@@ -31,7 +31,18 @@ Some examples of the skills and knowledge required are:
 * Git and Github
 * Open collaborative projects
 
-Our initial framework is based on simple drictionaries and ontologies (e.f. RDF, XML), public sources of scientific articles (especially preprints and country-specific inclusivity (e.g. Latin America , Redalyc, SciELO)). Current software is mainly Java, R, Node, Python but as the data are exposed as text files a varfiety of tools can be used).
+Our initial framework is based on simple dictionaries and ontologies (e.f. RDF, XML), public sources of scientific articles (especially preprints and country-specific inclusivity (e.g. Latin America , Redalyc, SciELO)). Current software is mainly Java, R, Node, Python but as the data are exposed as text files a variety of tools can be used).
 
+## scope
+
+Initially we will use papers retrieved by "coronavirus" . Typical results are:
+
+* EuropePubMedCentral (EPMC) 6563 papers
+* biorxiv preprints ca 400
+* medrxiv ca 300
+* SciELO ...
+* Redalyc ...
+
+### language
 
 
