@@ -52,14 +52,31 @@ list_properties <- function (item,
 
 get_names_from_properties <- function(properties){
   get_names_from_properties_nest1 <- function(x){
+    out <- lapply(lapply(lapply(lapply(x,"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","id")
+    names(out) <- lapply(lapply(lapply(x,"[[","mainsnak"),"[[","property"),"[[",1)
+    out}
+  get_names_from_properties_nest2 <- function(x){
+    out <- lapply(x,get_item)
+    out
+  }
+  get_names_from_properties_nest3.1 <- function(x){
     out <- lapply(lapply(lapply(x,"[[","labels"),"[[","en"),"[[","value")
     names(out) <- lapply(x,"[[","id")
     out
-    }
-  property_values.qid <- lapply(lapply(lapply(lapply(lapply(properties,"[[",1),"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","id")
-  property_values.q   <- lapply(property_values.qid,get_item)
-  property_names      <- lapply(property_values.q, get_names_from_properties_nest1)
-  property_names      <- lapply(lapply(property_names,unlist),enframe,name = "QID")
+  }
+  get_names_from_properties_nest3 <- function(x){
+    out <- lapply(x,get_names_from_properties_nest3.1)
+    out
+  }
+  get_names_from_properties_nest4 <- function(x){
+    out <- lapply(lapply(x,unlist),enframe,name = "QID")
+    out
+  }
+
+  property_values.qid <- lapply(properties,get_names_from_properties_nest1)
+  property_values.q   <- lapply(property_values.qid,get_names_from_properties_nest2)
+  property_names      <- lapply(property_values.q, get_names_from_properties_nest3)
+  property_names      <- lapply(property_values.q, get_names_from_properties_nest4) 
   property_names
 }
 
