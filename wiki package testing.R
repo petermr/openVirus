@@ -13,9 +13,10 @@ library('xml2')
 # .qs  = Wikidata item(s) summary
 # .q   = Wikidata item(s) in full
 # .p   = Properties of a Wikidata item(s)
+# .wh  = Wiki page in html
+# .wx  = Wiki page in xml
 
 # Functions ----------
-
 qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
   qid_from_DOI_nest1 <- function(x){paste('SELECT ?DOI WHERE {?DOI wdt:P356 "',
                                           x,
@@ -81,7 +82,6 @@ get_names_from_properties <- function(properties){
 }
 
 
-
 # Wikidata tests -----------
 # Get WikiJMed articles and their peer review URLs https://w.wiki/K6S
 sparql_query <- 'SELECT ?Article ?ArticleLabel ?DOI ?peer_review_URL WHERE {
@@ -110,14 +110,25 @@ get_names_from_properties(person.occupations.p)
 
 # Wikipedia tests -----------
 # Get links from 'TIM barrel'
-TIM.wlink <- page_links("en","wikipedia", page = "TIM barrel",clean_response = 1,limit = 1000)
-unlist(lapply(TIM.wlink[[1]]$links, '[[' ,2))
+page.wlink <- page_links("en","wikipedia", page = "TIM barrel",clean_response = 1,limit = 1000)
+unlist(lapply(page.wlink[[1]]$links, '[[' ,2))
 # Get backlinks to 'TIM barrel'
-TIM.wblink <- page_backlinks("en","wikipedia", page = "TIM barrel",clean_response = 1, namespaces=0 , limit = 1000)
-unlist(lapply(TIM.wblink, '[[' ,3))
+page.wblink <- page_backlinks("en","wikipedia", page = "TIM barrel",clean_response = 1, namespaces=0 , limit = 1000)
+unlist(lapply(page.wblink, '[[' ,3))
 # Get content of 'TIM barrel'
-TIM.wh <- page_content("en","wikipedia", page_name = "TIM barrel")
-cat(tidy_html(TIM.wh, option=opts))
-TIM.wx <- read_xml(TIM.w[[1]]$text$`*`)
-if(interactive()) {xml_tree_view(TIM.wx)}
-htmltidy::xml_view(TIM.wx,add_filter=TRUE, style="tomorrow-night-bright" )
+page.wh <- page_content("en","wikipedia", page = "TIM barrel")
+
+
+# WikiJournal content tests -----------
+page.wh <- page_content("en","wikiversity", page_name = "WikiJournal of Science/The TIM barrel fold")
+tidy_html.opts <- list(
+  TidyDocType="html5",
+  TidyMakeClean=TRUE,
+  TidyHideComments=TRUE,
+  TidyIndentContent=TRUE,
+  TidyWrapLen=200
+)
+page.wx     <- read_xml(page.wh[[1]]$text$`*`)
+tofind      <- "folding"
+page.sub.wx <- grep(tofind, xml_find_all(page.wx, "//p"),value = TRUE)
+xml_view(page.sub.wx,add_filter=TRUE, style="tomorrow-night-bright" )
