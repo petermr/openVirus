@@ -8,7 +8,7 @@ This project aims to use modern tools, especially Wikidata (and Wikpedia) , R, J
 
 ## goals
 
-* to collect all freely visible scientific/medical publications on COVID, viral epidemics and transform them to uniform form.
+* to collect all freely visible scientific/medical publications on [COVID19](https://www.wikidata.org/wiki/Q84263196), viral epidemics and transform them to uniform form.
 * to use Natural Language Processing (NLP) and textmining so machines can extract meaning from the articles.
 * to build dictionaries of terms related to viruses and viral epidemics for (a) search (b) classification (c) understanding.
 * to collect knowedge and publish it in [WikiJournal of Medicine](www.wikijmed.org) (a peer-reviewed OA journal with an emphasis on review)
@@ -37,11 +37,11 @@ Our initial framework is based on simple dictionaries and ontologies (e.f. RDF, 
 
 Initially we will use papers retrieved by "coronavirus" . Typical results are:
 
-* EuropePubMedCentral (EPMC) 6563 papers
-* biorxiv preprints ca 400
-* medrxiv ca 300
-* SciELO ...
-* Redalyc ...
+* [Europe PubMedCentral](https://europepmc.org/) (EPMC): 6563 papers
+* [biorxiv preprints](https://www.biorxiv.org/): ~400
+* [medrxiv preprints](https://www.medrxiv.org/): ~300
+* [SciELO](https://scielo.org/en/) ...
+* [Redalyc](https://scielo.org/en/) ...
 
 ### languages and countries
 
@@ -49,7 +49,7 @@ COVID19 is a global emergency and it's critical that knowledge is gloabl, not ce
 
 ## tasks
 
-We will list tasks on https://github.com/petermr/openVirus/issues . These are things we have to do including components, integration, bugs, tutorials, etc.
+We will list tasks on [github.com/petermr/openVirus/issues](https://github.com/petermr/openVirus/issues). These are things we have to do including components, integration, bugs, tutorials, etc.
 There may soon be a large number of "Open" Issues - this should be seen as positive - some issues are ongoing and don't get closed.
 
 
