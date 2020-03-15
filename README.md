@@ -11,23 +11,23 @@ This project aims to use modern tools, especially Wikidata (and Wikpedia) , R, J
 * to collect all freely visible scientific/medical publications on COVID, viral epidemics and transform them to uniform form.
 * to use Natural Language Processing (NLP) and textmining so machines can extract meaning from the articles.
 * to build dictionaries of terms related to viruses and viral epidemics for (a) search (b) classification (c) understanding.
-* to collect knowedge and publish it in EWikiJournal of Medicine (a peer-reviewed journal with an emphasis on review)
+* to collect knowedge and publish it in [WikiJournal of Medicine](www.wikijmed.org) (a peer-reviewed OA journal with an emphasis on review)
 
 ## how we will work
 
 This is a digital knowledge-based project (i.e. no laboratory or clinical work). It is open to all who are prepared to contribute components of the system. 
 
-Some examples of the skills and knowledge required are:
+Some examples of the skills and knowledge required within the project:
 * Wikimedia (esp. Wikipedia, Wikidata, Wiki technology, WikiJournal)
-* scholarly publications including preprints
+* Scholarly publications including preprints
 * Scraping web pages and building metadata
 * SPARQL/RDF , XML, JSON
 * Textmining , supervised and unsupervised
-* virology
-* epidemiology
-* computation
-* societal aspects of disease (e.g.  public health policy).
-* language translation (with a scientific emphasis)
+* Virology
+* Epidemiology
+* Computation
+* Societal aspects of disease (e.g.  public health policy).
+* Language translation (with a scientific emphasis)
 * Git and Github
 * Open collaborative projects
 
