@@ -69,20 +69,20 @@ get_names_from_properties <- function(properties){
     out <- lapply(lapply(lapply(lapply(x,"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","id")
     names(out) <- lapply(lapply(lapply(x,"[[","mainsnak"),"[[","property"),"[[",1)
     return(out)
-    }
+  }
   get_names_from_properties_nest2 <- function(x){
     out <- lapply(x,get_item)
     return(out)
-    }
+  }
   get_names_from_properties_nest3.1 <- function(x){
     out <- lapply(lapply(lapply(x,"[[","labels"),"[[","en"),"[[","value")
     names(out) <- lapply(x,"[[","id")
     return(out)
-    }
+  }
   get_names_from_properties_nest3 <- function(x){
     out <- lapply(x,get_names_from_properties_nest3.1)
     return(out)
-    }
+  }
   
   property_values.qid <- lapply(properties,get_names_from_properties_nest1)
   property_values.q   <- lapply(property_values.qid,get_names_from_properties_nest2)
@@ -134,18 +134,22 @@ get_names_from_properties(person.occupations.p)
 
 
 # Wikipedia tests -----------
-# Get links from 'TIM barrel'
-page.wlink <- page_links("en","wikipedia", page = "TIM barrel",clean_response = 1,limit = 1000)
+# Get links from wiki page
+page.wlink <- page_links("en","wikipedia", page = "Western African Ebola virus epidemic",clean_response = 1,limit = 1000)
 unlist(lapply(page.wlink[[1]]$links, '[[' ,2))
 # Get backlinks to 'TIM barrel'
-page.wblink <- page_backlinks("en","wikipedia", page = "TIM barrel",clean_response = 1, namespaces=0 , limit = 1000)
+page.wblink <- page_backlinks("en","wikipedia", page = "Western African Ebola virus epidemic",clean_response = 1, namespaces=0 , limit = 1000)
 unlist(lapply(page.wblink, '[[' ,3))
 # Get content of 'TIM barrel'
-page.wh <- page_content("en","wikipedia", page_name = "TIM barrel")
+page.wh <- page_content("en","wikipedia", page_name = "Western African Ebola virus epidemic")
+# full wikimarkup
+cat(pediarr::pediafulltext("Western African Ebola virus epidemic",format="wikimarkup"))
+# List pages in category
+pediarr::pediacategory("Category:Viral respiratory tract infections")
 
 
 # WikiJournal content tests -----------
-page.wh <- page_content("en","wikiversity", page_name = "WikiJournal of Science/The TIM barrel fold")
+page.wh <- page_content("en","wikiversity", page_name = "WikiJournal of Medicine/Western African Ebola virus epidemic")
 tidy_html.opts <- list(
   TidyDocType="html5",
   TidyMakeClean=TRUE,
@@ -154,6 +158,7 @@ tidy_html.opts <- list(
   TidyWrapLen=200
 )
 page.wx     <- read_xml(page.wh[[1]]$text$`*`)
-tofind      <- "folding"
+tofind      <- "Nigeria"
+paste(sep="","found ",length(grep(tofind, xml_find_all(page.wx, "//p")))," paragraphs containing the search term: '",tofind,"'")
 page.sub.wx <- grep(tofind, xml_find_all(page.wx, "//p"),value = TRUE)
 xml_view(page.sub.wx,add_filter=TRUE, style="tomorrow-night-bright" )
