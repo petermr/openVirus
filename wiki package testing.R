@@ -116,7 +116,7 @@ unlist(lapply(page.wlink[[1]]$links, '[[' ,2))
 page.wblink <- page_backlinks("en","wikipedia", page = "TIM barrel",clean_response = 1, namespaces=0 , limit = 1000)
 unlist(lapply(page.wblink, '[[' ,3))
 # Get content of 'TIM barrel'
-page.wh <- page_content("en","wikipedia", page = "TIM barrel")
+page.wh <- page_content("en","wikipedia", page_name = "TIM barrel")
 
 
 # WikiJournal content tests -----------
