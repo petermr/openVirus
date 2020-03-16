@@ -78,15 +78,11 @@ get_names_from_properties <- function(properties){
     out <- lapply(x,get_names_from_properties_nest3.1)
     out
   }
-  get_names_from_properties_nest4 <- function(x){
-    out <- lapply(lapply(x,unlist),enframe,name = "QID")
-    out
-  }
-
+  
   property_values.qid <- lapply(properties,get_names_from_properties_nest1)
   property_values.q   <- lapply(property_values.qid,get_names_from_properties_nest2)
   property_names      <- lapply(property_values.q, get_names_from_properties_nest3)
-  property_names      <- lapply(property_values.q, get_names_from_properties_nest4) 
+  property_names      <- lapply(lapply(property_names,unlist),enframe,name = "QID") 
   property_names
 }
 
@@ -111,7 +107,7 @@ get_names_from_properties(article.topics.p)
 
 # Get full item for "Thomas Shafee"
 person.qs  <- find_item("Thomas Shafee")
-person.qid <- qid_from_name(c("Thomas Shafee","Rohan Lowe"))
+person.qid <- qid_from_name(c("Thomas Shafee","Peter Murray Rust"))
 person.q   <- get_item(person.qid)
 person.occupations.p <- extract_claims(person.q,c("P106","P108"))
 get_names_from_properties(person.occupations.p)
