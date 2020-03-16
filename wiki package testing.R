@@ -1,13 +1,18 @@
-packagelist <- c('WikipediR',
-                 'WikidataR', 
-                 'WikidataQueryServiceR', 
-                 'tibble', 
-                 'tidytext', 
-                 'htmltidy', 
-                 'dplyr', 
-                 'xml2')
-install.packages(packagelist[!(packagelist %in% installed.packages()[,"Package"])])
-sapply(packagelist, require, character.only = TRUE)
+packagelist.cran <- c('WikipediR',
+                      'WikidataR', 
+                      'WikidataQueryServiceR', 
+                      'tibble',
+                      'devtools',
+                      'tidytext', 
+                      'htmltidy', 
+                      'dplyr', 
+                      'xml2')
+packagelist.git  <- c('chainsawriot/pediarr')
+install_packages(packagelist.cran[!(packagelist.cran %in% installed.packages()[,"Package"])])
+install_github  (packagelist.git[!(packagelist.git %in% installed.packages()[,"Package"])])
+sapply(packagelist.cran, require, character.only = TRUE)
+sapply(tail(stringr::str_split(packagelist.git,pattern = "/")[[1]],n=1), require, character.only = TRUE)
+
 
 # Recommended object endings
 # .qr  = Query result(s)
