@@ -27,6 +27,9 @@ sapply(c(packagelist.cran,packagelist.git2), require, character.only = TRUE)
 is.qid <- function(x){grepl("^[Qq][0-9]+$",x)}
 is.pid <- function(x){grepl("^[Pp][0-9]+$",x)}
 
+as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
+as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
+
 qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
   qid_from_DOI_nest1 <- function(x){paste('SELECT ?DOI WHERE {?DOI wdt:P356 "',
                                           x,
@@ -37,7 +40,7 @@ qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
   article.qr   <- lapply(query_wikidata(sparql_query),as_tibble)
   names(article.qr)<-DOI
   article.qid  <- unlist(lapply(article.qr,qid_from_DOI_nest2))
-  article.qid
+  return(article.qid)
 }
 
 qid_from_name <- function(name  = 'Thomas Shafee',
@@ -47,7 +50,7 @@ qid_from_name <- function(name  = 'Thomas Shafee',
   item.qid <- lapply(item.qs,qid_from_name_nest1)
   names(item.qid) <- name
   item.qid <- unlist(item.qid)
-  item.qid
+  return(item.qid)
 }
 
 list_properties <- function (item,
@@ -58,35 +61,51 @@ list_properties <- function (item,
       names(properties.p) <- unlist(lapply(lapply(lapply(get_property(properties.p),"[[","labels"),"[[","en"),"[[","value"))
     }
   }
-  properties.p 
+  return(properties.p)
 }
 
 get_names_from_properties <- function(properties){
   get_names_from_properties_nest1 <- function(x){
     out <- lapply(lapply(lapply(lapply(x,"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","id")
     names(out) <- lapply(lapply(lapply(x,"[[","mainsnak"),"[[","property"),"[[",1)
-    out}
+    return(out)
+    }
   get_names_from_properties_nest2 <- function(x){
     out <- lapply(x,get_item)
-    out
-  }
+    return(out)
+    }
   get_names_from_properties_nest3.1 <- function(x){
     out <- lapply(lapply(lapply(x,"[[","labels"),"[[","en"),"[[","value")
     names(out) <- lapply(x,"[[","id")
-    out
-  }
+    return(out)
+    }
   get_names_from_properties_nest3 <- function(x){
     out <- lapply(x,get_names_from_properties_nest3.1)
-    out
-  }
+    return(out)
+    }
   
   property_values.qid <- lapply(properties,get_names_from_properties_nest1)
   property_values.q   <- lapply(property_values.qid,get_names_from_properties_nest2)
   property_names      <- lapply(property_values.q, get_names_from_properties_nest3)
   property_names      <- lapply(lapply(property_names,unlist),enframe,name = "QID") 
-  property_names
+  return(property_names)
 }
 
+# Edited function from WikidataR ---------
+extract_claims <- function (items,
+                            claims){
+  claims <- sapply(claims,as_pid)
+  output <- lapply(items, function(x, claims) {
+    return(lapply(claims, function(claim, obj) {
+      which_match <- which(names(obj$claims) == claim)
+      if (!length(which_match)) {
+        return(NA)
+      }
+      return(obj$claims[[which_match[1]]])
+    }, obj = x))
+  }, claims = claims)
+  return(output)
+}
 
 # Wikidata tests -----------
 # Get WikiJMed articles and their peer review URLs https://w.wiki/K6S
@@ -103,14 +122,14 @@ articles.qr
 # Get a specific article and its main topics
 article.qid      <- qid_from_DOI('10.15347/WJM/2019.001')
 article.q        <- get_item(article.qid)
-article.topics.p <- extract_claims(article.q, "P921")
+article.topics.p <- extract_claims(article.q, "main topic")
 get_names_from_properties(article.topics.p)
 
 # Get full item for "Thomas Shafee"
 person.qs  <- find_item("Thomas Shafee")
 person.qid <- qid_from_name(c("Thomas Shafee","Peter Murray Rust"))
 person.q   <- get_item(person.qid)
-person.occupations.p <- extract_claims(person.q,c("P106","P108"))
+person.occupations.p <- extract_claims(person.q,c("occupation","employer"))
 get_names_from_properties(person.occupations.p)
 
 
