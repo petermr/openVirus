@@ -23,6 +23,9 @@ sapply(c(packagelist.cran,packagelist.git2), require, character.only = TRUE)
 # .wx  = Wiki page in xml
 
 # Functions ----------
+
+is.qid <- function(x){grepl("^[Q][0-9]+$",x)}
+
 qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
   qid_from_DOI_nest1 <- function(x){paste('SELECT ?DOI WHERE {?DOI wdt:P356 "',
                                           x,
