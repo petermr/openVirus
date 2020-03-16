@@ -1,6 +1,15 @@
 # openVirus
 aggregation of scholarly publications and extracted knowledge on viruses and epidemics.
 
+## NOTE
+This site is to develop knowledge resources and tools to help tackle the COVID19 outbreak. **It is NOT a guide to public information.** The actual content created from the site is drawn from reliable sources (journals, guidelines) but has **NOT been filtered or reviewed**.
+
+### tech background 
+All are welcome to participate. We assume a basic level of running programs (commandline, R, text editing) and - initially - won't be able to hand hold. However we know from experience that people can learn very fast, so feel free to dive in and try the tech.
+
+### discipline background
+This site is initially created by scientists in the bioscience/chemical area but without discipline knowledge of epidemiology, health care, virology, societal aspects, etc. . 
+
 ## background
 The world faces (and will continue to face) viral epdemics which arise suddenly and where scientific/medical knowledge is a critical resource. Despite over 100 Billion USD on medical research worldwide much knowledge is behind publisher paywalls and only available to rich universities. Moreover it is usually badly published, dispersed without coherent knowledge tools. It particularly disadvantages the Global South.
 
