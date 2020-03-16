@@ -8,11 +8,10 @@ packagelist.cran <- c('WikipediR',
                       'dplyr', 
                       'xml2')
 packagelist.git  <- c('chainsawriot/pediarr')
-install_packages(packagelist.cran[!(packagelist.cran %in% installed.packages()[,"Package"])])
-install_github  (packagelist.git[!(packagelist.git %in% installed.packages()[,"Package"])])
-sapply(packagelist.cran, require, character.only = TRUE)
-sapply(tail(stringr::str_split(packagelist.git,pattern = "/")[[1]],n=1), require, character.only = TRUE)
-
+packagelist.git2 <- sapply(stringr::str_split(packagelist.git,pattern = "/"),tail,n=1)
+install.packages(packagelist.cran[!(packagelist.cran %in% installed.packages()[,"Package"])])
+install_github  (packagelist.git[!(packagelist.git2%in% installed.packages()[,"Package"])])
+sapply(c(packagelist.cran,packagelist.git2), require, character.only = TRUE)
 
 # Recommended object endings
 # .qr  = Query result(s)
