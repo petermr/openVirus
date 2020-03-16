@@ -54,12 +54,16 @@ Initially we will use papers retrieved by "coronavirus" . Typical results are:
 
 ### languages and countries
 
-COVID19 is a global emergency and it's critical that knowledge is gloabl, not centered on the North Antlantic regions. We want to see other languages and other nations involved. As a start we are developing a scraper for Latin American OpenAccess publications, initially the Redalyc server.
+COVID19 is a global emergency and it's critical that knowledge is global, not centered on the North Atlantic regions. We want to see other languages and other nations involved. As a start we are developing a scraper for Latin American OpenAccess publications, initially the Redalyc server.
 
 ## tasks
 
 We will list tasks on [github.com/petermr/openVirus/issues](https://github.com/petermr/openVirus/issues). These are things we have to do including components, integration, bugs, tutorials, etc.
 There may soon be a large number of "Open" Issues - this should be seen as positive - some issues are ongoing and don't get closed.
+
+## Open Notebook publication
+
+We are using the Open Notebook philosophy fo Jean-Claude Bradley and implicitly of Wikimedia content and of many Free/Open Software projects. Everything is posted publicly as soon as it is created. That means that every iteration is visible and will almost certainly contain bugs/errors. Each subsequent commit fixes some of these. We know from past experience that this is the quickest way to create high-quality content and also gives a feeling of communal ownership.
 
 
 
