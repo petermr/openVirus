@@ -1,11 +1,13 @@
-library('WikipediR')
-library('WikidataR')
-library('WikidataQueryServiceR')
-library('tibble')
-library('tidytext')
-library('htmltidy')
-library('dplyr')
-library('xml2')
+packagelist <- c('WikipediR',
+                 'WikidataR', 
+                 'WikidataQueryServiceR', 
+                 'tibble', 
+                 'tidytext', 
+                 'htmltidy', 
+                 'dplyr', 
+                 'xml2')
+install.packages(packagelist[!(packagelist %in% installed.packages()[,"Package"])])
+sapply(packagelist, require, character.only = TRUE)
 
 # Recommended object endings
 # .qr  = Query result(s)
