@@ -120,7 +120,7 @@ articles.qr <- as_tibble(query_wikidata(sparql_query))
 articles.qr
 
 # Get a specific article and its main topics
-article.qid      <- qid_from_DOI('10.15347/WJM/2019.001')
+article.qid      <- qid_from_DOI(c('10.15347/WJM/2017.007','10.15347/WJM/2019.001','10.15347/WJM/2019.003','10.15347/WJM/2019.007'))
 article.q        <- get_item(article.qid)
 article.topics.p <- extract_claims(article.q, "main topic")
 get_names_from_properties(article.topics.p)
