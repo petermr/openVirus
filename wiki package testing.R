@@ -31,9 +31,21 @@ as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x
 as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
 
 qid_from_DOI <- function(DOI = '10.15347/WJM/2019.001'){
-  qid_from_DOI_nest1 <- function(x){paste('SELECT ?DOI WHERE {?DOI wdt:P356 "',
-                                          x,
-                                          '"}',
+  qid_from_DOI_nest1 <- function(x){paste('SELECT DISTINCT ?item ?itemLabel 
+                                            WHERE {
+                                              hint:Query hint:optimizer "None".
+                                              SERVICE wikibase:mwapi {
+                                                bd:serviceParam wikibase:api "Search";
+                                                                wikibase:endpoint "www.wikidata.org";
+                                                                mwapi:srsearch "haswbstatement:P356=',
+                                                                DOI,
+                                                                '".
+                                                ?title wikibase:apiOutput mwapi:title.
+                                              }
+                                              BIND(IRI(CONCAT(STR(wd:), ?title)) AS ?item)
+                                              FILTER NOT EXISTS { ?item wdt:P921 wd:Q202864. }
+                                              SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+                                            }',
                                           sep='')}
   qid_from_DOI_nest2 <- function(x){tail(stringr::str_split(x,pattern = "/")[[1]],n=1)}
   sparql_query <- lapply(DOI,qid_from_DOI_nest1)
