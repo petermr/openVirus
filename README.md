@@ -1,6 +1,15 @@
 # openVirus
 aggregation of scholarly publications and extracted knowledge on viruses and epidemics.
 
+## NOTE
+This site is to develop knowledge resources and tools to help tackle the COVID19 outbreak. **It is NOT a guide to public information.** The actual content created from the site is drawn from reliable sources (journals, guidelines) but has **NOT been filtered or reviewed**.
+
+### tech background 
+All are welcome to participate. We assume a basic level of running programs (commandline, R, text editing) and - initially - won't be able to hand hold. However we know from experience that people can learn very fast, so feel free to dive in and try the tech.
+
+### discipline background
+This site is initially created by scientists in the bioscience/chemical area but without discipline knowledge of epidemiology, health care, virology, societal aspects, etc. . 
+
 ## background
 The world faces (and will continue to face) viral epdemics which arise suddenly and where scientific/medical knowledge is a critical resource. Despite over 100 Billion USD on medical research worldwide much knowledge is behind publisher paywalls and only available to rich universities. Moreover it is usually badly published, dispersed without coherent knowledge tools. It particularly disadvantages the Global South.
 
@@ -45,12 +54,18 @@ Initially we will use papers retrieved by "coronavirus" . Typical results are:
 
 ### languages and countries
 
-COVID19 is a global emergency and it's critical that knowledge is gloabl, not centered on the North Antlantic regions. We want to see other languages and other nations involved. As a start we are developing a scraper for Latin American OpenAccess publications, initially the Redalyc server.
+COVID19 is a global emergency and it's critical that knowledge is global, not centered on the North Atlantic regions. We want to see other languages and other nations involved. As a start we are developing a scraper for Latin American OpenAccess publications, initially the Redalyc server.
 
 ## tasks
 
 We will list tasks on [github.com/petermr/openVirus/issues](https://github.com/petermr/openVirus/issues). These are things we have to do including components, integration, bugs, tutorials, etc.
 There may soon be a large number of "Open" Issues - this should be seen as positive - some issues are ongoing and don't get closed.
+
+## Open Notebook publication
+
+We are using the Open Notebook philosophy fo Jean-Claude Bradley and implicitly of Wikimedia content and of many Free/Open Software projects. Everything is posted publicly as soon as it is created. That means that every iteration is visible and will almost certainly contain bugs/errors. Each subsequent commit fixes some of these. We know from past experience that this is the quickest way to create high-quality content and also gives a feeling of communal ownership.
+1. [Summary publication preprint](https://en.wikiversity.org/wiki/WikiJournal_Preprints/Aggregation_of_scholarly_publications_and_extracted_knowledge_on_COVID19_and_epidemics)
+2. [Full open notebook](https://en.wikiversity.org/wiki/WikiJournal_Preprints/Aggregation_of_scholarly_publications_and_extracted_knowledge_on_COVID19_and_epidemics/Open_Notebook)
 
 
 
