@@ -23,7 +23,7 @@ This project aims to use modern tools, especially Wikidata (and Wikpedia), R, Ja
 * to collect knowedge and publish it in [WikiJournal of Medicine](www.wikijmed.org) (a peer-reviewed OA journal with an emphasis on review)
 
 ## diary/blog
-I have started a [diary|../diary] which I hope to complete each day. No consistent structure. Will praise and challenge.
+I have started a [diary](../diary) which I hope to complete each day. No consistent structure. Will praise and challenge.
 
 
 ## how we will work
