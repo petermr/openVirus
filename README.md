@@ -22,6 +22,10 @@ This project aims to use modern tools, especially Wikidata (and Wikpedia), R, Ja
 * to build dictionaries of terms related to viruses and viral epidemics for (a) search (b) classification (c) understanding.
 * to collect knowedge and publish it in [WikiJournal of Medicine](www.wikijmed.org) (a peer-reviewed OA journal with an emphasis on review)
 
+## diary/blog
+I have started a [diary|../diary] which I hope to complete each day. No consistent structure. Will praise and challenge.
+
+
 ## how we will work
 
 This is a digital knowledge-based project (i.e. no laboratory or clinical work). It is open to all who are prepared to contribute components of the system. 
