@@ -1,3 +1,5 @@
+# Setup -------------------
+
 packagelist.cran <- c('WikipediR',
                       'WikidataR', 
                       'WikidataQueryServiceR', 
@@ -5,7 +7,8 @@ packagelist.cran <- c('WikipediR',
                       'devtools',
                       'tidytext', 
                       'htmltidy', 
-                      'dplyr', 
+                      'dplyr',
+                      'readr',
                       'xml2')
 packagelist.git  <- c('chainsawriot/pediarr')
 packagelist.git2 <- sapply(stringr::str_split(packagelist.git,pattern = "/"),tail,n=1)
@@ -91,6 +94,45 @@ get_names_from_properties <- function(properties){
   return(property_names)
 }
 
+as_quickstatement <- function(items,
+                              properties,
+                              values,
+                              qual.properties=NULL,
+                              qual.values=NULL){
+  
+  items      <- sapply(items,function(x){if(x!="LAST"){as_qid(x)}else{x}})
+  properties <- sapply(properties,as_pid)
+  if(!is.null(qual.properties)){qual.properties <- sapply(qual.properties,as_pid)}
+  
+  QS <- list(items,
+             properties,
+             values)
+  QS.rowmax <- max(sapply(QS,length))
+  QS.check  <- sapply(QS,length)==1|
+    sapply(QS,length)==QS.rowmax
+  if(!all(QS.check)){stop("not all quickstatement columns equal length")}
+  QS.tib <- tibble(Item = QS[[1]],
+                   Prop = QS[[2]],
+                   Value = QS[[3]])
+  
+  # qualifiers properties and statements
+  if(!is.null(c(qual.properties,qual.values))){
+    
+    QSq <- list(qual.properties,
+                qual.values)
+    QSq.rowmax <- max(sapply(c(QS,QSq),length))
+    QSq.check  <- sapply(c(QS,QSq),length)==1|
+      sapply(c(QS,QSq),length)==QSq.rowmax
+    if(!all(QSq.check)){stop("incorrect number of qualifiers provided")}
+    
+    QS.tib <- add_column(QS.tib,
+                         qual.Prop  = QSq[[1]],
+                         qual.Value = QSq[[2]])
+  }
+  
+  write.table(QS.tib,quote = FALSE,row.names = FALSE,sep = "|")
+}
+
 # Edited function from WikidataR ---------
 extract_claims <- function (items,
                             claims){
@@ -106,6 +148,7 @@ extract_claims <- function (items,
   }, claims = claims)
   return(output)
 }
+
 
 # Wikidata tests -----------
 # Get WikiJMed articles and their peer review URLs https://w.wiki/K6S
@@ -146,6 +189,50 @@ page.wh <- page_content("en","wikipedia", page_name = "Western African Ebola vir
 cat(pediarr::pediafulltext("Western African Ebola virus epidemic",format="wikimarkup"))
 # List pages in category
 pediarr::pediacategory("Category:Viral respiratory tract infections")
+
+# Quickstatements test ------------
+# sparql_query <- 'SELECT ?Article ?ArticleLabel ?DOI ?peer_review_URL WHERE {
+#   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+#   ?Article wdt:P1433 wd:Q24657325.
+#   OPTIONAL { ?Article wdt:P356 ?DOI. }
+#   OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }
+# }
+# LIMIT 10000'
+# articles.qr <- as_tibble(query_wikidata(sparql_query))
+# 
+# article.qid      <- qid_from_DOI(articles.qr$DOI)
+# article.q        <- get_item(article.qid)
+# article.topics.p <- extract_claims(article.q, c('title','published in'))
+# 
+# review.URLs <- paste0('"https://en.wikiversity.org/wiki/Talk:',
+#                       lapply(lapply(lapply(lapply(lapply(lapply(lapply(lapply(article.topics.p,"[[","published in"),"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","id"),find_item),"[[",1),"[[","label"),
+#                       "/",
+#                       lapply(lapply(lapply(lapply(lapply(article.topics.p,"[[","title"),"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","text"),
+#                       '"'
+#                      )
+# review.URLs <- gsub(" ","_",review.URLs)
+sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?T ?peer_review_URL WHERE {
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  ?Article wdt:P1433 wd:Q24657325.
+  OPTIONAL { ?Article wdt:P1433 ?J. }
+  OPTIONAL { ?Article wdt:P1476 ?T. }
+  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }
+}
+LIMIT 10000'
+articles.qr <- as_tibble(query_wikidata(sparql_query))
+articles.qr <- articles.qr[articles.qr$peer_review_URL=="",]
+review.URLs <- paste0('"https://en.wikiversity.org/wiki/Talk:',
+                      articles.qr$JLabel,
+                      "/",
+                      articles.qr$T,
+                      '"'
+                     )
+review.URLs <- gsub(" ","_",review.URLs)
+
+as_quickstatement(items=sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
+                  properties="Peer review URL",
+                  values=review.URLs)
+
 
 
 # WikiJournal content tests -----------
