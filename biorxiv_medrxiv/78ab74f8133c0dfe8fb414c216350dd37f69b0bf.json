@@ -1,0 +1,1955 @@
+{
+    "paper_id": "78ab74f8133c0dfe8fb414c216350dd37f69b0bf",
+    "metadata": {
+        "title": "A quantitative narrative on movement, disease and patch exploitation in nesting agent groups",
+        "authors": [
+            {
+                "first": "Wayne",
+                "middle": [
+                    "M"
+                ],
+                "last": "Getz",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of California",
+                    "location": {
+                        "postCode": "94720-3112",
+                        "settlement": "Berkeley",
+                        "region": "CA"
+                    }
+                },
+                "email": "*wgetz@berkeley.edu"
+            },
+            {
+                "first": "Richard",
+                "middle": [],
+                "last": "Salter",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Numerus Inc",
+                    "location": {
+                        "addrLine": "850 Iron Point Road",
+                        "postCode": "95630",
+                        "settlement": "Folsom",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Krti",
+                "middle": [],
+                "last": "Tallam",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of California",
+                    "location": {
+                        "postCode": "94720-3112",
+                        "settlement": "Berkeley",
+                        "region": "CA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Animal relocation data has recently become considerably more ubiquitous, finely structured (collection frequencies measured in minutes) and co-variate rich (physiology of individuals, environmental and landscape information, and accelerometer data). To better understand the impacts of ecological interactions, individual movement and disease on global change ecology, including wildlife management and conservation, it is important to have simulators that will provide demographic, movement, and epidemiology null models against which to compare patterns observed in empirical systems. Such models may then be used to develop quantitative narratives that enhance our intuition and understanding of the relationship between population structure and generative processes: in essence, along with empirical and experimental narratives, quantitative narratives are used to advance ecological epistemology. Here we describe a simulator that accounts for the influence of consumer-resource interactions, existence of social groups anchored around a central location, territoriality, group-switching behavior, and disease dynamics on population size. We use this simulator to develop new and reinforce existing quantitative narratives and point out areas for future study.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The health and viability of species are of considerable concern to all nature lovers. Population models are central to our efforts to assess the numerical and ecological status of species and threats posed by climate change. Models, however, are crude caricatures of complex ecological systems. So how do we construct reliable assessment models able to capture processes essential to predicating the impacts of global change on population viability without getting tied up in their vast complexities? We broach this question and demonstrate how models focusing at the level of the individual (i.e., agent-based models) are tools for developing robust, narratives to augment narratives arising purely from empirical data sources and experimental outcomes. We do this in the context of nesting social groups, foraging for food, while exhibiting territoriality and group-switching behavior; and, we evaluate the impact of disease on the viability of such populations. 7 laboratory at the microcosm scale [7], but for populations of most vertebrates such 8 microcosm studies are not applicable, and we need to resort to the mesocosm level [8] or 9 use alternative methods to obtain insights. One of these methods is to build simulation 10 models that incorporate demographic, spatial, movement, and other relevant behavioral 11 and community processes, and then compare simulations of these models across various 12 scenarios [9] or outcomes with and without epidemiological processes added to the mix. 13 We take this latter approach and our primary aim is to develop a tool that can be used 14 to study the impact of disease on colonial populations and metapopulations [10] . This 15 tool must be comprehensive enough to include critical processes needed to address 16 questions that will extend our current knowledge in significant ways. Its application, of 17 course, is limited by the structure of the model. Thus, in building the model, we are 18 guided by principles related to concepts of \"appropriate complexity modeling\" [11, 12] .",
+            "cite_spans": [
+                {
+                    "start": 1499,
+                    "end": 1501,
+                    "text": "13",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 1667,
+                    "end": 1671,
+                    "text": "[10]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 2027,
+                    "end": 2031,
+                    "text": "[11,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 2032,
+                    "end": 2035,
+                    "text": "12]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The standard approach to modeling disease outbreaks caused by 20 directly-transmitted pathogens is through systems of differential or difference equations 21 that model the number or density of susceptible (S), infectious (I), and recovered or 22 removed (R) individuals [13, 14]. These formulations may either be deterministic or 23 stochastic, and elaborated to include time-delays [15], demographic (births, deaths, and 24 recruitment [16]), metapopulation [17] and other spatial processes [18]. Examples of 25 these elaborations can be found in the context of modeling, inter alia, influenza [19, 20], 26 measles [21], SARS [22, 23], and Ebola [24-28] outbreaks.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "27 Systems approaches to modeling disease limit our ability to consider individual-level 28 traits, unless these traits can be reasonably well expressed by dividing the population 29 into a limited number of subgroups, such as groups of individuals infected with different 30 strains of pathogens [29]. Including individual-level variation in disease models, however, 31 requires an agent-based approach [30], which then allows both individual behavior (e.g., 32 relevant to evaluating the probability of pathogen transmission) and pathogen exposure 33 history (e.g., relevant to evaluating the immunological state and hence the susceptibility 34 of an individual) to be incorporated into the model. It also allows one to trace the 35 number of individuals the each pathogen infects [25] and, hence, to identify individuals 36 that may be acting as super-spreaders [31].",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Here, we develop an agent-based formulation that has application to studying 38 disease outbreaks in wildlife populations whose state of health-and hence, 39 susceptibility-is impacted by various factors, including social factors related to group 40 living and the structure of social networks [32], ecological factors related to foraging 41 success, and the movement behavior of individuals (which influences exposure to 42 pathogens). The model also includes a periodic return to a colony or nest cell, which 43 implies that the model has both a population-level and a group-association level (core 44 or household) structure. Such models have applications in animal production systems 45 (e.g., managing foot and mouth disease [33]), wildlife conservation [2], and disease 46 management at the human-animal interface [34]. The latter involves diseases such as 47 anthrax [35], bovine tuberculosis [36], and brucellosis in cattle and wild ungulates [37], 48 chronic wasting disease in deer [38], and toxoplasmosis in rats, cats and humans [39]. 49 Rather then following a formulaic ODD (Overview, Design concepts, and Design 50 details; [30, 40]) or extended ODD [41] prescription in presenting our model, we take a 51 more expository approach by first crafting a broad outline of our model's general 52 October 1, 2019 2/28 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint features. In addition, to keep the paper reader-friendly, we relegate the mathematical 53 details of our model to a Technical Methods section at the end of the paper and the 54 algorithmic details to a supporting online file (SOF). In the Results section, we report 55 the results of simulations of several illustrative scenarios, and in the Discussion section 56 we present the findings in the form of a quantitative narrative that provides insights 57 into the role different processes play in creating the population patterns observed in our 58 simulations.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "At this point, a few brief remarks on quantitative narratives in disease ecology are in 60 order. Unlike the canonical theories of physics-with kinematics, electromagnetism, 61 general relativity, and quantum mechanics providing prime examples, ecology has no 62 fundamental theories and associated mathematical formulations that can be used to 63 develop an ecological epistemology. Rather, the complexity of the field induced by the 64 plethora of processes involved requires that we focus only on a limited number of these 65 processes when building models, where the selection of process depends on the questions 66 at hand [11]. Our understanding of these processes requires an analysis of associated 67 quantitative formulations, but the soundness of the arguments cannot be adjudicated by 68 comparing, say, the accuracy of Mercury's orbit as predicted by Newtonian versus 69 Einsteinian physics. Rather, ecological epistemology is woven from a collection of 70 quantitative narratives that provide current best explanations for, or fits to, observed 71 empirical and experimental data. While statistical null models are use to develop 72 consilient empirical and experimental narratives, dynamic null models are used to 73 develop quantitative narratives that are consilient with empirical and experimental 74 narratives (Fig. 1). Such dynamic null models have a Goldilocks quality in the sense of 75 containing just the right amount of biological process detail [42]: too little and model 76 simulations are rejected as providing adequate descriptions of observed data; too much 77 process detail and the null-model-parsimony principle, as discussed by Gotteli and 78 Graves ( [42], p. 6), is violated. 79 Fig 1. A sketch of the role of empirical, experimental and quantitative narratives in the formulation of canons and construction of syntheses in the development of an ecological epistemology.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In ecology, quantitative narratives, derived from the Gause-Lotka-Volterra 80 competition model, were used to construct the concept of a niche [43]. This narrative 81 begins with insights into competitive exclusion [44, 45], supported by additional 82 quantitative ideas relating to niche breadth and overlap [46, 47]. In epidemiology, 83 quantitative narratives, derived from analyses of SEIR epidemic models (S: susceptible; 84 E: exposed but not yet infectious; I: infections; R: removed-that is, recovered with 85 immunity or dead) [13] , have been used to identify critical differences in the emergence 86 of outbreak thresholds depending on whether pathogen transmission is dependent on quantitative narratives in epidemiology that incorporate aspects of the movement of 89 individuals [50] or particular ecological processes have been used to develop canonical 90 theories [51][52][53][54][55]; however, these are limited in scope and generality by the analytical 91 difficulties of studying dynamical systems, as well as networks that include more than 92 one ecological or behavioral process. The challenge here is to keep the models somewhat 93 general and broadly applicable, while including several key processes such as: spatial 94 demography; consumer-resource ecology with associated reproduction, growth, stress, 95 and mortality processes; movement and contact behavior; and SEIR epidemiology, in 96 ways that are simple enough to interpret the effects of each process. Sensitivity analyses 97 provide one type of approach to separating out effects [56][57][58][59]. Another is to use 98 methods relating to the practice of appropriate complexity modeling [11, 12] .",
+            "cite_spans": [
+                {
+                    "start": 536,
+                    "end": 540,
+                    "text": "[13]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 1673,
+                    "end": 1677,
+                    "text": "[11,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1678,
+                    "end": 1681,
+                    "text": "12]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "2 Methods",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The model we present here only incorporates the focal processes of interest and those 101 needed to attain a level of realism required to adequately address the questions at hand. 102 Thus, for example, we do not include agent age structure in the model even though age 103 structure is known to have important effects on population growth patterns [60], 104 persistence [61], and epidemics [62]. Agent age structure would certainly add complexity 105 to our narratives; but, whether its impacts are critical (i.e., it qualitatively changes the 106 structures we explain) or only elaborative (i.e., has quantitative but not qualitative 107 implications regarding the questions asked) is a issue to be examined in future studies. 108 For clarity, we enumerate below-without mathematical details-the processes 109 incorporated in our model, leaving such details to the Technical Methods Section at the 110 end of the paper. Aspects of the Numerus Model Builder construction of the model and 111 the generated NovaScript (extended JavaScript language) implementation are provided 112 in a Supporting Information file. 113 2.1 Model Outline 114",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The model is formulated as a set of agents (individuals) moving over a cellular array.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The agents themselves can be differentiated with respect to type (e.g., sex), can undergo 116 discrete state transitions (e.g., disease state) and can also change continuously over time 117 with respect an agent-level state vector. In our case, the latter contains the variables 118 \"mass\" (also a surrogate for fitness) and \"stress\" (which accumulates when the individual 119 is unable to meet its resource needs each time period). The cells in the cellular array 120 may also have relatively complex states that, in our model, include a list of the agents 121 in each cell and the level of a dynamically responding resource, which determines the 122 environmental context for the agents. Movement of agents occurs under the assumption 123 that, apart from reproduction, ecological and epidemiological processes are independent 124 of agent type. More specifically, in our model, the following objects and concepts apply: 125 Simulation world. This is the set of agents moving over a hexagonal cellular array 126 (we use a toroidal topology to eliminate boundary effects).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "1 Disease ecology is a rich field of study that synthesizes inter alia demographic, epidemic, 2 behavioural, movement, spatial and community processes in an ecological setting [1] [2] [3] [4] [5] [6] . 3 Thus, understanding the impact of particular diseases on wild populations in ecological 4 settings is a challenge that requires a comparison of the spatial and community structure 5 of these focal populations, as they might arise in the absence versus the presence of the 6 causative agents of the diseases of interest. One can undertake such studies in the Time. The action takes place over discrete time steps during which individuals (agents) 133 move through one or more cells, stay in a cell to exploit resources, or return to 134 their colony cell at regular intervals of time where they may reproduce. 135 Agents. Each agent has a biomass (which is a surrogate measure of its fitness), a 136 stress level, and a sex determined at birth. Females may reproduce on regular 137 returns back to their colonies by, essentially, fissioning into two (the parent retains 138 the majority of the biomass, while the offspring acquires the minority of biomass, 139 with some loss due to the cost of reproduction). limitations are assumed), provided they are sufficiently fit (i.e., large) and not too 164 stressed. Individuals die at a natural-mortality specified rate, plus an additional 165 disease-induced-mortality rate during their infectious period. 166 Fission-fusion. Individuals moving into a cell that contains a colony, will join the 167 group associated with that colony with a particular probability provided their own 168 colony is some specified ratio larger than their current colony. Epidemiology. We allow individuals to cycle through an S (susceptible), E (exposed 176 but not yet infectious), I (infectious), V (immune), S cycle at rates respectively period. Individuals in all stages are subject to a natural mortality rate, while 180 individuals in the I stage are subject to an additional disease-induced mortality 181 rate. 182 ",
+            "cite_spans": [
+                {
+                    "start": 94,
+                    "end": 95,
+                    "text": "2",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 176,
+                    "end": 179,
+                    "text": "[1]",
+                    "ref_id": null
+                },
+                {
+                    "start": 180,
+                    "end": 183,
+                    "text": "[2]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 184,
+                    "end": 187,
+                    "text": "[3]",
+                    "ref_id": null
+                },
+                {
+                    "start": 188,
+                    "end": 191,
+                    "text": "[4]",
+                    "ref_id": null
+                },
+                {
+                    "start": 192,
+                    "end": 195,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 196,
+                    "end": 199,
+                    "text": "[6]",
+                    "ref_id": null
+                },
+                {
+                    "start": 202,
+                    "end": 203,
+                    "text": "3",
+                    "ref_id": null
+                },
+                {
+                    "start": 384,
+                    "end": 385,
+                    "text": "5",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 650,
+                    "end": 653,
+                    "text": "133",
+                    "ref_id": null
+                },
+                {
+                    "start": 736,
+                    "end": 739,
+                    "text": "134",
+                    "ref_id": null
+                },
+                {
+                    "start": 813,
+                    "end": 816,
+                    "text": "135",
+                    "ref_id": null
+                },
+                {
+                    "start": 1455,
+                    "end": 1458,
+                    "text": "166",
+                    "ref_id": null
+                },
+                {
+                    "start": 1783,
+                    "end": 1786,
+                    "text": "176",
+                    "ref_id": null
+                },
+                {
+                    "start": 1951,
+                    "end": 1954,
+                    "text": "180",
+                    "ref_id": null
+                },
+                {
+                    "start": 2047,
+                    "end": 2050,
+                    "text": "182",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The mathematical equations are provided in Section 6, which are placed at the end of 184 the manuscript because it is not necessary to go through these details before the 185 presentation and discussion of our simulation results (those wishing to see the equations 186 before the results should read Section 6 before starting Section 3). These equations were 187 used to code the model using the Numerus Model Builder (NMB) platform that greatly 188 facilitated rapid, accurate construction of the model through NMB's hierarchical 189 architecture and chip design. More specifically, cell equations and agent equations were 190 first constructed as individual modules, which were then used to populate a \"world\" 191 with an open-ended number of agents moving over an 18\u00d718 hexagonal cellular array 192 that contained 9 regularly spaced nest cells (Fig. 1) . A toroidal topology was used to 3.1 Base-line scenario: no disease, no colony switching 218 We ran two instances of the baseline scenario and obtained similar results with some 219 stochastic variation across runs. A plot of the number of agents N t over time (all are in 220 the susceptible disease state) for the the two runs is provided in Fig. 3 and can are seen 221 to be close in both period and amplitude. We note that our baseline scenario places us 222 at a particular point in the consumer-resource growth-rate, extraction, and interaction 223 parameter value space of our model. Table 3 ). The top left graphic panel depicts the 18 \u00d7 18 hexagonal landscape: colony nest cells are indicated using fully saturated colors and their territory cells using corresponding partially saturated colors (note \"boundary spillover\" effects due to the toroidal landscape topology). The number of individuals in each colony at time t = 1959 are plotted in the central bar graph, using matching colony nest-cell colors. decrease the mutual interference level (parameter q in Eq. 6) from 1 (resource extraction 228 inefficiencies due to self and others are proportional to the total biomass of all agents in 229 cells) to 0 (inefficiencies arise only from self) or increase it to 10 (inefficiencies increase 230 ten fold for each competitor in the cell, presumably due to territorial conflicts) then we 231 see a small decrease in the oscillation frequency in the former case (compare plots Fig. 3 232 with orange plot in Fig. 4A ), but a very different type of trajectory in the strong mutual 233 interference case (compare plots in Fig. 3 with orange plot in Fig. 4B ). ",
+            "cite_spans": [
+                {
+                    "start": 712,
+                    "end": 715,
+                    "text": "191",
+                    "ref_id": null
+                },
+                {
+                    "start": 946,
+                    "end": 949,
+                    "text": "218",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 847,
+                    "end": 855,
+                    "text": "(Fig. 1)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1201,
+                    "end": 1207,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 1448,
+                    "end": 1455,
+                    "text": "Table 3",
+                    "ref_id": "TABREF9"
+                },
+                {
+                    "start": 2343,
+                    "end": 2349,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 2374,
+                    "end": 2381,
+                    "text": "Fig. 4A",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 2486,
+                    "end": 2492,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 2513,
+                    "end": 2520,
+                    "text": "Fig. 4B",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "183"
+        },
+        {
+            "text": "We evaluated the effects of our agents moving on the total number of agents over time 236 for the following five strategy rules (note: the rules apply to staying in the current cell 237 or moving to one of 18 the cells within a radius of 2 hexagonal rings for all times steps 238 except t mod T f when all individuals must be back in their nest cells): 3. minimize movement costs (\u03c6 1 = \u03c6 2 = 0) 243 4. maximize an equally weighted combination of the above three (\u03c6 1 = \u03c6 2 = 1/3) 244 5. maximize an equally weighted combination of all three, but allow individuals to 245 switch colonies with an 80% probability when in the nest cell of a foreign colony 246 that is no more than 30% as large as the individual's current colony (p switch = 0.8, 247",
+            "cite_spans": [
+                {
+                    "start": 481,
+                    "end": 484,
+                    "text": "244",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Effects of different movement strategies 235"
+        },
+        {
+            "text": "The number of agents produced by an illustrative simulation for each of movement To illustrate the impact of mortality rates on population viability, we ran our baseline 253 scenario 15 times with the natural mortality increased from \u00b5 = 0.005 to \u00b5 = 0.02. The 254 times at which the population was extirpated in these 15 runs is given in the first row of 255 Number of agents N t (i.e., the agent population trajectory) are plotted for the baseline case except for the following modifications to movement behavior. Movement is driven by: territory size maximization (blue plots, two replicates when \u03c6 1 = 0, \u03c6 2 = 1 ); available resource maximization (green plots, two replicates when \u03c6 1 = 1, \u03c6 2 = 0); movement cost minimization (orange and yellow plots, two replicates of \u03c6 1 = \u03c6 2 = 0); and equal weightings of above three (dotted grey plot-the same as blue plot in Fig. 3 where \u03c6 1 = \u03c6 2 = 1/3).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 871,
+                    "end": 877,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Effects of different movement strategies 235"
+        },
+        {
+            "text": "individuals persists over time) [48] . In the latter case, the bimodal distribution is 267 essentially a long-tailed distribution, given that all stochastic population processes 268 ultimately go to zero, if zero is an absorbing state (which it is in our model since no new 269 infectious individuals are recruited from outside of our metapopulation) [77] (Fig. 6 ).",
+            "cite_spans": [
+                {
+                    "start": 32,
+                    "end": 36,
+                    "text": "[48]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 356,
+                    "end": 363,
+                    "text": "(Fig. 6",
+                    "ref_id": "FIGREF10"
+                }
+            ],
+            "section": "Pathogen transmission"
+        },
+        {
+            "text": "Our model is initially seeded for potential disease outbreaks in that one of the agents at 271 simulation initialization is in disease state E (exposed), while the remaining 349 are in 272 disease state S (susceptible). To set up potential pathogen transmission outbreak 273 scenarios requires that the transmission parameter be positive (i.e. \u03b2 > 0). To explore 274 the nature of these bimodal distributions for our model, we simulated 15 instances each 275 of disease dynamics for the cases \u03b2 = 0.01, 0.2, and 0.03. The amount of time it took 276 for the number of exposed and infected individuals to fall to zero in each of these cases 277 is represented in the histograms plotted in Fig. 6A . The agent dynamics in the 278 longest-lasting of these 45 runs is illustrated in Fig. 6B . In these simulations, we note 279 that the only effect of pathogens on host-population dynamics is through the 280 assumption that individuals in disease states E and I do not reproduce, and not through 281 disease-induced mortality (considered next).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 687,
+                    "end": 694,
+                    "text": "Fig. 6A",
+                    "ref_id": "FIGREF10"
+                },
+                {
+                    "start": 778,
+                    "end": 785,
+                    "text": "Fig. 6B",
+                    "ref_id": "FIGREF10"
+                }
+            ],
+            "section": "270"
+        },
+        {
+            "text": "October 1, 2019 10/28 ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "282"
+        },
+        {
+            "text": "In standard SIR epidemic models, the virulence of a pathogen is assumed to be 284 captured by the size of the disease-induced mortality rate parameter [14] . In our model 285 this parameter is \u00b5 I ( Table 2) . We investigated the effects of increasing the value of this 286 virulence parameter in the context of a pathogen transmission rate of \u03b2 = 0.05 (Table 2 ) 287 that leads to outbreaks that generally persist over our 2000 time step interval (cf. Lotka-Volterra-type population process iterated at a \"slow\" daily time scale. This study 340 found inter-alia that increasing predator efficiency by either increasing their perceptual 341 range or decreasing the number of prey refugia resulted in a coexistence region-an 342 equilibrium around which the prey and predatory populations oscillated-decreased for 343 both prey and predator, thereby increasing the risk of extinction. As in our model, the 344 second study included the interaction of both competition and predation. The ",
+            "cite_spans": [
+                {
+                    "start": 151,
+                    "end": 155,
+                    "text": "[14]",
+                    "ref_id": "BIBREF17"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 199,
+                    "end": 207,
+                    "text": "Table 2)",
+                    "ref_id": "TABREF7"
+                },
+                {
+                    "start": 353,
+                    "end": 361,
+                    "text": "(Table 2",
+                    "ref_id": "TABREF7"
+                }
+            ],
+            "section": "283"
+        },
+        {
+            "text": "One thread of the quantitative narrative that emerges from simulations of our model 354 is that competition causes the period of prey-predator oscillations to increase and be 355 dampened more rapidly, with this increase and dampening accentuated as colony 356 mixing increases. A second thread is that a \"grass is greener syndrome\" (i.e., movement 357 decisions are based purely on resource considerations) leads to increased stress in ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "353"
+        },
+        {
+            "text": "A second thread of the quantitative narrative that emerges from our simulations 367 relates to the effects of disease on population dynamics, for which our model provides 368 an appropriate formulation to address the questions of interest. One of these effects is 369 the impact of increasing pathogen transmission rates on the maintenance of an endemic 370 infection. No subclass of a population (e.g., infectious individuals or even the 371 population as a whole) can persist forever-both are bounded stochastic population 372 processes that are known to go extinct in a finite amount of time [74, 75] . This is amply 373 demonstrated in our simulations that consider the impacts of increasing pathogen 374 transmission rates. In Fig. 6A , we verify that our infection process produces the 375 expected U-shaped bimodal distributions of infectious individuals, though the breadth 376 of the distribution associated with the outbreak mode (as opposed to an early-fade-out 377 mode) increases with \u03b2. Indeed, for \u03b2 = 0.05, once an outbreak occurs, it generally lasts 378 longer then 1000 time steps, as illustrated in Fig. 7 . This remains true as the virulence 379 of the pathogen increases from \u00b5 I = 0 (blue plots in Fig. 7 ) through \u00b5 I = 0.03 (orange 380 plots in Fig. 7 ) and \u00b5 ID = 0.1 (grey plots in Fig. 7 ) to \u00b5 I = 0.2 (yellow plots in Fig. 7 ). 381 What is clear from these simulations is that as virulence increases, the number of more precise than the level of the errors associated with the fit of models to data.",
+            "cite_spans": [
+                {
+                    "start": 595,
+                    "end": 599,
+                    "text": "[74,",
+                    "ref_id": null
+                },
+                {
+                    "start": 600,
+                    "end": 603,
+                    "text": "75]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 732,
+                    "end": 739,
+                    "text": "Fig. 6A",
+                    "ref_id": "FIGREF10"
+                },
+                {
+                    "start": 1118,
+                    "end": 1124,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 1220,
+                    "end": 1226,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 1269,
+                    "end": 1275,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 1308,
+                    "end": 1314,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 1347,
+                    "end": 1353,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF12"
+                }
+            ],
+            "section": "366"
+        },
+        {
+            "text": "The model we present here has the potential to address a range of questions relating 403 to the ecology of consumer-resource interactions played out over spatially-structured 404 landscapes and impacted by movement and disease processes. Our model can also be 405 elaborated to address questions that include, for example, mating and genetic 406 structures, multispecies situations, environmental factors that exhibit seasonal variation, 407 and landscape structures, including individuals moving over real landscapes. Numerus 408 Model Builder has the facility to import landscape information from GIS databases that 409 can be easily extended to metapopulation settings [90]: thus our model can be readily 410 extended to ask questions about spatially-structured populations on real landscapes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "402"
+        },
+        {
+            "text": "Of course, considerable interest exists in fitting models to data, especially in the 1. The population initially consists of N 0 agents; but over time, due to births and 425 deaths this number will change and be designated N t . 426 2. The landscape is a pixelated H \u03b3 \u00d7 H \u03b4 hexagonal cellular array with a doughnut 427 topology. The index pair \u03b3, \u03b4 refers to a particular cell in this array. To emphasize 428 that these indices refer to one entity (a particular cell), we tie them together using 429 October 1, 2019 14/28",
+            "cite_spans": [
+                {
+                    "start": 229,
+                    "end": 232,
+                    "text": "426",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "411"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "411"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint a hat notation: viz., \u03b3, \u03b4. This is particularly useful when we use multiple 430 subscripts to refer to cells in the neighborhood of the cell \u03b3, \u03b4. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint (d) a \u03b1, , = 4, 5, ... may be continuous state variables that measure the relative 475 size of individuals, their state of hunger, their state of emaciation when food 476 is in short supply, and so on. Here we only use two such variables and refer 477 to a \u03b1,4 interchangeably as the fitness or biomass variable and a \u03b1,5 as the 478 stress variable. distance any single move can be:",
+            "cite_spans": [
+                {
+                    "start": 523,
+                    "end": 526,
+                    "text": "475",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "411"
+        },
+        {
+            "text": "The total number of cells in this set is K = 1 + 6(1 + 2 + ... + r) = 1 + 3r + 3r 2 (one 497 center cell plus each hexagonal ring centered on this center cell ring has 6 cells more 498 then the its immediate inscribed ring: i.e., 1+6+12+...+6(r-1)+6r cells). We use the 499 notation \u03b3, \u03b4 i \u2261 i, i = 1, ..., K to index a renumbering of cells in BLOCK \u03b1 (r) . One 500 renumbering scheme, for example, is to label the center cell \u03b3, \u03b4, occupied by individual 501 \u03b1, as \u03b3, \u03b4 = \u03b3, \u03b4 1 , the cell to its immediate west as \u03b3, \u03b4 + 1 = \u03b3, \u03b4 2 , then going 502 counter-clockwise until the last of the cells in RING \u03b1 (1) has been labeled 7 (i.e., 503 \u03b3 \u2212 1, \u03b4 + 1 = \u03b3, \u03b4 7 and moving on to the west most cell in RING \u03b1 (2) as 8 and so on 504 until all cells in RING \u03b1 (r) have been labeled.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "411"
+        },
+        {
+            "text": "The decision for agent \u03b1 belonging colony to stay in its current cell or move to 506 some other cell in BLOCK \u03b1 (r) is determined using the agent movement rule below that 507 relies on the following three measures: 508 Distance measure: Closer is better 509 For some decay parameter \u03b5 > 0, distance radius \u03bd i , and maximum distance",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "represent the distance between the center cell and the i th cell in BLOCK \u03b1 when this 512 cell is in RING \u03b1 (\u03bd i ). If",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "October 1, 2019 16/28",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint Comparative occupation-history measure: Prefer cells less used by other colonies 517 Under our renumbering c \u03b3,\u03b4 i ,m+1 (t) is cell i's \u03b3, \u03b4's memory state with regard to 518 the occupation history of agents from colonies m = 1, ..., M in this cell. For cells 519 i = 2, ..., K, this quantity is based on a comparison of the largest occupation 520 history value (in cell i) of c \u03b3,\u03b4 i ,m (t) for all m = 1, ..., M in comparison with the 521 occupation history value of agent \u03b1 in cell i. Recalling that agent \u03b1 is from colony 522 ) then, for i = 1, ...., K, First, we determine for all cells which individuals occupying each cell stay or move, and 531 then, we compute changes in the resource states of the cells, as well as the fitness that 532 individuals gain or lose from consuming resources due to movement activity. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "If y = 0 then X(t) = 0. Specifically, the individuals' fitness states a \u03b1,4 (t \u2212 1), 548 \u03b1 = 1, ..., N , are updated for a maximum fitness value a max \u03b1,4 , a fitness decay factor 549 October 1, 2019 17/28",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint \u03c8, and a biomass conversion parameter 0 < \u03ba < 1 using 550 a \u03b1,4 (t) = e \u2212\u03c8 a \u03b1,4 (t \u2212 1) + \u03baX(t \u2212 1) max 0, 1 \u2212 a \u03b1,4 (t \u2212 1) a max \u03b1,4",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "and the cell \u03b3, \u03b4 resource state for resource-intrinsic-growth-rate parameter r > 0, 551 reservoir parameter g \u2265 0 and saturation parameter s > 0 is updated, by first",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "and then using the equation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "MOVE dynamics Individual fitness updating 555",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "If an individual \u03b1 moves out of a cell at time t \u2212 1, then the individual's fitness 556 (or biomass) decays at a rate \u03bd\u03c8 > 0, where \u03c8 is the decay rate factor introduced 557 in the STAY dynamics section and \u03bd > 0 is the fitness cost of moving relative to 558 not moving; i.e., 559 a \u03b1,4 (t) = e \u2212\u03bd\u03c8 a \u03b1,4 (t \u2212 1)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "Stress dynamics Individual not meeting daily requirements 560 We model stress dynamics using a variables a \u03b1,5 (t) for the a = 1, ..., N agents. We 561 note that a \u03b1,5 (t) \u2265 0, such that a \u03b1,5 (t) = 0 implies the individual is unstressed 562 with stress increasing as a \u03b1,5 (t) increases. We assume that without additional 563 stress input, the a \u03b1,5 (t) relaxes back to zero at a rate c z . However, if an 564 individual is subject to an additional stress z \u03b1 (t) over the interval [t, t + 1] then 565 its new stress level at time t will be 566 a \u03b1,5 (t) = max{0, (1 \u2212 c z )a \u03b1,5 (t \u2212 1) + z \u03b1 (t \u2212 1)}",
+            "cite_spans": [
+                {
+                    "start": 58,
+                    "end": 61,
+                    "text": "560",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "To calculate the amount of stress an individual is subject to in each time interval, 567 we assume that when it moves (i.e. does not take in any resources) then it has a 568 resource deficit of X * type (i.e., a set of input parameter values subscripted by type, 569 where \"type\" indicates that these deficits may vary by species, sex, or age, etc.). 570 In this case we assume, dropping the type designation (since we make this 571 parameter the same for both sexes, all disease states, and we have no incorporated 572 age structure), that 573 MOVES :",
+            "cite_spans": [
+                {
+                    "start": 351,
+                    "end": 354,
+                    "text": "570",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "where c m > 0 is a conversion constant that depends on the units used to measure 574 resources. On the other hand, if an individual gets to stay in the cell over time",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "505"
+        },
+        {
+            "text": "[t, t + 1], and there are y individuals (including itself) that stay to exploit 576 resources in the cell during this time interval, the amount of resource that the 577 individual extracts, from Eq. 6, is X(t \u2212 1)/y. We now assume that the extent to 578 which this value falls short of the resource deficit value X * is the amount of stress 579 incurred over [t, t + 1] multiplied by the conversion constant: i.e., 580 STAYS :",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "575"
+        },
+        {
+            "text": "Note the the above covers all individuals that stay whether or not they reproduce. 581",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "575"
+        },
+        {
+            "text": "October 1, 2019 18/28",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "575"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "575"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "575"
+        },
+        {
+            "text": "6.4 Epidemiology and Deaths",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "575"
+        },
+        {
+            "text": "The epidemiological component is essentially an S (susceptible), E (exposed but not yet 589 infectious), I (infectious), V (recovered with immunity) and D (dead) model [26] . We 590 use the value of a \u03b1,2 to denote this state and use the following rules to compute whether 591 or not individuals in states S, E, I, and V respectively transition to states E, I, V, S and 592 D in terms of \"transition rate parameters\" \u03b3 E > 0, \u03b3 I > 0, \u03b3 V > 0, \u03b3 S > 0 and \u03b3 D \u2265 0. 593 We assume a basic death rate over the interval [t, t + 1) \u00b5 0 > 0 that increases with 594 stress at rate that is proportional to the stress level a \u03b1,5 (t), with a constant of 595 proportionality given by c s > 0. In this case:",
+            "cite_spans": [
+                {
+                    "start": 168,
+                    "end": 172,
+                    "text": "[26]",
+                    "ref_id": null
+                },
+                {
+                    "start": 465,
+                    "end": 468,
+                    "text": "593",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "588"
+        },
+        {
+            "text": "for all individuals in diseases states S, E, I and V. For individuals in disease state I, we 597 assume an additional disease induce mortality rate \u00b5 I c \u03b3,\u03b4,1 (t) (where for relatively high 598 mortality diseases \u00b5 I >> \u00b5 0 ) so that for individuals in I, where we add the index I to 599 distinguish it from the rate we have in Eq. 15",
+            "cite_spans": [
+                {
+                    "start": 285,
+                    "end": 288,
+                    "text": "599",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "588"
+        },
+        {
+            "text": "Cell Infectiousness Pathogen density in each cell ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "588"
+        },
+        {
+            "text": "If susceptible, individuals also have a probability of dying over the same time 612 interval at a rate (or force of risk) that is proportional to their stress level a \u03b1,5 (t) 613 then, in essences, we are assuming that the transition rate out of then using a There are several ways to deal with emigration. A relatively simple approach is for 629 an individual to make a decision to join a colony, when it enters a colony cell and Here is a very simple approach that we employ in our simulation, based on the idea 634 that if a colony consists of a very few individuals, then competition for resources is less 635 intense in the neighborhood of this colony. In rule articulated below, #m refers to the 636 number of individuals in colony m:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "588"
+        },
+        {
+            "text": "Rule: An individual from colony m , currently in the nest cell of colony m, will switch to colony m with probability p switch whenever #m /#m < \u03c1 crit (20)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "637"
+        },
+        {
+            "text": "All individuals in colonies that do not move have an opportunity to reproduce at that 639 start of each new fast cycle (i.e., when t mod T f = 0). In particular, any individual who 640 is in disease state S or V, and whose fitness value exceeds b min will not move in the next 641 time step, but will instead give rise to a new individual. The fitness/biomass value of 642 this reproducing individual will drop (parent) and a newborn will be created with 643 updated fitnesses given by 644 If t mod T f = 0 and a \u03b1,4 (t) > b min then a \u03b1,4 (t + 1) = \u03c6 parent a \u03b1,4 (t) parent fitness a \u03b1 ,4 (t + 1) = \u03c6 newborn a \u03b1,4 (t) newborn fitness",
+            "cite_spans": [
+                {
+                    "start": 486,
+                    "end": 489,
+                    "text": "644",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "638"
+        },
+        {
+            "text": "Note that the newly reproduced individual, \u03b1 , will belong to the same colony. In 645 addition, we must have \u03c6 parent + \u03c6 newborn < 1, where the shortfall of this sum from 1 is 646 a cost of reproduction. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "638"
+        },
+        {
+            "text": "Here we provide some of the key details not included in previous publications [1, 2] regarding the construction, using the Numerus Model Builder platform, of the agent-based model presented in the main text. Numerus Model Builder (NMB) employs NovaScript, which is embedded in, and extends, Javascript. The NovaScript interpreter is an extension of the ECMA 1.7 Javascript standard. The full range of the Javascript language is available to the NovaScript programmer for specifying the computations required by his or her simulation. It includes facilities for specifying simulations visually, using stock and flow diagrams (familiar to programmers of Stella and Vensim) and other visual tools unique to NMB. Simulations are scoped out using such visual schematic diagrams with equation and other procedural details entered into appropriate windows [1] , or textually, via NovaScript. We will refer to the former as a diagram specification; the latter will be referred to as a code specification.",
+            "cite_spans": [
+                {
+                    "start": 78,
+                    "end": 81,
+                    "text": "[1,",
+                    "ref_id": null
+                },
+                {
+                    "start": 82,
+                    "end": 84,
+                    "text": "2]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 849,
+                    "end": 852,
+                    "text": "[1]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model Simulation Framework"
+        },
+        {
+            "text": "NMB is highly modularized due to: 1) the creation of dynamic agent \"Capsules\" that interact with their environments through input/output interfaces (more below) and 2) allowing these agents to move over a heterogeneous resource landscape. Movement can either be on a Cartesian plane or from one cell to another on a rectangular or hexagonal array of specifiable dimension [1] . Our model moves agents over hexagonal arrays of variable and dynamic resource cells and was designed to address questions regarding agent and colony populations dynamics under different movement and disease scenarios.",
+            "cite_spans": [
+                {
+                    "start": 372,
+                    "end": 375,
+                    "text": "[1]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model Simulation Framework"
+        },
+        {
+            "text": "Simulations are built out of objects, called Components. Among the component types are Primitive Components, Simulators, Displays, and Controls. The primitive components consist of Stocks, Variables, Sequences, Flows, and Terms. Stocks, Variables and Sequences are used to represent the state of a running simulation. The Stock component may be attached to one or more Flows. Each Flow specifies some change in the current value of the Stock. A Variable is similar, only it is not attached to any Flow; rather its change is determined by a derivative contained in the Prime field. Sequences are similar to variables, except that they are discrete, and change is indicated by a Next field, directly determining the value of the sequence in the next time interval. Flows and Terms both have Exp fields containing their expressions. As mentioned above, Flows affect the value on the Stocks to which they are attached. A Term is used to compute a value using current State values (in Stella, what Numerus Model Builder calls a Term is referred to as a Converter.)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "This model is formulated as a set of agents moving over a cellular array. Therefore, as described in our presentation, we require 3 Capsule types: the Cell, Agent, and sirTerrM. (Refer to Sections 3.1, 3.2, and 4 for further detail on each Capsule type.)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "A Numerus model is structured using elements called Simulators. Here is a description of the Simulators used in our model. 1 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Architecture"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint Simulators. The term-of-art Simulator is used by Numerus Model Builder to describe a container of interacting components. In a running simulation, a Simulator is set to an initial state. As the simulation progresses its next state is determined by its current state and by other simulators with which it may be communicating. The Capsule is the simplest Simulator, and may contain any of the components described in the previous section. The five other Simulator types are array-like aggregators comprised of Capsule elements. Each aggregator introduces new functionalities to their constituents, as described below.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Architecture"
+        },
+        {
+            "text": "Capsule. The role of the Capsule is to contain the components of a simulation and synchronize the progress of the computation. A Capsule holds instances of the primitive components, but may also contain other Capsules and other aggregator Simulators.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Architecture"
+        },
+        {
+            "text": "The top-level construct in any model is a Capsule.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Architecture"
+        },
+        {
+            "text": "A CellMatrix is a spatial array of individual Capsules, or Cells laid out in either a Cartesian lattice or hexagonal grid. Each Cell has a pair of coordinates and can query the CellMatrix to determine the other Cells in its neighborhood, with which it can exchange information. A CellMatrix can also provide an environment for agents to exist when combined with an AgentVector (see below).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CellMatrix."
+        },
+        {
+            "text": "In our model each cell contains resources (i.e., plants, fruits, seeds), can act as a nest site associated with a specified colony of agents, and can be occupied by one or more agents who either pass through in a single time period or remain for some time during which they exploit the dynamically changing (through both growth and extraction) resources.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CellMatrix."
+        },
+        {
+            "text": "AgentVector. An AgentVector contains a dynamic set of Capsules called Agents that can exist on some landscape. At any point in time an Agent has a location on that landscape, which will change if the Agent decides to move. Agent motion will generally either use a toroidal topology or reflect off the boundary like a billiard ball (other boundary effects can be implemented). The AgentVector helps Agents find nearby Agents with which they may interact. New Agents may be created and existing Agents may be removed during the lifetime of the simulation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CellMatrix."
+        },
+        {
+            "text": "In our model each Agent has a biomass (a surrogate measure of the agent's individual fitness), a stress level, and a sex (determined at birth). Females may reproduce on regular returns back to their colonies. This works via the parent retaining the majority of the biomass, the offspring acquiring a minority of biomass, and some loss from the cost of the reproduction event itself. Our movement algorithm uses a toroidal topology in order to eliminate boundary effects.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CellMatrix."
+        },
+        {
+            "text": "A SimWorld combines a CellMatrix with an AgentVector to create an artificial environment in which the Agents of the AgentVector range over the landscape created by the CellMatrix. Consequently, in addition to interacting with each other, Agents may determine the Cell in which they are located and interact with that or nearby Cells.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "SimWorld."
+        },
+        {
+            "text": "Pictured below is the top level Capsule of our model, sirTerrM showing the SimWorld labeled NWorld, which models a set of agents moving over a hexagonal cellular array.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "SimWorld."
+        },
+        {
+            "text": "Other components in this Capsule are used to initialize the SimWorld and analyze and display results.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "SimWorld."
+        },
+        {
+            "text": "Numerus Model Builder also provides 2 additional Simulators for implementing a network spatial topology and using that topology as an agent landscape.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "SimWorld."
+        },
+        {
+            "text": "Stocks, Flows and Sequences. Traditional system dynamics modeling is centered on the stock-and-flow construct, whereby a stock, representing some dynamic model value, is updated by adding or subtracting the content of one or more flows (i.e respectively \"flowing in or out\" of the stock). In the simplest case, with a single flow flowing into a stock, the flow's value is the derivative of the stock's value over time. (When multiple flows are present, the derivative is found by summing the positive and negative flow values). The stock-flow model in system dynamics is especially apt for designing networks of stocks connected by flows that move values between the stocks.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "Numerus fully supports the system dynamics paradigm, but adds several convenient modifications. A single Numerus Stock-Flow component may be substituted for a Stock with a single input Flow. This configuration can be particularly useful when modeling differential equations. Numerus also introduces a variation called Sequence, in which the Flow contains the Sequence's next value, rather than content to be added to or subtracted from the current value. Sequences do not offer the Runge-Kutta integration algorithms available to Stocks to reduce the error when modeling continuous processes; therefore they are most useful for discrete models.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "Numerus models are built using drag-and-drop gestures that place components on a design canvas. In the figures below, Stocks and Sequences respectively use lime-green and lavender-pink rectangles, and Flows are represented as yellow circles with arrows connecting to their Stocks.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "The sirTerrM model uses both Stocks and Sequences in the Agent Capsule to represent continuous and discrete elements of the model. The population initially consists of N 0 agents, but over time, due to births and deaths this number will change and be designated N t . To assign this, we go to Project >> Prelude.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "Recall that the quantities c \u03b3,\u03b4,m (t), m = 1, ..., M , contain a fading memory of how many individuals from colony m have visited the cell c \u03b3,\u03b4 up until time t. In our implementation these data are stored in an M -element array in the Sequence Cell Memory. This array is initialized with each slot set to 0. At each point in time first the current value of each slot is aged by a factor of e \u2212\u03b7 M (where \u03b7 M is represented in the program by the parameter mem fade), and then the current population of the cell is distributed to the slots based on their nest of origin.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "Note that cell Memory is referenced by an agent during the process of determining its next move. This computation is contained in the agent's move comp term. 6 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model Components"
+        },
+        {
+            "text": "We want the color of a cell in our visualization to reflect properties of the cell. Each nest is assigned a unique color which displays unless the nest is empty, in which case it displays in gray. Otherwise the cell's color is computed to reflect the color of the nest of origin of the most number of visitors, or a neutral color if unvisited. This computation occurs in the Cell term cellColor.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Cell Colors"
+        },
+        {
+            "text": "Underlying all dynamical systems modeling of epidemiological outbreaks and endemic diseases are formulations based on the concept of an SEIR progression. Susceptible individuals in disease class S enter disease class E on exposure to a pathogen (i.e., infected but not yet infectious themselves). After a period of latency, individuals in class E then transfer into the class of infectious individuals, I, only to transfer to a recovered or removed class R. However, note that once mortality is included in the model, then disease class R becomes ambiguous because removed individuals now include both recovered and dead individuals. Therefore, we use disease class V for recovered (i.e., \"V\" for naturally vaccinated individuals that have \"recovered with immunity\") and D for dead. This SEIVD notation proves useful once SEIR processes are expanded to include births, recruitment, immigration, deaths, and emigration processes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Disease Component"
+        },
+        {
+            "text": "cell Infect: Each cell has a cell Infect Sequence representing the infectiousness of the cell at time t based on the number of infected individuals that have visited. We require a fade rate to account for an assumed decline in the infectiousness environment of the cell over time brought about by past visitors. If the fade rate is close to 0, this implies that an indirect transmission of pathogens via the cell's environment is of significance, whereas if the fade rate goes towards \u221e, then this implies that direct contact is increasingly important for transmission. 7 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Disease Component"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Disease Component"
+        },
+        {
+            "text": "The third and final Cell state value is the resources it contains for nourishing the agents that visit. The formulae for determining resource dynamics involve both natural growth and agent consumption, and are discussed fully in the paper.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Resource"
+        },
+        {
+            "text": "Disease Transition Terms: We include the 5 transition states as Terms: gamma S, gamma E, gamma I, gamma V, gamma D, all of which govern the transitions of the Disease Value State (refer to Section 3 Model Components). Note that gamma E, gamma I, and gamma V are constants derived from parameters. gamma S, which governs the transition from Susceptible to Exposed, depends on the value of cell infect (i.e. the infectiousness of the environment); and gamma D, which governs the transition to Death, depends in part on agent stress.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Disease Transition States"
+        },
+        {
+            "text": "Determining movement is a computation that occurs in the Term move comp. Section 6.2 of the manuscript explains movement in great detail. For the purpose of the Supplementary document, we will focus on a few fundamental concepts that determined our choosing of the terms and states for this particular component.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Movement"
+        },
+        {
+            "text": "At the start of each time interval [t, t + 1], we initially make a case for whether or not individual \u03b1 = 1, ..., N remains in its current cell or moves to some other cell in the set BLOCK \u03b1 (r), where r is some pre-selected positive integer that determines the furthest distance any single move can be.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Movement"
+        },
+        {
+            "text": "We determined whether or not agent \u03b1 belonging to colony would stay in its current cell or move to another one, based on either Distance Measure (var dist), Comparative 8 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Movement"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint Resource Measure (var myResource), and Comparative Occupation-History Measure (var otherMaxOccupancy).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Movement"
+        },
+        {
+            "text": "There is also a stochastic trade-off with the agent movement rules, which play a role in determining cell attractiveness values. 9 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Movement"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Movement"
+        },
+        {
+            "text": "The Agent Color component also exists in order for us to observe distinctions between agents. It is determined by the agent Term agentColor, with each agent given the color associated with its home nest.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent Color"
+        },
+        {
+            "text": "A Fitness Sequence (defined in terms of the maximum resource extraction rate parameter) is also included in the model with the purpose of updating the stress state of individual agents. More specifically, the fitness of an individual is updated over the time interval[t\u22121, t] for the maximum fitness value, the fitness decay factor, and the biomass conversion values, all of which are broken down thoroughly in Section 6.3, Ecological Dynamics, of the manuscript. If an individual moves out of a cell at time t \u2212 1, then the fitness is reduced by a fraction that is some multiple of the decay rate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitness"
+        },
+        {
+            "text": "We model Stress Dynamics through the agent's Stress Stock, which contains the quantity a \u03b1,5 (t) for a = 1, ..., N , as described in Equation 11 of Section 6.3 in the paper. We note that the Stress component is initially given a random value between 0.5 and 1.",
+            "cite_spans": [
+                {
+                    "start": 133,
+                    "end": 144,
+                    "text": "Equation 11",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Fitness"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitness"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitness"
+        },
+        {
+            "text": "This model assumes nothing about mating structures and male limitations; therefore, only females reproduce, given a particular probability at regular colony-return times, provided they have sufficient fitness and sufficiently low stress values. Individuals die at naturalmortality specified rates, as well as with an additional disease-induced-mortality rate during their infectious period. Note that, as demonstrated in the figure below, Reproduction is a Command that occurs only when an agent selects \"reproduced\" as its current action. According to the rules of the model, this can occur only when the agent is in its home nest, which recurs on a cyclic basis (see the agent Term what should i do for the rules governing this selection).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproduction"
+        },
+        {
+            "text": "In our model, we incorporate the effect of pathogens on host population dynamics; therefore, individuals in disease states E and I do not reproduce. Individuals in disease state S or V, and whose fitness value exceeds b min will not move at the next time step, but instead will give rise to a new individual. Furthermore, newly reproduced individuals will belong to the same colony as their parents.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproduction"
+        },
+        {
+            "text": "11 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproduction"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproduction"
+        },
+        {
+            "text": "The top-most level includes the SimWorld container NWorld to house the cells and agents defined by the latter two Capsules.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "sirTerrM Layer"
+        },
+        {
+            "text": "The Prelude contains the globally defined array nestPop that keeps track of the population of the 9 colonies used by the model. The Terms colony 0 through colony 8 each select a distinct slot of this array for inclusion in the bar graph Nest Population (see below). The locations of the nests are defined in the Term Nests using the Numerus Cell ID notation CY :X, where Y and X respectively indicate the row and column address of the cell. Nest locations are fed to the SimWorld through input pins to both its Agent and Cell constituents, since both need to be aware of these locations.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Nests and Colonies"
+        },
+        {
+            "text": "There are a total of 6 displays showing the state of the running model. The first is a visualization of model activity generated by the NWorld SimWorld. The second and third 12 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data Displays"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint are, respectively, the bar graph mentioned above showing the current colony populations, and line graphs tabulating the current disease state of the agents. The final three displays provide statistical information across the agent and cell populations for Stress and Fitness (agent); and Resource (cell). The Stats plug-in is used to create graphs showing the mean and mean \u00b1 standard deviation of each of these quantities.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data Displays"
+        },
+        {
+            "text": "The tables below provide a translation between the notation used in the text and that employed in the model. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Text-to-Model Terminology Translation"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Going through the 675 motions: incorporating movement analyses into disease research",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Dougherty",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Seidel",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Carlson",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Spiegel",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Ecology letters",
+            "volume": "676",
+            "issn": "4",
+            "pages": "588--604",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Animal migration and infectious disease risk. 678 science",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Altizer",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Bartel",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Han",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "331",
+            "issn": "",
+            "pages": "296--302",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Climate change and 680 infectious diseases: from evidence to a predictive framework",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Altizer",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Ostfeld",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Johnson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kutz",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Harvell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "science",
+            "volume": "681",
+            "issn": "6145",
+            "pages": "514--519",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Why infectious disease research needs 683 community ecology",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Johnson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "De Roode",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Fenton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Science",
+            "volume": "349",
+            "issn": "6252",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Causal inference 685 in disease ecology: investigating ecological drivers of disease emergence. Frontiers 686 in Ecology and the Environment",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Plowright",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Sokolow",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Gorman",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Daszak",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Foley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "",
+            "volume": "6",
+            "issn": "",
+            "pages": "420--429",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Ecological theory to enhance infectious disease control and public health policy. 689 Frontiers in Ecology and the Environment",
+            "authors": [],
+            "year": 2005,
+            "venue": "",
+            "volume": "3",
+            "issn": "",
+            "pages": "29--37",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Size matters: what have we learnt from 691 microcosm studies of decomposer fungus-invertebrate interactions? Soil Biology 692 and Biochemistry",
+            "authors": [
+                {
+                    "first": "A&apos;",
+                    "middle": [],
+                    "last": "Bear",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Jones",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Boddy",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "78",
+            "issn": "",
+            "pages": "274--283",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Mesocosm experiments as a tool for ecological climate-change research",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Disease outbreak thresholds emerge from 697 interactions between movement behavior, landscape structure, and epidemiology",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Forester",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Craft",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "698",
+            "issn": "28",
+            "pages": "7374--7379",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Metapopulation biology",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Hanski",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Gilpin",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Mccauley",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "",
+            "volume": "454",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "702 Making ecological models adequate",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Marshall",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Carlson",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Giuggioli",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Ryan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Roma\u00f1ach",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Ecology letters",
+            "volume": "21",
+            "issn": "2",
+            "pages": "153--166",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Appropriate complexity landscape modeling. Earth-science reviews",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "The mathematics of infectious diseases. SIAM Review",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hethcote",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Infectious diseases of humans: dynamics and control",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "709",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Sippl-Swezey N. Panmictic and clonal evolution on a single patchy resource produces polymorphic foraging guilds",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Salter",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Lyons",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "PloS One",
+            "volume": "10",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Modeling epidemics: A primer and Numerus Model Builder implementation",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Salter",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Muellerklein",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Yoon",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Tallam",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemics",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Disease_State",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Make_Enum",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Action",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Make_Enum",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Male",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Make_Enum",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Celltype",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Make_Enum",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Agent association groups (colonies). Each agent belongs to one of several 141 association groups called colonies. These colonies have a home or nest cell. An 142 agent belonging to a particular colony marks each cell that it moves through with 143 a colony-specific marker. The accumulation of such markers (with fading effects144 over time) facilitates the emergence of territorial movement behavior.145 Consumer-resource ecology. When individuals move they loose biomass, but if they 146 remain in a cell they gain biomass. Changes in biomass are computed using 147 dynamic consumer-resource interaction processes that incorporate stress 148 components as well [63, 64]. These dynamics account for resource growth, 149 saturation, storage processes, and agent resource-extraction rates (which depend 150 on the efficiency of extraction as a function of resource density, as well as the 151 impacts of interference competition from other agents: i.e., so-called mutual 152 interference [65, 66]). 153 Territoriality. Cells have a fading memory of the accumulated visits of all individuals 154 from a particular colony (through the deposit of a scent-like marker each time an 155 agent enters the cell) [67]. 156 Movement. At each time-step-except when moving back to the colony at regular 157 intervals of time-individuals move to cells, selected with given probabilities based 158 on their relative attractiveness. This attractiveness increases with resource 159 richness and decreases with distance, as well as with the strength of the markings 160 of agents from foreign colonies. 161 Births and deaths. Only females reproduce with a particular probability at regular 162 nest-cell return times (note that nothing about mating structures and male 163",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "of disease transmission. Each cell presents a risk of infection to susceptible 170 (S) agents entering that cell with a force proportional to the number of infected (I) 171 individuals currently in the cell added to a fading value of past visits by infected 172 individuals. This incorporation of accumulated but fading risk from past visits 173 allows the model to deal with both direct (current I individual visits) and indirect 174 disease transmission [68] (past visits of I individuals)175",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "avoid boundary effects. The simulation period was 2000 time steps, with individuals 194 returning every 10 time steps to their colonies to reproduce. 195 Some of the details on how to build such models using NMB have been provided 196 elsewhere [26, 69], with additional novel features discussed in our Supporting Online File 197 (SOF). Notably, the NMB platform has two independent components. The first is a set 198 of coding tools accessed through a graphical user interface (GUI) that is used to 199 generate a NovaScript, which is an enriched JavaScript language. This script can then 200 be run in any suitable run-time environment, where NMB currently provides a Java 201 runtime engine implementable in Windows, MacOS, and Linux environments. An 202 example of a script created for our model is provided in our SOF, together with a table 203 that facilitates moving between the code and the mathematical description in Section 6. 204 Finally, our model is available online (see our SOF) and interested readers can run the 205 model after downloading a free version of the NMB platform at the Numerus website 206 (numerusinc.com). experience with the consumer-resource component of the model [69, 70] and some 209 experimentation led us to select a set of resource and consumer growth and interaction 210 process rate parameters, as well as consumer stress and mortality process rate 211 parameters (Tables 2 & 3) that were used to generate a baseline set of simulation results 212 against which we could compare the agent and colony population dynamics under 213 different movement and disease scenarios. We set up our NMB dashboard so that we 214 could observe plots of information in real time and create a visual record of all 215 parameter values used to produce the results of interest. An example of this output 216 obtained during one of our simulations is provided in Fig. 2.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Two different instances (blue and orange trajectories) of the number of agents N t obtained for the base-line simulations (no competition, no colony switching, no disease) are plotted over the 2000 step time interval.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": ". maximize available resources (\u03c6 1 = 1, \u03c6 2 = 0) (p switch = 0.0) 240 2. maximize territory size (i.e., individual in colonies other than your 241 (\u03c6 1 = 0, \u03c6 2 = 1) 242",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "graphed in Fig. 5. Simulations involving movement strategy 5 were 250 undertaken in the context of exploring the effects of mortality on population viability.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "The number of agents N t from the base-line simulations without (q = 0 implying no competition; Panel A.) and with competition (q = 10; Panel B.) for the no-colony-switching (p switch = 0.0; blue plots in Panels A and B) and colony switching (p switch = 0.8; orange plots in Panels A and B) scenarios are plotted over the 2000 step time interval. Note that the vertical scales on panels A (0 to 800) and B (0 to 2000) are different.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "The number of infected individuals in a population, after seeding the population with 261 an exposed (or infectious) individual under non-zero pathogen transmission conditions, 262 follows a U-or J-shaped bimodal distribution [74, 75](Fig. 6): the left-hand mode 263 represents failed or short-lived/stuttering outbreaks [76], while the right-hand mode 264 represent successful outbreaks (i.e., the number of infected individuals rises to a peak 265 and then falls to zero)-unless endemic conditions ensue (i.e., the presence of infected",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "Panel A. Times taken for all infected (I) and exposed (E) individuals to be extirpated by natural mortality (disease mortality rates are zero in these simulations) are plotted as a histogram for 15 replicate simulations for each for the three transmission parameter cases \u03b2 = 0.01, 0.2, and 0.03, as labelled (note: time scale is log-like). Panel B. Plots of the number of individuals in disease states S, E, I, and V (immune) for Run 3 of the case \u03b2 = 0.03, where final extirpation of the epidemic occurred at time t = 1816 (note that number of dead individuals in state D was not plotted since it is an integrated-and hence steadily increasing-rather than an instantaneous value of time).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "288 where for \u03b2 = 0.03 14 runs led to extirpation of disease within 1000 time steps and one 289 at time t = 1816). In this case, the number of infectious individuals remained positive 290 for the full simulation interval of 2000 time steps (Fig. 7). As virulence levels increased, 291 the number of infectious individuals decreased and the total number of susceptible 292 individuals increased. The highest virulence level, the number of infected individuals 293 kept being driven down to almost zero, at which which point the number of susceptible 294 individuals increases only to be driven down at the next outburst in the number of",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "The number of infectious (I: top) and susceptible (S: bottom) agents in four simulations over the interval [0,2000] are plotted here over the first 1000 time steps only (for purposes of clarity) for the baseline set of parameter values, except \u03b2 = 0.05 and \u00b5 I = 0.0 (blue), 0.03 (orange), 0.1 (grey) and 0.2 (yellow). The average values were calculated over the full 2000 time steps prey-predator systems in fish populations. They articulated the principle that such 311 interactions invariably oscillate \"for some time\" after being perturbed from a 312 coexistence equilibrium, or they may support sustained oscillations \"for all time.\" The 313 time concepts are in inverted commas because they relate to results obtained from 314 deterministic models while, in effect, all population processes exhibit some level of 315",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "quantitative narrative the emerged for this study[87], quoting from its abstract, was:346In a low-production environment, the smaller and faster consumer347 out-competes the larger and slower one, but in a high production 348 environment the larger and slower consumer survives. Predation hastens the 349 extinction of one of the consumers, but niche partitioning of the consumers 350 increases both the coexistence of consumers and the number of predators. 351 Predators with medium efficiency are able to coexist in the system longer 352 and in larger numbers.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "358individuals and, as a possible result, to population collapse because individuals are not 359 taking into account the cost of moving (green plots inFig. 5). This collapse (green plots 360Fig. 5) is mitigated by territoriality considerations, since these curtail movement and 361 allow more time for resource extraction (blue plots inFig. 5); but movement based on 362 territoriality-only considerations leads to dampening, albeit less so than 363 movement-cost-only considerations (compare yellow with blue plots inFig. 5). Notably, 364 a movement strategy that accounts for all three factors provides the most regular, albeit 365 oscillatory, population trajectories (dotted grey plot inFig. 5).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "382infectious individuals decreases, though in our highest virulence case we obtain a 383 sequence of fade outs to near extirpation, followed by outbreaks that are then contained 384 the infection to a state of temporary immunity. This immunity 386 once lost creates, along with births, a rising group of susceptible individuals. Such 387 outbreaks are similar to what we see in seasonal influenza-although, in this case, loss 388 of immunity is hastened by the existence of different influenza strains and mutations in 389 the influenza virus antigens [exploration of the various issues examined in this paper, as well as 392 comprehensive investigations of the many other questions that could be asked along the 393 lines of those we posed, would require much more extensive simulations than has been 394 reported here. This is particularly true of simulations involving evaluations of395 times-to-extinction of populations [89], consequences of different movement strategies on 396 the formation and stability of territories [67], extirpation of disease outbreaks [76] 397 because of the stochastic nature of the processes involved. In the context of developing 398 quantitative narratives, a point is reached where additional simulations will not add to 399 the qualitative character of the information obtained and the increased precision that 400 comes from additional runs is not useful. In other words, there is little value in being 401",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "412context of wildlife management[91]  and predicting the behavior of ecological systems 413 that, for example, include a sociological component[92]. Agent-based models provide 414 the best, if not the only, approach to addressing many of the more complex questions 415 relating to the management of real socio-ecological systems and to the advancement of 416 ecological understanding through its application to developing quantitative narratives in 417 ecology(Fig. 1). Thus, in the future, we can expect agent-based models to increasingly 418 be used to develop quantitative narratives as a way of advancing ecological epistemology. technical presentation all TEXT in this font refers to an actual Numerus Model 422 Builder built-in function, but its designation is sufficiently clear so that the algorithm 423 can be implemented in other programming languages.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "<< N 0 of the H \u03b3 \u00d7 H \u03b4 cells are identified as nest cells because they are the 432 home cell of, at most, one uniquely identified colony.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "Initially, every one of the N 0 agent is assigned to a nest cell at random. Thus,434    initially, there are an average of M/N 0 individuals per colony. The m th of these 435 colonies is referred to as A m , i = 1, ..., M .436 5. The model has a T f -unit fast-time (within) cycle that begins with all individuals 437 at home (in their nest cells) at REMAINDER(TIME()/T f )=0, while 438 INTEGER(TIME()/T f ) is the number of cycles that have been completed. 439 6. At each tick of the clock except the last-i.e, for time progressing from 440 REMAINDER(TIME()/T f )=\u03c4 to \u03c4 + 1 for \u03c4 = 0, ..., T f \u2212 1, an individual can stay in 441 its current cell or move to any of a set of cells in set of cells called BLOCK (see Eq.1 442 below). However, when REMAINDER(TIME()/T f )=0 the individual moves 443 (jumping, if necessary) back in its home cell. 444 7. At each tick of the clock, except for the last within-cycle tick, when individuals 445 return home, individuals move to increase their potential to extract resources from 446 cells or claim new cells for their colony according to the priorities laid out in the 447 movement rules section below. 448 8. Cells have a state vector of dimension M + 2, indexed according to the position of 449 the cell in the array using the row index \u03b3 = 1, ..., H \u03b3 and column index memories\" of the \"occupation history\" of individuals from each of the M colonies 452 that have occupied this cell over time. In particular, if an individual from colony j 453 occupies the \u03b3\u03b4 cell at time t, then the value of the j th element c \u03b3,\u03b4,j is increased 454 by 1, but the value itself declines geometrically over time at a rate \u03b7 M . The 455 M + 1 th element of c \u03b3,\u03b4 , denoted by c \u03b3,\u03b4,M +1 , is a real non-negative number that 456 reflects this cells current resource value. Finally, the element c \u03b3,\u03b4,M +2 contains 457 the infectiousness value of the cell.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "Individual agents have a state vector a \u03b1 , \u03b1 = 1, ..., N t . The elements of a \u03b1 are as 459 follows: 460 (a) a \u03b1,1 is a positive integer value that designates the type of individual with the 461 number of possible types reflecting the number of species of interest, their 462 sex, and any other category designator (e.g., if there are two sexes for each of 463 two species, this number may be 1, 2, 3 or 4). 464 (b) a \u03b1,2 is an positive integer value m = 1, ..., M that identifies the colony 465 membership of individual \u03b1. 466 (c) a \u03b1,3 : this is a positive integer value (or named state) that identifies the 467 disease state of individual \u03b1. This can be relatively simple-such as disease 468 states (with a numeric equivalents) S (0), E (1), I (2), V (3). In more 469 detailed cases, we might want to increase the number of categories so the 470 value a \u03b1,3 might reflect the number of time periods since the individual was 471 infected. The probability of being in state E, I, or V (and even back to S) 472 could then depend on the value of a \u03b1,3 , conditioned on the value of other 473 elements of a \u03b1 if needs be.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF21": {
+            "text": "section, and in NovaScript, an extension of the JavaScript programming 481 language used to construct Numerus Model Builder, the local cell occupied by an 482 individual is referred to as its RING(0) cell. Its six immediate neighbors are its RING(1) 483 cells, while all cells that it can reach in a minimum of k moves without jumping over 484 any cells is its RING(k). 485 Recall that c \u03b3,\u03b4 (t) represents the state of the cell occupied by individual \u03b1 at time t, 486 where \u03b3, \u03b4 \u2261 RING \u03b1 (0) is one way of referring to the cell currently occupied by 487 individual \u03b1. With this in mind, we use {c \u03b3,\u03b4 (t)| \u03b3, \u03b4 \u2208 RING \u03b1 (1)} to refer to the set of 488 state vectors of the 6 cells surrounding the current location of individual \u03b1. Before 489 moving on, we stress that the designators \u03b3, \u03b4, \u03b3 = 1, ..., H 1 , \u03b4 = 1, ..., H 2 are global 490 locators of cells, while RING \u03b1 (r) is a local locator of all cells a distance r from the 491 current cell occupied by individual \u03b1. 492 At the start of each time interval [t, t + 1], we first determine whether or not 493 individual \u03b1 = 1, ..., N remains in its current cell or moves to some other cell in the set 494 BLOCK \u03b1 (r), where r is some pre-selected positive integer that determines the furthest 495",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF22": {
+            "text": "Comparative resource measure: Prefer cells with more resources 514 Under our renumbering c \u03b3,\u03b4 i ,1 (t) is the resource value of the i th cell in BLOCK \u03b1 at 515 time. Use this to calculate for i = 1, ...., K, 516",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF23": {
+            "text": "trade-offs among the relative values of movement distance, resources of cells, and 526 past use of cells-define the cell attractiveness values p i , i = 1, ..., K as 527",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF24": {
+            "text": "Who moves? 534 Assume that there are n \u03b3,\u03b4 \u2265 1 in cell \u03b3, \u03b4 individuals at times t that are not 535 divisible by T f . Then for each of these individuals, a multinomial drawing based 536 on Eq. 5 is implemented to see if an individual stays or moves; and, if it moves, to 537 which cell it moves. 538 STAY dynamics Cell resources and individual fitness updating 539 If 0 < y(t \u2212 1) \u2264 n \u03b3,\u03b4 individuals stay in cell \u03b3, \u03b4 over the time interval[t \u2212 1, t] 540 (i.e., these individuals were in cell \u03b3, \u03b4 at time t \u2212 1 and did not move out at time 541 t), then the individual and cell states are updated using the following quantity 542 defined in terms of the maximum resource extraction rate parameter u > 0, 543 extraction-efficiency parameter h \u2265 0, and competition parameter q > 0 544 (see [69, 70], taking into account that y(t \u2212 1) \u2212 1 is the number of individuals in 545 each cell beyond a focal individual for which the extraction expression is being 546 formulated): 547 X(t \u2212 1) = min c \u03b3,\u03b4,M +1 (t \u2212 1)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF25": {
+            "text": "c \u03b3,\u03b4,m (t), m = 1, ..., M , which contain a fading memory of how 583 many individuals from colony m have visited the cell over time, are updated using 584 y m (t) to represent the number of individuals from colony m that are in cell \u03b3, \u03b4 at 585 time t and a memory fade rate constant \u03b7 M > 0. The updating equation for 586 m = 1, ..., M is:",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF26": {
+            "text": "If y I (t) is the number of infected individuals in cell \u03b3, \u03b4 at time t and \u03b7 I \u2265 0 is an 602 infectiousness fade rate (\u03b7 I close to 0 implies that indirect transmission of 603 pathogens is of considerable importance while \u03b7 I \u2192 \u221e implies that direct contact 604 becomes increasingly important for transmission (for a discussion on direct versus 605 indirect transmission, see [34]), then: 606 c \u03b3,\u03b4,m+2 (t + 1) = y I (t) + e \u2212\u03b7I c \u03b3,\u03b4,m+2 (t) (17)Transmission or death Who gets infected?607A susceptible individual that spends the period [t, t + 1) in cell \u03b3, \u03b4 will have 608 probability of getting infected at a rate proportional c \u03b3,\u03b4,m+2 (t), where the 609 constant of proportionality is \u03b2 > 0. Thus the per-capita rate or force of infection 610 is:",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF27": {
+            "text": "competing rates approach [26] we obtain for \u03b3 S and \u03b3 D given by Eqs. 18 and 15615 Prob. individual makes transition S \u2192 E = \u03b3 S (1 \u2212 e \u2212\u03b3S\u2212\u03b3D ) \u03b3 S + \u03b3 D Prob. individual dies: i.e., S \u2192 D = \u03b3 D (1 \u2212 e \u2212\u03b3S\u2212\u03b3D ) \u03b3 S + \u03b3 D(19)Prob. individual not infected: i.e., S \u2192 S = e \u2212\u03b3S\u2212\u03b3D",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF28": {
+            "text": "630 conditions are favorable compared to the individual's current state. For example, the 631 individual on entering a cell can compare its own current fitness and stress levels with 632 those of the individuals residing in the cell being entered.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF30": {
+            "text": "of all the parameters appearing in the model, the names of these parameters in 649 our NMB code, their mathematical symbols and the equations in which they first 650 appear, their baseline values, and other values used in non-baseline runs are given in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF31": {
+            "text": "memory vector c \u03b3,\u03b4,j (0) = 0, j = 1, ..., M # Initial cell resources c \u03b3,\u03b4,M +1 (0) = U(1, 3) \u2020# Initial cell infectiousness c \u03b3,\u03b4,M +2 (0) = 0 # Initial number of agents N 0 = 350 Initial agent sex a \u03b1,1 (0) is \"Female\" with probability p f = 0.6 \u2021 Initial agent membership a \u03b1,2 (0) randomly assigned to one of M colonies \u2021 Initial agent disease state a \u03b1,3 (0) is S except for one random E \u2021 Initial agent biomass/fitnessa \u03b1,4 (0) = U(0.15, 0.25) \u2020 \u2021 Initial agent stress level a \u03b1,5 (0) = U(0.15, 0.25) \u2020 \u2021 \u2020 U(a,b) is a random drawing from the uniform distribution on [a, b] # \u03b3 = 1, ..., 18, \u03b4 = 1, ..., 18 \u2021 \u03b1 = 1, ..., N0 Acknowledgments 654 The development of Nova, a precursor to Numerus Model Builder, was supported by 655 NSF grant CNS-0939153 to Oberlin College (PI: RS) and NSF-EEID grant 1617982 (PI: 656 WMG). We thank John Pataki of Logical Laboratories for his considerable help and 657 input into creating and supporting the Numerus Model Builder website 658 http://www.numerusinc.com/. 659 Funding 660 KT was funded in part by Numerus Model Builder. RS was funded in part by a private 661 donation to Oberlin College. WMG was funded in part by the A. Starker Leopold Chair 662 at the University of California, Berkeley, CA 94720, USA. 663 Competing Interests 664 WMG and RS are two of three partners in Numerus Inc., which is the owner and 665 provider of Numerus Model Builder (NMB).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF32": {
+            "text": "the mathematical model and wrote the first draft of the manuscript. 668 RS coded the model and ensured its smooth running on the Numerus Model Builder 669 platform. WMG carried out the simulations and generated the figures. KT developed 670 the Supporting Online File, and contributed to the verification of coding and 671 mathematical equation accuracy. All authors helped edit the the manuscript and 672 approved the content of the submitted version.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF33": {
+            "text": "Dushoff J, Plotkin JB, Levin SA, Earn DJ. Dynamical resonance can account for 722 seasonality of influenza epidemics. Proceedings of the National Academy of 723 Sciences. 2004;101(48):16915-16916. 724 21. Grenfell B, Bj\u00f8rnstad O, Kappey J. Travelling waves and spatial hierarchies in 725 measles epidemics. Nature. 2001;414(6865):716-723. 726 22. Lloyd-Smith JO, Galvani AP, Getz WM. Curtailing transmission of severe acute 727 respiratory syndrome within a community and its hospital. Proceedings of the 728 Royal Society of London B: Biological Sciences. 2003;270(1528):1979-1989. 729 23. Bauch CT, Lloyd-Smith JO, Coffee MP, Galvani AP. Dynamically modeling 730 SARS and other newly emerging respiratory illnesses: past, present, and future. 731 Epidemiology. 2005;16(6):791-801. 732 24. Althaus CL. Estimating the reproduction number of Ebola virus (EBOV) during 733 the 2014 outbreak in West Africa. PLoS currents. 2014;6. 734 25. Getz WM, Gonzalez JP, Salter R, Bangura J, Carlson C, Coomber M, et al. 735 Tactics and strategies for managing Ebola outbreaks and the salience of 736 immunization. Computational and mathematical methods in medicine. 2015;2015. 737 26. Getz WM, Salter R, Muellerklein O, Yoon HS, Tallam K. Modeling epidemics: A 738 primer and Numerus Model Builder implementation. Epidemics. 2018;. 739 27. Getz WM, Salter R, Mgbara W. Adequacy of SEIR models when epidemics have 740 spatial structure: Ebola in Sierra Leone. Philosophical Transactions of the Royal 741 Society B. 2019;374(1775):20180282. 742 28. Rivers CM, Lofgren ET, Marathe M, Eubank S, Lewis BL. Modeling the impact 743 of interventions on an epidemic of Ebola in Sierra Leone and Liberia. PLoS 744 currents. 2014;6. 745 29. Keeling MJ, Rohani P. Modeling infectious diseases in humans and animals. 746 Princeton University Press; 2011. 747 30. Grimm V, Berger U, Bastiansen F, Eliassen S, Ginot V, Giske J, et al. A 748 standard protocol for describing individual-based and agent-based models. 749 Ecological modelling. 2006;198(1-2):115-126. 750 31. Lloyd-Smith JO, Schreiber SJ, Kopp PE, Getz WM. Superspreading and the 751 effect of individual variation on disease emergence. Nature. 2005;438(7066):355. 752 32. Sah P, Leu ST, Cross PC, Hudson PJ, Bansal S. Unraveling the disease 753 consequences and mechanisms of modular structure in animal social networks. 754 Proceedings of the National Academy of Sciences. 2017;114(16):4165-4170. 755 doi:10.1073/pnas.1613616114. 756 33. James AD, Rushton J. The economics of foot and mouth disease. Revue 757 scientifique et technique-office international des epizooties. 2002;21(3):637-641. Garine-Wichatitsky M, Caron A, Kock R, Tschopp R, Munyeme M, Hofmeyr 767 M, et al. A review of bovine tuberculosis at the wildlife-livestock-human interface 768 in sub-Saharan Africa. Epidemiology & Infection. 2013;141(7):1342-1356. 769 37. Dean AS, Crump L, Greter H, Schelling E, Zinsstag J. Global burden of human 770 brucellosis: a systematic review of disease frequency. PLoS neglected tropical 771 diseases. 2012;6(10):e1865. 772 38. Williams E. Chronic wasting disease. Veterinary pathology. 2005;42(5):530-549. 773 39. Saadatnia G, Golkar M. A review on human toxoplasmosis. Scandinavian journal 774 of infectious diseases. 2012;44(11):805-814. 775 40. Grimm V, Berger U, DeAngelis DL, Polhill JG, Giske J, Railsback SF. The ODD 776 protocol: a review and first update. Ecological modelling. 777 2010;221(23):2760-2768. 778 41. M\u00fcller B, Bohn F, Dre\u00dfler G, Groeneveld J, Klassert C, Martin R, et al. 779 Describing human decisions in agent-based models-ODD+ D, an extension of the 780 ODD protocol. Environmental Modelling & Software. 2013;48:37-48. 781 42. Gotelli NJ, Graves GR. Null models in ecology. Smithsonian Institution; 1996. 782 43. Leibold MA. The niche concept revisited: mechanistic models and community 783 context. Ecology. 1995;76(5):1371-1382. 784 44. Levin SA. Community equilibria and stability, and an extension of the 785 competitive exclusion principle. The American Naturalist. 1970;104(939):413-423. 786 45. Armstrong RA, McGehee R. Competitive exclusion. The American Naturalist. 787 1980;115(2):151-170. 788 46. May RM, Mac Arthur RH. Niche overlap as a function of environmental 789 variability. Proceedings of the National Academy of Sciences.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF34": {
+            "text": "Pianka ER. Niche overlap and diffuse competition. Proceedings of the National 792 Academy of Sciences. 1974;71(5):2141-2145.793 48. Lloyd-Smith JO, Cross PC, Briggs CJ, Daugherty M, Getz WM, Latto J, et al. 794 Should we expect population thresholds for wildlife disease? Trends in ecology & 795 evolution. 2005;20(9):511-519.796 49. Getz WM, Pickering J. Epidemic models: thresholds and population regulation. 797 The American Naturalist. 1983;121(6):892-898. 798 50. Edwards AM, Phillips RA, Watkins NW, Freeman MP, Murphy EJ, Afanasyev V, 799 et al. Revisiting L\u00e9vy flight search patterns of wandering albatrosses, bumblebees 800 and deer. Nature. 2007;449(7165):1044.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF35": {
+            "text": "Coulson T, Catchpole EA, Albon SD, Morgan BJ, Pemberton J, Clutton-Brock 823 TH, et al. Age, sex, density, winter weather, and population crashes in Soay 824 sheep. Science. 2001;292(5521):1528-1531. 825 62. Diekmann O, Heesterbeek JAP. Mathematical epidemiology of infectious diseases: 826 model building, analysis and interpretation. vol. 5. John Wiley & Sons; 2000. 827 63. Getz WM. Biomass transformation webs provide a unified approach to 828 consumer-resource modelling. Ecology letters. 2011;14(2):113-124. 829 64. Getz WM, Owen-Smith N. Consumer-resource dynamics: quantity, quality, and 830 allocation. PloS one. 2011;6(1):e14539. 831 65. Beddington JR. Mutual interference between parasites or predators and its effect 832 on searching efficiency. The Journal of Animal Ecology. 1975; p. 331-340. 833 66. DeAngelis DL, Goldstein R, O'neill R. A model for tropic interaction. Ecology. Giuggioli L, Kenkre V. Consequences of animal interactions on their dynamics: 836 emergence of home ranges and territoriality. Movement ecology. 2014;2(1):20. 837 68. Blackburn JK, Ganz HH, Ponciano JM, Turner WC, Ryan SJ, Kamath P, et al. 838 Modeling R0 for Pathogens with Environmental Transmission: Animal 839 Movements, Pathogen Populations, and Local Infectious Zones. International840 journal of environmental research and public health. 2019;16(6):954. Huisman G, De Boer RJ. A formal derivation of the \"Beddington\" functional 847 response. Journal of theoretical biology. 1997;185(3):389-400. 848 72. Cantrell RS, Cosner C. On the dynamics of predator-prey models with the 849 Beddington-DeAngelis functional response. Journal of Mathematical Analysis 850 and Applications. 2001;257(1):206-222. 851 73. Getz WM. Computational population biology: linking the inner and outer worlds 852 of organisms. Israel journal of ecology & evolution. 2013;59(1):2-16. 853 74. Ball F, N\u00e5sell I. The shape of the size distribution of an epidemic in a finite 854 population. Mathematical biosciences. 1994;123(2):167-181. 855 75. Gordillo LF, Marion SA, Martin-L\u00f6f A, Greenwood PE. Bimodal epidemic size 856 distributions for near-critical SIR with vaccination. Bulletin of Mathematical 857 Biology. 2008;70(2):589-602. 858 76. Lloyd-Smith JO, George D, Pepin KM, Pitzer VE, Pulliam JR, Dobson AP, et al. 859 Epidemic dynamics at the human-animal interface. Science. 860 2009;326(5958):1362-1367. 861 77. M\u00e9l\u00e9ard S, Villemonais D, et al. Quasi-stationary distributions and population 862 processes. Probability Surveys. 2012;9:340-410. 863 78. Fan M, Kuang Y. Dynamics of a nonautonomous predator-prey system with the 864 Beddington-DeAngelis functional response. Journal of Mathematical Analysis 865 and Applications. 2004;295(1):15-39. 866 79. Hwang TW. Global analysis of the predator-prey system with 867 Beddington-DeAngelis functional response. Journal of Mathematical Analysis 868 and Applications. 2003;281(1):395-401. 869 80. Li H, Takeuchi Y. Dynamics of the density dependent predator-prey system with 870 Beddington-DeAngelis functional response. Journal of Mathematical Analysis 871 and Applications. 2011;374(2):644-654. 872 81. Chen W, Wang M. Qualitative analysis of predator-prey models with 873 Beddington-DeAngelis functional response and diffusion. Mathematical and 874 Computer Modelling. 2005;42(1-2):31-44. 875 82. Huang G, Ma W, Takeuchi Y. Global properties for virus dynamics model with 876 Beddington-DeAngelis functional response. Applied Mathematics Letters. Huang G, Ma W, Takeuchi Y. Global analysis for delay virus dynamics model 879 with Beddington-DeAngelis functional response. Applied Mathematics Letters.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF36": {
+            "text": "Elaiw A, Azoz S. Global properties of a class of HIV infection models with 882 Beddington-DeAngelis functional response. Mathematical Methods in the 883 Applied Sciences. 2013;36(4):383-394. Karsai I, Montano E, Schmickl T. Bottom-up ecology: an agent-based model on 890 the interactions between competition and predation. Letters in Biomathematics. 891 2016;3(1):161-180. 892 88. Lofgren E, Fefferman NH, Naumov YN, Gorski J, Naumova EN. Influenza 893 seasonality: underlying causes and modeling theories. Journal of virology. Ovaskainen O, Meerson B. Stochastic models of population extinction. Trends in 896 ecology & evolution. 2010;25(11):643-652. 897 90. Getz W, Muellerklein O, Salter R, Carslon C, Lyons A, Seidel D. A web app for 898 population viability and harvesting analyses. Natural Resource Modeling. McLane AJ, Semeniuk C, McDermid GJ, Marceau DJ. The role of agent-based 901 models in wildlife ecology and management. Ecological Modelling. Filatova T, Verburg PH, Parker DC, Stannard CA. Spatial agent-based models 904 for socio-ecological systems: challenges and prospects. Environmental modelling 905 & software. 2013;45:file, containing details of the Numerus Model Builder construction of our model 908 and a copy of the NovaScript file (superset of JavaScipt and implemented in a Java Run 909 Time environment), is either attached herewith or available at a site to which this file is 910 posted.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Different behaviors are expected at other points in 224 this space, just as a different qualitative behaviors arise in the Lotka-VolterraFig 2. Numerus model builder (NMB) dashboard [69] with output from a simulation run are plotted up to time t = 1959 (see number under \"current\" on top strip). Parameters that can be manipulated using sliders appear above the 6 graphics panels, while a full list of parameters and values appear on the right-hand side (slider default values in light grey, other parameter values in black; also see",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "The number of agents in each disease class are plotted in the upper right-most graphics panel. Plots are also shown of the average cell resource (bottom left graphics panel), agent biomass/fitness (bottom center graphics panel) and agent stress (bottom right graphics panel) levels over time. A mouse-controlled arrow can be used to read particular values from the plotted output (bottom center graphics panel).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "In the second row ofTable 1, we report the result for the case where \u00b5 = 0.02; 256 but now individuals are allowed to switch colonies with a probability of 0.8 (i.e.30% as large as their own colony (i.e. \u03c1 crit = 0.3 ). Times to population extinct for the base line set of parameters(Table 2except \u00b5 = 0.02) switch = 0.8) \u2020 The difference is significant at the p < 0.01 level: two-sided Mann-Whitney U test.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "interactions can be traced back to the work of Lotka and Volterra in the 1920's [85] on 310",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "Now choose among the cells by applying the single drawing multinomial distribution: MULTINOMIAL[1;p \u03b1,1 , ...., p \u03b1,K ]",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF6": {
+            "text": "The transitions from states E to I or D and V back to S or D follows the same formulations of Eqs. 19, except we replace \u03b3 S with \u03b3 E and \u03b3 V in each of the two cases respectively. The transition from state I to V or D, also follows the same formulation of Eqs. 19 except now we replace \u03b3 S with some \u03b3 E > 0, and we replace \u03b3 D with \u03b3 ID = defined by Eq. 16",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF7": {
+            "text": "Model Parameter Values",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF8": {
+            "text": "Values used to define the size of the simulations (size of landscape, length of runs) and the initial values used in our various simulations are given inTable 3.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF9": {
+            "text": "Simulation Parameter Values and Initial Conditions",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF10": {
+            "text": "51. Galvani AP. Epidemiology meets evolutionary ecology. Trends in Ecology & Evolution. 2003;18(3):132-139. 52. Grassly NC, Fraser C. Mathematical models of infectious disease transmission. 53. Ostfeld RS, Glass GE, Keesing F. Spatial epidemiology: an emerging (or re-emerging) discipline. Trends in ecology & evolution. 2005;20(6):328-336. 54. Keesing F, Holt RD, Ostfeld RS. Effects of species diversity on disease risk. 59. Pianosi F, Beven K, Freer J, Hall JW, Rougier J, Stephenson DB, et al. Sensitivity analysis of environmental models: A systematic review with practical 820 workflow. Environmental Modelling & Software. 2016;79:214-232. 60. Caswell H. Matrix population models. Encyclopedia of Environmetrics. 2006;3.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF12": {
+            "text": "Discrete Value State. The DiscreteState component is similar to the Sequence, only its values are drawn from a small discrete set defined for use in the model. In the sirTerrM model, for example, the set of Disease states are represented by the letters S, E, I, V and D (for Susceptible, Exposed, Infected, Immune and Died, respectively). Other All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder.. https://doi.org/10.1101/791400 doi: bioRxiv preprint Discrete State sets identify agent sex (Male, Female), agent action (Stayed, Moved, Reproduced) and Cell type (Nest, Normal). DiscreteState transitions are represented as a set of rules governing the transition from each allowable state. In this regard a DiscreteState component implements a finite automaton. Graphical Display. Numerus provides a wide set of standard data display options (graphs, tables, etc.), including tableaux for visualizing the actions within cells and agents through the choice of color and (in the case of agents) size. Certain analytical components also include graphs for visualizing their output. The Tabulator component determines at each point in time the number of agents or cells in a particular state. The Stats component computes statistical means and standard deviations for some state value across the set of cells or agents, and displays in a graph and table the running mean and mean \u00b1 standard deviation. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF13": {
+            "text": "EXP(-this.fit_decay)*this.fitness + this.biomass_conv*this.MYCELL().X*MAX(0, 1-(this.fitness/ this.fit_max)); break; case moved: ans = EXP(this.fit_decay*this.move_cost)*this.fitness; break; case reproduced: ans = EXP(this.fit_decay*this.move_cost)*this.fitness; All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder.. https://doi.org/10.1101/791400 doi: bioRxiv preprint FLOOR(this.RANDOM(this.CellNests.length))', next: function(){ var ans = this.myNestIdx; if (this.p_switch > 0) { if (this.otherNest >= 0 && nestPop[this.otherNest]/nestPop[this.myNestIdx] < this.rho_crit && this.FLIP(this.p_switch)) { ans = this.otherNest; nestPop[this.myNestIdx]--; nestPop[this.otherNest]++; All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint this.stress_death*this.stress);', var i = 0; i < nests.length; i++) { nestPop[i] = this.NWorld.CELL(nests[i]).MYAGENT_COUNT(); } } },",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The NovaScript generated by NMB is attached to the end of this document. The model file is called GetzEtAlPLoSOct2019.nmd, which can be downloaded at https://www.dropbox.com/s/24j6js6js6h5ur3/GetzEtAlPLoSOct2019.nmd?dl=0 and can be run after downloading a version of NMB at numerusinc.com",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "NovaScript"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint 5 (also z(t)) alpha 5 stress input a \u03b1, , = 6, 7, . . .14 All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. specifies: \"InPin\", exp: \"mscope.disease_death\", }, p_switch : { specifies: \"InPin\", exp: \"mscope.p_switch\", }, nat_death : { specifies: \"InPin\", exp: \"mscope.nat_death\", }, weight_res : { specifies: \"InPin\", exp: \"mscope.weight_res\", }, weight_occ : { specifies: \"InPin\", exp: \"mscope.weight_occ\", }, res_grow : { specifies: \"InPin\", exp: \"mscope.res_grow\", }, comp_ex : { specifies: \"InPin\", exp: \"mscope.comp_ex\", }, rep_fit_thresh : { specifies: \"InPin\", exp: \"mscope.rep_fit_thresh\", All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint '[this.gamma_V*(1-EXP(-this.gamma_Vthis.gamma_D))/(this.gamma_V+this.gamma_D),\\n'+ 'this.gamma_D*(1-EXP(-this.gamma_Vthis.gamma_D))/(this.gamma_V+this.gamma_D),\\n'+ 'EXP(-this.gamma_V -this.gamma_D)]);\\n', D: 'D', }, }, disease_trans : { specifies: \"InPin\", exp: \"mscope.disease_trans\", }, disease_death : { specifies: \"InPin\", exp: \"mscope.disease_death\", }, p_switch : { specifies: \"InPin\", exp: \"mscope.p_switch\", }, nat_death : { specifies: \"InPin\", exp: \"mscope.nat_death\", }, weight_res : { specifies: \"InPin\", exp: \"mscope.weight_res\", }, weight_occ : { specifies: \"InPin\", exp: \"mscope.weight_occ\", }, res_grow : { specifies: \"InPin\", exp: \"mscope.res_grow\", }, comp_ex : { specifies: \"InPin\", exp: \"mscope.comp_ex\", }, rep_fit_thresh : { specifies: \"InPin\", exp: \"mscope.rep_fit_thresh\", }, res_def : { specifies: \"InPin\", exp: \"mscope.res_def\", }, stress_decay : { specifies: \"InPin\", All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. :3\",\"C3:9\",\"C3:15\",\\n'+ '\"C9:3\",\"C9:9\",\"C9:15\",\\n'+ '\"C15:3\",\"C15:9\",\"C15:15\"\\n'+ ']\\n'+ ');\\n', }, Agent_count : { All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint Nest_Population : { specifies: \"Plugin\", base: \"PL_Barchart\", pins: { inpt0: \"this.colony_0\", inpt1: \"this.colony_1\", inpt2: \"this.colony_2\", inpt3: \"this.colony_3\", inpt4: \"this.colony_4\", inpt5: \"this.colony_5\", inpt6: \"this.colony_6\", inpt7: \"this.colony_7\", inpt8: \"this. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint base: \"PL_AgentViewerX\", pins: { agentsource: \"NWorld\", cellsource: \"NWorld\", aColorOut: \"agentColor\", cColorOut: \"cellColor\", aSizeOut: \"fitness\", }, properties: __props__ The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint var __clockParams__ = { lo: 0.000000, hi: 2000.000000, max: 2000.000000, dt: 1.000000, method: \"Discrete\", step: 1, unit:\"null\" } var __props__ = { title: \"sirTerrM\", address: \"rms@cs.oberlin.edu\", date: \"Sun Sep 08 08:49:02 PDT 2019\", paramset: \"Param_set_1\", clockParams: {lo: 0.000000, hi: 2000.000000, max: 2000.000000, dt: 1.000000, method: \"Discrete\", step: 1, unit:\"null\"}, disease_trans: { type: \"slider\", id: \"disease_trans\", text: \"disease_trans\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0, step: 0.010000, unit: \"\" }, disease_death: { type: \"slider\", id: \"disease_death\", text: \"disease_death\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0, step: 0.010000, unit: \"\" }, p_switch: { type: \"slider\", id: \"p_switch\", text: \"p_switch\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0, step: 0.100000, unit: \"\" }, nat_death: { type: \"slider\", id: \"nat_death\", text: \"nat_death\", size: 1.000000, min: 0.000000, max: 0.100000, value: 0.005, step: 0.001000, unit: \"\" }, weight_res: { type: \"slider\", id: \"weight_res\", text: \"weight_res\", size: 1.000000, min: 0.000000, max: 1.000000, value: 1/3, step: 0.010000, unit: \"\" }, weight_occ: { type: \"slider\", id: \"weight_occ\", text: \"weight_occ\", size: 1.000000, min: 0.000000, max: 1.000000, value: 1/3, step: 0.010000, unit: \"\" }, res_grow: { type: \"slider\", id: \"res_grow\", text: \"res_grow\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0.2, step: 0.010000, unit: \"\" }, comp_ex: { type: \"slider\", id: \"comp_ex\", text: \"comp_ex\", size:All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint 1.000000, min: 0.000000, max: 20.000000, value: 1, step: 1.000000, unit: \"\" }, rep_fit_thresh: { type: \"slider\", id: \"rep_fit_thresh\", text: \"rep_fit_thresh\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0.15, step: 0.050000, unit: \"\" }, res_def: { type: \"slider\", id: \"res_def\", text: \"res_def\", size: 1.000000, min: 0.000000, max: 0.500000, value: 0.1, step: 0.010000, unit: \"\" }, stress_decay: { type: \"slider\", id: \"stress_decay\", text: \"stress_decay\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0.05, step: 0.010000, unit: \"\" }, stress_death: { type: \"slider\", id: \"stress_death\", text: \"stress_death\", size: 1.000000, min: 0.000000, max: 10.000000, value: 1, step: 1.000000, unit: \"\" }, fit_decay: { type: \"slider\", id: \"fit_decay\", text: \"fit_decay\", size: 1.000000, min: 0.000000, max: 1.000000, value: 0.1, step: 0.010000, unit: \"\" }, move_cost: { type: \"slider\", id: \"move_cost\", text: \"move_cost\", size: 1.000000, min: 1.000000, max: 5.000000, value: 2, step: 0.200000, unit: \"\" }, main: { init_agent_count: { pinned: false, type: \"slider\", id: \"main:init_agent_count\", text: \"agent count\", size: 6.000000, min: 0.000000, max: 1000.000000, value: 350.000000, step: 50.000000, unit: \"\" }, Nest_Population: { pinned: false, width: 500, height: 350, autogen: true, plotInterval: 1, contplot: true, XAxis: [\"colony_0\", \"colony_1\", \"colony_2\", \"colony_3\", \"colony_4\", \"colony_5\", \"colony_6\", \"colony_7\", \"colony_8\"], YAxis: [0.000000, 200.000000], All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint caption: \"Nest_Population\", strokes: [\"#ff5500\", \"#d4ff00\", \"#2aff00\", \"#00ff7f\", \"#00d4ff\", \"#002aff\", \"#7f00ff\", \"#ff00d4\", \"#ff0026\", \"#0000ff\", \"#ff0000\", \"#00ff00\", \"#aaaa00\", \"#ff00ff\", \"#00ffff\", \" [\"#00ff00\", \"#0000ff\", \"#ff0000\", \"#aaaa00\", \"#ff00ff\", \"#00ffff\", \"#77777777\"], legend: [\"Mean\", \"Mean+Std\", \"Mean- [\"#00ff00\", \"#0000ff\", \"#ff0000\", \"#aaaa00\", \"#ff00ff\", \"#00ffff\", \"#77777777\"], legend: [\"Mean\", \"Mean+Std\", \"Mean- [\"#00ff00\", \"#804d80\", \"#e64d4d\", \"#ff9966\", \"#1a1a1a\", \"#0000ff\", \"#ff0000\", \"#aaaa00\", \"#ff00ff\", \"#00ffff\", \"#77777777\"], legend: [\"S\", \"E\", \"I\", \"V\", \" [\"#00ff00\", \"#0000ff\", \"#ff0000\", \"#aaaa00\", \"#ff00ff\", \"#00ffff\", \"#77777777\"], legend: [\"Mean\", \"Mean+Std\", \"Mean-Std\"], ylow: [null, null, null], yhigh: [null, null, null], }, All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. [\"#000000\", \"#ff0000\", \"#008000\", \"#0000ff\", \"#00ffff\", \"#ff00ff\", \"#ffff00\", \"#ffffff\"], agent: [\"#000000\", \"#ff0000\", \"#008000\", \"#0000ff\", \"#00ffff\", \"#ff00ff\", \"#ffff00\", \"#ffffff\"], }, cellValues: [0.000, 1.000, 2.000, 3.000, 4.000, 5.000, 6.000, 7 All rights reserved. No reuse allowed without permission.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/791400 doi: bioRxiv preprint",
+            "cite_spans": [
+                {
+                    "start": 609,
+                    "end": 610,
+                    "text": "5",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 9032,
+                    "end": 9033,
+                    "text": "7",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [],
+            "section": "annex"
+        }
+    ]
+}

@@ -1,0 +1,2553 @@
+{
+    "paper_id": "8349823092836fe397a59e38615d1491423dbe70",
+    "metadata": {
+        "title": "AI-aided design of novel targeted covalent inhibitors against SARS-CoV-2",
+        "authors": [
+            {
+                "first": "Bowen",
+                "middle": [],
+                "last": "Tang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Xiamen University",
+                    "location": {
+                        "postCode": "361000",
+                        "settlement": "Xiamen",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Fengming",
+                "middle": [],
+                "last": "He",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Xiamen University",
+                    "location": {
+                        "postCode": "361000",
+                        "settlement": "Xiamen",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Dongpeng",
+                "middle": [],
+                "last": "Liu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Missouri",
+                    "location": {
+                        "postCode": "65211",
+                        "settlement": "Columbia",
+                        "region": "MO",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Meijuan",
+                "middle": [],
+                "last": "Fang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Xiamen University",
+                    "location": {
+                        "postCode": "361000",
+                        "settlement": "Xiamen",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Zhen",
+                "middle": [],
+                "last": "Wu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Xiamen University",
+                    "location": {
+                        "postCode": "361000",
+                        "settlement": "Xiamen",
+                        "country": "China"
+                    }
+                },
+                "email": "wuzhen@xmu.edu.cn"
+            },
+            {
+                "first": "Dong",
+                "middle": [],
+                "last": "Xu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Missouri",
+                    "location": {
+                        "postCode": "65211",
+                        "settlement": "Columbia",
+                        "region": "MO",
+                        "country": "USA"
+                    }
+                },
+                "email": "xudong@missouri.edu"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The focused drug repurposing of known approved drugs (such as lopinavir/ritonavir) has been reported failed for curing SARS-CoV-2 infected patients. It is urgent to generate new chemical entities against this virus. As a key enzyme in the life-cycle of coronavirus, the 3C-like main protease (3CL pro or M pro ) is the most attractive for antiviral drug design. Based on a recently solved structure (PDB ID: 6LU7), we developed a novel advanced deep Q-learning network with the fragment-based drug design (ADQN-FBDD) for generating potential lead compounds targeting SARS-CoV-2 3CL pro . We obtained a series of derivatives from those lead compounds by our structure-based optimization policy (SBOP). All the 47 lead compounds directly from our AI-model and related derivatives based on SBOP are accessible in our molecular library at https://github.com/tbwxmu/2019-nCov. These compounds can be used as potential candidates for researchers in their development of drugs against SARS-CoV-2.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission. : bioRxiv preprint disease (COVID-19) worldwide. 1 As of March 2, 2020, more than 90,000 people have been infected by SARS-CoV-2 and more than 3000 people have been reported dead according to Johns Hopkins Coronavirus map tracker. 2 The numbers of infection and death are still increasing. To face the considerable threat of SARS-CoV-2, it is urgent to develop new inhibitors or drugs against this deadly virus. Unfortunately, since the outbreak of severe acute respiratory syndrome (SARS) eighteen years ago, there has been no approved treatment against the SARS coronavirus (SARS-CoV), 3 which is similar to SARS-CoV-2. Repurposing potential drugs such as lopinavir and ritonavir also failed to SARS-CoV-2 injected patients. 4 Structure-based antiviral drug design with a new artificial intelligence algorithm may represent a more helpful approach to get the SARS-CoV-2 targeted inhibitors or drugs. Thanks to the prompt efforts of many researchers, we have several pieces of important information about this vital virus genome and protein structures. We now know that the non-structural protein 5 (Nsp5) is the main protease (M pro ) of SARS-CoV-2 and it is a cysteine protease, which also been called \"3C-like protease\" (3CL pro ). Moreover, we know that the 3D structure of 3CL pro is very similar to SARS-CoV with a sequence identity of >96% and 3D structure superposition RMSDC\u03b1 of 0.44 \u00c5 as shown in Figures S1 and S2. 3CL pro has been reported as an attractive target for developing anti-coronaviral drugs: 1) this protease is highly conserved in both sequences and 3D structures; 5 2) 3CL pro is a key enzyme for related virus (including SARS and SARS-CoV-2) replication; 3) it only exists in the virus, not in humans. Developing specific antiviral drugs targeting 3CL pro of the specific virus has shown significant success; for example, both approved drugs lopinavir and ritonavir can completely occupy the substrate-binding site of 3CL pro to break down the replication of human immunodeficiency virus (HIV). However, due to the large difference between HIV and SARS-CoV-2 3CL pro , lopinavir and ritonavir were validated ineffective for inhibiting SARS-Cov-2. 4 On the other hand, the substrate-binding site of 3CL pro is almost the same between the SARS-CoV-2 and SARS as Figure S3 presents. The developed potential inhibitors and drug-design experience targeting SARS-3CL pro may also be applicable to SARS-CoV-2. For author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 304,
+                    "end": 305,
+                    "text": "2",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 2360,
+                    "end": 2369,
+                    "text": "Figure S3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The emerging coronavirus SARS-CoV-2 has caused an outbreak of coronavirus example, the recently solved structure of SARS-CoV-2 3CL pro (PDB ID: 6LU7)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "indicates that the developed inhibitor N3, 6 which is a covalent inhibitor derived from non-covalent inhibitors against SARS can also bind SARS-CoV-2 3CL pro with a similar binding conformation ( Figure S4 ).",
+            "cite_spans": [
+                {
+                    "start": 43,
+                    "end": 44,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 196,
+                    "end": 205,
+                    "text": "Figure S4",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "All the above available information paved a way to design new targeted covalent inhibitors (TCI) 7 against SARS-CoV-2. A successful TCI against 3CL pro must first be able to fit in the binding site of 3CL pro with an appropriate pose that keeps its reactive groups close enough to the Cys145, which then undergoes a chemical step (nucleophilic attack by Cys145) leading to the formation of a stable covalent bond as presented in the scheme below:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "TCIs usually have a longer target residence time than the relative non-covalent inhibitors in theory given the following: 1) For the inhibition, k1 must be larger than k2, and thus the non-covalent binding is determined by the equilibrium constant k1/k2; 2)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "TCIs have the chemical reaction step with the target, where usually k3 >> k4; and 3) for TCIs, the binding process is controlled by k1 k3/(k2 k4), which is bigger than k1/k2 in non-covalent inhibitors. In some extreme cases k4 = 0, and hence, these irreversible inhibitors covalently bind the target until the target disappears. 7, 8 Considering the inhibitors of SARS 3CL pro may be also bio-active to SARS-CoV-2, we have created a molecular library including all the reported SARS-3CL pro inhibitors (284 molecules) 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29 and we will also add new validated molecular structures into this library with our research progresses. To date, there are no clinically approved vaccines or drugs specifically targeting SARS-CoV-2.",
+            "cite_spans": [
+                {
+                    "start": 329,
+                    "end": 331,
+                    "text": "7,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 332,
+                    "end": 333,
+                    "text": "8",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 518,
+                    "end": 520,
+                    "text": "9,",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 521,
+                    "end": 524,
+                    "text": "10,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 525,
+                    "end": 528,
+                    "text": "11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 529,
+                    "end": 532,
+                    "text": "12,",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 533,
+                    "end": 536,
+                    "text": "13,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 537,
+                    "end": 540,
+                    "text": "14,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 541,
+                    "end": 544,
+                    "text": "15,",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 545,
+                    "end": 548,
+                    "text": "16,",
+                    "ref_id": null
+                },
+                {
+                    "start": 549,
+                    "end": 552,
+                    "text": "17,",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 553,
+                    "end": 556,
+                    "text": "18,",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 557,
+                    "end": 560,
+                    "text": "19,",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 561,
+                    "end": 564,
+                    "text": "20,",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 565,
+                    "end": 568,
+                    "text": "21,",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 569,
+                    "end": 572,
+                    "text": "22,",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 573,
+                    "end": 576,
+                    "text": "23,",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 577,
+                    "end": 580,
+                    "text": "24,",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 581,
+                    "end": 584,
+                    "text": "25,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 585,
+                    "end": 588,
+                    "text": "26,",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 589,
+                    "end": 592,
+                    "text": "27,",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 593,
+                    "end": 596,
+                    "text": "28,",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 597,
+                    "end": 599,
+                    "text": "29",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Thus, with the hope to discover novel candidate drugs targeting SARS-CoV-2, we combine artificial intelligence (AI) with the structure-based drug design (SBDD) to accelerate generating potential lead compounds and design TCIs. AI, especially deep learning, has been applied in predicting molecular properties 30, 31, 32, 33 and designing novel molecules 34 . Unlike earlier deep-learning molecular design by adding single atom one at a time 34, 35 , our approach explores new molecules by adding a meaningful molecular fragment one by one, which is not only computationally more efficient but also chemically more reasonable. To make our AI model work well, the first step is to prepare the molecular fragment library as shown in Figure 1 . We used our collected SARS-CoV 3CL pro inhibitors (284 molecules) as the initial molecule database targeting SARS-CoV-2 3CL pro . Then, we split this set of molecules into fragments with a molecule weight no more than 200 daltons. Both of the collected inhibitors and the fragments are supplied in https://github.com/tbwxmu/2019-nCov.",
+            "cite_spans": [
+                {
+                    "start": 309,
+                    "end": 312,
+                    "text": "30,",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 313,
+                    "end": 316,
+                    "text": "31,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 317,
+                    "end": 320,
+                    "text": "32,",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 321,
+                    "end": 323,
+                    "text": "33",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 354,
+                    "end": 356,
+                    "text": "34",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 441,
+                    "end": 444,
+                    "text": "34,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 445,
+                    "end": 447,
+                    "text": "35",
+                    "ref_id": "BIBREF38"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 730,
+                    "end": 738,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "Then we applied an advanced deep Q-learning network with the fragment-based drug design (ADQN-FBDD) for generating potential lead compounds. Noted, if researchers have enough experience and internal lead compounds or biased fragments, they can inject all such information into ADQN-FBDD by manually adding the lead compounds and biased fragments to the corresponding files. By using the same fragments directly from existing bioactivate molecules, our ADQN-FBDD agent can easily access the potential chemical space focused on 3CL pro of SARS-CoV-2.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint After ADQN-FBDD automatically generated novel compounds targeting this new virus 3CL pro , we obtained a covalent lead compound library with 4,922 unique valid structures. In total, 47 of these compounds were selected with high scores from our AImodel's reward function. Then these molecules were further evaluated by docking and covalent docking studies. The lead compound #46 with a high covalent docking score attracts our attention, which also has a low difference between non-covalent and covalent docking pose among the 47 lead compounds. After carefully checking the lead #46's interaction mode with 3CL pro , we believe there is still much space to optimize lead it. Then we designed a series of derivatives from compound #46 based on our chemical biology knowledge and the structure-based optimization policy. All the generated molecular structures are published in our code library https://github.com/tbwxmu/2019-nCov. We encourage researchers who are interested in finding a potential treatment for this viral infection to synthesize and evaluate some of these molecules for treating COVID-19. The solid lines represent taken actions including the addition/deletion of a different fragment or no modification during each step. The dashed lines represent actions that our reinforcement learning agent considered but did not make. After the first three actions to S1, S2, and S3, the fourth action to S4 was an exploratory action, meaning that it was taken even though another sibling action, the one colored in red author/funder. All rights reserved. No reuse allowed without permission. (Table S1) were kept for the next non-covalent docking and covalent-docking evaluation. These 47 virtual leads display suitable 3Dcomplexity with common characteristics of peptidomimetics and protein-protein interaction (PPI) inhibitors. They are mainly ranked by covalent-docking scores, considering covalent-docking also contains the scores of non-covalent docking. 36 And we also paid attention on the RMSD difference between the covalent binding and noncovalent binding poses based on all heavy atoms. Finally, we selected the lead molecule #46 as displayed in Figure 3 with both a good covalent docking score and a small RMSD value (Table S1 ). We further optimized it and get a series of derivatives based on the SBDD approach.",
+            "cite_spans": [
+                {
+                    "start": 2108,
+                    "end": 2110,
+                    "text": "36",
+                    "ref_id": "BIBREF39"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1740,
+                    "end": 1750,
+                    "text": "(Table S1)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2305,
+                    "end": 2313,
+                    "text": "Figure 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 2377,
+                    "end": 2386,
+                    "text": "(Table S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "Molecule #46 was ranked number 1 based on the covalent docking score and its interaction model with the binding site was carefully checked as shown in Figure 3 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 151,
+                    "end": 159,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "Although compound #46 has the best covalent docking score, it has the alerting group aldehyde. Considering there is still much space for compound #46 to fill in the S1'",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "subsite and \u03b1-ketoamides may be good to fit the oxyanion hole ( Figure 4A ) of 3CL pro , 3 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 64,
+                    "end": 73,
+                    "text": "Figure 4A",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint we replaced the aldehyde by formamide and also replaced the 1,4 Michael acceptors by alpha-ketoamides. Thus, we optimized compound #46 to compound 46-14-1 ( Figure 4 A and B). Figure 3 . Lead compound #46 generated by AI. A: Non-covalent molecular docking model of SARS-CoV-2 3CL pro (brown surface) with the bound lead compound #46 (magenta sticks). The triazole ring binds to the S1 subsite of the catalytic active center, the covalent fragment of \u03b1, \u03b2unsaturated aldehyde binds to S1' subsite, \u03b2-lactam ring binds to S2 subsite and 5,7-dihydroxy chromone binds to S3 subsite. B: A two-dimensional (2D) view of non-bonding interaction of lead compound #46 in complex with 3CL protease based on non-covalent docking. The triazole ring, i.e., keto-amide, phenolic hydroxy forms hydrogen bond (H-bond) with His163, Glu166, and Thr190, respectively. C: Covalent docking model between compound #46 (green sticks) and 3CL protease (brown surface) exhibits a similar docking model as non-covalent docking. D: A 2D view of ligand author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 318,
+                    "end": 326,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 299,
+                    "end": 307,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint interaction between compound #46 and protease under covalent docking. The triazole ring forms an H-bond with His163; the fragment of \u03b1,\u03b2-unsaturated aldehyde forms a covalent bond with Cys145, i.e., the key residue in the catalytic center of the protease, resulting in covalent inhibition; aldehyde carbonyl forms an H-bond with His41; and besides, the hydroxyl of chromone at position 7 forms an H-bond with Thr190.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The non-bonding interaction between compound 46-14-1 and SARS-CoV-2 3CL pro is mainly hydrogen bond. The carbonyl group of covalent scaffold \u03b1-ketoamide forms Hbonds with Leu141 and Gly143 as a hydrogen acceptor or a hydrogen donor. The hydrogen on the nitrogen atom of the triazole ring forms an H-bond with Glu166, while Glu166 also forms an H-bond with the carbonyl group on the main chain. The oxygen in the \u03b2-lactam ring forms an H-bond with His41. In order to enhance the polarity of the compounds, sulfonic groups were introduced to replace the ketone carbonyl groups on the main chain and sulfonamides 46-14-2 were obtained. The covalent docking model of compound 46-14-2 with SARS-CoV-2 3CL pro is shown in Figure 4 C and D.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 716,
+                    "end": 724,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "In order to make the compound 46-14-2 fit the active pocket with a higher affinity, we added a carbon atom to the sulfonic acid group of the original molecule, extending the carbon chain to increase the flexibility of the molecule, and obtained another optimized compound 46-14-3. The mode of covalent docking with SARS-CoV-2 3CL pro is shown in Figure 5 . Due to the introduction of carbon atoms and the enhancement of molecular flexibility, the \u03b2-lactam ring can be inserted deeper into the S2 pocket and the other fragments of the compound can better adapt to the S1, S1' and S3 subsites. The \u03b1carbonyl carbon on the \u03b1-ketoamide of compound 46-14-3 forms a covalent bond with the key residue Cys145 on the protease, but the main non-bond interaction is still hydrogen bond (indicated by a yellow dash). The triazole ring mainly forms H-bonds with Phe140 and Glu166 residues in the S1 pocket; \u03b1-ketoamide covalent binding fragment mainly forms H-bonds with key amino acid residues Cys145, Gly143 and Ser144 in the S1' subsite, which forms an oxyanion hole in the red circle in Figure 9 ; the \u03b2-lactam side chain mainly forms H-bonds with residues Tyr54 and AsS187 in the author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 346,
+                    "end": 354,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 1079,
+                    "end": 1087,
+                    "text": "Figure 9",
+                    "ref_id": "FIGREF13"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . S2 pocket; the chromone scaffold mainly forms H-bonds with key residues Thr190 and Gln192 in the S3 pocket. In addition, the oxygen on the sulfonyl group of the main chain forms an H-bond with Glu166 in the S1 pocket. author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The representatives were selected (46-14-1, 46-14-2 and 46-14-3 as Figure 6 displays), which may be further evaluated by molecular dynamics simulation to get the binding free energy and by quantum chemical calculation to get the reaction energy barrier.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 67,
+                    "end": 75,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "Meanwhile, 46-14-1, 46-14-2 and 46-14-3 are chosen as our candidates for chemical synthesis and anti-SARS-CoV-2 activity testing, which is ongoing. The copyright holder for this preprint (which was not peer-reviewed) is the . efficient and effective as ADQN-FBBD is molecular fragment-based growing with the knowledge of chemical reactions, while other models are all atom-based with no rules of chemical reactions at all 34, 38, 39 . 4) ADQN-FBDD is highly flexible and user-friendly for the medicinal chemists, who can easily inject their drug discovery experience into the reward function to guide the novel molecule generation. Our ADQN-FBDD and related pipeline can be used not only for designing anti-COVID-19 drugs but also other structure-based drug discoveries, especially for emerging infetious diseases that require treatments timely.",
+            "cite_spans": [
+                {
+                    "start": 422,
+                    "end": 425,
+                    "text": "34,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 426,
+                    "end": 429,
+                    "text": "38,",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 430,
+                    "end": 432,
+                    "text": "39",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "Intuitively, the problem of chemical structure graph generation is formulated as learning a reinforced agent, which performs discrete actions of chemical reaction-based fragment addition or removal in a chemistry-aware Markov Decision Process (MDP). Ac={At} denotes a set of actions that describe the modification made on the current molecule structure at each time step t. Here, each action can be classified into three author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Markov Decision Process for Molecule Generation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint categories: fragment addition, fragment deletion, and no modification.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Markov Decision Process for Molecule Generation"
+        },
+        {
+            "text": "probability, which specifies the next possible state given the current state and action at time step t. Here, we define the state transition to be deterministic. For example, as Figure 2C indicates S0 to S1, by adding a 1H-1,2,3-triazol-4-yl fragment on S0, the next state S1 will be the new structure of added 1H-1,2,3-triazol-4-yl with a probability of 1.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 178,
+                    "end": 187,
+                    "text": "Figure 2C",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "P =p(st+1 |st \u2026 s0) =p(st+1|st, at) is the basic assumption in MDP. The state transition"
+        },
+        {
+            "text": "R is the reward function that specifies the reward after reaching state ', (0,1] is the discount factor and typically \u03b3 = 0.9 in our study. In our framework, the state always has a valid and complete chemical structure at each step as Figure 2C indicates. A reward is given not just at the terminal states, but at each step. Both intermediate rewards and final rewards are used to guide the behavior of the reinforcement learning (RL) agent. So, there is no delayed or sparse reward issue as many other reinforced frameworks suffered. 40, 41 Furthermore, to ensure that the last state is rewarded the most, we use \u03b3 T-t to discount the value of the rewards at state ' . In addition, our reward function can directly integrate the experience of medicinal chemists. For example, given a core of interest, medicinal chemists may add biased fragments of their interests and their input can be used to design a reward function that gives high reward signal values to biased fragments so that ADQN-FBDD may have a better chance to generate the desired structures.",
+            "cite_spans": [
+                {
+                    "start": 535,
+                    "end": 538,
+                    "text": "40,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 539,
+                    "end": 541,
+                    "text": "41",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 235,
+                    "end": 244,
+                    "text": "Figure 2C",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "P =p(st+1 |st \u2026 s0) =p(st+1|st, at) is the basic assumption in MDP. The state transition"
+        },
+        {
+            "text": "In our RL framework, the chemical environment receives action at from the agent and emits scalar reward rt and state s ' 3 to the agent as Figure 2A shows. Note that the definition of the environment state is different from the general approach that the environment state is only the environment's private representation invisible to the agent.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 139,
+                    "end": 148,
+                    "text": "Figure 2A",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Chemical Environment Design"
+        },
+        {
+            "text": "We define the state of the chemical environment s ' 3 as the intermediate generated molecule structure at time step t, which is fully observable by the RL agent. Simply, author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Chemical Environment Design"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint the environment's state s ' 3 is the agent's state '45 . For the task of molecule generation, the environment incorporates rules of chemistry. In our study, chemistry rules are not only the basic chemical valency, but also the rules about adding and removing the fragments derived from known inhibitors based on chemical reactions.",
+            "cite_spans": [
+                {
+                    "start": 168,
+                    "end": 169,
+                    "text": "'",
+                    "ref_id": null
+                },
+                {
+                    "start": 193,
+                    "end": 196,
+                    "text": "'45",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Chemical Environment Design"
+        },
+        {
+            "text": "The detail information of 45 defined chemical reaction rules is presented in Table S2 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 77,
+                    "end": 85,
+                    "text": "Table S2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Chemical Environment Design"
+        },
+        {
+            "text": "As indicated in Figure where < =~8 (? = ) is the expectation within policy \u03c0 on state st taken at and R( E , E )",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 16,
+                    "end": 22,
+                    "text": "Figure",
+                    "ref_id": null
+                }
+            ],
+            "section": "Agent Design"
+        },
+        {
+            "text": "denotes the reward at step n. Value function Q \u03c0 (st , at) measures the value of taking action at on state st. V \u03c0 (st ) is the value of being at state st means how good to be in this state. Obviously, V \u03c0 (st ) can be seen as a part of Q \u03c0 (st , at). Then, the rest part from Q \u03c0 (st , at) can be defined as the so-called advantage function A \u03c0 (st , at) 42 as:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent Design"
+        },
+        {
+            "text": "Intuitively, the advantage value shows how advantageous selecting the action is relative to the others at the same given state. Then Eqn.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent Design"
+        },
+        {
+            "text": "(2) can be rewritten according to Eqn.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent Design"
+        },
+        {
+            "text": "(4):",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent Design"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent Design"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint Note that , and come from the dueling Q-network as Figure 7 indicates. |Ac| is the size of action space and '",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 193,
+                    "end": 201,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF9"
+                }
+            ],
+            "section": "Agent Design"
+        },
+        {
+            "text": ". To make our RL agent more robust to be more stable learning and to handle the problem of the overestimation of Q-values, double Qnetwork 43 and fixed Q-targets 44 are also incorporated: ",
+            "cite_spans": [
+                {
+                    "start": 139,
+                    "end": 141,
+                    "text": "43",
+                    "ref_id": "BIBREF45"
+                }
+            ],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "where, TD is the temporal-difference; '<e 8 is another dueling DQN network as the target network and its parameters ( \u2032, \u2032, \u2032) keep fixed and copy from the dueling DQN author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint 8 every m steps (m=20 as we used). To update the parameters ( , , ) from the dueling DQN as Figure 7 displays, we can train our RL agent by minimizing the loss function:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 234,
+                    "end": 242,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF9"
+                }
+            ],
+            "section": "3"
+        },
+        {
+            "text": "where E is the expectation. As the L2 loss has a disadvantage of the tendency to be dominated by outliers, we use the Huber loss as the loss function o :",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "Prioritized Experience Replay (PER) 45 is a technique to enable reinforcement learning agents remember and reuse experience from the past, and to replay important transitions more frequently. PER is very useful for replaying some less frequent experiences. Here, we use the same code of \"Prioritized Replay Buffer\" from open AI's gym with version 0.15.4. 46 Finally, our RL agent is the double dueling deep Q learning with fixed qtargets and prioritized experience replay.",
+            "cite_spans": [
+                {
+                    "start": 36,
+                    "end": 38,
+                    "text": "45",
+                    "ref_id": null
+                },
+                {
+                    "start": 355,
+                    "end": 357,
+                    "text": "46",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Prioritized Experience Replay"
+        },
+        {
+            "text": "The fragment-based approach to drug discovery (FBDD) has been established as an efficient tool in the search for new drugs. 47 The idea of FBDD is that proper optimization of each unique interaction in the binding site and subsequent incorporation into a single molecular entity should produce a compound with a binding affinity that is the sum of the individual interactions. However, the widely used fragment libraries only consider the diversity of fragments, such as the ZINC fragment database. They have a very low probability to exhibit the desired bioactivity for a given protein.",
+            "cite_spans": [
+                {
+                    "start": 124,
+                    "end": 126,
+                    "text": "47",
+                    "ref_id": "BIBREF49"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Fragment Library Design"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fragment Library Design"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fragment Library Design"
+        },
+        {
+            "text": "To combine the idea of FBDD with our RL framework, we first collected and built a SARS-CoV-2 3CL pro inhibitor dataset containing 284 reported molecules. Then using the improved BRICS algorithm 48 ",
+            "cite_spans": [
+                {
+                    "start": 194,
+                    "end": 196,
+                    "text": "48",
+                    "ref_id": "BIBREF50"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Fragment Library Design"
+        },
+        {
+            "text": "Studies have identified various scaffolds or core structures that have privileged characteristics in terms of the activity of a certain target. 49, 50, 51 Core structure selection is the starting point in a scaffold-based drug discovery. Choosing or designing a proper author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 144,
+                    "end": 147,
+                    "text": "49,",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 148,
+                    "end": 151,
+                    "text": "50,",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 152,
+                    "end": 154,
+                    "text": "51",
+                    "ref_id": "BIBREF53"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Core Selection"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint initial scaffold is never trivial, and medicinal chemists may need enough experience to get such a skill. Luckily, there are serval reported privileged core structures targeting SARS M pro . 3, 52 Here, we chose 4-aminopent-2-enal and 3-amino-2-oxobutanal as the starting cores as Figure 8 displays, because both cores have been validated to generate covalent bonds with the Cys145 of SARS or SARS-CoV-2 3CL pro .",
+            "cite_spans": [
+                {
+                    "start": 333,
+                    "end": 335,
+                    "text": "3,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 336,
+                    "end": 338,
+                    "text": "52",
+                    "ref_id": "BIBREF54"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 423,
+                    "end": 431,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF12"
+                }
+            ],
+            "section": "Core Selection"
+        },
+        {
+            "text": "Most reported RL methods using the complete structure information of a positive drug or inhibitor as the template, 38, 39 and they design a reward function for the RL agent to learn to regenerate the template structure or generate highly similar structures to the template. This way may be useful in testing the performance of RL methods but not suitable in a real-world drug design because no one knows the complete structural information of the novel molecule. A more practical approach is to learn the structure features of existing drugs or inhibitors to local, focused chemical space for a specific protein target. Instead of simply putting attention on the diversity of molecule structure, we explore the possibility of generating novel molecules based on the existing knowledge. Here, we designed a deep reinforcement learning reward (DRL-reward) function that consists of the final property score, containing specific fragments (CSF) score and pharmacophore score as:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "where yez represents weight for the quantitative estimate of drug-likeness (QED)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "property and its default value is 0.1. yez stands for the QED. QED values can range from 0 (all properties are unfavourable) to 1 (all properties are favourable), which are calculated by eight molecular properties. 53 The score function {?\u20ac of containing specific fragments (csf) is:",
+            "cite_spans": [
+                {
+                    "start": 215,
+                    "end": 217,
+                    "text": "53",
+                    "ref_id": "BIBREF55"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint pocket are shown as surface, which are assigned as S1 (green), S1' (red), S2 (magenta), and S3(cyan). B:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "The key residues of the binding site are displayed by green, red, magenta and cyan lines (S1, S1', S2 and S3). The pictures of the binding site are generated using PyMol ((http://www.pymol.org/).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "The binding site of SARS-CoV-2 3CL pro ( Figure 9 ) is commonly divided into the catalytic activity center (His41 and Cys145, specified as S1') and several subsites, defined as S1 (His163, Glu166, Phe140, Leu141 and Asn142), S1' (His41, Cys145, Gly143 and Ser144), S2 (Tyr54, Asp187, His41, Arg188, His164 and Met49), and S3",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 41,
+                    "end": 49,
+                    "text": "Figure 9",
+                    "ref_id": "FIGREF13"
+                }
+            ],
+            "section": "Reward Design"
+        },
+        {
+            "text": "(Thr190, Gln192, Glu166, Met165, Leu167 and Gln189). Each subsite may have its own favorable binding fragment. When generated structures (including the intermediates) containing those favorable fragments, {?\u20ac is equivalent to give an additional reward to our RL agent. {zE controls the contribution of the biased fragment to the reward signal and the default value is 0.6. \u017d<'{| stands for how many biased fragments have been matched in one generated structure. 'z'<o is the number of biased fragments defined based on our knowledge learned from related work. y|< author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reward Design"
+        },
+        {
+            "text": "represents the score function of pharmacophores, which mainly depends on the ligandprotein interaction mode from the crystal structure (PDB ID: 6LU7): y|< ( ) = } 1 \u210e \u210e \u210e \u210e 0 (13) The pharmacophores plot was added in Figure S5 . y|< controls the contribution of the pharmacophore score to the reward and the default value is 0.4.",
+            "cite_spans": [
+                {
+                    "start": 175,
+                    "end": 179,
+                    "text": "(13)",
+                    "ref_id": "BIBREF12"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 217,
+                    "end": 226,
+                    "text": "Figure S5",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Reward Design"
+        },
+        {
+            "text": "As discussed in the above reward design part, our reward function considers the molecular descriptor thresholds (QED>0.1), the defined pharmacophores and biased fragments. In total, 4,922 unique valid structures were automatically generated and all matched the defined rules by using ADQN-FBDD without any pre-training as many other methods need. 35, 40, 41, 54, 55 Next, All the molecules with high deep reinforcement learning scores (DRL score: R(S)>0.6) were kept (47 molecules). Then, these 47 unique molecules were prepared to generate at least 1 conformation with the local energy minimization using the OPLS-2005 force field by the \"ligand prepare\" module of Schr\u00f6dinger 2015 software. The 47 unique molecules generated a total of 163 3D",
+            "cite_spans": [
+                {
+                    "start": 347,
+                    "end": 350,
+                    "text": "35,",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 351,
+                    "end": 354,
+                    "text": "40,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 355,
+                    "end": 358,
+                    "text": "41,",
+                    "ref_id": null
+                },
+                {
+                    "start": 359,
+                    "end": 362,
+                    "text": "54,",
+                    "ref_id": "BIBREF56"
+                },
+                {
+                    "start": 363,
+                    "end": 365,
+                    "text": "55",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Molecular Generation and Selection"
+        },
+        {
+            "text": "conformations before docking into the substrate-binding site of SARS-CoV-2 3CL pro .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Molecular Generation and Selection"
+        },
+        {
+            "text": "Considering the balance between precision and calculation time, the stand-precision (SP) Glide 56 was firstly used to predict the possible non-covalent binding poses in this binding site and the binding site grid centered on the original ligand N3 57 with 20 \u00c5 buffer dimensions. Following this non-covalent docking, we also calculated the covalent docking poses and scores for those 47 molecules. We reordered the docking results mainly based on the covalent docking score and the RMSD value from covalent docking pose to non-covalent (Table S1 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 536,
+                    "end": 545,
+                    "text": "(Table S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Molecular Generation and Selection"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Supplementary information"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.03.972133 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Supplementary information"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Severe acute respiratory syndrome-related coronavirus-The species and its viruses, a statement of the Coronavirus Study Group",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Gorbalenya",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "BioRxiv",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "authors": [],
+            "year": null,
+            "venue": "Coronavirus COVID-19 Global Cases by Johns Hopkins CSSE \uff0c available from \uff1a",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.03.03.972133"
+                ]
+            }
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Alpha-ketoamides as broad-spectrum inhibitors of coronavirus and enterovirus replication Structure-based design, synthesis, and activity assessment",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Journal of Medicinal Chemistry",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Potential inhibitors for 2019-nCoV coronavirus M protease from clinically approved medicines. bioRxiv",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X-J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Design of wide-spectrum inhibitors targeting coronavirus main proteases",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "PLoS biology",
+            "volume": "3",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "The resurgence of covalent drugs",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Singh",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Petter",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Baillie",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Whitty",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nature reviews Drug discovery",
+            "volume": "10",
+            "issn": "",
+            "pages": "307--317",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "The taxonomy of covalent inhibitors",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tuley",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Fast",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Biochemistry",
+            "volume": "57",
+            "issn": "",
+            "pages": "3326--3337",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Synthesis and evaluation of keto-glutamine analogues as potent inhibitors of severe acute respiratory syndrome 3CLpro",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Jain",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "47",
+            "issn": "",
+            "pages": "6113--6116",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Small molecules targeting severe acute respiratory syndrome human coronavirus",
+            "authors": [
+                {
+                    "first": "C-Y",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "101",
+            "issn": "",
+            "pages": "10012--10017",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Design and synthesis of peptidomimetic severe acute respiratory syndrome chymotrypsin-like protease inhibitors",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Ghosh",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "48",
+            "issn": "",
+            "pages": "6767--6771",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Discovery of potent anilide inhibitors against the severe acute respiratory syndrome 3CL protease",
+            "authors": [
+                {
+                    "first": "J-J",
+                    "middle": [],
+                    "last": "Shie",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "48",
+            "issn": "",
+            "pages": "4469--4473",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Inhibition of the severe acute respiratory syndrome 3CL protease by peptidomimetic \u03b1, \u03b2-unsaturated esters",
+            "authors": [
+                {
+                    "first": "J-J",
+                    "middle": [],
+                    "last": "Shie",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Bioorganic & medicinal chemistry",
+            "volume": "13",
+            "issn": "",
+            "pages": "5240--5252",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "An efficient method for the synthesis of peptide aldehyde libraries employed in the discovery of reversible SARS coronavirus main protease (SARS-CoV Mpro) inhibitors",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Al-Gharabli",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "ChemBioChem",
+            "volume": "7",
+            "issn": "",
+            "pages": "1048--1055",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Structure-based drug design and structural biology study of novel nonpeptide inhibitors of severe acute respiratory syndrome coronavirus main protease",
+            "authors": [
+                {
+                    "first": "I-L",
+                    "middle": [],
+                    "last": "Lu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "49",
+            "issn": "",
+            "pages": "5154--5161",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.03.03.972133"
+                ]
+            }
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Discovery of a novel family of SARS-CoV protease inhibitors by virtual screening and 3D-QSAR studies",
+            "authors": [
+                {
+                    "first": "K-C",
+                    "middle": [],
+                    "last": "Tsai",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "49",
+            "issn": "",
+            "pages": "3485--3495",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Stable benzotriazole esters as mechanism-based inactivators of the severe acute respiratory syndrome 3CL protease",
+            "authors": [
+                {
+                    "first": "C-Y",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Chemistry & biology",
+            "volume": "13",
+            "issn": "",
+            "pages": "261--268",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Evaluation of peptide-aldehyde inhibitors using R188I mutant of SARS 3CL protease as a proteolysis-resistant mutant",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Akaji",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Konno",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Onozuka",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Makino",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Saito",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Nosaka",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Design, synthesis and antiviral efficacy of a series of potent chloropyridyl ester-derived SARS-CoV 3CLpro inhibitors",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Ghosh",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Bioorganic & medicinal chemistry letters",
+            "volume": "18",
+            "issn": "",
+            "pages": "5684--5688",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Design, synthesis, and evaluation of trifluoromethyl ketones as inhibitors of SARS-CoV 3CL protease",
+            "authors": [
+                {
+                    "first": "Y-M",
+                    "middle": [],
+                    "last": "Shao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Bioorganic & medicinal chemistry",
+            "volume": "16",
+            "issn": "",
+            "pages": "4652--4660",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Individual and common inhibitors of coronavirus and picornavirus main proteases",
+            "authors": [
+                {
+                    "first": "C-J",
+                    "middle": [],
+                    "last": "Kuo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "FEBS letters",
+            "volume": "583",
+            "issn": "",
+            "pages": "549--555",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Synthesis and evaluation of pyrazolone compounds as SARS-coronavirus 3C-like protease inhibitors",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Ramajayam",
+                    "suffix": ""
+                },
+                {
+                    "first": "K-P",
+                    "middle": [],
+                    "last": "Tan",
+                    "suffix": ""
+                },
+                {
+                    "first": "H-G",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "P-H",
+                    "middle": [],
+                    "last": "Liang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Bioorganic & medicinal chemistry",
+            "volume": "18",
+            "issn": "",
+            "pages": "7849--7854",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Biflavonoids from Torreya nucifera displaying SARS-CoV 3CLpro inhibition",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Ryu",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Structure-based design, synthesis, and evaluation of peptide-mimetic SARS 3CL protease inhibitors",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Akaji",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "54",
+            "issn": "",
+            "pages": "7962--7973",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Discovery, synthesis, and structure-based optimization of a series of N-(tertbutyl)-2-(N-arylamido)-2-(pyridin-3-yl) acetamides (ML188) as potent noncovalent small molecule inhibitors of the severe acute respiratory syndrome coronavirus",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Jacobs",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "The newly emerged SARS-like coronavirus HCoV-EMC also has an\" Achilles' heel\": current effective inhibitor targeting a 3C-like protease",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Protein & cell",
+            "volume": "4",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Development of potent dipeptide-type SARS-CoV 3CL protease inhibitors with novel P3 scaffolds: Design, synthesis, biological evaluation, and docking studies",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Thanigaimalai",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "European journal of medicinal chemistry",
+            "volume": "68",
+            "issn": "",
+            "pages": "372--384",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Discovery of N-(benzo [1, 2, 3] triazol-1-yl)-N-(benzyl) acetamido) phenyl) carboxamides as severe acute respiratory syndrome coronavirus (SARS-CoV) 3CLpro inhibitors: identification of ML300 and noncovalent nanomolar inhibitors with an induced-fit binding",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Turlington",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Bioorganic & medicinal chemistry letters",
+            "volume": "23",
+            "issn": "",
+            "pages": "6172--6177",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Identification and evaluation of potent Middle East respiratory syndrome coronavirus (MERS-CoV) 3CLPro inhibitors",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Kumar",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Antiviral research",
+            "volume": "141",
+            "issn": "",
+            "pages": "101--106",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "A self-attention based message passing neural network for predicting molecular lipophilicity and aqueous solubility",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Kramer",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Fang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Qiu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Journal of Cheminformatics",
+            "volume": "12",
+            "issn": "",
+            "pages": "1--9",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Chemi-Net: a molecular graph convolutional network for accurate drug property prediction",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "International journal of molecular sciences",
+            "volume": "20",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Molecule Property Prediction Based on Spatial Graph Embedding",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Journal of chemical information and modeling",
+            "volume": "59",
+            "issn": "",
+            "pages": "3817--3828",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "MoleculeNet: a benchmark for molecular machine learning",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Chemical science",
+            "volume": "9",
+            "issn": "",
+            "pages": "513--530",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Junction tree variational autoencoder for molecular graph generation",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Jin",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Barzilay",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Jaakkola",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Graph convolutional policy network for goaldirected molecular graph generation",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "You",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Ying",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Pande",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Leskovec",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Advances in neural information processing systems",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Docking Covalent Inhibitors: A Parameter Free Approach To Pose Prediction and Scoring",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Journal of Chemical Information & Modeling",
+            "volume": "54",
+            "issn": "",
+            "pages": "1932--1940",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Assessing the impact of generative AI on medicinal chemistry",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Walters",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Murcko",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Nature Biotechnology",
+            "volume": "",
+            "issn": "",
+            "pages": "1--3",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Molecular de-novo design through deep reinforcement learning",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Olivecrona",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Blaschke",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Engkvist",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Journal of cheminformatics",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Optimization of molecules via deep reinforcement learning",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kearnes",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Zare",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Scientific reports",
+            "volume": "9",
+            "issn": "",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Deep reinforcement learning for de novo drug design",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Popova",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Isayev",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tropsha",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Science",
+            "volume": "42",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Dueling network architectures for deep reinforcement learning",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Schaul",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hessel",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Van Hasselt",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lanctot",
+                    "suffix": ""
+                },
+                {
+                    "first": "De",
+                    "middle": [],
+                    "last": "Freitas",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Deep reinforcement learning with double q-learning",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Van Hasselt",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Guez",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Silver",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Thirtieth AAAI conference on artificial intelligence",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Improvements in Deep Q Learning: Dueling Double DQN, Prioritized Experience Replay, and fixed Q-targets. \u010cervenec",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Simonini",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Recent advances in fragment-based computational drug design: tackling simultaneous targets/biological effects",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Speck-Planche",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Future Science",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "On the Art of Compiling and Using'Drug-Like'Chemical Fragment Spaces",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Degen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wegscheid-Gerlach",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zaliani",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Rarey",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "ChemMedChem: Chemistry Enabling Drug Discovery",
+            "volume": "3",
+            "issn": "",
+            "pages": "1503--1507",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Mining for bioactive scaffolds with scaffold networks: improved compound set enrichment from primary screening data",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Varin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Schuffenhauer",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Ertl",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Renner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of chemical information and modeling",
+            "volume": "51",
+            "issn": "",
+            "pages": "1528--1538",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "The scaffold tree\u2212 visualization of the scaffold universe by hierarchical scaffold classification",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Schuffenhauer",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Ertl",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Roggo",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Wetzel",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Koch",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Waldmann",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Journal of chemical information and modeling",
+            "volume": "47",
+            "issn": "",
+            "pages": "47--58",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Chromone as a Privileged Scaffold in Drug Discovery: Recent Advances: Miniperspective",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Reis",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gaspar",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Milhazes",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Borges",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "60",
+            "issn": "",
+            "pages": "7941--7957",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "An Overview of Severe Acute Respiratory Syndrome-Coronavirus (SARS-CoV) 3CL Protease Inhibitors: Peptidomimetics and Small Molecule Chemotherapy",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Pillaiyar",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Manickam",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Namasivayam",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Hayashi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S-H",
+                    "middle": [],
+                    "last": "Jung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Journal of Medicinal Chemistry",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Quantifying the chemical beauty of drugs",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Bickerton",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Paolini",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Besnard",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Muresan",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hopkins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Nature chemistry",
+            "volume": "4",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Deep learning for molecular design-a review computer-assisted drug discovery",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Elton",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Boukouvalas",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Fuge",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Chung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Chemical reviews",
+            "volume": "119",
+            "issn": "",
+            "pages": "10520--10594",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "Extra precision glide: Docking and scoring incorporating a model of hydrophobic enclosure for protein\u2212 ligand complexes",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Friesner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Journal of medicinal chemistry",
+            "volume": "49",
+            "issn": "",
+            "pages": "6177--6196",
+            "other_ids": {}
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "Structure-based drug design, virtual screening and high-throughput screening rapidly identify antiviral leads targeting COVID-19. bioRxiv",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Jin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.03.03.972133"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Flowchart for our SARS-CoV-2 3CL pro lead compounds development.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "A: Framework of ADQN-FBDD. B: Examples for explaining the fragment-based actions. C:",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "ADQN-FBDD is flexible and efficient to access the focused chemical space targeting the SARS-CoV-2 3CL pro . Based on the configurations targeting the SARS-CoV-2 3CL pro , ADQN-FBDD generated a potential lead library containing 4,922 unique molecular structures (Supplementary dataset in https://github.com/tbwxmu/2019-nCov). To narrow our focus to a smaller set of molecules for analysis, we elaborately defined filter rules (QED>0.1 and DRL-reward>=0.6) and the detailed information of the rules can be found in the Methods section. And then 47 unique molecules",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "The covalent binding models of compound 46-14-1 and 46-14-2 in complex with the SARS-CoV-2 3CL pro . A: The covalent docking model between compound 46-14-1 (green sticks) with 3CL protease (yellow-orange surface). The oxyanion hole formed by the segment of \u03b1ketoamides is shown in the red circle. B: The detailed view of the interactions between the compound 46-14-1 and 3CL pro . C: The covalent docking model between compound 46-14-2 with 3CL protease. The molecule 46-14-2 is shown as green sticks and the protein is shown as brown surface. D: The 2D view of the interactions between the compound 46-14-1 and 3CL pro .",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "The covalent binding model of Compound 46-14-3 in SARS-CoV-2 3CL pro . A: Surface representation of SARS-CoV-2 3CL pro (brown) complexed with 46-14-3 (green sticks). B: A stereo view showing 43-14-3 bound into the substrate-binding pocket of the SARS-CoV-2 3CL pro at 4 \u00c5. The molecule 43-14-3 is shown as green sticks. Residues forming the H-bond are shown as yellow sticks. And the yellow dashes represent the H-bonds, as well as the oxyanion hole, is in the red circle region.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Structures of optimized compounds. author/funder. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Computational approaches are particularly important for emerging diseases given the urgent need to provide timely solutions. In this work, our robust and efficient computational method and pipeline for designing compounds can provide useful drug candidates for treating SARS-CoV-2 infections. For more information about our AI model generated leads and SBDD optimized derivatives, please go to the library https://github.com/tbwxmu/2019-nCov. These candidates or their variants have a good chance to produce valid leads of anti-COVID-19 drugs. It is understood that the computational design requires experimental validations. While we are exploring experimental validations ourselves, we like to release these candidates promptly for other researchers to accelerate the development of anti-COVID-19 drugs given the emergency of seeking treatments for the disease.Comparing with other deep RL methods, ADQN-FBDD has several highlights: 1) It directly modifies and generate molecular structures without format conversion problems while some other tools such as Insilico Medicine's GENTRL (https://insilico.com) may generate invalid SMILES output. 2) Most of the generative models require pre-training on a specific dataset and then produce the molecules with high similarities to a given training set. For example, the best molecule from Insilico Medicine for their target DDR1 was actually very similar to the kinase inhibitor Iclusig (ponatinib) on the market.37 ADQN-FBDD does not need pre-training at all and has a capacity to generate novel molecules.3) The process of generating molecules is very author/funder. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": ", the components of MDP) include M = {S, A, P, R, \u03b3}, where each term is defined as follows: = { ' } denotes the state space containing all possible intermediate and finalgenerated molecular graphs. Each ' is a tuple of (s, t). s stands for a valid molecule structure and t is the time step. For the initial state ) , the structure can be represented as a specific core asFigure 2Cindicates or randomly chosen from the prepared fragment library at time t = 0. We also limit the maximum number of time steps T in our molecule fragment based MDP, which defines the set of terminal states as { ' |t=T} containing all the states with the number of steps reaching the maximum allowed value T.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "2A, the basic model of our ADQN-FBDD is an advanced Qnetwork. The goal of molecule generation is equally to fit a Q function Q(st, at) to make the agent choose the action at at state st that maximizes the future expected \u03b3-discounted cumulative rewards with policy \u03c0. Mathematically, given the agent's policy \u03c0, the value of the state-action pair Q \u03c0 (st , at) and the value of state V \u03c0 (st ) are defined as, respectively: 8 ( ' , ' ) = < =~8 (? = ) @A \u03b3 CDE \u00b7 R(",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "To avoid the issue of identifiability, we deduct the mean value from the prediction and the Q-function of dueling DQN can be Architecture of used advance deep Q-learning network (ADQN). TD is the temporal difference error.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "to split those molecules to get the fragment library target on SARS-CoV-2 3CL pro as the flowchart displayed in Figure 1's yellow box. An elaborate filtering cascade accompanied by manual inspection and the rules can be changed based on the needs in different studies. Our fragment library contains 316 fragments with molecular weight <200 daltons, the minimum number non-hydrogen atom >1 and the maximum \u2264 25. The fragments directly from the existing inhibitors based on the chemical retrosynthetic rules are always true substructures and may have a high quality of bioactivity targeting 3CL pro . It is worth noting that the quality of the designed fragment library directly affects the behavior of the chemical environment of ADQN-FBDD.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Structures of the chosen cores",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "Binding site of SARS-CoV-2 3CL pro . A: The subsites that complement the substrate-binding",
+            "latex": null,
+            "type": "figure"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "We would like to thank Prof. Dongqing Wei's group and the PCL lab for their generous support of high-performance computing resources. BT's work was funded by the program of China Scholarships Council No. 201806310017. DX's effort was supported by the US National Institutes of Health grant R35-GM126985.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Supplementary dataset and additional information of this paper can be found at https://github.com/tbwxmu/2019-nCov.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "annex"
+        },
+        {
+            "text": "BT and DX designed the study. BT developed the AI-aided methods and wrote the manuscript. All authors contributed to the interpretation of results. All authors reviewed and edited the manuscript. All authors read and approved the final manuscript.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Authors' contributions"
+        },
+        {
+            "text": "The code for the ADQN-FBDD and related data in this paper will be available at https://github.com/tbwxmu/2019-nCov upon acceptance of this paper for journal publication.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data and Code availability"
+        },
+        {
+            "text": "The authors declare that they have no competing interests.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Competing interests"
+        }
+    ]
+}

@@ -1,0 +1,3542 @@
+{
+    "paper_id": "d2c7ac58cc309df9d3da8e766184d09c32d16dca",
+    "metadata": {
+        "title": "TaxIt: An iterative and automated computational pipeline for untargeted strain-level identification using MS/MS spectra from pathogenic samples",
+        "authors": [
+            {
+                "first": "Mathias",
+                "middle": [],
+                "last": "Kuhring",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Bioinformatics Unit (MF",
+                    "location": {}
+                },
+                "email": ""
+            },
+            {
+                "first": "Joerg",
+                "middle": [],
+                "last": "Doellinger",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Centre for Biological Threats and Special Pathogens, Proteomics and Spectroscopy (ZBS",
+                    "institution": "",
+                    "location": {}
+                },
+                "email": ""
+            },
+            {
+                "first": "Andreas",
+                "middle": [],
+                "last": "Nitsche",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Robert Koch Institute",
+                    "location": {
+                        "settlement": "Berlin",
+                        "country": "Germany"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Thilo",
+                "middle": [],
+                "last": "Muth",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Bioinformatics Unit (MF",
+                    "location": {}
+                },
+                "email": ""
+            },
+            {
+                "first": "Bernhard",
+                "middle": [
+                    "Y"
+                ],
+                "last": "Renard",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Bioinformatics Unit (MF",
+                    "location": {}
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Untargeted accurate strain-level classification of a priori unidentified organisms using tandem mass spectrometry is a challenging task. Reference databases often lack taxonomic depth, limiting peptide assignments to the species level. However, the extension with detailed strain information increases runtime and decreases statistical power. In addition, larger databases contain a higher number of similar proteomes. We present TaxIt, an iterative workflow to address the increasing search space required for MS/MS-based strain-level classification of samples with unknown taxonomic origin. TaxIt first applies reference sequence data for initial identification of species candidates, followed by automated acquisition of relevant strain sequences for low level classification. Furthermore, proteome similarities resulting in ambiguous taxonomic assignments are addressed with an abundance weighting strategy to improve candidate confidence. We apply our iterative workflow on several samples of bacterial and viral origin. In comparison to noniterative approaches using unique peptides or advanced abundance correction, TaxIt identifies microbial strains correctly in all examples presented (with one tie), thereby demonstrating the potential for untargeted and deeper taxonomic classification. TaxIt makes extensive use of public, unrestricted and continuously growing sequence resources such as the NCBI databases and is available under open-source license at https://gitlab.com/rki_bioinformatics.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Pathogenic strain identification using LC-MS/MS-based proteomics presents a crucial, yet highly challenging task. Many pathogenic strains feature significant phenotypic differences within a species with respect to pathogenicity, zoonotic potential, cell attachment and entry, host-virus interaction and clinical symptoms [1] [2] [3] . In a diagnostic context, strain-level knowledge is important to infer virulence 4, 5 and drug resistance 6 for appropriate therapy. However, inferring exact strain information from proteomic samples remains a difficult task, in particular when the taxonomic origin of a sample is unknown and when related strains feature high sequence similarity. In recent years, MALDI-TOF mass spectrometry has gained popularity as fast, sensitive and economical method for microbial biotyping. However, identifying strains using MALDI-TOF workflows is still very challenging and requires curated, often proprietary spectral databases 7 . Several commercial platforms for microbial biotyping down to the species or strain level are available based on MALDI and other technologies such as the Bruker MALDI Biotyper Systems 8 , the Bruker Strain typing with IR Biotyper 9 and the Ibis T5000 Universal Biosensor 10 . Several studies report on limitations of MALDI-TOF biotyping for strain-level identifications and advocate advancements towards MS/MS marker peptide detection and, consequently, the analysis was shifted to the MS/MS level 11, 12 . In these studies, however, the MS/MS-based protein identification was established using sequence databases that were already targeted or restricted to particular species or limited sets. In contrast, untargeted MS/MS typing approaches are limited to species level identification 6, 13 . However, in general MS/MS is preferred for the analysis of complex unpurified peptide mixtures as it is considered to provide more distinct and unambiguous peptide and protein identifications 14 and thus increased proteome resolution 15 as well as higher statistical confidence 16 . In particular, organisms with unknown taxonomic origin benefit from peptide sequence-based analysis, as MALDI-based biotyping is in comparison too prone to ambiguous identifications 17 . Furthermore, advances in instrumentation including higher resolution, mass accuracy and dynamic range increasingly allow for identification of the majority of all fragmented peptides 18 resulting in higher sensitivity, higher coverage of target proteomes and thus higher availability of distinctive features. Taking advantage of the vast amount of available protein sequences for MS/MS strain-level identification is challenging. On the one hand, constraining the search space may result in unidentified strains or incorrectly assigned taxa, in particular for non-model organisms 19 . On the other hand, applying large databases is not recommended either since it decreases peptide identification rates 20 and thus eventually impedes taxonomic inference 21 . Furthermore, with increasing database size sequence quality often decreases (e.g. when using the complete NCBI Protein in comparison to the NCBI RefSeq database) and contaminant sequences may occur more often 22 . Therefore, extended databases should only be used when necessary. However, strain-level identification of MS/MS spectra from samples with unclear taxonomic status requires an untargeted search against comprehensive databases holding as many strains as possible. A common and popular concept to handle increased search spaces is the application of multiple identification steps in general, independently of target application such as strain-level identification. These multi-stage identification search strategies are described by several different terms such as serial search 23 , multi-step 24 , iterative 25, 26 , multi-stage 27 , two-step [28] [29] [30] as well as cascade search 31 and they find application in proteomics, metaproteomics 26, 28 and proteogenomics 30, 32 . Most of these strategies do not only overlap in their objective of increasing the identification rate or identification confidence, but share methodological principles as well. This includes the concept of identifying primarily unassigned spectra using databases of increasing complexity (for instance, by employing altered digestion parameters, additional post-translational modifications or additional spectral and genomic databases) [24] [25] [26] [27] 31 as well as the recurring theme of database size reduction 24, 26, [28] [29] [30] 32 . In addition, some methods rely on spectral quality assessment to enhance subsequent identification steps 25, 32 or exhibit a focus on algorithmic runtime reduction 24 . Apart from database size, multi-proteome databases present an additional challenge for taxonomic assignment in the form of high sequence similarity between proteomes, in particular between related species and strains. These similarities give rise to taxonomically ambiguous, widespread and false assignments and thus need to be accounted for. Several methods exist that provide various strategies to account for ambiguous peptide spectrum matches due to sequence similarity. Dworzanski et al. apply a proteogenomic mapping approach in combination with discriminant analysis to infer most likely bacterial assignments 33 . The proteogenomic approach was further developed in BACid that applies several statistical measures to account for similarity, including the comparison of ratios of taxonomic differences and of unique peptides to known error rates, i.e. the noise levels 34, 35 . BACid has since been applied to and extended for samples of unknown origin 36 as well as mixtures of bacteria 36, 37 . With the focus on metaproteomic analysis, MEGAN 38 , UniPept 39 , MetaProteomeAnalyzer 40,41 and TCUP 6 rely on lowest common ancestor or most specific taxonomy approaches to assign peptides spectrum matches to taxonomic levels. MiCId uses a clustering approach based on peptidome similarity of taxa on different levels in combination with unified E-values to infer statistically significant representatives of clusters as identified or classified microorganisms 13, 42 . Tracz et al. use a direct assignment strategy by concatenating all proteins of a proteome into one pseudo-polyprotein and considering only the top-scored spectrum matches to a peptide as counts for bacterial candidates 43 . In contrast, Pipasic explicitly makes use of ambiguous peptide spectrum matches (PSMs) by applying abundance correction based on intensityweighted proteome similarities of organisms in metaproteomic samples 44 . While these methods share the objective of reducing uncertainty in taxonomic identification due to ambiguous assignments in the context of the protein inference issue 45 , their application for untargeted strain-level identification is not straightforward for several reasons. For example, unique peptides are not necessarily available for all candidate strains in the sequence databases for which the information given is often limited to species or higher taxonomic levels. In addition, the approaches rely on fully sequenced genomes (and thus uniform proteome coverage) or other forms of targeted, curated, inhouse or validated databases and are thus restricted to a predefined limited set of organisms, often with definite focus on bacteria. Furthermore, some methods do not scale well with immoderate large databases (i.e. high number of proteomes) with respect to computational or analytical performance. Previous multi-step procedures illustrate the effect of database size on identification confidence and the advantage of applying concise, prefiltered or specialized databases. Thus, we transfer the general concept of multi-step procedures to approach the increased search space necessary for untargeted and detailed taxonomic classification. We present TaxIt, an iterative workflow for untargeted strain-level identification of protein samples. By applying two separate identification steps for species-and strain-level classification, we circumvent the immediate need for a comprehensive database containing strain All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 321,
+                    "end": 324,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 325,
+                    "end": 328,
+                    "text": "[2]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 329,
+                    "end": 332,
+                    "text": "[3]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 415,
+                    "end": 417,
+                    "text": "4,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 418,
+                    "end": 419,
+                    "text": "5",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 440,
+                    "end": 441,
+                    "text": "6",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 955,
+                    "end": 956,
+                    "text": "7",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 1229,
+                    "end": 1231,
+                    "text": "10",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 1456,
+                    "end": 1459,
+                    "text": "11,",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 1460,
+                    "end": 1462,
+                    "text": "12",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 1744,
+                    "end": 1746,
+                    "text": "6,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 1747,
+                    "end": 1749,
+                    "text": "13",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1944,
+                    "end": 1946,
+                    "text": "14",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1986,
+                    "end": 1988,
+                    "text": "15",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 2030,
+                    "end": 2032,
+                    "text": "16",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 2217,
+                    "end": 2219,
+                    "text": "17",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 2405,
+                    "end": 2407,
+                    "text": "18",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 2802,
+                    "end": 2804,
+                    "text": "19",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 2925,
+                    "end": 2927,
+                    "text": "20",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 2976,
+                    "end": 2978,
+                    "text": "21",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 3190,
+                    "end": 3192,
+                    "text": "22",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 3771,
+                    "end": 3773,
+                    "text": "23",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 3802,
+                    "end": 3805,
+                    "text": "25,",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 3806,
+                    "end": 3808,
+                    "text": "26",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 3837,
+                    "end": 3841,
+                    "text": "[28]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 3842,
+                    "end": 3846,
+                    "text": "[29]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 3847,
+                    "end": 3851,
+                    "text": "[30]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 3878,
+                    "end": 3880,
+                    "text": "31",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 3937,
+                    "end": 3940,
+                    "text": "26,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 3941,
+                    "end": 3943,
+                    "text": "28",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 3963,
+                    "end": 3966,
+                    "text": "30,",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 3967,
+                    "end": 3969,
+                    "text": "32",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 4408,
+                    "end": 4412,
+                    "text": "[24]",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 4413,
+                    "end": 4417,
+                    "text": "[25]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 4418,
+                    "end": 4422,
+                    "text": "[26]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 4423,
+                    "end": 4427,
+                    "text": "[27]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 4428,
+                    "end": 4430,
+                    "text": "31",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 4489,
+                    "end": 4492,
+                    "text": "24,",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 4493,
+                    "end": 4496,
+                    "text": "26,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 4497,
+                    "end": 4501,
+                    "text": "[28]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 4502,
+                    "end": 4506,
+                    "text": "[29]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 4507,
+                    "end": 4511,
+                    "text": "[30]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 4512,
+                    "end": 4514,
+                    "text": "32",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 4622,
+                    "end": 4625,
+                    "text": "25,",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 4626,
+                    "end": 4628,
+                    "text": "32",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 4681,
+                    "end": 4683,
+                    "text": "24",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 5303,
+                    "end": 5305,
+                    "text": "33",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 5562,
+                    "end": 5565,
+                    "text": "34,",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 5566,
+                    "end": 5568,
+                    "text": "35",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 5681,
+                    "end": 5684,
+                    "text": "36,",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 5685,
+                    "end": 5687,
+                    "text": "37",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 6153,
+                    "end": 6156,
+                    "text": "13,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 6157,
+                    "end": 6159,
+                    "text": "42",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 6381,
+                    "end": 6383,
+                    "text": "43",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 6593,
+                    "end": 6595,
+                    "text": "44",
+                    "ref_id": "BIBREF53"
+                },
+                {
+                    "start": 6765,
+                    "end": 6767,
+                    "text": "45",
+                    "ref_id": "BIBREF54"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint proteome sequences. Thereby, a first untargeted search allows the selection of a relevant species and enables to focus a second search on a highly reduced but adequate choice of automatically downloaded strain proteomes, resulting in increased identification confidence and reduced taxonomic ambiguity. Moreover, strain-level identification relies on recent data, without the need of keeping a local comprehensive strain database up-to-date. The workflow takes advantage of a free, publicly available and continuously growing protein sequence resource (NCBI Protein) and is thus suitable for most common established MS experimental workflows.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The TaxIt workflow for strain identification consists of several recurring modules interconnected, controlled (in terms of input and output) and automatically executed by the Snakemake computational workflow management system 46 . The designed workflow executes up to three stages including (i) an optional host filter, (ii) species identification (primary iteration) and (iii) strain identification (secondary iteration). A concise overview of the workflow is illustrated in Figure 1 . The main steps of each iteration are the execution of a peptide search engine, false discovery rate (FDR) control, taxonomic classification, taxa counting and adjustment as well as candidate selection and visualization. The automated download of strain proteomes bridges the primary and secondary iteration. The procedures of the main modules are described in detail below.",
+            "cite_spans": [
+                {
+                    "start": 226,
+                    "end": 228,
+                    "text": "46",
+                    "ref_id": "BIBREF55"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 476,
+                    "end": 484,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Material and Methods"
+        },
+        {
+            "text": "The central step in the analysis of MS/MS spectra is an efficient peptide search for comprehensive protein identification. Therefore, we rely on established and reliable open-source database search engines such as X!Tandem 47 in combination with the XTandem Parser 48 and MS-GF+ 49 . However, any command-line search engine including proprietary ones could be implemented via additional Snakemake rules. We apply a classic target-decoy approach for false discovery rate (FDR) control 50 . Decoy sequences are created upfront and independently of the search engine with fasta-decoy.pl 51 by reversing the target sequences (including contaminant proteins, for instance cRAP 52 ) and both target and decoy databases are concatenated as suggested by Jeong et al. 20 . PSMs are subjected to an FDR cutoff based on a per-match FDR calculated as Ndecoy/Ntarget, with Ndecoy being the number of decoys in between targets (Ntarget) in a list of matches sorted by e-value 20, 53 . To acknowledge established false positive hits of previous iterations, decoy sequences with an e-value above the FDR-cutoff are passed on and concatenated to the database of the next iteration.",
+            "cite_spans": [
+                {
+                    "start": 279,
+                    "end": 281,
+                    "text": "49",
+                    "ref_id": "BIBREF58"
+                },
+                {
+                    "start": 484,
+                    "end": 486,
+                    "text": "50",
+                    "ref_id": "BIBREF59"
+                },
+                {
+                    "start": 759,
+                    "end": 761,
+                    "text": "20",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 962,
+                    "end": 965,
+                    "text": "20,",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 966,
+                    "end": 968,
+                    "text": "53",
+                    "ref_id": "BIBREF61"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Peptide Search"
+        },
+        {
+            "text": "We make use of the NCBI Taxonomy to assign PSMs to corresponding taxa and redistribute shared hits introduced by proteins associated with higher/upper taxonomic levels such as genus. First, NCBI protein accessions are mapped to NCBI taxids using the NCBI protein id mapping file (ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.gz). Next, taxonomic relations are inferred from the NCBI Taxonomy nodes dump file (ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz) and PSMs are reassigned to a taxonomic level based on the objective of the current iteration. In general, PSMs assigned to higher taxa such as genus are propagated as shared hits to corresponding leaf taxa as long as the target leaves already exhibit matches on their own. In addition, in the first iteration, PSMs are summarized at the species level.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Taxonomic Classification"
+        },
+        {
+            "text": "For each candidate taxon (i.e. species in primary and strains in secondary iteration, respectively), raw counts are calculated by summing over all assigned PSMs including non-unique matches. To account for taxonomic biases caused by shared matches, we integrate a weighting scheme based on the level of uniqueness using the global frequency of a PSM. Here, a PSM count per taxon is adjusted by the number of occurrences in all candidate taxa. Thereby, unique PSMs gain in value for the final taxa selection without fully neglecting the importance of high numbers of non-unique matches that are often highly present within closely related taxa such as strains.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Count Adjustment"
+        },
+        {
+            "text": "After count adjustment, the most dominant candidate taxon is selected as the most likely species or strain, respectively. In the final step of the first iteration, the selected species is used to retrieve strain-level data for the strain identification in the second iteration. Once more, we rely on the NCBI Taxonomy and infer all available strains for the candidate species via the nodes dump file. Next, strain proteins are automatically downloaded from NCBI Protein using the NCBI Entrez API 54 in combination with the jsoup: Java HTML Parser 55 . This includes all available RefSeq as well as non-RefSeq sequences since the availability of curated strain material is often limited. Finally, the obtained protein sequences are merged into a single database and redundant entries are removed using seqkit rmdup 56 .",
+            "cite_spans": [
+                {
+                    "start": 547,
+                    "end": 549,
+                    "text": "55",
+                    "ref_id": null
+                },
+                {
+                    "start": 814,
+                    "end": 816,
+                    "text": "56",
+                    "ref_id": "BIBREF64"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Selection and Downloads"
+        },
+        {
+            "text": "For benchmarking, we compare TaxIt against classic comprehensive search strategies based on straight non-iterative taxonomic identification supported by unique PSMs or abundance similarity correction as provided by Pipasic 44 . TaxIt uses NCBI RefSeq proteins of selected kingdoms as reference databases for initial species identification followed by automated and selective strain protein incorporation. Unique-PSMs-and Pipasic-based strategies, however, apply comprehensive databases integrating as many strain-level sequences as possible at once, including all protein sequences from the NCBI Protein database for selected kingdoms. In general, a preselection of kingdoms may be justified by clinical findings based on, for instance, symptoms or microscopic examination 57 . Both, unique-PSMs-and Pipasic-based strategies use the same procedures for peptide search, FDR control and taxonomic classification as described in the iterative workflow. However, PSMs are not summarized at species level and counts are directly inferred at the lowest possible taxonomic level. For the unique-PSMs-based strategy, adjusted counts are based on PSMs that occur only once. In other words, only spectra assigned unambiguously to only one peptide sequence and thus organism are taken into account. The abundance similarity correction of Pipasic uses the similarity of expressed proteomes between taxa to account for attribution biases. Originally intended for metaproteomic abundance correction, it is here applied to highlight the most likely strain within a provided sample. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarking Experiments"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint Since Pipasic is sensitive to a high number of taxa, we limit the input to taxa with a minimum of two hits as well as to the 100 most abundant taxa. Expressed proteins per taxa are extracted according to the taxonomic classification and digested peptides with a minimum length of six amino acids are prepared using trypsin digestion 58 . PSMs and tryptic peptides are then passed to Pipasic to obtain corrected relative counts. We perform all three strategies on several viral and bacterial MS/MS spectra samples with available strainlevel knowledge. This includes a Cowpox virus (Brighton Red) strain (acquired in-house), an Avian infectious bronchitis virus (strain Beaudette CK) 59 and a Bacillus subtilis BSN238 60 that we will refer to as cowpox, bronchitis and bacillus sample, respectively. B. subtilis BSN238 is a transgenic organism resulting from horizontal gene transfer (HGT) of the DivIVA protein from Listeria monocytogenes strain EGD-e to Bacillus subtilis subsp. subtilis str. 168. Since B. subtilis BSN238 is neither yet present in the NCBI Taxonomy nor in the NCBI Protein database and only one protein is modified, we expect B. subtilis subsp. subtilis str. 168 to be selected as final strain candidate. Bacillus samples are examined twice, once completely with 28902 spectra (bacillus all) and once randomly reduced to 1000 spectra (bacillus 1k) to improve performance with respect to the vast bacterial search space. A detailed description of the cowpox sample acquisition and the search parameters for all samples is provided in Supplementary item 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarking Experiments"
+        },
+        {
+            "text": "For the viral samples we used all viral NCBI RefSeq proteins (314156 entries, via Entrez on July 10, 2017) in the iterative workflow and additionally all viral non-RefSeq proteins (1987275 entries in total, via Entrez on July 11, 2017) for the unique-PSMs-and Pipasic-based strategies. Viral spectra were filtered beforehand using corresponding host proteomes (all isoforms) including the UniProt Homo sapiens reference proteome (93588 entries, UP000005640, May 23, 2017) for the cowpox sample and Gallus gallus Red jungle fowl reference proteome (29732 entries, UP000000539, May 16, 2017) for the bronchitis sample. For the iterative examination of the bacillus samples, all bacterial NCBI RefSeq proteins (65996005 entries, release 82) were downloaded via FTP (ftp.ncbi.nlm.nih.gov/refseq/release/bacteria/). Since downloading all NCBI Protein entries for bacteria (taxid 2) is impractical and requires too much time using the Entrez API, we used the NCBI Blast NR database as most comprehensive, common and readily available protein resource. This database can be obtained in fasta format via FTP (ftp.ncbi.nlm.nih.gov/blast/db/FASTA/, release 19.07.2017) and the bacteria subset (93760438 entries) was extracted with in-house scripts to create the databases for the unique-PSMs-and Pipasic-based strategies.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarking Experiments"
+        },
+        {
+            "text": "To demonstrate the potential of iterative strain-level identification, we compared TaxIt against classic comprehensive search strategies based on non-iterative taxonomic identification supported by either unique PSMs or the abundance similarity correction of Pipasic 44 . The final selections of the top taxa candidates for all samples and all three compared identification strategies are summarized in Table 1 . For the cowpox sample, identification results agree the most. TaxIt (Figure 2) and Pipasic (Supplementary item 1 - Figure S1 ) are both able to identify the expected Cowpox virus (Brighton Red) strain. However, unique PSMs are limited to the parent Cowpox virus species and not available at the strain level. For this reason, an incorrect identification of Bat astrovirus Hil GX bszt12 could occur based on a single unique PSM (Supplementary item 1 -Figure S1 ). The results also show that the original TaxIt counts are not an All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 267,
+                    "end": 269,
+                    "text": "44",
+                    "ref_id": "BIBREF53"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 403,
+                    "end": 410,
+                    "text": "Table 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 481,
+                    "end": 491,
+                    "text": "(Figure 2)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 528,
+                    "end": 537,
+                    "text": "Figure S1",
+                    "ref_id": null
+                },
+                {
+                    "start": 840,
+                    "end": 872,
+                    "text": "(Supplementary item 1 -Figure S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint appropriate measure to distinguish the expected strain from competing candidates (Figure 2) . However, the weight-based correction method implemented in TaxIt resolves the present tie and emphasizes the correct Cowpox virus strain (Brighton Red).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 227,
+                    "end": 237,
+                    "text": "(Figure 2)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "In comparison, bronchitis and bacillus samples feature notable variability in proposed taxa candidates. For bronchitis, TaxIt could identify the expected Avian infectious bronchitis virus (strain Beaudette CK) strain. Despite applying a small correction based on weighting, however, final candidate selection is not limited to a single strain but additionally includes a closely related strain, namely Avian infectious bronchitis virus (strain Beaudette US) ( Figure 3A) . Nevertheless, TaxIt provides a highly constrained selection of candidates in the first place. In contrast, the Pipasic-based strategy results in considerably more initial candidates and eventually promotes an incorrect strain, namely Avian infectious bronchitis virus (strain 6/82) (Figure 3B ). Since no unique PSMs are available for the bronchitis sample, strain-level identification was not possible with this strategy.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 460,
+                    "end": 470,
+                    "text": "Figure 3A)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 755,
+                    "end": 765,
+                    "text": "(Figure 3B",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "Using TaxIt, the expected B. subtilis str. 168 strain is identified correctly in the reduced as well as in the complete sample (Supplementary item 1 - Figure S3 and S4) . Pipasic consistently misses the correct strain and species in favor of incorrect strains such as Bacillus cereus SJ1 and Bacillus cereus B4264. The unique-PSMs-based strategy includes the correct strain B. subtilis str. 168 into the final candidate list of the bacillus 1k sample. However, it fails to separate the strain from several distinct species due to equal amounts of unique PSMs (Supplementary item 1 -Figure S3) . Furthermore, the data analysis on the complete bacillus sample results in the incorrect species Paenisporosarcina quisquiliarum being predominantly present in terms of uniquely assigned PSMs.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 151,
+                    "end": 168,
+                    "text": "Figure S3 and S4)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 559,
+                    "end": 592,
+                    "text": "(Supplementary item 1 -Figure S3)",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "Besides identification efficiency, computational performance may delimit the potential application as routine or expeditious method in research or clinics. Therefore, we compared runtime and memory consumption for all samples and strategies (as illustrated in Table 2 and Figure 5) . Analysis was performed with X!Tandem as database search engine and limited to 24 threads on a server with Debian GNU/Linux 8.9 (jessie), 64 cores (128 threads) of type Intel(R) Xeon(R) CPU E5-4667 v4 @ 2.20 GHz, 512 GB of RAM and SSD storage. Applying the iterative approach reduces memory usage down to one third for viral strain identification and two third for bacterial strain identification. While the runtime of Pipasic is comparably high, TaxIt shows no substantial change in runtime in comparison to the unique-PSMs-based strategy for small databases such as the collective viral sequences or small sample sizes. However, analyzing the full bacillus sample reveals an increased runtime when using NCBI RefSeq proteins plus selected strain proteomes instead of the extensive NCBI Blast NR database.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 260,
+                    "end": 267,
+                    "text": "Table 2",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 272,
+                    "end": 281,
+                    "text": "Figure 5)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "TaxIt demonstrates superior performance with respect to strain-level identification and computational expense. In summary, our approach can be used to unambiguously identify candidate organisms of all samples down to a low taxonomic level, with the minor exception of a tie for the bronchitis sample. In contrast, the unique-PSMs-based identification strategy is repeatedly deficient at the strain level or features highly ambivalent results. Furthermore, Pipasic frequently favors an incorrect strain or even an All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint incorrect species. For some samples, correct strains are observed as a top candidate even in the original counts, independently of database choice and prior to count adjustments. Nevertheless, all samples benefit either from the iterative and focused database usage, the count adjustment procedure or the reduced resource consumption while the outcome remains legitimate. It was shown that TaxIt improves taxonomic assignment already in the count-based ranking, independently of count adjustments, by limiting candidates to strains of a single species early on ( Figure  3) . For instance, the search of bronchitis samples against the NCBI Blast NR bacteria subspace results in a rather uniform distribution of original counts for Infectious bronchitis virus strains: the strains Beaudette, Beaudette CK and Beaudette UK are only slightly increased in comparison to other strains (Figure 3B,  Original) . In contrast, the iterative approach results in less strain candidates of the same species focusing solely on Beaudette strains when selectively searching against Avian coronavirus strains in the secondary iteration (Figure 3A, Original) . This is a consequence of how and whether parental or multispecies proteins are associated with strains or taxa in general within the NCBI taxonomy. In case of the iterative approach, fewer mutual species or genus proteins are consulted in the strain identification iteration. However, the extent of this effect varies between samples, candidate strains or target databases and taxonomies, respectively. For instance, bacterial strain proteomes such as the Bacillus subtilis strains feature numerous directly assigned mutual protein sequences and thus result in an extended range of candidate strains of the same species (Supplementary item 1 -Figure S3 and S4) . Nevertheless, the restriction to a specific set of strain proteomes prevents manifold primary misassignments to distant species, genera or even phyla as can be observed for Pipasic-and unique-PSMsbased original counts, respectively, that cannot be sufficiently resolved after correction (Supplementary item 1 - Figure S3 and S4) . In general, the iterative and selective database usage ensures that final strain selection is limited to strain candidates of an appropriate species. Thus, it prevents false positive hits on distinct strains of other taxa including species, genera and phyla and allows for a more confident final strain candidate selection. Furthermore, uniform distributions and even consensus in original counts of strain candidates demonstrate the need and benefit of count adjustment methods. The implemented weighting procedure can resolve ties between strains such as in the TaxIt cowpox sample analysis (Figure 2 ) or at least amplifies the correct strain and increases the distance to competing candidates. TaxIt infers exactly one strain for the presented samples each expect for the bronchitis sample where the strains Beaudette CK and Beaudette UK cannot be differentiated. We observed that the corresponding PSMs are fully shared between the two proteomes. Although different proteins are available for each strain in general, peptide hits are either assigned to shared proteins of the parent strain Infectious bronchitis virus or to homologous proteins that differ only in identifier but not in sequence. Though a more granular taxonomic relation cannot be ascertained from the NCBI taxonomy, we expect the Beaudette strains to feature a considerably closer relationship as compared to other Infectious bronchitis virus strains. Therefore, we consider the draw between Beaudette strains as sufficiently appropriate strain identification. For the unique-PSMs-based strategy, we observed a poor availability of unique PSMs at the strain level. While the exploitation of purely unique features is a common theme for species-level identification, the low amount of unique PSMs in strains is insufficient for strain-level inference. However, the frequency of All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 709,
+                    "end": 719,
+                    "text": "Figure  3)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 1026,
+                    "end": 1048,
+                    "text": "(Figure 3B,  Original)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 1266,
+                    "end": 1287,
+                    "text": "(Figure 3A, Original)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 1910,
+                    "end": 1950,
+                    "text": "(Supplementary item 1 -Figure S3 and S4)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 2264,
+                    "end": 2281,
+                    "text": "Figure S3 and S4)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 2877,
+                    "end": 2886,
+                    "text": "(Figure 2",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint spectra matching to distinct proteins and proteomes remains a valuable parameter for strain differentiation when considering and weighing both, unique and the plethora of non-unique matches. TaxIt has a comparable computational runtime for small samples and databases (such as the viral data) despite using a constrained search space. This is primarily a result of the additional strain proteome downloads, since the NCBI Entrez API is not designed and optimized for large scale downloads and proteins need to be fetched in numerous iterations of small chunks. However, the download overhead fades into the background when considering full bacterial samples such as bacillus all (Table 2 and Figure  5) and gives place to a runtime improvement of three quarters when compared to NCBI Blast NR database searches. In contrast, the runtime of Pipasic is afflicted with additional sequence comparisons necessary for constructing the similarity matrix that is highly influenced by increasing numbers of PSMs and taxa to compare. Finally, the memory footprint of TaxIt in comparison to the unique-PSMs-and Pipasic-based strategies remains constantly less for all samples, as would be expected when using substantially less proteins in the search databases. On a final note, strain-level identification performance is generally limited by the availability and integrity of taxa and proteomes in used databases. However, constantly increasing quality and quantity of the NCBI Taxonomy and Protein databases will induce constant improvement of strain-level identification strategies such as the presented iterative workflow.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 838,
+                    "end": 848,
+                    "text": "Figure  5)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "Untargeted strain level identification via MS/MS spectra is a challenging task with respect to the excessive quantity of strains that need to be considered competitively. For solving this problem, we present TaxIt, an iterative approach that first focuses on species identification and thus limits strain identification to concise selected target databases. In our method, both iteration steps take advantage of publicly available data from the NCBI Taxonomy and Protein databases. Thereby, TaxIt enables final strain identification from recent and relevant sequence data, without the need of heavily curated, tailored or taxonomically constrained databases. TaxIt supports any MS/MS peptide data suitable for classic database search methods. With further ongoing developments, our tool might enable a wide range of applications in public health, research and potentially also clinics in the future: based on further validation, TaxIt might support diagnosis and treatment of pathogen-based infectious diseases. TaxIt is available for download under open-source license at https://gitlab.com/rki_bioinformatics. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint Figure 1 . Overview of the TaxIt workflow. In up to three stages, MS/MS spectra are searched against a host proteome to pre-filter host proteins (optional), against an untargeted database for global species identification (primary iteration) and against a targeted, species-based and automatically fetched database for strain level identification (secondary iteration). The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint RSS, resident set size; TOF, time-of-flight All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 146,
+                    "end": 154,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Conclusion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Vaccinia Virus Strain Differences in Cell Attachment and Entry",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Bengali",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Townsley",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Moss",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Virology",
+            "volume": "389",
+            "issn": "1",
+            "pages": "132--140",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Orthopoxvirus Species and Strain Differences in Cell Entry",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Bengali",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Satheshkumar",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Moss",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Virology",
+            "volume": "2012",
+            "issn": "2",
+            "pages": "506--512",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.virol.2012.08.044"
+                ]
+            }
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Comparison of the Cowpox Virus and Vaccinia Virus Mature Virion Proteome: Analysis of the Species-and Strain-Specific Proteome",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Doellinger",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Schaade",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Nitsche",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "PLOS ONE",
+            "volume": "10",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0141527"
+                ]
+            }
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Identification of Virulence Genes in a Pathogenic Strain of Pseudomonas Aeruginosa by Representational Difference Analysis",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Choi",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Sifri",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Goumnerov",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Rahme",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ausubel",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Calderwood",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "J. Bacteriol",
+            "volume": "184",
+            "issn": "4",
+            "pages": "952--961",
+            "other_ids": {
+                "DOI": [
+                    "10.1128/jb.184.4.952-961.2002"
+                ]
+            }
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Strain-and Genotype-Specific Differences in Virulence of Paenibacillus Larvae Subsp. Larvae, a Bacterial Pathogen Causing American Foulbrood Disease in Honeybees",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Genersch",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ashiralieva",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Fries",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Appl. Environ. Microbiol",
+            "volume": "71",
+            "issn": "11",
+            "pages": "7551--7555",
+            "other_ids": {
+                "DOI": [
+                    "10.1128/AEM.71.11.7551-7555.2005"
+                ]
+            }
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Typing and Characterization of Bacteria Using Bottom-up Tandem Mass Spectrometry Proteomics",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Boulund",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Karlsson",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Gonzales-Siles",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Johnning",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Karami",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Al-Bayati",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "\u00c5hr\u00e9n",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "R B"
+                    ],
+                    "last": "Moore",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Kristiansson",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Mol. Cell. Proteomics MCP",
+            "volume": "2017",
+            "issn": "6",
+            "pages": "1052--1063",
+            "other_ids": {
+                "DOI": [
+                    "10.1074/mcp.M116.061721"
+                ]
+            }
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Mass Spectrometry: An Emerging Technology for Microbial Identification and Diagnosis",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Singhal",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kumar",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Kanaujia",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Virdi",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Maldi-Tof",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Front. Microbiol",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.3389/fmicb.2015.00791"
+                ]
+            }
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "The Ibis T5000 Universal Biosensor: An Automated Platform for Pathogen Identification and Strain Typing",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Ecker",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drader",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gutierrez",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gutierrez",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Hannis",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Schink",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Sampath",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Blyn",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Eshoo",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hall",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "JALA J. Assoc. Lab. Autom",
+            "volume": "11",
+            "issn": "6",
+            "pages": "341--351",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.jala.2006.09.001"
+                ]
+            }
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Beyond the Matrix-Assisted Laser Desorption Ionization (MALDI) Biotyping Workflow: In Search of Microorganism-Specific Tryptic Peptides Enabling Discrimination of Subspecies",
+            "authors": [
+                {
+                    "first": "M.-T",
+                    "middle": [],
+                    "last": "Gekenidis",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Studer",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "W\u00fcthrich",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Brunisholz",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Drissner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Appl. Environ. Microbiol",
+            "volume": "80",
+            "issn": "14",
+            "pages": "4234--4241",
+            "other_ids": {
+                "DOI": [
+                    "10.1128/AEM.00740-14"
+                ]
+            }
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Bacillus Cereus Group-Type Strain-Specific Diagnostic Peptides",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pfrunder",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Grossmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Hunziker",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Brunisholz",
+                    "suffix": ""
+                },
+                {
+                    "first": "M.-T",
+                    "middle": [],
+                    "last": "Gekenidis",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Drissner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "J. Proteome Res",
+            "volume": "15",
+            "issn": "9",
+            "pages": "3098--3107",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/acs.jproteome.6b00216"
+                ]
+            }
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Identification of Microorganisms by High Resolution Tandem Mass Spectrometry with Accurate Statistical Significance",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Alves",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ogurtsov",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Drake",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gucek",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Suffredini",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Sacks",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y.-K",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "J. Am. Soc. Mass Spectrom",
+            "volume": "27",
+            "issn": "2",
+            "pages": "194--210",
+            "other_ids": {
+                "DOI": [
+                    "10.1007/s13361-015-1271-2"
+                ]
+            }
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Mass Spectrometry-Based Proteomics",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Aebersold",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mann",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Nature",
+            "volume": "422",
+            "issn": "6928",
+            "pages": "198--207",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature01511"
+                ]
+            }
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Mass Spectrometry and Protein Analysis",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Domon",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Aebersold",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Science",
+            "volume": "",
+            "issn": "5771",
+            "pages": "212--217",
+            "other_ids": {
+                "DOI": [
+                    "10.1126/science.1124619"
+                ]
+            }
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Computational Methods for Protein Identification from Mass Spectrometry Data",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mchugh",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Arthur",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "PLoS Comput Biol",
+            "volume": "4",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.0040012"
+                ]
+            }
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Accurate Mass Measurements in Proteomics",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Belov",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Jaitly",
+                    "suffix": ""
+                },
+                {
+                    "first": "W.-J",
+                    "middle": [],
+                    "last": "Qian",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Chem. Rev",
+            "volume": "107",
+            "issn": "8",
+            "pages": "3621--3653",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/cr068288j"
+                ]
+            }
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Precision Proteomics: The Case for High Resolution and High Mass Accuracy",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mann",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Kelleher",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Proc. Natl. Acad. Sci",
+            "volume": "",
+            "issn": "",
+            "pages": "18132--18138",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.0800788105"
+                ]
+            }
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Estimating the Computational Limits of Detection of Microbial Non-Model Organisms",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kuhring",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Renard",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PROTEOMICS",
+            "volume": "2015",
+            "issn": "20",
+            "pages": "3580--3584",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "False Discovery Rates in Spectral Identification",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Jeong",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Bandeira",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "BMC Bioinformatics",
+            "volume": "13",
+            "issn": "16",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1471-2105-13-S16-S2"
+                ]
+            }
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Navigating through Metaproteomics Data: A Logbook of Database Searching",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kolmeder",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Saloj\u00e4rvi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Keskitalo",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Varjosalo",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Verdam",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Rensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Reichl",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "De Vos",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rapp",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Proteomics",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/pmic.201400560"
+                ]
+            }
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "The Importance of Recognizing and Reporting Sequence Database Contamination for Proteomics",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Pible",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Hartmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Imbert",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Armengaud",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "EuPA Open Proteomics",
+            "volume": "3",
+            "issn": "",
+            "pages": "246--249",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.euprot.2014.04.001"
+                ]
+            }
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Error Tolerant Searching of Uninterpreted Tandem Mass Spectrometry Data",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Creasy",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Cottrell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "PROTEOMICS",
+            "volume": "2002",
+            "issn": "10",
+            "pages": "1426--1434",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/1615-9861"
+                ]
+            }
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "A Method for Reducing the Time Required to Match Protein Sequences with Tandem Mass Spectra",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Craig",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Beavis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Rapid Commun. Mass Spectrom",
+            "volume": "17",
+            "issn": "20",
+            "pages": "2310--2316",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/rcm.1198"
+                ]
+            }
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Dynamic Spectrum Quality Assessment and Iterative Computational Analysis of Shotgun Proteomic Data Toward More Efficient Identification of Post-Translational Modifications, Sequence Polymorphisms, and Novel Peptides",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Nesvizhskii",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Roos",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Grossmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Vogelzang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Eddes",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Gruissem",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Baginsky",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Aebersold",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Mol. Cell. Proteomics",
+            "volume": "5",
+            "issn": "4",
+            "pages": "652--670",
+            "other_ids": {
+                "DOI": [
+                    "10.1074/mcp.M500319-MCP200"
+                ]
+            }
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "An Iterative Workflow for Mining the Human Intestinal Metaproteome",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Rooijers",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Kolmeder",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Juste",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dor\u00e9",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Been",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Boeren",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Galan",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Beauvallet",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Vos",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schaap",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "BMC Genomics",
+            "volume": "12",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1471-2164-12-6"
+                ]
+            }
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Computational Analysis of Unassigned High-Quality MS/MS Spectra in Proteomic Data Sets",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Ning",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Fermin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Nesvizhskii",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PROTEOMICS",
+            "volume": "2010",
+            "issn": "14",
+            "pages": "2712--2718",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/pmic.200900473"
+                ]
+            }
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Deep Metaproteomic Analysis of Human Salivary Supernatant",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Jagtap",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Mcgowan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bandhakavi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Tu",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Seymour",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Griffin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Rudney",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PROTEOMICS",
+            "volume": "2012",
+            "issn": "7",
+            "pages": "992--1001",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/pmic.201100503"
+                ]
+            }
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "A Two-Step Database Search Method Improves Sensitivity in Peptide Sequence Matches for Metaproteomics and Proteogenomics Studies",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Jagtap",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Goslinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kooren",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Mcgowan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Wroblewski",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Seymour",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Griffin",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PROTEOMICS",
+            "volume": "2013",
+            "issn": "8",
+            "pages": "1352--1357",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/pmic.201200352"
+                ]
+            }
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Flexible and Accessible Workflows for Improved Proteogenomic Analysis Using the Galaxy Framework",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Jagtap",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Johnson",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Onsongo",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Sadler",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Murray",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Shenykman",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bandhakavi",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Griffin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "J. Proteome Res",
+            "volume": "13",
+            "issn": "12",
+            "pages": "5898--5908",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/pr500812t"
+                ]
+            }
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Mass Spectrum Identification via Cascaded Search",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kertesz-Farkas",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Keich",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Noble",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Tandem",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "J. Proteome Res",
+            "volume": "14",
+            "issn": "8",
+            "pages": "3027--3038",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "High-Throughput Parallel Proteogenomics: A Bacterial Case Study",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Chapman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Bellgard",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PROTEOMICS",
+            "volume": "2014",
+            "issn": "",
+            "pages": "2780--2789",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Identification of Bacteria Using Tandem Mass Spectrometry Combined with a Proteome Database and Statistical Scoring",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Dworzanski",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Snyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Wishart",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Anal. Chem",
+            "volume": "",
+            "issn": "8",
+            "pages": "2355--2366",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Classification and Identification of Bacteria Using Mass Spectrometry-Based Proteomics",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Dworzanski",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Snyder",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Expert Rev. Proteomics",
+            "volume": "2",
+            "issn": "6",
+            "pages": "863--878",
+            "other_ids": {
+                "DOI": [
+                    "10.1586/14789450.2.6.863"
+                ]
+            }
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Mass Spectrometry-Based Proteomics Combined with Bioinformatic Tools for Bacterial Classification",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Dworzanski",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Deshpande",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Jabbour",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Snyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Wick",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "J. Proteome Res",
+            "volume": "5",
+            "issn": "1",
+            "pages": "76--87",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Double-Blind Characterization of Non-Genome-Sequenced Bacteria by Mass Spectrometry-Based Proteomics",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Jabbour",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Deshpande",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Wade",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Stanford",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Wick",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Zulich",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Skowronski",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Snyder",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Appl Env. Microbiol",
+            "volume": "",
+            "issn": "11",
+            "pages": "3637--3644",
+            "other_ids": {
+                "DOI": [
+                    "10.1128/AEM.00055-10"
+                ]
+            }
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "A Protein Processing Filter Method for Bacterial Identification by Mass Spectrometry-Based Proteomics",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Jabbour",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Deshpande",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Stanford",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Wick",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Zulich",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Snyder",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "J. Proteome Res",
+            "volume": "10",
+            "issn": "2",
+            "pages": "907--912",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Analysis of Metagenomic Data",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Huson",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Auch",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Qi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Schuster",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Megan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Genome Res",
+            "volume": "17",
+            "issn": "3",
+            "pages": "377--386",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/gr.5969107"
+                ]
+            }
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Unipept: Tryptic Peptide-Based Biodiversity Analysis of Metaproteome Samples",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Mesuere",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Devreese",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Debyser",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Aerts",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Vandamme",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Dawyndt",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "J. Proteome Res",
+            "volume": "2012",
+            "issn": "12",
+            "pages": "5773--5780",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/pr300576s"
+                ]
+            }
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "The MetaProteomeAnalyzer: A Powerful Open-Source Software Suite for Metaproteomics Data Analysis and Interpretation",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Behne",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Heyer",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Kohrs",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Benndorf",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hoffmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lehtev\u00e4",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Reichl",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Martens",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rapp",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "J. Proteome Res",
+            "volume": "14",
+            "issn": "3",
+            "pages": "1557--1565",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/pr501246w"
+                ]
+            }
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "A Stand-Alone Software Package for Analyzing Metaproteome Samples on the Go",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Kohrs",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Heyer",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Benndorf",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rapp",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Reichl",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Martens",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Renard",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Mpa Portable",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Anal. Chem",
+            "volume": "90",
+            "issn": "1",
+            "pages": "685--689",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "All rights reserved. No reuse allowed without permission",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/acs.analchem.7b03544"
+                ]
+            }
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/812313"
+                ]
+            }
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Rapid Classification and Identification of Multiple Microorganisms with Accurate Statistical Significance via High-Resolution Tandem Mass Spectrometry",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Alves",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ogurtsov",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Drake",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gucek",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Sacks",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y.-K",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "J. Am. Soc. Mass Spectrom",
+            "volume": "29",
+            "issn": "8",
+            "pages": "1721--1737",
+            "other_ids": {
+                "DOI": [
+                    "10.1007/s13361-018-1986-y"
+                ]
+            }
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "A Simple Shotgun Proteomics Method for Rapid Bacterial Identification",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Tracz",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Mccorrister",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Chong",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Corbett",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Westmacott",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "J. Microbiol. Methods",
+            "volume": "94",
+            "issn": "1",
+            "pages": "54--57",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.mimet.2013.04.008"
+                ]
+            }
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Pipasic: Similarity and Expression Correction for Strain-Level Identification and Quantification in Metaproteomics",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Penzlin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Lindner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Doellinger",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Dabrowski",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Nitsche",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Renard",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Bioinformatics",
+            "volume": "30",
+            "issn": "12",
+            "pages": "149--156",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/bioinformatics/btu267"
+                ]
+            }
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Interpretation of Shotgun Proteomic Data: The Protein Inference Problem",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Nesvizhskii",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Aebersold",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Mol. Cell. Proteomics",
+            "volume": "4",
+            "issn": "10",
+            "pages": "1419--1440",
+            "other_ids": {
+                "DOI": [
+                    "10.1074/mcp.R500012-MCP200"
+                ]
+            }
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Snakemake-a Scalable Bioinformatics Workflow Engine",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "K\u00f6ster",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Rahmann",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Bioinformatics",
+            "volume": "2012",
+            "issn": "19",
+            "pages": "2520--2522",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/bioinformatics/bts480"
+                ]
+            }
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "TANDEM: Matching Proteins with Tandem Mass Spectra",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Craig",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Beavis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Bioinformatics",
+            "volume": "20",
+            "issn": "9",
+            "pages": "1466--1467",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/bioinformatics/bth092"
+                ]
+            }
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "XTandem Parser: An Open-Source Library to Parse and Analyse X!Tandem MS/MS Search Results",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Vaudel",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Barsnes",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Martens",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sickmann",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PROTEOMICS",
+            "volume": "2010",
+            "issn": "7",
+            "pages": "1522--1524",
+            "other_ids": {
+                "DOI": [
+                    "10.1002/pmic.200900759"
+                ]
+            }
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "Makes Progress towards a Universal Database Search Tool for Proteomics",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Pevzner",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ms-Gf+",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nat. Commun",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/ncomms6277"
+                ]
+            }
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "Target-Decoy Search Strategy for Increased Confidence in Large-Scale Protein Identifications by Mass Spectrometry",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Elias",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Gygi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Nat. Methods",
+            "volume": "4",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nmeth1019"
+                ]
+            }
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Alexandre Masselot / InSilicoSpectro-Databanks-0.0.43 -search",
+            "authors": [],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Proteogenomics: Concepts, Applications and Computational Strategies",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Nesvizhskii",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nat. Methods",
+            "volume": "11",
+            "issn": "11",
+            "pages": "1114--1125",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nmeth.3144"
+                ]
+            }
+        },
+        "BIBREF62": {
+            "ref_id": "b62",
+            "title": "Database Resources of the National Center for Biotechnology Information",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Wheeler",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Barrett",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Benson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Bryant",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Canese",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Chetvernin",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Church",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Dicuccio",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Edgar",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Federhen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Nucleic Acids Res",
+            "volume": "36",
+            "issn": "",
+            "pages": "13--21",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/nar/gkm1000"
+                ]
+            }
+        },
+        "BIBREF64": {
+            "ref_id": "b64",
+            "title": "SeqKit: A Cross-Platform and Ultrafast Toolkit for FASTA/Q File Manipulation",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Le",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PLOS ONE",
+            "volume": "2016",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0163962"
+                ]
+            }
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "Chapter 1 -Electron Microscopy of Viruses",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Laue",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "M\u00fcller-Reichert",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ed",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "In Methods in Cell Biology",
+            "volume": "96",
+            "issn": "10",
+            "pages": "96001--96010",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0091-679X"
+                ]
+            }
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "All rights reserved. No reuse allowed without permission",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF67": {
+            "ref_id": "b67",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/812313"
+                ]
+            }
+        },
+        "BIBREF68": {
+            "ref_id": "b68",
+            "title": "The Proteome of the Infectious Bronchitis Virus Beau-R Virion",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Dent",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xia",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Wastling",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Neuman",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Britton",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Maier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "J. Gen. Virol",
+            "volume": "96",
+            "issn": "59",
+            "pages": "3499--3506",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/812313"
+                ]
+            }
+        },
+        "BIBREF69": {
+            "ref_id": "b69",
+            "title": "Horizontal Gene Transfer Detection Directly from Proteomic MS/MS Data",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Trappe",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Wulf",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Doellinger",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Halbedel",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Renard",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hortense",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.7287/peerj.preprints.3248v1"
+                ]
+            }
+        },
+        "BIBREF70": {
+            "ref_id": "b70",
+            "title": "All rights reserved. No reuse allowed without permission",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/812313"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Relative counts of cowpox sample analysis. Relative counts are illustrated as result of the TaxIt workflow. Original and weighted relative counts are summarized by means of one vertical stacked bar each. Candidate strains are labeled and color-coded and ratios highlighted as percentages within bars.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Relative counts of bronchitis sample analysis. Relative counts are illustrated as result of the TaxIt (A) or Pipasic approach (B), respectively. TaxIt's original and weighted relative counts as well as Pipasic's original, filtered (a minimum of two hits and only the most 100 abundant taxa) and corrected relative counts are summarized by means of one vertical stacked bar each. Candidate strains are labeled and color-coded and ratios highlighted as percentages within bars. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Runtime and memory benchmarks. Total runtime in minutes and maximum memory usage in gigabyte is represented per sample and color-coded identification strategy.All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "MK carried out the implementation and evaluation, participated in the software design and experimental design and drafted the manuscript. JD participated in the experimental design and data acquisition. AN participated in the experimental design. TM participated in the software design and drafted the manuscript. BYR participated in the software design and experimental design and drafted the manuscript. All authors read and approved the final manuscript. ACKNOWLEDGMENT The authors would like to thank Henning Schiebenhoefer for constructive criticism of the manuscript. This work was supported by the German Research Foundation (DFG) (RE3474/2-2 to B.Y.R.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": ". https://doi.org/10.1101/812313 doi: bioRxiv preprint Table 1. Expected and identified taxa per sample and strategy. Uniques no unique PSMs available Pipasic Avian infectious bronchitis virus (strain 6/82) 11121 Bacillus 1k Expected Bacillus subtilis subsp. subtilis str. 168 224308 Bacillus all Expected Bacillus subtilis subsp. subtilis str. 168 224308 TaxIt Bacillus subtilis subsp. subtilis str. 168 224308 All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint Uniques Paenisporosarcina quisquiliarum 365346 Runtime and maximal memory consumption (resident set size, RSS) per identification strategy and sample. All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/812313 doi: bioRxiv preprint AUTHOR INFORMATION Corresponding Author Dr. Bernhard Renard Bioinformatics Unit (MF 1), Robert Koch Institute, Nordufer 20, 13353 Berlin, Germany E-mail: renardb@rki.de Fax: +49 30 18754 2328",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

@@ -1,0 +1,5118 @@
+{
+    "paper_id": "906b616191eea5e5e724d47546f7d2d9d096ed7a",
+    "metadata": {
+        "title": "Ensemble Feature Selection and Meta-Analysis of Cancer miRNA Biomarkers",
+        "authors": [
+            {
+                "first": "Lopez-Rincon",
+                "middle": [],
+                "last": "Alejandro",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "CWI",
+                    "location": {
+                        "settlement": "Amsterdam",
+                        "country": "Netherlands"
+                    }
+                },
+                "email": "*alejandro.lopez@iscpif.fr"
+            },
+            {
+                "first": "Martinez-Archundia",
+                "middle": [],
+                "last": "Marlet",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Laboratorio de Modelado Molecular",
+                    "institution": "",
+                    "location": {
+                        "country": "Bioinform\u00e1tica"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Gustavo",
+                "middle": [],
+                "last": "Martinez-Ruiz",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "",
+                "middle": [],
+                "last": "Ulises",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "National Autonomous University of Mexico",
+                    "location": {
+                        "settlement": "Mexico City",
+                        "country": "Mexico"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Tonda",
+                "middle": [],
+                "last": "Alberto",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "UMR 782 GMPA",
+                    "institution": "INRA",
+                    "location": {
+                        "settlement": "Paris",
+                        "region": "AgroParisTech",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The role of microRNAs (miRNAs) in cellular processes captured the attention of many researchers, since their dysregulation is shown to affect the cancer disease landscape by sustaining proliferative signaling, evading program cell death, and inhibiting growth suppressors. Thus, miRNAs have been considered important diagnostic and prognostic biomarkers for several types of tumors. Machine learning algorithms have proven to be able to exploit the information contained in thousands of miRNAs to accurately predict and classify cancer types. Nevertheless, extracting the most relevant miRNA expressions is fundamental to allow human experts to validate and make sense of the results obtained by automatic algorithms. We propose a novel feature selection approach, able to identify the most important miRNAs for tumor classification, based on consensus on feature relevance from high-accuracy classifiers of different typologies. The proposed methodology is tested on a real-world dataset featuring 8,129 patients, 29 different types of tumors, and 1,046 miRNAs per patient, taken from The Cancer Genome Atlas (TCGA) database. A new miRNA signature is suggested, containing the 100 most important oncogenic miRNAs identified by the presented approach. Such a signature is proved to be sufficient to identify all 29 types of cancer considered in the study, with results nearly identical to those obtained using all 1,046 features in the original dataset. Subsequently, a meta-analysis of the medical literature is performed to find references to the most important biomarkers extracted by the methodology. Besides known oncomarkers, 15 new miRNAs previously not ranked as important biomarkers for diagnosis and prognosis in cancer pathologies are uncovered. Such miRNAs, considered relevant by the machine learning algorithms, but still relatively unexplored by specialized literature, could provide further insights in the biology of cancer.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "MicroRNAs (miRNAs) are non-coding RNA molecules that regulate gene expression. In the last years, the under and over expression of miRNAs has been related to the diagnosis and prognosis of specific cancer types. While machine learning techniques can efficiently exploit the information contained in thousands of miRNAs to detect the",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "1 Several studies have shown the properties of microRNA types (miRNAs) as oncogenes 2 and tumor suppressors [1] [2] [3] . Since then, many sophisticated techniques, such as 3 high-throughput technologies, microarray, mass spectrometry and especially the Next 4 Generation Sequencing (NGS), have been developed for their identification [4] . However, 5 it is clear that the development of computational tools is needed for the interpretation 6 of results from these high-throughput experiments [5] . Indeed, computational assisted 7 methods are used for the identification of miRNAs from different genome organisms, for 8 example in Caenorhabditis briggsae [6] and in Epstein-Barr virus (EBV or HHV4), a 9 member of the human herpesvirus (HHV) [7] . Furthermore, several computational 10 techniques can be applied to accurately predict miRNA expressions, as seen for example 11 in [8] . 12 Succeeding the earliest evidence of miRNA involvement in human cancer by Croce 13 and collaborators [9] , various studies demonstrate that miRNA expression is deregulated 14 in human cancer through diverse mechanisms [10] . Additionally, in comparison to the 15 impractical and invasive methods currently used for cancer diagnosis [11, 12] , miRNA 16 biomarkers can be detected directly from biological fluids (such as blood, urine, saliva 17 and pleural fluid [13] ), and they can also be used as biomarkers to detect tumors at an 18 early stage, which is extremely important for survival. For example, the 5-year survival 19 rate for lung cancer is 5%, but an early diagnosis can boost it to almost 50% [14] . Thus, 20 miRNA expression profiles correlate with clinical variables, highlighting their potential 21 value as prognostic and/or diagnostic tools. 22 In such a context of increasing availability of data, it is of utmost practical 23 importance to build databases of miRNA expressions data for cancer research [15] [16] [17] [18] [19] , 24 and also to extract features that could be used as cancer biomarkers [20] [21] [22] . For 25 example, miRNA hsa-mir-21 is mentioned as a marker for patients with squamous cell 26 lung carcinoma [23], with astrocytoma [24], breast cancer [25] , and gastric cancer [26] . 27 Following this idea, the scientific community is currently looking for miRNA signatures, 28 representing the minimal number of miRNAs to be measured for discriminating between 29 different stages and types of cancer. 30 Current NGS technologies such as Applied Biosystems, SOLiD3,or HiSeq from 31 Illumina are able to extract thousands of components in genome sequences [27] , and 32 traditional linear statistical analysis are not suited to manage such quantities of 33 most relevant miRNAs to use as biomarkers for cancer classification. Typically, 39 classifiers trained on a dataset will not use the whole set of available features to 40 separate classes, but just a subset which could be ordered by relative importance, with 41 a different meaning given to the list by the specific technique. The top 100 biomarkers 42 in the list are then evaluated as a potential reduced signature for classification. Finally, 43 the top 50 miRNAs are compared to a meta-analysis of the medical literature, to 44 validate the results automatically produced by the machine learning algorithms. 45 Unsurprisingly, most of the miRNAs identified by the classifiers are also considered 46 important by the specialized literature: 15 of them, however, are still understudied, and 47 they could thus represent promising leads for future exploration. 48 The rest of the paper is organized as follows. The target dataset and the proposed 49 approach are detailed in Section 2. Experimental results are reported in Section 3, while 50 Section 4 concludes the paper. 51 ",
+            "cite_spans": [
+                {
+                    "start": 84,
+                    "end": 85,
+                    "text": "2",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 108,
+                    "end": 111,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 112,
+                    "end": 115,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 116,
+                    "end": 119,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 173,
+                    "end": 174,
+                    "text": "3",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 259,
+                    "end": 260,
+                    "text": "4",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 335,
+                    "end": 338,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 350,
+                    "end": 351,
+                    "text": "5",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 441,
+                    "end": 442,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 493,
+                    "end": 496,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 619,
+                    "end": 620,
+                    "text": "8",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 656,
+                    "end": 659,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 703,
+                    "end": 704,
+                    "text": "9",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 743,
+                    "end": 746,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 784,
+                    "end": 786,
+                    "text": "10",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 874,
+                    "end": 876,
+                    "text": "11",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 880,
+                    "end": 883,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 886,
+                    "end": 888,
+                    "text": "12",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 968,
+                    "end": 970,
+                    "text": "13",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 989,
+                    "end": 992,
+                    "text": "[9]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 1060,
+                    "end": 1062,
+                    "text": "14",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1106,
+                    "end": 1110,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 1148,
+                    "end": 1150,
+                    "text": "15",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1220,
+                    "end": 1224,
+                    "text": "[11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 1225,
+                    "end": 1228,
+                    "text": "12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 1237,
+                    "end": 1239,
+                    "text": "16",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1329,
+                    "end": 1331,
+                    "text": "17",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 1350,
+                    "end": 1354,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 1421,
+                    "end": 1423,
+                    "text": "18",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1513,
+                    "end": 1515,
+                    "text": "19",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1594,
+                    "end": 1598,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1700,
+                    "end": 1702,
+                    "text": "21",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 1748,
+                    "end": 1750,
+                    "text": "22",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 1910,
+                    "end": 1914,
+                    "text": "[15]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1915,
+                    "end": 1919,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1920,
+                    "end": 1924,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 1925,
+                    "end": 1929,
+                    "text": "[18]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1930,
+                    "end": 1934,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1937,
+                    "end": 1939,
+                    "text": "24",
+                    "ref_id": null
+                },
+                {
+                    "start": 2009,
+                    "end": 2013,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 2014,
+                    "end": 2018,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 2019,
+                    "end": 2023,
+                    "text": "[22]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 2030,
+                    "end": 2032,
+                    "text": "25",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 2116,
+                    "end": 2118,
+                    "text": "26",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 2177,
+                    "end": 2181,
+                    "text": "[25]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 2203,
+                    "end": 2207,
+                    "text": "[26]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 2210,
+                    "end": 2212,
+                    "text": "27",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 2302,
+                    "end": 2304,
+                    "text": "28",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 2430,
+                    "end": 2432,
+                    "text": "30",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 2507,
+                    "end": 2509,
+                    "text": "31",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 2583,
+                    "end": 2587,
+                    "text": "[27]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 2594,
+                    "end": 2596,
+                    "text": "32",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 2681,
+                    "end": 2683,
+                    "text": "33",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 2764,
+                    "end": 2766,
+                    "text": "39",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 2852,
+                    "end": 2854,
+                    "text": "40",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 3130,
+                    "end": 3132,
+                    "text": "43",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 3213,
+                    "end": 3215,
+                    "text": "44",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 3296,
+                    "end": 3298,
+                    "text": "45",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 3384,
+                    "end": 3386,
+                    "text": "46",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 3546,
+                    "end": 3548,
+                    "text": "48",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 3632,
+                    "end": 3634,
+                    "text": "49",
+                    "ref_id": "BIBREF46"
+                },
+                {
+                    "start": 3759,
+                    "end": 3761,
+                    "text": "51",
+                    "ref_id": "BIBREF48"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The considered dataset, containing miRNA sequencing isoform values, is taken from the 53 Cancer Genome Atlas 1 . The database contains the information from 8,129 patients. 54 Using the next-generation sequencing miRNASeq BCGSC IlluminaHiSeq miRNASeq 55 Level 3, a total of 1,046 miRNA expression features for each case study are extracted. 56 In summary, the dataset that will be used in the following experiments has 29 types of 57 ",
+            "cite_spans": [
+                {
+                    "start": 172,
+                    "end": 174,
+                    "text": "54",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 250,
+                    "end": 252,
+                    "text": "55",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 340,
+                    "end": 342,
+                    "text": "56",
+                    "ref_id": "BIBREF53"
+                },
+                {
+                    "start": 430,
+                    "end": 432,
+                    "text": "57",
+                    "ref_id": "BIBREF54"
+                }
+            ],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "is the number of tumor types in the dataset, that depends 64 on miRNA's relative position, bringing the result displayed in Figure 1 . As the objective is to find and validate a reduced list of miRNAs to be used as a 66 signature, feature selection is to be performed on the dataset. Popular approaches to 67 feature selection range from univariate statistical considerations, to iterated runs of the 68 same classifier with a progressively reduced number of features, in order to assess the 69 contribution of the features to the overall result. As the considered case study is 70 particularly complex, however, relying upon simple statistical analyses or a single 71 classifier might not suffice. Following the idea behind ensemble feature selection [31] [32] [33] , 72 we use multiple algorithms to obtain a more robust predictive performance. For this 73 purpose, we train a set of classifiers to then extract a sorted list of the most relevant 74 features from each. As, intuitively, a feature considered important by the majority of 75 classifiers in the set is likely to be relevant for our aim, the information from all 76 classifiers is then compiled to find the most common relevant features. 77 Starting from a thorough comparison of 22 different state-of-the-art classifiers on the 78 considered dataset presented in [34] , in this work a subset of those classifiers is selected 79 considering both (i) high accuracy and (ii) a way to extract the relative importance of 80 the features from the trained classifier. After preliminary tests to set algorithms' 81 hyperparameters, 8 classifiers are chosen, all featuring an average accuracy higher than 82 90% on a 10-fold cross-validation: 83 \u2022 \u2022 SVC (Support Vector Machines Classifier with a linear kernel) [42] 91 All considered classifiers are implemented in the scikit-learn Python toolbox [43] . 92 Overall, the selected classifiers fall into two broad typologies: those exploiting 93 ensembles of classification trees [44] (Bagging, GradientBoosting, RandomForest), 94 and those optimizing the coefficients of linear models to separate classes 95 (LogisticRegression, PassiveAggressive, Ridge, SGD, SVC). Depending on classifier 96 typology, there are two different ways of extracting relative feature importance. For 97 classifiers based on classification trees, the features used in the splits are counted and 98 sorted by frequency, from the most to the least common. For classifiers based on linear 99 models, the values of the coefficients associated to each feature can be used as a proxy 100 of their relative importance, sorting coefficients from the largest to the smallest in 101 absolute value. As the two feature extraction methods return heterogeneous numeric 102 values, only the relative sorting of features provided by each classifier is considered. We 103 arbitrarily decide to extract the top 100 most relevant features, so we assign to each 104 feature f a simple score S f = N t /N c , where N t is the number of times that specific 105 features appears among the top 100 of a specific classifier instance, while N c is the total 106 number of classifiers instances used; for instance, a feature appearing among the 100 107 most relevant in 73% of the classifiers used would obtain a score S f = 0.73. In order to 108 increase the generalizability of our results, each selected classifier is run 10 times, using 109 a 10-fold stratified cross-validation, so that each fold preserves the percentage of Table 2 compares the classification accuracy of each classifier using the full 1,046 119 features, with the accuracy obtained by the same classifier using a signature composed 120 by selected 100 features. It is interesting to notice how the accuracy is, for most cases, 121 unchanged, providing empirical evidence that a 100-miRNA signature is enough to 122 obtain good classification results.",
+            "cite_spans": [
+                {
+                    "start": 217,
+                    "end": 219,
+                    "text": "66",
+                    "ref_id": "BIBREF63"
+                },
+                {
+                    "start": 306,
+                    "end": 308,
+                    "text": "67",
+                    "ref_id": "BIBREF64"
+                },
+                {
+                    "start": 579,
+                    "end": 581,
+                    "text": "70",
+                    "ref_id": "BIBREF67"
+                },
+                {
+                    "start": 666,
+                    "end": 668,
+                    "text": "71",
+                    "ref_id": "BIBREF68"
+                },
+                {
+                    "start": 752,
+                    "end": 756,
+                    "text": "[31]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 757,
+                    "end": 761,
+                    "text": "[32]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 762,
+                    "end": 766,
+                    "text": "[33]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 769,
+                    "end": 771,
+                    "text": "72",
+                    "ref_id": "BIBREF69"
+                },
+                {
+                    "start": 856,
+                    "end": 858,
+                    "text": "73",
+                    "ref_id": "BIBREF70"
+                },
+                {
+                    "start": 1039,
+                    "end": 1041,
+                    "text": "75",
+                    "ref_id": "BIBREF72"
+                },
+                {
+                    "start": 1128,
+                    "end": 1130,
+                    "text": "76",
+                    "ref_id": "BIBREF73"
+                },
+                {
+                    "start": 1203,
+                    "end": 1205,
+                    "text": "77",
+                    "ref_id": "BIBREF74"
+                },
+                {
+                    "start": 1329,
+                    "end": 1333,
+                    "text": "[34]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 1391,
+                    "end": 1393,
+                    "text": "79",
+                    "ref_id": "BIBREF76"
+                },
+                {
+                    "start": 1482,
+                    "end": 1484,
+                    "text": "80",
+                    "ref_id": "BIBREF77"
+                },
+                {
+                    "start": 1570,
+                    "end": 1572,
+                    "text": "81",
+                    "ref_id": "BIBREF78"
+                },
+                {
+                    "start": 1700,
+                    "end": 1702,
+                    "text": "83",
+                    "ref_id": "BIBREF80"
+                },
+                {
+                    "start": 1769,
+                    "end": 1773,
+                    "text": "[42]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 1855,
+                    "end": 1859,
+                    "text": "[43]",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 1862,
+                    "end": 1864,
+                    "text": "92",
+                    "ref_id": "BIBREF89"
+                },
+                {
+                    "start": 1948,
+                    "end": 1950,
+                    "text": "93",
+                    "ref_id": "BIBREF90"
+                },
+                {
+                    "start": 1985,
+                    "end": 1989,
+                    "text": "[44]",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 2033,
+                    "end": 2035,
+                    "text": "94",
+                    "ref_id": "BIBREF91"
+                },
+                {
+                    "start": 2111,
+                    "end": 2113,
+                    "text": "95",
+                    "ref_id": "BIBREF92"
+                },
+                {
+                    "start": 2379,
+                    "end": 2381,
+                    "text": "98",
+                    "ref_id": "BIBREF95"
+                },
+                {
+                    "start": 2653,
+                    "end": 2656,
+                    "text": "101",
+                    "ref_id": "BIBREF98"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 124,
+                    "end": 132,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 3488,
+                    "end": 3495,
+                    "text": "Table 2",
+                    "ref_id": "TABREF2"
+                }
+            ],
+            "section": "52"
+        },
+        {
+            "text": "123 Figure 2 shows a heatmap comparing the relative frequency of the overall top 100 124 most frequent features, for each considered classifier. As expected, not all classifiers use 125 the same features to separate the types of cancer, and thus using their consensus proves 126 to be more robust than just relying upon a single algorithm. It is interesting to notice 127 that while the overall most common biomarkers appear among the top for each RidgeClassifier is forced to use the top 100 features; while BaggingClassifier 136 seems to be overall unaffected by the restriction (see Table 2 ). One classifier, SVC, even 137 slightly increases its average accuracy, probably due to the fact that the search space 138 defined by the 100-feature signature is easier to explore for its optimization procedure. 139 Algorithm 1: Extracting the 100 most relevant features from the considered medical dataset.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 4,
+                    "end": 12,
+                    "text": "Figure 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 586,
+                    "end": 593,
+                    "text": "Table 2",
+                    "ref_id": "TABREF2"
+                }
+            ],
+            "section": "52"
+        },
+        {
+            "text": "1 Normalize dataset by feature; 2 Divide dataset in N folds; 3 Select K classifiers; 4 for each fold n of N do 5 for each classifier k of K do Train classifier k n on all folds minus n, using all features; Test classifier k n on fold n; Obtain sorted list l kn of features from k n ;",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 112,
+                    "text": "5",
+                    "ref_id": "BIBREF4"
+                }
+            ],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "Assign weight w f nk to each f of the 1,046 features; 6 for each feature f of F do if f is among the top 100 features in l kn then",
+            "cite_spans": [
+                {
+                    "start": 54,
+                    "end": 55,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "9 Select 100-feature signature, from features with highest S f ; 10 for each fold n of N do 11 for each classifier k of K do Train classifier k n on all folds minus n, using signature; Test classifier k n on fold n; 12 Compare performance of classifiers using all features and signature; either for cancer diagnosis, prediction, or prognosis by Muller [3] , and can be measured 147 by body fluids. Ferracin [2] mentions a total of 10, with 6 not appearing in [3] :",
+            "cite_spans": [
+                {
+                    "start": 92,
+                    "end": 94,
+                    "text": "11",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 216,
+                    "end": 218,
+                    "text": "12",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 352,
+                    "end": 355,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 407,
+                    "end": 410,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 459,
+                    "end": 462,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "148 hsa-let-7b, hsa-let-7f-1, hsa-let-7i, hsa-mir-29c, and hsa-mir-145. In total, 21 miRNAs 149 identified by the proposed approach are found among the two surveys.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "The most important result of this work is that several miRNAs types highly ranked 151 by the classifiers appear to be still understudied in literature. Table 3 reports a 152 summary of the literature meta-analysis, from which it clearly emerges that 15 of the 153 miRNA types appear in less than 50 references connected to cancer from the PubMed 154 query: strikingly, hsa-135-a-1 appears only once, and hsa-103-1 only twice, while both 155 are considered important by more than 60% of the classifiers. These two miRNAs could 156 thus represent promising leads for future research. Interestingly, only 25 of the miRNA 157 types found by the proposed machine learning approach also appear among the most 158 expressed in the baseline analysis summarized in Figure 1 , and only 4 (hsa-mir-9-1, 159 hsa-mir-28, hsa-mir-103-1, and hsa-mir-199b) are both overexpressed and understudied, 160 suggesting that simple statistical approaches might not be enough to extract meaningful 161 information from such complex data. hsa-mir-10b, the feature with the highest S f score, while not appearing in the surveys, 165 is currently under clinical trials as oncomarker for Glioma [45] , and it is mentioned in a 166 recent article as possible oncomarker [46] . hsa-mir-135a-1 and hsa-mir-135a-2, located 167 inside chromosomes 3 and 12, respectively, generate the same mature active 168 sequence [47] . hsa-mir-9-1, hsa-mir9-2, and hsa-mir9-3, generate the oncogenic 169 hsa-mir-9 [48] . hsa-mir-944 at the moment is known to decrease malignant features in 170 gastric [49] , colorectal [50] and endometrial [51] cancers. 171 We envision that understudied miRNAs could play a key role in the biology of 172 cancer. On the other hand, the presence of single-nucleotide polymorphism (SNP) could 173 affect miRNA biology due to alterations in the miRNA maturation process, their structure, and expression levels. From these, creation and loss of miRNA targeted sites 175 by SNPs is the most inspected area [52, 53] . However, the miRNA-mediated oncogenic 176 transcriptional landscape could be a consequence of the SNPs presence in the seed 177 region of mature miRNAs [54] , that is involved in the molecular recognition with its 178 targeted mRNAs. Although the presence of SNPs in seed regions seems to be negatively 179 selected [55] , in a pathological condition as cancer, it would be interesting to perform 199 Furthermore, personal-directed anti-tumoral therapy could be achieved by measurement 200 of a specific, minimal miRNA signature, as proposed in this work. List of the top 100 most relevant features identified by the proposed methodology, in 209 order of importance: hsa-mir-10b, hsa-mir-126, hsa-mir-10a, hsa-mir-9-2, hsa-mir-30a, 210 hsa-mir-9-1, hsa-mir-375, hsa-mir-21, hsa-mir-125a, hsa-mir-143, hsa-mir-122, hsa-let-7i, 211 hsa-mir-200c, hsa-mir-196b, hsa-mir-22, hsa-mir-145, hsa-mir-205, hsa-mir-30d, 212 hsa-mir-210, hsa-mir-148a, hsa-mir-193a, hsa-mir-190b, hsa-mir-9-3, hsa-let-7c, 213 hsa-mir-1247, hsa-mir-490, hsa-mir-141, hsa-mir-19a, hsa-mir-503, hsa-mir-135a-1, 214 hsa-mir-944, hsa-mir-203, hsa-let-7b, hsa-mir-103-1, hsa-mir-584, hsa-mir-152, 215 hsa-mir-30e, hsa-mir-106a, hsa-mir-183, hsa-let-7f-1, hsa-mir-202, hsa-mir-199b, 216 hsa-mir-200b, hsa-mir-194-2, hsa-mir-29c, hsa-mir-30b, hsa-mir-101-2, hsa-mir-192, 217 hsa-mir-135a-2, hsa-mir-28, hsa-mir-211, hsa-mir-200a, hsa-mir-598, hsa-mir-1-2, 218 hsa-mir-95, hsa-mir-99a, hsa-mir-378, hsa-mir-194-1, hsa-mir-199a-1, hsa-mir-15a, 219 hsa-mir-155, hsa-mir-107, hsa-mir-190, hsa-let-7f-2, hsa-mir-3678, hsa-mir-182, 220 hsa-mir-142, hsa-mir-146a, hsa-mir-34a, hsa-mir-181b-1, hsa-mir-885, hsa-mir-130a, 221 hsa-mir-3613, hsa-mir-204, hsa-mir-340, hsa-mir-221, hsa-mir-7-3, hsa-mir-135b, 222 hsa-mir-1976, hsa-mir-27b, hsa-mir-934, hsa-mir-708, hsa-let-7g, hsa-mir-196a-1, 223 hsa-mir-146b, hsa-mir-199a-2, hsa-mir-1245, hsa-mir-328, hsa-mir-124-2, hsa-let-7a-3, 224 hsa-let-7d, hsa-mir-139, hsa-let-7e, hsa-mir-101-1, hsa-mir-374b, hsa-mir-223, 225 hsa-mir-335, hsa-mir-124-1, hsa-mir-125b-1, hsa-mir-23a. 226 ",
+            "cite_spans": [
+                {
+                    "start": 1167,
+                    "end": 1171,
+                    "text": "[45]",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 1241,
+                    "end": 1245,
+                    "text": "[46]",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 1383,
+                    "end": 1387,
+                    "text": "[47]",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 1468,
+                    "end": 1472,
+                    "text": "[48]",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 1556,
+                    "end": 1560,
+                    "text": "[49]",
+                    "ref_id": "BIBREF46"
+                },
+                {
+                    "start": 1574,
+                    "end": 1578,
+                    "text": "[50]",
+                    "ref_id": "BIBREF47"
+                },
+                {
+                    "start": 1595,
+                    "end": 1599,
+                    "text": "[51]",
+                    "ref_id": "BIBREF48"
+                },
+                {
+                    "start": 1609,
+                    "end": 1612,
+                    "text": "171",
+                    "ref_id": null
+                },
+                {
+                    "start": 1990,
+                    "end": 1994,
+                    "text": "[52,",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 1995,
+                    "end": 1998,
+                    "text": "53]",
+                    "ref_id": "BIBREF50"
+                },
+                {
+                    "start": 2153,
+                    "end": 2157,
+                    "text": "[54]",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 2317,
+                    "end": 2321,
+                    "text": "[55]",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 2398,
+                    "end": 2401,
+                    "text": "199",
+                    "ref_id": null
+                },
+                {
+                    "start": 2733,
+                    "end": 2736,
+                    "text": "210",
+                    "ref_id": null
+                },
+                {
+                    "start": 2994,
+                    "end": 2997,
+                    "text": "213",
+                    "ref_id": null
+                },
+                {
+                    "start": 3163,
+                    "end": 3166,
+                    "text": "215",
+                    "ref_id": null
+                },
+                {
+                    "start": 3248,
+                    "end": 3251,
+                    "text": "216",
+                    "ref_id": null
+                },
+                {
+                    "start": 3506,
+                    "end": 3509,
+                    "text": "219",
+                    "ref_id": null
+                },
+                {
+                    "start": 4019,
+                    "end": 4022,
+                    "text": "225",
+                    "ref_id": null
+                },
+                {
+                    "start": 4080,
+                    "end": 4083,
+                    "text": "226",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 152,
+                    "end": 159,
+                    "text": "Table 3",
+                    "ref_id": "TABREF3"
+                },
+                {
+                    "start": 756,
+                    "end": 764,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "150"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Non-coding RNAs and cancer. International journal of molecular sciences",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Calore",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Lovat",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Garofalo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "14",
+            "issn": "",
+            "pages": "17085--17110",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Micromarkers: miRNAs in cancer diagnosis and prognosis. Expert review of molecular diagnostics",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ferracin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Veronese",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Negrini",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "",
+            "volume": "10",
+            "issn": "",
+            "pages": "297--308",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Non-coding RNAs and cancer",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Fabbri",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Identifying miRNAs, targets and functions",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Cairns",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Briefings in bioinformatics",
+            "volume": "15",
+            "issn": "1",
+            "pages": "1--19",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Current tools for the identification of miRNA genes and their targets",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Mendes",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Freitas",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Sagot",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Nucleic acids research",
+            "volume": "37",
+            "issn": "8",
+            "pages": "2419--2433",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "The microRNAs of Caenorhabditis elegans",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Lim",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Weinstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Abdelhakim",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Yekta",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Rhoades",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Genes & development",
+            "volume": "17",
+            "issn": "8",
+            "pages": "991--1008",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Identification of microRNAs of the herpesvirus family",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pfeffer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sewer",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lagos-Quintana",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Sheridan",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Sander",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Grasser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nature methods",
+            "volume": "2",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Human microRNA prediction through a probabilistic co-learning model of sequence and structure",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Nam",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Shin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Han",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nucleic acids research",
+            "volume": "33",
+            "issn": "11",
+            "pages": "3570--3581",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Frequent deletions and down-regulation of micro-RNA genes miR15 and miR16 at 13q14 in chronic lymphocytic leukemia",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Calin",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Dumitru",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Shimizu",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Bichi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zupo",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Noch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "99",
+            "issn": "24",
+            "pages": "15524--15529",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "The role of MicroRNAs in human cancer",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Croce",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Signal transduction and targeted therapy",
+            "volume": "1",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Role of tumor markers in patients with solid cancers: a critical review",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Duffy",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "European journal of internal medicine",
+            "volume": "18",
+            "issn": "3",
+            "pages": "175--184",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Limitations of tumour markers in screening",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Roulston",
+                    "suffix": ""
+                }
+            ],
+            "year": 1990,
+            "venue": "British Journal of Surgery",
+            "volume": "77",
+            "issn": "9",
+            "pages": "961--962",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Body fluid micro (mi) RNAs as biomarkers for human cancer",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Sauter",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Patel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of Nucleic Acids Investigation",
+            "volume": "2",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Cancer facts & figures. The Society",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Society",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Bioinformatic tools for microRNA dissection",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Akhtar",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Micolucci",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Islam",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Olivieri",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Procopio",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nucleic acids research",
+            "volume": "44",
+            "issn": "1",
+            "pages": "24--44",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "SomamiR 2.0: a database of cancer somatic mutations altering microRNA-ceRNA interactions",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bhattacharya",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Cui",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic acids research",
+            "volume": "44",
+            "issn": "D1",
+            "pages": "1005--1010",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Revealing the complexity of breast cancer by next generation sequencing",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Verigos",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Magklara",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Cancers",
+            "volume": "7",
+            "issn": "4",
+            "pages": "2183--2200",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Integration and comparison of different genomic data for outcome prediction in cancer",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Gomez-Rueda",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Martinez-Ledesma",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Martinez-Torteya",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Palacios-Corona",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Trevino",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "BioData mining",
+            "volume": "8",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "microRNAs as pharmacogenomic biomarkers for drug efficacy and drug safety assessment",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Koturbash",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Tolleson",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Hong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Biomarkers in medicine",
+            "volume": "9",
+            "issn": "11",
+            "pages": "1153--1176",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "MicroRNAs: novel biomarkers for human cancer",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Bartels",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Tsongalis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Clinical chemistry",
+            "volume": "55",
+            "issn": "4",
+            "pages": "623--631",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "MicroRNAs in body fluids-the mix of hormones and biomarkers",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cortez",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bueso-Ramos",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Ferdin",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Lopez-Berestein",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Sood",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Calin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nature reviews Clinical oncology",
+            "volume": "8",
+            "issn": "8",
+            "pages": "467--477",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "MicroRNA dysregulation in cancer: diagnostics, monitoring and therapeutics. A comprehensive review",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Iorio",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Croce",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "EMBO molecular medicine",
+            "volume": "4",
+            "issn": "3",
+            "pages": "143--159",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "MicroRNA miR-21 overexpression in human breast cancer is associated with advanced clinical stage, lymph node metastasis and patient poor prognosis",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Yan",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Shao",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Deng",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Rna",
+            "volume": "14",
+            "issn": "11",
+            "pages": "2348--2360",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Hsa-miR-21 and Hsa-miR-29 in tissue as potential diagnostic and prognostic biomarkers for gastric cancer",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zuo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Cellular Physiology and Biochemistry",
+            "volume": "37",
+            "issn": "4",
+            "pages": "1454--1462",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "The impact of next-generation sequencing technology on genetics",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Mardis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Trends in genetics",
+            "volume": "24",
+            "issn": "3",
+            "pages": "133--141",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "miRClassify: an advanced web server for miRNA family classification and annotation. Computers in biology and medicine",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Zou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Mao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ji",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "45",
+            "issn": "",
+            "pages": "157--160",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "imDC: an ensemble learning method for imbalanced classification with miRNA data",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Zou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Genetics and Molecular Research",
+            "volume": "14",
+            "issn": "1",
+            "pages": "123--133",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Naive Bayes for microRNA target predictions-machine learning for microRNA targets",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Yousef",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Jung",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Kossenkov",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Showe",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Showe",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Bioinformatics",
+            "volume": "23",
+            "issn": "22",
+            "pages": "2987--2992",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Robust biomarker identification for cancer diagnosis with ensemble feature selection methods",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Abeel",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Helleputte",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Van De Peer",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Dupont",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Saeys",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Bioinformatics",
+            "volume": "26",
+            "issn": "3",
+            "pages": "392--398",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Robust feature selection using ensemble feature selection techniques",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Saeys",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Abeel",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Van De Peer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Joint European Conference on Machine Learning and Knowledge Discovery in Databases",
+            "volume": "",
+            "issn": "",
+            "pages": "313--325",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Ensemble feature selection: Homogeneous and heterogeneous approaches. Knowledge-Based Systems",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Seijo-Pardo",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Porto-Diaz",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Bolon-Canedo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Alonso-Betanzos",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "118",
+            "issn": "",
+            "pages": "124--139",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.knosys.2016.11.017"
+                ]
+            }
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Evolutionary Optimization of Convolutional Neural Networks for Cancer miRNA Biomarkers Classification",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Rincon",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tonda",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Elati",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Schwander",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Piwowarski",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Gallinari",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Applied Soft Computing",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.asoc.2017.12.036"
+                ]
+            }
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Pasting small votes for classification in large databases and on-line",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Breiman",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Machine Learning",
+            "volume": "36",
+            "issn": "1-2",
+            "pages": "85--103",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Greedy function approximation: a gradient boosting machine",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Friedman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Annals of statistics",
+            "volume": "",
+            "issn": "",
+            "pages": "1189--1232",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "The regression analysis of binary sequences",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Cox",
+                    "suffix": ""
+                }
+            ],
+            "year": 1958,
+            "venue": "Journal of the Royal Statistical Society Series B (Methodological)",
+            "volume": "",
+            "issn": "",
+            "pages": "215--242",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Online passive-aggressive algorithms",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Crammer",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Dekel",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Keshet",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Shalev-Shwartz",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Singer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Journal of Machine Learning Research",
+            "volume": "7",
+            "issn": "",
+            "pages": "551--585",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Random forests. Machine learning",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Breiman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "",
+            "volume": "45",
+            "issn": "",
+            "pages": "5--32",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "On the stability of inverse problems",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Tikhonov",
+                    "suffix": ""
+                }
+            ],
+            "year": 1943,
+            "venue": "Dokl. Akad. Nauk SSSR. vol",
+            "volume": "39",
+            "issn": "",
+            "pages": "195--198",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Solving large scale linear prediction problems using stochastic gradient descent algorithms",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Proceedings of the twenty-first international conference on Machine learning",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Support vector machines. IEEE Intelligent Systems and their Applications",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hearst",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Dumais",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Osman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Platt",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Scholkopf",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "",
+            "volume": "13",
+            "issn": "",
+            "pages": "18--28",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Scikit-learn: Machine learning in Python",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Pedregosa",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Varoquaux",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gramfort",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Michel",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Thirion",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Grisel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of Machine Learning Research",
+            "volume": "12",
+            "issn": "",
+            "pages": "2825--2830",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Classification and regression trees",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Breiman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Friedman",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Stone",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Olshen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "MicroRNAs in cancer: biomarkers, functions and therapy. Trends in molecular medicine",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hayes",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Peruzzi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Lawler",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "20",
+            "issn": "",
+            "pages": "460--469",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "The microRNA miR-10b as a potentially promising biomarker to predict the prognosis of cancer patients: a meta-analysis",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Liao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Tong",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Hao",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Oncotarget",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "miR-135a inhibits the invasion of cancer cells via suppression of ERR alpha",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Tribollet",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Barenton",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kroiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Vincent",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Forcet",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "PloS one",
+            "volume": "11",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "miR-9, a MYC/MYCN-activated microRNA, regulates E-cadherin and cancer metastasis",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Young",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Prabhala",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Pan",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Mestdagh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Nature cell biology",
+            "volume": "12",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "miR-944 inhibits metastasis of gastric cancer by preventing the epithelial-mesenchymal transition via MACC1/Met/AKT signaling. FEBS open bio",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Pan",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Yuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Qin",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "7",
+            "issn": "",
+            "pages": "905--914",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "miR-944 inhibits cell migration and invasion by targeting MACC1 in colorectal cancer",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Han",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Oncology reports",
+            "volume": "37",
+            "issn": "6",
+            "pages": "3415--3422",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "miR-944 acts as a prognostic marker and promotes the tumor progression in endometrial cancer",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Meng",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Kuang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Biomedicine & Pharmacotherapy",
+            "volume": "88",
+            "issn": "",
+            "pages": "902--910",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "SNPs in human miRNA genes affect biogenesis and function",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Yan",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Noltner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Feng",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Sarkis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Rna",
+            "volume": "15",
+            "issn": "9",
+            "pages": "1640--1651",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "SNPs in microRNA target sites and their potential role in human disease. Open biology",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Moszyska",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gebert",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Collawn",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Bartoszewski",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Genome-wide identification of SNPs in microRNA genes and the SNP effects on microRNA target binding and biogenesis",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gong",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tong",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Shan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Human mutation",
+            "volume": "33",
+            "issn": "1",
+            "pages": "254--263",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Single nucleotide polymorphisms associated with microRNA regulation",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Jin",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Lee",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Biomolecules",
+            "volume": "3",
+            "issn": "2",
+            "pages": "287--302",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Clinicopathologic significance of miR-10b expression in gastric carcinoma",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ye",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "Q"
+                    ],
+                    "last": "Tao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Human pathology",
+            "volume": "44",
+            "issn": "7",
+            "pages": "1278--1285",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Diagnosis of lung cancer in individuals with solitary pulmonary nodules by plasma microRNA biomarkers",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Todd",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Liao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "BMC cancer",
+            "volume": "11",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Expression profile of microRNAs in serum: a fingerprint for esophageal squamous cell carcinoma",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Clinical chemistry",
+            "volume": "56",
+            "issn": "12",
+            "pages": "1871--1879",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Frequent and distinct aberrations of DNA methylation patterns in fibrolamellar carcinoma of the liver",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Tr\u00e4nkenschuh",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Puls",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Christgen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Albat",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Heim",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Poczkaj",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "PloS one",
+            "volume": "5",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "A 5-microRNA signature for lung squamous cell carcinoma diagnosis and hsa-miR-31 for prognosis",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Tan",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Qin",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Clinical cancer research",
+            "volume": "17",
+            "issn": "21",
+            "pages": "6802--6811",
+            "other_ids": {}
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "Epigenetic regulation of microRNA expression in colorectal cancer",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bandres",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Agirre",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Bitarte",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ramirez",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zarate",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Roman-Gomez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "International journal of cancer",
+            "volume": "125",
+            "issn": "11",
+            "pages": "2737--2743",
+            "other_ids": {}
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "Early detection of lung adenocarcinoma in sputum by a panel of microRNA markers",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Todd",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Xing",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "International Journal of Cancer",
+            "volume": "127",
+            "issn": "12",
+            "pages": "2870--2878",
+            "other_ids": {}
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Direct serum assay for microRNA-21 concentrations in early and advanced breast cancer",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Asaga",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Kuo",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Nguyen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Terpenning",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Giuliano",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Hoon",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Clinical chemistry",
+            "volume": "57",
+            "issn": "1",
+            "pages": "84--91",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Salivary microRNA: discovery, characterization, and clinical utility for oral cancer detection",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Elashoff",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Henson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kastratovic",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Abemayor",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Clinical Cancer Research",
+            "volume": "15",
+            "issn": "17",
+            "pages": "5473--5477",
+            "other_ids": {}
+        },
+        "BIBREF62": {
+            "ref_id": "b62",
+            "title": "Deregulated expression of miR-21, miR-143 and miR-181a in non small cell lung cancer is related to clinicopathologic characteristics or patient prognosis",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Cao",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Biomedicine & Pharmacotherapy",
+            "volume": "64",
+            "issn": "6",
+            "pages": "399--408",
+            "other_ids": {}
+        },
+        "BIBREF63": {
+            "ref_id": "b63",
+            "title": "MiR-122/cyclin G1 interaction modulates p53 activity and affects doxorubicin sensitivity of human hepatocarcinoma cells",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Fornari",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Gramantieri",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Giovannini",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Veronese",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ferracin",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Sabbioni",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Cancer research",
+            "volume": "69",
+            "issn": "14",
+            "pages": "5761--5767",
+            "other_ids": {}
+        },
+        "BIBREF64": {
+            "ref_id": "b64",
+            "title": "Comprehensive gene and microRNA expression profiling reveals the crucial role of hsa-let-7i and its target genes in colorectal cancer metastasis",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Molecular biology reports",
+            "volume": "39",
+            "issn": "2",
+            "pages": "1471--1478",
+            "other_ids": {}
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "hsa-miR-200c, is an independent prognostic factor in pancreatic cancer and its upregulation inhibits pancreatic cancer invasion but increases cell proliferation",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Ohuchida",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Mizumoto",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Sato",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kayashima",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fujita",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Molecular cancer",
+            "volume": "9",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "Screening of microRNA in patients with esophageal cancer at same tumor node metastasis stage with different prognoses",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Ji",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Qi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Tao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Asian Pacific Journal of Cancer Prevention",
+            "volume": "14",
+            "issn": "1",
+            "pages": "139--143",
+            "other_ids": {}
+        },
+        "BIBREF67": {
+            "ref_id": "b67",
+            "title": "Characterization of global microRNA expression reveals oncogenic potential of miR-145 in metastatic colorectal cancer",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Arndt",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Dossey",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Cullen",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Lai",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Druker",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Eisbacher",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "BMC cancer",
+            "volume": "9",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF68": {
+            "ref_id": "b68",
+            "title": "Diagnostic assay based on hsa-miR-205 expression distinguishes squamous from nonsquamous non-small-cell lung carcinoma",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Lebanony",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Benjamin",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Gilad",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ezagouri",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Dov",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Ashkenazi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Journal of clinical oncology",
+            "volume": "27",
+            "issn": "12",
+            "pages": "2030--2037",
+            "other_ids": {}
+        },
+        "BIBREF69": {
+            "ref_id": "b69",
+            "title": "Amplification and overexpression of Hsa-miR-30b, Hsa-miR-30d and KHDRBS3 at 8q24. 22-q24. 23 in medulloblastoma",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lu",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ryan",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Elliott",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Bignell",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Futreal",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Ellison",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PloS one",
+            "volume": "4",
+            "issn": "7",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF70": {
+            "ref_id": "b70",
+            "title": "Detection of elevated levels of tumour-associated microRNAs in serum of patients with diffuse large B-cell lymphoma",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Lawrie",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Gal",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Dunlop",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Pushkaran",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Liggins",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Pulford",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "British journal of haematology",
+            "volume": "141",
+            "issn": "5",
+            "pages": "672--675",
+            "other_ids": {}
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "A two-microRNA signature as a potential biomarker for early gastric cancer",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Zheng",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Xiong",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Oncology letters",
+            "volume": "7",
+            "issn": "3",
+            "pages": "679--684",
+            "other_ids": {}
+        },
+        "BIBREF72": {
+            "ref_id": "b72",
+            "title": "A ten-microRNA expression signature predicts survival in glioblastoma",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Srinivasan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Irp",
+                    "middle": [],
+                    "last": "Patric",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Somasundaram",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "PloS one",
+            "volume": "6",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF73": {
+            "ref_id": "b73",
+            "title": "microRNAs derived from circulating exosomes as noninvasive biomarkers for screening and diagnosing lung cancer",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Cazzoli",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Buttitta",
+                    "suffix": ""
+                },
+                {
+                    "first": "Di",
+                    "middle": [],
+                    "last": "Nicola",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Malatesta",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Marchetti",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rom",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Journal of thoracic oncology",
+            "volume": "8",
+            "issn": "9",
+            "pages": "1156--1162",
+            "other_ids": {}
+        },
+        "BIBREF74": {
+            "ref_id": "b74",
+            "title": "The microRNA molecular signature of atypic and common acquired melanocytic nevi: differential expression of miR-125b and let-7c",
+            "authors": [
+                {
+                    "first": "Lmb",
+                    "middle": [],
+                    "last": "Holst",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Kaczkowski",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Glud",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Futoma-Kazmierczak",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Hansen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Gniadecki",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Experimental dermatology",
+            "volume": "20",
+            "issn": "3",
+            "pages": "278--280",
+            "other_ids": {}
+        },
+        "BIBREF75": {
+            "ref_id": "b75",
+            "title": "miR-1247 is correlated with prognosis of pancreatic cancer and inhibits cell proliferation by targeting neuropilins. Current molecular medicine",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Shi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Qin",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Cheng",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "14",
+            "issn": "",
+            "pages": "316--327",
+            "other_ids": {}
+        },
+        "BIBREF76": {
+            "ref_id": "b76",
+            "title": "MicroRNA profiling in cancer: A bioinformatics perspective",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Gusev",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF77": {
+            "ref_id": "b77",
+            "title": "Circulating microRNAs as stable blood-based markers for cancer detection",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Mitchell",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Parkin",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kroh",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Fritz",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Wyman",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Pogosova-Agadjanyan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "105",
+            "issn": "30",
+            "pages": "10513--10518",
+            "other_ids": {}
+        },
+        "BIBREF78": {
+            "ref_id": "b78",
+            "title": "Identification by Real-time PCR of 13 mature microRNAs differentially expressed in colorectal cancer and non-tumoral tissues",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bandres",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Cubedo",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Agirre",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Malumbres",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zarate",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ramirez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Molecular cancer",
+            "volume": "5",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF79": {
+            "ref_id": "b79",
+            "title": "MiR-503 regulates cisplatin resistance of human gastric cancer cell lines by targeting IGF1R and BCL2",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Ge",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ding",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Chinese medical journal",
+            "volume": "127",
+            "issn": "12",
+            "pages": "2357--2362",
+            "other_ids": {}
+        },
+        "BIBREF80": {
+            "ref_id": "b80",
+            "title": "An investigation of microRNAs mapping to breast cancer related genomic gain and loss regions. Cancer genetics and cytogenetics",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Selcuklu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Yakicier",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Erson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "189",
+            "issn": "",
+            "pages": "15--23",
+            "other_ids": {}
+        },
+        "BIBREF81": {
+            "ref_id": "b81",
+            "title": "miRNAs associated with chemo-sensitivity in cell lines and in advanced bladder cancer",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Nordentoft",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Birkenkamp-Demtroder",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Agerbaek",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Theodorescu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Ostenfeld",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Hartmann",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "BMC medical genomics",
+            "volume": "5",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF82": {
+            "ref_id": "b82",
+            "title": "MicroRNA signatures of tumor-derived exosomes as diagnostic biomarkers of ovarian cancer",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Taylor",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Gercel-Taylor",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Gynecologic oncology",
+            "volume": "110",
+            "issn": "1",
+            "pages": "13--21",
+            "other_ids": {}
+        },
+        "BIBREF83": {
+            "ref_id": "b83",
+            "title": "Downregulation of HMGA2 by the pan-deacetylase inhibitor panobinostat is dependent on hsa-let-7b expression in liver cancer cell lines",
+            "authors": [
+                {
+                    "first": "Di",
+                    "middle": [],
+                    "last": "Fazio",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Montalbano",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Neureiter",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Alinger",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Schmidt",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Merkel",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Experimental cell research",
+            "volume": "318",
+            "issn": "15",
+            "pages": "1832--1843",
+            "other_ids": {}
+        },
+        "BIBREF84": {
+            "ref_id": "b84",
+            "title": "Medical science monitor: international medical journal of experimental and clinical research",
+            "authors": [
+                {
+                    "first": "Zhao",
+                    "middle": [],
+                    "last": "Jy",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zhang",
+                    "middle": [],
+                    "last": "Xb",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "21",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF85": {
+            "ref_id": "b85",
+            "title": "MicroRNA expression profiling is a potential diagnostic tool for thyroid cancer",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Vriens",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Weng",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Suh",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Huynh",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Guerrero",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Shen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Cancer",
+            "volume": "118",
+            "issn": "13",
+            "pages": "3426--3432",
+            "other_ids": {}
+        },
+        "BIBREF86": {
+            "ref_id": "b86",
+            "title": "A robust methodology to study urine microRNA as tumor marker: microRNA-126 and microRNA-182 are related to urinary bladder cancer",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hanke",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Hoefig",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Merz",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Feller",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Kausch",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Jocham",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Urologic Oncology: Seminars and Original Investigations",
+            "volume": "28",
+            "issn": "",
+            "pages": "655--661",
+            "other_ids": {}
+        },
+        "BIBREF87": {
+            "ref_id": "b87",
+            "title": "Identification of miR-30e* regulation of Bmi1 expression mediated by tumor-associated macrophages in gastrointestinal cancer",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Sugihara",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Ishimoto",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Watanabe",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Sawayama",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Iwatsuki",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Baba",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PloS one",
+            "volume": "8",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF88": {
+            "ref_id": "b88",
+            "title": "Circulating microRNAs in plasma of patients with gastric cancers",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tsujiura",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Ichikawa",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Komatsu",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Shiozaki",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Takeshita",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kosuga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "British journal of cancer",
+            "volume": "102",
+            "issn": "7",
+            "pages": "1174--1179",
+            "other_ids": {}
+        },
+        "BIBREF89": {
+            "ref_id": "b89",
+            "title": "MicroRNA let-7f inhibits tumor invasion and metastasis by targeting MYH9 in human gastric cancer",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Liang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Miao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Gu",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "PLoS One",
+            "volume": "6",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF90": {
+            "ref_id": "b90",
+            "title": "Unique microRNA molecular profiles in lung cancer diagnosis and prognosis",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Yanaihara",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Caplen",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bowman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Seike",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Kumamoto",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Yi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Cancer cell",
+            "volume": "9",
+            "issn": "3",
+            "pages": "189--198",
+            "other_ids": {}
+        },
+        "BIBREF91": {
+            "ref_id": "b91",
+            "title": "MicroRNA-143 as a tumor suppressor for bladder cancer",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Dong",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Pan",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "The Journal of urology",
+            "volume": "181",
+            "issn": "3",
+            "pages": "1372--1380",
+            "other_ids": {}
+        },
+        "BIBREF92": {
+            "ref_id": "b92",
+            "title": "Diallyl disulfide suppresses proliferation and induces apoptosis in human gastric cancer through Wnt-1 signaling pathway by up-regulation of miR-200b and miR-22. Cancer letters",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Kong",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "340",
+            "issn": "",
+            "pages": "72--81",
+            "other_ids": {}
+        },
+        "BIBREF93": {
+            "ref_id": "b93",
+            "title": "miR-194 suppresses metastasis of non-small cell lung cancer through regulating expression of BMP1 and p27kip1",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Fang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Leach",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Luo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Oncogene",
+            "volume": "33",
+            "issn": "12",
+            "pages": "1506--1514",
+            "other_ids": {}
+        },
+        "BIBREF94": {
+            "ref_id": "b94",
+            "title": "microRNA expression profile and identification of miR-29 as a prognostic marker and pathogenetic factor by targeting CDK6 in mantle cell lymphoma",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Lwin",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Kong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Blood",
+            "volume": "115",
+            "issn": "13",
+            "pages": "2630--2639",
+            "other_ids": {}
+        },
+        "BIBREF95": {
+            "ref_id": "b95",
+            "title": "miR-101-2, miR-125b-2 and miR-451a act as potential tumor suppressors in gastric cancer through regulation of the PI3K/AKT/mTOR pathway",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Riquelme",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Tapia",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Leal",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sandoval",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Varga",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Letelier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Cellular oncology",
+            "volume": "39",
+            "issn": "1",
+            "pages": "23--33",
+            "other_ids": {}
+        },
+        "BIBREF96": {
+            "ref_id": "b96",
+            "title": "Circulating miR-192 in liver fluke-associated cholangiocarcinoma patients: a prospective prognostic indicator",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Silakit",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Loilome",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Yongvanit",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Chusorn",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Techasen",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Boonmars",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "21",
+            "issn": "",
+            "pages": "864--872",
+            "other_ids": {}
+        },
+        "BIBREF97": {
+            "ref_id": "b97",
+            "title": "MiRNA molecular profiles in human medical conditions: connecting lung cancer and lung development phenomena",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Aghanoori",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Mirzaei",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tavallaei",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Asian Pac J Cancer Prev",
+            "volume": "15",
+            "issn": "22",
+            "pages": "9557--9565",
+            "other_ids": {}
+        },
+        "BIBREF98": {
+            "ref_id": "b98",
+            "title": "Strand-specific miR-28-5p and miR-28-3p have distinct effects in colorectal cancer cells",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Almeida",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Nicoloso",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zeng",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Ivan",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Spizzo",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Gafa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Gastroenterology",
+            "volume": "142",
+            "issn": "4",
+            "pages": "886--896",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Top 50 most expressed miRNA types, across all cancer classes in the considered dataset.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "110 samples of each class of the original dataset. Thus, N c = 80 (8 types of classifiers, run 111 10 times each). The complete procedure is summarized by Algorithm 1. 112 Finally, the top 50 features obtained in this way are validated with a meta-analysis 113 of the relevant literature. In a first step, reviews of miRNA types related to cancer are 114 inspected for the presence of the extracted features. Subsequently, the PubMed 115 database is interrogated for references containing the identified miRNA types 2 , and the 116 results are later manually analyzed by the authors.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "128 classifier, some classifiers make use of only a few. For example, BaggingClassifier 129 and RidgeClassifier do not use the vast majority of the features exploited by others 130 to discriminate between classes. A further difference between the two is that features 131 used by BaggingClassifier that are also appearing in the top 100 are clearly 132 important for the classifier, being used in almost 100% of its 10 runs; while it is 133 noticeable how RidgeClassifier probably bases its discrimination on features that do 134 not appear among the top 100. This also explains the drop in performance when135",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "162hsa-mir-21, mentioned in both surveys, is also the most commonly overexpressed 163 miRNA for all classes of tumors in the statistical analysis summarized byFigure 1.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "180 further measurements to determine whether any miRNA-related SNPs is contained in 181 miRNA signature we propose. The complete list of the 100 extracted features is in 182 Annex A.183",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "tumors, 1,046 miRNA features, and 8,129 patient samples. Information on the dataset 58 is summarized inTable 1.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Classifiers used in the experiments. For each classifier, the average accuracy and corresponding standard deviation on a 10-fold cross validation are reported, for both the complete dataset (1,046 features) and the 100 features that have been selected as the most relevant. In the case a classifier is not using standard values for its hyperparameters, the relevant variations are summarized in the corresponding column.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "miRNA types identified by the machine learning feature extraction, appearing in less than 50 references connected to cancer in a PubMed query. miRNA expression profiles have serious consequences for several diseases, such as cancer.186   Since ectopic modulation of specific miRNAs could compromise the hallmarks of cancer, 187 it has been proposed that cancerous miRNAs could be modulated by microRNA-based 188 therapies. In this sense, several efforts had been achieved to generate scaffold-mediated 189 miRNA-based delivery systems, thus exploiting the miRNA-mediated therapeutic",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "Table comparingthe top 50 most frequent features extracted by the machine learning algorithms with existing biomarkers references in literatures. miRNAs highlighted in gray are proposed as promising venues of research, as they only appear in less than 50 references connected to cancer in literature, according to the PubMed query performed in this study. miRNAs marked with * show considerable overexpression along all classes of tumors, as reported inFigure 1.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/353201 doi: bioRxiv preprintThe results published here are based upon data generated by The Cancer Genome Atlas 203 Research Network, and the authors would like to thank all specimen donors and research groups that contributed to this project.This work was partially funded by INRA, France; and CONACYT, Mexico.Annex A",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

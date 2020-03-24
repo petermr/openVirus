@@ -1,0 +1,1110 @@
+{
+    "paper_id": "c85f571a674c7fed0ccb9176e9cf9f3d3659ca32",
+    "metadata": {
+        "title": "Title Analysis of the epidemic growth of the early 2019-nCoV outbreak using internationally confirmed cases",
+        "authors": [
+            {
+                "first": "Qingyuan",
+                "middle": [],
+                "last": "Zhao",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Statistical Laboratory",
+                    "institution": "University of Pennsylvania",
+                    "location": {}
+                },
+                "email": "*qyzhao@statslab.cam.ac.uk"
+            },
+            {
+                "first": "Yang",
+                "middle": [],
+                "last": "Chen",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Statistical Laboratory",
+                    "institution": "University of Pennsylvania",
+                    "location": {}
+                },
+                "email": ""
+            },
+            {
+                "first": "Dylan",
+                "middle": [
+                    "S"
+                ],
+                "last": "Small",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Statistical Laboratory",
+                    "institution": "University of Pennsylvania",
+                    "location": {}
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Background: On January 23, 2020, a quarantine was imposed on travel in and out of Wuhan, where the 2019 novel coronavirus (2019-nCoV) outbreak originated from. Previous analyses estimated the basic epidemiological parameters using symptom onset dates of the confirmed cases in Wuhan and outside China.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We obtained information on the 46 coronavirus cases who traveled from Wuhan before January 23 and have been subsequently confirmed in Hong Kong, Japan, Korea, Macau, Singapore, and Taiwan as of February 5, 2020. Most cases have detailed travel history and disease progress. Compared to previous analyses, an important distinction is that we used this data to informatively simulate the infection time of each case using the symptom onset time, previously reported incubation interval, and travel history. We then fitted a simple exponential growth model with adjustment for the January 23 travel ban to the distribution of the simulated infection time. We used a Bayesian analysis with diffuse priors to quantify the uncertainty of the estimated epidemiological parameters. We performed sensitivity analysis to different choices of incubation interval and the hyperparameters in the prior specification.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We found that our model provides good fit to the distribution of the infection time.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Assuming the travel rate to the selected countries and regions is constant over the study period, we found that the epidemic was doubling in size every 2.9 days (95% credible interval [CrI], 2 days-4.1 days). Using previously reported serial interval for 2019-nCoV, the estimated basic reproduction number is 5.7 (95% CrI, 3.4-9.2). The estimates did not change substantially if we assumed the travel rate doubled in the last 3 days before January 23, when we used previously reported incubation interval for severe acute respiratory syndrome (SARS), or when we changed the hyperparameters in our prior specification.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Our estimated epidemiological parameters are higher than an earlier report using confirmed cases in Wuhan. This indicates the 2019-nCoV could have been spreading faster than previous estimates.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "On December 31, 2019, the Health Commission in Wuhan, China, announced 27 cases of viral pneumonia. On January 8, 2020, the Chinese Center for Disease Control and Prevention announced that a novel coronavirus was the causative pathogen and was subsequently designated as 2019-nCoV. Anxiety quickly grew in the general public after a preeminent Chinese epidemiologist, Dr Zhong Nanshan, confirmed human-to-human transmission in a televised interview in the evening of January 20, and three days later the entire city of Wuhan was put into quarantine: all public transportation was suspended, and outbound trains and flights were halted. As of February 6, 2020, more than 28,000 cases of 2019-nCoV have been confirmed globally.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Main text"
+        },
+        {
+            "text": "Using the first 425 confirmed patients of 2019-nCoV in Wuhan, a previous report estimated that the epidemic doubled in size every 7.4 days. With a mean serial interval of 7.5 days, the basic reproduction number was estimated to be 2.2 (95% confidence interval [CI] , 1.4 -3.9) (Li et al., 2020) . Using internationally exported cases from Wuhan (known days of symptom onset from December 25, 2019 to January 19, 2020) and flight travel data, another report estimated that the basic reproduction number is 2.7 (95% CrI, 2.5 -2.9) . Other analyses using the series of new confirmed cases have reported larger estimates of the basic reproduction number (Read et al., 2020; Zhao et al., 2020) .",
+            "cite_spans": [
+                {
+                    "start": 260,
+                    "end": 264,
+                    "text": "[CI]",
+                    "ref_id": null
+                },
+                {
+                    "start": 277,
+                    "end": 294,
+                    "text": "(Li et al., 2020)",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 650,
+                    "end": 669,
+                    "text": "(Read et al., 2020;",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 670,
+                    "end": 688,
+                    "text": "Zhao et al., 2020)",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Main text"
+        },
+        {
+            "text": "Using information published by governments and news media, we constructed a dataset of 2019-nCoV patients that are confirmed outside mainland China as of February 4, 2020. We only kept cases who resided in Wuhan or had recent travel history to Wuhan. We excluded patients who arrived in these countries and regions after January 23 or were reported to have exposure to 2019-nCoV outside Wuhan. For each cluster of cases (two cases are considered to belong to the same cluster if they had close contact outside Wuhan), we kept the first confirmed case and discarded the other cases as they were likely infected during their travel outside Wuhan. We only considered cases confirmed in Hong Kong, Japan, Korea, Macau, Singapore, and Taiwan as these governments provided detailed information on the confirmed cases. After applying this selection criterion, we obtained a sample of 46 coronavirus cases who were most certainly exported from Wuhan.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Dataset preparation and visualization"
+        },
+        {
+            "text": "Based on the trajectories of these cases, we simulated the dates they were infected as follows. Among the 46 cases, one (18 th case in Singapore) has missing symptom onset dates. We used the mice software package (van Buuren & Groothuis-Oudshoorn, 2011) to obtain 100 imputations of the missing symptom onset date. For each imputation of symptom onset, we simulated the infection time based on Gamma-distributed incubation period that are have the same mean (5.2 days) and 95th percentile (12.5 days) as previous estimates (Li et al., 2020) . We repeated the simulation until the infection time is consistent with the case's trajectory and known exposure to other confirmed cases. In particular, because infection must be prior to the patient's arrival if we assume all the cases were infected in Wuhan, this allows us to greatly narrow down the infection time. We repeated the simulation of infection time for 100 times and obtained a distribution of infection time for the 46 cases ( Figure 1 ).",
+            "cite_spans": [
+                {
+                    "start": 523,
+                    "end": 540,
+                    "text": "(Li et al., 2020)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 986,
+                    "end": 994,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Dataset preparation and visualization"
+        },
+        {
+            "text": "We modeled, # , the number of new infections in Wuhan on day since December 1, 2019 and assume it was growing exponentially up till January 23: # = ' \u00d7 +# , 1 \u2264 \u2264 , where is the growth exponent and = 31 + 23 = 54 is the length of the series considered. We assumed, # , the number of new infections in Wuhan on day who subsequently traveled to one of the selected Asian countries and regions, follows a Poisson distribution:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Statistical model"
+        },
+        {
+            "text": "where ? is the rate of travel on day . The sum is from to because each person infected on day can only travel out of Wuhan from day to day (corresponding to January 23, 2020 when all outbound trains and flights were halted). Since we collected this dataset 13 days after the outbound travel e ban, which is more than the estimated 95 th percentile of the incubation period (Li et al., 2020) , we assume that all 2019-nCoV cases traveled from Wuhan to the selected countries and regions have already been confirmed.",
+            "cite_spans": [
+                {
+                    "start": 373,
+                    "end": 390,
+                    "text": "(Li et al., 2020)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Statistical model"
+        },
+        {
+            "text": "We expected that the international travel from Wuhan was relatively stable during this period. This motivated our working model for ? : 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Statistical model"
+        },
+        {
+            "text": "? = for the entire study period; We considered another two choices of the travel rate as sensitivity analysis:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Statistical model"
+        },
+        {
+            "text": "2. ? = before January 21 and ? = 2 \u00d7 on and after January 21; 3. ? = 0 before January 23 and ? = \u00d7 on January 23. The second choice is intended to model the possible panic effect after human-to-human transmission was publicly confirmed. The third choice is impossibly extreme. We only included it to compare our results with assuming a simple exponential model for # with no offset, thereby ignoring the effect of the January 23 travel ban.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Statistical model"
+        },
+        {
+            "text": "We computed, [ # ], the mean of # using the simulated distribution of infection dates. Using data from January 1 to January 15, we fitted the following linear regression for log ( [ # ]) with offset log( \u2212 + 1) that is derived from the statistical model above assuming constant travel rate:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model fitting and statistical inference"
+        },
+        {
+            "text": "log( [ # ]) \u2212 log( \u2212 + 1) = log( \u00d7 ' ) + . We compared the fit of this model with the other two choices of the travel rate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model fitting and statistical inference"
+        },
+        {
+            "text": "To quantify the uncertainty of the estimated growth exponent, we performed a Bayesian analysis for this statistical model with diffuse priors. The prior we used for is an exponential distribution with mean log(2) /7.4, matching the previously reported doubling time using cases in Wuhan. The prior we used for ' is such that the number of new infections on January 1, 2020 has prior mean 50 and standard deviation 100. We used an exponential prior for whose mean is computed from dividing the estimated number of travels from Wuhan to the selected . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model fitting and statistical inference"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model fitting and statistical inference"
+        },
+        {
+            "text": "regions by the population of Wuhan. We expected that the posterior of the number of new infections # would be very sensitive to the choice of the prior mean of , but the posterior of the growth exponent would be insensitive to the choice of prior.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model fitting and statistical inference"
+        },
+        {
+            "text": "We fitted the models for 100 realizations of the infection counts from January 1 to January 20, expecting the public confirmation of human-to-human transmission on January 20 might have lowered the epidemic growth in the next few days. We did not use infections before January 1 because the simulation could be unreliable for early infections. We also fitted the models using all infections as a sensitivity analysis. The Bayesian models were fitted using the rstan software package in R (Carpenter et al., 2017) . We computed the posterior means and credible intervals by pooling posterior samples for different realizations of the infection counts.",
+            "cite_spans": [
+                {
+                    "start": 488,
+                    "end": 512,
+                    "text": "(Carpenter et al., 2017)",
+                    "ref_id": "BIBREF0"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model fitting and statistical inference"
+        },
+        {
+            "text": "We obtained the distribution of the mean counts of new infections among the cases and found that it was growing exponentially till January 18 but was dropping from January 19 to 23 ( Figure  2 , Panel A). This qualitative behavior contradicts an exponential growth model for # (third choice for ? ). However, the correction factor \u2212 + 1 is our working model predicts the mean counts to be decreasing when",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 183,
+                    "end": 192,
+                    "text": "Figure  2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Simulated infection time"
+        },
+        {
+            "text": "This equation shows that the stationary point is 1/ days before January 24. The empirical stationary point between January 19 and 20 puts between 0.2 and 0.25. Error bars in Panel A also show that the uncertainty of the estimated mean infection counts due to using Monte-Carlo simulations is small.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Simulated infection time"
+        },
+        {
+            "text": "In fitted linear regressions for logarithm of mean infection counts versus, Modeling the effect of the travel ban on January 23 (Panels B and C, Figure 2 ) visually improves the fit to the data when compared to ignoring the travel ban (Panel D, Figure 2 ). The fitted growth exponent using our working model was = 0.25 (Panel B). This is consistent with our prediction of in the last paragraph based on the decreasing infections after January 19. On the contrary, if we assumed the travel rate doubled in the last three days, a similar calculation shows that the stationary point in Panel A should be around January 16. These qualitative assessments show that our working model provide superior fit to the data.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 145,
+                    "end": 153,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 245,
+                    "end": 253,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Simulated infection time"
+        },
+        {
+            "text": "To aide comparison, we included lines in panels B, C, and D, in Figure 2 corresponding to a growth rate of = 0.11 or a doubling time of 6.4 days reported by a previous analysis . This estimate did not fit the average infection counts well.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 64,
+                    "end": 72,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Simulated infection time"
+        },
+        {
+            "text": "In our Bayesian model fitted using infections before January 21 and assuming constant travel rate, the posterior mean of the growth exponent was 0.25 (95% CrI, 0.17 -0.34). This corresponds to a doubling time of 2.9 days (95% CrI, 2.0 days -4.1 days) and basic reproduction . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemic growth"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . number of 5.7 (95% CrI, 3.4 -9.2). The basic reproduction number is computed using the serial interval previously reported for 2019-nCoV (Li et al., 2020) .",
+            "cite_spans": [
+                {
+                    "start": 215,
+                    "end": 232,
+                    "text": "(Li et al., 2020)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Epidemic growth"
+        },
+        {
+            "text": "We further performed a thorough sensitivity analysis of our results (Table 1 and Online Supplement) using a different estimation period, the other two travel rates, and the incubation period and serial interval reported for the severe acute respiratory syndrome (SARS) (Donnelly et al., 2003; Lipsitch et al., 2003) . We found that our estimated epidemiological parameters are relatively insensitive to these choices unless we ignore the outbound travel ban on January 23. We also performed a sensitivity analysis to the prior chosen for the rate of travel. Not surprisingly, we found that the estimated growth exponent is not sensitive to the choice, but the total number of infections are very sensitive to the choice (Online Supplement).",
+            "cite_spans": [
+                {
+                    "start": 269,
+                    "end": 292,
+                    "text": "(Donnelly et al., 2003;",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 293,
+                    "end": 315,
+                    "text": "Lipsitch et al., 2003)",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 68,
+                    "end": 76,
+                    "text": "(Table 1",
+                    "ref_id": "TABREF2"
+                }
+            ],
+            "section": "Epidemic growth"
+        },
+        {
+            "text": "Our analysis reported a much higher growth rate of the early 2019-nCoV outbreak in Wuhan. A direct comparison can be drawn with a previous analysis that also used internationally confirmed cases to infer the epidemic size and growth in Wuhan . However, their estimated doubling time is 6.4 days (95% CrI, 5.8 days -7.1 days). Another report (Li et al., 2020) using the cases in Wuhan estimated the doubling time to be 7.4 days (4.2 days -14 days). These estimates did not fit our simulated distribution of infections well, even with our impossibly extreme assumption of the travel rate (Figure 2, Panel D) . This shows that the epidemic may have been spreading much faster in Wuhan than these earlier estimates.",
+            "cite_spans": [
+                {
+                    "start": 341,
+                    "end": 358,
+                    "text": "(Li et al., 2020)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 586,
+                    "end": 605,
+                    "text": "(Figure 2, Panel D)",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "There are several possible explanations for the large difference in epidemiological estimates. One possible reason is the different study sample. The previous reports used internationally confirmed cases as of January 28 and the first 425 confirmed cases in Wuhan. In comparison, we used confirmed cases in 6 selected countries and regions with detailed case reports as of February 4. Our selected countries and regions also have good public health surveillance systems and could more easily identified suspected cases in border control. Another key distinction is that our analysis used the simulated infection time instead of the noisier symptom onset as in the previous analyses. By using the cases' travel history (in particular, international arrival date), we can narrow down when the cases were infected. This reduces the noise in our estimates.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "A third distinction with the analysis by ) is that our model takes into account the restricted outbound travel from Wuhan since January 23, 2020 ---a milestone event in this epidemic. The analysis by used a more complicated susceptible-exposedinfectious-recovered (SEIR) model and only accounted for the quarantine of Wuhan in their forecast but not in their estimation. Ignoring the travel ban since January 23 could also produce much smaller growth rate in our model. However, we have convincingly demonstrated that this leads to very poor fit of the distribution of infection time.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "Our analysis should be viewed in terms of its limitations. The international cases are only \"shadows\" of the epidemic in Wuhan and we relied on the assumption that they form a representative sample. We used a simple exponential growth model for the new infections and did not account for the dynamics of the epidemics like a SEIR model. We assumed a constant . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "rate of travel in the study period which might not approximate the travel pattern in Wuhan---a transportation hub in central China---very well. In particular, millions of people (substantial proportion of the Wuhan population) traveled back home from Wuhan before the Lunar New Year, which we did not consider in our model. Finally, our estimates are relatively but not entirely insensitive to the incubation period which are crucial in simulating the infection time.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "Despite these potential limitations, we convincingly demonstrated that a simple theoretical model ---exponential growth with correction for the travel ban on January 23 ---provides very good fit to the internationally confirmed cases with detailed case trajectories. Our results suggest that the early outbreak of 2019-nCoV could have been spreading much faster in Wuhan than previous estimates. This has important implications in designing prevention measures to control the outbreak in other cities in China and around the world. On the more positive side, our simulated infection rates in January 21 to 23 showed visually significant departure from the previous growth pattern (Panel B, Figure 2 ). This gives some evidence that the prevention measures following the public confirmation of human-to-human transmission in the evening of January 20 were effective.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 690,
+                    "end": 698,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "Data for this study are from public sources. We have kept the data and computer programs used in our analysis at https://github.com/qingyuanzhao/2019-nCov-Data, so the results reported in this article and previous versions of our analysis are fully reproducible. . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data and reproducibility"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . Dec 15 Jan 01 Jan 15 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 r = 0.11 D . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data and reproducibility"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data and reproducibility"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10. 1101 ",
+            "cite_spans": [
+                {
+                    "start": 98,
+                    "end": 102,
+                    "text": "1101",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Data and reproducibility"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Stan: A Probabilistic Programming Language",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Carpenter",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gelman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Hoffman",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Goodrich",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Betancourt",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Brubaker",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Riddell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Journal of Statistical Software",
+            "volume": "1",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Epidemiological determinants of spread of causal agent of severe acute respiratory syndrome in Hong Kong",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Ghani",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hedley",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Abu-Raddad",
+                    "suffix": ""
+                },
+                {
+                    "first": "L.-M",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "T.-Q",
+                    "middle": [],
+                    "last": "Thach",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Chau",
+                    "suffix": ""
+                },
+                {
+                    "first": "K.-P",
+                    "middle": [],
+                    "last": "Chan",
+                    "suffix": ""
+                },
+                {
+                    "first": "T.-H",
+                    "middle": [],
+                    "last": "Lam",
+                    "suffix": ""
+                },
+                {
+                    "first": "L.-Y",
+                    "middle": [],
+                    "last": "Tse",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Tsang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S.-H",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Kong",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "The Lancet",
+            "volume": "361",
+            "issn": "9371",
+            "pages": "1761--1766",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0140-6736(03)13410-1"
+                ]
+            }
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tong",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "S M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "H Y"
+                    ],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Wong",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Xing",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Xiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Feng",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "New England Journal of Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1056/NEJMoa2001316"
+                ]
+            }
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Transmission Dynamics and Control of Severe Acute Respiratory Syndrome",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Cooper",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Robins",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "James",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Gopalakrishna",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Chew",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Tan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Samore",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Fisman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Murray",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Science",
+            "volume": "300",
+            "issn": "5627",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Novel coronavirus 2019-nCoV: early estimation of epidemiological parameters and epidemic predictions",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Read",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R E"
+                    ],
+                    "last": "Bridgen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A T"
+                    ],
+                    "last": "Cummings",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Jewell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "MedRxiv",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.01.23.20018549"
+                ]
+            }
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "mice: Multivariate Imputation by Chained Equations in R",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Van Buuren",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Groothuis-Oudshoorn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of Statistical Software",
+            "volume": "1",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Nowcasting and forecasting the potential domestic and international spread of the 2019-nCoV outbreak originating in Wuhan, China: a modelling study",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Lancet",
+            "volume": "",
+            "issn": "0",
+            "pages": "30260--30269",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0140-6736(20"
+                ]
+            }
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Preliminary estimation of the basic reproduction number of novel coronavirus (2019-nCoV) in China, from 2019 to 2020: A data-driven analysis in the early phase of the outbreak",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Ran",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Musa",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lou",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "International Journal of Infectious Diseases",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/J.IJID.2020.01.050"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Trajectory and distribution of simulated infection time of 46 cases of 2019-nCoV confirmed in 6 Asian countries and regions (HK: Hong Kong, JP: Japan, KR: Korea, MO: Macau, SG: Singapore, TW: Taiwan). Infected: when the patient was infected; Symptom: when the patient first showed symptoms; Initial: when the patient first sought medical consultation or was isolated as a suspected case; Hospital: if the patient was not immediately admitted after the initial visit, when the patient was finally admitted to a hospital; Confirmed: when the case was confirmed as 2019-nCoV positive.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "models using mean counts of new infections. Panel A: Grey bars are the mean counts of new infections based on infection dates simulated from symptom onset dates and assumed incubation period that are consistent with the patients' exposure history to Wuhan. Red and blue error bars are the one standard error of the mean counts due to Monte-Carlo simulations. Grey dots are 10 realizations of the simulated infection counts. Panel B,C&D: Fitted linear regression for logarithm of the mean counts versus time with different offsets (B: assume constant travel rate; C: assume travel rate doubled from January 21 to January 23; D: ignore the travel ban out of Wuhan since January 23, 2020). Red lines are linear regressions fitted using data in panel A from January 1 to January 15. Blue lines shows growth exponent r=0.11 which correspond to the estimated doubling time of 6.4 days in.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF2": {
+            "text": "Estimated parameters for epidemic growth rate using different periods of infection and different assumptions on the travel rate. Estimated parameters are in the form of \"posterior mean (95% credible interval)\".",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The authors have no conflict of interest to declare. We thank Michael Levy for providing helpful comments on this analysis.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgement"
+        }
+    ]
+}

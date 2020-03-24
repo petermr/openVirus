@@ -1,0 +1,1439 @@
+{
+    "paper_id": "d5f7332f6dba1d990d54b5887a175e530d144130",
+    "metadata": {
+        "title": "Optimising Renewal Models for Real-Time Epidemic Prediction and Estimation",
+        "authors": [
+            {
+                "first": "K",
+                "middle": [
+                    "V"
+                ],
+                "last": "Parag",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "MRC Centre for Global Infectious Disease Analysis",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "W2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "C",
+                "middle": [
+                    "A"
+                ],
+                "last": "Donnelly",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "MRC Centre for Global Infectious Disease Analysis",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "W2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The effective reproduction number, Rt, is an important prognostic for 2 infectious disease epidemics. Significant changes in Rt can forewarn about 3 new transmissions or predict the efficacy of interventions. The renewal 4 model infers Rt from incidence data and has been applied to Ebola virus 5 disease and pandemic influenza outbreaks, among others. This model 6 estimates Rt using a sliding window of length k. While this facilitates 7 real-time detection of statistically significant Rt fluctuations, inference is 8 highly k -sensitive. Models with too large or small k might ignore meaning-9 ful changes or over-interpret noise-induced ones. No principled k -selection 10 scheme exists. We develop a practical yet rigorous scheme using the ac-11 cumulated prediction error (APE) metric from information theory. We 12 derive exact incidence prediction distributions and integrate these within 13 an APE framework to identify the k best supported by available data. We 14 find that this k optimises short-term prediction accuracy and expose how 15 common, heuristic k -choices, which seem sensible, could be misleading. 16 18 fectious disease epidemic is known as an incidence curve or epi-curve [1]. At 19 the population level, these curves offer prospective insight into the spread of a 20 disease by informing on the effective reproduction number, which defines the 21 average number of secondary infections induced by a primary one [2]. This 22",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "reproduction number, denoted R t at time t, is an important prognostic of the 23 behaviour of an epidemic. If R t > 1, for example, we can expect and hence 24 prepare for an exponentially increasing incidence, whereas if R t < 1, we can be 25 1 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint reasonably confident that the epidemic has been arrested [2]. Reliably estimat-26 ing meaningful changes in R t is an important problem in epidemiology, since 27 it can forewarn about the growth rate of an outbreak and signify the level of 28 control effort that must be initiated or sustained [3] [4]. 29 The renewal model [5] is a popular approach for inferring salient fluctuations 30 in R t and has been used to predict Ebola virus disease case counts and assess the 31 transmission potential of pandemic influenza and Zika virus, among others [6] [7] 32 [3]. The renewal model may be applied retrospectively to understand the past 33 behaviour of an epidemic or prospectively to gain real-time insight into ongoing 34 outbreak dynamics [8] [5]. We only consider the latter here. Model selection 35 metrics for the former application were investigated in [9]. The prospective ap-36 proach approximates R t with a piecewise-constant function i.e. R t is considered 37 constant or stable over some sliding window of k time units (e.g. days or weeks) 38 into the past, beyond which a discontinuous change is assumed [8].",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "39 This formulation models the non-stationary nature of epidemics, capturing 40 the idea that different dynamics are expected during distinct phases (e.g. onset, 41 growth, control) of the epidemic lifetime. The window length, k, is effectively a 42 hypothesis about the stability of R t underpinning the observed epi-curve and is 43 critical to reliably characterising the epidemic because it controls the time-scale 44 over which R t fluctuations are deemed significant. Too large or small a k-value 45 can respectively lead to over-smoothing (which ignores important changes) or 46 to random noise being misinterpreted as meaningful. Inferring under the wrong 47 k can appreciably affect our understanding of an epidemic, as observed in [5], 48 where case reproduction numbers (a common k-grouping of R t ) were found to 49 over-smooth significant changes in HIV transmission, for example.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "50 Surprisingly, no principled method for optimally selecting k exists. Current 51 best practice either relies on heuristic choices (including visual trial and error) [6] 52 or provides implicit, minimum thresholds for k [8]. Here we adapt metrics from 53 information theory to develop a simple yet rigorous framework for optimising k.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "54",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Specifically, we analytically derive the posterior predictive incidence distribution 55 of the renewal model and then minimise its accumulated prediction error (APE) 56 [10] over the space of possible k, to obtain k * . The APE is a formal, data-57 driven, model selection strategy that identifies the k * most justified by the 58 available incidence data by optimising for short-term predictive accuracy [11] .",
+            "cite_spans": [
+                {
+                    "start": 405,
+                    "end": 409,
+                    "text": "[11]",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The renewal model with this k * best explains the observed epi-curve.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The APE metric is valid for all sample sizes, is easily computed for models of 61 arbitrary dimension and is strongly linked to Bayesian model selection (BMS), 62 cross validation and minimum description length (MDL) [12] [13]. Unlike many 63 standard model selection approaches, the APE accounts for parametric com-64 plexity, which describes how functional dependencies among parameters matter 65 [14]. Ignoring parametric complexity is known to promote suboptimal renewal 66 model selection performance [9]. The APE metric deems the model that best 67",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "predicts unseen data from the same underlying process, and not the one that 68 best fits existing data, as optimal and of justified complexity [15].",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Our APE-based approach should therefore pinpoint and characterise only 70 those reproduction number fluctuations that are key to achieving reliable short-",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint term incidence predictions. The performance, speed and computational ease of 72 our approach makes it suitable for real-time forecasting and model selection.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "It could serve as a stand-alone computational tool or be integrated within ex-74 isting real-time frameworks, such as in [4], to provide emerging insights into 75 infectious transmission dynamics, or to assess the prospective efficacy of im-76 plemented interventions (e.g. vaccination or quarantine). Public health policy 77 decisions or preparedness plans based on improperly specified k-windows could 78 be misinformed or overconfident. Our approach will hopefully limit these risks. 79 Results 80 Problem Definition 81 Let the incidence or number of infected cases in an epidemic at present time t, 82 be I t . The incidence curve is a historical record of these case counts from the 83 start of the outbreak [1], and is summarised as I t 1 = {I s : 1 \u2264 s \u2264 t}, with s as a 84 time-indexing variable. For convenience, we assume that incidence is available 85 on a daily scale so that I t 1 is a vector of t daily counts (though in general weeks 86 or months could be used instead). The associated effective reproduction number 87 and total infectiousness of the epidemic are denoted R t and \u039b t , respectively. 88 Here R t is the number of secondary cases that are induced, on average, by 89 a single primary case at t [2], while \u039b t measures the cumulative impact of past 90 cases, from the epidemic origin at s = 1, on the present. The generation time 91 distribution of the epidemic, which describes the elapsed time between a primary 92 and secondary case, controls \u039b t (see Methods). In the problems we consider, I t 1 93 and \u039b t 1 form our data, the generation time distribution is assumed known, and 94 R t 1 or some grouping of this vector are the parameters to be inferred. 95 The renewal model [5] [6] derives from the classic renewal epidemic trans-96 mission equation [26], and defines the Poisson distributed (Poiss) relationship 97 I t \u223c Poiss (R t \u039b t ). This means that P(x) = 1 /x! e \u2212Rt\u039bt (R t \u039b t ) x , with x in-98 dexing possible I t values. This formulation assumes maximum epidemic non-99 stationarity (i.e. that transmission statistics change every time unit) and hence 100 only uses the most recent data (I t , \u039b t ) to infer the current R t . While this max-101 imises the fitting flexibility of the renewal model, it often results in noisy and 102 unreliable estimates that possess many spurious reproduction number changes 103 [6]. Consequently, grouping is employed. This hypothesises that the repro-104 duction number is constant over a k-day window into the past and leads to a 105 piecewise-constant function that separates salient fluctuations (change-points) 106 from negligible ones (the constant segments) [8] [9]. 107 We use R \u03c4 (t) to indicate that the present reproduction number to be inferred 108 is stationary (constant) over the last k points of the incidence curve i.e. the time 109 window \u03c4 (t) := {t, t \u2212 1, . . . , t \u2212 k + 1}. The data used to estimate R \u03c4 (t) is 110 then (I t t\u2212k+1 , \u039b t t\u2212k+1 ). This construction allows us to filter noise and increase 111 estimate reliability but elevates bias. In the Methods we show precisely how 112 grouping achieves this bias-variance trade-off. Choosing k therefore amounts to 113 3 . CC-BY-NC-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint selecting a belief about the scale over which the epidemic statistics are meaning-114 fully varying and can significantly influence our understanding of the dynamics 115 of the outbreak. Thus, it is necessary to find a principled method for balancing 116 k. Ultimately, we want to find a k, denoted k * , that (i) is best supported by 117 the epi-curve and (ii) maximises our confidence in making real-time, short-term 118 predictions that can inform prospective epidemic responses. 119 This is no trivial task as k * would be sensitive to both the specifically ob-120 served stochastic incidence of an epidemic and to how past infections propagate 121 forward in time. We solve (i)-(ii) by applying the accumulated prediction error 122 (APE) metric from information theory [10], which values models on their capac-123 ity to predict unseen data from the generating process instead of their ability to 124 fit existing data [11]. The properties and mathematical definition of the APE 125 355",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "cept I s+1 are included [21]. Comparing this to Eq. (9) (see Methods) we see 356 that APE is a modified CV that is explicitly specialised for non-stationary, 357 accumulating time-series.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "(c) Lack of a 'true model'. It is highly unlikely that the underlying R t is truly 359 described by one of the piecewise-constant functions assumed within renewal 360 models. Unlike many model selection criteria, the APE does not require a true 361 model to exist within the set being evaluated [14]. It is only interested in finding 362 the model that best predicts the data and so emphasises accurate forecasting 363 and data-justified complexity. However, should a true model exist, the APE is 364 statistically consistent i.e. as data accumulate it will select the data-generating 365 model with probability 1 [14]. 366 We tested our metric on both simulated and empirical datasets. We started 367 by examining various distinct, time-varying reproduction number profiles in 368 Fig. 2 , for which no true model existed. By comparing the APE-optimised 369 k * against long and short window sizes, we found that not only does APE 370 meaningfully balance R t estimates to achieve good prediction capacity, but also 371 that getting k wrong could promote strikingly different conclusions from the 372 same dataset. This behaviour held consistent for outbreaks with both small 373 and large numbers of infecteds. 374 We then investigated several step-changing reproduction number examples 375 in Fig. 4 to better expose the underlying mechanics of our approach, and to 376 showcase its performance on epidemics with strong non-stationary transmission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 782,
+                    "end": 788,
+                    "text": "Fig. 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 1296,
+                    "end": 1302,
+                    "text": "Fig. 4",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "These examples featured rapid changes, also known as events in information 378 theory, caused by effective and ineffective countermeasures [4]. In all cases, our 379 metric responded rapidly whilst maintaining reliable incidence predictions in 380 real-time. Such rapid, event-triggered responses (as in Fig. 5) are known to 381 be time-efficient [22]. A key objective of short-term forecasting is the speedy 382 diagnosis of intervention efficacy. Fig. 4 confirmed the practical value of our 383 method towards this objective. 384 While our metric is promising, we caution that much work remains to be 385 done. Standard Poisson renewal models, such as those we have considered here, 386 make several limiting assumptions including that (i) all cases are detected (i.e. 387 there is no significant sampling bias), (ii) the serial interval and generation time 388 distribution coincide and do not change over the epidemic lifetime and (iii) that 389 heterogeneities in transmission within the infected population have negligible 390 effect [8]. Our analysis of H1N1 influenza (1918) and SARS (2003) flagged 391 some of these concerns. Comparing the k * to previously recommended weekly 392 windows led to some interesting revelations.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The APE approach selected a notably shorter window (k * = 2 days) for both 394 datasets. While this produced noisy R s estimates that seemed less reliable than 395 those obtained with weekly windows, the predicted incidence values were central 396 to understanding this discrepancy. The weekly windows were considerably worse 397 at forecasting the observed epi-curve, often systematically biased around the 398 peak of the epidemic and sometimes predicting multi-modal curves that were 399 not reflected by the existing data. From a model selection perspective, the 400 shorter windows are therefore justified. 401 However, the noisy R t estimates are still undesirable. Both datasets are 402 known to potentially contain super-spreading heterogeneities and other biases 403 that may lead to outliers [17] [8]. Moving-average filters were applied in [17] 404 15 . CC-BY-NC-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint to remove these artefacts from the H1N1 data. We used the same technique 405 to regularise both datasets and then re-applied the APE. Results remained 406 consistent, providing evidence for the use of more flexible negative binomial 407 renewal models, which can better handle these biases. In an upcoming study 408 we will adapt the APE for these more general renewal methods. 409 Real-time, model-based epidemic forecasts are quickly becoming an inte-410 gral prognostic for resource allocation and strategic intervention planning [23]. 411 As global infectious disease threats elevate, model-supported predictions, which 412 can inform decision making, have become imperative. However, much is still un-413 known about the fundamentals of epidemic prediction and this uncertainty has 414 inspired some reluctance in public health applications [23]. As a result, recent 415 studies have called for careful evaluation of the predictive capacity of models, 416 and demonstrated the importance of having standard metrics to compare models 417 and qualify their uncertainties [24] [25]. 418 Here we have presented one such metric. Short-term forecasts aid immedi-419 ate decision making and are more actionable than long-term ones (reliability 420 decreases sharply with prediction horizon) [24] [23]. While we focussed on re-421 newal models, the general APE metric of Eq. (9) can select among diverse types 422 of models, facilitating comparative evaluation of their short-term predictive ca-423 pacity and reliability. Its direct use of posterior predictive distributions within 424 an honest, causal framework allows proper and problem-specific inclusion of 425 uncertainty [11]. Common metrics such as the mean absolute error lack this 426 adaptation [24]. Given its information-theoretic links and demonstrated perfor-427 mance we hope that our APE-based method can serve as a rigorous benchmark 428 [9] K. Parag and C. Donnelly, \"Adaptive estimation for epidemic renewal and 561 phylogenetic skyline models,\" BioRxiv, 2019.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The time-series of infected cases (infecteds) observed over the course of an in-are provided in the Methods. The APE uses the window of data preceding time 126 s, (I s s\u2212k+1 , \u039b s s\u2212k+1 ), to predict the incidence at s + 1 and assigns a log-score to 127 this prediction. This procedure is repeated over s \u2264 t and for possible k-values. 128 The k achieving the minimum cumulated log-score is deemed optimal. Fig. 1 129 illustrates the APE for selecting between two windows k 1 and k 2 . Figure 1 : Window length selection using APE. An observed incidence curve (blue dots) is sequentially and causally predicted over time s \u2264 t, using effective reproduction number estimates based on two possible windows lengths of k 1 and k 2 (green shaded). The true reproduction number (R s ) is drawn in dashed black (inset). Its estimates for each window length areR \u03c41(s) (dark grey) andR \u03c42(s) (light grey). Large windows (k 1 ) smooth over fluctuations. Small ones (k 2 ) recover these changes but are noisy. The APE assesses k 1 and k 2 via the log-loss of their sequential predictions (red error bars shown for predictions at t 1 and t 2 under k 1 and k 2 respectively). The k-window with the smaller APE is better supported by this incidence curve. The algorithm parameters are defined in Results.",
+            "cite_spans": [
+                {
+                    "start": 156,
+                    "end": 159,
+                    "text": "126",
+                    "ref_id": null
+                },
+                {
+                    "start": 336,
+                    "end": 339,
+                    "text": "128",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 407,
+                    "end": 413,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 486,
+                    "end": 494,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "17"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "4"
+        },
+        {
+            "text": "To successfully adapt APE, we require the posterior predictive incidence dis-132 tribution of the renewal model, which at time s is P(x | I s s\u2212k+1 ) (see Eq. (9)), 133 with x indexing the space of possible one-step-ahead predictions at s + 1, and",
+            "cite_spans": [
+                {
+                    "start": 165,
+                    "end": 168,
+                    "text": "133",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "4"
+        },
+        {
+            "text": ". We assume a gamma conjugate prior distribution on R \u03c4 (s) as in 135 [8] . For some hyperparameters a and c this is R \u03c4 (s) \u223c Gam (a, 1 /c), with Gam 136 as a standard shape-scale parametrised gamma distribution. The posterior dis-137 tribution of R \u03c4 (s) is P(R \u03c4 (s) | I s s\u2212k+1 ) and is described in Eq. (1) [8] . 138 R \u03c4 (s) | I t s\u2212k+1 \u223c Gam a + i \u03c4 (s) ,",
+            "cite_spans": [
+                {
+                    "start": 70,
+                    "end": 73,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 312,
+                    "end": 315,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 318,
+                    "end": 321,
+                    "text": "138",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "4"
+        },
+        {
+            "text": "139 140",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "4"
+        },
+        {
+            "text": "For convenience we define \u03b1 \u03c4 (s) := a + i \u03c4 (s) , \u03b2 \u03c4 (s) := 1 /c+\u03bb \u03c4 (s) with i \u03c4 (s) and 141 \u03bb \u03c4 (s) are the sum of incidence (I s ) and total infectiousness (\u039b s ) over the window 142 \u03c4 (s) (see Methods). If a variable y \u223c Gam(\u03b1, \u03b2) then P(y) = y \u03b1\u22121 e \u2212 y /\u03b2 /\u03b2 \u03b1 \u0393(\u03b1) 143 and E[y] = \u03b1\u03b2. The posterior mean estimate is thereforeR \u03c4 (t) = \u03b1 \u03c4 (t) \u03b2 \u03c4 (t) .",
+            "cite_spans": [
+                {
+                    "start": 274,
+                    "end": 277,
+                    "text": "143",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "4"
+        },
+        {
+            "text": "Applying Bayes formula and marginalising yields the posterior predictive dis-145 tribution of the number of infecteds at s + 1 as in Eq.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "144"
+        },
+        {
+            "text": "(2).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "144"
+        },
+        {
+            "text": "In Eq.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "144"
+        },
+        {
+            "text": "(2) we used the conditional independence of future incidence data from 149 the past epi-curve, given the reproduction number to reduce P x | I s s\u2212k+1 , R \u03c4 (s) 150 to P x | R \u03c4 (s) , which expresses the renewal model relation x \u223c Poiss(R \u03c4 (s) \u039b s+1 ).",
+            "cite_spans": [
+                {
+                    "start": 161,
+                    "end": 164,
+                    "text": "150",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "144"
+        },
+        {
+            "text": "As \u039b s+1 only depends on I s s\u2212k+1 (see Methods) there are no unknowns. Solving 152 using this and Eq. (1) gives",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "151"
+        },
+        {
+            "text": "Since \u03b8 z\u22121 e \u2212y\u03b8 d\u03b8 \u2261 \u0393(z) /y z the integral in \u03c6 1 simplifies to \u0393(x+\u03b1 \u03c4 (s) ) (\u039bs+1+ 1 /\u03b2 \u03c4 (s) ) x+\u03b1 \u03c4 (s) .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "155"
+        },
+        {
+            "text": "Some algebra then reveals the negative binomial (NB) distribution of Eq. (4). ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "156"
+        },
+        {
+            "text": "\u03bb \u03c4 (s) +\u039bs+1 . These relations explicate how the current 165 estimate of R \u03c4 (s) influences our ability to predict upcoming incidence points. 166 Setting s = t in all the above expressions will give the prediction statistics for 167 the next (unobserved) time-point beyond the present. 168 Importantly, Eq. (4) controls the APE metric through the shape of its dis-169 tribution. We explicitly compute this to derive Eq. (5), with I s+1 as the (true) 170 observed incidence at time s + 1, which is evaluated within the context of the 171 predictive space of x, and B s+1 := log Is+1+\u03b1 \u03c4 (s) \u22121 Is+1 as a binomial term.",
+            "cite_spans": [
+                {
+                    "start": 143,
+                    "end": 146,
+                    "text": "166",
+                    "ref_id": null
+                },
+                {
+                    "start": 287,
+                    "end": 290,
+                    "text": "168",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "156"
+        },
+        {
+            "text": "Eq. (5) is easy to evaluate using the in-built NB routines of many software.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "156"
+        },
+        {
+            "text": "When computing directly, the most difficult term is B s+1 when I s+1 and \u03b1 \u03c4 (s) 176 are large. In these cases Stirling approximations may be applied. The renewal 177 model APE metric offers a simple means of finding k * := arg min k APE k , the 178 window length that optimises one-step-ahead predictive performance.",
+            "cite_spans": [
+                {
+                    "start": 81,
+                    "end": 84,
+                    "text": "176",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "175"
+        },
+        {
+            "text": "Optimal Window Selection 180 We apply our APE metric to select k * for various epidemic examples, which 181 examine reproduction number profiles for large outbreaks (Fig. 2a-Fig. 2c ), 182 small ones (which are more difficult to estimate: Fig. 2d-Fig. 2e) , and a random 183 one (Fig. 2f) . We simulated epidemics for t = 200 days using a generation time 184 distribution analogous to that used for Ebola virus disease predictions in [16] . 185 We investigated a window search space of 2 \u2264 k \u2264 t /2 and computed the APE at 186 each k, over the epidemic duration (1 \u2264 s \u2264 t). Reproduction number estimates, 187R \u03c4 (s) , and incidence predictions, x | I s s\u2212k+1 , are presented on the left and right 188 panels in Fig. 2 . Predictions over the first s < k times use all s data points. 189 We find that the APE metric balancesR \u03c4 (s) estimate accuracy against one- When k is unjustifiably large not only do we observe systematic prediction 201 and estimation errors, but alarmingly, we tend to be overconfident in them.",
+            "cite_spans": [
+                {
+                    "start": 25,
+                    "end": 28,
+                    "text": "180",
+                    "ref_id": null
+                },
+                {
+                    "start": 185,
+                    "end": 188,
+                    "text": "182",
+                    "ref_id": null
+                },
+                {
+                    "start": 434,
+                    "end": 438,
+                    "text": "[16]",
+                    "ref_id": null
+                },
+                {
+                    "start": 441,
+                    "end": 444,
+                    "text": "185",
+                    "ref_id": null
+                },
+                {
+                    "start": 783,
+                    "end": 786,
+                    "text": "189",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 165,
+                    "end": 181,
+                    "text": "(Fig. 2a-Fig. 2c",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 239,
+                    "end": 255,
+                    "text": "Fig. 2d-Fig. 2e)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 279,
+                    "end": 288,
+                    "text": "(Fig. 2f)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 712,
+                    "end": 718,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "179"
+        },
+        {
+            "text": "When k is too small, we infer rapidly and randomly fluctuatingR \u03c4 (s) values, 203 which sometimes can deceptively underlie reasonably looking incidence predic-204 tions. Consequently, optimal k-selection is integral for trustworthy inference 205 6 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint Figure 3 : APE prediction accuracy. We compare the APE metric (solid blue, left y axis) to the percentage of true incidence values, I s+1 that fall outside the 95% prediction intervals of x | I s s\u2212k+1 (dotted red, right y axis) over the window search space k. The dashed line is k * and panels correspond to those of Fig. 2. and prediction. Observe that small k, which implies a more complex renewal 206 model (i.e. there are more parameters to be inferred), does not generally result 207 in better causally predictive one-step-ahead incidence predictions. Had we in-208 stead naively picked the k that best fits the existing epi-curve, then the smallest 209 k would always be favoured (overfitting) [9]. 210 We emphasize and validate the predictive performance of APE in Fig. 3 . The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint tify our results over 10 3 simulated epi-curves with t = 150 days. We focus on 228 step-changes in R s and examine how the successively optimal window length, 229 k * (s), computed with data up to time s, responds. If k * (s) is sensitive to these 230 changes then it is likely a dependable means of diagnosing control efficacy. Note 231 that until now, the optimal window length was k * = k * (t). 232 We consider four possible models: (a) an epidemic that is increasing and [19] and apply the APE metric over 2 \u2264 k \u2264 t /2 with t as the last available 266 incidence time point. We compare the one-step-ahead I s+1 prediction fidelity 267 and the R \u03c4 (s) estimation accuracy obtained from the renewal model under the 268 APE-selected k * to that from the model used in [8] , which recommended weekly 269 windows (i.e. k = 7) after visually examining several window lengths. Our main 270 results are given in Fig. 6 and Fig. 7 . We benchmarked our estimates against The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint Figure 4 : APE sensitivity to real-time transmission changes. We simulate 10 3 independent incidence curves under renewal models with reproduction numbers indicating (a) increasing, (b) controlled, (c) recovering and (d) cumulatively controlled epidemics. In each panel the top graphs give the true (green) and predicted (cyan) incidence ranges curves, the middle ones provide the estimate of R s under the final k * (t) and the bottom graphs illustrate how the successive k * (s) choices of the APE metric vary across time. We find that k * (s) responds rapidly to significant changes in the shape of the incidence curves. This makes it sensitive to important fluctuations in R s , especially those that force R s < 1. The APE metric is suitable for real-time applications and particularly useful for diagnosing the efficacy of control measures.",
+            "cite_spans": [
+                {
+                    "start": 1318,
+                    "end": 1321,
+                    "text": "210",
+                    "ref_id": null
+                },
+                {
+                    "start": 1942,
+                    "end": 1945,
+                    "text": "232",
+                    "ref_id": null
+                },
+                {
+                    "start": 2019,
+                    "end": 2023,
+                    "text": "[19]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 2312,
+                    "end": 2315,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 612,
+                    "end": 620,
+                    "text": "Figure 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 930,
+                    "end": 937,
+                    "text": "Fig. 2.",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1385,
+                    "end": 1391,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 2451,
+                    "end": 2468,
+                    "text": "Fig. 6 and Fig. 7",
+                    "ref_id": null
+                },
+                {
+                    "start": 2657,
+                    "end": 2665,
+                    "text": "Figure 4",
+                    "ref_id": null
+                }
+            ],
+            "section": "202"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint Fig. 6 . Between 8 \u2212 10% of incidence data points are better covered by using 277 k * over k = 7. This improvement is apparent in the right graphs of (a) and 278 (b) in Fig. 7 , where the k = 7 case produces stiffer incidence predictions that 279 cannot properly reproduce the observed epi-curve. Weekly windows misjudge 280 the SARS epidemic peak, predict a multimodal SARS incidence curve that is 281 not reflected by the actual data and systematically underestimate influenza case 282 counts when it matters most (i.e. around the high incidence phase).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 215,
+                    "end": 221,
+                    "text": "Fig. 6",
+                    "ref_id": null
+                },
+                {
+                    "start": 384,
+                    "end": 390,
+                    "text": "Fig. 7",
+                    "ref_id": null
+                }
+            ],
+            "section": "10"
+        },
+        {
+            "text": "However, the smaller k * window results in noisier R \u03c4 (s) estimates (left graphs 284 of (a) and (b) in Fig. 7) , which may be questionable. These rapidly fluctuat- The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint Figure 6 : Empirical prediction accuracy. We compare the APE metric (solid blue, left y axis) to the percentage of true incidence values, I s+1 , which fall outside the 95% prediction intervals of x | I s s\u2212k+1 (dotted red, right y axis) across the window search space k. The dashed line gives k * (black) and k = 7 (grey). The top graph presents results for the influenza 1918 dataset, while the bottom one is for SARS 2003 data. We find that heuristic weekly windows lead to appreciably larger forecasting error than the APE selections.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 104,
+                    "end": 111,
+                    "text": "Fig. 7)",
+                    "ref_id": null
+                },
+                {
+                    "start": 314,
+                    "end": 322,
+                    "text": "Figure 6",
+                    "ref_id": null
+                }
+            ],
+            "section": "283"
+        },
+        {
+            "text": "We might suspect that certain artefacts of the data could resolve this issue, 295 rendering a more believable combination of estimated reproduction number and 296 predicted incidence. Particularly, the influenza data seems considerably more 297 affected by the smaller look-back windows. These k * = 2 windows are needed 298 to help predictions get close to the peak incidence values of the data. However, 299 these peaks seem reminiscent of outliers and in the original analysis of [17] they 300 were attributed to possible recollection bias in patients that were questioned.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "283"
+        },
+        {
+            "text": "Removing these biases might be expected to lead to smoother APE-justified 302 reproduction numbers. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint Figure 7 : Selection for empirical datasets. Left graphs of each panel com-pareR \u03c4 (s) estimates (cyan with 95% confidence intervals) at APE window length k * to those when k = 7 (weekly sliding windows). Right graphs give corresponding one-step-ahead predicted incidence curves (cyan with 95% prediction intervals). Dashed lines are the R = 1 threshold (left) and dots are the true incidence counts (right). The panels examine epi-data from outbreaks of (a) pandemic influenza (1918) and (b) SARS (2003), which are available in EpiEstim [8] . Panels (c) and (d) repeat (a) and (b) respectively, but smooth outliers in the incidence data using 5-day moving averages as in [17] . Interestingly, while k * leads to less believable reproduction number fluctuations, these are justified by the available data in both smoothed and un-smoothed cases. This hints that a Poisson renewal model may not be the most appropriate for these data. The longer weekly windows, which are heuristic recommendations of previous analyses [8] , miss important characteristics of the epi-curves.",
+            "cite_spans": [
+                {
+                    "start": 787,
+                    "end": 790,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 921,
+                    "end": 925,
+                    "text": "[17]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1266,
+                    "end": 1269,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 249,
+                    "end": 257,
+                    "text": "Figure 7",
+                    "ref_id": null
+                }
+            ],
+            "section": "301"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint variance equality that may limit the ability to properly predict incidence data to available epidemic data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "13"
+        },
+        {
+            "text": "Our approach was founded on deriving an analytical expression for the re- . Grouping is therefore employed [8] .",
+            "cite_spans": [
+                {
+                    "start": 107,
+                    "end": 110,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "334"
+        },
+        {
+            "text": "This assumes that the reproduction number, denoted R \u03c4 (t) , is constant over 452 the past k time units [8] , and leads to a piecewise-constant function that classifies 453 between meaningful and negligible reproduction number changes. The grouped",
+            "cite_spans": [
+                {
+                    "start": 104,
+                    "end": 107,
+                    "text": "[8]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "451"
+        },
+        {
+            "text": ", with parameter-independent prediction error up to the present t, which we term k * , gives the renewal model 496 that best predicts the unseen datum at t + 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "451"
+        },
+        {
+            "text": "We generally do not use\u00ce s+1 directly, but instead obtain its full predictive The optimal window, k * := arg min k APE k , is easy to compute provided the 503 predictive distribution in Eq. (9) is calculable. Fig. 1 as tailored to specific problems, both metrics converge when errors are normally 510 distributed [11] . Other score functions can be used with these one-step-ahead 511 predictions when application-specific insights are available [28] .",
+            "cite_spans": [
+                {
+                    "start": 313,
+                    "end": 317,
+                    "text": "[11]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 445,
+                    "end": 449,
+                    "text": "[28]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 209,
+                    "end": 215,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "497"
+        },
+        {
+            "text": "The APE metric has formal links to MDL and Bayesian model selection However, the APE is simpler and more transparent, requiring no difficult 521 integral evaluations [9] . Consequently, the APE not only accounts for parametric 522 complexity (implicitly), but also applies to models of arbitrary complexity [11] .",
+            "cite_spans": [
+                {
+                    "start": 166,
+                    "end": 169,
+                    "text": "[9]",
+                    "ref_id": null
+                },
+                {
+                    "start": 307,
+                    "end": 311,
+                    "text": "[11]",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": "512"
+        },
+        {
+            "text": "The drawbacks of APE are that it requires the data to be ordered in time, and 524 being data-driven, its computational complexity increases linearly in both the ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "523"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Different epidemic curves for severe acute res-540 piratory syndrome reveal similar impacts of control measures",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Teunis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Am. J. Epi-541 demiol",
+            "volume": "160",
+            "issn": "6",
+            "pages": "509--525",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Epidemiology of transmissible 543 diseases after elimination",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "De Serres",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Gay",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Farrington",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Am. J. Epidemiol",
+            "volume": "151",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Ebola virus disease in West Africa -the 545 first 9 months of the epidemic and forward projections",
+            "authors": [],
+            "year": 2014,
+            "venue": "N. Engl. J. Med",
+            "volume": "546",
+            "issn": "16",
+            "pages": "1481--95",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Estimating in real time the 548 efficacy of measures to control emerging communicable diseases",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Boelle",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Thomas",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Am. J",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Estimating individual and household reproduction numbers in 551 an emerging epidemic",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "PLoS One",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Influenza transmission in 553 households during the 1918 pandemic",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Cummings",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Klinkenberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Am. J. Epidemiol",
+            "volume": "174",
+            "issn": "5",
+            "pages": "505--519",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Countering the Zika epidemic 556 in Latin America",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Cucunba",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Dorigatti",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Science",
+            "volume": "353",
+            "issn": "6297",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "A new framework and software 558 to estimate time-varying reproduction numbers during epidemics",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Am. J",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Order estimation by accumulated prediction errors",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rissanen",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "J. Appl",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Accumulative prediction 565 error and the selection of time series models",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Wagenmakers",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Grunwald",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Steyvers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "J. Math. Psychol",
+            "volume": "50",
+            "issn": "",
+            "pages": "149--166",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Bayes factors",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Kass",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Raftery",
+                    "suffix": ""
+                }
+            ],
+            "year": 1995,
+            "venue": "J. Amer. Stat. Assoc",
+            "volume": "90",
+            "issn": "430",
+            "pages": "773--95",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Fisher information and stochastic complexity",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rissanen",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "IEEE Trans",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "The Minimum Description Length Principle",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Grunwald",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "572",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Present position and potential developments: Some personal 574 views. statistical theory. the prequential approach",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Dawid",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "J. R. Stat. Soc A",
+            "volume": "575",
+            "issn": "",
+            "pages": "278--92",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "A simple approach to measure 577 transmissibility and forecast incidence",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Nouvellet",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Garske",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemics",
+            "volume": "22",
+            "issn": "",
+            "pages": "29--35",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Influenza in Maryland: preliminary statis-580 tics of certain localities",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Frost",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Sydenstricker",
+                    "suffix": ""
+                }
+            ],
+            "year": 1919,
+            "venue": "Public Health Rep",
+            "volume": "34",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "The epidemiology of severe acute 582 respiratory syndrome in the 2003 Hong Kong epidemic: An analysis of all 583 1755 patients",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Hedley",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Ann. Intern. Med",
+            "volume": "141",
+            "issn": "9",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Improved inference of 585 time-varying reproduction numbers during infectious disease outbreaks",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Thompson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Stockwin",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Van Gaalen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "586 Epidemics",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Robust design for coalescent model inference",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Evaluation and comparison of compu-590 tational models",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Myung",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pitt",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Methods Enzymol",
+            "volume": "454",
+            "issn": "",
+            "pages": "287--304",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "On signalling and estimation limits for molecular birth-592 processes",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "J. Theor. Biol",
+            "volume": "480",
+            "issn": "",
+            "pages": "262--73",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "A collaborative multiyear, multimodel 600 assessment of seasonal influenza forecasting in the United States",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Viboud",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                },
+                {
+                    "first": "; N",
+                    "middle": [],
+                    "last": "Reich",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Brooks",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Fox",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "PNAS",
+            "volume": "601",
+            "issn": "8",
+            "pages": "3146--54",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "How generation intervals shape the relation-603 ship between growth rates and reproductive numbers",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Proc. R. Soc. B",
+            "volume": "604",
+            "issn": "",
+            "pages": "599--604",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Theory of Point Estimation",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Lehmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Casella",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "",
+            "volume": "606",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Prequential data analysis",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Dawid",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "Current Issues in Statistical In-608 ference: Essays in Honor of D. Basu",
+            "volume": "",
+            "issn": "",
+            "pages": "113--139",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Model selection by normalized max-611 imum likelihood",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Myung",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Navarro",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pitt",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "J. Math. Psychol",
+            "volume": "50",
+            "issn": "",
+            "pages": "167--79",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Model selection and the principle of minimum 613 description length",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hansen",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "J. Amer. Stat. Assoc",
+            "volume": "96",
+            "issn": "454",
+            "pages": "746--74",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "P(I t 1 + 1 | D \u2212 k 1 ) \u2212 log P(I t 2 + 1 | D \u2212 k 2 ) APE k = \u2211 s\u2264t \u2212 log P(I s | D \u2212 k ) I s+ 1 | D \u2212 k \u223cNB(\u03b1 \u03c4(s) , p \u03c4(s) ) R \u03c4(s) | D \u2212 k \u223cGam(\u03b1 \u03c4(s) , \u03b2 \u03c4(s) \u03c4 j (s) = {s, . . . , s \u2212 k j + 1}",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "step-ahead predictive coverage (i.e. the proportion of time that the true I s+1 lies 191 within the 95% prediction intervals of x | I s s\u2212k+1 ) for a range of R s dynamics 192 (top graphs of Fig. 2). This dual optimisation is of central interest to this 193 work. Moreover, vastly different I s+1 predictions andR \u03c4 (s) estimates can result 194 when k-misspecification occurs (middle and bottom graphs in Fig. 2). This can 195 be especially misleading when attempting to identify the significant changes in 196 epidemic transmissibility and can support substantially different beliefs about 197 the progression of a pathogen. Estimation and prediction performance also 198 depend on the actual incidence at any time, with small I s values necessitating 199 wider confidence intervals inR \u03c4 (s) at any k (see Eq. (8) of Methods).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Selection under time-varying reproduction numbers. Left graphs of each panel compareR \u03c4 (s) estimates (cyan with 95% confidence intervals) at the APE window length k * to those when k is set to the upper or lower limits of its search space. Right graphs give corresponding one-step-ahead predicted incidence curves (cyan with 95% prediction intervals). Dashed lines are the true R s numbers (left) and dots are the true I s counts (right). The panels examine (a) stable (constant), (b) steeply changing, (c) exponentially rising and decaying, (d) periodically varying, (e) piecewise falling and (f) random (filtered white noise) changes in R s .",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "This shows, for all simulated examples from Fig. 2, that minimising the APE 212 also approximately minimises the percentage of the time s \u2264 t that true inci-213 dence values fall outside the 95% prediction intervals of Eq. (4). This validates 214the APE approach and evidences its proficiency at optimising for short-term 215 forecasting accuracy in real time. We recommend using APE to define k * for 216 an existing epi-curve up to the present t. Applying Eq. (4) with this k * should 217 then best predict the number of cases on the (t+1) th day. This entire procedure 218 should be repeated for later forecasts, with k * being progressively updated. The 219 behaviour of k * as data accumulate is investigated in the next section.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "goal of real-time epidemic forecasting is the rapid and reliable diagno-222 sis or verification of the efficacy of implemented control measures [4]. Knowing 223 whether an intervention is working or not can inform preparedness and resource 224 allocation. Estimating whether R s < 1 or R s \u2265 1 is one simple means of assess-225 ing efficacy. Effective control measures lead to the former. Here we investigate 226 how the APE metric responds to swift swings in reproduction number and quan-",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "233 uncontrolled, (b) an outbreak that is rapidly controlled, (c) an epidemic with 234 ineffective control that features a late-stage increase in transmission and (d) a 235 two-step control scheme in which the first step was only partially effective. Our 236 results are in Fig. 4 with top graphs overlaying true and predicted incidence 237 across time and middle ones showing the bestR \u03c4 (s) mean estimates under 238 the final k * (t). Here we see that the APE-selected model is able to properly 239 distinguish significant changes from stable periods in all scenarios. Model (a) 240 is the most difficult to infer as the increasing reproduction number does not 241 visibly change the shape of the incidence curve. 242 The bottom graphs of Fig. 4 show k * (s) sequentially over time. Here we 243 observe how the APE metric uses data to justify its choices. As data accumulate 244 under a stable reproduction number APE increases k * . This makes sense as 245 there is increasing support for stationary epidemic behaviour. This is especially 246 obvious in Fig. 4b. However, on facing a step-change the APE immediately 247 responds by drastically reducing k * (s) -both in scenarios where R s is changing 248 from above to below 1 and vice versa. This reduction is less visible in Fig. 4a 249 because the observed incidence curve is not as dramatically altered as in Fig. 4b-250 Fig. 4d. This rapid response recommends the APE as a suitable and sensitive 251 diagnostic of control efficacy. 252 We illustrate the impact of change-times on the actual APE values at dif-253 ferent window lengths in Fig. 5. There we find that when the epi-curve is 254 reasonably stable there is not much difference between the performance at var-255 ious window lengths and so the APE curves are neighbouring. However, when 256 a non-stationary change occurs there is a clear unravelling of the curves and 257 potentially large gains to be made by optimising k. Failing to properly select k 258 here can potentially mislead the characterisation of intervention efficacy. This 259 increases the impetus for formal k-selection metrics such as the APE.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "test our APE approach on two well-studied empirical epidemic datasets: (a) 262 pandemic H1N1 influenza in Baltimore from 1918 [17] and (b) SARS in Hong 263 Kong from 2003[18]. For each epidemic we extract the incidence curve, total 264 infectiousness and generation time distributions from the EpiEstim R package 265[8]",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "APE predictive scores with time. The successive (in time) APE scores for each window length, k, are shown in grey. The scores for the smallest and largest k are in cyan and magenta respectively. Graphs correspond to models (a)-(d) in Fig. 4. Dashed lines are the change-times of each model. In (a) the change-time does not significantly affect the epi-curve shape and so the APE scores are close together. In (b)-(d) the change-times notably alter the epi-curve shape so that window length choice becomes critical to performance. those directly provided by EpiEstim to confirm our implementation and restrict 272 k > 1 to avoid model identifiability issues [9] [20]. 273 Intriguingly, we find k * = min k = 2 for both scenarios. This yields apprecia-274 bly improved prediction fidelity (i.e. the coverage of observed incidence values 275 by the 95% prediction intervals), relative to the weekly window choice, as seen 276 in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "285 ing reproduction numbers likely motivated the adoption of weekly windows in 286 previous analyses. While the APE-based estimates are indeed more uncertain 287 (a consequence of shorter windows), we argue that they are formally justified 288 by the available data, especially given the weaker predictive capacity of weekly 289 windows. While the noisier R \u03c4 (s) estimates do not mislead our understanding of 290 the efficacy of implemented control measures (it is still clear that the influenza 291 epidemic is only partially under control between 40 \u2264 s \u2264 65 days before recov-292 ering, while the SARS outbreak is largely prevented from increasing from s >",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "However, in (c) and (d) ofFig. 7we find that applying simple 5-day moving 304 averages, as in[17], to ameliorate outliers still does not support a k * > 2 in 305 either scenario, though smoother estimates do result. Weekly windows are still 306 too inflexible to properly predict this averaged incidence. While other signal 307 processing techniques, such as using autocorrelated smoothing prior distribu-308 tions instead of independent gamma ones over the reproduction numbers, could 309 be applied to test if k * > 2 is justifiable we consider this beyond the scope of 310 this work and somewhat biologically unmotivated. Instead we conjecture that 311 these results support the interesting alternative hypothesis that the epi-curve 312 data are not Poisson distributed.313It is likely that influenza and SARS epi-curves could be better modelled with 314 a less restrictive renewal model. The Poisson renewal model forces a mean-",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "316 sequentially. This limit would then have to be circumvented by APE through the 317 use of smaller sized windows. Using a negative binomial renewal model, which implements the relationship I t \u223c NB \u03ba, \u039btRt \u039btRt+\u03ba , with \u03ba as a noise parameter, 319 would relax this equality. The development of APE-based metrics for these 320 generalised models will form a subject of upcoming work. The \u03ba parameter 321 should better accommodate transmission heterogeneities and super-spreading 322 events, which are known to affect both influenza and SARS datasets [18] [6]. 323 Discussion 324 Inferring the dynamics of the effective reproduction number, R t , in real-time 325 is crucial for forecasting transmissibility and the efficacy of implemented con-326 trol actions [4]. Renewal models provide a popular platform for prospectively 327 estimating these reproduction numbers, which can then be used to generate 328 incidence projections [16] [6] [3]. However, the dependence of these estimates 329 and predictions on the look-back window size, k, which determines the renewal 330 model dimensionality, has never been formally investigated. Previous methods 331 for selecting k have generally been heuristic or ad-hoc [8]. Here we have defined 332 and validated a new, rigorous, information-theoretic approach for optimising k 333",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "newal model posterior predictive distribution. Integrating this into the general 336 APE metric of [10] led to Eq. (5), a simple, easily-computed yet theoretically 337 justified method for k-selection that balances estimation fidelity with prediction 338 accuracy. This APE approach not only accounts for parametric complexity and 339 is formally linked to MDL and BMS [14], but it also has several desirable proper-340 ties that render it suitable for handling the eccentricities of real-time infectious 341 disease applications, as follows: 342 (a) Small outbreak sample size. Early-on in an epidemic data are scarce 343and uncertainty is large. The APE approach is valid and computable at all 344 sample sizes at which the renewal model is identifiable and hence is applicable 345 to emerging outbreaks[11]. Its emphasis on using the full predictive distribution 346 and its Bayesian formulation allow it to properly account for large uncertainties 347 and to handle different (prior) hypotheses about R t , as the epidemic progresses 348 from small to large data regimes.349 (b) Non-stationary transmission. Incidence time series are not independent 350 and identically (iid) distributed [6]. Instead they are sequential, autocorre-351 lated and possess non-stationary (time-varying) statistics. The APE formally 352 accounts for these properties. Leave-one-out cross validation (CV) is a pop-353 ular model selection approach that is related to APE. It can be defined as log P(I s+1 | I c s+1 ), where I c s+1 means that all incidence points ex-for model-based forecasts. an incidence curve over times 1 \u2264 s \u2264 t for an epidemic with effec-432 tive reproduction number and total infectiousness at t of R t and \u039b t . While R t 433 describes the branching of the epidemic (the number of secondary cases orig-434 inating from a primary one), \u039b t := t\u22121 s=1 I t\u2212s w s , controls how infected cases 435 propagate, via the generation time distribution, which is defined by w s . Here 436 w s is the probability that a primary case takes between s \u2212 1 and s days to 437 generate a secondary case [5]. This distribution is intrinsic to a disease and 438 b s=1 w s = 1 for some memory time b. We make the common assumptions that 439 the generation time distribution is known and does not change with time [8]. 440 The quantities R t and \u039b t therefore completely describe the transmissibility 441 of an epidemic, an idea formalised by the renewal model [5]. Generally R t 442 is unknown and must be inferred from (I t 1 , \u039b t 1 ). Its log-likelihood under the 443 standard renewal model, l (1) t = log P(I t , \u039b t | R t ) follows as in Eq. (6) [6].",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "and hence only uses (I t , \u039b t ) to infer R t . While this construction max-449 imises model flexibility, the resulting estimates can be noisy and over-fitting is 450 likely [6] [9]",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "term \u03b6 \u03c4 (t) = s\u2208\u03c4 (t) \u2212 log I s ! + I s log \u039b s and grouped sums i \u03c4 (t) := s\u2208\u03c4 (t) I s 456 and \u03bb \u03c4 (t) := s\u2208\u03c4 (t) \u039b s follows in Eq. (7). At k = 1 we recover Eq. (6).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "+ 1 (i.e. one-step-ahead of s) using the subset of data preceding it [15]. This 491 means that we causally predict I s+1 at every s given a k-window back in time 492 of \u03c4 (s) = {s, s \u2212 1, . . . , s \u2212 k + 1}. This window is truncated if s < k so that 493 min \u03c4 (s) \u2265 1. We then evaluate our prediction (e.g. the posterior mean\u00ce s+1 ) 494 against the observed I s+1 . The k minimising the cumulative one-step-ahead 495",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "498 distribution P(x | I s s\u2212k+1 ), with x as some value of the predicted incidence at 499 time s + 1. Eq. (9) then defines the APE as a cumulative log-score function.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "BMS). BMS also includes parametric complexity and is asymptotically equiv-514 alent to the MDL when Jeffreys prior is used within the BMS [13] [14]. In-515 terestingly, because any joint distribution can be decomposed as \u2212 log P (log P I s+1 | I s s\u2212k+1 , APE, under certain reg-517 ularity conditions, is equivalent to both of these measures [29]. The latter 518 equality is from the finite memory of the renewal model, which depicts the 519 non-stationary nature of epidemics.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF22": {
+            "text": "number of models to be assessed and the size of t [30]. Overall, APE provides 526 a simple and optimal solution to window selection, which surprisingly has not 527 penetrated the epidemiological literature.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF24": {
+            "text": "and performed research and wrote the initial draft of the paper.537CAD supervised the research. All authors edited and approved the final draft.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF1": {
+            "text": "measures the inverse of estimate variance) [27]. The MLE,R \u03c4 (t) , is the solution to \u2202l (k)the FI for the square root of R \u03c4 (t) , I(2 R \u03c4 (t) ), as it is known to have optimal properties [20]. Eq. (8) then follows[9].",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Comparing Eq.(8) to equivalent expressions when k = 1 reveals the impact of grouping. This givesR \u03c4 (t) = s\u2208\u03c4 (t) ( \u039bs /\u03bb \u03c4 (t) )R s and I(2 R \u03c4 (t) ) = \u221a R s ). The grouped MLE is hence a weighted moving average of the ungrouped MLEs, which explains why noise is reduced. The grouped FI is a linear summation of the ungrouped FIs, implying that estimate precision also increases with grouping. Unfortunately, these advantages come at the expense of elevated tracking bias. At the extreme of k = t, for example,R \u03c4 (t) is a stable 475 t-point average, that can only be gradually perturbed by new incidence data.Thus, we trade the sensitivity to rapid R s changes for smaller estimate variances 477[8]. The need to formally mediate this trade motivated the APE metric.Prospective Model SelectionIn[20] a minimum description length (MDL) solution was proposed for retrospectively selecting a different but related k that defines the non-overlapping window size optimising historical reproduction number estimates. This method, by exploiting an often neglected aspect of model complexity, known as parametric complexity [14], was able to outperform standard measures such as Akaike 484 (AIC) and Bayesian information criteria (BIC). While this MDL technique is not directly applicable here, as prospective performance requires a different optimisation [15], we heed the lesson about accounting for parametric complexity.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/835181 doi: bioRxiv preprint cally, this is implemented by sequentially predicting the data observed at time",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "summarises and illustrates the APE approach. By using the full posterior predictive distribution the APE appropriately accounts for predictive uncertainty and is specialised to the problem of interest. A point-estimate alternative to APE, known as predictive mean squared error (PMSE), can be used when this distribution is not available 508[10] and is defined as PMSE k = 1 /t s=0 (I s+1 \u2212\u00ce s+1 ) 2 . While the PMSE is not",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

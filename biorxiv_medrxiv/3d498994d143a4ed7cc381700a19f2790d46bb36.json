@@ -1,0 +1,1709 @@
+{
+    "paper_id": "3d498994d143a4ed7cc381700a19f2790d46bb36",
+    "metadata": {
+        "title": "Vorpal: A novel RNA virus feature- 1 extraction algorithm demonstrated 2 through interpretable genotype-to- 3 phenotype linear models 4 5",
+        "authors": [
+            {
+                "first": "Phillip",
+                "middle": [],
+                "last": "Davis",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "John",
+                "middle": [],
+                "last": "Bagnoli",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "David",
+                "middle": [],
+                "last": "Yarmosh",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Alan",
+                "middle": [],
+                "last": "Shteyman",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Lance",
+                "middle": [],
+                "last": "Presser",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Sharon",
+                "middle": [],
+                "last": "",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "",
+                "middle": [],
+                "last": "Altmann",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Shelton",
+                "middle": [],
+                "last": "Bradrick",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Joseph",
+                "middle": [
+                    "A"
+                ],
+                "last": "Russell",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "In the analysis of genomic sequence data, so-called \"alignment free\" approaches are often 12 selected for their relative speed compared to alignment-based approaches, especially in the 13 application of distance comparisons and taxonomic classification 1,2,3,4 . These methods are 14 typically reliant on excising K-length substrings of the input sequence, called K-mers 5 . In 15 the context of machine learning, K-mer based feature vectors have been used in 16 applications ranging from amplicon sequencing classification to predictive modeling for 17 antimicrobial resistance genes 6,7,8 . This can be seen as an analogy of the \"bag-of-words\" 18 model successfully employed in natural language processing and computer vision for 19 document and image classification 9,10 . Feature extraction techniques from natural language 20 processing have previously been analogized to genomics data 11 ; however, the \"bag-of-21",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "words\" approach is brittle in the RNA virus space due to the high intersequence variance 22 and the exact matching requirement of K-mers. To reconcile the simplicity of \"bag-of-23",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "words\" methods with the complications presented by the intrinsic variance of RNA virus 24 space, a method to resolve the fragility of extracted K-mers in a way that faithfully reflects 25 an underlying biological phenomenon was devised. Our algorithm, Vorpal, allows the 26 construction of interpretable linear models with clustered, representative 'degenerate' K-27 mers as the input vector and, through regularization, sparse predictors of binary 28 phenotypes as the output. Here, we demonstrate the utility of Vorpal by identifying 29 nucleotide-level genomic motif predictors for binary phenotypes in three separate RNA 30 virus clades; human pathogen vs. non-human pathogen in Orthocoronavirinae, 31 hemorrhagic fever causing vs. non-hemorrhagic fever causing in Ebolavirus, and human-32 host vs. non-human host in Influenza A. The capacity of this approach for in silico 33 identification of hypotheses which can be validated by direct experimentation, as well as 34 identification of genomic targets for preemptive biosurveillance of emerging viruses, is 35 discussed. The code is available for download at https://github.com/mriglobal/vorpal. 36 37 Feature Extraction Algorithm Overview 38",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In the quasispecies model, the virus organism is represented by the \"cloud\" of genotypes that can 39 be maintained by the virus within the allowable fitness parameters 12 . In the method proposed 40",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "MRIGlobal -425 Volker Blvd., Kansas City, MO, USA 10 SUMMARY 11",
+            "cite_spans": [
+                {
+                    "start": 50,
+                    "end": 52,
+                    "text": "10",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "In the analysis of genomic sequence data, so-called \"alignment free\" approaches are often 12 selected for their relative speed compared to alignment-based approaches, especially in the 13 application of distance comparisons and taxonomic classification 1,2,3,4 . These methods are 14 typically reliant on excising K-length substrings of the input sequence, called K-mers 5 . In 15 the context of machine learning, K-mer based feature vectors have been used in 16 applications ranging from amplicon sequencing classification to predictive modeling for 17 antimicrobial resistance genes 6,7,8 . This can be seen as an analogy of the \"bag-of-words\" 18 model successfully employed in natural language processing and computer vision for 19 document and image classification 9, 10 . Feature extraction techniques from natural language 20 processing have previously been analogized to genomics data 11 ; however, the \"bag-of-21",
+            "cite_spans": [
+                {
+                    "start": 772,
+                    "end": 774,
+                    "text": "10",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "words\" approach is brittle in the RNA virus space due to the high intersequence variance 22 and the exact matching requirement of K-mers. To reconcile the simplicity of \"bag-of-23",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "words\" methods with the complications presented by the intrinsic variance of RNA virus 24 space, a method to resolve the fragility of extracted K-mers in a way that faithfully reflects 25 an underlying biological phenomenon was devised. Our algorithm, Vorpal, allows the 26 construction of interpretable linear models with clustered, representative 'degenerate' K-27 mers as the input vector and, through regularization, sparse predictors of binary 28 phenotypes as the output. Here, we demonstrate the utility of Vorpal by identifying 29 nucleotide-level genomic motif predictors for binary phenotypes in three separate RNA 30 virus clades; human pathogen vs. non-human pathogen in Orthocoronavirinae, 31 hemorrhagic fever causing vs. non-hemorrhagic fever causing in Ebolavirus, and human-32 host vs. non-human host in Influenza A. The capacity of this approach for in silico 33",
+            "cite_spans": [
+                {
+                    "start": 703,
+                    "end": 705,
+                    "text": "31",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "identification of hypotheses which can be validated by direct experimentation, as well as 34 identification of genomic targets for preemptive biosurveillance of emerging viruses, is 35 discussed. The code is available for download at https://github.com/mriglobal/vorpal. 36 37",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "In the quasispecies model, the virus organism is represented by the \"cloud\" of genotypes that can 39 be maintained by the virus within the allowable fitness parameters 12 . In the method proposed 40 here, the frame of reference for the quasispecies \"cloud\" is reduced to the level of K-length 41 motifs. In order to estimate the connectedness of these K-mers across the input assemblies, a 42 distance matrix between all of the unique K-mers observed across the designated virus genome 43 assemblies is established using hamming distance. Hierarchical clustering is then performed on 44 the resulting distance matrix using an average linkage function, corresponding to the ultrametric 45 assumption used in Unweighted Pair Group Method with Arithmetic Mean (UPGMA) 46 phylogenies, and flat clusters are extracted using a hyperparameter for the distance cutoff of 47 cluster membership. The constituents of these clusters are then aligned and their positional 48 variants represented using the International Union of Pure and Applied Chemistry (IUPAC) 49 nucleic acid notation with degenerate base symbols. These degenerate motifs are mapped back to 50 their respective assemblies. This approach facilitates interpretation of model features in a 51 functional profiling and hypothesis generating context. To demonstrate the effectiveness of this 52 new feature extraction technique, genotype-to-phenotype linear models were trained on various 53 RNA virus groups. A description of the Python implementation of the algorithm is detailed in 54",
+            "cite_spans": [
+                {
+                    "start": 98,
+                    "end": 100,
+                    "text": "39",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 765,
+                    "end": 767,
+                    "text": "46",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "38"
+        },
+        {
+            "text": "Methods and the code is available for download at https://github.com/mriglobal/vorpal, along 55",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "38"
+        },
+        {
+            "text": "with persistent versions of the models described here-in. A simplified example of the 56 agglomerative clustering step is depicted in Figure 1 this motif in the same reading frame but it has returned to the spike protein as QDGVNK. This 130 motif serves as a signal for human pathogenicity whose importance is based at least partially on 131 its translation, though the domain itself can appear in completely different protein products. It 132 was also recognized that another positive predictor in the model was a motif related to this one, 133 KGATGTTGTTARWCAAY, offset by a single nucleotide. This related motif sometimes co-134 occurred at the same position as the one mentioned above, and other times appears at a different 135 position in the genome, which suggests this is part of a larger, repetitive motif. 136 This is summarized in ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 134,
+                    "end": 142,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "38"
+        },
+        {
+            "text": "Ebolavirus 148",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "The model for the genus Ebolavirus was specified for a phenotype corresponding to human-149 hemorrhagic-fever causing, i.e. the African Ebolavirus constituents, and non-human-150 hemorrhagic-fever causing, i.e. Reston ebolavirus (EBOV). The recently discovered Bombali 151 EBOV, was excluded due to its ambiguity as a human pathogen 15 . 152",
+            "cite_spans": [
+                {
+                    "start": 333,
+                    "end": 335,
+                    "text": "15",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "The Ebola model demonstrates the utility of the assumption in the Vorpal algorithm that the 153 feature vector contains information about the frequency of genomic motifs. The preservation of 154 repeated motifs in the 5' untranslated region (UTR), especially of those in the overlapping UTRs 155",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "in the Ebola genome, are the predictors of primary importance in differentiating the phenotypes. 156",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "These repeating motifs, or \"motif blocks\", and their corresponding coefficients in the model, are 157 summarized in Table 3 and visualized in Figure 3 . These motifs in the 5' UTRs, specifically in 158 the leading sequence of the L protein, have been previously established as being functionally 159 important to growth kinetics in cell culture 16 . The presence and location of this motif across the 160",
+            "cite_spans": [
+                {
+                    "start": 345,
+                    "end": 347,
+                    "text": "16",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 116,
+                    "end": 123,
+                    "text": "Table 3",
+                    "ref_id": "TABREF2"
+                },
+                {
+                    "start": 142,
+                    "end": 150,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "147"
+        },
+        {
+            "text": "Reston and African constituents of the Ebola genus forms an obvious distinguishing factor. The 161 contiguous block of overlapping motifs identified in The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprint Examination of the constituent K-mers of these motifs demonstrated that the allowance of the 225 negative predictor to map to the TTA leucine codon introduced, almost exclusively, swine 226",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "isolates. The conservation of the CTA leucine codon in the human-isolate predictor is 227 noteworthy because this codon is one of the rare leucine codons in the human genome, with a 228 relative frequency of 7%. Alternatively, the TTA codon being more predictive for swine isolates 229 is notable because while TTA also only has a 7% relative abundance in humans, its abundance in 230 pigs is 6% while the CTA codon is less rare (13% relative abundance) 19 . This mammalian 231 adaptation separates it almost entirely from any avian examples and there appears to be a fitness 232 gradient. When it appears in mammals, there is a higher incidence of the uncommon leucine 233 codon at this location. Table 4B , and this relationship between motif 242 mapping frequency following a codon rarity gradient in mammals, and the inverse in birds, is 243 visualized in Figure 4 . that the TTA codon for leucine plays in increasing the probability of a Swine isolate classification 249",
+            "cite_spans": [
+                {
+                    "start": 454,
+                    "end": 456,
+                    "text": "19",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 698,
+                    "end": 706,
+                    "text": "Table 4B",
+                    "ref_id": null
+                },
+                {
+                    "start": 860,
+                    "end": 868,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "147"
+        },
+        {
+            "text": "for the H1 subtype. Arrows indicating the increase or decrease in total number of motif 250 mappings point in a direction along the relative host codon frequency gradient where 251 rightwards movement indicates optimization towards the lower frequency rank for the 252 corresponding amino acid. also induced non-functional proteins, hypothesized to be related to glycosylation disruption 23 . 280",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "The fidelity of conformational change in mammalian isolates to these rare codon identities is 281 extremely high. The oscillation between these conformational states is suggestive of another 282 dimension of interpretation that these logistic regression models offer, outside of the examination 283 of the genomic motifs themselves. 284 285",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "Other Dimensions of Interpretation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "147"
+        },
+        {
+            "text": "The fragility of the phenotype for the Influenza A model resulted in a model with higher 287 complexity than the other RNA viruses studied. However, this provides another avenue for 288 model analysis. Logistic regression classifiers offer not only an output label, but also a 289 probability assignment to the corresponding label. Thus, additional information can be encoded 290 in this output. Figure 5 presents a graphical representation of the distribution of these class 291 probabilities for the training sets for the segments described. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 396,
+                    "end": 404,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "286"
+        },
+        {
+            "text": "The highest coefficient predictor in the model for Influenza A segment 1, which codes for the 303 PB2 polymerase gene, is a motif which represents a mammalian amino acid substitution 304 experimentally observed in a mouse model 24 . This mammalian adaptation was identified as 305 relevant to the temperature sensitivity of the polymerase in H5N1. The reversion of the avian 306 conformation containing the glutamic acid residue, to the mammalian conformation containing 307 offers another angle for interpretation, especially in regards to identifying possible spill-over or 353",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "302"
+        },
+        {
+            "text": "re-assortment events and is depicted in Figure 6 . Neighbors in the local embedding are often 354 temporally and geographically proximal, in addition to sharing host isolate membership. 355",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 40,
+                    "end": 48,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "302"
+        },
+        {
+            "text": "Comingling Table 6A . Close inspection of region (B) identifies linkage of human-conformation 366 H1N1 isolates from humans in Sichuan, China with those from pandas believed to have 367 been infected by direct human contact at a conservation center in the same locale.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 11,
+                    "end": 19,
+                    "text": "Table 6A",
+                    "ref_id": null
+                }
+            ],
+            "section": "302"
+        },
+        {
+            "text": "Region B corresponds with data in Table 6B . Note: Axes in t-SNE plots have no intrinsic 369 meaning except to represent pair-wise distances between points.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 34,
+                    "end": 42,
+                    "text": "Table 6B",
+                    "ref_id": null
+                }
+            ],
+            "section": "368"
+        },
+        {
+            "text": "Year ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Accession"
+        },
+        {
+            "text": "Inspection of the embedded space makes it possible to identify candidate events, even if the 380 model has not made a classification error. Examples of these are summarized in Figure 7 and 381 Table 7A and 7B where Influenza A segment 1 (PB2) sequences are embedded into a two-382 dimensional field. Further experimentation may also help develop models that incorporate a 383 velocity to the conformational changes of host-predictor motifs and estimate temporal distance 384 from a prospective zoonotic event, in a segment-specific manner. 385 these viruses. However, it is possible to imagine these functional profiles leading to a more 438 deterministic understanding of function with which to build a predictive frame work. 439",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 176,
+                    "end": 184,
+                    "text": "Figure 7",
+                    "ref_id": null
+                },
+                {
+                    "start": 193,
+                    "end": 201,
+                    "text": "Table 7A",
+                    "ref_id": "TABREF8"
+                }
+            ],
+            "section": "379"
+        },
+        {
+            "text": "Nonetheless, improvements in data structure and metadata association may yield better abilities 440",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "379"
+        },
+        {
+            "text": "to estimate the probability of future events. Certain observations seen in the models thus far may 441 themselves be predictive of the respective phenotype before it is observed, rather than an effect 442 of it already having occurred. The primary example of this is the predictor identified in the 443 Orthocoronavirinae model. As described in the Methods section, certain assumptions were built 444 into labeling for the human-pathogen phenotype that incorporated theories about the zoonotic 445 provenance of SARS and Middle East Respiratory Syndrome-related (MERS) from civets and 446 camels respectively. Observing human-pathogen predictors occurring in SARS and MERS 447 viruses from non-human hosts could suggest the ability to predict the potential of a virus as a 448",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "379"
+        },
+        {
+            "text": "human pathogen in advance of a spill-over event. This is observed in the data. The 449",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "379"
+        },
+        {
+            "text": "AKRATGKTGTTAATMAA motif appears in all five of the civet SARS assemblies in the 450 dataset. In the case of the camel isolates, the motif KGATGTTGTTARWCAAY, which is also 451 related to the one mentioned above, is another high coefficient predictor for human pathogenicity 452 and it appears in 231 of the 232 Camel-MERS instances in the training set. This motif also 453 appears in the emerging 2019-nCoV as noted in Table 2.  454  455 As for the obstacles for predictive efforts, there are many opportunities for improvements in the 456 collection and annotation of viral genomic data. In Table 1 Genbank records for the Influenza A training set members for \"passage\" annotations revealed 464 that 42.3% of the instances in that set contained such annotations for cell passage. In contrast, the 465 Influenza A test set members, which represents more recently generated data, only contained 466 \"passage\" annotations in 29.0% of those records. 467 468",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 418,
+                    "end": 436,
+                    "text": "Table 2.  454  455",
+                    "ref_id": "TABREF1"
+                },
+                {
+                    "start": 591,
+                    "end": 598,
+                    "text": "Table 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "379"
+        },
+        {
+            "text": "Lastly, we hope that this analysis demonstrates that the utility of a Global Virome Project is not 469",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "379"
+        },
+        {
+            "text": "ambiguous. Controversy about the value of such a project has been described 29 and this thinking 470 has been reflected in policymakers' decision to end funding to USAID Predict. If recent 471 estimates of mammalian viral diversity hold true 30 , then marginal increases in monitoring 472 infrastructure combined with new and developing analysis methods, such as Vorpal, might 473 finally deliver the long sought preemptive strategies for emergent diseases, and enable us to 474 more effectively battle those from which we are already suffering. 475 476",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "379"
+        },
+        {
+            "text": "The use of this algorithm for genotype-to-phenotype models is just one of the potential 478 applications. Automated molecular assay design and degenerate-motif based phylogenetics are 479 examples of the downstream uses already being investigated. The ability to make use of the 480 . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprint latent data that is accumulating in databases, as well as novel surveillance data, is made more 481 tangible with this algorithm. Well-curated and richly annotated metadata promises to allow 482 machine learning and other data science techniques to unleash a torrent of discovery in genomics 483 at large. The mantra we are positing for the infectious and emergent diseases surveillance 484 community is \"More data, Better data, Metadata.\" The techniques to unlock the potential of 485 data-driven genomic science are gathering momentum. The Vorpal algorithm for feature extraction was developed using the libraries and versions 560 delineated in the requirements.txt document located on the Github. The Vorpal feature 561 extraction algorithm has 3 steps, each corresponding to a script that becomes the Vorpal 562 workflow. 563",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "477"
+        },
+        {
+            "text": "1. kmercountouter_sparse.py 564 a. Input: 565",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "477"
+        },
+        {
+            "text": "i. a reference genome in FASTA format 566",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "477"
+        },
+        {
+            "text": "ii. a folder containing complete assemblies for the viral group of interest 567",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "477"
+        },
+        {
+            "text": "iii. a parameter for K-mer size 568 iv. a percent variance argument for filtering out assemblies that are divergent 569 from the reference genome in terms of length 570 . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "477"
+        },
+        {
+            "text": "Wrapper scripts for reproducing the models with the parameters described below are also 603 provided as binary_vorpal_model.py and binary_vorpal_model_ElasticNet.py. 604 605",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "602"
+        },
+        {
+            "text": "All models were built around binary output variables using a logistic regression classifier. The 607 models were regularized using either \u21131 or ElasticNet methods, using the liblinear 31 ",
+            "cite_spans": [
+                {
+                    "start": 184,
+                    "end": 186,
+                    "text": "31",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "606"
+        },
+        {
+            "text": "All of the input parameters for feature extraction and the rationale behind the use and tuning of 619 each parameter, and their relation to the corresponding model discussed above is provided here. 620 621",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "618"
+        },
+        {
+            "text": "The first parameter, K length, can be a variable input, but in the development of these methods 623",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "622"
+        },
+        {
+            "text": "was fixed at 17. The decision to set the k-length at 17 had many facets. The first is that the 624 feature space should be large enough, that the introduction of degenerate positions does not 625 cause a complete collapse of feature structures. Evaluation of optimal K length for specific tasks 626 has been performed in many contexts. For phylogenetic representations of viruses, an optimal 627 range of 9 to 13 has been proposed 35 , for the optimal uniqueness ratio in plant genomes a K 628 length of 20 has been identified 36 , and in phenetic analysis of bacteria a K length of 31 has been 629 demonstrated to yield the best balance between sensitivity and specificity in intra-and 630",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "622"
+        },
+        {
+            "text": "interspecies distance analysis 4 . However, defining a subspace that lends itself to genotype-to-631 phenotype model interpretability should have the following desiderata: 632",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "622"
+        },
+        {
+            "text": "1. K-size motifs should map to mostly unique genomic loci. In other words, sparsity in the 633 weights vector is influenced by sparsity in the input vector. 634",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "622"
+        },
+        {
+            "text": "2. K-size should be small enough, that the feature space inflation is not catastrophic to 635 memory constraints. 636 ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "622"
+        },
+        {
+            "text": "Applying a filter to the K-mers that are allowed to proceed to the clustering step has two 699 purposes. The first is to denoise the data by removing low abundance features that could be the 700 result of error or other transient sources of variance. The removal of these K-mers is achieved 701 through a parameter specified at the clustering stage, the K-mer quantile. Singletons, or K-mer 702 that are unique to a single instance, are always removed no matter the quantile specified. It was 703 The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprint discovered that allowing the singletons to form motifs through agglomerative clustering 704",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "698"
+        },
+        {
+            "text": "introduced instability into the model parameter estimation (data not shown). Contribution to 705 frequency is determined not by cumulative sum of count across every instance but rather 706 frequency of presence across the sample instances. This is identical to the way the \"TopN\" score 707 is calculated for K-mers in PriMux primer design software 37 . Using a K-mer frequency filter 708 selects for a conserved variance signal. This is a reasonable heuristic to introduce, especially for 709 predictive models, where these high-frequency K-mer derived motifs are the those with the 710 presumed highest probability of appearing in a novel example of a related organism in nature. 711",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "698"
+        },
+        {
+            "text": "The second function of this feature extraction parameter, made reference to above, is as a 712 dimensionality reduction technique to make K-mer clustering more tractable in the current 713 algorithm implementation, given limitations in computational resources. Memory constraints 714 during the tree building step represents the primary bottleneck with the scipy implementation of 715 the nearest-neighbors chain algorithm for average linkage using ( F ) memory 38,39 . 716",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "698"
+        },
+        {
+            "text": "The user specifies an average number of degenerate bases to apply when flat clustering. This 717 number is then divided by the K length specified to estimate the corresponding hamming 718 distance to provide as the max distance for flat clustering. After flat clusters are grouped into 719 alignments and a degenerate motif of the alignment is generated by collapsing each position in 720 the K length alignment into the IUPAC symbol matching the bases seen at that position. 721",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "698"
+        },
+        {
+            "text": "This clustering of K-mers, and subsequent representation as degenerate motifs, is another layer 722 of dimensionality reduction similar to lemmatization of words in a Natural Language Processing 723 (NLP) feature extraction technique 40 . Much of this approach could be described as modifications 724 of equivalent NLP feature extraction and modeling strategies. It should be noted however, that 725 data preparation techniques such as term frequency-inverse document frequency (tf-idv), were 726 considered inappropriate to apply in this circumstance for multiple reasons. First, \"document\" 727 length was invariant in the sense that complete assemblies were the only instances allowed in the 728 training data, and differences in genome sizes within the taxonomies considered were considered 729 irrelevant. Second, document terms, in this case K-mer motifs, that follow a frequency pattern 730 similar to the word \"the\" in the English language are not present. Additionally, for this reason, 731 the data was not normalized, however to improve convergence speed this could be a future 732 improvement. 733 734",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "698"
+        },
+        {
+            "text": "Phenotype labels for the different organisms modeled were applied using a variety of strategies 736 with some specific assumptions introduced for labeling of the Orthocoronavirinae group. In the 737 cases of Ebolavirus and Coronavirus, taxonomy was used as a guide for phenotype labels, where 738 knowledge about the phenotype of interest was usually easily delineated along taxonomic 739 boundaries. For Influenza A, the World Health Organization nomenclature for Influenza strain 740 identification, which is encoded in the FASTA header, was parsed for labeling of human 741 isolate 41 . For those FASTA headers which contained malformed strain identifiers, an ambiguous 742 labeling was applied and removed from the training set. 743 744",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "735"
+        },
+        {
+            "text": "The following explicit assumptions were applied when labeling viral instances for the human 745 pathogen phenotype in the Orthocoronavirinae model. First, since most transmissions of Middle 746",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "735"
+        },
+        {
+            "text": "East Respiratory Syndrome-related (MERS) betacoronavirus to humans have been zoonic events 747 traced to dromedary camels, all camel isolates for MERS coronavirus were labeled in the 748 positive class corresponding to human pathogen. Likewise, in the cases for Severe Acute 749 . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "735"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Alignment-free sequence 489 comparison: benefits, applications, and tools",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zielezinski",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Vinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Almeida",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Karlowski",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Genome Biology",
+            "volume": "18",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Mash: fast genome and metagenome distance estimation using 491 MinHash",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Ondov",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Genome Biology",
+            "volume": "17",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "MetaPalette: a k-mer Painting Approach for Metagenomic 493 Taxonomic Profiling and Quantification of Novel Strain Variation",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Koslicki",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Falush",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Phenetic Comparison of Prokaryotic Genomes Using k-mers",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "D\u00e9raspe",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "DSK: k-mer counting with very low memory usage",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Rizk",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Lavenier",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Chikhi",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Naive Bayesian Classifier for Rapid 499 Assignment of rRNA Sequences into the New Bacterial Taxonomy",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Garrity",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Tiedje",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Cole",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Environmental Microbiology",
+            "volume": "73",
+            "issn": "",
+            "pages": "5261--5267",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "A 502 Tool for Fast and Accurate Taxonomic Classification of 16S rRNA Hypervariable 503 Regions in Metagenomic Datasets",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Chaudhary",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Sharma",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Agarwal",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gupta",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Sharma",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Classifier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Plos One",
+            "volume": "10",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Interpretable genotype-to-phenotype classifiers with performance 505 guarantees",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Drouin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Scientific Reports",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "A Bayesian Hierarchical Model for Learning Natural Scene 507 Categories",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Fei-Fei",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Perona",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "IEEE CVPR",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Local Word Bag Model for Text Categorization",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Pu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Seventh IEEE International 509 Conference on Data Mining (ICDM 2007",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1109/icdm.2007.69"
+                ]
+            }
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Continuous Distributed Representation of Biological 511 Sequences for Deep Proteomics and Genomics",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Asgari",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "R K"
+                    ],
+                    "last": "Mofrad",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Plos One",
+            "volume": "10",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "The Distributional Hypothesis",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Sahlgren",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Rivista di Linguistica (Italian Journal of 515 Linguistics)",
+            "volume": "20",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Distributed Representations 517 of Words and Phrases and their Compositionality",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Mikolov",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Sutskever",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Corrado",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dean",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:1310.4546[cs.CL]."
+                ]
+            }
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Is the 519 Bombali virus pathogenic in humans?",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Martell",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Masterson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Mcgreig",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Michaelis",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Wass",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Bioinformatics",
+            "volume": "35",
+            "issn": "",
+            "pages": "3553--3558",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "An Upstream Open Reading Frame Modulates Ebola Virus 521 Polymerase Translation and Virus Replication",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Shabman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Pathogens",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Genome structure of Ebola virus subtype Reston: differences among Respiratory Syndrome-related betacoronavirus, since the initial outbreak had been theorized to 750 begin from a zoonic event from infected palm civets at a market in Guangdong, China, along 751 with a specific civet spill over event documented in a waitress and a customer in a",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Ikegami",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "the 754 assumption was built-in that bat isolates of both MERS-like and SARS-like betacoronaviruses 755 were not part of the human pathogen class. In the instance of MERS-like bat isolates, examples 756 have been found across wide geographic ranges, such as South Africa, while human cases appear 757 to restricted to areas where Saudi Arabian dromedary camels are present 43 or hospital acquired 758 infections. The same is true of SARS-like bat isolates discovered in caves in China",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "However",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Accessions for designated taxonomic groups were derived from 764 National Center for Biotechnology Virus 46 and then used to extract the associated assemblies 765 from RVDB. Test sets were developed from RVDB version 15",
+            "authors": [],
+            "year": 2018,
+            "venue": "Training sets were developed from the un-clustered Reference Viral Database 45 (RVDB) version 763 14 published October 1 st",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Embedding Visualization 769 The same feature vectors used to produce the logistic regression models were topic modeled 770 similarly to Latent Semantic Analysis 47 (LSA) using a truncated Singular Value Decomposition 771 (SVD) to a 500 component subspace, which was then subjected to a t-distributed Stochastic 772 Neighbor Embedding 48,49 (t-SNE) to a two-dimensional space to observe the local structure of 773 the Influenza A viral assemblies. Both of these methods were employed using the associated 774 classes in Scikit-learn",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "LIBLINEAR: A 779 Library for Large Linear Classification",
+            "authors": [
+                {
+                    "first": "R.-E",
+                    "middle": [],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "K.-W",
+                    "middle": [],
+                    "last": "Chang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C.-J",
+                    "middle": [],
+                    "last": "Hsieh",
+                    "suffix": ""
+                },
+                {
+                    "first": "X.-R",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C.-J",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Journal of Machine Learning Research",
+            "volume": "9",
+            "issn": "",
+            "pages": "1871--780",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Large-Scale Machine Learning with Stochastic Gradient Descent",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Bottou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Proceedings",
+            "volume": "782",
+            "issn": "",
+            "pages": "2010--177",
+            "other_ids": {
+                "DOI": [
+                    "10.1007/978-3-7908-2604-3_16"
+                ]
+            }
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Proceedings of the 24th 784 international conference on Machine learning -ICML",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Shalev-Shwartz",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Singer",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Srebro",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pegasos",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1145/1273496.1273598"
+                ]
+            }
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Stochastic gradient descent training for L1-787 regularized log-linear models with cumulative penalty",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tsuruoka",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tsujii",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ananiadou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Proceedings of the Joint 788 Conference of the 47th Annual Meeting of the ACL and the 4th International Joint 789 Conference on Natural Language Processing of the AFNLP",
+            "volume": "1",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.3115/1687878.1687946"
+                ]
+            }
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Viral Phylogenomics Using 792 an Alignment-Free Method: A Three-Step Approach to Determine Optimal Length of k-793 mer",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S.-R",
+                    "middle": [],
+                    "last": "Jun",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Leuze",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Ussery",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Nookaew",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Scientific Reports",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "A new method to compute K-mer 795 frequencies and its application to annotate large repetitive plant genomes",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kurtz",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Narechania",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Stein",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Ware",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC 796 Genomics",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Skip the Alignment: Degenerate, Multiplex Primer and Probe Design 798 Using K-mer Matching Instead of Alignments",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hysom",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "PLoS ONE",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Modern hierarchical, agglomerative clustering algorithms",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "M\u00fcllner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "doi:800arXiv:1109.2378v1"
+                ]
+            }
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "fastcluster: Fast Hierarchical, Agglomerative Clustering Routines 802 forRandPython",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "M\u00fcllner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Journal of Statistical Software",
+            "volume": "53",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "An Analysis of Lemmatization on TopicModels 804 of Morphologically Rich Language",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Cotterell",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Van Durme",
+                    "suffix": ""
+                }
+            ],
+            "year": 1980,
+            "venue": "Bulletin of the World Health Organization",
+            "volume": "806",
+            "issn": "",
+            "pages": "585--591",
+            "other_ids": {
+                "arXiv": [
+                    "doi:arXiv:1608.03995v2[cs.CL]80541"
+                ]
+            }
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "SARS-CoV Infection in a Restaurant from Palm Civet. Emerging 808 Infectious Diseases",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "",
+            "volume": "11",
+            "issn": "",
+            "pages": "1860--1865",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "MERS and the dromedary camel trade 810 between Africa and the Middle East",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Younan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bornstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Gluecks",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Tropical Animal Health and Production",
+            "volume": "48",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Discovery of a rich gene pool of bat SARS-related coronaviruses provides 813 new insights into the origin of SARS coronavirus",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "PLOS Pathogens",
+            "volume": "13",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "A Reference 815 Viral Database (RVDB) To Enhance Bioinformatics Analysis of High-Throughput 816 Sequencing for Novel Virus Detection",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Goodacre",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Aljanahi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Nandakumar",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mikailov",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Khan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "3",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Virus Variation Resource -improved response to emergent viral 818 outbreaks",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hatcher",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nucleic Acids Research",
+            "volume": "45",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "in Introduction to Information Retrieval",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Manning",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "403--419",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Visualizing High-Dimensional Data Using t-SNE",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Van Der Maaten",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Hinton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Journal of Machine Learning Research",
+            "volume": "822",
+            "issn": "",
+            "pages": "2579--2605",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Accelerating t-SNE using Tree-Based Algorithms",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Van Der Maaten",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Journal of 824 Machine Learning Research",
+            "volume": "15",
+            "issn": "",
+            "pages": "3221--3245",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Plotly Technologies Inc. Collaborative data science",
+            "authors": [],
+            "year": 2015,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Hierarchical K-mer Clustering. A simplified example of K-mer clustering to 60 produce degenerate motifs. After K-mer counting and filtering on frequency, K-mers are 61 clustered using an average linkage function with hamming distance, or positional 62 agreement, as the metric. The resulting alignments, after tree-cutting at a user specified 63 cutoff, are collapsed into their IUPAC character representation.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "142 locations, and corresponding translated products for selected predictors in the 143 Orthocoronavirinae model. Bolded examples are instances labeled Non-human-pathogens 144 in the training set, all others are members of the Human pathogen class. Note: 2019-145 nCoV was not part of the training set when these models were developed.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "208of a degeneracy allowing for the TTA codon for leucine is an important predictor for the209 non-human conformation for the H1 subtype. The third motif with no coefficient was 210 identified by looking in avian isolates at the same genomic position. This motif was not 211 used by the model but provides additional interpretation of the phenomenon in effect.212 The only avian flu examples in the model predictors that these motifs appear in are North 213 American Turkey isolates. No other avian examples of any HA gene subtypes contain 214 these motifs utilizing rare leucine codons. This serine at the beginning of this amino acid 215 sequence is the tail constituent of a N-x-S/T glycosylation motif.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "220important predictor for the non-human conformation for the H1 subtype. The third motif 221 with no coefficient was identified by looking in avian isolates at the same genomic",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Host Codon Optimizations for H1 subtype. The justification for the coefficients 247 assigned by the model for the motifs specified in Table4A are demonstrated by the clear role 248",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Influenza A training set class probability histograms. The class probability 295 distributions for the Influenza A segment 1 and segment 4 models discussed in this 296 section. The frequency is presented in log scale so it can be observed that the vast 297 majority of class predictions belong to the highest and lowest probability bins. We 298 explore the possibility that instances with class probabilities in the middle of the 299 distribution are in transition between host-isolate states as a results of recent zoonosis",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "of class labels in the embedded space potentially offers the opportunity for 356 identification of zoonosis events. Embedding of Influenza A segment four train set data. Two-dimensional t-SNE 360 embedding of the feature vector for the Influenza A segment four (HA gene). Many 361 clusters can be observed to segregate with respect to the human isolate class label (blue) 362 vs. non-human isolates (red). Close inspection of region (A) identifies linkage of H1N1 363 isolates from swine and humans likely infected from the same swine population, with the 364 swine-conformation shifting towards a human-conformation. Region A corresponds with 365 data in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Embedding of Influenza A segment one train set data. Two-dimensional t-SNE 387 embedding of the feature vector for the Influenza A segment one (PB2 gene). Many 388 clusters can be observed to segregate with respect to the human isolate class label (blue) 389 vs. non-human isolates (red). Close inspection of region (A) identifies linkage of H7N2 390 isolates from birds and a human likely infected from the same avian population at a live 391 bird market within the same locality. Region A corresponds with data in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "influenza virus. Proceedings of the Japan Academy, Series B 88, , Y. Codon usage tabulated from international DNA sequence databases: status 528 for the year 2000. Nucleic Acids Research 28, 292-292 (2000). 529 20. Clarke, T. F. & Clark, P. L. Rare Codons Cluster. PLoS ONE 3, (2008). 530 21. Cruz, E., Cain, J., Crossett, B. & Kayser, V. Site-specific glycosylation profile of 531 influenza A (H1N1) hemagglutinin through tandem mass spectrometry. Human Vaccines 532 & Immunotherapeutics 14, 508-517 (2017). 533 22. Ebrahimi, K. H., West, G. M. & Flefil, R. Mass Spectrometry Approach and ELISA 534 Reveal the Effect of Codon Optimization on N-Linked Glycosylation of HIV-1 gp120. 535 Journal of Proteome Research 13, 5801-5811 (2014). 536 23. Zucchelli, E. et al. Codon Optimization Leads to Functional Impairment of RD114-TR 537 Envelope Glycoprotein. Molecular Therapy -Methods & Clinical Development 4, 102-538 114 (2017). 539 24. Min, J.-Y. et al. Mammalian Adaptation in the PB2 Gene of Avian H5N1 Influenza 540 Virus. Journal of Virology 87, 10884-10888 (2013). 541 25. Tinoco, Y. O. et al. Transmission dynamics of pandemic influenza A(H1N1)pdm09 virus 542 in humans and swine in backyard farms in Tumbes, Peru. Influenza and Other 543 Respiratory Viruses 10, 47-56 (2015). 544 26. Li, D. et al. Influenza A(H1N1)pdm09 Virus Infection in Giant Pandas, China. Emerging 545 Infectious Diseases 20, 480-483 (2014). 546 27. Shinde, V. et al. Triple-Reassortant Swine Influenza A (H1) in Humans in the United 547 States, 2005-2009. New England Journal of Medicine 360, 2616-2625 (2009). 548 28. Bastien, N. et al. Human Infection with a Triple-Reassortant Swine Influenza A(H1N1) 549 Virus Containing the Hemagglutinin and Neuraminidase Genes of Seasonal Influenza 550 Virus. The Journal of Infectious Diseases 201, 1178-1182 (2010). 551 29. Jonas, O. & Seifman, R. Do we need a Global Virome Project? The Lancet Global Health 552 7, (2019). 553 30. Carlson, C. J., Zipfel, C. M., Garnier, R. & Bansal, S. Global estimates of mammalian 554 viral diversity accounting for host sharing. Nature Ecology & Evolution 3,",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "Post-quantile filtering K-mer distribution. K-mer rank-frequency distribution 638 plots for Influenza segments 1 and 4, Ebolavirus, and Orthocoronavirinae at the quantile 639 used in the models discussed. Frequency is calculated as number of instances the ranked640K-mer appears in.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "670 to converge to 1.0, which describes a single motif of all \"N\" symbols. This ratio tracks the 671 amount of previously distinct motifs now represented as a single feature. The final 672 column, shows the phenomena of motifs that are now reverse complements of 673 themselves as a result of degeneracy, contributing to the inflation of the Motif/Feature 674 ratio. Of note in the Orthocoronavirinae features, is while dimensionality reduction 675 continues with the allowance of more degeneracy, the fraction of those resulting 676 features that have corresponding reverse complements in the feature set does not Line plot for three of the selected columns from Table 10A. The plateau 682 reached at 4.0 degeneracy for the ratio of reverse complement motifs is clearly evident.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "both the training and test sets. Selected models are summarized inTable 1.96   Construction of the training and test sets is described in the Methods section. 97Figure 2. Degeneracy cutoff parameter search. Range of feature vector sizes across 99 different degeneracy cutoff levels. Ebolavirus and Orthocoronavirinae find the least 100 number of non-zero coefficients in the weights vector at 2.0 and 4.0 average degeneracy 101 respectively. They also find very high numerical stability at these cutoffs, with repeated 102 fitting returning almost identical motif set membership. Error bars correspond to 103 standard error of the mean.Table 1. Models Summary. A summary of the attributes for the models built for each RNA The model for the Orthocoronavirinae sub-family was built around the phenotype of human 118 pathogen. The motif with the highest coefficient for the human pathogen phenotype, 119 AKRATGKTGTTAATMAA, is an example of the positional independence phenomena that the 120 Vorpal algorithm could learn if it contains information about the response variable. The motif 121 also appears across both Alphacoronavirus and Betacoronavirus group species that infect 122 humans. Interestingly its pattern of appearance in those groups varies in a way not predicated on 123 this taxonomic organization. In the Alphacoronavirus examples that it appears in, namely 229E 124 and NL63, this motif is located in the same reading frame within the spike S2 glycoprotein 125 protein and encodes a conserved QDVVNQ amino acid sequence. However, when it appears in 126 Severe Acute Respiratory Syndrome (SARS), it remains in the same reading frame, coding for a 127 YNVVNK amino acid sequence, but instead occurs in the polyprotein in the N-terminus of non-128 structural protein (NSP) 15. The other Betacoronavirus member it appears in, OC43, presents 129",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Table 4A. Influenza A HA2 motifs. Shows three overlapping segments where the addition",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "Table 4B. Relative Host Codon Frequencies for HA2 motifs. Shows three overlapping segments where the addition of a degeneracy allowing for the TTA codon for leucine is an",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "Table 4B shows the relative frequencies for these codons across 253 these animal clades. Magnitude of arrows expressing change in number of reference mappings 254 are not drawn to scale. 255 256 The predictor variable with the highest coefficient from the segment 4 model is another, more 257 dramatic example, of the phenomenon described above. The identity of the motif, 258 AATGTRACAGTAACACA, and its translated product, NVTVTH, again demonstrate a 259 preference for rare human codons -in this case, valine. Like the example discussed above, this 260 motif is present almost exclusively in human (N=15913) and swine (N=3885) examples of the 261 H1 subtype. The associated NVTVTH amino acid sequence is also completely conserved across 262 CTA TTA TTG TGC TGT BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprint all the examples, avian included. The valine codons in the human-isolate versions, almost 263 exclusively GTA, have a relative frequency of only 11% in the human genome. While in the 264 avian examples of segment 4, those codons are switched to GTG, which are the most common 265 Valine codons with a 46% relative frequency in mallards. A motif for the avian version of this 266 was developed using a multiple sequence alignment of the non-human and non-swine isolates of 267 the H1 subtype assemblies in the training set. This motif was established as 268 AAYGTRACYGTGACYCA and mapped back to the training set sequences. When mapped, this 269 new motif was resolved to 480 avian isolates, 33 swine isolates, and nothing else. Unfortunately, 270 unlike the above-mentioned Influenza A motif, the constituent K-mers for this motif were below 271 the quantile cutoff for clustering, and thus, were unable to become a directly observed feature of 272 the model. The use of rare codons, and their tendency to cluster, has been observed across both 273 eukaryotes and prokaryotes 20 . This NVTVTH amino acid motif is also, like the SLQCR 274 sequence described above, an experimentally validated N-linked glycosylation site on the HA 275 gene in H1N1 21 . Rare-codon clusters in association with N-linked glycosylation sites in human 276 pathogens have previously observed in HIV-1 envelope glycoprotein gp120, where the 277 conservation of the rare-codon RNA sequence conferred increased glycosylation efficiency 278 compared to gp120 mutants 22 . Codon optimization efforts for lentivirus envelope protein have 279",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF6": {
+            "text": "lysine, was observed to be approximately six days. By chance, some subset of viral isolates could 308 have been sampled during this window while \"in transit\" between host-signature genotypes.Table 5. Notable H1N1 Swine Isolates. Transition from the human conformation of the H1N1 virus to the swine conformation from samples in Peru. case of the misclassified swine isolates, they are surrounded in the local neighborhood by H1N1 351 Swine instances from Ohio and Iowa in 2007 and 2008. This proximity in embedded spaces 352",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF7": {
+            "text": "Midwest, US Influenza A segment four isolates. The local neighbors of 372 A/Ohio/01/2007 (H1N1) and A/Ohio/02/2007 (H1N1) identified in Shinde et. al. 2009 27 as swine influenza virus infections of human hosts at a county fair in 2007. The estimated incubation period for these misclassified training examples was 3-4 days. Table 6B. Sichuan, CN Influenza A segment four isolates. The Giant Panda isolate misclassified in the training set and its nearest neighbor in the embedding space.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF8": {
+            "text": "Close392inspection of region (B) identifies co-mingling of human-isolated and swine-isolated H1N1 and H3N2 strains from Saskatchewan, Canada. Region B corresponds with data inTable 7B. Note: Axes in t-SNE plots have no intrinsic meaning except to represent pair-wise Would this pose a problem for parents who both work M-F? Would they then have to find child care options?Table 7A. New York Influenza A segment one isolates. A human isolate collocated Table 7B. Saskatchewan, CA Influenza A segment one isolates. A Saskatchewan specific sub-cluster that belongs to a larger cluster of PB2 genes isolated from Swine and co-Human pathogen phenotype and Bombali ebolavirus as 90.2% probable for the Human-435 hemorrhagic-fever phenotype. Both of these classifications, especially the Wuhan COV 436 designation, are out-of-step with what is known, or in the case of Bombali, suspected, about 437",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF9": {
+            "text": ", a slight drift can be observed in the 457 Influenza A model accuracies between the training and test sets. Because the test set represented 458 the most recently isolated viruses, it is attractive to explain this drift as real, i.e. due to evolution.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF12": {
+            "text": "orientation in the input data. It was known that there were example assemblies in GenBank for645   Lassa virus where different instances had inconsistent strand reporting. This assumption seems 646 to be unwarranted for the viruses selected for this study and could be removed for future 647implementations. It should be pointed out that, while maintaining this assumption seems wasteful 648 from a memory overhead perspective, certain features could only be revealed through this 649 canonical approach, such as hair-pin complements in RNA secondary structures, where the 650 resolution of this structural motif is only possible when compared to the K-mer produced by the 651 complementary region. Other dimensionality reduction techniques, namely high-frequency K-652 mer filtering, allowing the feature extraction to remain tractable, given the computing resources 653available for this study. The effect of this canonical approach, and the information it potentially 654 encodes in the feature space, is demonstrated inTable 9Aand 9B.. CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprintTable 9A. Orthocoronavirinae Feature Extraction Summary (0.95 quantile). Summary for clustering. Feature space tracks the dimensionality reduction introduced by degeneracy to motifs that map back to training set. Initially, since no odd-length K-mer can be a reverse complement of itself, canonical K-mers counted compared to those 669 mapped should be half. As degeneracy is introduced, the Motif/Feature ratio is expected",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF13": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.28.969782 doi: bioRxiv preprintTable 9B.Ebolavirus Feature Extraction Summary (0.0 quantile). Summary statistics for feature extraction for Ebolavirus from 0.0 to 5.0 degeneracy cutoff for clustering. A larger fraction of the features at the highest degeneracy allowance produced contain corresponding reverse complement motifs in the feature set in the Ebolavirus data than in the Orthocoronavirinae data. This could be attributable to the high frequency K-mer 689 quantile cutoff utilized in the Coronavirus group, or it could allude to generally higher 690 fraction of the Ebolavirus genomes having self-complementation than Coronavirus Figure 9B. Line plot for three of the selected columns from Table 9b. The relationship between mean number of degenerate positions in the motifs and the mean number of degenerate bases represented is very similar between Ebolavirus and Coronavirus.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

@@ -1,0 +1,1014 @@
+{
+    "paper_id": "3ddc987158400d3867939d3594da56dd546d6ddd",
+    "metadata": {
+        "title": "A novel framework for inferring parameters of transmission 1 from viral sequence data",
+        "authors": [
+            {
+                "first": "Casper",
+                "middle": [
+                    "K"
+                ],
+                "last": "Lumby",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Cambridge",
+                    "location": {
+                        "settlement": "Cambridge",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Nuno",
+                "middle": [
+                    "R"
+                ],
+                "last": "Nene",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Cambridge",
+                    "location": {
+                        "settlement": "Cambridge",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "&amp;",
+                "middle": [],
+                "last": "Christopher",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "J",
+                "middle": [
+                    "R"
+                ],
+                "last": "Illingworth",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Cambridge",
+                    "location": {
+                        "settlement": "Cambridge",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Transmission between hosts is a critical part of the viral lifecycle. Recent studies of viral transmission have 9 used genome sequence data to evaluate the number of particles transmitted between hosts, and the role 10 of selection as it operates during the transmission process. However, the interpretation of sequence data 11 describing transmission events is a challenging task. We here present a novel and comprehensive frame-12 work for using short-read sequence data to understand viral transmission events. Our model describes 13 transmission as an event involving whole viruses, rather than independent alleles. We demonstrate how 14 selection and noisy sequence data may each affect inferences of the population bottleneck, and identify 15 circumstances in which selection for increased viral transmission may or may not be identified. Applying 16 our model to data from a previous experimental transmission study, we show that our approach grants a 17 more quantitative insight into viral transmission, inferring that between 2 to 6 viruses initiated infection, 18 and allowing for a more informed interpretation of transmission events. While our model is here applied 19 to influenza transmission, the framework we present is highly generalisable to other systems. Our work 20 provides new opportunities for studying viral transmission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "21",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Introduction",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Understanding viral transmission is a key task for viral epidemiology. The extent to which a virus is able 23 to transmit between hosts determines whether it is likely to cause sporadic, local outbreaks, or spread 24 to cause a global pandemic [1, 2]. In a transmission event, the transmission bottleneck, which specifies 25 the number of viral particles founding a new infection, influences the amount of genetic diversity that is 26 retained upon transmission, with important consequences for the evolutionary dynamics of the virus [3,4].",
+            "cite_spans": [
+                {
+                    "start": 244,
+                    "end": 247,
+                    "text": "[1,",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Recent studies have used genome sequencing approaches to study transmission bottlenecks in influenza 29 populations. In small animal studies, the use of neutral genetic markers has shown that the transmission 30 bottleneck is dependent upon the route of transmission, whether by contact or aerosol transmission [5,6]. 31 In natural human influenza populations, where modification of the virus is not possible, population genetic 32 methods have been used to analyse bottleneck sizes. Analyses of transmission have employed different 33 approaches, exploiting the observation or non-observation of variant alleles [7] or using changes in allele 34 frequencies to characterise the bottleneck under a model of genetic drift [8-11]. A recent publication 35 improved this latter model, incorporating the uncertainty imposed upon allele frequencies by the process 36 of within-host growth [12]. Two studies of within-household influenza transmission have provided strik-37 ingly different outcomes in the number of viruses involved in transmission, with estimates of 1-2 [13] and 38 100-200 [14] respectively.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "39 40 Another focus of research has been the role of selection during a transmission event; this is important 41 in the context of the potential for new influenza strains to become transmissible between mammalian 42 hosts [15, 16]. Studies examining transmissibility have assessed the potential for different strains of in-43 fluenza to achieve droplet transmission between ferrets under laboratory conditions [17-20]; ferrets provide 44 . CC-BY-NC-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint a useful, if imperfect, model for transmission between humans [21, 22]. The application of bioinformatic 45 techniques to data from these experiments has identified 'selective bottlenecks' in the experimental evolu-46 tion of these viruses [23, 24], whereby some genetic variants appear to be more transmissible than others.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In these studies, selection has been considered in terms of the population diversity statistic \u03c0; changes 48 in \u03c0 N /\u03c0 S , the ratio between non-synonymous and synonymous diversity, have been used to evaluate 49 patterns of selection across different viral segments. 50 51 We here note the need for a greater clarity of thinking in the analysis of viral transmission events. For 52 example, analysis of genetic variants in viral populations shows that synonymous and non-synonymous 53 mutations both have fitness consequences for viruses [25, 26]; the use of synonymous variants as a neu-54 tral reference set may not hold. More fundamentally, in an event where the effective population size is 55 small, the influences of selection and genetic drift may be of similar magnitude [27]. However selection 56 is assessed, this implies a need to separate stochastic changes in a population from selection, especially 57 where a transmission bottleneck may include only a small number of viruses [5, 13, 28]. The attribution 58 of a change in diversity to the action of selection or the attribution of changes in allele frequencies to 59 genetic drift could both potentially be flawed. Given the increasing availability of sequence data, more 60 sophisticated tools for the analysis of viral transmission are required. 61 62 Here we note three challenges in the analysis of data from viral transmission events. Firstly, selection 63 can produce changes in a population equivalent to those arising through a neutral population bottle-64 neck [29] (Figure 1A), making it necessary to distinguish between the two scenarios. A broad literature 65 has considered the simultaneous inference of the magnitude of selection acting upon a variant along with 66 an effective population size [30-35]. However, such approaches rely on the observation of an allele fre-67 quency at more than two time points so as to distinguish a deterministic model of selection (with an 68 implied infinite effective population size) from a combined model of selection with genetic drift; such 69 approaches cannot be directly applied to the analysis of viral transmission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "70 71 Secondly, inferences of transmission events need to account for the haplotype structure of viral pop-72 ulations, whereby whole viruses, rather than sets of independent alleles, are transmitted (Figure 1B). 73 The low rate of homologous recombination in segments of the influenza virus [36, 37] implies that viral 74 evolution proceeds at the haplotype level [38]; competition occurs between collections of linked alleles, or 75 segments, rather than the individual alleles themselves. Under such circumstances, fitter variants do not 76 always increase in frequency within a population [39-41]. Calculations of genetic drift, which are often 77 derived from the evolution of independent variants [42], need to be adjusted to account for this more 78 complex dynamics. 79 80 Thirdly, noise in the measurement of a population may influence the inferred size of a transmission 81 bottleneck (Figure 1C). A broad range of studies have examined the effect of noise in variant calling 82 and genome sequence analysis [43-50]; more recently formulae have been proposed to measure the preci-83 sion with which allele frequencies can be defined given samples from a population [51-53]. Where small 84 changes in allele frequencies are used to assess a population bottleneck, it is important to separate the 85 effects of noise in the measurement of populations from genuine changes in a population.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "86 87",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We here describe a novel method for the inference of population bottlenecks which resolves the above 88 issues. Our approach correctly evaluates changes in a population even where the data describing that 89 change is affected by noise. It explicitly accounts for the haplotype structure of a population, utilising the 90 data present within short sequence reads. Further, where these factors can be discriminated, our method 91 distinguishes between the influences on the population of selection and the transmission bottleneck. 92 Studies of viral evolution have highlighted the potential for payoffs between within-host viral growth and 93 . CC-BY-NC-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint transmissibility [54]; given sufficient data we can evaluate how selection operates upon each of these two 94 phenotypes. Our model extends previous population genetic work on bottleneck inference to provide a 95 generalised model for the analysis of data spanning viral transmission events. 96 Results 97 Model outline 98",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In the recent literature, the term 'bottleneck' has been applied to describe a reduction in the genetic 99 diversity of a population (e.g.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "[55]), whether arising from selection or a numerical reduction in the size of 100 a population. Here, we define a 'bottleneck' more strictly as a neutral process whereby a finite number 101 of viral particles from one population found a subsequent generation of the population, either within the 102 same host, or across a transmission event from host to recipient. Selection then constitutes a modification 103 to this process whereby some viruses, because of their genotype, have a higher or lower probability of 104 making it through the bottleneck to found the next generation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We applied a population genetic method to make a joint inference of the bottleneck size and the 107 extent of selection acting during a transmission event. We consider a scenario in which a viral population 108 is transmitted from one host to another, with samples being collected before and after the transmission 109 event (Figure 2A ). In our model viruses are categorised as haplotypes, that is, according to the variants 110 they contain at a subset of positions in their genome. As such, the viral population is represented as 111 a vector of haplotype frequencies; the population before transmission is represented by the vector q B . 112 During transmission, a random sample of N T viruses are passed on to the second host to give the founder 113 population q F . Selection for transmissibility, whereby genetic variants cause some viruses to be more 114 transmissible than others, is described by the function S T . The potentially small size of the founder pop-115 ulation means that the population evolves within the host under the influence of genetic drift to create 116 the large post-transmission population q A ; this process is approximated in our model by a population 117 bottleneck of effective size N G . Selection acting for within-host growth may further alter the genetic 118 composition of the population; this effect is described by the function S G . Our method thus allows for a 119 discrimination to be made between selection for increased within-host replication and for increased viral 120 transmissibility. Observations of the population are collected before and after transmission via a noisy 121 sequencing process to give the datasets x A and x B . The extent of noise in the sampling and sequencing is 122 characterised by the parameter C; a value of C = 0 would indicate that samples contain no information, 123 while a large C corresponds to noiseless sampling, as in a binomial model. 124 125",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 325,
+                    "end": 335,
+                    "text": "(Figure 2A",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "To summarise our approach, we note that both the transmission and within-host growth events can 126 be represented as sampling processes, which may each be biased by the effect of selection. As such, given 127 an estimate of the noise inherent to the sequencing process, and externally-derived estimates for N G and 128 S G , we can calculate an approximate likelihood for the parameters N T and S T given the observations 129 x B and x A . Maximising this likelihood gives an estimate for the size of the transmission bottleneck 130 and the extent to which specific genetic variants within the pre-transmission population confer increased 131 transmissibility upon viruses.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "132 133",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In our model we discriminate between changes in a population arising from selection and those aris-134 ing due to the population bottleneck. This is achieved by considering regions of the genome between 135 which recombination or reassortment has removed linkage disequilibrium between alleles ( Figure 2B ). As 136 transmission involves whole viruses, the bottleneck N T is preserved between regions. Meanwhile, in the 137 absence of epistasis, selection acting upon one region of the virus does not influence the composition of the 138 population in other parts of the genome. As such, a cross-region calculation estimates both N T and the 139 . doi: bioRxiv preprint 157",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 296,
+                    "end": 305,
+                    "text": "Figure 2B",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "involving the absolute number of reads of a genome position, which specifies the depth of noise-free reads 158 that would produce the same degree of certainty in an allele frequency. This statistic is dominated by the 159 smaller of C and the absolute read depth; for large C this statistic is close to the absolute read depth, 160 while as the number of reads describing a variant frequency becomes large, the effective depth tends to 161 C + 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Inferences of bottleneck sizes showed a limit on the inferred bottleneck size governed by noise in se-",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Straightforward statistics describing a population may generate misleading inferences of population bottleneck size. In the illustrated case, the genetic structure of a population is changed by a population bottleneck during transmission, but the frequency of each allele within the population does not change; an inference of bottleneck size derived from single-locus statistics would incorrectly be very large. C. Noise arising from the process of collecting and sequencing data is likely to produce differences between the observed populations, even in the event that the composition of the viral population was entirely unchanged during transmission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. Here we used simulated data to evaluate the performance of our model under different circumstances. is likely to result from noise. Here we note failures in the inferred bottleneck size even with very high 170 C; these occur due to the finite read depth in our simulations, which averaged around 12,000. In these 171 calculations a neutral method, in which selection was assumed to have no effect on the population, was 172 used to make inferences from neutral simulations. A consistent value of C was used for simulation and 173 inference purposes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "In a real dataset, the extent of noise may be unknown. Further investigation showed bottleneck 176 estimation to be relatively robust to an incorrect estimate of the extent of noise in a dataset, except 177 where the extent of noise was substantially overestimated (Supplementary Figure S1) In contrast to measures of diversity, which attempt to associate selection with a gene or segment of a virus, 226 our method was able to correctly identify specific variants conferring increased transmissibility. Success 227 was more often achieved in cases for which selection was relatively strong and the transmission bottleneck in one direction or another by more than the expectation; this leads to false inferences of selection.",
+            "cite_spans": [
+                {
+                    "start": 203,
+                    "end": 206,
+                    "text": "177",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 280,
+                    "end": 290,
+                    "text": "Figure S1)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "175"
+        },
+        {
+            "text": "Genuine changes resulting from selection become easier to identify when the changes are themselves 242 larger (stronger selection) or where the magnitude of the stochastic effect is reduced (higher N T ). In The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint . True positives were defined as inferences for which selection was inferred for the selected locus in a system; false positives were defined as inferences for which selection was inferred at any neutral locus or for multiple neutral loci in the system. Supplementary Table S1 . We have here presented an approach for jointly inferring a population bottleneck size and selection for dif-307 ferential transmissibility from viral sequence data describing a transmission event. While basic sampling 308 approaches to bottleneck inference have been improved by an accounting for drift during within-host viral 309 growth [7, 12-14], our approach additionally accounts for noise in genome sequence data, exploits partial 310 haplotype data available from short-read sequencing, and separates the influence of a finite bottleneck 311 from that induced by selection for increased transmissibility. In multiple studies, the transmission bot-312 tleneck has been found to be narrow during natural viral spread between hosts [59]. While we do not 313 explicitly question these results, we note that both selection and noise in the measurement of sequence 314 data can decrease the inferred bottleneck where sequence data is used for inference. Our approach is The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Figure 8 . Inferred fitness landscape for within-host growth using data from the HA190D225D dataset. Viral haplotypes for which the inferred frequency rose above 1% in at least one animal are shown. Lines show haplotypes separated by a single mutation. Figure 9 . Histograms of bottleneck inferences for HA190D225D and Mut transmission pairs from 100 analysis seeds. A replicate inference method was employed for the Mut transmission pairs such that a common fitness landscape was imposed. The Mut transmission pairs may take different bottleneck values and have been plotted as an overlapping histogram. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 611,
+                    "end": 633,
+                    "text": "Supplementary Table S1",
+                    "ref_id": null
+                },
+                {
+                    "start": 1757,
+                    "end": 1765,
+                    "text": "Figure 8",
+                    "ref_id": null
+                },
+                {
+                    "start": 2010,
+                    "end": 2018,
+                    "text": "Figure 9",
+                    "ref_id": null
+                }
+            ],
+            "section": "241"
+        },
+        {
+            "text": "Applied to the analysis of data from a recent evolutionary experiment, our approach provides a 321 greater precision in the inference of evolutionary statistics, leading to an alternative explanation for the 322 data observed. Where data have previously been interpreted as implying differential transmission bottle-323 necks between strains, our approach infers bottlenecks of similar sizes. Furthermore, where evidence has 324 been interpreted to suggest a differing extent of transmissibility between strains, our approach attributes 325 changes in allele frequencies either to stochastic effects or to selection for increased host adaptation. Our 326 result does not definitively prove the absence of differential transmissibility among the viruses involved 327 in this study, but implies that data which might suggest differential transmissibility can be more parsi- to assess viral transmissibility, steps taken to increase the number of particles transmitted would increase 338 the power to infer differential transmissibility. We note that, unlike more general inferences of selection 339 from changes in viral diversity, our approach evaluates selection in terms of specific variants conveying In the light of our study, we propose that the term used in some analyses of viral transmission, of a 345 'selective bottleneck' is ambiguous, failing on the one hand to distinguish changes in a population arising 346 from selection and those occurring through stochastic change in the population, and on the other to 347 distinguish between selection for more rapid within-host selection or for inherent viral transmissibility.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "241"
+        },
+        {
+            "text": "While selection may act differently for these latter two phenotypes [54], their respective influences are 349 intrinsically hard to separate from data. In this case, the completeness of the collected data, covering 350 both within-host adaptation and between-host transmission, was necessary to evaluate the cause of evo-351 lutionary change. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint such information could prove powerful for the study of viral transmission. During the process of growth between q F and q A , the population may be influenced by selection 409 for within-host growth; this acts independently of selection for transmissibility [70], and is described by 410 the function S G (q), which changes the frequencies of haplotypes according to their relative within-host 411 growth rates. Selection for within-host growth is challenging to separate from selection for transmissibil-412 ity; we here estimate this parameter independently from the transmission event itself. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Likelihood framework 415 As the observations x B and x A are conditionally independent given q B , the joint probability of the 416 system may be written as a product of individual probabilities",
+            "cite_spans": [
+                {
+                    "start": 1258,
+                    "end": 1261,
+                    "text": "415",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "348"
+        },
+        {
+            "text": "where \u03b8 represents the remaining variables in the system upon which only x A depends.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "348"
+        },
+        {
+            "text": "As an approximation to this likelihood, we split the inference into two calculations, first calculating ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": "The first component of this likelihood, corresponding to the initial observation of the system, x B , 427 represents a straightforward sampling of the system, drawing from a collection of viral haplotypes. Such 428 a process can be modelled using a multinomial distribution. However, as is well known [53], next-429 generation sequence data is error-prone, such that less information is contained within the sample than 430 would be contained in a multinomial sample of equivalent depth to the sample. A Dirichlet multinomial 431 distribution may be used to capture this reduction of information, such that",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": "where C, which alters the variance of the distribution, characterises the extent of noise in the data. The ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": "The fitness of a haplotype h i is then given as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": "where the sum is calculated over all fitness parameters k. To give an example, a single-locus fitness Selection is incorporated into the transmission event from donor to recipient by representing this event as 466 a biased sampling process. As we are not considering data here, noise is not an issue. We therefore model 467 the population q F as arising via a multinomial sampling process of depth N T from a set of genotypes 468 with frequencies S T (q B ), where S T represents the role of selection in the transmission event. We write The haplotype frequency vector q B is unknown and must be determined from the available data. We :",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": "and",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": "where \u03b2 = N B +C",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "419"
+        },
+        {
+            "text": ", M (q) = Diag(q) \u2212 qq \u2020 and \u2020 indicates the transpose function. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "1+C"
+        },
+        {
+            "text": "and its variance by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "1+C"
+        },
+        {
+            "text": "arising from a multinomial sample of depth N T and the selectively shifted frequencies S T q B . ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "1+C"
+        },
+        {
+            "text": "and variance",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "1+C"
+        },
+        {
+            "text": "is defined for notational convenience. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "1+C"
+        },
+        {
+            "text": "These expressions characterise the x B component of the likelihood from Eq. 2 in terms of a normal dis-530 tribution. We identify values of \u00b5 B and \u03a3 B maximising this likelihood. As the covariance matrix \u03a3 B 531 may contain a large number of elements, we make the approximation that its off-diagonal elements are 532 zero.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "1+C"
+        },
+        {
+            "text": "Moving on to the post-transmission process, the marginalisation over q B results in a mean of",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "534"
+        },
+        {
+            "text": "where in the penultimate step we used the first-order second-moment approximation to a vector function 536 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint acting on a random variable. The law of total variance yields",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "534"
+        },
+        {
+            "text": "Note that (DS) j i = \u2202Si \u2202qj is the Jacobian matrix arising from the first-order second-moment approximation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "534"
+        },
+        {
+            "text": "Marginalisation over q F yields a mean of",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "539"
+        },
+        {
+            "text": "and variance",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "539"
+        },
+        {
+            "text": "where in the last step we defined \u03b3 = N T +N G \u22121",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "539"
+        },
+        {
+            "text": "Treating the integral over q A in a similar manner, we obtain by the law of total expectation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "539"
+        },
+        {
+            "text": "Analogously, the law of total variance yields 545 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "539"
+        },
+        {
+            "text": "The above expressions represent mean and covariance matrices of multivariate normal distributions or more explicitly, ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "var(x A ) = E[var[x A |q A ]] + var[E[x A |q"
+        },
+        {
+            "text": "Data from multiple genes 588",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "var(x A ) = E[var[x A |q A ]] + var[E[x A |q"
+        },
+        {
+            "text": "The mathematical framework outlined above utilises the haplotype information inherent to the data, and 589 accounts for the effect of noise in the sequencing process ( Figure 1B,C) . However, in order to discriminate 590 between changes in viral diversity arising from bottlenecking and selection ( Figure 1A ) it is necessary 591 to consider data from different regions of the genome at which genetic diversity is nominally statistially where the subscript m denotes information particular to a specific genomic region. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 168,
+                    "end": 180,
+                    "text": "Figure 1B,C)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 299,
+                    "end": 308,
+                    "text": "Figure 1A",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "var(x A ) = E[var[x A |q A ]] + var[E[x A |q"
+        },
+        {
+            "text": "where the subscript r denotes information particular to a specific replicate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "var(x A ) = E[var[x A |q A ]] + var[E[x A |q"
+        },
+        {
+            "text": "Application to data 605 Our method was applied to both simulated sequence data, and data from an evolutionary experiment 606 conducted in ferrets [24] .",
+            "cite_spans": [
+                {
+                    "start": 20,
+                    "end": 23,
+                    "text": "605",
+                    "ref_id": null
+                },
+                {
+                    "start": 146,
+                    "end": 150,
+                    "text": "[24]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "604"
+        },
+        {
+            "text": "Generation of simulated data 608 Simulated data were generated in order to nominally reflect data from an influenza transmission event. . The specific data examined here describes two sets of viral transmissions. In the 637 first, denoted HA190D220D, a viral population was given to three ferrets, transmission to a recipient host 638 being observed in one of three cases, giving time-resolved sequence data from four ferrets. In the second, 639 denoted Mut, a viral population arising from the first experiment was given to three ferrets, transmission 640 to two recipient hosts being observed, giving data from five ferrets.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "607"
+        },
+        {
+            "text": "Processing of sequence data 642 Genome sequence data was processed using the SAMFIRE software package, according to default set- Figure S13B) . Finally, linear and decay exponential models were fitted to this data via 749 regression, selecting the BIC penalty model which minimised the error in the inferred bottlenecks from 750 the simulation data. We note that our penalty is a function of the inferred population bottleneck, higher 751 penalties being inferred for tight bottlenecks and lower penalties being inferred for looser bottlenecks.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 129,
+                    "end": 141,
+                    "text": "Figure S13B)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "641"
+        },
+        {
+            "text": "Thirdly, the inferred data was reinterpreted to derive a BIC penalty optimal for the inference of The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Table S1 . Inferred fitness coefficients for the within-host evolution of the virus within each experiment. Parameters were inferred across all index and contact ferrets within each experiment and are reported to a single decimal place. Only polymorphisms at which within-host selection was identified are listed. The parameter \u03c7 denotes an epistatic interaction between variant alleles. We note that our method infers the approximate shape of a fitness landscape based upon a reconstruction of whole viral segments; individual selection coefficients may be subject to variance between similar fitness landscapes.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 247,
+                    "end": 255,
+                    "text": "Table S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "753"
+        },
+        {
+            "text": "Mut HA190D220D PB2 Figure S2 . Median inferred bottleneck size from data simulating neutral transmission and transmission with a single locus under selection of magnitude \u03c3 \u2208 {0, 0.5, 0.75, 1.0, 2.0}. Inferences were made using either a neutral model, in which the effect of selection was assumed to be zero, or a selection model, which allowed scenarios involving selection to be identified. Median inferences are shown from 100 simulations, each involving three replicate transmission events, for each datapoint.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 19,
+                    "end": 28,
+                    "text": "Figure S2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Figure S3 . Inferred bottleneck sizes N T for a range of true bottleneck sizes. Results were generated by applying a neutral inference model to selected simulated data. Results are shown for 200 simulations at each bottleneck size.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 215,
+                    "end": 224,
+                    "text": "Figure S3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Figure S4 . Inferred bottleneck sizes N T for a range of true bottleneck sizes. Results were generated by applying an inference model accounting for selection to selected simulated data. Results are shown for 200 simulations at each bottleneck size.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 215,
+                    "end": 224,
+                    "text": "Figure S4",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Figure S5 . Inferred bottleneck sizes N T for a range of true bottleneck sizes. Results were generated by applying a neutral inference model to selected simulated data. Results are shown for 200 simulations at each bottleneck size, each simulation describing three replicate transmission events.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 215,
+                    "end": 224,
+                    "text": "Figure S5",
+                    "ref_id": null
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Figure S6 . Inferred bottleneck sizes N T for a range of true bottleneck sizes. Results were generated by applying an inference model accounting for selection to selected simulated data. Results are shown for 200 simulations at each bottleneck size, each simulation describing three replicate transmission events.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 215,
+                    "end": 224,
+                    "text": "Figure S6",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint Figure S10 . Histograms of selection inferences for the Mut transmission pairs from 100 random seeds using an allele frequency cut-off of 2%. A replicate inference method was employed such that a common fitness landscape was imposed. Selection inferences that resulted in at least 10% non-zero inferences are here reported by the nucleotide position of the variant site.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 306,
+                    "end": 316,
+                    "text": "Figure S10",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. Figure S11 . Histograms of bottleneck inferences for HA190D225D and Mut transmission pairs from 100 random seeds using allele frequency cut-offs of q cut \u2208 {0.03, 0.04}. A replicate inference method was employed for the Mut transmission pairs such that a common fitness landscape was imposed. The Mut transmission pairs may take different bottleneck values and have been plotted as an overlapping histogram.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 157,
+                    "end": 167,
+                    "text": "Figure S11",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. Figure S13 . Determining BIC penalty function for bottleneck inference under simulated data. A) The ratio of the median inferred bottleneck to the true bottleneck is plotted against the true bottleneck size. As shown in Figure 3 , as the bottleneck increases, our ability to infer it correctly decreases due to noise. In order to account for this phenomenon, a straight line is fitted to the data aiming to capture the general trend. B) Heat map of the bottleneck-specific statistic plotted against BIC penalty and bottleneck size. The plot was generated for three datasets with selection coefficients s = {0, 1, 2} and a simple statistic based on bottleneck differences was employed. More specifically, the median bottleneck was computed across 200 seeds and the bottleneck-statistic was defined as the absolute value of the difference between the median inferred bottleneck and the true bottleneck multiplied by the baseline determined in A). By considering bottlenecks in the range [5, 100] and BIC penalty values in the range [10, 200], a heat map was produced and linear and decay exponential regression were conducted seeking to minimise the sum of the statistic across the values of N T that were considered.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 157,
+                    "end": 167,
+                    "text": "Figure S13",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 377,
+                    "end": 385,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Segment Variant"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/302331 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Segment Variant"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Strain of Influenza A (H1N1): Early Findings",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "324",
+            "issn": "",
+            "pages": "1557--1561",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Interhuman transmissibility of Middle East respiratory 780 syndrome coronavirus: estimation of pandemic risk",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Breban",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Riou",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Fontanet",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "The Lancet",
+            "volume": "382",
+            "issn": "",
+            "pages": "694--699",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Transmission bottlenecks as determinants of virulence 782 in rapidly evolving pathogens",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Bergstrom",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Mcelhany",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Real",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Proceedings of the National Academy of Sciences of the United 783 States of America",
+            "volume": "96",
+            "issn": "",
+            "pages": "5095--5100",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Virus population bottlenecks during within-host pro-785 gression and host-to-host transmission",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Guti\u00e9rrez",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Michalakis",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Blanc",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Current Opinion in Virology",
+            "volume": "2",
+            "issn": "",
+            "pages": "546--555",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Transmission Bottlenecks Are Defined by Infection Route and Recipient Host",
+            "authors": [],
+            "year": null,
+            "venue": "Cell Host and 788 Microbe",
+            "volume": "16",
+            "issn": "",
+            "pages": "691--700",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Challenges arising in the inference of transmission bottlenecks from viral sequence data. Circles represent idealised viral particles characterised by four distinct alleles. A. Reductions in population diversity cannot necessarily be attributed unambiguously to either a population bottleneck, or the action of selection. In the illustrated case, either a tight bottleneck without selection or a large bottleneck with strong selection could explain the change in the population during transmission. B.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "A. Basic model of transmission. A set of haplotypes exists at frequencies q B from which a noisy observation x B is made. During a transmission event, a total of N T viruses are transferred under the influence of selection S T , establishing an infection in the next host described by q F . Growth of the viral population within the host then occurs to produce the population q A , influenced by genetic drift (characterised by the effective population size N G ) and selection S G . Sampling of the final population gives the second observation x A . B. Regions of the genome which are separated by recombination or reassortment are used to distinguish the effects of selection and a population bottleneck. Here, genetic diversity is reduced in one region but not in another; the preservation of diversity in the second region attributes this change to the action of selection on the first, rather than a shared population bottleneck.C. Models of neutrality and selection are compared, as illustrated in this simplified diagram. Black dots represent observations x B and x A while the red dot indicates the inferred expected position of q A . The solid line joining these (b,c) indicates the inferred action of selection, with dotted lines showing components of this vector (c). The blue circle represents the optimised variance in the position of q A ; the length of it's radius, shown as a dashed line, is inversely related to the bottleneck size. In the neutral case, the difference between observations is explained by the bottleneck alone. More complex models of selection fit q A more closely to x A and with reduced variance, giving higher inferred values of N T . Influence of sequencing noise upon the ability to infer a population bottleneck size from genome sequence data. Median inferred bottlenecks are shown, calculated on the basis of 200 replicate simulations for each point. In the left-hand plot, a value of 1 indicates a correct bottleneck inference; in the right-hand plot, the absolute inferred bottleneck size is shown. Simulations were conducted under the assumption of selective neutrality, with no attempt to infer selection from the data. influence of selection. A model selection process [56] is used to distinguish models of neutral transmission 140 from evolution under selection (Figure 2C). A full exposition of the model is given in the Methods section.141 142",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Having established the effect of sequencing noise on the inference of population bottlenecks, we demon-144 strate the ability of our method to correctly infer population bottlenecks from sequence data in the 145 presence or absence of selection, and its ability to correctly identify variants conferring a benefit for viral146 transmissibility. We then applied our model to evaluate selection and population bottlenecks in a recently 147 published viral transmission experiment [24]; our approach provides more precise inference of population 148 bottlenecks in this case and discriminates between the influence of selection for within-host growth and noise limits the maximum inferrable bottleneck 153 Application of our model to simulated data describing neutral population bottlenecks showed that a lack 154 of sequencing noise is critical for the correct inference of large population bottlenecks (Figure 3). Noise in 155 our study was considered in terms of the precision with which the frequency of a variant can be specified 156 by viral sequence data. Our noise parameter C can be related to an 'effective depth' of sequencing [53], 7 a plateau above which increases in the true bottleneck no longer affect the inferred bottleneck size. This 167 result can be understood in terms of the extent to which the population bottleneck and noise contribute 168 to the change in the viral population; where large numbers of viruses are transmitted, most of this signal 169",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Inferred bottleneck sizes (N T ) for true bottlenecks N T = {5, 10, 25, 50, 100}. Results were generated by applying a neutral inference model to neutral simulated data. Inferences are shown for 200 simulations at each bottleneck size. explains the more pronounced underestimates achieved at larger bottleneck sizes; larger bottlenecks pro-213 duce smaller stochastic changes in the population relative to the change induced by selection. When the 214 full version of our model was run, allowing for a consideration of selection effects, the median bottleneck 215 inferred from data under selection resembled that inferred from neutral data; the small shortfalls in the 216 inference from neutral data are here explained by the influence of noise.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "performed for data describing multiple replicate transmission events gave sim-219 ilar inferred transmission bottlenecks. In each case sets of three replicate transmission events were 220 simulated, transmitted populations sharing a common set of polymorphic loci in each segment. Median 221 inferred values are shown in Supplementary Figure S2. Full results describing the range of inferred bot-222 tleneck sizes from both one-and three-replicate populations are shown in Supplementary Figures S3 to S6.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "228was relatively large(Figure 6). Our process for distinguishing selection from neutrality (Figure 2C) can 229 be tuned to identify a greater number of true variants under selection at the cost of making a greater 230 number of false positive calls; here a conservative approach to identifying selection was applied. Under this 231 approach we retained a false positive rate (inference of selection at an unselected locus) of 5% or less across 232 the systems tested. At lower magnitudes of selection (\u03c3 \u2264 0.5), correctly identifying sites under selection 233 was very difficult, though as selection became stronger (\u03c3 \u2265 1) loci under selection could be identified",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "contrast to the inference of bottleneck size, data from replicate simulations led to a more dramatic change244 in the results, with the false positive rate falling to zero for bottlenecks with N T \u2265 15 . The power of 245 replicate experiments arises from the lower probability that stochastic effects will impose a consistent 246 pattern of change upon multiple populations. While a larger-than-expected stochastic change in the 247 frequency of a variant may occur in one system, leading to a false positive inference of selection, it is 248 unlikely that the same pattern would recur across multiple replicates. The use of replicate experiments 249 is therefore very powerful for identifying variants affecting transmissibility; while, under our conservative 250 approach, not all variants under selection were identified, variants identified from replica data as being 251 under selection were almost universally true positive calls. 252 Estimating the magnitude of a selected variant 253 Given the correct identification of selection acting for a specific variant, the inferred magnitude of selec-254 tion was marginally overestimated, with an increased overestimate at smaller values of the transmission 255 bottleneck N T (Figure 7). The mixture of deterministic and stochastic changes in the population explains",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "True and false positive rates of selection inference from 200 simulations of transmission events from single-and three-replicate systems with selective pressures of \u03c3 \u2208 {0, 0.5, 0.75.1.0}",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Probability distributions of inferred selection coefficients from 200 simulations of transmission events with selective pressures \u03c3 \u2208 {0.5, 0.75, 1.0, 2.0}. Distributions were constructed for bottleneck values where the inference of selection resulted in a true positive rate for identifying selected variants of above 5 %. Smooth kernel distributions were computed using a Gaussian kernel function defined on (0, 10) and Silverman's rule of thumb [57, p. 48] for the bandwidth size. Distributions were scaled such that their integral across the kernel range equalled the true positive rate.this phenomenon; the population after transmission is equal to its expected value plus some stochastic 257 change. In the event that the stochastic change is aligned with the direction of selection, the presence 258 of selection is more likely to be inferred, while the additional change in that direction will give an over-259 estimate of selection. Conversely, if the stochastic change is in a direction opposed to the influence of 260 selection, the presence of selection is less likely to be inferred. Thus, selection was disproportionately 261 inferred to exist when stochastic changes in the population led to an overestimate of its magnitude. 262 Inferences conducted on sets of replicate transmission events produced more accurate and more precise 263 estimates of selection. For example given a bottleneck of N T = 100 and a true strength of selection of 264 0.75, the mean inferred selection from a single replicate was 0.98 with variance 0.048, while the mean 265 inferred selection from three replicates was 0.87 with variance 0.013. (Supplementary Figure S7) 266 267 Application to an experimental dataset 268 We applied our approach to an influenza transmission dataset obtained by Watanabe et al. [58] and sub-269 sequently analysed by Moncla et al. [24]. This dataset provides high-resolution, whole-genome sequence 270 data describing both the within-host evolution, and airborne transmission, of a 1918-like influenza virus, 271 that became transmissible upon introduction of three key mutations, PB2 E627K, HA E190D and G225D. three-mutant strain was denoted 'HA190D225D' and successfully transmitted in one of three ferret 273 transmission pairs. Isolation and subsequent growth in MDCK cells of viruses from the contact ferret 274 of the successful transmission led to the generation of the 'Mut' strain, which transmitted in two of 275 three instances. A previous analysis of these data using linked variants on the HA segment identified an 276 increase in the diversity of the viral population during within-host growth, and respectively 'loose' and 277 'stringent' bottlenecks in the transmission of the two strains. In the transmission of the Mut strain, the 278 fixation of sequence variants, potentially due to selection, was observed, while the observation of two out 279 of three, rather than one out of three, successful transmissions suggested that the Mut virus may have 280 evolved increased fitness for infection. Within and between hosts, segment-wide and localised measures 281 of synonymous and non-synonymous sequence diversity \u03c0 were used to assess the presence or absence of 282 selection, leading to the conclusion that selection affected the system during transmission of the 'Mut' study, data from serial samples from the within-host populations were used to infer a fit-286 ness landscape for within-host growth for each of the two populations. Using a previously published 287 approach [51] we inferred the presence of non-neutral change in the population in seven out of eight 288 segments in the combined HA190D225D population, and in four out of eight segments in the combined 289 Mut population. The inference of positive selection acting for multiple non-consensus viral haplotypes 290 in the HA segment (Figure 8) explains the increase in sequence diversity previously observed. Further 291 results are shown in Supplementary Figures S8 and S9 and in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "inference framework to the data identified narrow transmission bottlenecks in each case 294 (Figure 9). In each of our calculations a set of statistical replicate inferences was produced, corresponding 295 to different potential reconstructions of the population q B from the sequence data (see Methods). Within 296 the HA190D225D population, our estimated bottlenecks ranged from 4 to 6, with a median bottleneck 297 size of 5, while for the Mut calculations, our bottlenecks ranged from 2 to 37 and 2 to 8, with medians of 298 6 and 2 respectively. As such, no clear evidence was found that the HA190D225D transmission involved 299 a greater number of particles than the Mut transmissions. Given the inclusion of the inferred within-host 300 selection S G , no evidence was found for the existence of variants making the virus more or less transmis-301 sible, with selection being inferred in only a small number of the replicate calculations (Supplementary 302Figure S10). Increasing the frequency cutoff at which variants were included in the calculation led to 303 small decreases in the inferred bottleneck sizes (SupplementaryFigure S11).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "315suitable for the analysis of acute infectious diseases such as influenza on the basis of a small number of 316 observed transmission events; we note that where more substantial diversity is present in a within-host317 viral population, or where data is available from a large number of hosts in an outbreak, phylogenetic 318 methods of evolutionary inference become of increasing value [60-62].",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "shows that the identification of variants conferring increased viral transmissibility is diffi-331 cult when the number of transmitted viral particles is small. While improvements to our method may 332 be achievable, this difficulty is fundamentally rooted in the nature of a transmission event; where a low 333 number of virions transmit, the influence of stochastic processes become large, with variants fixing during 334 transmission in a manner that cannot be distinguished from a selective sweep. The potential to infer 335 the presence of selection increases at larger population sizes. The size of the transmission bottleneck in 336 natural influenza populations is currently a subject of debate [13, 14]; where experiments are conducted 337",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "340 an advantage or disadvantage for transmission. Where broad measures of diversity are calculated across 341 segments of a genome, the background of genetic diversity across a large number of positions may be 342 hard to separate from changes at individual positions under the action of selection.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "may reduce the need for animals in viral transmission studies. One approach to explor-354 ing transmissibility (in influenza virus) has been the comparison, for different viruses, of the proportion 355 of distinct animal pairs between which transmission occurs [63]. The statistical significance achievable 356 in these studies is limited by the number of animal pairs that can be examined [64-66]. Furthermore, 357 the comparison between one genotype and another may be confounded by viral heterogeneity, whereby 358 each population contains a cloud of genetic diversity [23, 67]. In our approach, while data from replicate 359 transmission events is of value, it is the number of particles transmitted, rather than the number of 360 replicates, that primarily informs inferences of transmissibility. Transmission of more viruses between 361 fewer animals may provide a more efficient use of animal stocks.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "situations, neutral markers or molecular barcodes may be added to a viral population in 364 order to characterise bottleneck sizes [5, 29]. While our method does not require the presence of such 365 markers, its adaptation to include marker data would likely be straightforward, including in a calculation 366 a further probabilistic term constraining the bottleneck size. Inference of selection for transmissibility 367 could then be conducted under this constraint; the combination of whole-genome sequence data with",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "have here considered the transmission of influenza virus, very few steps of our approach 371 would need to be altered for the method to be applied to another viral population. As detailed in the 372 Methods section, it is only in accounting for genetic drift in the within-host growth of the virus that we 373 make approximations relying on biological knowledge of the influenza virus; an alternative accounting for 374 within-host expansion could be used. A second key assumption in the inference of selection is the existence 375 of regions of the virus separated from each other by recombination or reassortment. This assumption 376 would be preserved in some other viruses, as noted in observations of within-host HIV evolution [68], if 377 not for all influenza populations [69]. Where a viral genome did not exhibit recombination, and only a 378 single transmission event was observed, the neutral version of our method could be applied; in so far as 379we utilise partial haplotype data, and account for sequencing noise, our method would still provide an 380 advantage over alternative methods.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF21": {
+            "text": "is a critical component of disease and a key factor in viral evolution. In outlining a 383 novel framework for the interpretation of data from viral transmission events we hope to bring a greater 384 clarity to the population genetic theory of how these events operate and a greater power in the interpre-385 tation of experimental data, so as to engender a greater understanding of this important topic of research.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF22": {
+            "text": "describe the viral population as a set of haplotypes, with associated frequencies, that changes in time 390 during a transmission event. Given a number of (possibly non-consecutive) loci of interest in the viral 391 genome, the set of haplotypes h = {h i } decribes a set of sequences having specific nucleotides at these 392 loci. Within a viral population of finite size, the number of viruses with each haplotype h i is described 393 by the vector n = {n i }. Frequencies of each haplotype within the population are denoted by the vec-394 tor q = {q i }, while observations of the population collected via sequencing are denoted by the vector 395 x = {x i }, where x i is the number of sampled viruses with haplotype h i . 396 397 The transmission event is now described according to the framework outlined in Figure 2. A popula-398 tion of viruses q B undergoes transmission with some bottleneck N T , creating a founder population with 399 haplotype frequencies q F in the recipient. Selection influencing this transmission process is described by 400 the function S T (q), which changes the frequency of haplotypes according to the relative propensity of 401 each haplotype to transmit. Within the host, the viral population grows rapidly in number to create the 402 population q A . During this growth process, genetic drift affects the population in a manner according to 403 the effective population size N G . Observations of the system are made via genome sequencing of samples 404 collected before and after transmission, and are denoted x B and x A respectively; the total numbers of 405 sequence reads in each are denoted N B and N A . Given the observations x B and x A , we wish to estimate 406 the size of the population bottleneck N T and the extent of selection for transmissibility S T .",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF25": {
+            "text": "for q B given x B , then inferring the transmission event from x A given q B . Noting 421 the potential uncertainty in the inference of q B , we introduce a variance component so that q B may be 422 regarded as a random variable rather than a fixed quantity. The process of breaking up the inference 423 process greatly reduces the computational time required for our approach, without considerable cost to 424 the accuracy of the results. Splitting the likelihood in this manner, and marginalising over unknown 425 quantities, the likelihood can be written generically as 426",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF26": {
+            "text": "parameter C can be estimated given independent observations of identical parameters, such as haplotype434 or single allele frequencies; in the application to experimental data, time-resolved variant frequencies 435 derived from the sequence data were used for this purpose [51] 436 437 Considering the second component of the likelihood, the expression P (x A |q A ) may be calculated in 438 the same manner as in Equation 3 dependent upon the haplotype frequencies q A . The remaining parts 439 of this component can also be described as sampling events. A sample of the population in the donor 440 animal transmits to the recipient, generating a founder population. The founder population multiplies 441 within the host to generate the final population q A . The x A component thus represents a compound of 442 multiple sampling events. We will go on to describe the calculation of both components of the likelihood 443 function. However, we first need to consider how selection is incorporated into our model. model, the functions describing selection are potentially complex, each having a number of 447 parameters equal to the number of haplotypes in the system. In common with previous approaches to 448 studying within-host influenza evolution [71] we adopt a hierarchical model of selection whereby the fit-449 ness of a haplotype is calculated from a set of one-or multi-locus components, describing the advantage 450 or disadvantage of a specific nucleotide, or nucleotides, at a single locus or set of loci. Model selection is 451 then used to identify the most parsimonious explanation of the data. 452 453 Formally, we denote the j th component of the haplotype h i as h ij , with h ij \u2208 {A, C, G, T }. In a 454 fitness model, a parameter is defined as the pair of values (s k , g k ), where s k is a real number, denoting 455 the difference in fitnesses of individuals with and without the allele [72], and g k is a vector of components 456 g kj \u2208 {A, C, G, T, \u2212} denoting the haplotypes to which this selection applies. We now define 457",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF27": {
+            "text": "parameter would have a single element of g k that was either A, C, G, or T. Supposing this element to 461 be at position j, it would convey the fitness advantage s k to all haplotypes with the given nucleotide at 462 position j in the genome.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF28": {
+            "text": "defines a distorted population based on the haplotype fitnesses w T = {w T i }, representing the relative 471 propensity of each haplotype h i for transmission. We note here that q F i = n F i N T , where n F is the compo-472 sition of haplotypes in the founder population.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF29": {
+            "text": "founding of an infection in the recipient, the viral population grows to the point at which data is 476 collected for sequencing, under the influence of both genetic drift and selection. Selection for within-host 477 growth is modelled by the function S G , identical in form to S T . We note that neglect of this term could 478 distort the inferred value of S T ; given only data collected before and after transmission the two terms 479 cannot be separated. However, where samples have been collected at distinct times from one or multiple 480 hosts, it is possible to make an independent estimate of S G [51], such that the two forms of selection 481 can be discriminated. We here incorporate within-host selection into our derivation; the absence of such 482 selection is then represented as a special case of our model.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF30": {
+            "text": ", we note that the number of viruses in a host grows rapidly, with experiments 485 suggesting that a single infected cell can produce between 10 3 and 10 4 viruses [73]. Each strand of RNA 486 forming a new virus undergoes at least two rounds of replication within the cell; this replication has 487 elsewhere been considered as a branching process with a mean 100-fold increase in the population size at 488 each step [74]. In a population of variable size, the effective population size can be written",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF31": {
+            "text": "(t k ) is the population size after k generations [75]. Given the rapid growth in population size we 490 approximate the sum to consider only the first generation, modelling drift as a single multinomial draw 491 with depth N G = 100N T . 492 493 Approximation of the likelihood function 494 We now turn to calculating the likelihood function of Equation 2. On account of the discrete nature of the 495 multinomial distribution, the integrals present in this equation may be written as sums over all possible 496 outcomes of the multinomial sampling processes represented by the different potential values of q F and 497 q A . However, in realistic cases, where there might be multiple haplotypes present, the number of possible 498 outcomes grows combinatorially with N T , making this calculation intractable. Instead we consider a 499 continuous approximation in which the random variables of the model (Figure 2A) are represented by 500 multivariate normal distributions, each defined by a mean and covariance matrix. By ignoring higher or-501 der moments, we may then calculate the individual components of the system (Equation 2) by appealing 502 to a moments based approach for the evaluation of integrals arising from marginalisation over unknown 503 variables. This step follows multiple previous approaches to time-resolved data, in which moments-based 504 approximations have been used to simplify the propagation of evolutionary models [35, 76-78].505 506",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF32": {
+            "text": "denote the mean of the distribution of q B as \u00b5 B and its covariance matrix by \u03a3 B . Given a sampling depth 508 N B and a dispersion parameter C, we describe x B as a distribution with mean and variance derived from 509 the Dirichlet multinomial[79]",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF34": {
+            "text": "the within-host growth process may be represented by a distribution with mean E[q A |q F ] = 518 q F and variance var[q A |q F ] = 1 N G M (q F ). As for the pre-transmission case, a Dirichlet multinomial 519 likelihood with sampling depth N A , selectively shifted frequencies S G (q A ) and dispersion parameter C 520 may be used to model the sequencing of the population post-transmission. The resulting distribution can 521 be approximated as a multivariate normal with mean 522",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF35": {
+            "text": "the above distributions, we are now equipped to carry out the relevant marginali-526 sations (Equation 2) using the law of total expectation and the law of total variance. Starting with the 527 pre-transmission compound distribution, the marginalisation over q B yields a mean of 528 E[x B ] = E[E[x B |q B ]] = E[N B q B ] = N B \u00b5 B",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF36": {
+            "text": "resulting from the evaluation of marginalisations in Equation 2. As such, the components of Equation 2 547 may be represented in a tractable form as the probability density functions of two multivariate normal 548 distributions; The x B component has mean and covariance matrix as specified in Equations 10 and 11, 549 whilst the x A component has mean and covariance matrix as given in Equations 22 and 23. Taken as a 550 whole, this defines a likelihood for the transmission event given the data. As such, given an independent 551 estimate of S G , and our estimated values for \u00b5 B and \u03a3 B , the maximum likelihood values of N T and S T 552 may be inferred.553 Reversion to a discrete likelihood function 554 Given a mean and covariance matrix for the likelihood function, we can approximate the likelihood by the 555 probability density function of a multivariate normal distribution. However, where the variance of this 556 distribution is very small in one dimension, as can occur under an inference of very strong selection, the 557 density function evaluated at a point can become arbitrarily large. For this reason a Gaussian cubature 558 approach was used to calculate the integral of the final likelihood over the unit cube described by each 559 observation x, once optimisation had been completed. Approximate numerical integrals were calculated 560 using the software package cubature [80]. 561 562 Extension to partial haplotype data 563 In the calculations above we made the implicit assumption that the observations x B and x A consist of 564 sets of complete viral haplotypes h i . However, short-read sequencing technologies generally result in sets 565 of individual reads which only cover a subset of the genetic loci of interest; we refer to these reads as 566 partial haplotypes. In this framework the data represents direct observations of partial haplotypes in the 567 set h P = {h P 1 , . . . , h P L }, where each of the sets h P l is a vector of haplotypes spanning a common subset 568 of the loci spanned by the full haplotypes in h. Population-wide observations of these partial haplotypes 569 are then defined by x P = {x P 1 , . . . , x P L } with x P l = {x P li } where x P li is the number of reads with haplotype 570 h P li . As a result, the total number of observations must now be defined on the basis of each set of partial 571 haplotypes, e.g. N B,P l = i x P li is the total number observations of partial haplotypes in the set l. As 572 each set of partial haplotype observations is independent of the others, we may reconstruct Equation 2 573 in the following terms: L(N T , S T |x B , x A , N G , S construction, bottleneck sizes and selection are conserved between partial haplotype sets, 575 being evaluated at the full haplotype level. Each set of partial haplotype observations x P l is considered 576 as a sample drawn from a set of partial haplotypes with frequencies q P l , these frequencies being defined 577 via a linear transformation of the full haplotype frequencies with matrix T l . For example, given the full 578 haplotypes {AG, AT, CG, CT} and a set of partial haplotypes {A-, C-}, we have 579 q P l = T l q (25)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF37": {
+            "text": "Thus, as described above, the calculation of transmission and within-host growth under selection can 581 be performed at the level of full haplotypes, switching into partial haplotype space only to evaluate the 582 likelihoods of the observations. Re-deriving the results of Equations 16 and 17 for short-read sequence 583 data, we find that the compound distribution for the x B component has mean for the x A component of the likelihood, we get a (T l S G (S T (\u00b5 B )))",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF38": {
+            "text": "independent. At high doses of influenza virus reassortment occurs rapidly, as has been observed both 593 in vitro and in small animal infections[81, 82]. In our analysis, distinct viral segments were therefore 594 log L(N T , S T |x B , x A , N G , S",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF39": {
+            "text": "are highly valuable for evolutionary inference [83,84]. Within our calculation they provide 600 an additional level of abstraction to the inference process. Under this framework we assumed that 601 replicates share a common fitness landscape, S T , whilst exhibiting individual bottleneck values. As a 602 result, the likelihood from Equation 31 becomes 603 log",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF40": {
+            "text": "As such, a single transmission event was modelled as the transmission of viruses each with eight indepen-610 dent segments, the lengths of each segment being equal to the eight segments of the A/H1N1 influenza 611 virus, with five randomly located polymorphic loci in each segment creating a total of 2 5 potential full 612 haplotypes. One fourth of these haplotypes were randomly chosen under the constraint that each of the 613 five loci had to be polymorphic. Subsequently, full haplotype frequencies were generated at random, with 614 the constraint of a minimum haplotype frequency of 5%.615 616 Transmission was modelled as a multinomial draw of depth equal to the bottleneck size. Selection for 617 transmission was incorporated as a shift in haplotype frequencies as described in Equation 8. Within-host 618 growth was included as two 12-hour rounds of replication, each round being modelled as two successive 619 drift processes, each resulting in a 100-fold increase in population size. Within-host selection was mod-620 elled in a manner similar to that of selection for transmission.621 622Partial haplotype observations were generated on the basis of short-read data simulated for each gene.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF41": {
+            "text": "Short-reads were modelled as randomly placed gapped reads with mean read and gap lengths derived624 from an example influenza dataset [23] (mean read length = 119.68, SD read length = 136.88, mean gap 625 length = 61.96, SD gap length = 104.48, total read depth = 102825); these estimates are conservative 626 relative to what can be achieved with the best contemporary sequencing technologies. Read depths were 627 calculated for all possible sets of partial haplotypes by assigning individual reads to sets according to 628 the loci they cover. Finally, partial haplotype observations were modelled as Dirichlet-multinomial draws 629 employing a dispersion parameter C to account for noise.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF42": {
+            "text": "were generated by considering replicate observations of transmission events 632 with consistent viral populations; that is, for which the variant alleles were consistent between replicate 633 transmission events.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF43": {
+            "text": "643 tings [85], calling variant alleles that existed at a frequency of at least 1% at some point during the 644 observed infections. For the calculation of a within-host fitness landscape, the effective depth of sequenc-645 ing was estimated in a conservative manner, filtering out variants which changed in frequency by more 646 than 5% per day before using the frequencies of remaining variants from different time-points within the 647 same host to estimate the parameter C. Following the approach of previous calculations [51, 69], poten-648 tially non-neutral variants were identified as those for which a model of frequency change under selection 649 outperformed a neutral model by more than 10 units according to the Bayesian Information Criterion 650 (BIC) [56]. Variants reaching a frequency of at least 5% in at least one sample were then identified 651 before calling multi-locus variant observations from the data; data from all time-points were used in this 652inference. The 5% cutoff was chosen to reduce computational costs for this part of the calculation while 653 still reconstructing the core aspects of the within-host fitness landscape.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF44": {
+            "text": "inference of transmission, a revised approach to estimating the effective depth of sequencing 656 was taken, noting our result that estimates which overestimate noise may lead to errors in the inferred 657 bottleneck size. Here, in common with previous calculations, we initially identified a conservative value 658 of C from within-host data using the default settings in SAMFIRE. Next, variant frequencies were eval-659 uated, identifying potentially non-neutral changes in frequency using a single-locus analysis [51]. Finally, 660 a more conservative estimate of C was calculated, using the set of trajectories which were identified as 661 being consistent with a neutral model of frequency change. 662 663 As in the original analysis of the data [24], variants were identified from data collected from the final 664 observation before transmission and the first point of observation after transmission; these data were 665 used to construct multi-locus observations across variants which reached a frequency of at least 2% in at 666 least one sample.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF45": {
+            "text": "was identical for simulated and experimental datasets: Partial haplotype ob-669 servations were removed if A) the partial haplotype did not have at least 10 observations either before or 670 after transmission, B) the partial haplotype exhibited a frequency of < 1% before transmission, C) the 671 partial haplotype had no observations before transmission (variant assumed to have arisen de novo), D) 672 the partial haplotype was the only partial haplotype in its set and had no observations post-transmission.673 Additionally, to avoid potential dataset errors from drastically influencing the inference outcome, partial 674 haplotypes were removed if found to have a single post-transmission observation despite the presence of 675 a large (\u2265 50) overall sampling depth. Finally, removal of partial haplotype observations may result in 676individual loci becoming monomorphic (all partial haplotypes covering these loci exhibit the same alleles).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF46": {
+            "text": "In this case, relevant partial haplotype sets were removed with the reads being redistributed unto variant 678 sets with fewer loci.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF47": {
+            "text": "model, the set of potential fitness parameters is large. To simplify the calculation, parameters modelling three-or higher-locus epistatic effects were neglected, while parameters modelling two-locus 684 epistasis were only considered for addition to a model which already contained single-locus fitness pa-685 rameters for each of the two loci. In both the inferences of within-host selection and of transmissibility, a 686 null assumption of neutrality was used as the starting point for an inference model, exploring successively 687 more complex models of selection until an optimal model, defined according to a model selection process, experimental dataset an inference of within-host selection was conducted according to a method691 previously described in earlier publications [51, 69]. Under the assumption of rapid reassortment in the 692 system [81] different segments of the virus were treated independently. Our inference of selection aimed 693 to characterise fitness so as to estimate S G for an inference of transmission; the HA190D225D and Mut 694 datasets were considered independently, with data from all animals in each set being combined to infer 695 within-host selection. 696 Replicate calculations of transmission parameters 697 Both our within-host and transmission calculations are performed in a model space of potential multi-698 locus haplotypes, identified by the SAMFIRE code [85]. In the first step of the transmission model, 699 we calculate an estimate for the population q B given the data x B . Where there are greater numbers 700 of potential haplotypes and short reads span smaller numbers of loci there is an increasing potential 701 for the data to not fully specify the initial vector q B . For this reason statistical replicate calculations 702 were run in each case, using different reconstructions of q B in each case; the median inferred parameters 703 across replicates are presented above. To improve the speed of the inference, haplotypes in q B with 704inferred frequencies of less than 10 \u221210 were removed from the calculation; subsequent to this, haplotypes 705 were removed in increasing size of inferred frequency until no more than 100 haplotypes remained in 706 q B at non-zero frequencies. We note that our inference of q B depends upon the initial identification 707 of a plausible set of underlying viral haplotypes using SAMFIRE. Where this plausible set is large, as 708 might occur where very short reads describe a large number of polymorphic loci, this inference becomes 709 computationally challenging.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF48": {
+            "text": "was performed using the Bayesian Information Criterion:713 BIC = \u22122 log L + K log n(33)where L is the maximum likelihood obtained for a model, K is the number of parameters in the fitness 714 model, and n is the number of data points. A range of potential fitness models were explored, the optimal 715 model being identified as that for which the addition of any single fitness parameter failed to bring a discussion of the complexity of using BIC in biological modelling [86], we here adopted a machine-learning approach to the interpretation of BIC statistics. Classically, a difference of 10 units721 of BIC has been held to represent strong evidence in favour of the additional parameter [56]. Consistent 722 with previous approaches this heuristic was used in the inference of within-host selection; in this case the 723 final model parameters make only small refinements to the inferred fitness landscape [51]. In the inference 724 of transmission, errors in model selection have more severe consequences for the inferred bottleneck size 725 and selection model. Using a fixed difference of 10 BIC units for model selection resulted in an overesti-726 mation of the extent of selection with a high false positive rate (Supplementary Figure S12). As such, we 727 generated and analysed simulated data to identify the optimal interpretation of BIC differences. Given 728 a real dataset for analysis, simulated data was generated describing systems with equivalent numbers of 729 gene segments and polymorphic loci to the real dataset, being observed with an equal number of reads 730 spanning each set of loci, and with reads containing an amount of information specified by the parameter 731 C inferred for the real dataset.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF49": {
+            "text": "inferences were conducted on data describing neutral transmission events with bottlenecks in 734 the range [5, 100]. As shown in Figure 3, the ability to infer a correct neutral bottleneck is impaired by 735 noise for transmission events involving a large number of viruses; linear regression was used to obtain a 736 simple function describing the ratio between the median inferred and true bottleneck sizes under neutral-737 ity (Supplementary Figure S13A); this parameterises our expectation of the 'correct' inferred bottleneck 738 size for any given real bottleneck, once noise is accounted for.739 740 Secondly, using this baseline to set our expectations, a parameterisation was carried out to find a BIC 741 penalty function that gave the largest accuracy in bottleneck inference. To this end, three datasets were 742 considered; a neutral dataset and two datasets with single selection coefficients of s = {1, 2} respectively. 743 BIC penalty values in the range [10, 200] were examined, with smaller BIC penalty values leading to 744 inferences with a larger number of selection coefficients and vice versa. For each BIC penalty value, the 745 difference between the bottleneck inference of the optimal model (under BIC) and the baseline expectation 746 was summed for the three datasets to give a statistic describing the accuracy of the inferred bottlenecks, 747 this statistic being expressed as a function of the real transmission bottleneck N T and the BIC penalty 748 (Supplementary",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF50": {
+            "text": "754selection. We note that, even with a BIC penalty function optimised for bottleneck inference, there755 may still remain cases where, through the stochastic process of transmission, the genetic composition 756 of the population changes in a manner consistent with the action of selection, granting a false positive 757 inference. A second BIC penalty was learned as above, this time maximising the accuracy of the inference 758 or non-inference of selection parameters, defined as 759 # true positives + # true negatives # true positives + # false positives + # true negatives + # false negatives (34) This conservative BIC penalty function typically led to an underestimate for the inferred bottleneck; 63. Yen HL, Liang CH, Wu CY, Forrest HL, Ferguson A, et al. (2011) Hemagglutinin-neuraminidase 920 balance confers respiratory-droplet transmissibility of the pandemic H1N1 influenza virus in ferrets. 921 Proceedings of the National Academy of Sciences of the United States of America 108: = \ufffd\ufffd \ufffd = \ufffd\ufffd\ufffd \ufffd = \ufffd\ufffd\ufffd \ufffd = \ufffd\ufffd\ufffd \ufffd = \ufffd\ufffd\ufffd\ufffd \ufffd = \ufffd\ufffd \ufffd Bottleneck inference under a neutral model applied to neutral data with simulation dispersion parameters of C = {50, 10 6 }. Inference was performed using a range of dispersion parameters, C = {50, 100, 200, 500, 1000, 10 6 }. ://github.com/stevengj/cubature. Accessed: 19-01-2018.960 81. Marshall N, Priyamvada L, Ende Z, Steel J, Lowen AC (2013) Influenza Virus Reassortment Occurs 961 with High Frequency in the Absence of Segment Mismatch. PLoS Pathogens 9: e1003421. 962 82. Tao H, Steel J, Lowen AC (2014) Intrahost Dynamics of Influenza Virus Reassortment. Journal of 963 Virology 88: 7485-7492. 964 83. Kofler R, Schl\u00f6tterer C (2014) A guide for the design of evolve and resequencing studies. Molecular 965 Biology and Evolution 31: 474-483. 966 84. Achaz G, Rodriguez-Verdugo A, Gaut BS, Tenaillon O (2014) The reproducibility of adaptation 967 in the light of experimental evolution with whole genome sequencing. Adv Exp Med Biol 781: 968 211-31. 969 85. Illingworth CJR (2016) SAMFIRE: multi-locus variant calling for time-resolved sequence data.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF51": {
+            "text": "\ufffd = \ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd \ufffd \ufffd = \ufffd\ufffd\ufffd \ufffd = \ufffd\ufffd\ufffd Probability distributions of inferred selection coefficients from 100 simulations each of three transmission events with selective pressures \u03c3 \u2208 {0.75, 1.0, 2.0}. Distributions were constructed for bottleneck values where the inference of selection resulted in a true positive rate for identifying selected variants of above 5 %. Smooth kernel distributions were computed as for Figure 7.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF54": {
+            "text": "True and false positive rates of selection inference from 200 simulations of transmission events from single-replicate systems with selective pressures of \u03c3 \u2208 {0, 0.5, 0.75.1.0}. A fixed BIC difference of 10 units were employed in the model selection process, requiring a model with a single additional parameter to generate an improvement of at least 10 units to BIC to be accepted. While such a difference is accepted as showing strong evidence in favour of the more complex model, in our case it generated a high rate of false positive inferences of selection.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF2": {
+            "text": ". In general, an underestimate of the extent of noise in a dataset led to an inferred bottleneck size that was marginally lower than the correct value, while an overestimate of the extent of noise led to an overestimate of the 180 size of the bottleneck. Severe overestimation of noise led to dramatically incorrect inferences; as such, while noise limits the intrinsic potential of a method to identify large bottleneck sizes, underestimating 182 the extent of noise is generally the more safer approach.Variance in inferred transmission bottlenecksResults from individual simulations showed that our method could discriminate between bottleneck sizes185 that differ by a factor of four or above (Figure 4). Obtaining precision in an estimated bottleneck or 186 effective population size is inherently a difficult task, relying on the estimate of the extent of a stochastic 187 effect from limited data [32]. Across 200 simulations, the interquartile range in an inferred bottleneck 188 spanned close to 28% of the true bottleneck size, with inferred values spanning a range of approximately 140% of the correct bottleneck size. A slight underestimate in the bottleneck size for the case N T = 100 was consistent with the extent of noise in sequencing; here and in all subsequent simulations a value of 191 C = 200 was used, representing an extent of noise that is readily achievable from short read sequenc-Inference of population bottleneck sizes under selection for transmissibility Inferences of bottleneck size showed a systematic underestimate of the bottleneck when selection affected 197 a transmission event, but a method neglecting selection was used in the inference procedure (Figure 5). Simulations were conducted in which an allele at the third of five polymorphic loci in the HA segment of a simulated influenza virus increased the transmissibility of the virus according to a selection coefficient \u03c3; this model of selection was applied for all subsequent simulations. In our simulations a value of \u03c3 = 1 is equivalent to a change in the frequency of a variant from 50% to 73% in a single transmission event. TheInferences of population bottleneck were conducted using a neutral inference method, and with a model in which selection was not constrained to be zero. In the first case, ignoring selection led to an underestimation of the true bottleneck size by an amount which increased according to the magnitude of selection for transmissibility. Selection during transmission produces a shift in the expected composition of the viral population; if this shift is interpreted as occurring due solely due to a finite bottleneck a",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. ItFigure 5. Median inferred bottleneck size from data simulating transmission with a single locus under selection of magnitude \u03c3 \u2208 {0, 0.5, 0.75, 1.0, 2.0}. Inferences were made using either a neutral inference model, in which the effect of selection was assumed to be zero, or a model incorporating selection, which allowed the presence of selection to be inferred. Median inferences are shown from 200 simulations for each data point. with greater accuracy. Where selection existed the ease with which it could be identified increased with increasing bottleneck size. Our results can again be understood with respect to the dynamics of the system. The bottleneck has a stochastic effect on the population of a magnitude inversely related to the number of viruses transmitted. Inferring the presence of selection requires the identification of changes in the population going beyond what would be expected under neutrality, biasing the population in the direction of the selected allele or alleles. However, stochastic effects can by chance distort the population",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF6": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder.It . https://doi.org/10.1101/302331 doi: bioRxiv preprint \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd = \ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd = \ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd = \ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd = \ufffd\ufffd\ufffd",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF7": {
+            "text": "It . https://doi.org/10.1101/302331 doi: bioRxiv preprint \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd = \ufffd\ufffd\ufffd",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF9": {
+            "text": "It . https://doi.org/10.1101/302331 doi: bioRxiv preprint \ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd (\ufffd \ufffd ) \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd \ufffd\ufffd\ufffd \uf7d9 \ufffd\ufffd\ufffd\ufffd \ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd (\ufffd \ufffd ) \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd \ufffd\ufffd\ufffd \uf7d9 \ufffd\ufffd\ufffd\ufffd \ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd (\ufffd \ufffd ) \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd \ufffd \ufffd\ufffd\ufffd \uf7d9 \ufffd\ufffd\ufffd\ufffd \ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd\ufffd \ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd (\ufffd \ufffd ) \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd \ufffd \ufffd\ufffd\ufffd \uf7d9 \ufffd\ufffd\ufffd\ufffd",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF10": {
+            "text": "\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd = \ufffd\ufffd\ufffd \u2022 \ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \u25a0 \ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": " Figure S9 . Inferred within-host fitness landscape for segments in the Mut viral populations. Haplotypes for which the inferred frequency rose to a frequency of at least 1% in at least one animal are shown. Haplotypes which are separated by a single mutation are joined by lines.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1,
+                    "end": 10,
+                    "text": "Figure S9",
+                    "ref_id": null
+                }
+            ],
+            "section": "NA Haplotypes Variants"
+        }
+    ]
+}

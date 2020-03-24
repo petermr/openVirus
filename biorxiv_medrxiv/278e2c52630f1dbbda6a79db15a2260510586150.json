@@ -1,0 +1,1362 @@
+{
+    "paper_id": "278e2c52630f1dbbda6a79db15a2260510586150",
+    "metadata": {
+        "title": "PhyloFold: Precise and Swift Prediction of RNA Secondary Structures to Incorporate Phylogeny among Homologs Associate Editor: XXXXXXX Received on XXXXX; revised on XXXXX; accepted on XXXXX",
+        "authors": [
+            {
+                "first": "Masaki",
+                "middle": [],
+                "last": "Tagashira",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Tokyo",
+                    "location": {
+                        "postCode": "277-8561",
+                        "settlement": "Chiba",
+                        "country": "Japan"
+                    }
+                },
+                "email": "tagashira_masaki_17@stu-cbms.k.u-tokyo.ac.jp\"."
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The simultaneous consideration of sequence alignment and RNA secondary structure, or structural alignment, is known to help predict more accurate secondary structures of homologs. However, the consideration is heavy and can be done only roughly to decompose structural alignments.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "A large quantity of functional ncRNAs have been discovered through sequencing technology, including high throughput sequencing (Maxam and Gilbert, 1977; Bentley et al., 2008) . The RNAs are related to various biological processes such as epigenetic silencing (Pasmant et al., 2011) , splicing regulation (Ji et al., 2003) , translational control (Long and Caceres, 2009 ), apoptosis regulation, and cell cycle control (Kino et al., 2010) . However, the functions of a large number of RNAs have not yet been uncovered. Secondary structures of the RNAs are an important key to uncovering the functions of the RNAs because the structures play critical roles in biological processes, (Wu et al., 1991) and secondary structures are often conserved among homologs even in the case where the sequences of the homologs are nonconserved. (Klein and Eddy, 2003) To more correctly predict secondary structures, simultaneous consideration of sequence alignment and secondary structure, or structural alignment (Sankoff, 1985; Hofacker et al., 2004; Havgaard et al., 2007) , has been taken into account. (Hamada et al., 2009c (Hamada et al., , 2011 Tan et al., 2017) However, the consideration has been proven intractable (Sankoff, 1985) and thus has been conducted roughly to decompose structural alignments. (Hamada et al., 2009c,a; Sato et al., 2012; Tan et al., 2017) To more accurately accomplish this goal, the PhyloFold method ( Figure 1 ) was developed in this study. The method predicts secondary structures of homologs considering likely pairwise structual alignments between the homologs by a sparsification technique. (1) The method computes pairwise structural alignment probabilities for each pair of input homologs.",
+            "cite_spans": [
+                {
+                    "start": 127,
+                    "end": 152,
+                    "text": "(Maxam and Gilbert, 1977;",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 153,
+                    "end": 174,
+                    "text": "Bentley et al., 2008)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 259,
+                    "end": 281,
+                    "text": "(Pasmant et al., 2011)",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 304,
+                    "end": 321,
+                    "text": "(Ji et al., 2003)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 346,
+                    "end": 369,
+                    "text": "(Long and Caceres, 2009",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 418,
+                    "end": 437,
+                    "text": "(Kino et al., 2010)",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 680,
+                    "end": 697,
+                    "text": "(Wu et al., 1991)",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 829,
+                    "end": 851,
+                    "text": "(Klein and Eddy, 2003)",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 998,
+                    "end": 1013,
+                    "text": "(Sankoff, 1985;",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1014,
+                    "end": 1036,
+                    "text": "Hofacker et al., 2004;",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 1037,
+                    "end": 1059,
+                    "text": "Havgaard et al., 2007)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 1091,
+                    "end": 1112,
+                    "text": "(Hamada et al., 2009c",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 1113,
+                    "end": 1135,
+                    "text": "(Hamada et al., , 2011",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 1136,
+                    "end": 1153,
+                    "text": "Tan et al., 2017)",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 1209,
+                    "end": 1224,
+                    "text": "(Sankoff, 1985)",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1297,
+                    "end": 1321,
+                    "text": "(Hamada et al., 2009c,a;",
+                    "ref_id": null
+                },
+                {
+                    "start": 1322,
+                    "end": 1340,
+                    "text": "Sato et al., 2012;",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 1341,
+                    "end": 1358,
+                    "text": "Tan et al., 2017)",
+                    "ref_id": "BIBREF29"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1423,
+                    "end": 1431,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "(2) Next, the method calculates average pairing probabilities between a target homolog and multiple support homologs to incorporate more than one sample into the subsequent predictions of secondary structures.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "(3) Finally, the method predicts the single secondary structure of each input homolog or the consensus secondary structure of the input sequence alignment.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "!\"#\"$%#\"#$#$%%#%\"$%$#\"#%$ ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Let STA RNA , f e STA be a set of all possible alignments STA RNA and the free energy (or inverse of the score) of the alignment STA, respectively. Assume that the probability of any alignment STA \u2208 STA RNA , p STA , obeys a Boltzmann (probability) distribution, i.e. p STA = exp(\u2212\u03b2f e STA ) Z where Z = STA exp(\u2212\u03b2f e STA ) and \u03b2 is a positive real number. Z is called a partition function. \u03b2 scales any energy f e STA . Let P PA RNA be the pair alignment probability matrix given the pair RNA. Let I PA STAijkl be 1 if the pairs (i, j), (k, l) are pair-aligned in the alignment STA and 0 otherwise, where i, j are two positions in the sequence RN A, k, l are two positions in the other sequence RN A , and i < j, k < l. The matrix P PA RNA can be written by the probabilities p STA :",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Posterior pair alignment probability matrix"
+        },
+        {
+            "text": "ijkl is the probability that the pairs (i, j), (k, l) are pair-aligned.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Posterior pair alignment probability matrix"
+        },
+        {
+            "text": "Any computation methods for a matrix P PA RNA have not been proposed although the concept of it P PA RNA is proposed in Hamada et al. (2009c) . Therefore, a computation method for the matrix P PA RNA and an efficient sparse version of the method are suggested in this study.",
+            "cite_spans": [
+                {
+                    "start": 120,
+                    "end": 141,
+                    "text": "Hamada et al. (2009c)",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Posterior pair alignment probability matrix"
+        },
+        {
+            "text": "Let f e SS be the free energy of the structure SS. The energy f e STA RNA is decomposed into additional components: f e STA RNA = f e SS RN A + f e SS RN A + f e PA + f e LA + f e gap . Here, f e PA , f e LA are the sum free energy of the pair and loop alignments in STA RNA , respectively. Also, f e gap is the sum free energy (or penalty) of affine gaps in the alignment",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Composition of structural alignment free energy f e STA"
+        },
+        {
+            "text": "The components f e SS RN A , f e SS RN A can be computed by the estimated parameters of the Turner (nearest neighbor) model, which approximates the free energy of RNA secondary structure on thermodynamics. (Turner and Mathews, 2010) As the components, conventional methods based on structural alignment employ posterior pairing probability matrices on single secondary structure, predicted by inside-outside algorithms such as the McCaskill algorithm (McCaskill, 1990) , to simplify computations, although the suitability of the matrices has not been discussed. (Hofacker et al., 2004; Do et al., 2008) . Hence, the Turner model, instead of the matrices, is adopted in this study to prevent a reduction in the accuracy of a matrix P PA RNA . The components f e PA , f e LA can be computed by the RIBOSUM score matrices, predicted from learning datasets of validated structural alignments. (Klein and Eddy, 2003) In this study, the RIBOSUM score 80-65 matrices, which are the most popular, are adopted.",
+            "cite_spans": [
+                {
+                    "start": 206,
+                    "end": 232,
+                    "text": "(Turner and Mathews, 2010)",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 451,
+                    "end": 468,
+                    "text": "(McCaskill, 1990)",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 562,
+                    "end": 585,
+                    "text": "(Hofacker et al., 2004;",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 586,
+                    "end": 602,
+                    "text": "Do et al., 2008)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 889,
+                    "end": 911,
+                    "text": "(Klein and Eddy, 2003)",
+                    "ref_id": "BIBREF17"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Composition of structural alignment free energy f e STA"
+        },
+        {
+            "text": "In the next section, an efficient (however nevertheless impractical) method that computes a matrix P PA RNA in the framework of an inside-outside algorithm is proposed.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Composition of structural alignment free energy f e STA"
+        },
+        {
+            "text": "2.4 Inside-outside algorithm that computes pair alignment probability matrix P PA RNA A probability p PA,RNA ijkl can be written with two 'inside\" and one 'outside\" ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Composition of structural alignment free energy f e STA"
+        },
+        {
+            "text": "can be considered though the sparsification proposed in this study is not effective for the variants. Algorithm 1 is the \"simultaneous\" solution of the Durbin (forwardbackward) algorithm, which predicts posterior alignment probability matrices on pairwise sequence alignment (Durbin et al., 1998) , and the McCaskill algorithm (McCaskill, 1990) , as expected. Algorithm 1 is also an inside-outside algorithm version of the Sankoff algorithm, which predicts pairwise structural alignments whose free energy is minimum (Sankoff, 1985) , as expected. The time and space complexities of Algorithm 1 are preferably around O(N M ) to deal with long ncRNAs. In the next section, a solution to the heavy complexity, sparsifying all possible structural alignments STA RNA , is introduced. reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 275,
+                    "end": 296,
+                    "text": "(Durbin et al., 1998)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 327,
+                    "end": 344,
+                    "text": "(McCaskill, 1990)",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 517,
+                    "end": 532,
+                    "text": "(Sankoff, 1985)",
+                    "ref_id": "BIBREF24"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Composition of structural alignment free energy f e STA"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. be the pairing probability of the positions i, j given the sequence RN A. In this study, the following sparsification conditions are introduced: ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Composition of structural alignment free energy f e STA"
+        },
+        {
+            "text": "Probabilistic consistency transformation is the technique that converts a probability between a target homolog and each support homolog into a metric that summarizes the phylogeny among all the homologs. (Do et al., 2005) The transformation has been required because the computational complexities involved in computing posterior probabilities among all the homologs is NP-complete as with multiple precise alignment. (Do et al., 2005; Hamada et al., 2009c; Tan et al., 2017) ",
+            "cite_spans": [
+                {
+                    "start": 204,
+                    "end": 221,
+                    "text": "(Do et al., 2005)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 418,
+                    "end": 435,
+                    "text": "(Do et al., 2005;",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 436,
+                    "end": 457,
+                    "text": "Hamada et al., 2009c;",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 458,
+                    "end": 475,
+                    "text": "Tan et al., 2017)",
+                    "ref_id": "BIBREF29"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Probabilistic consistency transformation"
+        },
+        {
+            "text": "The accuracy of a predicted structure SS against a reference alignment STA is measured based on terms of positive and negative predictions:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Secondary structure prediction that maximizes average expected accuracy incorporating multiple support homologs"
+        },
+        {
+            "text": "where T P, T N, F P, F N are the numbers of true positive, true negative, false positive, and false negative predictions, respectively, and {\u03b1 h } is their scale parameter. In this study, the counts T P, T N, F P, F N are configured as: Because the accuracy and \u03b3-dependent accuracy a(SS, STA), a \u03b3 (SS, STA) = \u03b3T P + T N are equivalent, the expected accuracy to be maximized is gained:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Secondary structure prediction that maximizes average expected accuracy incorporating multiple support homologs"
+        },
+        {
+            "text": ". The predicted structure that maximizes expected accuracy E STA RNA [a \u03b3 (SS RN A , STA RNA )] can be computed to conduct Nussinov-type dynamic programming (Nussinov et al., 1978) based on the following recursion:",
+            "cite_spans": [
+                {
+                    "start": 157,
+                    "end": 180,
+                    "text": "(Nussinov et al., 1978)",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Secondary structure prediction that maximizes average expected accuracy incorporating multiple support homologs"
+        },
+        {
+            "text": ".",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Secondary structure prediction that maximizes average expected accuracy incorporating multiple support homologs"
+        },
+        {
+            "text": "In order to consider more than one support homolog, it is sufficient that probabilities p pair,RNA The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. All rights . https://doi.org/10.1101/2020.03.05.975797 doi: bioRxiv preprint ) can be computed by the RNAalipfold algorithm. (Bernhart et al., 2008) 3 Results and discussions",
+            "cite_spans": [
+                {
+                    "start": 315,
+                    "end": 338,
+                    "text": "(Bernhart et al., 2008)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Secondary structure prediction that maximizes average expected accuracy incorporating multiple support homologs"
+        },
+        {
+            "text": "The PhyloFold method proposed in this study was implemented in the Rust programming language as the PhyloFold program ('https://github.com/heartsh/phylofold\") and the PhyloAliFold program ('https://github.com/heartsh/phyloalifold\"). The programs employ multithreading to achieve the fastest possible running time. Programs were run on a computer composed of an \"AMD EPYC 7501\" CPU with 128 threads and a clock rate 2 GHz and 128 GB of RAM unless environments for running programs are otherwise specified.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Implementations and benchmark environments"
+        },
+        {
+            "text": "Positive predictive value, sensitivity, and false positive rate are calculated from the numbers of true and false positives and negatives:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark of PhyloFold method with competitors"
+        },
+        {
+            "text": "The PhyloFold program performed the best trade-off of the above metrices (Figure 3 ) among the PhyloFold, CentroidFold (Hamada et al., 2009b) , CentroidHomFold (Hamada et al., 2009c) , and TurboFold-smp (Tan et al., 2017) programs (Table 2 ) on test set \"unaligned\" (Table 3) while demanding comparable running time (Table 4 ). Ten percent of ncRNA families whose reference seed structural alignments have at most 200 columns and whose number of homologs is less than 11 are sampled from the Rfam database (Kalvari et al., 2018) . The reference seed structural alignments of the 147 sampled families are compiled as test set \"aligned\". The rightmost column shows the type of probabilities used to predict secondary structures. Precise alignment type is proposed in this study. Decomposed alignment type considers structural alignment to decompose an alignment STA RNA into the structures and alignment SS RN A , SS RN A , SA RNA . Single sequence type does not take support homologs into account. \"+ consensus structure\" means that probabilities on consensus secondary structure given input sequence alignment are mixed. Precise alignment (+ consensus structure) type is expected to display the highest prediction accuracy. Unaligned homologs of 11 ncRNA families and the reference secondary structures of the homologs were collected from the RNA STRAND database (Andronescu et al., 2008) and compiled as test set \"unaligned\". The Rfam database was not used to build the set because this database does not register reference single secondary structures. Ten homologs and their reference secondary structures were sampled from each ncRNA family when the family had 11 or more homologs. The middle and rightmost columns show the number of homologs and the range of lengths on each ncRNA family, respectively. \"Coronavirus 3 prime stem-loop\u2026\" and \"Vimentin 3 prime UTR\" stand for \"Coronavirus 3 prime stem-loop II-like motif (s2m)\" and \"Vimentin 3 prime UTR protein-binding region,\" respectively.",
+            "cite_spans": [
+                {
+                    "start": 119,
+                    "end": 141,
+                    "text": "(Hamada et al., 2009b)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 160,
+                    "end": 182,
+                    "text": "(Hamada et al., 2009c)",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 203,
+                    "end": 221,
+                    "text": "(Tan et al., 2017)",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 506,
+                    "end": 528,
+                    "text": "(Kalvari et al., 2018)",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1363,
+                    "end": 1388,
+                    "text": "(Andronescu et al., 2008)",
+                    "ref_id": "BIBREF0"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 73,
+                    "end": 82,
+                    "text": "(Figure 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 231,
+                    "end": 239,
+                    "text": "(Table 2",
+                    "ref_id": "TABREF3"
+                },
+                {
+                    "start": 266,
+                    "end": 275,
+                    "text": "(Table 3)",
+                    "ref_id": "TABREF4"
+                },
+                {
+                    "start": 316,
+                    "end": 324,
+                    "text": "(Table 4",
+                    "ref_id": null
+                }
+            ],
+            "section": "Benchmark of PhyloFold method with competitors"
+        },
+        {
+            "text": "The PhyloAliFold program demonstrated a superior trade-off of the above metrices ( Figure 4 ) compared to the CentroidAliFold program (Hamada et al., 2011) on the set keeping comparable running time (Table 5) .",
+            "cite_spans": [
+                {
+                    "start": 134,
+                    "end": 155,
+                    "text": "(Hamada et al., 2011)",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 83,
+                    "end": 91,
+                    "text": "Figure 4",
+                    "ref_id": null
+                },
+                {
+                    "start": 199,
+                    "end": 208,
+                    "text": "(Table 5)",
+                    "ref_id": "TABREF5"
+                }
+            ],
+            "section": "Benchmark of PhyloFold method with competitors"
+        },
+        {
+            "text": "reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark of PhyloFold method with competitors"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. All rights . https://doi.org/10.1101/2020.03.05.975797 doi: bioRxiv preprint (Katoh and Standley, 2013) were used to compute the sequence alignments to input into the PhyloAliFold program. The MAFFT G-INS-i executes only classic multiple sequence alignment whereas the MAFFT X-INS-i considers structural alignments during multiple sequence alignment to decompose them. The reference sequence alignments of the ncRNA families in test set \"aligned\" are also used as the input of the PhyloAliFold. Table 4 . The benchmark of \u03b3-dependent programs that predict single secondary structures on running time using test set \"unaligned\".",
+            "cite_spans": [
+                {
+                    "start": 168,
+                    "end": 194,
+                    "text": "(Katoh and Standley, 2013)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 586,
+                    "end": 593,
+                    "text": "Table 4",
+                    "ref_id": null
+                }
+            ],
+            "section": "Benchmark of PhyloFold method with competitors"
+        },
+        {
+            "text": "Running time Time complexity",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Program (algorithm)"
+        },
+        {
+            "text": "The rightmost column shows the ideal time complexity of each program where R is the number of homologs and N is the longest length of the homologs. The running time of the programs were measured when \u03b3 = 2 0 = 1 across the test set. All the parameter values of the programs were the same as Figure 3 . The computer used has an \"Intel Xeon CPU\" CPU with 64 threads and a clock rate of 2.30 GHz and 240 GB of RAM. The programs were run exploiting as many threads as possible to complete the benchmark in the shortest time. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 291,
+                    "end": 299,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Program (algorithm)"
+        },
+        {
+            "text": "The rightmost column shows the ideal time complexity of each program where R is the number of homologs, N is the longest length of the homologs, C is the number of columns in an input sequence alignment. The running time of the programs were measured when \u03b3 = 2 0 = 1 across the test set using the MAFFT X-INS-i program to predict input sequence alignments. All the parameter values of the programs were the same as Figure 4 . The computer used is the same as Table 4 . The programs were run exploiting as many threads as possible to complete the benchmark in the shortest time.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 416,
+                    "end": 424,
+                    "text": "Figure 4",
+                    "ref_id": null
+                },
+                {
+                    "start": 460,
+                    "end": 467,
+                    "text": "Table 4",
+                    "ref_id": null
+                }
+            ],
+            "section": "Program (algorithm)"
+        },
+        {
+            "text": "reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Program (algorithm)"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. All rights . https://doi.org/10.1101/2020.03.05.975797 doi: bioRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Program (algorithm)"
+        },
+        {
+            "text": "The PhyloFold method, which predicts secondary structures considering the phylogeny among homologs, has been devised. The method demonstrated superior prediction accuracy compared to competitors while demanding comparable running time on the prediction of both single and consensus secondary structures. The method has the potential to be improved by secondary structure probing methods such as icSHAPE (Spitale et al., 2015) and SHAPE-MaP (Siegfried et al., 2014) as demonstrated in the SuperFold (Siegfried et al., 2014) and TurboFold methods.",
+            "cite_spans": [
+                {
+                    "start": 403,
+                    "end": 425,
+                    "text": "(Spitale et al., 2015)",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 440,
+                    "end": 464,
+                    "text": "(Siegfried et al., 2014)",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 498,
+                    "end": 522,
+                    "text": "(Siegfried et al., 2014)",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Conclusions"
+        },
+        {
+            "text": "Probabilities } can be utilized to improve the accuracy of existing methods that predict RNA-RNA interactions, alignments, etc., such as the IntaRNA (Mann et al., 2017) , CentroidAlign (Hamada et al., 2009a) , and DAFS (Sato et al., 2012) programs, which either employ the decomposition of structural alignments or do not incorporate structural alignments.",
+            "cite_spans": [
+                {
+                    "start": 149,
+                    "end": 168,
+                    "text": "(Mann et al., 2017)",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 185,
+                    "end": 207,
+                    "text": "(Hamada et al., 2009a)",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 219,
+                    "end": 238,
+                    "text": "(Sato et al., 2012)",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Conclusions"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "RNA STRAND: The RNA Secondary Structure and Statistical Analysis Database",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Andronescu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC Bioinformatics",
+            "volume": "9",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Accurate whole human genome sequencing using reversible terminator chemistry",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Bentley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Nature",
+            "volume": "456",
+            "issn": "7218",
+            "pages": "53--59",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "RNAalifold: improved consensus structure prediction for RNA alignments",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Bernhart",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC Bioinformatics",
+            "volume": "9",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Fast statistical alignment",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Bradley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PLoS Computational Biology",
+            "volume": "5",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "ProbCons: Probabilistic consistency-based multiple sequence alignment",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Do",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Genome research",
+            "volume": "15",
+            "issn": "2",
+            "pages": "330--370",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "A max-margin model for efficient simultaneous alignment and folding of RNA sequences",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Do",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Bioinformatics",
+            "volume": "24",
+            "issn": "13",
+            "pages": "68--76",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Biological sequence analysis",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Durbin",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "CentroidAlign: fast and accurate aligner for structured RNAs by maximizing expected sum-of-pairs score",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hamada",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Bioinformatics",
+            "volume": "",
+            "issn": "24",
+            "pages": "3236--3279",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Prediction of RNA secondary structure using generalized centroid estimators",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hamada",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Bioinformatics",
+            "volume": "25",
+            "issn": "4",
+            "pages": "465--473",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Predictions of RNA secondary structure by combining homologous sequence information",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hamada",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Bioinformatics",
+            "volume": "25",
+            "issn": "12",
+            "pages": "330--338",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Improving the accuracy of predicting secondary structure for aligned RNA sequences",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hamada",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nucleic Acids Research",
+            "volume": "39",
+            "issn": "2",
+            "pages": "393--402",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Fast Pairwise Structural RNA Alignments by Pruning of the Dynamical Programming Matrix",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Havgaard",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "PLoS Computational Biology",
+            "volume": "3",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Alignment of RNA base pairing probability matrices",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hofacker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Bioinformatics",
+            "volume": "20",
+            "issn": "14",
+            "pages": "2222--2227",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "MALAT-1, a novel noncoding RNA and thymosin \u03b24 predict metastasis and survival in early-stage non-small cell lung cancer",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Ji",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Oncogene",
+            "volume": "22",
+            "issn": "39",
+            "pages": "8031--8041",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Rfam 13.0: shifting to a genome-centric resource for noncoding RNA families",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Kalvari",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Nucleic Acids Research",
+            "volume": "46",
+            "issn": "D1",
+            "pages": "335--342",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "MAFFT Multiple Sequence Alignment Software Version 7: Improvements in Performance and Usability",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Katoh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Standley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Molecular Biology and Evolution",
+            "volume": "30",
+            "issn": "4",
+            "pages": "772--780",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Noncoding RNA gas5 is a growth arrest-and starvationassociated repressor of the glucocorticoid receptor",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kino",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Science signaling",
+            "volume": "3",
+            "issn": "107",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "RSEARCH: Finding homologs of single structured RNA sequences",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Klein",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Eddy",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "BMC Bioinformatics",
+            "volume": "4",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "The SR protein family of splicing factors: master regulators of gene expression",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Long",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Caceres",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "The Biochemical journal",
+            "volume": "417",
+            "issn": "1",
+            "pages": "15--27",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "IntaRNA 2.0: enhanced and customizable prediction of RNA-RNA interactions",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mann",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Wright",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Backofen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nucleic Acids Research",
+            "volume": "45",
+            "issn": "",
+            "pages": "435--439",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "A new method for sequencing DNA (DNA chenistry/dimethyl sulfate cleavage/hydrazine/piperidine)",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Maxam",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Gilbert",
+                    "suffix": ""
+                }
+            ],
+            "year": 1977,
+            "venue": "Biochemistry",
+            "volume": "74",
+            "issn": "2",
+            "pages": "560--564",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "The equilibrium partition function and base pair binding probabilities for RNA secondary structure",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Mccaskill",
+                    "suffix": ""
+                }
+            ],
+            "year": 1990,
+            "venue": "Biopolymers",
+            "volume": "29",
+            "issn": "6-7",
+            "pages": "1105--1119",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Algorithms for Loop Matchings",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Nussinov",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Pieczenik",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Griggs",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Kleitman",
+                    "suffix": ""
+                }
+            ],
+            "year": 1978,
+            "venue": "SIAM Journal on Applied Mathematics",
+            "volume": "35",
+            "issn": "1",
+            "pages": "68--82",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "ANRIL, a long, noncoding RNA, is an unexpected major hotspot in GWAS",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Pasmant",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "FASEB journal : official publication of the Federation of American Societies for Experimental Biology",
+            "volume": "25",
+            "issn": "2",
+            "pages": "444--452",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Simultaneous Solution of the RNA Folding, Alignment and Protosequence Problems",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Sankoff",
+                    "suffix": ""
+                }
+            ],
+            "year": 1985,
+            "venue": "SIAM J. Appl. Math",
+            "volume": "45",
+            "issn": "5",
+            "pages": "810--825",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "IPknot: fast and accurate prediction of RNA secondary structures with pseudoknots using integer programming",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Sato",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Bioinformatics",
+            "volume": "27",
+            "issn": "13",
+            "pages": "85--93",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "DAFS: simultaneous aligning and folding of RNA sequences via dual decomposition",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Sato",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Bioinformatics",
+            "volume": "28",
+            "issn": "24",
+            "pages": "3218--3224",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "RNA motif discovery by SHAPE and mutational profiling (SHAPE-MaP)",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Siegfried",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nature Methods",
+            "volume": "11",
+            "issn": "9",
+            "pages": "959--965",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Structural imprints in vivo decode RNA regulatory mechanisms",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Spitale",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nature",
+            "volume": "519",
+            "issn": "7544",
+            "pages": "486--490",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "TurboFold II: RNA structural alignment and secondary structure prediction informed by multiple homologs",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Tan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nucleic Acids Research",
+            "volume": "45",
+            "issn": "20",
+            "pages": "11570--11581",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "NNDB: the nearest neighbor parameter database for predicting stability of nucleic acid secondary structure",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Turner",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Mathews",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Nucleic Acids Research",
+            "volume": "38",
+            "issn": "suppl_1",
+            "pages": "280--282",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "tat regulates binding of the human immunodeficiency virus trans-activating region RNA loop-binding protein TRP-185",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "Genes & development",
+            "volume": "5",
+            "issn": "11",
+            "pages": "2128--2168",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "The proposed workflow of the PhyloFold method that predicts single and consensus RNA secondary structures.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Examples of (A) a secondary structure SS RN A , (B) a sequence alignment SA RNA , and (C) a structural alignment STA RNA . of positions are said to be pair-aligned if they are pairing and aligned. Two positions are said to be loop-aligned if they are unpaired and aligned.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "M are the lengths of the sequences RN AandRN A , respectively. Inside and outside partition functions can be computed with those of shorter and longer substrings, respectively, and are stored in dynamic programming memory for the remaining computation. A matrix P PARNA can be computed by Algorithm 1 with the time and space complexities O(N 4 M 4 ), O(N 3 M 3 ). Variants of Algorithm 1 with the time and space complexities",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "RN A ij \u2265 for any pairing positions i, j and any sequence RN A where \u03b4, are sparsification parameters. The first two conditions let Algorithm 1 not consider the alignments STA RNA with too many gaps. The last condition makes Algorithm 1 not consider the alignments STA RNA with pairings difficult to predict (e.g. distant). Algorithm 1 with the above conditions are ideal with the time and space complexities O(L 2 ), O(L 2 ) where L = max(N, M ) if the parameters \u03b4, take sufficiently small and large values, respectively.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Here, I pair,SS ij is 1 if the positions i, j are pairing in the structure SS and 0 otherwise; I pair,STA ij is 1 if the positions i, j are pairing in the alignment STA ij and 0 otherwise; I unpair,SS i is 1 if the position i is unpaired in the structure SS and 0 otherwise, I unpair;STA i is 1 if the position i is unpaired in the alignment STA and 0 otherwise; and I pair,",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "ij , p unpair,RNA i are replaced with the probabilities p pair,RN A,{RN A } ij , p unpair,RN A,{RN A } i in the above recursion.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Secondary structure prediction is extended to that of sequence alignment to view positions {i} on a sequence RN A as columns on an alignment {RN A}, SA {RN A} , on the above recursion. It is known that pairing probabilities of columns i, j given an alignment SA {RN A} , p pair,SA {RN A} ij , improves the prediction accuracy of consensus secondary structure. (Hamada et al., 2011; Bernhart et al., 2008) Thus, the mixture of probabilities {p pair,RN A,{RN A } ij }, p pair,SA {RN A} ij is used on the above recursion to predict the structure of an alignment SA {RN A} : p pair,mix,SA {RN A} ij= RN A p pair,RN A ,{RN A}\\RN A i * j * 2|{RN A * }| + p pair,SA {RN A} ij 2 where RN A \u2208 {RN A}, {RN A * } isthe subset of the sequences {RN A} that is not mapped to gaps on the columns i, j in the alignment SA {RN A} , and i * , j * are the positions mapped to the columns i, j in the alignment SA {RN A} respectively. A matrix (p pair,SA {RN A} ij",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "The benchmark of \u03b3-dependent programs that predict single secondary structures on prediction accuracy using test set \"unaligned\". The trade-off curves are composed of (left) pairs {(SEN S, P P V )} and (right) pairs {(F P R, SEN S)} at each parameter \u03b3 = 2 g : g \u2208 {\u22127, . . . , 10} respectively. The PhyloFold method specified its parameter values as inTable 1. The CentroidFold and CentroidHomFold programs were run with their default parameter values. The TurboFold-smp was given only the number of its iterations \u03b7 = 1. The different algorithms are shown in parentheses. The benchmark of \u03b3-dependent programs that predict consensus secondary structures on prediction accuracy using test set \"aligned\". The trade-off curves are composed of (left) pairs {(P P V, SEN S)} and (right) pairs {(F P R, SEN S)} at each parameter \u03b3 = 2 g : g \u2208 {\u22127, . . . , 10} respectively. The parameter values of the PhyloFold method are the same asFigure 3. The CentroidAlifold program was run with its default parameter values. The MAFFT G-INS-i and MAFFT X-INS-i programs",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Consensus secondary structures color-coded with their reliability. The structures are of the sequence alignment among homologs sampled from the tRNA family registered in the Rfam database. The alignment was computed by (A) the MAFFT G-INS-i and (B) MAFFT X-INS-i programs. The structures were computed by the RNAalifold program (Bernhart et al., 2008). (C) The reference consensus secondary structures of the homologs derived from the database. The reliability was assessed to average mean pairing probabilities {p pair,RN A,{RN A } ij } per column pair. The reliability was improved when the quality of the input sequence alignment increased.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "{p pair,RN A,{RN A } ij } can be used to measure the reliability of predicted secondary structures as a part of postprocessing. (Figure 5) Also, the probabilities {p pair,RN A,{RN A } ij",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Sparsifying pair alignment probability matrix P PA RNA From all the possible alignments STA RNA , sparsification can pick out those that are favorable (e.g. with adequately low free energy). It can allow Algorithm 1 to compute only the functions {\u03b1 x ijkl , \u03b1 y uv , \u03b2 x ijkl } that satisfy sparsification conditions. Let p pair,RN A",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "In this study, the methods that transform probabilities {p PA,RNA ijkl } are proposed. To average probabilities p PA,(RN A,RN A ) ijkl between the target homolog and each support homolog RN A, {RN A }, the average pairing probability {RN A } are considered or not.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Parameter values used in the PhyloFold method.The penalties p OG , p EG are set to zero because they p OG , p EG exert a bad influence on the prediction of secondary structures.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "The profile of \u03b3-dependent programs that predict secondary structures.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "The profile of test set \"unaligned\".",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "The benchmark of \u03b3-dependent programs that predict consensus secondary structures on running time using test set \"aligned\".",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "I thank the members of the Asai and Frith laboratories for discussing this study with me for years. Also, I thank Dr. Risa Kawaguchi for sharing valuable information about the scaling and logsumexp methods on exact probability computations with me. I would like to thank Editage (www. editage.com) for English language editing. Most computations were performed on the NIG supercomputer at the ROIS National Institute of Genetics.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "M.T. conceived the proposed method, implemented it in the presented programs, experimented with them and competitors, and wrote this paper.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Author contributions"
+        }
+    ]
+}

@@ -1,0 +1,820 @@
+{
+    "paper_id": "d92e6ddc127c4dd588cfa8fd584a9a1adb4bbe86",
+    "metadata": {
+        "title": "Identification of viruses with the potential to infect human",
+        "authors": [
+            {
+                "first": "Zheng",
+                "middle": [],
+                "last": "Zhang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Hunan University",
+                    "location": {
+                        "settlement": "Changsha",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Zena",
+                "middle": [],
+                "last": "Cai",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Hunan University",
+                    "location": {
+                        "settlement": "Changsha",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Zhiying",
+                "middle": [],
+                "last": "Tan",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Hunan University",
+                    "location": {
+                        "settlement": "Changsha",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Congyu",
+                "middle": [],
+                "last": "Lu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Hunan University",
+                    "location": {
+                        "settlement": "Changsha",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Gaihua",
+                "middle": [],
+                "last": "Zhang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Hunan Normal University",
+                    "location": {
+                        "postCode": "410081",
+                        "settlement": "Changsha",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Yousong",
+                "middle": [],
+                "last": "Peng",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Hunan University",
+                    "location": {
+                        "settlement": "Changsha",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The virus has caused much mortality and morbidity to humans, and still posed a serious threat to the global public health. The virome with the human-infection potential is far from complete. Novel viruses have been discovered at an unprecedented pace as the rapid development of viral metagenomics. However, there is still a lack of a method for rapidly identifying the virus with the human-infection potential. This study built several machine learning models for discriminating the human-infecting viruses from other viruses based on the frequency of k-mers in the viral genomic sequences. The k-nearest neighbor (KNN) model could predict the human-infecting virus with an accuracy of over 90%. Even for the KNN models built on the contigs as short as 1kb, they performed comparably to those built on the viral genomes, suggesting that the models could be used to identify the human-infecting virus from the viral metagenomic sequences. This work could help for discovery of novel human-infecting virus in metagenomics studies.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Viruses are the most abundant biological entities on Earth and exist in all habitats of the world (Paez-Espino, Eloe-Fadrosh et al. 2016) . They can infect all kinds of organisms ranging from the bacteria to animals, including the human. Humans are constantly exposed to a large diversity of viruses, and over two-thirds of all human pathogens belong to viruses (Woolhouse and Gaunt 2007) . The viruses have caused huge mortality and morbidity to the human society in human history, such as the devastating smallpox and Spanish flu. Although much progress have been made in prevention and control of viral infectious disease, recent serial outbreaks caused by the Middle East Respiratory Syndrome coronavirus (Breban, Riou et al. 2013) , avian influenza H7N9 virus (Gao, Cao et al. 2013) , Ebola virus (Maganga, Kapetshi et al. 2014) and Zika virus (Mlakar, Korva et al. 2016) indicate that the viruses still pose a serious threat to the global public health.",
+            "cite_spans": [
+                {
+                    "start": 112,
+                    "end": 137,
+                    "text": "Eloe-Fadrosh et al. 2016)",
+                    "ref_id": null
+                },
+                {
+                    "start": 362,
+                    "end": 388,
+                    "text": "(Woolhouse and Gaunt 2007)",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 709,
+                    "end": 735,
+                    "text": "(Breban, Riou et al. 2013)",
+                    "ref_id": null
+                },
+                {
+                    "start": 765,
+                    "end": 787,
+                    "text": "(Gao, Cao et al. 2013)",
+                    "ref_id": null
+                },
+                {
+                    "start": 802,
+                    "end": 833,
+                    "text": "(Maganga, Kapetshi et al. 2014)",
+                    "ref_id": null
+                },
+                {
+                    "start": 849,
+                    "end": 876,
+                    "text": "(Mlakar, Korva et al. 2016)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "The virome which could infect humans is far from complete. Generally speaking, a new pathogen would not be identified until it caused epidemics or pandemics. Many viruses may remain undiscovered, even if they have already entered into human populations (Rosenberg 2015) . Traditional diagnostic methods such as polymerase chain reaction, immunological assays and pan-viral microarrays are limited in their ability to identify novel viruses with the potential to infect humans. Rapid development of viral metagenomic sequencing in recent years provides a powerful high-throughput and culture-independent means to identify new viruses, which leads to accumulation of new viruses at an unprecedented pace (Alavandi and Poornima 2012) . The Global Virome Project (GVP), which was proposed and initiated in the beginning of 2018, estimated that there were over 1.67 million yet-to-be-discovered viruses in animal reservoirs, and between 631,000 to 827,000 of these unknown viruses have the capacity to infect humans (Carroll, Daszak et al. 2018) . Therefore, it is in great need to develop rapid methods for identifying viruses with the potential to infect humans.",
+            "cite_spans": [
+                {
+                    "start": 253,
+                    "end": 269,
+                    "text": "(Rosenberg 2015)",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 702,
+                    "end": 730,
+                    "text": "(Alavandi and Poornima 2012)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 1011,
+                    "end": 1040,
+                    "text": "(Carroll, Daszak et al. 2018)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "Two kinds of methods, the sequence alignment-based and alignment-free methods, have been developed to predict the host for viruses. For example, several methods based on k-mers, which were extracted from viral genomes (Ahlgren, Ren et al. 2016, . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/597963 doi: bioRxiv preprint Li and Sun 2018) , and several methods based on sequence blast, have been developed to predict the host of the phage (Bolotin, Quinquis et al. 2005 , Edwards, McNair et al. 2015 . Some studies have also attempted to identify the human virus with these methods. For example, Xu et al. (Xu, Tan et al. 2017) developed SVM models to predict the host of influenza viruses based on word vectors. However, all these studies have focused some type of viruses, such as coronavirus and influenza virus. The methods they developed were not suitable for identification of novel human-infecting viruses from the viral metagenomic sequences. Here, we attempted to build machine learning models for rapid identification of viruses with the potential to infect human.",
+            "cite_spans": [
+                {
+                    "start": 218,
+                    "end": 246,
+                    "text": "(Ahlgren, Ren et al. 2016, .",
+                    "ref_id": null
+                },
+                {
+                    "start": 460,
+                    "end": 476,
+                    "text": "Li and Sun 2018)",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 577,
+                    "end": 607,
+                    "text": "(Bolotin, Quinquis et al. 2005",
+                    "ref_id": null
+                },
+                {
+                    "start": 608,
+                    "end": 637,
+                    "text": ", Edwards, McNair et al. 2015",
+                    "ref_id": null
+                },
+                {
+                    "start": 744,
+                    "end": 765,
+                    "text": "(Xu, Tan et al. 2017)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "The virus with specific hosts and the viral genomic sequences were obtained from the database of Virus-Host DB (available at https://www.genome.jp/virushostdb/) on July 15, 2018 (Mihara, Nishimura et al. 2016) . After removing the viroid and satellites, and the viruses with genomic sequence less than 1kb, a total of 9428 viruses were kept for further analysis, which included 1236 viruses infecting humans, which were defined as human-infecting viruses, and 8192 viruses infecting other species.",
+            "cite_spans": [
+                {
+                    "start": 178,
+                    "end": 209,
+                    "text": "(Mihara, Nishimura et al. 2016)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Virus-host interactions and viral genomes"
+        },
+        {
+            "text": "The machine learning models of k-nearest neighbor (KNN) (k=1), support vector machine (SVM) (using the linear kernel function), gaussian naive bayes classifier (GNBC), random forest (RF) (with default settings) and logistic regression (LR) (with default settings) were built with the default parameters using the package \"scikit-learn\" (version 0.20.2) (Pedregosa, Varoquaux et al. 2011) in Python (version 3.6.2).",
+            "cite_spans": [
+                {
+                    "start": 353,
+                    "end": 387,
+                    "text": "(Pedregosa, Varoquaux et al. 2011)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Machine learning models"
+        },
+        {
+            "text": "Because the number of human-infecting viruses was much smaller than that of other viruses, the functions of \"BalanceBaggingClassifier\" (Breiman 1996 , Barandiaran 1998 ) and \"BalanceRandomForest\" (Chen, Liaw et al. 2004) in the package of \"imbalanced-learn\" (version 0.4.3) in Python were used to deal with the imbalance . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/597963 doi: bioRxiv preprint between the human-infecting virus and other viruses in the modeling, with the parameter of \"n_estimators\" set to be 100. Ten-fold cross-validations were used to evaluate the predictive performances of the machine learning models, and were conducted using the functions of 'StratifiedKFold' in the package \"scikit-learn\" in Python. To measure the predictive performances of the machine learning models, the area under the receiver operating characteristics (ROC) curve (AUC), the accuracy, recall rate, specificity and predictive precision were calculated for each model.",
+            "cite_spans": [
+                {
+                    "start": 135,
+                    "end": 148,
+                    "text": "(Breiman 1996",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 149,
+                    "end": 167,
+                    "text": ", Barandiaran 1998",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 196,
+                    "end": 220,
+                    "text": "(Chen, Liaw et al. 2004)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Machine learning models"
+        },
+        {
+            "text": "All the statistical analysis was conducted in R (version 3.5.0).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Statistical analysis"
+        },
+        {
+            "text": "A total of 9428 viruses were used in the study. Among them, 1236 viruses were reported to infect humans, which were defined as the human-infecting virus. They ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Taxonomy distribution of viruses"
+        },
+        {
+            "text": "To discriminating the human-infecting virus from other viruses, several machine-learning models, including k-nearest neighbor (KNN), random forest (RF), gaussian naive bayes classifier (GNBC), support-vector machine (SVM) and logistic regression (LR), were built based on k-mer frequencies in the viral genome. K-mers of one to six nucleotides were used in the models to evaluating the influence of the k-mer length on the model performance (Table S1 ). Figure 2 showed that the AUC of GNBC, SVM and LR models increased as the increase of the k-mer length from one to six. While for KNN and RF, the AUCs of them peaked at k-mer length of 4 and 3, respectively; then, they began to decrease as the increase of k-mer length. The AUCs of KNN and RF were much larger than those of other models, including GNBC, SVM",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 441,
+                    "end": 450,
+                    "text": "(Table S1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 454,
+                    "end": 462,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Machine-learning models for identifying the human-infecting virus based on k-mer frequencies in the genome"
+        },
+        {
+            "text": "and LR, at all length of k-mers, suggesting that the KNN and RF outperformed other models in discriminating the human-infecting virus from other viruses. The best . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/597963 doi: bioRxiv preprint performance was achieved on the KNN model with the k-mers of four nucleotides.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Machine-learning models for identifying the human-infecting virus based on k-mer frequencies in the genome"
+        },
+        {
+            "text": "The model not only had the best overall performance, with accuracy of 0.90 and AUC of 0.92, respectively, but also had the best ability of capturing the human-infecting virus, with recall rate of 0.94. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Machine-learning models for identifying the human-infecting virus based on k-mer frequencies in the genome"
+        },
+        {
+            "text": "In the metagenomics studies, contigs of varying length were assembled, which range from several hundreds to several thousands of nucleotides. Rapid determination of the human-infecting virus from metagenomic sequences is important for early warnings of newly emerging viruses. To mimic the metagenomic sequences, viral genomes . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/597963 doi: bioRxiv preprint were split into non-overlapping contigs of 500, 1,000, 3,000, 5,000 and 10,000 nucleotides long. The number of contigs of varying length in the human-infecting virus and other viruses were listed in Table S2 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 741,
+                    "end": 749,
+                    "text": "Table S2",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Identifying the human-infecting virus based on contigs of varying length"
+        },
+        {
+            "text": "Since the KNN model performed best in discriminating the human-infecting virus from other viruses, it was used to identify the human-infecting virus based on contigs of varying length. For the contigs of a given length, KNN models for discriminating the human-infecting virus and other viruses were built with k-mers of different size (Table S3 ). As was shown in Figure 3 , for contigs of all length, the AUC of KNN models increased as the increase of k-mer length from one to four. The best performance was achieved for all models with k-mers of four nucleotides long. The longer the contigs were, the better the models performed in identifying the human-infecting virus ( Figure 3 and Table 2 model not only achieved excellent overall performances, but also had high sensitivity in identifying the human-infecting virus.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 335,
+                    "end": 344,
+                    "text": "(Table S3",
+                    "ref_id": null
+                },
+                {
+                    "start": 364,
+                    "end": 372,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 675,
+                    "end": 683,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 688,
+                    "end": 695,
+                    "text": "Table 2",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Identifying the human-infecting virus based on contigs of varying length"
+        },
+        {
+            "text": "In conclusion, this study for the first time built the computational models to predict the human-infecting virus in the perspective of virome. The high accuracy and sensitivity of the KNN model built on the viral contigs of varying length suggests that the model could be used to identify the human-infecting virus from the viral metagenomic sequences. This work could help for discovery of novel human-infecting virus in metagenomics studies.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Identifying the human-infecting virus based on contigs of varying length"
+        },
+        {
+            "text": "Ahlgren, N. A., et al. (2016) . \"Alignment-free oligonucleotide frequency dissimilarity measure improves prediction of hosts from metagenomically-derived viral sequences.\" Nucleic acids research 45(1): 39-53.",
+            "cite_spans": [
+                {
+                    "start": 12,
+                    "end": 29,
+                    "text": "A., et al. (2016)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Reference"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "The yellow fever virus vaccine induces a broad and polyfunctional human memory CD8+ T cell response",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Akondy",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "The Journal of Immunology",
+            "volume": "183",
+            "issn": "12",
+            "pages": "7919--7930",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Viral metagenomics: a tool for virus discovery and diversity in aquaculture",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Alavandi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Poornima",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Indian Journal of Virology",
+            "volume": "23",
+            "issn": "2",
+            "pages": "88--98",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "The random subspace method for constructing decision forests",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Barandiaran",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "IEEE Trans. Pattern Anal. Mach. Intell",
+            "volume": "20",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "The epidemiology of human papillomavirus infections",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Baseman",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Koutsky",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Journal of clinical virology",
+            "volume": "32",
+            "issn": "",
+            "pages": "16--24",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Clustered regularly interspaced short palindrome repeats (CRISPRs) have spacers of extrachromosomal origin",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bolotin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Microbiology",
+            "volume": "151",
+            "issn": "8",
+            "pages": "2551--2561",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Interhuman transmissibility of Middle East respiratory syndrome coronavirus: estimation of pandemic risk",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Breban",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "The Lancet",
+            "volume": "382",
+            "issn": "9893",
+            "pages": "694--699",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Bagging predictors",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Breiman",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "Machine learning",
+            "volume": "24",
+            "issn": "2",
+            "pages": "123--140",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "The global virome project",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Carroll",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Science",
+            "volume": "359",
+            "issn": "6378",
+            "pages": "872--874",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Using random forest to learn imbalanced data",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "",
+            "volume": "110",
+            "issn": "",
+            "pages": "1--12",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Zika: the continuing threat",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "De Oliveira Garcia",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Bull World Health Organ",
+            "volume": "97",
+            "issn": "",
+            "pages": "6--7",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Computational approaches to predict bacteriophage-host relationships",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Edwards",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "FEMS microbiology reviews",
+            "volume": "40",
+            "issn": "2",
+            "pages": "258--272",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Human infection with a novel avian-origin influenza A (H7N9) virus",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                }
+            ],
+            "year": 1920,
+            "venue": "New England Journal of Medicine",
+            "volume": "368",
+            "issn": "",
+            "pages": "1888--1897",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Comparative studies of alignment, alignment-free and SVM based approaches for predicting the hosts of viruses based on viral sequences",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Scientific reports",
+            "volume": "8",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Ebola virus disease in the Democratic Republic of Congo",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Maganga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "New England Journal of Medicine",
+            "volume": "371",
+            "issn": "22",
+            "pages": "2083--2091",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Linking virus genomes with host taxonomy",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Mihara",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Viruses",
+            "volume": "8",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Zika virus associated with microcephaly",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mlakar",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "New England Journal of Medicine",
+            "volume": "374",
+            "issn": "10",
+            "pages": "951--958",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Uncovering Earth's virome",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Paez-Espino",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nature",
+            "volume": "536",
+            "issn": "7617",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Scikit-learn: Machine learning in Python",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Pedregosa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of machine learning research",
+            "volume": "12",
+            "issn": "",
+            "pages": "2825--2830",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Zika virus epidemic in the Americas: potential association with microcephaly and Guillain-Barr\u00e9 syndrome",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ecdc Stockholm",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Detecting the emergence of novel, zoonotic viruses pathogenic to humans",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Rosenberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Cellular and molecular life sciences",
+            "volume": "72",
+            "issn": "6",
+            "pages": "1115--1125",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Ecological origins of novel human pathogens",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Woolhouse",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Gaunt",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Critical reviews in microbiology",
+            "volume": "33",
+            "issn": "4",
+            "pages": "231--242",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "included 1043 viruses exclusively infecting humans and 193 viruses both infecting humans and other species. The human-infecting virus covered all groups of viruses in the Baltimore classification (Figure 1A). Over 60% of the human-infecting virus belonged to single-stranded RNA (ssRNA) viruses, which also had the highest ratio of human-infecting viruses (28%). The second largest component (25%) of the human-infecting virus was the double-stranded DNA (dsDNA) virus. On the level of family, the human-infecting virus comprised of viruses from 30 viral families. Among them, the families of Caliciviridae (ssRNA), Picornaviridae (ssRNA) and Papillomaviridae (dsDNA) were the three most abundant ones, which accounted for nearly 60% of the human-infecting virus. Besides the human-infecting virus, there were a total of 8192 viruses which infect other species except the human, including the archaea, bacteria, fungi, plant, animal, Analysis of the taxonomy distribution of all viruses used. (A) Taxonomy distribution of the human-infecting and other viruses in the Baltimore classification. (B) Taxonomy distribution of the human-infecting virus by viral family.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "The AUCs for machine learning models with k-mer length ranging from one to six.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "). The model built on the contigs of 10,000 nucleotides had an AUC of 0.96 and a recall rate of 0.99, suggesting the model could capture most human-infecting viruses. While on the contig of 500 nucleotides, the model only had an AUC of 0.86 and a recall rate of 0.88. Attention to note, for models built on the contigs of 1000 nucleotides or longer, they performed similarly to those built on the viral genome.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "The AUCs for KNN models built on contigs of varying length, with k-mer length ranging from one to five.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Best performance of each kind of machine learning model.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "of rapid methods for identification of viruses with the potential to infect humans. As far as we know, this study for the first time attempted to discriminate the human-infecting virus from non-human-infecting virus in the perspective of virome.The human-infecting virus used here has different ability of infecting humans. Some of them are human viruses and have been circulating in human populations for a long time, such as the human papillomavirus(Baseman and Koutsky 2005) and yellow fever virus(Akondy, Monson et al. 2009); while some of them were zoonotic and only infect humans rarely, such as the avian influenza virus and coronavirus. As was shown in numerous studies, the zoonotic viruses are very likely to cause epidemics or even pandemics after adaptive mutations. The most recent example is the Zika virus.It rarely caused wide-spread epidemics in humans, even in highly enzootic areas, in the 20 th century. However, a few mutations on the viral genome facilitated its rapid spread in human populations. The virus has caused epidemics in more than 50 countries and has infected more than one million people since 2014 (Prevention and Control 2016, de Oliveira Garcia 2019). Taken together, it is difficult to distinguish between viruses with different extent of infecting humans. Therefore, the human-infecting virus with varying ability of infecting humans were considered equally in the modeling.There are some limitations to this study. Firstly, the human-infecting virus is far from complete when compared to that estimated by the GVP. But they covered viruses of 30 families in all groups of the Baltimore classification, which was similar to that estimated by the GVP. Besides, the machine learning models had excellent performances in discriminating the human-infecting virus from other viruses. They could help much in discovering novel human-infecting viruses. infect humans after adaptive mutations. Secondly, the number of human-infecting virus is much smaller than that of other viruses. Such a large imbalance may hinder accurate modeling. Here, the under-sampling method was used to deal with the imbalance problem. The KNN",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

@@ -1,0 +1,3154 @@
+{
+    "paper_id": "b0899a264af548a89d649154aec569889717b295",
+    "metadata": {
+        "title": "Stochastic challenges to interrupting helminth transmission",
+        "authors": [
+            {
+                "first": "Robert",
+                "middle": [
+                    "J"
+                ],
+                "last": "Hardwick",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "London Centre for Neglected Tropical Disease Research (LCNTDR)",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "WC2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Marleen",
+                "middle": [],
+                "last": "Werkman",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "London Centre for Neglected Tropical Disease Research (LCNTDR)",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "WC2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "James",
+                "middle": [
+                    "E"
+                ],
+                "last": "Truscott",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "London Centre for Neglected Tropical Disease Research (LCNTDR)",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "WC2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Roy",
+                "middle": [
+                    "M"
+                ],
+                "last": "Anderson",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "London Centre for Neglected Tropical Disease Research (LCNTDR)",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "WC2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Predicting the effect of different programmes designed to control both the morbidity induced by helminth infections and parasite transmission is greatly facilitated by the use of mathematical models of transmission and control impact. In such models, it is essential to account for as many sources of uncertainty-natural, or otherwise -to ensure robustness in prediction and to accurately depict variation around an expected outcome. In this paper, we investigate how well the standard deterministic models match the predictions made using individual-based stochastic simulations. We also explore how well concepts which derive from deterministic models, such as 'breakpoints' in transmission, apply in the stochastic world. Employing an individual based stochastic model framework we also investigate how transmission and control are affected by the migration of infected people into a defined community. To give our study focus we consider the control of soil-transmitted helminths (STH) by mass drug administration (MDA), though our methodology is readily applicable to the other helminth species such as the schistosome parasites and the filarial worms. We show it is possible to define a 'stochastic breakpoint' where much noise surrounds the expected deterministic breakpoint. We also discuss the concept of the 'interruption of transmission' independent of the 'breakpoint' concept where analyses of model behaviour illustrate the current limitations of deterministic models to account for the 'fade-out' or transmission extinction behaviour in simulations. The analyses based on migration confirm a relationship between the infected human migration rate per unit of time and the death rate of infective stages that are released into the free-living environment (eggs or larvae depending on the STH species) that create the reservoir of infection which in turn determines the likelihood that control activities aim at chemotherapeutic treatment of the human host will eliminate transmission. The development of a new stochastic simulation code for STH in the form of a publicly-available open-source python package which includes features to incorporate many population stratifications, different control interventions including mass drug administration (with defined frequency, coverage levels and compliance patterns) and inter-village human migration is also described. : medRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Following past publications [12, 23] , the STH transmission model we introduce here is a stochastic individual-based analogue to the deterministic original given in Refs. [26, 11, 7] . : medRxiv preprint \u2202 \u2202Z G jn [Z(t), t] = \u03bb jn \u039b j (t) [Z(t) \u2212 1] G jn [Z(t), t] , whose solution is given by Eq. (A.4) when one replaces Z(t ) \u2212 1 with the inverted form of the equation above.",
+            "cite_spans": [
+                {
+                    "start": 28,
+                    "end": 32,
+                    "text": "[12,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 33,
+                    "end": 36,
+                    "text": "23]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 171,
+                    "end": 175,
+                    "text": "[26,",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 176,
+                    "end": 179,
+                    "text": "11,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 180,
+                    "end": 182,
+                    "text": "7]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Helminthiases are a class of the neglected tropical diseases (NTDs) that affect many hundreds of millions of humans and animals worldwide. One group of worms, the soiltransmitted helminths (STH) are especially prevalent are transmitted through the ingestion of eggs (for Ascaris lumbricoides or Trichuris trichuria) or larvae (in the case of the hookworms: Necator americanus and Ancylostoma duodenale). They are estimated to affect 1.45 billion people at present [1, 2] .",
+            "cite_spans": [
+                {
+                    "start": 464,
+                    "end": 467,
+                    "text": "[1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 468,
+                    "end": 470,
+                    "text": "2]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In recent years, mathematical models of both infectious disease transmission [3, 4, 5] and intervention impact have been widely used in infectious disease epidemiological studies and public health policy formulation [6, 7, 8, 9, 10] . Their use in the study of the NTDs is more recent, where the variety of approaches implemented have included both deterministic [11, 7] and individual-based stochastic simulation models [12, 13, 14, 15] . Much progress in model formulation, * r.hardwick@imperial.ac.uk parameter estimation and application has been made over the last 20 years. Model-based analyses are increasingly serving an important role in policy formulation and the evaluation of different control policies [16, 17, 18] as is well illustrated by the activities of the Bill and Melinda Gates Foundation funded NTD Modelling consortium [19] . Furthermore, following the London Declaration in 2010, which stimulated the expansion of large mass drug administration (MDA) programmes under the direction of World Health Organization (WHO) guidelines on treatment strategies [17, 20, 21] , mathematical models have played an increasing role in determining how best to design and evaluate MDA programmes [22, 23, 24] .",
+            "cite_spans": [
+                {
+                    "start": 77,
+                    "end": 80,
+                    "text": "[3,",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 81,
+                    "end": 83,
+                    "text": "4,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 84,
+                    "end": 86,
+                    "text": "5]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 216,
+                    "end": 219,
+                    "text": "[6,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 220,
+                    "end": 222,
+                    "text": "7,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 223,
+                    "end": 225,
+                    "text": "8,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 226,
+                    "end": 228,
+                    "text": "9,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 229,
+                    "end": 232,
+                    "text": "10]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 363,
+                    "end": 367,
+                    "text": "[11,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 368,
+                    "end": 370,
+                    "text": "7]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 421,
+                    "end": 425,
+                    "text": "[12,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 426,
+                    "end": 429,
+                    "text": "13,",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 430,
+                    "end": 433,
+                    "text": "14,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 434,
+                    "end": 437,
+                    "text": "15]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 714,
+                    "end": 718,
+                    "text": "[16,",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 719,
+                    "end": 722,
+                    "text": "17,",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 723,
+                    "end": 726,
+                    "text": "18]",
+                    "ref_id": null
+                },
+                {
+                    "start": 841,
+                    "end": 845,
+                    "text": "[19]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1075,
+                    "end": 1079,
+                    "text": "[17,",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1080,
+                    "end": 1083,
+                    "text": "20,",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1084,
+                    "end": 1087,
+                    "text": "21]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 1203,
+                    "end": 1207,
+                    "text": "[22,",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 1208,
+                    "end": 1211,
+                    "text": "23,",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 1212,
+                    "end": 1215,
+                    "text": "24]",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Two key concepts emerge from analyses of deterministic models. The first is the existence of a 'breakpoint' in transmission created by the dioecious nature of the worms (a male and female must be present in the same host to ensure the production of fertile eggs and pass to the external environment and form the pool of infectious material) which creates an unstable equilibrium separating the stable endemic infection equilibrium Basic reproductive number Mean worm burden S t a b l e e n d e m i c e q .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Uns tabl e 'bre akp oint ' eq. from the other stable equilibrium of parasite extinction. Independent of this breakpoint, a further epidemiological situation arises where only one stable equilibrium exists; namely, parasite and transmission extinction where the rate of infection is always too low to sustain the parasites in the human host. In this case transmission is interrupted, since an adult female worm in the human host on average, produces too few offspring to ensure one of her offspring matures in the human host to perpetuate the lifecycle. For many viral and bacterial infections (the microparasites), this is the situation where the basic reproduction number, R 0 < 1, where R 0 describes the generation of secondary cases. For the macroparasitic helminths, the concept of R 0 needs modification since it describes the average number of female offspring, produced by female worms, that survive to reproductive maturity by infecting a new human host and maturing within it [7] . The concept of R 0 is further modified by two density dependent processes: acting on fecundity as a population regulatory factor and acting via the dioecious nature of the worm. Because of the action of these two processes, the crtical R 0 value to sustain transmission is greater than unity in value. These two concepts are illustrated diagrammatically in Fig. 1 . Note, in particular, how the darker red shaded region -which demarcates the R 0 < 1 region -is replaced with a lighter shaded red 'breakpoint' region once these density dependent processes have been introduced.",
+            "cite_spans": [
+                {
+                    "start": 986,
+                    "end": 989,
+                    "text": "[7]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1349,
+                    "end": 1355,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "The importance of these notions when we move from the deterministic world to a stochastic one is linked to explaining what the interruption of transmission really appears as in a noisy world full of variation and chance events. Even when the deterministic breakpoint is crossed, when its value is low due to high degrees of parasite aggregation in the human host (see Ref. [7] ), stochastic noise may induce fluctuations where bounce back or extinction occur [24, 25] . Similarly, even when transmission is interrupted when the average female worm produces too few offspring to ensure the continuation of the life cycle, stochastic noise may not always result in parasite extinction in a defined location. In this paper, we shall analyze these situations with the use of a full individual-based stochastic model and certain approximations to the fully-simulated outcomes. In particular what is novel in our approach, is both looking at noise around the breakpoint and the transmission interruption state, and assessing how the migration of infected humans influences the likelihood of achieving effective control or even transmission interruption by MDA.",
+            "cite_spans": [
+                {
+                    "start": 373,
+                    "end": 376,
+                    "text": "[7]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 459,
+                    "end": 463,
+                    "text": "[24,",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 464,
+                    "end": 467,
+                    "text": "25]",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "At present the demand is for increasing complexity in models to describe all known biological and epidemiological complexities including, for example: differing patterns of compliance to treatment; infected human migration patterns in and out of defined control activity regions; and various heterogeneities in human behaviour that influence transmission. In such circumstances, the temptation is to move to ever more complex simulation models, with a concomitant growth in parameters and the associated problems in measurement and estimation. In this paper we adopt a somewhat different approach, seeking to address the following fundamental questions:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "\u2022 How well can deterministic models match the predictions made using stochastic simulations?",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "\u2022 Do the concepts such as 'breakpoints' in transmission still apply when stochasticity is introduced?",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "\u2022 How are transmission and control affected by infected human migration in a world of stochasticity?",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In addressing these questions here we seek to ascertain the uncertainties that have the greatest impact on forecasts of NTD control initiatives both to enhance the quality of predictions and focus attention on what needs to be measured to improve accuracy.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The results described in this paper are underpinned by various analytical and numerical methods. We focus attention on stochastic models for STH infection and control, with epidemiological parameters set to those of the two hookworm species (Necator americanus and Ancylostoma duodenale). However, the methodologies developed are generalizable to other human helminth infections.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In Sec. 2 we introduce the mathematical model and formalism within which the first two main questions posed above are answered. In Sec. 3 we then extend this formalism to include a model for MDA control and infected human migration between reservoirs of infection, which we then use to answer the third question above. Lastly, in Sec. 4 we conclude with a summary of our findings and a discussion of future work.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "For a recent review of stochastic STH models and their predictions concerning tramsmission dynamics and control impact, see Ref. [23] .",
+            "cite_spans": [
+                {
+                    "start": 129,
+                    "end": 133,
+                    "text": "[23]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Consider an ensemble of Poisson walkers, each representing individual worm hosts within a community, and each assigned a worm uptake rate \u03bb jn \u039b j (t) (or the 'force of infection') for the nth individual within the j-th age bin, where one initially draws human predispositions to worm uptake from a unit-mean and 1/k j -variance gamma distribution 1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "and one evolves the contribution to the force of infection in the j-th age bin according to the following differential equation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where it is important to note that the quantity which accounts for egg input into the reservoir from sexually-reproducing worms",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "depends on the total number of worms w jn (as opposed to the just the number of females) in the n-th individual within the j-th age bin. Throughout we shall assume that the standard exponential relationship for STH which takes into account the density dependent fecundity of worms z \u2261 e \u2212\u03b3 [7, 11, 26] is set to \u03b3 = 0.08, unless otherwise stated. Now let us build a corresponding Poisson process in the opposing direction to model the worm and human deaths, given by rates \u00b5 1 and \u00b5. In such a model, the total mean worm burden m(t) is defined as a weighted sum over the mean worm burdens within each age bin m j (t) (with N a age bins in total) -which itself is the average over the individual worm burdens",
+            "cite_spans": [
+                {
+                    "start": 290,
+                    "end": 293,
+                    "text": "[7,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 294,
+                    "end": 297,
+                    "text": "11,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 298,
+                    "end": 301,
+                    "text": "26]",
+                    "ref_id": "BIBREF24"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "and can hence take different values, depending on the realisation. The stochastic jump equation, which governs its time evolution over a population of N p people, takes the following form",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where the worm uptake U j (t) and (worm and human) death D j (t) are given by the following Poisson processes summed from n = 1 to N j individuals within the j-th age bin",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where \u2206t i \u2261 t i \u2212 t i\u22121 , \u03c4 is a pre-specified timescale short enough such that no event is expected to take place.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "We have developed a new stochastic simulation code for helminth transmission based on the model defined above. This code comes in the form of a publicly-available open-source python class: helmpy, which includes features to incorporate any population stratifications, models of control with MDA, inter-cluster human migration (building from earlier work in Refs. [27, 28] ) and an interactive notebook tutorial for calculating all of the quantities discussed in this paper. 2 This code will also be extended to include the other helminths in the future.",
+            "cite_spans": [
+                {
+                    "start": 363,
+                    "end": 367,
+                    "text": "[27,",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 368,
+                    "end": 371,
+                    "text": "28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Our computational implementation in brief"
+        },
+        {
+            "text": "The individual-based stochastic model implemented in the helmpy code follows a similar pattern to the Gillespie algorithm [29] , however we also adopt a separate methodology for the mean field expansion (which we shall introduce later) to compare the with the former, which relies on a multidimensional Langevin solver, i.e., numerically evolves many coupled drift-diffusion processes simultaneously -see, e.g., Ref. [30] .",
+            "cite_spans": [
+                {
+                    "start": 122,
+                    "end": 126,
+                    "text": "[29]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 417,
+                    "end": 421,
+                    "text": "[30]",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Our computational implementation in brief"
+        },
+        {
+            "text": "The code is written in a (mostly) vectorised implementation of the python programming language. To provide a benchmark for the performance, we note here that a single individual-based stochastic realisation of the code which implements multiple MDA treatment rounds and migration between 40 clusters of 500 people (each cluster corresponding to a different infectious reservoir) requires \u223c 20 minutes to run for 100 years on a laptop with a 1.7 GHz Intel Core i5 processor and 4GB of memory.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Our computational implementation in brief"
+        },
+        {
+            "text": "Stochastic individual-based simulations of STH transmission seek to incorporate a range of uncertainties into the populationlevel dynamics of the host-parasite interaction. It is interesting to note that these may typically be categorised into either one, or all, of three important biological/epidemiological components:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "1. Uncertainty in predispositions of people (i.e. the specific chance of a particular group of people having their predispositions to STH infection drawn from a probability distribution), i.e., finite population uncertainty induced by specific samples of realisations. 2. Uncertainty in precisely when new infections, resulting in new worm acquisition, or worm/host deaths, resulting in worm loss, occur, i.e., dynamical uncertainty about precisely when events occur. 3. Uncertainty in the demographic parameters and initial conditions of the given human community (or 'system') under consideration, i.e., either prior or posterior uncertainty on the initial conditions.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "One may average over the above forms of uncertainty either individually, or in combination. In particular, to obtain the dynamics corresponding to deterministic models of STH transmission, one must average over the first two -which we shall hereafter refer to as an 'ensemble average'. The ensemble average of Eq. (2) may be written as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "where the result",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "has been derived in numerous Refs. [26, 11, 7] . Note that we have also defined the ensemble average over m j (t) as M j (t) \u2261 E[m j (t)]. Performing an equivalent ensemble average over N j m j , the mean-field evolution equation for M j (t) is given by",
+            "cite_spans": [
+                {
+                    "start": 35,
+                    "end": 39,
+                    "text": "[26,",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 40,
+                    "end": 43,
+                    "text": "11,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 44,
+                    "end": 46,
+                    "text": "7]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "matching the standard theory of the mean or 'deterministic' disease model [7] . Note that we have also used Eq. (1) to iden-",
+            "cite_spans": [
+                {
+                    "start": 74,
+                    "end": 77,
+                    "text": "[7]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "assuming that \u03bb jn and \u039b(t) may be treated as independent random variables. Note that this latter assumption is especially poor when the number of infected individuals (predominately controlled by k and/or treatment) is low since a limited number of individuals asserting their influence on the reservoir will lead to stronger cross-",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "In contrast to the simplicity of computing the dynamical equations for M j (t) above, calculating the time evolution of V j (t) \u2261 Var[m j (t)] will require knowledge of the overall distribution.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "It is straightforward to derive a master equation which governs the out-of-equilibrium behaviour of the n-th individual's (in the j-th age bin) worm burden distribution as a function of time P(w jn , t). This is d dt P(w jn , t) = \u2212 \u03bb jn \u039b j (t) + (\u00b5 + \u00b5 1 )w jn P(w jn , t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "where one recognises the solution as an inhomogeneous Poisson walker w jn (t) \u223c Pois[w jn (t); I jn (t)] with intensity (for the explicit derivation, see Appendix A)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "(16) Therefore, for an ensemble of N j independent walkers (hence individuals) the corresponding probability mass function is also that of a Poisson distribution",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "where we have also used the definition of the mean worm burden in the j-th age bin given by Eq. (4) . Note that in the case where \u039b j (t) is roughly constant for all time, the timescale for the distribution to achieve stationarity is \u2206t stat 1/(\u00b5 + \u00b5 1 ).",
+            "cite_spans": [
+                {
+                    "start": 96,
+                    "end": 99,
+                    "text": "(4)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "Note that by assuming that the reservoir of infection \u039b(t) in Eq. (16) is deterministic in time and averaging over \u03bb jn according to Eq. (1), one recovers the well-established [7] negative binomial distribution for worms within hosts as the result of a gamma-poisson mixture. In reality, of course, the sample mean estimate for the number of infectious stages entering the reservoir in Eq.",
+            "cite_spans": [
+                {
+                    "start": 176,
+                    "end": 179,
+                    "text": "[7]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "(2) will induce stochastic fluctuations in \u039b(t). Estimating the amplitude of these fluctuations will be essential to evaluating the distribution of worms within hosts in the stochastic individual-based simulation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "To begin with, we must first understand the variation in \u039b j (t) that is induced from the finite sample of N j individuals assigned with an initial value of \u03bb jn . The implicit solution to Eq. (2) is given by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "Between ensemble realisations of Eq. (18), the only source of random variation is the sample variance in individual worm burdens when computing the value of the double sum",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "As discussed in Ref. [28] , the extremely short reservoir timescale 1/\u00b5 2 compared to the timescales of the other processes, e.g., 1/\u00b5 and 1/\u00b5 1 , allows for an accurate approximation 4 to Eq. (18) to be made where one may coarse-grain (integrate) over time such that",
+            "cite_spans": [
+                {
+                    "start": 21,
+                    "end": 25,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 193,
+                    "end": 197,
+                    "text": "(18)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "(20) If one now also assumes that w jn is drawn from an approximately negative binomial distribution then the distribution of N a j=1 N j samples drawn from the individual's egg input distribution is approximately also a negative binomial with updated mean and variance [28] such that",
+            "cite_spans": [
+                {
+                    "start": 270,
+                    "end": 274,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "where one may compute the variance of the egg input distribution through evaluation of its second moment, yielding",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "By combining Eqs. (1), (17) , (20) and (21) we may infer that the full distribution over ensemble realisations of P(w jn , t) may be approximated by",
+            "cite_spans": [
+                {
+                    "start": 23,
+                    "end": 27,
+                    "text": "(17)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 30,
+                    "end": 34,
+                    "text": "(20)",
+                    "ref_id": "BIBREF18"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "where we have marginalised over all possible reservoir config-urations\u0232 (within the negative binomial approximation) and individual uptake rates \u03bb jn . In Appendix B we calculate the approximate ensemble mean and variance of the mean worm burden constructed from summed samples from Eq. (25) . Sampling directly from Eq. (25), one may effectively reconstruct an accurate ensemble of realisations at any specified point in time as long as the negative binomial approximation of the reservoir is accurate. However, accurate temporal correlations between the sum of individuals will require alternative methods.",
+            "cite_spans": [
+                {
+                    "start": 287,
+                    "end": 291,
+                    "text": "(25)",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The approximate worm burden distribution"
+        },
+        {
+            "text": "In order to obtain a better approximation to the temporal correlations of the system, we shall perform a mean field expansion which allows us to calculate an accurate approximation to the stochastic noise around the mean worm burden of the deterministic STH model. Let us now rewrite the value of N j m j in separate components which depend differently on the system size N j , to obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": "where \u03be j (t) denotes a fluctuation in each age bin at each moment in time.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": "Note that in Eq. (26) we have performed a temporal average (as opposed to ensemble average) over the states of the Poisson walkers, each with intensity I jn (t) -see Eq. (17) . The full ensemble of realisations for the system, which includes a random set of values chosen for \u03bb jn , is not strictly ergodic. Hence, in order to assess the temporally correlated behaviour, in this section we shall use the temporal average (with notation \u00b7 ) to refer to drawing the random values of \u03bb jn a priori for a given realisation of the system -averaging over only the uncertainty component 2. as discussed at the beginning of Sec. 2.2. The full ensemble may then be restored subsequently by a second averaging over finite population samples (component 1. of Sec. 2.2) a posteriori.",
+            "cite_spans": [
+                {
+                    "start": 170,
+                    "end": 174,
+                    "text": "(17)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": "In Appendix C we perform a van Kampen [31] expansion to obtain a Fokker-Planck equation for the evolution of the distribution over fluctuations \u03be j in time, which is",
+            "cite_spans": [
+                {
+                    "start": 38,
+                    "end": 42,
+                    "text": "[31]",
+                    "ref_id": "BIBREF29"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": "which has the following stationary solutio\u00f1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": "The exact form of the force of infection \u039b j (t) is not generally known, however in the limit where the mean-field equations apply, the following estimator may be intuited which uses the ensemble average",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": "Using the approximation in Eq. (30) we may thus use the solution to the mean field Eqs. (10) and (12) to stochastically evolve trajectories of the mean worm burden with temporal correlations.",
+            "cite_spans": [
+                {
+                    "start": 88,
+                    "end": 92,
+                    "text": "(10)",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A mean field expansion of the system"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "5"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2019. 12.17.19013490 doi: medRxiv preprint ",
+            "cite_spans": [
+                {
+                    "start": 71,
+                    "end": 85,
+                    "text": "12.17.19013490",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "C1 R 0 = 3.5; k = 0.3; M(t 0 ) = 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Configuration Parameter choices (t 0 is initial time)"
+        },
+        {
+            "text": "Having established the main mathematical preliminaries, in the analysis of our results it will be convenient to refer to specific configurations of the human heminth system (according to initial choices of transmission parameters) to illustrate our results more effectively. These configurations shall always include the following choices corresponding to the hookworm timescales of: the adult worm death rate \u00b5 1 = 1/2 per year (or an average life span of 2 years); the eggs/larvae death rate in the infectious reservoir \u00b5 2 = 26 per year (or an average life span of 2 weeks) and a density-dependent worm fecundity power of \u03b3 = 0.08 [32] . We also have provided the particular choices of parameters in the configurations C1 and C2 of Table 1 . Configuration C1 has been chosen with parameters such that the system is far from the unstable 'breakpoint' equilibrium as illustrated in Fig. 1 , conversely, configuration C2 has been chosen such that the system is much closer to the breakpoint for a clear comparison.",
+            "cite_spans": [
+                {
+                    "start": 634,
+                    "end": 638,
+                    "text": "[32]",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 735,
+                    "end": 742,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 883,
+                    "end": 889,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Deterministic models versus stochastic simulations"
+        },
+        {
+            "text": "In Sec. 2.2, we stated that deterministic models of STH transmission are obtained by averaging over both of the uncertainties in predispositions to infection and when events precisely occur in time. As such, the first of our results regarding the relationship between the deterministic models of STH transmission and stochastic simulations is not unexpected. The deterministic predictions for the dynamics of the mean worm burden [7] and the mean of the mean worm burdens derived from individual-based simulations exactly match -see, for instance, the good match between dashed lines plotted in the left and right top panels of Fig. 2 , where we have plotted the dynamics of the mean worm burdens in a community with parameters in configuration C1 (see Table 1 ) for a range of population sizes. The left and right columns of this figure correspond to the numerical solution to the fully individual-based stochastic simulation that we defined at the beginning of Sec. 2 and the mean field model with the stochastic noise approximation using Eqs. (27) and (28), respectively.",
+            "cite_spans": [
+                {
+                    "start": 430,
+                    "end": 433,
+                    "text": "[7]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 1046,
+                    "end": 1050,
+                    "text": "(27)",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 628,
+                    "end": 634,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 753,
+                    "end": 760,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Deterministic models versus stochastic simulations"
+        },
+        {
+            "text": "Considering the same pair of plots (top row) in Fig. 2 in more detail we find that, for a given range of parameters, the two methods used to generate the 68% credible intervals about each mean value also agree to very good accuracy. This agreement is not always the case, however, as we illustrate with the same pair of plots but with different transmission parameters on the bottom row of Fig. 2 . Given configuration C2 (see Table 1 ), in which the endemic equilibrium value is situated closer to the unstable 'breakpoint' equilibrium, we find that an important phenomenon which exists in the individual-based stochastic simulation is not present in the deterministic model -this phenomenon is known as 'fade-out' in the parasite population. 'Fade-out' is where transmission is interrupted due to chance events, even when the underlying transmission success (the value of R 0 ) is above the level that deterministic models predict will result in parasite persistence. In other words, values just above the transmission breakpoint of the deterministic model may indeed move to parasite extinction, due to chance effects.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 48,
+                    "end": 54,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 390,
+                    "end": 396,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 427,
+                    "end": 434,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Deterministic models versus stochastic simulations"
+        },
+        {
+            "text": "Ordinarily in disease transmission models, the stochastic noise approximation using Eqs. (27) and (28) may be used to compute similar 'fade-out' effects to great accuracy, see, e.g., in an SIR model [33] . However, the presence of the unstable 'breakpoint' equilibrium leads to a stronger fade-out effect as one can observe in the drift towards a zero mean worm burden (transmission interruption) of the lower 68% credible interval contour (and mean) in the bottom row plots of Fig. 2 with population sizes of 100 and 350, and which markedly reduces the accuracy of the mean field stochastic approximation. A simple Gaussian approximation notwithstanding, fade-out is a very important phenomenon of considerable practical relevance to the prospect of helminth transmission interruption. Note that the probability of a fade-out event also increases from very small to large as village population size decreases, as is also shown by the results of Fig. 2 . The inability of the stochastic noise approximation model to capture the fade-out phenomenon is of considerable interest and is requires a more detailed mathematical description of the stochastic dynamics of the reservoir of infection. Such work is planned for investigation in future work.",
+            "cite_spans": [
+                {
+                    "start": 89,
+                    "end": 93,
+                    "text": "(27)",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 199,
+                    "end": 203,
+                    "text": "[33]",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 478,
+                    "end": 484,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 946,
+                    "end": 952,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Deterministic models versus stochastic simulations"
+        },
+        {
+            "text": "In our analysis in this section, although we ignored age structure, its inclusion does not influence the general insights although it will influence quantitative detail. For hookworm, the absence of age structure is not too serious, even in quantitative terms since field studies suggest that the force of infection is often independent of age [32] . To illustrate this point, in Fig. 3 we have plotted the C1 configuration (see Table 1 ) with relevant hookworm age stucture included, where the difference between ",
+            "cite_spans": [
+                {
+                    "start": 344,
+                    "end": 348,
+                    "text": "[32]",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 380,
+                    "end": 386,
+                    "text": "Fig. 3",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 429,
+                    "end": 436,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Deterministic models versus stochastic simulations"
+        },
+        {
+            "text": "STHs are dioecious and therefore both male and female parasites must be in the same host for the female worm to be fertilized and produce viable eggs or larvae which sustain transmission. Past research in the context of the deterministic models of transmission has demonstrated that there are three apparent equilibria: a stable endemic state, parasite extinction, and an unstable state termed the 'transmission breakpoint' which lies between the stable state and parasite extinction [34, 35, 36] . The existence of such a breakpoint can be intuited by the above limitations of STH reproduction when it becomes difficult to find a male and female worm pair within an individual host and it represents a clear target for control policies which aim to achieve transmission interruption. As we also discussed earlier in Sec. 1 and illustrated in Fig. 1 , this (dashed) breakpoint curve in the phase plane of Fig. 1 acts as a separatrix between 6 . CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 484,
+                    "end": 488,
+                    "text": "[34,",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 489,
+                    "end": 492,
+                    "text": "35,",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 493,
+                    "end": 496,
+                    "text": "36]",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 843,
+                    "end": 849,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 905,
+                    "end": 911,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "The 'breakpoint' of stochastic simulations"
+        },
+        {
+            "text": "The copyright holder for this preprint (27) and (28)) have also been run for comparison (right column). The top row corresponds configuration C1 in Table 1 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 148,
+                    "end": 155,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The bottom row corresponds configuration C2 in Table 1. 7 . CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity. Table 1 . In this instance, the population has been split into two equal-sized components of ages 0-14 and 15+, where we the worm uptake rate in the case of the 15+ group has been set to exactly 3 times that of the 0-14 group. The observed lack of an effect may be restricted to hookworm infections where the force of infection is often constant across age classes. This is not the case for Ascaris and Trichuris infections [23] . the attractor basins of the stable (endemic) and exctinction equilibria.",
+            "cite_spans": [
+                {
+                    "start": 646,
+                    "end": 650,
+                    "text": "[23]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 47,
+                    "end": 55,
+                    "text": "Table 1.",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 222,
+                    "end": 229,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Extensive past numerical analyses based on using the individual-based simulation code [37, 25] strongly indicate that the uncertainties which are inherent in individual-based simulations dominate the transmission dynamics near the deterministic breakpoint in transmission. This is especially true if the breakpoint is close to the endemic equilibrium of parasite extinction (as opposed to the stable equilibrium of endemic infection) as a consequence of high degree of parasite aggregation in the human population [38, 7] , as is illustrated by the appearance of the fade-out effect between the top left and bottom left plots of Fig. 2 . Furthermore, in the previous section, we highlighted some limitations in the standard formulation of deterministic models to account for the specific phenomena of population 'fade-out' (or spontaneous transmission interruption) which are present in the real world due to chance effects in population growth and decay especially when host population densities are low. Such effects are also captured by individualbased stochastic simulation models. It may hence be reasonable to ask whether concepts which exist in the deterministic framework are present in the stochastic simulations.",
+            "cite_spans": [
+                {
+                    "start": 86,
+                    "end": 90,
+                    "text": "[37,",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 91,
+                    "end": 94,
+                    "text": "25]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 514,
+                    "end": 518,
+                    "text": "[38,",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 519,
+                    "end": 521,
+                    "text": "7]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 629,
+                    "end": 635,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Conclusions drawn from hookworm simulation studies in Refs. [25, 37] for a range of population sizes study thresholds in prevalence in the range 0.5%-2% below which the probability of transmission interruption is assessed. In particular, attaining a prevalence below the threshold of \u223c 1% for population sizes 100-1000 leads to interruption of transmission with a high probability. In this section, we provide a theoretical argument for the existence of this threshold as a 'stochastic breakpoint' which works in a similar way to the behaviour present in deterministic models, but accounting for some unavoidable uncertainty.",
+            "cite_spans": [
+                {
+                    "start": 60,
+                    "end": 64,
+                    "text": "[25,",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 65,
+                    "end": 68,
+                    "text": "37]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Let us define a net 'grower' as an individual who, given a particular reservoir of infection and adult worm death rate, is able to accumulate more than one worm over time in a consistent manner (an individual who is predisposed to infection). Such individuals are crucial to the survival of the parasite in a defined community as they provide future material to the reservoir of infective stages in the habitat which subsequentially may grow the number of human hosts who become net growers of infection themselves, and so on. One can typically state that if the number of human hosts in which the parasite population grows (net growers) is one or more in a given cluster or community of people, then the chances of parasite extinction in the long-term are low.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Immediately after, e.g., treatment through an MDA programme, only a limited number of infected individuals remain in each age bin N inf and hence are able to contribute to the reservoir in the following timesteps (until further relaxation of the system towards some equilibrium). Using a modified version of Eq. (20) we may infer the following estimate of the infectious reservoir contribution by those individuals into the j-th age bin",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Hence, by further assuming that the fluctuations in the reservoir of infection are well-approximated by the negative binomial distribution, we may evaluate the expected maximum fraction E( f >1 max ) -of all individuals in the cluster -whose ratio between their uptake rate \u03bb jn \u039b j (t) inf and the death rate of a single worm (\u00b5 + \u00b5 1 ) exceeds 1 through the following integral motivated by the form of Eq. (25)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where NB inf [\u0232; E(\u0232), Var(\u0232)] denotes the reservoir egg count negative binomial distribution corresponding to\u0232| inf and \u0398(\u00b7) is a Heaviside function. Given Eq. (32) he expected number of net growers is therefore simply N p E( f >1 max ). Let us now define the prevalence of infection p as the fraction of the total population who are infected. We therefore deduce that p = N inf /N p . Using Eqs. (25) and (32), we have plotted a calculation of both the probability of the number of net growers for communities with configurations C1 and C2 (see Table 1 ) in Fig. 4 and the expected number of net growers as a function of the prevalence in Fig. 5 for a wide range of system configurations. In both sets of plots we consider population numbers of 100, 350 and 1000, as indicated. Fig. 4 demonstrates that for system configurations further from the unstable 'breakpoint' equilibrium -configuration C1 in the right column of plots -the probability of exceeding a net number of growers larger than 1 becomes large once the 1% 8 . CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 398,
+                    "end": 402,
+                    "text": "(25)",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 547,
+                    "end": 554,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 560,
+                    "end": 566,
+                    "text": "Fig. 4",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 641,
+                    "end": 647,
+                    "text": "Fig. 5",
+                    "ref_id": null
+                },
+                {
+                    "start": 780,
+                    "end": 786,
+                    "text": "Fig. 4",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint The relative probability (the probability mass divided by the maximum value) of a number of individuals who will gain more than one worm, or, 'net growers' given that effectively only one individual is contributing to the reservoir of infection per unit time for two different system configurations (given by the left and right columns). This probability has been calculated using Eq. (25) and the condition for a net grower -as discussed in Sec. 2.5. The right columns have the same parameters of the system as those of configuration C1 in Table 1 (which is assumed to have attained an endemic equilibrium mean worm burden). The left columns have the same parameters of the system as those of configuration C2 in Table 1 (which is also assumed to have attained an endemic equilibrium mean worm burden).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 580,
+                    "end": 587,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 753,
+                    "end": 760,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "prevalence threshold, with the contrary being true below this threshold. The plots in the left column -which correspond to configuration C2 -the probability for the number of net growers to be above 1 remains low even for a prevalence of 2%, which is to be expected due to this configuration's proximity to the unstable 'breakpoint' equilibrium. Furthermore, from Fig. 5 , it is immediately apparent that the expected number of growers is extremely unlikely to exceed 1 if the prevalence of infection is lower than \u223c 1% in all cases of population number. Hence, this threshold essentially acts as a 'stochastic breakpoint', below which the probability of interrupting transmission in stochastic individual-based simulations becomes very likely. Note that caveats to our analysis here include varying the population number well beyond the prior limits used in our short sensitivity analysis -in such situations it is possible for apparent thresholds to go much lower or higher, e.g., consider the small, but non-negligible probabilities of sustaining transmission below a prevalence of 1% for much larger population numbers than those studied here in Ref. [37] . It is important to also mention that the approximate bound we obtain on the prevalence as a 'stochastic breakpoint' applies as more of a strict bound and hence does not exclude the possibility (or even high likelihood in some specific configurations) of elimination at a higher prevalence of 2%. Our discussion here is therefore complementary (and not contradictory) to, e.g., Ref. [25] .",
+            "cite_spans": [
+                {
+                    "start": 1155,
+                    "end": 1159,
+                    "text": "[37]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 1544,
+                    "end": 1548,
+                    "text": "[25]",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 364,
+                    "end": 370,
+                    "text": "Fig. 5",
+                    "ref_id": null
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We expect that similar conclusions apply in settings where parasite interruption is predicted since the basic reproduction number (R 0 ) is too low to sustain transmission (see Fig. 1 ). If the mean worm load is just below this critical R 0 value to sustain transmission in regions where the only stable state is parasite extinction, there will be a probability distribution of situations where parasite persistence occurs for a while due to chance events which may obscure the precise location of this threshold.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 177,
+                    "end": 183,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Our short analysis in this section has provided some theoretical justification for the existence of a 'stochastic breakpoint' which has been identified to be an important target for transmission interruption from previous hookworm simulation studies [25, 37] and our analysis may also be extended to other parasites, which shall be subject of future work.",
+            "cite_spans": [
+                {
+                    "start": 250,
+                    "end": 254,
+                    "text": "[25,",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 255,
+                    "end": 258,
+                    "text": "37]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In the stochastic model we have built, the effect of people ageing over time has been neglected so far. Assuming that the effective number of people in each age bin remains unchanged, the passing of individuals between age bins may be fully accounted for as a reservoir pulse of the same form as Eq. (33) which introduces new egg pulses drawn from the ( j \u2212 1)-th age bin and removes eggs from the j-th bin into the ( j + 1)-th bin. The reservoir fluctuation model described above demonstrates how ageing can can only affect the system by a significant variation in k j between bins -furthermore, such fluctuations are can be shown to be damped significantly when the age bins are much wider than 1/(\u00b5 + \u00b5 1 ) due to the relaxation timescale of each individual Poisson walker (see, e.g., Eq. (17)). In light of this fact, we have elected to avoid a direct description of ageing in this work without loss of generality in our Figure 5 : The expected number of individuals who will gain more than one worm, or, 'net growers' given that effectively only one individual is contributing to the reservoir of infection per unit time for a range of different system configurations. These values have been obtained by randomly sampling configurations of Eq. (32) with flat priors defined over the following intervals in one cluster without age structure for illustration: the basic reproduction number R 0 \u2208 [2, 4]; the logarithim (base 10) of the worm aggregation parameter log 10 k \u2208 [\u22124, 0]; the initial mean worm burden M(t 0 ) \u2208 [2, 5] and an assumed density-dependent worm fecundity power of \u03b3 = 0.08. The range of system configurations sampled corresponds to much wider range than those given in Fig. 4. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 925,
+                    "end": 933,
+                    "text": "Figure 5",
+                    "ref_id": null
+                },
+                {
+                    "start": 1694,
+                    "end": 1701,
+                    "text": "Fig. 4.",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "A note on modifying the reservoir to account for ageing"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "10"
+        },
+        {
+            "text": "The copyright holder for this preprint .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "argumentation, while leaving future versions of our stochastic simulation to include these sub-dominant effects. Past published individual-based stochastic models of helminth transmission have included a dynamically ageing population [23] .",
+            "cite_spans": [
+                {
+                    "start": 234,
+                    "end": 238,
+                    "text": "[23]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Up until this point we have not considered processes which may modify the standard STH transmission model. Applying control measures through MDA and the effect of infected human migration between clusters are both processes which modify the dynamics. The impact of MDA has been covered in various recent publications [39, 25, 37] , whereas, infected human migration in the context of STH transmission has only recently been addressed in the context of its impact on achieving breakpoints in transmission [27, 28] . In the context of STH infections it is necessary for infected people to be present at a location long enough to contribute to the infectious reservoir.",
+            "cite_spans": [
+                {
+                    "start": 317,
+                    "end": 321,
+                    "text": "[39,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 322,
+                    "end": 325,
+                    "text": "25,",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 326,
+                    "end": 329,
+                    "text": "37]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 504,
+                    "end": 508,
+                    "text": "[27,",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 509,
+                    "end": 512,
+                    "text": "28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "In this paper, we incorporate the migration model for STH described in Ref. [28] into our individual-based stochastic simulation. We shall use this model to describe the consequences that infected human migration has on human helminth transmission using illustrative examples. In Ref. [28] the relative size of the migration rate of individual egg counts into or out of a region (e.g., some number of people per year) compared to the death rate of infectious stages within the reservoir, \u00b5 2 (\u00b5 2 = 26 per year for hookworm), was found to be have important implications for the effect of migration on transmission. Hence, in all of the results on migration in this section, the migration rate shall be quoted as a factor of \u00b5 2 to investigate the importance of the ratio between these two parameters in the fully individualbased stochastic simulation.",
+            "cite_spans": [
+                {
+                    "start": 76,
+                    "end": 80,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 285,
+                    "end": 289,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "The migration of infected individuals between clustered communities represents a combination of both the finite population and dynamical uncertainty described at the beginning of Sec. 2.2. A simple modification to the model we have introduced, which builds from the work in Ref. [28] , may be considered to incorporate the effects of human migration into the transmission dynamics: consider a compound Poisson process j (t) which perturbs Eq. (2) in the following way 3 3 As was also shown in Ref. [28] , when the reservoir timescale \u00b5 2 is not as fast, Eq. (34) should receive a non-Markovian modification \u221d 1 \u2212 e \u00b5 2 (t\u2212t 0 ) to account for the slower decay of pulses in the reservoir.",
+            "cite_spans": [
+                {
+                    "start": 279,
+                    "end": 283,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 470,
+                    "end": 471,
+                    "text": "3",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 498,
+                    "end": 502,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "and where r + and r \u2212 are the ingoing and outgoing the migratory rates, respectively, and we have coarse-grained in time to obtain the j (t) fluctuation amplitude with respect to the mean worm burden -as in Eq. (20) . With the effect of migration defined in this way, the parameters of Eq. (35) may be randomly selected from any of the corresponding available age bins, and the ensemble mean updated to account for any out-of-equilibrium behaviour. Using a similar set of pulses, in Ref. [28] it was further shown that the migratory rate must exceed or be around the same order as the death rate of infectious material in the reservoir, i.e., r + , r \u2212 \u00b5 2 , for the migration to affect the dynamics significantly.",
+            "cite_spans": [
+                {
+                    "start": 211,
+                    "end": 215,
+                    "text": "(20)",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 488,
+                    "end": 492,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "In Ref. [28] it is also assumed that the reservoir pulses which arise from migration are uniform across the full ensemble of realisations: though this captures the inherent variability due to migration effects, it does not marginalise entirely over the full ensemble of possible fluctuations which are captured in this work. It is necessary in the finite population limit, then, for such processes to be modelled by a full stochastic individualbased simulation, where we leave the possibility of an analytic description for future work.",
+            "cite_spans": [
+                {
+                    "start": 8,
+                    "end": 12,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "In light of the apparent necessity for a numerical approach, we also point out that when using a fully individual-based simulation one may randomly draw from the worm burdens of the individuals and compute an egg pulse amplitude using Eq. (3) -in doing so potentially capturing the out-of-equilibrium behaviour of the reservoir during, e.g., rounds of treatment. For the latter reason we shall adopt this approach when generating our numerical results throughout. We further note that such an approach has also been advocated in similar models such as those in Ref. [27] .",
+            "cite_spans": [
+                {
+                    "start": 566,
+                    "end": 570,
+                    "text": "[27]",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "In the bottom left panel of Fig. 2 we provided an example of the fade-out effect which appears in standard individual-based simulations. In metapopulation disease transmission models it is well-known that migration effects can stabilise local tranmission, evading effects such as fade-out even when the population sizes are small -see, e.g., Ref. [40] . By including migration from a cluster with configuration C1 (see Table 1 ) into the cluster depicted in the plot with configuration C2 (with 350 people each), in Fig. 6 we demonstrate that a similar stabilisation of the fade-out effect can also occur for helminth transmission models, despite the especially strong fade-out induced from the presence of the unstable 'breakpoint' equilibrium. As targets for helminth elimination trials drive the prevalence in regions closer to (and beyond) the unstable equilibrium, this is an important possibility to take note of with practical implications should migration within a given region be of the same order or higher as is indicated in Fig. 2 . Note that in order for this effect to be important, the migration rate needs to exceed the death rate of eggs/larvae in the infectious reservoir, i.e., r + , r \u2212 \u00b5 2 , which is an early confirmation of the conclusions drawn from Ref. [28] , but we shall now investigate the importance of migration rates relative to \u00b5 2 in more detail by examining another 11 . CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 347,
+                    "end": 351,
+                    "text": "[40]",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 1279,
+                    "end": 1283,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 28,
+                    "end": 34,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 419,
+                    "end": 426,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 516,
+                    "end": 522,
+                    "text": "Fig. 6",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 1036,
+                    "end": 1042,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "The effect of infected human migration"
+        },
+        {
+            "text": "The copyright holder for this preprint Table 1 into a cluster (of 350 people) with the same transmission parameters as configuration C2 in Table 1 , the latter of which is displayed. Three different migration rates of individuals are used as scales of the death rate of eggs/larvae in the infectious reservoir \u00b5 2 and are depicted by different shades of blue colour.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 39,
+                    "end": 46,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 139,
+                    "end": 146,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "new consequence of migration. Migration into a cluster may also occur from an untreated external source (UES), i.e., from a location with a defined negative binomial distribution of worms within hosts and population number that is left untreated in the endemic state. In such instances, it is also possible that the region may have previously achieved elimination which is then reversed -an 'outbreak' scenario.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In Fig. 7 we have plotted the prevalence of worms within hosts after a period of 100 years for a previously-eliminated cluster experiencing UES migration for a range of migration rates (as a ratio of the eggs or larvae death rate for comparison). The transmission parameters chosen for the UES match a cluster of the indicated population size and configuration C1 from Table 1 from which migrants move to a cluster with the same indicated population size and transmission parameters from configuration C2 in the left column of plots (configuration C1 in the right column of plots), where the latter cluster has been initialised without any initial infections. From these plots one can immediately see that a discrete transition occurs in prevalence after a critical UES migration rate has been reached and that this value changes according to population size. This transition marks the point at which the STH transmission is sustained endemically, and hence the UES migration rate that this corresponds to is of critical importance to policy makers and implementers of STH control programmes since achieving elimination above this critical point in migration rate is likely impossible without treating the external source of migrants simultaneously.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 9,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 369,
+                    "end": 376,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "For the larger population numbers (350 and 1000), Fig. 7 also confirms the conclusions drawn in Ref. [28] -that critical mi-gration rates to affecting transmission must exceed a threshold of at least \u00b5 2 . Note, however that the precise number of individuals required to be contributing to the reservoir per unit time can be substantially modified when the population number is changed and the apparent prevalence required to trigger the outbreak transition can be much higher than 1% -typically 10%. Therefore, it is important that we state that the stochastic breakpoint that we derived in Sec. 2.5 only applies to situations where the prevalence of infection is lowered due to treatment, as opposed to being raised from a zero worm state due to UES migration. Such a difference in breakpoint prevalence value required between these two scenarios is due to the greater homogeneity in worm loads of individuals in the case of UES migration, as opposed to the case of post-treatment where a limited number of individuals have a large number or worms -the latter of which is more consistent with the negative binomial reservoir approximation used to derive the stochastic breakpoint in Sec. 2.5. We plan to investigate this apparent asymmetry in how the stochastic breakpoint applies for individual-based simulations in future work.",
+            "cite_spans": [
+                {
+                    "start": 101,
+                    "end": 105,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 50,
+                    "end": 56,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Note here that for configuration C1 and a small population number of 100, in Fig. 7 (top right panel) we see that transmission may transition to the endemic state spontaneously with a much lower migration rate than \u00b5 2 -such an effect is due to the additional variance induced by finite population effects and this represents a potentially important caveat to the migration rate threshold we have proposed above.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 77,
+                    "end": 83,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "To demonstrate the difficulty in achieving STH transmission interruption with an MDA control programme when migration of infected humans between clustered communities is in place, even when treating all communities at once, in Fig. 8 we plot the positive predictive value (PPV) of elimination after 100 years having reached at least a given prevalence threshold or below (as indicated on the horizontal axis) in a cluster with a C2 configuration (see Table 1 ) after 3 rounds of treatment (assuming 100% efficacy). Treatment rounds have been applied in years 15, 16 and 17 simultaneously to clusters with configurations C1 and C2 (with population sizes of 350 each), where the dashed black horizontal line at a PPV of 1 shows that elimination is essentially certain in the C2 configuration after treatment if no migration occurs between the two clusters. Once again, however, we find that this PPV drops sharply as the migration rate between clusters is increased in rate relative to the eggs/larvae death rate in the reservoir, \u00b5 2 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 227,
+                    "end": 233,
+                    "text": "Fig. 8",
+                    "ref_id": "FIGREF9"
+                },
+                {
+                    "start": 451,
+                    "end": 458,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Accounting for treatment with random compliance"
+        },
+        {
+            "text": "The control of helminth infections worldwide will require a greater degree of monitoring and evaluation throughout 2020 to 2030 as treatment programmes strive to get to the point where transmission interruption thresholds have been achieved. This leads to an increased focus of research into predicting the likelihood of 'bounce back' once the transmission breakpoint has been achieved. Such breakpoints are variously defined, but in Table 1 from which migrants move to a cluster with the same indicated population size and transmission parameters from configuration C2 in the left column of plots (configuration C1 in the right column of plots), where the latter cluster has been initialised without any initial infections. Note that we are using the death rate of eggs/larvae in the infectious reservoir, \u00b5 2 , as a unit with which to measure the relative migration rate, where \u00b5 2 = 26 per year for hookworm. Dashed vertical black lines indicate when the migration rate equals \u00b5 2 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 434,
+                    "end": 441,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Concluding discussion"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "13"
+        },
+        {
+            "text": "The copyright holder for this preprint Table 1 ) given that a prevalence threshold -which is varied on the horizontal axis -has been crossed immediately post-MDA. In three of the shown cases the C2 cluster is also experiencing migration from another cluster with a C1 configuration (once again, see Table 1 ) where the migration rates are indicated (using units of \u00b5 2 = 26 per year for hookworm). The treatment has been applied to both clusters and is 3 rounds of MDA with a random compliance pattern of individual behaviours assumed at 60% coverage (and 100% efficacy) in years 15, 16 and 17 of the overall 100. general for human helminths, the indication from modelling studies is that a true prevalence (based on the use of a very sensitive diagnostic) of less than 1% moves the dynamics of the system to the interruption of transmission. Defining the breakpoint and designing monitoring and evaluation programmes requires the use of stochastic individual-based models to determine this likelihood in terms of PPV and NPV values of the probability of transmission elimination or bounce back. It is therefore highly desirable to account for as many sourcesnatural, or otherwise -of uncertainty to ensure a high degree of confidence in the predictions made by such models. The effect of infected human migration in and out of health implementation units on control outcomes, is but one important example of a key source of heterogeneity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 39,
+                    "end": 46,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 299,
+                    "end": 306,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In this paper, we have sought to answer a number of questions of importance to providing reliable predictions for the design of public health programmes for the control of human helminth infections and their monitoring and evaluation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Averaged quantities, e.g., the mean worm burden, are matched well by the deterministic model to the individualbased simulations. This is an expected result conformed by past work [12] . Stochastic versions of the deterministic models employing mean-field approximations may be derived to predict how fluctuations in the averaged quantities vary over time. The mean-field approximation, however, appears to fail to predict specific important phenomena accurately which exist in an individual-based simulation; namely, fade-out effects.",
+            "cite_spans": [
+                {
+                    "start": 179,
+                    "end": 183,
+                    "text": "[12]",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Our analyses suggest that deterministic models of STH (and other helminth) transmission provide important general guidelines to making predictions of what level of control, such as MDA coverage, and what patterns of individual compliance to treatment will move the system close to or below the deterministic breakpoint in transmission. However, once in this region, chance effects can result in either transmission elimination (fade out) or bounce back even when above or below the breakpoint. In practice, around the unstable equilibrium, stochastic noise induces a degree of uncertainty in outcome which must be described as a probability of a certain outcome being achieved. Deriving these probability descriptions in terms of, for example PPV and NPV values, requires the use of an individual-based stochastic model.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Our analyses suggest that public health workers will benefit from determining the transmission threshold -or 'breakpoint' -for transmission interruption using individual-based simulations, and that theoretical calculations suggest a true prevalence target of below \u223c 1% to have an extremely high probability of interruption in a wide variety of scenarios for all the major helminth infections of humans. The important public health message, however, is that in a stochastic world where chance events play a central role, nothing is certain. As such, outcomes should be expressed as probability events. Even below the 1% threshold, however, bounce back can occur due to chance events, where its likelihood will depend on host and parasite population size.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Infected human migration, like treatment, is an effect which requires individual-based simulation to assess its importance in sustaining high levels of control in the real world where much heterogeneity exists within and between health intervention population units in most regions of endemic infection. Analyses suggest that sufficiently rapid migration from regions with prevalent infection can shift units in which high MDA coverage is achieved to a situation of sustained transmission. This suggests that external processes such as inter-cluster migration could play an important role in sustaining STH transmission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The models suggest the existence of a near-universal critical migration rate (up to the population number caveat discussed in Sec. 3.1) corresponding to the death rate of eggs or larvae in the case of STH infections in the infectious reservoir exists, above which, simulations exhibit various behaviours. These include stabilization of fade-out effects such that infection persist; migration from a neighboring setting generating infection bounce back in locations where infection has been well controlled; and lower PPVs for transmission elimination, proceeding treatment achieving a target prevalence of infection threshold is likely even if all clusters are being treated when migration between locations is occurring. The key result is that migration from an untreated external source (UES) is capable of causing bounce back even in areas with effective MDA coverage to get transmission close to the breakpoint once its rate equals or exceeds the death rate of eggs or larvae in the infectious reservoir. For hookworm, this is typically around 26 infected individuals per year. As a consequence of the result above, if the rate of infected migration exceeds or equals the defined threshold, the PPV for elimination may be lowered even if all clusters are treated.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Finally, public health workers will hopefully benefit from open access to simulation models, such as our public code, helmpy, in order to examine the effects of infected human migration on the effectiveness of their control policies for STH and other helminths, though some simpler approximate descriptions exist under certain assumptions [28] . In future work, we plan also to extend the helmpy package to include features for likelihood-based inference for parameter estimation from epidemiological data in given settings.",
+            "cite_spans": [
+                {
+                    "start": 339,
+                    "end": 343,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The models suggest the existence of a near-universal critical migration rate (up to the population number caveat discussed in Sec. 3.1) corresponding to the death rate of eggs or larvae in the case of STH infections in the infectious reservoir exists, above which, simulations exhibit various behaviours. These include stabilization of fade-out effects such that infection persist; migration from an neighboring setting generating infection bounce back in locations where infection has been well controlled; and lower PPVs for transmission elimination, proceeding treatment achieving a target prevalence of infection threshold is likely even if all clusters are being treated when migration between locations is occurring. The challenges for future work on migration impact on the likelihood of achieving transmission breakpoints, lie in good measurement of both the heterogeneity of MDA coverage over time in adjacent health implementation units and migration patterns between such units. Since the mean of Eq. (27) is an averaged quantity it does not fluctuate as a random variable, hence we may now rewrite the probability distribution in terms of the other remaining random variable which now characterises the fluctuations of the system around the temporal average \u03bb jn \u039b j (t) + (\u00b5 + \u00b5 1 )",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where the following van Kampen [31] (or Taylor) expansion of the distributions on the right hand side can be made which is controlled by powers of the system size N j P \u03be j \u00b1 N \u22121/2 j , t =P \u03be j , t \u00b1 N \u22121/2 j \u2202 \u2202\u03be jP (\u03be j , t) + (2N j ) \u22121 \u2202 2 \u2202\u03be 2 jP (\u03be j , t) \u00b1 . . . . (C.8)",
+            "cite_spans": [
+                {
+                    "start": 31,
+                    "end": 35,
+                    "text": "[31]",
+                    "ref_id": "BIBREF29"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "By equating Eq. (C.6) and Eq. (C.7) with the expansion above, we may match terms of the same system size order to obtain constraint equations. At O(N j ) there is a cancellation of terms, followed by O(N 1/2 j ) where the mean-field results of Eqs. (12) , (13) 18 . CC-BY-NC-ND 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 249,
+                    "end": 253,
+                    "text": "(12)",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2019. 12.17.19013490 doi: medRxiv preprint and (14) are consistently reproduced after a posteriori marginalisation over \u03bb jn values. Lastly, at O(N 0 j ), one obtains a linear noise approximation for the fluctuations in the form of a Fokker-Planck equation",
+            "cite_spans": [
+                {
+                    "start": 101,
+                    "end": 137,
+                    "text": "12.17.19013490 doi: medRxiv preprint",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "which also corresponds to the following Langevin equation for the individual realisations d\u03be j dt = \u2212(\u00b5 + \u00b5 1 )\u03be j (t) + \u03b7 j (t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where \u03b7 j (t) is a zero-mean unit-amplitude Gaussian random variable with the temporal averages of \u03b7 j (t) = 0, \u03b7 j (t)\u03b7 j (t ) = \u03b4(t \u2212 t ).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Global numbers of infection and disease burden of soil transmitted helminth infections in 2010",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Pullan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Jasrasaria",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Brooker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Parasites & vectors",
+            "volume": "7",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "The prevention of malaria",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Ross",
+                    "suffix": ""
+                }
+            ],
+            "year": 1910,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "A contribution to the mathematical theory of epidemics",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Kermack",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Mckendrick",
+                    "suffix": ""
+                }
+            ],
+            "year": 1927,
+            "venue": "Proceedings of the royal society of london. Series A",
+            "volume": "115",
+            "issn": "772",
+            "pages": "700--721",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "A simple stochastic epidemic",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Bailey",
+                    "suffix": ""
+                }
+            ],
+            "year": 1950,
+            "venue": "Biometrika",
+            "volume": "",
+            "issn": "",
+            "pages": "193--202",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "The population dynamics of malaria",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Aron",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1982,
+            "venue": "The population dynamics of infectious diseases: theory and applications",
+            "volume": "",
+            "issn": "",
+            "pages": "139--179",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Infectious Diseases of Humans: Dynamics and Control",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "Dynamics and Control",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Transmission of influenza: implications for control in health care settings",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Weinstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Bridges",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Kuehnert",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Hall",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Clinical infectious diseases",
+            "volume": "37",
+            "issn": "8",
+            "pages": "1094--1101",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Transmission dynamics and control of severe acute respiratory syndrome",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Cooper",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Robins",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "James",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Gopalakrishna",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Chew",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Tan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Samore",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Science",
+            "volume": "300",
+            "issn": "",
+            "pages": "1966--1970",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Effectiveness of a triple-drug regimen for global elimination of lymphatic filariasis: a modelling study",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Irvine",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Stolk",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Subramanian",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Singh",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Weil",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Michael",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Hollingsworth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "The Lancet Infectious Diseases",
+            "volume": "17",
+            "issn": "4",
+            "pages": "451--458",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Population dynamics of human helminth infections: control by chemotherapy",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1982,
+            "venue": "Nature",
+            "volume": "297",
+            "issn": "5867",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Community control of helminth infections of man by mass and selective chemotherapy",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Medley",
+                    "suffix": ""
+                }
+            ],
+            "year": 1985,
+            "venue": "Parasitology",
+            "volume": "90",
+            "issn": "4",
+            "pages": "629--660",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Schistosim: a microsimulation model for the epidemiology and control of schistosomiasis",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "De"
+                    ],
+                    "last": "Vlas",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Van Oortmarssen",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Gryseels",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Polderman",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Plaisier",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Habbema",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "The American journal of tropical medicine and hygiene",
+            "volume": "55",
+            "issn": "5",
+            "pages": "170--175",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Onchosim: a model and computer simulation program for the transmission and control of onchocerciasis",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Plaisier",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Van Oortmarssen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Habbema",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Remme",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Alley",
+                    "suffix": ""
+                }
+            ],
+            "year": 1990,
+            "venue": "Computer methods and programs in biomedicine",
+            "volume": "31",
+            "issn": "1",
+            "pages": "43--56",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "The lymfasim simulation program for modeling lymphatic filariasis and its control",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Plaisier",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Subramanian",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Das",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Souza",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Lapa",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Furtado",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Van Der Ploeg",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Habbema",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Van Oortmarssen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Methods of information in medicine",
+            "volume": "37",
+            "issn": "01",
+            "pages": "97--108",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Human hookworm infection in the 21st century",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Brooker",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bethony",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hotez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Advances in Parasitology",
+            "volume": "58",
+            "issn": "",
+            "pages": "197--288",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0065-308X(04)58004-1"
+                ]
+            }
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Accelerating work to overcome the global impact of neglected tropical diseases : a roadmap for implementation : executive summary, World Health Organization",
+            "authors": [],
+            "year": 2012,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Ntd modelling consortium webpage",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Preventive chemotherapy in human helminthiasis : coordinated use of anthelminthic drugs in control interventions : a manual for health professionals and programme managers, World Health Organization",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "W T"
+                    ],
+                    "last": "Crompton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Ending the neglect and reaching 2020 goals",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "The coverage and frequency of mass drug administration required to eliminate persistent transmission of soil-transmitted helminths",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Hollingsworth",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Philosophical Transactions of the Royal Society B: Biological Sciences",
+            "volume": "369",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Chapter three -soil-transmitted helminths: Mathematical models of transmission, the impact of mass drug administration and transmission elimination criteria",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Turner",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Farrell",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Mathematical Models for Neglected Tropical Diseases",
+            "volume": "94",
+            "issn": "",
+            "pages": "133--198",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/bs.apar.2016.08.002"
+                ]
+            }
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Assessing the interruption of the transmission of human helminths with mass drug administration alone: optimizing the design of cluster randomized trials",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Farrell",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Turner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Walson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Truscott",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Parasites & Vectors",
+            "volume": "10",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/s13071-017-1979-x"
+                ]
+            }
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Identifying optimal threshold statistics for elimination of hookworm using a stochastic simulation model",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Werkman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Wright",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Farrell",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Sarkar",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "\u00c1sbj\u00f6rnsd\u00f3ttir",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Parasites & Vectors",
+            "volume": "10",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/s13071-017-2256-8"
+                ]
+            }
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "The dynamics and control of direct life cycle helminth parasites",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1980,
+            "venue": "Vito Volterra Symposium on Mathematical Models in Biology",
+            "volume": "",
+            "issn": "",
+            "pages": "278--322",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Human population movement can impede the elimination of soil-transmitted helminth transmission in regions with heterogeneity in mass drug administration coverage and transmission potential between villages: a metapopulation analysis",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Vegvari",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Kura",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Parasites & Vectors",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "The 'breakpoint'of soil-transmitted helminths with infected human migration",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hardwick",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Vegvari",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Journal of theoretical biology",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Exact stochastic simulation of coupled chemical reactions",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Gillespie",
+                    "suffix": ""
+                }
+            ],
+            "year": 1977,
+            "venue": "The journal of physical chemistry",
+            "volume": "81",
+            "issn": "25",
+            "pages": "2340--2361",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Multiple spectator condensates from inflation",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hardwick",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "JCAP 1805 (05)",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1088/1475-7516/2018/05/054"
+                ],
+                "arXiv": [
+                    "arXiv:1803.03521"
+                ]
+            }
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Stochastic processes in physics and chemistry",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Van Kampen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "",
+            "volume": "1",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Heterogeneity in transmission parameters of hookworm infection within the baseline data from the tumikia study in kenya",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Ower",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Werkman",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Halliday",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Oswald",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Gichuki",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Mcharo",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Brooker",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Njenga",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Mwandariwo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Parasites & vectors",
+            "volume": "12",
+            "issn": "1",
+            "pages": "1--13",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Stochastic epidemics: the probability of extinction of an infectious disease at the end of a major outbreak",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Van Herwaarden",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "Journal of mathematical biology",
+            "volume": "35",
+            "issn": "7",
+            "pages": "793--813",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "The dynamics of helminth infections, with special reference to schistosomes",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Macdonald",
+                    "suffix": ""
+                }
+            ],
+            "year": 1965,
+            "venue": "Transactions of The Royal Society of Tropical Medicine and Hygiene",
+            "volume": "59",
+            "issn": "5",
+            "pages": "489--506",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/0035-9203(65)90152-5"
+                ]
+            }
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Thresholds and breakpoints in ecosystems with a multiplicity of stable states",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1977,
+            "venue": "Nature",
+            "volume": "269",
+            "issn": "",
+            "pages": "471--477",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/269471a0"
+                ]
+            }
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Helminth infections of humans: Mathematical models, population dynamics, and control",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1985,
+            "venue": "",
+            "volume": "24",
+            "issn": "",
+            "pages": "1--101",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0065-308X(08)60561-8"
+                ]
+            }
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Defining stopping criteria for ending randomized clinical trials that investigate the interruption of transmission of soil-transmitted helminths employing mass drug administration",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Werkman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Toor",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Vegvari",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Wright",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "\u00c1sbj\u00f6rnsd\u00f3ttir",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Means",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Walson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLoS neglected tropical diseases",
+            "volume": "12",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Thresholds and breakpoints in ecosystems with a multiplicity of stable states",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1977,
+            "venue": "Nature",
+            "volume": "269",
+            "issn": "5628",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "What impact will the achievement of the current world health organisation targets for anthelmintic treatment coverage in children have on the intensity of soil transmitted helminth infections?",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Truscott",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Turner",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Parasites & Vectors",
+            "volume": "8",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/s13071-015-1135-4"
+                ]
+            }
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "The emergence of the rescue effect from explicit within-and between-patch dynamics in a metapopulation",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Eriksson",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "El\u00edas-Wolff",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Mehlig",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Manica",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Proceedings of the royal society B: biological sciences",
+            "volume": "281",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Diagram illustrating the stable endemic equilibrium (solid black line), unstable 'breakpoint' equilibrium (dashed black line) and insufficient R 0 breakpoint. For reference, the transmission model illustrated is that of soiltransmitted helminth infections with the density dependent fecundity parameter \u03b3 = 0.08 and worm aggregation within hosts parameter k = 0.3.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "\u03b3 = 0.08; \u00b5 = 1/70; \u00b5 1 = 1/2; and \u00b5 2 = 26 (last three are per year)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Fig. 3 and the top left plot of Fig. 2 is very small.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Two different examples (in both left and right panels) of the expected (dashed lines) and 68% credible regions (between the solid lines) of the possible mean worm burdens realised in time by the stochastic fully individual-based simulation method (left column) and the counterpart simulations using a mean field stochastic approximation method (see Eqs.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "changes in behaviour if the endemic equilibrium is the same",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "An example demonstrating the relatively small effects of age structure on stochastic individual-based model with the original configuration of C1 in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Figure 4: The relative probability (the probability mass divided by the maximum value) of a number of individuals who will gain more than one worm, or, 'net growers' given that effectively only one individual is contributing to the reservoir of infection per unit time for two different system configurations (given by the left and right columns). This probability has been calculated using Eq. (25) and the condition for a net grower -as discussed in Sec. 2.5. The right columns have the same parameters of the system as those of configuration C1 in Table 1 (which is assumed to have attained an endemic equilibrium mean worm burden). The left columns have the same parameters of the system as those of configuration C2 in Table 1 (which is also assumed to have attained an endemic equilibrium mean worm burden).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Three different examples (in both left and right panels) of the expected (dashed lines) and 68% credible regions (between the solid lines) of the possible mean worm burdens realised in time by the stochastic individual-based simulation method with the inclusion of infected human migration from a cluster (of 350 people) with the same transmission parameters as configuration C1 in",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "The prevalence of worms within hosts after a period of 100 years for a previously-eliminated cluster experiencing migration from an untreated external source (UES) for a range of migration rates. The transmission parameters chosen for the UES match a cluster of the indicated population size and configuration C1 from",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "The positive predictive value (PPV) for elimination (the latter is here defined as no remaining worms after 100 years) in a cluster with a C2 configuration (see",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "j , t) + (\u00b5 + \u00b5 1 )(N j m j + 1)P(N j m j + 1, t) + N j n=1 \u03bb jn \u039b j (t)P(N j m j \u2212 1, t) . (C.1)Though this equation would almost-certainly represent a less efficient simulation than that of Eq. (15), it may nonetheless consistent results for a sufficiently short choice of numerical timestep.Let us now rewrite the local value of N j m j (which is regarded as constant in time -or a 'state variable' -by the master equation) in separate components which depend differently on the system size N j , to obtain N j m j = N j m j (t) + N",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "[\u03be j (t), t] . (C.6) Notice that Eq. (27) implies steps of N j m j \u00b1 1 translate into fluctuations of \u03be j \u00b1 N \u22121/2 j in the argument ofP. Using this mapping as well as Eq. (27), one finds that Eq. (C.1) may be rewritten as d dt P(N j m j , t)",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "The particular configurations with hookworm parameters[32] used for demonstration in this work.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The temporally inhomogenous process of an individual's worm uptake and death is obtained from the Markovian approximation to a summing over the possible histories in the following way P(w jn , t + \u2206t) = s=\u22121,0,1 P(w jn + s, t)P(w jn , t + \u2206t|w jn + s, t) = P(w jn \u2212 1, t)\u03bb jn \u039b j (t)\u2206t + P(w jn + 1, t)(\u00b5 + \u00b5 1 )(w jn + 1)\u2206t + P(w jn , t) 1 \u2212 \u03bb jn \u039b j (t)\u2206t \u2212 (\u00b5 + \u00b5 1 )w jn \u2206t + O(\u2206t 2 ) (A.1)Which matches Eq. (15) in the main text. We may also rewrite Eq. (A.2) using the Probability Generating Function (PGF) G jn (Z, t) \u2261 \u221e w jn =0 Z w jn P(w jn , t) such thatBy method of characteristics, 4 the solution to Eq. (15) iswhere the initial intensity I jn (t 0 ) is to be set for each individual. One immediately recognises Eq. (A.4) as the PGF of an inhomogeneous Poisson walker with intensitywhich matches Eq. (16) in the main text. For an ensemble of N j independent walkers (hence individuals) in a given age bin we may obtain the PGF of the sum of their collective worm burdens G j (Z, t) by multiplication such thatwhere the corresponding probability mass function is therefore also that of a Poisson distributionwhere we have also used the definition of the mean worm burden in the j-th age bin given by Eq. (4) in the main text. Note that in the case where \u039b j (t) is roughly constant for all time, the timescale for the distribution to achieve stationarity is \u2206t stat 1/(\u00b5 + \u00b5 1 ). 4 One solves first-order PDEs of the form in Eq. (A.3) by method of characteristics, i.e., choosing a curve Z(t) such thatGiven the fact that along the curve Z(t) one also obtains an effective ODE of the formAppendix B. Approximate ensemble mean and variance of the mean worm burdenThe approximate mean and variance of \u039b j (t) may be computed by inserting Eqs. (22) and (23) into Eq. (20) and its square, yielding the following equationsUsing Eq. (17) in the main text and Eq. (B.1), we may therefore compute the ensemble mean of m j (t), matches the solution to Eq. (12) in the rapid equilibriation limit dE(\u039b j )/dt \u2192 0 and hence verifies the consistency of our approximative results in this section so far.The ensemble variance of m j (t) may also be deduced asfrom the properties of independent samples. 5 By making use of Eq. (1) and assuming the relative independence of \u03bb jn and \u039b(t) once again, we haveand hence one may obtain E[I jn (t) 2 ], which is given by 6If one assumes temporal stationarity such that E[\u039b j (t)] = E(\u039b j ) and E[\u03bb 2 jn \u039b j (t)\u039b j (t )] = E(\u03bb 2 jn \u039b 2 j ), both time integrations in Eq. (B.7) are trivial and one obtains ",
+            "cite_spans": [
+                {
+                    "start": 412,
+                    "end": 416,
+                    "text": "(15)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1392,
+                    "end": 1393,
+                    "text": "4",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 1753,
+                    "end": 1757,
+                    "text": "(22)",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 1776,
+                    "end": 1780,
+                    "text": "(20)",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 2200,
+                    "end": 2201,
+                    "text": "5",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Appendix A. Derivation and solution of the master equation"
+        },
+        {
+            "text": "We may re-derive Eq. (15) in terms of the sum over all worms carried by N j individuals in the j-th age bin N j m j (t) = N j n=1 w jn (t), taking a single step at each point in time, such that",
+            "cite_spans": [
+                {
+                    "start": 21,
+                    "end": 25,
+                    "text": "(15)",
+                    "ref_id": "BIBREF13"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Appendix C. The van Kampen expansion of the master equation"
+        }
+    ]
+}

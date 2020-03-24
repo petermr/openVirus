@@ -1,0 +1,1209 @@
+{
+    "paper_id": "ff54e3e961a72eb1d2500166809b3651b2f98cf6",
+    "metadata": {
+        "title": "China through a drug-target interaction deep learning model",
+        "authors": [
+            {
+                "first": "Bo",
+                "middle": [
+                    "Ram"
+                ],
+                "last": "Beck",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Deargen, Inc",
+                    "location": {
+                        "settlement": "Daejeon",
+                        "country": "Republic of Korea"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Bonggun",
+                "middle": [],
+                "last": "Shin",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Deargen, Inc",
+                    "location": {
+                        "settlement": "Daejeon",
+                        "country": "Republic of Korea"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Yoonjung",
+                "middle": [],
+                "last": "Choi",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Deargen, Inc",
+                    "location": {
+                        "settlement": "Daejeon",
+                        "country": "Republic of Korea"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Sungsoo",
+                "middle": [],
+                "last": "Park",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Deargen, Inc",
+                    "location": {
+                        "settlement": "Daejeon",
+                        "country": "Republic of Korea"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Keunsoo",
+                "middle": [],
+                "last": "Kang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Dankook University",
+                    "location": {
+                        "settlement": "Cheonan",
+                        "country": "Republic of Korea"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The infection of a novel coronavirus found in Wuhan of China (2019-nCoV) is rapidly spreading, and the incidence rate is increasing worldwide. Due to the lack of effective treatment options for 2019-nCoV, various strategies are being tested in China, including drug repurposing. In this study, we used our pretrained deep learning-based drug-target interaction model called Molecule Transformer-Drug Target Interaction (MT-DTI) to identify commercially available drugs that could act on viral proteins of 2019-nCoV. The result showed that atazanavir, an antiretroviral medication used to treat and prevent the human immunodeficiency virus (HIV), is the best chemical compound, showing a inhibitory potency with Kd of 94.94 nM against the 2019-nCoV 3C-like proteinase, followed by efavirenz (199.17 nM), ritonavir (204.05 nM), and dolutegravir (336.91 nM). Interestingly, lopinavir, ritonavir, and darunavir are all",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "designed to target viral proteinases. However, in our prediction, they may also bind to the replication complex components of 2019-nCoV with an inhibitory potency with Kd < 1000 nM. In addition, we also found that several antiviral agents, such as Kaletra, could be used for the treatment of 2019-nCoV, although there is no real-world evidence supporting the prediction. Overall, we suggest that the list of antiviral drugs identified by the MT-DTI model should be considered, when establishing effective treatment strategies for 2019-nCoV.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Coronaviruses (CoVs), belonging to the family Coronaviridae, are positive-sense enveloped RNA viruses and cause infections in birds, mammals, and humans (1) (2) (3) . The family includes four genera, such as Alphacoronavirus, Betacoronavirus, Deltacoronavirus, and Gammacoronavirus (4) . Two infamous infectious coronaviruses in the genus Betacoronavirus are severe acute respiratory syndrome coronavirus (SARS-CoV) (5) and Middle East respiratory syndrome coronavirus (MERS-CoV) (6) , which have infected more than 10,000 people around the world in the past two decades. Unfortunately, the incidence was accompanied by high mortality rates (9.6% for SARS-CoV and 34.4% for MERS-CoV), indicating that there is an urgent need for effective treatment at the beginning of the outbreak to prevent the spread (7, 8) . However, this cannot be achieved with current drug development or an application system, taking several years for newly developed drugs to come to the market.",
+            "cite_spans": [
+                {
+                    "start": 153,
+                    "end": 156,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 157,
+                    "end": 160,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 161,
+                    "end": 164,
+                    "text": "(3)",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 226,
+                    "end": 242,
+                    "text": "Betacoronavirus,",
+                    "ref_id": null
+                },
+                {
+                    "start": 243,
+                    "end": 260,
+                    "text": "Deltacoronavirus,",
+                    "ref_id": null
+                },
+                {
+                    "start": 261,
+                    "end": 285,
+                    "text": "and Gammacoronavirus (4)",
+                    "ref_id": null
+                },
+                {
+                    "start": 416,
+                    "end": 419,
+                    "text": "(5)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 480,
+                    "end": 483,
+                    "text": "(6)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 804,
+                    "end": 807,
+                    "text": "(7,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 808,
+                    "end": 810,
+                    "text": "8)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Unexpectedly, the world is facing the same situation as the previous outbreak due to a recent epidemic of atypical pneumonia caused by a novel coronavirus (2019-nCoV) in Wuhan, China (5, 9) . Thus, a rapid drug application strategy that can be immediately applied to the patient is necessary. Currently, the only way to address this matter is to repurpose commercially available drugs for the pathogen in so-called \"drug-repurposing\". However, in theory, artificial intelligence (AI)-based architectures must be taken into account in order to accurately predict drug-target interactions (DTIs). This is because of the enormous amount of complex information (e.g. hydrophobic interactions, ionic interactions, hydrogen bonding, and/or van der Waals forces) between molecules. To this end, we previously developed a deep learning-based drug-target interaction prediction model, called Molecule Transformer-Drug Target Interaction (MT-DTI) (10) .",
+            "cite_spans": [
+                {
+                    "start": 183,
+                    "end": 186,
+                    "text": "(5,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 187,
+                    "end": 189,
+                    "text": "9)",
+                    "ref_id": null
+                },
+                {
+                    "start": 937,
+                    "end": 941,
+                    "text": "(10)",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In this study, we applied our pre-trained MT-DTI model to identify commercially available antiviral drugs that could potentially disrupt 2019-nCoV's viral components, such as proteinase, RNA-dependent RNA polymerase, and/or helicase. Since the model utilizes simplified molecular-input line-entry system (SMILES) strings and amino acid (AA) sequences, which are 1D string inputs, it is possible to quickly apply target proteins that do not have experimentally confirmed 3D crystal structures, such as viral proteins of 2019-nCoV. We share a list of top commercially available antiviral drugs that could potentially hinder the multiplication cycle of 2019-nCoV with the hope that effective drugs can be developed based on these AI-proposed drug candidates and act against 2019-nCoV.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org /10.1101 /10. /2020 ",
+            "cite_spans": [
+                {
+                    "start": 178,
+                    "end": 186,
+                    "text": "/10.1101",
+                    "ref_id": null
+                },
+                {
+                    "start": 187,
+                    "end": 197,
+                    "text": "/10. /2020",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Amino acid sequences of 3C-like proteinase (accession YP_009725301.1), RNA-dependent RNA polymerase (accession YP_009725307.1), helicase (accession YP_009725308.1), 3'-to-5' exonuclease (accession YP_009725309.1), endoRNAse (accession YP_009725310.1), and 2'-O-ribose methyltransferase (accession YP_009725311.1) of the 2019-nCoV replication complex were extracted from the 2019-nCoV whole genome sequence (accession NC_045512.2), from the National Center for Biotechnology Information (NCBI) database. The raw prediction results were screened for antiviral drugs that are FDA approved, target viral proteins, and have a Kd value less than 1,000 nM.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Amino acid sequences used in this study"
+        },
+        {
+            "text": "Molecule transformer-drug target interaction (MT-DTI) was used to predict binding affinity values between commercially available antiviral drugs and target proteins. Briefly, the natural language processing (NLP) based Bidirectional Encoder Representations from Transformers (BERT) framework is a core algorithm of the model with good performance and robust results in diverse drug-target interaction datasets through pretraining with 'chemical language' SMILES of approximately 1,000,000,000 compounds.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Prediction of drug-target interactions using binding affinity scores"
+        },
+        {
+            "text": "To train the model, the Drug Target Common (DTC) database (11) and BindingDB (12) database were manually curated and combined. Three types of efficacy value, Ki, Kd, and IC50 were integrated by a consistence-score-based averaging algorithm (13) to make the Pearson correlation score over 0.9 in terms of Ki, Kd, and IC50. Since the BindingDB database includes a wide variety of species and target proteins, the MT-DTI model has the potential power to predict interactions between antiviral drugs and 2019-nCoV proteins.",
+            "cite_spans": [
+                {
+                    "start": 58,
+                    "end": 62,
+                    "text": "(11)",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 240,
+                    "end": 244,
+                    "text": "(13)",
+                    "ref_id": "BIBREF12"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Prediction of drug-target interactions using binding affinity scores"
+        },
+        {
+            "text": "The 2019-nCoV 3C-like proteinase was predicted to bind with atazanavir (Kd 94.94 nM), followed by efavirenz, ritonavir, and other antiviral drugs that have a predicted affinity of Kd > 100 nM potency (Table   1 ). No other protease inhibitor antiviral drug was found in the Kd < 1,000 nM range. Although there is . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org /10.1101 /10. /2020 no real-world evidence about whether these drugs will act as predicted against 2019-nCoV yet, some case studies have been identified. For example, a docking study of lopinavir along with other HIV proteinase inhibitors of the CoV proteinase (PDBID 1UK3) suggests atazanavir and ritonavir, which are listed in the present prediction results, may inhibit the CoV proteinase in line with the inhibitory potency of lopinavir (14) . According to the prediction, viral proteinase-targeting drugs were predicted to act more favorably on the viral replication process than viral proteinase through the DTI model (Table 2 -6) . The results include antiviral drugs other than proteinase inhibitors, such as guanosine analogues (e.g., acyclovir, ganciclovir, and penciclovir), reverse transcriptase inhibitors, and integrase inhibitors.",
+            "cite_spans": [
+                {
+                    "start": 491,
+                    "end": 499,
+                    "text": "/10.1101",
+                    "ref_id": null
+                },
+                {
+                    "start": 500,
+                    "end": 510,
+                    "text": "/10. /2020",
+                    "ref_id": null
+                },
+                {
+                    "start": 932,
+                    "end": 936,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1124,
+                    "end": 1127,
+                    "text": "-6)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 200,
+                    "end": 210,
+                    "text": "(Table   1",
+                    "ref_id": null
+                },
+                {
+                    "start": 1115,
+                    "end": 1123,
+                    "text": "(Table 2",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Results and Discussion"
+        },
+        {
+            "text": "Among the prediction results, atazanavir was predicted to have a potential binding affinity to bind to Table   2 -6) . Also, ganciclovir was predicted to bind to three subunits of the replication complex of the 2019-nCoV: RNA-dependent RNA polymerase (Kd 11.91 nM), 3'-to-5' exonuclease (Kd 56.29 nM), and RNA helicase (Kd 108.21 nM). Lopinavir and ritonavir, active materials of AbbVie's Kaletra, both were predicted to have a potential affinity to 2019-nCoV helicase (Table 3 ) and are suggested as potential MERS therapeutics (15) . Recently, approximately $2 million worth of Kaletra doses were donated to China (16) , and a previous clinical study of SARS by Chu et al. (17) may support this decision (17).",
+            "cite_spans": [
+                {
+                    "start": 113,
+                    "end": 116,
+                    "text": "-6)",
+                    "ref_id": null
+                },
+                {
+                    "start": 529,
+                    "end": 533,
+                    "text": "(15)",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 616,
+                    "end": 620,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 656,
+                    "end": 679,
+                    "text": "SARS by Chu et al. (17)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 103,
+                    "end": 112,
+                    "text": "Table   2",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 469,
+                    "end": 477,
+                    "text": "(Table 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results and Discussion"
+        },
+        {
+            "text": "Another anti-HIV drug, Prezcobix of Johnson & Johnson, which consists of darunavir and cobicistat, was to be sent to China (16) , and darunavir is also predicted to have a Kd of 90.38 nM against 2019-nCoV's helicase (Table 3) . However, there was no current supporting literature found for darunavir to be used as a CoV therapeutic.",
+            "cite_spans": [
+                {
+                    "start": 123,
+                    "end": 127,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 216,
+                    "end": 225,
+                    "text": "(Table 3)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results and Discussion"
+        },
+        {
+            "text": "In many cases, DTI prediction models serve as a tool to repurpose drugs to develop novel usages of existing drugs. However, the application of DTI prediction in the present study may be useful to control The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.31.929547 doi: bioRxiv preprint Table 1 . Drug-target interaction (DTI) prediction results of FDA approved antviral drugs available on markets against a novel coronavirus (2019-nCoV, NCBI reference sequence NC_045512.2) 3C-like proteinase (accession YP_009725301.1). Ritonavir is expressed in canonical and isomeric forms SMILES, and * indicates isomeric form SMILES of ritonavir. Table 3 . Drug-target interaction (DTI) prediction results of antiviral drugs available on markets against a novel coronavirus (2019-nCoV, NCBI reference sequence NC_045512.2) helicase (accession YP_009725308.1). Ritonavir is expressed in canonical and isomeric form SMILES, and * indicates isomeric form SMILES of ritonavir. The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org /10.1101 /10. /2020 The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.31.929547 doi: bioRxiv preprint Table 6 . Drug-target interaction (DTI) prediction results of anti-viral drugs available on markets against a novel coronavirus (2019-nCoV, NCBI reference sequence NC_045512.2) 2'-O-ribose methyltransferase (accession YP_009725311.1). The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org /10.1101 /10. /2020 ",
+            "cite_spans": [
+                {
+                    "start": 1115,
+                    "end": 1123,
+                    "text": "/10.1101",
+                    "ref_id": null
+                },
+                {
+                    "start": 1124,
+                    "end": 1134,
+                    "text": "/10. /2020",
+                    "ref_id": null
+                },
+                {
+                    "start": 1606,
+                    "end": 1614,
+                    "text": "/10.1101",
+                    "ref_id": null
+                },
+                {
+                    "start": 1615,
+                    "end": 1625,
+                    "text": "/10. /2020",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 346,
+                    "end": 353,
+                    "text": "Table 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 695,
+                    "end": 702,
+                    "text": "Table 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 1277,
+                    "end": 1284,
+                    "text": "Table 6",
+                    "ref_id": null
+                }
+            ],
+            "section": "Conclusion"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Coronavirus avian infectious bronchitis virus. Veterinary research",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Cavanagh",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "38",
+            "issn": "",
+            "pages": "281--97",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Human coronaviruses: a review of virus-host interactions",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Lim",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ng",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Tam",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Liu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Diseases",
+            "volume": "4",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Coronavirus pathogenesis",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Weiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Leibowitz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Adv Virus Res",
+            "volume": "81",
+            "issn": "",
+            "pages": "85--164",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Coronavirus genomics and bioinformatics analysis",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Woo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Yuen",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Newly discovered coronavirus as the primary cause of severe acute respiratory syndrome",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kuiken",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Fouchier",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Schutten",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Rimmelzwaan",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Van Amerongen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Van Riel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Lancet",
+            "volume": "362",
+            "issn": "",
+            "pages": "263--70",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Isolation of a novel coronavirus from a man with pneumonia in Saudi Arabia",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Zaki",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Van Boheemen",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Bestebroer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Osterhaus",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Fouchier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "N Engl J Med",
+            "volume": "367",
+            "issn": "",
+            "pages": "1814--1834",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Summary of probable SARS cases with oneset of illness from 1",
+            "authors": [],
+            "year": 2002,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "N Engl J Med",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Self-attention based molecule representation for predicting drug-target interaction",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Shin",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Kang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Ho",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Proceedings of Machine Learning Research",
+            "volume": "106",
+            "issn": "",
+            "pages": "230--278",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Drug Target Commons 2.0: a community platform for systematic analysis of drug-target interaction profiles",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Tanoli",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Alam",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Vaha-Koskela",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Ravikumar",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Malyutina",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Jaiswal",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Database (Oxford)",
+            "volume": "",
+            "issn": "",
+            "pages": "1--13",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "BindingDB: a web-accessible database of experimentally determined protein-ligand binding affinities",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Jorissen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Gilson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Nucleic Acids Res",
+            "volume": "35",
+            "issn": "",
+            "pages": "198--201",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Global mapping of pharmacological space",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Paolini",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Shapland",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Van Hoorn",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Mason",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hopkins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Nat Biotechnol",
+            "volume": "24",
+            "issn": "7",
+            "pages": "805--820",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Lopinavir; a potent drug against coronavirus Infection: insight from molecular docking study. Archives of Clinical Infectious Diseases",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Dayer",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Taleb-Gassabi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Dayer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "12",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "SARS and MERS: recent insights into emerging coronaviruses",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "De Wit",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Van Doremalen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Falzarano",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Munster",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nat Rev Microbiol",
+            "volume": "14",
+            "issn": "",
+            "pages": "523--557",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "drugmakers ship therapies to China, seeking to treat coronavirus",
+            "authors": [
+                {
+                    "first": "Js",
+                    "middle": [
+                        "U S"
+                    ],
+                    "last": "Hopkins",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "The Wall Raltegravir Cc1nnc(C(=O)NC(C)(C)c2nc(C(=O)NCc3ccc(F)cc3)c(O)c(=O)",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Dolutegravir CC1CCOC2Cn3cc(C(=O)NCc4ccc(F)cc4F)c(=O)c(O)c3C(=O)N 12",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Lopinavir Cc1cccc(C)c1OCC(=O)NC(Cc1ccccc1)C(O)CC(Cc1ccccc1)",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "1--1",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Drug-target interaction (DTI) prediction results of anti-viral drugs available on markets against a novel coronavirus (2019-nCoV, NCBI reference sequence NC_045512.2) endoRNAse (accession",
+            "authors": [],
+            "year": null,
+            "venue": "Table 5",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Cl)cc2[C@@](C#CC2CC2)(C(F)(F)F)",
+            "authors": [
+                {
+                    "first": "Efavirenz",
+                    "middle": [],
+                    "last": "O=c1nc2ccc",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "=O)NC(C(=O)NC(Cc1ccccc1)C(O)CN(Cc1ccc(-c2ccccn2)cc1)",
+            "authors": [
+                {
+                    "first": "Coc",
+                    "middle": [],
+                    "last": "Atazanavir",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Ritonavir CC(C)c1nc(CN(C)C(=O)NC(C(=O)NC(Cc2ccccc2)CC(O)C(Cc2c cccc2)NC(=O)OCc2cncs2)C(C)C)",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "4cccc(F)c4C3)CN2C1=O",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Dolutegravir CC1CCOC2Cn3cc(C(=O)NCc4ccc(F)cc4F)c(=O)c(O)c3C(=O)N",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "C)C)sc2C(=O)O)C2CCC(O)C",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Nelfinavir Cc1c(O)cccc1C(=O)NC(CSc1ccccc1)C(O)",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "1--2",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "1C(=O)",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "ccn1)C1CCCCC1)C(C)(C)C)C(=O)C(=O)",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "1--1",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Abacavir Nc1nc(NC2CC2)c2ncn(C3C=CC(CO)C3)c2n1",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": ")NCc3ccc(F)cc3)c(O)c(=O)",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.01.31.929547"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "RNA-dependent RNA polymerase (Kd 21.83 nM), helicase (Kd 25.92 nM), 3'-to-5' exonuclease (Kd 82.36 nM), 2'-O-ribose methyltransferase (Kd of 390 nM), and endoRNAse (Kd 50.32 nM), which suggests that all subunits of the 2019-nCoV replication complex may be inhibited simultaneously by atazanavir (",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "unexpected and rapidly spreading infections such SARS-CoV, MERS-CoV, and 2019-nCoV at the frontline of the disease control until better therapeutic measures are developed. Nevertheless, we hope our prediction results may support and helpful to experimental therapy options for China and other countries identified 2019-nCoV infection.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Kd in nM Atazanavir COC(=O)NC(C(=O)NC(Cc1ccccc1)C(O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)C(NC(=O)OC)C(C)(C)C)C(C)NC(=O)C1CC(Oc2ncc(OC)c3ccc(Cl)cc23)CN1C(= O)C(NC(=O)OC(C)(C)C)C(C)(C)C)C(=O)NS(=O)(C)c1nc(CN(C)C(=O)N[C@H](C(=O)N[C@@H](Cc2ccccc 2)C[C@H](O)[C@H](Cc2ccccc2)NC(=O)OCc2cncs2)C(C)O[C@H]3CC4C(=O)N(C)CCCC/C=C\\[C@H]5C[C @@]5(C(=O)NS(=O)(=O)C5CC5)NC(=O)[C@@H]4C3)cc(-c3nc(C(C)C)cs3)nc2c1C826.24",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Kd in nM Grazoprevir C=C[C@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H]2CN1C(= O)[C@H](C(C)(C)C)NC(=O)O[C@@H]1C[C@H]1CCCCCc1n c3ccc(OC)cc3nc1O2)C(=O)NS(=O)(=O)c2ncn(COC(CO)CO)c2[nH]1 11.91 Atazanavir COC(=O)NC(C(=O)NC(Cc1ccccc1)C(O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)C(NC(=O)OC)C(C)(C)C)C(C)(C)C 21.83 Daclatasvir COC(=O)NC(C(=O)N1CCCC1c1ncc(-c2ccc(-c3ccc(-c4cnc(C5CCCN5C(=O)C(NC(=O)OC)C(C)C)[nH]4)cc3)cc2)(Cl)cc2[C@@](C#CC2CC2)(C(F)(F)F)O1 76.70 Asunaprevir C=CC1CC1(NC(=O)C1CC(Oc2ncc(OC)c3ccc(Cl)cc23)CN1C(= O)C(NC(=O)OC(C)(C)C)C(C)(C)C)C(=O)NS(=O)(=O)C1CC1 78.36 Abacavir Nc1nc(NC2CC2)c2ncn(C3C=CC(CO)C3)c2n1 131.51 (C)(C)OC(=O)N[C@H]1CCCCC/C=C\\[C@@H]2C[C@@]2 (CNS(=O)(=O)C2CC2)NC(=O)[C@@H]2C[C@@H](OC(C)(C)NC(=O)[C@@H]1C[C@@H]2CCCC[C@H]2CN1C[ C@@H](O)[C@H](Cc1ccccc1)NC(=O)[C@H](CC(N)=O)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Kd in nM Simeprevir COc1ccc2c(O[C@H]3CC4C(=O)N(C)CCCC/C=C\\[C@H]5C[C@ @]5(C(=O)NS(=O)(=O)C5CC5)NC(=O)[C@@H]4C3)(=O)NC(C(=O)NC(Cc1ccccc1)C(O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)C(NC(=O)OC)C(C)(C)C)C(C)[C@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H]2CN1C(=O)[C @H](C(C)(C)C)NC(=O)O[C@@H]1C[C@H]1CCCCCc1nc3ccc( OC)cc3nc1O2)C(=O)NS(=O)(=O)C1CC1 26.28 Asunaprevir C=CC1CC1(NC(=O)C1CC(Oc2ncc(OC)c3ccc(Cl)cc23)CN1C(= O)C(NC(=O)OC(C)(C)C)C(C)(C)C)C(=O)NS(=O)(=O)C1CC1 28.20 Te laprevir CCCC(NC(=O)C1C2CCCC2CN1C(=O)C(NC(=O)C(NC(=O)c1cn ccn1)C1CCCCC1)C(C)(C)C)C(=O)C(=O)NC1CC1 40.75 Ritonavir CC(C)c1nc(CN(C)C(=O)NC(C(=O)NC(Cc2ccccc2)CC(O)C(Cc2c cccc2)NC(=O)OCc2cncs2)C(C)C)c1OCC(=O)N[C@@H](Cc1ccccc1)[C@@H](O)C[C @H](Cc1ccccc1)NC(=O)[C@H](C(C)C)N1CCCNC1=O 78.49 Darunavir CC(C)CN(C[C@@H](O)[C@H](Cc1ccccc1)/N=C(\\O)O[C@H]1C O[C@H]2OCC[C@@H]12)S(=O)(=O)c1ccc((C#N)cc(C)c1Oc1nc(Nc2ccc(C#N)cc2)nc(N)c1Br 175.50 Raltegravir Cc1nnc(C(=O)NC(C)(C)c2nc(C(=O)NCc3ccc(F)cc3)c(O)c(=O)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Atazanavir COC(=O)NC(C(=O)NC(Cc1ccccc1)C(O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)C(NC(=O)OC)C(C)(C)C)C(C)C@@H](n2cnc3c(=O)nc(N)[nH]c32)C[C@H](O)[C@H]1C O 82.78 Daclatasvir COC(=O)NC(C(=O)N1CCCC1c1ncc(-c2ccc(-c3ccc(-c4cnc(C5CCCN5C(=O)C(NC(=O)OC)C(C)C)[nH]4)cc3)cc2)[C@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H]2CN1C(=O)[C @H](C(C)(C)C)NC(=O)O[C@@H]1C[C@H]1CCCCCc1nc3ccc( OC)cc3nc1O2)C(=O)NS(=O)(=O)C1CC1 111.90 Asunaprevir C=CC1CC1(NC(=O)C1CC(Oc2ncc(OC)c3ccc(Cl)cc23)CN1C(= O)C(NC(=O)OC(C)(C)C)C(C)(C)C)C(=O)NS(=O)((C(=O)N(c2cc(C#CC(C)(C)C)sc2C(=O)O)C2CCC(O)C C2)CC1 182.65 Darunavir CC(C)CN(C[C@@H](O)[C@H](Cc1ccccc1)/N=C(\\O)O[C@H]1C O[C@H]2OCC[C@@H]12)S(=O)(=O)c1ccc(",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Kd in nM Atazanavir COC(=O)NC(C(=O)NC(Cc1ccccc1)C(O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)C(NC(=O)OC)C(C)(C)C)C(C)",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Drug-target interaction (DTI) prediction results of antiviral drugs available on markets against",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Drug-target interaction (DTI) prediction results of anti-viral drugs available on markets against a novel coronavirus (2019-nCoV, NCBI reference sequence NC_045512.2) 3'-to-5' exonuclease (accession YP_009725309.1).",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

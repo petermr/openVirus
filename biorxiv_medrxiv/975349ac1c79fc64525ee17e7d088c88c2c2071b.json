@@ -1,0 +1,2527 @@
+{
+    "paper_id": "975349ac1c79fc64525ee17e7d088c88c2c2071b",
+    "metadata": {
+        "title": "A practical generation interval-based approach to inferring the strength of epidemics from their speed Keywords Infectious disease modeling; Generation interval; basic reproductive number 1",
+        "authors": [
+            {
+                "first": "Sang",
+                "middle": [
+                    "Woo"
+                ],
+                "last": "Park",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "McMaster University",
+                    "location": {
+                        "settlement": "Hamilton",
+                        "region": "Ontario",
+                        "country": "Canada"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "David",
+                "middle": [],
+                "last": "Champredon",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "McMaster University",
+                    "location": {
+                        "settlement": "Hamilton",
+                        "region": "Ontario",
+                        "country": "Canada"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Joshua",
+                "middle": [
+                    "S"
+                ],
+                "last": "Weitz",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Georgia Institute of Technology",
+                    "location": {
+                        "settlement": "Atlanta",
+                        "region": "Georgia",
+                        "country": "United States of America"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Jonathan",
+                "middle": [],
+                "last": "Dushoff",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "McMaster University",
+                    "location": {
+                        "settlement": "Hamilton",
+                        "region": "Ontario",
+                        "country": "Canada"
+                    }
+                },
+                "email": "*dushoff@mcmaster.ca"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Infectious-disease outbreaks are often characterized by the reproductive number R and exponential rate of growth r. R provides information about outbreak control and predicted final size. Directly estimating R is difficult, while r can often be estimated from incidence data. These quantities are linked by the generation interval -the time between when an individual is infected by an infector, and when that infector was infected. It is often infeasible to obtain the exact shape of a generation-interval distribution, and to understand how this shape affects estimates of R. We show that estimating generation interval mean and variance provides insight into the relationship between R and r. We use examples based on Ebola, rabies and measles to explore approximations based on gamma-distributed generation intervals, and find that use of these simple approximations are often sufficient to capture the r-R relationship and provide robust estimates of R.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Infectious disease research often focuses on estimating the reproductive number, i.e., the number of new infections caused on average by a single infection. This number is termed the reproductive number -R. The reproductive number provides information about the disease's potential for spread and the difficulty of control. It is described in terms of an average [4] or an appropriate sort of weighted average [9] .",
+            "cite_spans": [
+                {
+                    "start": 363,
+                    "end": 366,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 410,
+                    "end": 413,
+                    "text": "[9]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The reproductive number has remained a focal point for research because it provides information about how a disease spreads in a population, on the scale of disease generations. As it is a unitless quantity, it does not, however, contain information about time. Hence, another important quantity is the population-level rate of spread, r. The initial rate of spread can often be measured robustly early in an epidemic, since the number of incident cases at time t is expected to follow i(t) \u2248 i(0) exp(rt). The rate of growth can also be described using the \"characteristic time\" of exponential growth C = 1/r. This is closely related to, and simpler mathematically than, the more commonly used doubling time (given by T 2 = ln(2)C \u2248 0.69C).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In disease outbreaks, the rate of spread, r, can be inferred from caseincidence reports, e.g., by fitting an exponential function to the incidence curve [27, 29, 24] . Estimates of the initial exponential rate of spread, r, can then be combined with a mechanistic model that includes unobserved features of the disease to esimate the initial reproductive number, R. In particular, R can be calculated from r and the generation-interval distribution using the generating function approach popularized by [44] .",
+            "cite_spans": [
+                {
+                    "start": 153,
+                    "end": 157,
+                    "text": "[27,",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 158,
+                    "end": 161,
+                    "text": "29,",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 162,
+                    "end": 165,
+                    "text": "24]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 503,
+                    "end": 507,
+                    "text": "[44]",
+                    "ref_id": "BIBREF43"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The generation interval is the amount of time between when an individual is infected by an infector, and the time that the infector was infected [39] . While r measures the speed of the disease at the population level, the generation interval measures speed at the individual level. Generation interval distributions are typically inferred from contact tracing, sometimes in combination with clinical data [7, 20, 16] . Generation interval distributions can be difficult to ascertain empirically [29, 8] , and the generation-function approach depends on an entire distribution. Multiple studies have explored how general-interval distributions affect the r-R relationship (summarized in Table 1 ). However, the use of an entire distribution makes it difficult to determine which features of the distributions are essential to connect measurements of the rate of spread r, with the reproductive number, R. Moreover, different assumptions about the shape of generation interval distributions",
+            "cite_spans": [
+                {
+                    "start": 145,
+                    "end": 149,
+                    "text": "[39]",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 406,
+                    "end": 409,
+                    "text": "[7,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 410,
+                    "end": 413,
+                    "text": "20,",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 414,
+                    "end": 417,
+                    "text": "16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 496,
+                    "end": 500,
+                    "text": "[29,",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 501,
+                    "end": 503,
+                    "text": "8]",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 687,
+                    "end": 694,
+                    "text": "Table 1",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "Assumptions/Notes References Delta approximation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "\u2022 Mean generation interval \u2022 Assumes fixed generation interval [45, 37, 26, 42] \u2022 Provides an upper bound for R estimate Empirical (histogram-based)",
+            "cite_spans": [
+                {
+                    "start": 63,
+                    "end": 67,
+                    "text": "[45,",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 68,
+                    "end": 71,
+                    "text": "37,",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 72,
+                    "end": 75,
+                    "text": "26,",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 76,
+                    "end": 79,
+                    "text": "42]",
+                    "ref_id": "BIBREF41"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "\u2022 Generation interval samples \u2022 Relies on binning generation intervals [45] into discrete histograms Empirical (sample-based)",
+            "cite_spans": [
+                {
+                    "start": 71,
+                    "end": 75,
+                    "text": "[45]",
+                    "ref_id": "BIBREF44"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "\u2022 Generation interval samples \u2022 Uses discretized Euler-Lotka equation [ have led to seemingly contradictory results [46, 37] .",
+            "cite_spans": [
+                {
+                    "start": 70,
+                    "end": 71,
+                    "text": "[",
+                    "ref_id": null
+                },
+                {
+                    "start": 116,
+                    "end": 120,
+                    "text": "[46,",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 121,
+                    "end": 124,
+                    "text": "37]",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "The primary goal of this paper is to further explore and explain the r-R relationship. We explore the qualitative relationship between generation time, initial rate of spread r, and initial reproductive number R using means, variance measures and gamma approximations. We show that summarizing generation-interval distributions using moments provides biological explanations that unify previous findings. We further discuss the generality of the gamma approximation and provide examples of its relevance in using realistic epidemiological parameters from previous outbreaks. By doing so, we shed light on the underpinnings of the relationship between r and R, and on the factors underlying its robustness and its practical use when data on generation intervals is limited or hard to obtain. In this section, we introduce an analytical framewok, and recapitulate previous work relating growth rate r and reproductive number R. These two quantities are linked by the generation-interval distribution, which describes the interval between the time an individual becomes infected and the time that they infect another individual. In particular, if R is known, a shorter generation interval means a faster epidemic (larger r). Conversely (and perhaps counter-intuitively), if r is known, then shorter disease generations imply a lower value of R, because more individual generations are required to realize the same population spread of disease [11, 32] (see Fig. 1 ). The generation-interval distribution can be defined using a renewalequation approach. A wide range of disease models can be described using the model [15, 10, 36, 1, 44, 37] :",
+            "cite_spans": [
+                {
+                    "start": 1440,
+                    "end": 1444,
+                    "text": "[11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 1445,
+                    "end": 1448,
+                    "text": "32]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 1614,
+                    "end": 1618,
+                    "text": "[15,",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1619,
+                    "end": 1622,
+                    "text": "10,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 1623,
+                    "end": 1626,
+                    "text": "36,",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 1627,
+                    "end": 1629,
+                    "text": "1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 1630,
+                    "end": 1633,
+                    "text": "44,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 1634,
+                    "end": 1637,
+                    "text": "37]",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1454,
+                    "end": 1460,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Required information"
+        },
+        {
+            "text": "where t is time, i(t) is the incidence of new infections, S(t) is the proportion of the population susceptible, and K(s) is the intrinsic infectiousness of individuals who have been infected for a length of time s. The basic reproductive number, defined as the average number of secondary cases generated by a primary case in a fully susceptible population [4, 9] , is",
+            "cite_spans": [
+                {
+                    "start": 357,
+                    "end": 360,
+                    "text": "[4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 361,
+                    "end": 363,
+                    "text": "9]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "and the intrinsic generation-interval distribution is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "The \"intrinsic\" interval can be distinguished from \"realized\" intervals, which can look \"forward\" or \"backward\" in time [8] (see also earlier work [39, 28] ). In particular, it is important to correct for biases that shorten the intrinsic interval when generation intervals are observed through contact tracing during an outbreak. In this model, disease growth is predicted to be approximately exponential in the early phase of an epidemic, because the depletion in the effective number of susceptibles is relatively small. Thus, for the exponential phase, we write:",
+            "cite_spans": [
+                {
+                    "start": 120,
+                    "end": 123,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 147,
+                    "end": 151,
+                    "text": "[39,",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 152,
+                    "end": 155,
+                    "text": "28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "where R = R 0 S is the effective reproductive number. We can then solve for the characteristic time C by assuming that the population is growing 5 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint exponentially: i.e., substitute i(t) = i(0) exp(t/C) to obtain the exact speedstrength relationship [10] :",
+            "cite_spans": [
+                {
+                    "start": 456,
+                    "end": 460,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "This fundamental relationship dates back to the work of Euler and Lotka [23] . We will explore the shape of this relationship using parameters based on human infectious diseases, and investigate approximations based on gammadistributed generation intervals.",
+            "cite_spans": [
+                {
+                    "start": 72,
+                    "end": 76,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Required information"
+        },
+        {
+            "text": "We do not expect to know the full distribution g(\u03c4 ) -particularly while an epidemic is ongoing -so we are interested in approximations to R based on limited information. We follow the approach of [29] and approximate the generation interval with a gamma distribution. We prefer the gamma distribution to the standard normal approximation used in many applications for a number of reasons. First, it is more biologically realistic, since it is confined to non-negative values. Second, it has a convenient momentgenerating function, and provides a corresponding simple form for the r-R relationship that can be parameterized with only two parameters that have biologically relevant meanings that can assist in explaining intuition behind the r-R relationship. Third, it generalizes the result obtained from simple Susceptible-Infectious-Recovered (SIR) models, and approximately matches Susceptible-Exposed-Infectious-Recovered (SEIR), in the case where the latent period and infectious period are similar (see Appendix). While the gamma approximation has been applied to infer R in previous outbreaks (Table 1) , its theoretical properties and practical importance has not yet been explored in depth.",
+            "cite_spans": [
+                {
+                    "start": 197,
+                    "end": 201,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1101,
+                    "end": 1110,
+                    "text": "(Table 1)",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "For biological interpretability, we describe the gamma distribution using the mean\u1e20 and the squared coefficient of variation \u03ba (thus \u03ba = 1/a, and G = a\u03b8, where a and \u03b8 are the shape and scale parameters under the standard parameterization of the gamma distribution). Substituting the gamma distribution into (5) then yields the gamma-approximated speed-strength relationship:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "6 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "We write:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "where \u03c1 =\u1e20/C = r\u1e20 measures how fast the epidemic is growing (on the time scale of the mean generation interval) -or, equivalently, the length of the mean generation interval (in units of the characteristic time of exponential growth). The longer the generation interval is compared to C, the higher the estimate of R (see Fig. 1 ). We then explore the behaviour of the gammaapproximated speed-strength relationship R gamma defined above (equivalent to the Tsallis \"q-exponential\", with q = 1 \u2212 \u03ba [43] ): its shape determines how the estimate of R changes with the estimate of normalized generation length \u03c1. For small \u03c1, R gamma always looks like 1 + \u03c1, regardless of the shape parameter 1/\u03ba, which determines the curvature: if 1/\u03ba = 1, we get a straight 7 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint line, for 1/\u03ba = 2 the curve is quadratic, and so on (see Fig. 2 ). For large values of 1/\u03ba, R gamma converges toward exp(\u03c1).",
+            "cite_spans": [
+                {
+                    "start": 496,
+                    "end": 500,
+                    "text": "[43]",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 322,
+                    "end": 328,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 1023,
+                    "end": 1029,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "The limit as \u03ba \u2192 0 is reasonably easy to interpret. The incidence is increasing by a factor of exp(\u03c1) in the time it takes for an average disease generation. If \u03ba = 0, the generation interval is fixed, so the average case must cause exactly R = exp(\u03c1) new cases. If variation in the generation time (i.e., \u03ba) increases, then some new cases will be produced before, and some after, the mean generation time. Since we assume the disease is increasing exponentially, infections that occur early on represent a larger proportion of the population, and thus will have a disproportionate effect: individuals don't have to produce as many lifetime infections to sustain the growth rate, and thus we expect R < exp(\u03c1) (as shown by [44] ).",
+            "cite_spans": [
+                {
+                    "start": 723,
+                    "end": 727,
+                    "text": "[44]",
+                    "ref_id": "BIBREF43"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "The straight-line relationship for \u03ba = 1 also has a biological interpretation. This case corresponds to the classic SIR model, where the infectious period is exponentially distributed [6] . In this case, recovery rate and infection rate are constant for each individual. The rate of exponential growth per generation is then given directly by the net per capita increase in infections: R \u2212 1, where one represents the recovery of the initial infectious individual.",
+            "cite_spans": [
+                {
+                    "start": 184,
+                    "end": 187,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "Characterizing the r-R relationship with mean and coefficient of variation also helps explain results based on compartmental models [46, 37] , because the mean and variance of the generation interval is linked to the mean and variance of latent and infectious periods. Shorter mean latent and infectious periods result in shorter generation intervals, and thus smaller R estimates. Less-variable latent periods result in less-variable generation intervals, and thus higher R estimates. Less-variable infectious periods have more complicated effects. While they reduce variation in generation interval (which would be expected to increase R estimates), they also reduce the mean generation interval [39] (which would lead to a decrease). This explains the apparent anomaly between earlier results: when mean generation interval is held constant, the effect of less-variable infectious periods is to reduce variation, leading to lower R for a given r [37] ; when mean infectious period is held constant the effect of reducing generation interval will be stronger, leading to higher R [46] .",
+            "cite_spans": [
+                {
+                    "start": 132,
+                    "end": 136,
+                    "text": "[46,",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 137,
+                    "end": 140,
+                    "text": "37]",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 698,
+                    "end": 702,
+                    "text": "[39]",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 949,
+                    "end": 953,
+                    "text": "[37]",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 1082,
+                    "end": 1086,
+                    "text": "[46]",
+                    "ref_id": "BIBREF45"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "There is a simple intuition for this latter result. In an exponentially growing epidemic, things that happen earlier have the largest effect. If we increase the variation in latent period while holding R constant, we have more early progression and more late progression to infectiousness. The former effect will be more important, and thus increasing variation should",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint increase r for a given value of R -or, equivalently, decrease R for a given value of r. Increasing variation in infectious period has the opposite effect: it increases the amount of both early and late recovery, and thus leads to smaller r for a given value of R (and conversely).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Approximation method, in theory"
+        },
+        {
+            "text": "We test our approximation method by generating a pseudo-realistic generation-interval distributions using previously estimated/observed latent and infectious period distributions for different diseases ( Table 2 ). For each pseudo-realistic distribution, we calculate the \"true\" relationship between r and R and compare it with a relationship inferred based on gamma distribution approximations. These approximations are first done with large amounts of data, allowing us to evaluate how well the approximations describe the r-R relationship under ideal conditions, and then tested with smaller amounts of data to assess how well methods perform when data is limited.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 204,
+                    "end": 211,
+                    "text": "Table 2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Approximation method, in practice"
+        },
+        {
+            "text": "Estimating generation intervals is complex; our goal with pseudo-realistic distributions is not to precisely match real diseases, but to generate distributions that are likely to be roughly as challenging for our approximation methods as real distributions would be. We construct pseudo-realistic intervals from sampled latent and infectious periods by adding the sampled latent period to a an infection delay chosen uniformly from the sampled infectious period:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Approximation method, in practice"
+        },
+        {
+            "text": "where G i , E i and I i are the sampled intrinsic generation interval, latent period, and infectious period, respectively, and U represents a uniform random deviate. This implicitly assumes that infectiousness is constant across the infectious period [13] . We sample from latent and infectious periods obtained from observations (for empirical distributions), or by using a uniform set of quantiles (for parametric distributions). For the purpose of constructing pseudo-realistic distributions, we do not attempt to correct for the fact that observed intervals may be sampled in a context more relevant to backward than to intrinsic generation intervals (see [8] ). We sample latent periods at random, and infectious periods by length-weighted resampling (since longer infectious period implies more opportunities to infect). For our examples, we used 10,000 quantiles for each parametric distribution and 10,000 sampled generation intervals for each disease (see Appendix). We then calculate \"exact\" relationships (for our pseudo-realistic distributions) by substituting sampled generation intervals into the exact speedstrength relationship (5) . This relationship is then compared to the corresponding gamma-approximated relationship (6) .",
+            "cite_spans": [
+                {
+                    "start": 251,
+                    "end": 255,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 660,
+                    "end": 663,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 1144,
+                    "end": 1147,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 1238,
+                    "end": 1241,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Approximation method, in practice"
+        },
+        {
+            "text": "All calculations, numerical analyses and figures were made with the software platform R [34] . Code is freely available at https://github.com/dushoff/ link calculations.",
+            "cite_spans": [
+                {
+                    "start": 88,
+                    "end": 92,
+                    "text": "[34]",
+                    "ref_id": "BIBREF33"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Approximation method, in practice"
+        },
+        {
+            "text": "We investigate this approximation approach using three different examples. These examples also serve to demonstrate that robust estimates could be made with less data and potentially earlier in an outbreak -a point we revisit in the Discussion. Our initial investigation of this question was motivated by work on the West African Ebola Outbreak [47] , so we start with that example. To probe the approximation more thoroughly, we also chose one disease with high variation in generation interval (canine rabies), and one with a high reproductive number (measles). For simplicity, we assumed that latent and infectious periods are equivalent to incubation and symptomatic periods for Ebola virus disease (EVD), measles, and canine rabies.",
+            "cite_spans": [
+                {
+                    "start": 345,
+                    "end": 349,
+                    "text": "[47]",
+                    "ref_id": "BIBREF46"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "We generated a pseudo-realistic generation-interval distribution for Ebola virus disease (EVD) using information from [7] and a lognormal assumption for both the incubation and infectious periods. In contrast to gamma distributed incubation and infectious periods assumed by [7] , we used a lognormal assumption for our components because it is straightforward and should provide a challenging test of our gamma approximation (see Appendix for results using gamma components). We used the reported standard deviation for the infectious period, and chose the standard deviation for the incubation period to match the reported coefficient of variation for the serial interval distribution, since this value is available and is expected to be similar to the generation interval distribution for EVD [7] .",
+            "cite_spans": [
+                {
+                    "start": 118,
+                    "end": 121,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 275,
+                    "end": 278,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 796,
+                    "end": 799,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Ebola"
+        },
+        {
+            "text": "We then used our pseudo-realistic distribution to calculate both the exact (5) and gamma-approximated (6) speed-strength relationships (see Fig. 3 ). The exact speed-strength relationship (5) using a pseudo-realistic generationinterval distribution based on [7] . (dashed curve) The Gamma approximated speed-strength relationship (6), using the mean and CV of a pseudo-realistic generation-interval distribution. (dotted curves) Naive approximations based on exponential (lower) and fixed (upper) generation distributions. Points indicate estimates for the three focal countries of the West African Ebola Outbreak calculated by [7] : Sierra Leone (square, R = 1.38), Liberia (triangle, R = 1.51), and Guinea (circle, R = 1.81). Initial growth rate for each outbreak was inferred from doubling periods reported by [7] (r = ln(2)/T 2 ).",
+            "cite_spans": [
+                {
+                    "start": 258,
+                    "end": 261,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 628,
+                    "end": 631,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 813,
+                    "end": 816,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 140,
+                    "end": 146,
+                    "text": "Fig. 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Ebola"
+        },
+        {
+            "text": ". CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "The approximation is within 1% of the pseudo-realistic distribution it is approximating across the range of country estimates, and within 5% across the range shown. It is also within 2% of the World Health Organization (WHO) estimates derived from the observed time series assuming a poisson process with a known serial interval distribution. We also applied the moment approximation to a pseudo-realistic generation-interval distribution based on information about measles from 12 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint [19] , [22] , and [5] . Incubation periods were assumed to follow a lognormal distribution [19] . Infectious periods were assumed to follow a gamma distribution with coefficient of variation of 0.2 [38, 22, 17] . Since variation in infectious period is relatively low [38, 17] , and infectious period is short compared to incubation period, this choice is reasonable (and our results are not sensitive to the details).",
+            "cite_spans": [
+                {
+                    "start": 691,
+                    "end": 695,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 698,
+                    "end": 702,
+                    "text": "[22]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 709,
+                    "end": 712,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 782,
+                    "end": 786,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 889,
+                    "end": 893,
+                    "text": "[38,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 894,
+                    "end": 897,
+                    "text": "22,",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 898,
+                    "end": 901,
+                    "text": "17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 959,
+                    "end": 963,
+                    "text": "[38,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 964,
+                    "end": 967,
+                    "text": "17]",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "Here, we found surprisingly close agreement between the exact and approximate relationships between r and R across a much wider range of interest (a difference of < 1% for R up to > 20) (see Fig. 4 ). On examination, this closer agreement is due to the smaller overall variation in generation times in measles: when overall variation is small, differences between distributions have less effect.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 191,
+                    "end": 197,
+                    "text": "Fig. 4",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "Measles"
+        },
+        {
+            "text": "We did a similar analysis for rabies by constructing a pseudo-realistic generation-interval distribution from observed incubation and infectious period distributions (see Fig. 5 ). Since estimates of R for rabies are near 1, there is small difference between the naive estimates and the gamma approximated speed-strength relationship. But, looking at the relationship more broadly, we see that the moment-based approximation would do a poor job of predicting the relationship for intermediate or large values of R -in fact, a poorer job than if we use the approximation based on exponentially distributed generation times.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 171,
+                    "end": 177,
+                    "text": "Fig. 5",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Rabies"
+        },
+        {
+            "text": "The reason for poor predictions of the moment approximation for higher R can be seen in the histogram shown in Fig. 5 . The moment approximation is strongly influenced by rare, very long generation intervals, and does a poor job of matching the observed pattern of short generation intervals (in particular, the moment approximation misses the fact that the distribution has a density peak at a finite value). We expect short intervals to be particularly important in driving the speed of the epidemic, and therefore in determining the relationship between r and R. We can address this problem by estimating gamma parameters formally using a maximum-likelihood fit to the pseudo-realistic generation intervals. This fit does a better job of matching the observed pattern of short generation intervals and of predicting the simulated relationship between r and R across a broad range (Fig. 5 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 111,
+                    "end": 117,
+                    "text": "Fig. 5",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 883,
+                    "end": 890,
+                    "text": "(Fig. 5",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Rabies"
+        },
+        {
+            "text": ". CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It (6), using the mean and CV of a pseudo-realistic generation-interval distribution. \"moment\" approximation is based on the observed mean and CV of the distribution whereas \"MLE\" approximation uses the mean and CV calculated from a maximumlikelihood fit. (dotted curves) Naive approximations based on exponential (lower) and fixed (upper) generation distributions. Gray horizontal lines represent R ranges estimated by [13] : 1.05 -1.32. (Right) histogram represents rabies generation interval distributions simulated from incubation and infectious periods observed by [13] . Dashed curves represent estimated distribution of generation intervals using method of moments and MLE (corresponding to approximate speed-strength relationships of the left figure).",
+            "cite_spans": [
+                {
+                    "start": 571,
+                    "end": 575,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 721,
+                    "end": 725,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                }
+            ],
+            "ref_spans": [],
+            "section": "13"
+        },
+        {
+            "text": "14 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. Table 2 : Parameters that were used to obtain theoretical generation distributions for each disease. Reproduction numbers are represented as points in figure Fig. 3 -5. Ebola parameters in triples represent Sierra Leone, Liberia, Guinea.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 154,
+                    "end": 161,
+                    "text": "Table 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 305,
+                    "end": 318,
+                    "text": "figure Fig. 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "13"
+        },
+        {
+            "text": "Estimating the reproductive number R is a key part of characterizing and controlling infectious disease spread. The initial value of R for an outbreak is often estimated by estimating the initial exponential rate of growth, and then using a generation-interval distribution to relate the two quantities [44, 39, 28, 40] . However, detailed estimates of the full generation interval are difficult to obtain, and the link between uncertainty in the generation interval and uncertainty in estimates of R are often unclear. Here we introduced and analyzed a simple framework for estimating the relationship between R and r, using only the estimated mean and CV of the generation interval. The framework is based on the gamma distribution. We used three disease examples to test the robustness of the framework. We also compared estimates based directly on estimated mean and variance of of the generation interval to estimates based on maximum-likelihood fits. The gamma approximation for calculating R from r was introduced by [29] , and provides estimates that are simpler, more robust, and more realistic than those from normal approximations (see Appendix). Here, we presented the gamma approximation in a form conducive to intuitive understanding of the relationship between speed, r, and strength, R (See Fig. 2) . In doing so, we explained the general result that estimates of R increase with mean generation time, but decrease with variation in generation times [44, 46, 37] . We also provided mechanistic interpretations: when generation intervals are longer, more infection is needed per generation (larger R) in order to produce 15 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint a given rate of increase r. Similarly, when variance in generation time is large, there is more early infection. As early infections contribute most to growth of an epidemic, faster exponential growth is expected for a given value of R. Thus a higher value of R will be needed to match a given value of r.",
+            "cite_spans": [
+                {
+                    "start": 303,
+                    "end": 307,
+                    "text": "[44,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 308,
+                    "end": 311,
+                    "text": "39,",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 312,
+                    "end": 315,
+                    "text": "28,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 316,
+                    "end": 319,
+                    "text": "40]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 1024,
+                    "end": 1028,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 1466,
+                    "end": 1470,
+                    "text": "[44,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 1471,
+                    "end": 1474,
+                    "text": "46,",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 1475,
+                    "end": 1478,
+                    "text": "37]",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1307,
+                    "end": 1314,
+                    "text": "Fig. 2)",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "We tested the gamma approximation framework by applying it to parameter regimes based on three diseases: Ebola, measles, and rabies. We found that approximations based on observed moments closely match true answers (based on known, pseudo-realistic distributions, see Sec. 4 for details) when the generation-interval distribution is not too broad (as is the case for Ebola and measles, but not for rabies), but that using maximum likelihood to estimate the moments provides better estimates for a broader range of parameters Sec. 4.3, and also when data are limited (see Appendix).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "Many studies have linked r with R using generation interval distributions under various assumptions (Table 1) . Simple methods, such as delta and exponential approximations, require minimal information (i.e., mean generation interval) but result in extreme estimates. More realistic methods, such as empirical and SEIR methods, may yield more realistic estimates, but are harder to interpret and require more data to implement.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 100,
+                    "end": 109,
+                    "text": "(Table 1)",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "Summarizing an entire generation interval distributions using two moments is a practically feasible approach that can give sensible and robust estimates of the relationship between r and R that lie between extreme estimates (see Appendix). More detailed methods will often be preferred when data are abundant but the gamma approximation can be easily used in preliminary analyses. In particular, this framework has potential advantages for understanding the likely effects of parameter changes, and also for parameter estimation with uncertainty: since R can be estimated from three simple quantities (\u1e20, \u03ba and r), it should be straightforward to propagate uncertainty from estimates of these quantities to estimates of R.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "For example, during the Ebola outbreak in West Africa, many researchers tried to estimate R from r [2, 7, 30, 35, 18] but uncertainty in the generationinterval distribution was often neglected (but see [41] ). During the outbreak, [47] used a generation-interval argument to show that neglecting the effects of post-burial transmission would be expected to lead to underestimates of R. Our generation interval framework provides a clear interpretation of this result: as long as post-burial transmission tends to increase generation intervals, it should result in higher estimates of R for a given estimate of r. Knowing the exact shape of the generation interval distribution is difficult, but quantifying how various transmission routes and epidemic parameters 16 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint affect the moments of the generation interval distribution will help researchers better understand and predict the scope of future outbreaks. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint 6 Appendix",
+            "cite_spans": [
+                {
+                    "start": 99,
+                    "end": 102,
+                    "text": "[2,",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 103,
+                    "end": 105,
+                    "text": "7,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 106,
+                    "end": 109,
+                    "text": "30,",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 110,
+                    "end": 113,
+                    "text": "35,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 114,
+                    "end": 117,
+                    "text": "18]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 202,
+                    "end": 206,
+                    "text": "[41]",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 231,
+                    "end": 235,
+                    "text": "[47]",
+                    "ref_id": "BIBREF46"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "The SEIR (susceptible-exposed-infectious-recovered) model is given by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "It is assume that latent and infectious periods are exponentially distributed with mean 1/\u03c3 and 1/\u03b3, respectively. For this model, generation interval distribution can be written as follows [39] :",
+            "cite_spans": [
+                {
+                    "start": 190,
+                    "end": 194,
+                    "text": "[39]",
+                    "ref_id": "BIBREF38"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "The mean generation interval is\u1e20",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "and the square coefficient of variation is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "[21, 37] derived the following r-R relationship under SEIR model:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "Reparameterizing, we have",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "1 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint Note that Taylor expansion of (7) yields the following:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "where R gamma is an R estimate based on the gamma approximation. When \u03c3 = \u03b3, g(\u03c4 ) follows a gamma distributio and O(\u03c1 3 ) vanishes. We expect the gamma approximation to work well when average duration of latent and infectious periods are similar.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": "2 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It Figure S1 : We perform the same analysis as we did in Sec. 4.1 assuming gamma distributed incubation and infectious periods. We find that the gamma approximated speed-strength relationship matches the true relationship almost perfectly in this case. Once again, we adjust the standard deviation of the incubation period to match the reported coefficient of variation in serial interval distributions. Rest of the parameters and points as in Fig. 3 3 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint Figure S2 : Approximating generation-interval distributions with a normal distribution has two problems. First, the distribution extends to negative values, which are biologically impossible. Second, as a consequence, the normal approximation predicts a saturating and eventually a decreasing r\u2212R relationship for large r. Parameters and points as in Fig. 3 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 156,
+                    "end": 165,
+                    "text": "Figure S1",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 597,
+                    "end": 603,
+                    "text": "Fig. 3",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 815,
+                    "end": 824,
+                    "text": "Figure S2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 1166,
+                    "end": 1172,
+                    "text": "Fig. 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Comparison with the SEIR model"
+        },
+        {
+            "text": ". CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "4"
+        },
+        {
+            "text": "The moment-matching method (approximating R based on estimated mean and variance of the generation interval) has an appealing simplicity, and works well for all of the actual disease parameters we tested (the breakdown for rabies distributions occurs for values of R well above observed values). We therefore wanted to compare its robustness given small sample sizes along with that of the more sophisticated maximum likelihood method. Fig. S3 shows results of this experiment. When sample size is limited, estimates using MLE tend to be substantially close to the known true values in these experiments. As we increase sample size, our estimates become narrower. We also find that using the gamma approximated speed-strength relationship gives narrower estimates than the two naive estimates even when the sample size is extremely small (n = 10). It is important to note that Fig. S3 only conveys uncertainty in the estimate of coefficient of variation of generation interval distributions. Estimation of mean generation interval will introduce additional uncertainty into estimates of the reproductive number. Relative length of generation interval (\u03c1)",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 436,
+                    "end": 443,
+                    "text": "Fig. S3",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 877,
+                    "end": 884,
+                    "text": "Fig. S3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Robustness of the gamma approximation"
+        },
+        {
+            "text": "Reproductive number moment mle Figure S3 : The effect of small sample size on approximated relationship between r and R. (black solid curve) The relationship between growth rate and R using a known generation-interval distribution (see Fig. 3 ). (colored curves) Estimates based on finite samples from this distribution: dashed curves show the median and solid curves show 95% quantiles of 1000 sampling experiments. Note that the upper 95% quantile of the moment approximation and MLE approximation overlap. (dotted curves) Naive approximations based on exponential (lower) and fixed (upper) generation distributions.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 31,
+                    "end": 40,
+                    "text": "Figure S3",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 236,
+                    "end": 242,
+                    "text": "Fig. 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Robustness of the gamma approximation"
+        },
+        {
+            "text": "6 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Robustness of the gamma approximation"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "An integral equation model for the control of a smallpox outbreak",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gk Aldis",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Roberts",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Mathematical biosciences",
+            "volume": "195",
+            "issn": "",
+            "pages": "1--22",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Estimating the Reproduction Number of Ebola Virus (EBOV) During the 2014 Outbreak in West Africa",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Althaus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLoS Curr",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "On the spread of a disease with gamma distributed latent and infectious periods",
+            "authors": [
+                {
+                    "first": "Dorothy",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ray",
+                    "middle": [],
+                    "last": "Watson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1980,
+            "venue": "Biometrika",
+            "volume": "67",
+            "issn": "",
+            "pages": "191--198",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Infectious Diseases of Humans: Dynamics and Control",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Directly transmitted infections diseases: control by vaccination",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Roy",
+                    "suffix": ""
+                },
+                {
+                    "first": "Robert M",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1982,
+            "venue": "Science 215",
+            "volume": "4536",
+            "issn": "",
+            "pages": "1053--1060",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Infectious diseases of humans: dynamics and control",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Roy",
+                    "suffix": ""
+                },
+                {
+                    "first": "Robert M",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Ebola virus disease in West Africa-the first 9 months of the epidemic and forward projections",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Aylward",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "N Engl J Med",
+            "volume": "371",
+            "issn": "",
+            "pages": "1481--95",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Intrinsic and realized generation intervals in infectious-disease transmission",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Champredon",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "In: Proc Biol Sci",
+            "volume": "282",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "On the definition and the computation of the basic reproduction ratio R0 in models for infectious diseases in heterogeneous populations",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Diekmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Metz",
+                    "suffix": ""
+                }
+            ],
+            "year": 1990,
+            "venue": "J Math Biol",
+            "volume": "28",
+            "issn": "",
+            "pages": "365--82",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Mathematical epidemiology of infectious diseases: model building, analysis and interpretation",
+            "authors": [
+                {
+                    "first": "Odo",
+                    "middle": [],
+                    "last": "Diekmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "Johan Andre Peter",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Why the proportion of transmission during early-stage HIV infection does not predict the long-term impact of treatment on HIV incidence",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Eaton",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Hallett",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Proc Natl Acad Sci U S A",
+            "volume": "111",
+            "issn": "",
+            "pages": "16202--16209",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Strategies for containing an emerging influenza pandemic in Southeast Asia",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Neil",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nature",
+            "volume": "437",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Transmission dynamics and prospects for the elimination of canine rabies",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Hampson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cleaveland",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Haydon",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kaare",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Packer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Dobson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PLoS Biol",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Transmission dynamics and prospects for the elimination of canine rabies",
+            "authors": [
+                {
+                    "first": "Katie",
+                    "middle": [],
+                    "last": "Hampson",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jonathan",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sarah",
+                    "middle": [],
+                    "last": "Cleaveland",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Daniel",
+                    "suffix": ""
+                },
+                {
+                    "first": "Magai",
+                    "middle": [],
+                    "last": "Haydon",
+                    "suffix": ""
+                },
+                {
+                    "first": "Craig",
+                    "middle": [],
+                    "last": "Kaare",
+                    "suffix": ""
+                },
+                {
+                    "first": "Andy",
+                    "middle": [],
+                    "last": "Packer",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Dobson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PLoS biology",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "The concept of R 0 in epidemic theory",
+            "authors": [
+                {
+                    "first": "Jap",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Dietz",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "Statistica Neerlandica",
+            "volume": "50",
+            "issn": "",
+            "pages": "89--110",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Quantitative, model-based estimates of variability in the generation and serial intervals of Plasmodium falciparum malaria",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Huber",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Johnston",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Greenhouse",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Perkins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "In: Malar J",
+            "volume": "15",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Disease extinction and community size: modeling the persistence of measles",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Keeling",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "In: Science",
+            "volume": "275",
+            "issn": "",
+            "pages": "65--72",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Avoidable errors in the modelling of outbreaks of emerging pathogens, with special reference to Ebola",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "King",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "M G"
+                    ],
+                    "last": "Domenech Dcm",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Magpantay",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rohani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Proceedings of the Royal Society B: Biological Sciences",
+            "volume": "282",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Incubation periods of acute respiratory viral infections: a systematic review",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lessler",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Reich",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Brookmeyer",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Perl",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Nelson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A T"
+                    ],
+                    "last": "Cummings",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Lancet Infect Dis",
+            "volume": "9",
+            "issn": "",
+            "pages": "291--300",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Times to key events in Zika virus infection and implications for blood donation: a systematic review",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lessler",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "In: Bull World Health Organ",
+            "volume": "94",
+            "issn": "",
+            "pages": "841--849",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Transmission dynamics and control of severe acute respiratory syndrome",
+            "authors": [
+                {
+                    "first": "Marc",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Science",
+            "volume": "300",
+            "issn": "",
+            "pages": "1966--1970",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Realistic distributions of infectious periods in epidemic models: changing patterns of persistence and dynamics",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lloyd",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "In: Theor Popul Biol",
+            "volume": "60",
+            "issn": "",
+            "pages": "59--71",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Relation Between Birth Rates and Death Rates",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Alfred",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lotka",
+                    "suffix": ""
+                }
+            ],
+            "year": 1907,
+            "venue": "Science",
+            "volume": "26",
+            "issn": "",
+            "pages": "21--22",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Estimating initial epidemic growth rates",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Bolker",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J D"
+                    ],
+                    "last": "Earn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Bull Math Biol",
+            "volume": "76",
+            "issn": "",
+            "pages": "245--60",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Early transmission characteristics of influenza A (H1N1) v in Australia: Victorian state",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Es Mcbryde",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Transmission dynamics of Tasmanian devil facial tumor disease may lead to disease-induced extinction",
+            "authors": [
+                {
+                    "first": "Hamish",
+                    "middle": [],
+                    "last": "Mccallum",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "3379--3392",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Transmissibility of 1918 pandemic influenza",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Mills",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Robins",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Nature",
+            "volume": "432",
+            "issn": "",
+            "pages": "904--910",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Time variations in the generation time of an infectious disease: Implications for sampling to appropriately quantify transmission potential",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Nishiura",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Mathematical Biosciences and Engineering",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Transmission potential of the new influenza A(H1N1) virus and its age-specificity in Japan",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Nishiura",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Castillo-Chavez",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Safan",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Chowell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Euro Surveill",
+            "volume": "14",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Theoretical perspectives on the infectiousness of Ebola virus disease",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Nishiura",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Chowell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "In: Theor Biol Med Model",
+            "volume": "12",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Theoretical perspectives on the infectiousness of Ebola virus disease",
+            "authors": [
+                {
+                    "first": "Hiroshi",
+                    "middle": [],
+                    "last": "Nishiura",
+                    "suffix": ""
+                },
+                {
+                    "first": "Gerardo",
+                    "middle": [],
+                    "last": "Chowell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Theoretical Biology and Medical Modelling",
+            "volume": "12",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Impact of early-stage HIV transmission on treatment as prevention",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Powers",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kretzschmar",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Miller",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Cohen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Proc Natl Acad Sci U S A",
+            "volume": "111",
+            "issn": "",
+            "pages": "15867--15875",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "The epidemic behavior of the hepatitis C virus",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Oliver",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sunetra",
+                    "middle": [],
+                    "last": "Michael A Charleston",
+                    "suffix": ""
+                },
+                {
+                    "first": "Andrew",
+                    "middle": [],
+                    "last": "Gupta",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Edward",
+                    "suffix": ""
+                },
+                {
+                    "first": "Paul H",
+                    "middle": [],
+                    "last": "Holmes",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Harvey",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Science",
+            "volume": "292",
+            "issn": "",
+            "pages": "2323--2325",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "R Core Team",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Modeling the impact of interventions on an epidemic of Ebola in Sierra Leone and Liberia",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Rivers",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Lofgren",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Marathe",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Eubank",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lewis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLoS Curr",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Modelling strategies for minimizing the impact of an imported exotic infection",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Mg Roberts",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Proceedings of the Royal Society of",
+            "volume": "271",
+            "issn": "",
+            "pages": "2411--2415",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Model-consistent estimation of the basic reproduction number from the incidence of an emerging infection",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Roberts",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Journal of mathematical biology",
+            "volume": "55",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Infectiousness of communicable diseases in the household (measles, chickenpox, and mumps)",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Re Hope Simpson",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Lancet (1952)",
+            "volume": "",
+            "issn": "",
+            "pages": "549--54",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "A note on generation times in epidemic models",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Svensson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Math Biosci",
+            "volume": "208",
+            "issn": "",
+            "pages": "300--311",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "The influence of assumptions on generation time distributions in epidemic models",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Svensson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "In: Math Biosci",
+            "volume": "270",
+            "issn": "",
+            "pages": "81--90",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Stochasticity and the limits to confidence when estimating R0 of Ebola and other emerging infectious diseases",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Taylor",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Weitz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "J Theor Biol",
+            "volume": "408",
+            "issn": "",
+            "pages": "145--54",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Estimation of the reproductive number for A (H1N1) pdm09 influenza among the French armed forces",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Trichereau",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Journal of Infection",
+            "volume": "64",
+            "issn": "",
+            "pages": "628--630",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "What are the numbers that experiments provide",
+            "authors": [
+                {
+                    "first": "Constantino",
+                    "middle": [],
+                    "last": "Tsallis",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "Quimica Nova",
+            "volume": "17",
+            "issn": "",
+            "pages": "468--471",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "How generation intervals shape the relationship between growth rates and reproductive numbers",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "In: Proc Biol Sci",
+            "volume": "274",
+            "issn": "",
+            "pages": "599--604",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "How generation intervals shape the relationship between growth rates and reproductive numbers",
+            "authors": [
+                {
+                    "first": "Jacco",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "Marc",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Proceedings of the Royal Society of",
+            "volume": "274",
+            "issn": "",
+            "pages": "599--604",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Appropriate models for the management of infectious diseases",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Helen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Pejman",
+                    "middle": [],
+                    "last": "Wearing",
+                    "suffix": ""
+                },
+                {
+                    "first": "Matt",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Rohani",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Keeling",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "PLoS Med",
+            "volume": "2",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Modeling post-death transmission of Ebola: challenges for inference and opportunities for control",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Weitz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "In: Sci Rep",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Two hypothetical epidemics with the same growth rate (r = 0.25/week) and fixed generation intervals. Assuming a short generation interval (fast transmission at the individual level) implies a smaller reproductive number R 0 (panel A) when compared to a longer generation interval (slow transmission at the individual level, panel B).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "The approximate relationship (6) between mean generation time (relative to the characteristic time of exponential growth, \u03c1 = r\u1e20 =\u1e20/C) and reproductive number. The curves correspond to different amounts of variation in the generation-interval distribution.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Estimating R for the West African Ebola Outbreak. (solid curve)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Estimating R for measles. (solid curve) The exact speed-strength relationship (5) using a pseudo-realistic generation-interval distribution. (dashed curve) The gamma-approximated relationship (6) using the mean and CV of a pseudo-realistic generation-interval distribution (this curve is almost invisible because it overlaps the solid curve) (dotted curves) Naive approximations based on exponential (lower) and fixed (upper) generation distributions. Gray horizontal lines represent R ranges estimated by[5]: 12.5-18.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Estimating R for the Rabies. (Left) estimating R from rabies infectious case data. (solid curve) The exact speed-strength relationship (5) using a pseudo-realistic generation-interval distribution. (dashed curve) The Gamma approximated speed-strength relationship",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Time until maxium infectivity \u2022 Duration of maximum infectivity \u2022 Time until recovery",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Summary of previous studies that relate growth rate, r, with reproductive number, R, using generation interval distributions.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/312397 doi: bioRxiv preprint[48] Ping Yan. \"Separate roles of the latent and infectious periods in shaping the relation between the basic reproduction number and the intrinsic growth rate of infectious disease outbreaks\". In: Journal of theoretical biology 251.2 (2008), pp. 238-252.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The authors thank Steve Bellan for helpful comments, and Katie Hampson for making rabies data available. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgments"
+        },
+        {
+            "text": "SWP led the literature review, wrote the first draft of the MS, assisted with analytic calculations, and finalized the simulations and data analysis; JD conceived the study and did the initial simulations and analytic calculations;all authors contributed to refining study design, literature review, and MS writing. All authors gave final approval for publication.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Authors' Contributions"
+        },
+        {
+            "text": "The authors declare that they have no competing interests.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Competing interests"
+        }
+    ]
+}

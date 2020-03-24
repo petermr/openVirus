@@ -1,0 +1,1726 @@
+{
+    "paper_id": "d5f14e63b86239f491c9dd1749cff01dc4d633cb",
+    "metadata": {
+        "title": "",
+        "authors": [
+            {
+                "first": "Markus",
+                "middle": [],
+                "last": "Luczak-Roesch",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Victoria University of Wellington",
+                    "location": {
+                        "addrLine": "Jianfeng He, Wenjun Ma 23/01/20 BetaCo V",
+                        "postBox": "/IDF0372",
+                        "postCode": "2020",
+                        "country": "France"
+                    }
+                },
+                "email": "*markus.luczak-roesch@vuw.ac.nz"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Profiling the genetic evolution and dynamic spreading of viruses is a crucial task when responding to epidemic outbreaks. We aim to devise novel ways to model, visualise and analyse the temporal dynamics of epidemic outbreaks in order to help researchers and other people involved in crisis response to make well-informed and targeted decisions about from which geographical locations and time periods more genetic samples may be required to fully understand the outbreak. Our approach relies on the application of Transcendental Information Cascades to a set of temporally ordered nucleotide sequences, and we apply it to real-world data that was collected during the currently ongoing outbreak of the novel 2019-nCoV coronavirus. We assess information-theoretic and network-theoretic measures that characterise the resulting complex network and identify touching points and temporal pathways that are candidates for deeper investigation by geneticists and epidemiologists.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "How far a virus will eventually spread at local, regional, national and international levels is of central concern during an epidemic outbreak due to the severe consequences large-scale epidemics have on human well-being [5] , the stability and coherence of social systems [11] , and the global economy [23] . A thorough understanding of the genetic characteristics of a virus is crucial to understand the way it is (or may be) transmitted (e.g. human-to-human transmissibility) in order to be able to anticipate the potential reach of an outbreak and develop effective countermeasures. The recent outbreak of a new type of coronavirus -2019-nCoV -provides plenty of examples of the way researchers seek to quickly approach the aforementioned problems of genetic decomposition of the virus [2, 8] and modelling of its transmission dynamics [15] .",
+            "cite_spans": [
+                {
+                    "start": 221,
+                    "end": 224,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 273,
+                    "end": 277,
+                    "text": "[11]",
+                    "ref_id": null
+                },
+                {
+                    "start": 303,
+                    "end": 307,
+                    "text": "[23]",
+                    "ref_id": null
+                },
+                {
+                    "start": 790,
+                    "end": 793,
+                    "text": "[2,",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 794,
+                    "end": 796,
+                    "text": "8]",
+                    "ref_id": null
+                },
+                {
+                    "start": 840,
+                    "end": 844,
+                    "text": "[15]",
+                    "ref_id": "BIBREF13"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Here we present a novel approach to gain insights into the transmission dynamics of an epidemic outbreak. Our method is based on Transcendental Information Cascades [16, 17] and combines gene sequence analysis with temporal data mining to uncover potential relationships between a virus' genetic evolution and distinct occurrences of infections. We apply this new approach to publicly available genomic sequence data from the currently ongoing outbreak of the 2019-nCoV coronavirus.",
+            "cite_spans": [
+                {
+                    "start": 165,
+                    "end": 169,
+                    "text": "[16,",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 170,
+                    "end": 173,
+                    "text": "17]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Our results show pathways of similarity between certain clusters of 2019-nCoV virus samples taken in different geographical locations, and indicate coronavirus cases that are candidates for further investigation into the human touch points of these patients in order to derive a detailed understanding of how the virus may have spread, and how and why it has genetically evolved. Our analysis provides a unique view to the dynamics of the 2019-nCoV coronavirus outbreak that complements knowledge obtained using other state-of-the-art methods such as Bayesian evolutionary analysis [9] .",
+            "cite_spans": [
+                {
+                    "start": 582,
+                    "end": 585,
+                    "text": "[9]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "We obtained a total of 87 genomic sequences from human subjects that were available via the GISAID EpiFlu Database\u2122 1 as of Monday, February 10th 2020.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Research data and preprocessing"
+        },
+        {
+            "text": "These data were preprocessed using the R programming language. First, we derived a metadata object that allows to store the sequence identifier, the collection location, the collection date, and the raw nucleotide sequence. The metadata object was then filtered to keep only those sequences for which the collection date was not empty and which featured a length that fell within a margin of 1, 000 of the estimated 30, 000 nucleotides that are currently assumed to make up the genomic code of the 2019-nCoV coronavirus (i.e. we cover the range of nucleotide sequences from 29, 000 to 31, 000 in length). This left us with a total of 82 genomic sequences. We then exported a single CSV file containing only the raw nucleotide sequences in ascending order by the collection date of the sample. This structure is the standard input format for the genes-CODON-samplesequence tokeniser featured in the Transcendental Information Cascades R toolchain that is available as free and open scientific software 2 .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Research data and preprocessing"
+        },
+        {
+            "text": "Transcendental Information Cascades (TICs) are a method that first transforms any kind of sequential data into a network of recurring information tokens, to then exploit this network as a kind of analytical middle ground between views to the source data that would otherwise only be accessible individually through distinct analytical frameworks [16, 17] . The approach falls into the category of contemporary approaches that make use of network theory for the study of dynamical complex systems [4, 19, 21] . In the field of phylogenetic and phylogeographic analysis our approach can be compared to haplotype networks for example [1, 18] but with the benefit that the resulting network preserves access to temporal patterns at both macroscopic (e.g. whole generation time periods) and microscopic (e.g. short time period bursts) resolution.",
+            "cite_spans": [
+                {
+                    "start": 346,
+                    "end": 350,
+                    "text": "[16,",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 351,
+                    "end": 354,
+                    "text": "17]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 496,
+                    "end": 499,
+                    "text": "[4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 500,
+                    "end": 503,
+                    "text": "19,",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 504,
+                    "end": 507,
+                    "text": "21]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 631,
+                    "end": 634,
+                    "text": "[1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 635,
+                    "end": 638,
+                    "text": "18]",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Construction of Transcendental Information Cascades"
+        },
+        {
+            "text": "At an abstract level a Transcendental Information Cascade is constructed from some Figure 1 . Example of the unique codon tokenisation used in this study. The example sequence comprises three window steps and shows how the +1 (marked in blue), +2 (marked in orange) and +3 (marked in black) reading frames lead to seven unique codon tokens extracted from the nucleotide sequence.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 83,
+                    "end": 91,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Construction of Transcendental Information Cascades"
+        },
+        {
+            "text": "sequentially ordered source data in the following way: At first the data from each distinct sequence step is processed to extract unique information tokens. These tokens form the identifier set for that particular sequence step. Then a directed network is generated with one vertex for each sequence step and edges between any two vertices that have a particular token from their identifier set in common and that does not occur in any identifier set of vertices that represent sequence steps between these two. In other words, identifier sets represent information token co-occurrences and edges represent information token recurrences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Construction of Transcendental Information Cascades"
+        },
+        {
+            "text": "As the information tokens of interest in this study we encode unique codon identifiers as (a) their position when sliding a window of size 3 in steps of size 3 over the nucleotide sequence (e.g. \"pos1\", \"pos2\", ...), (b) a flag that indicates the reading frame (\"+1\", \"+2\" or \"+3\") that captures the respective triplet in the current window, and (c) the actual matched nucleotide triplet that constitutes the matched codon. The use of this tokenisation is motivated by previous work on phylogenetic profiling and gene sequencing [6, 13] that suggested that codons suit well for assessing similarities (and dissimilarities) at the gene, chromosome, or genome levels [6, 14, 22] .",
+            "cite_spans": [
+                {
+                    "start": 529,
+                    "end": 532,
+                    "text": "[6,",
+                    "ref_id": null
+                },
+                {
+                    "start": 533,
+                    "end": 536,
+                    "text": "13]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 665,
+                    "end": 668,
+                    "text": "[6,",
+                    "ref_id": null
+                },
+                {
+                    "start": 669,
+                    "end": 672,
+                    "text": "14,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 673,
+                    "end": 676,
+                    "text": "22]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Construction of Transcendental Information Cascades"
+        },
+        {
+            "text": "An example of the particular encoding we use is visualised in Figure 1 . It is this tokenisation of the original nucleotide sequences that we use in the TIC approach to construct the information token recurrence network from. This means in our TIC instantiation the nodes represent distinct nucleotide sequences of the virus obtained from patient samples ordered by the date of their collection by researchers (random order in case of same date collections). The edges are unique codon identifier recurrences matched between different nucleotide sequences.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 62,
+                    "end": 70,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Construction of Transcendental Information Cascades"
+        },
+        {
+            "text": "The TIC network we derive in the way described before can be analysed in a variety of ways. Information-theoretic and network-theoretic measures have been introduced as the base framework to start the analysis from [16] . In particular we perform (1) an analysis of the information token entropy and evenness over time, (2) an analysis of network clusters of sequences that can be detected in the TIC network, and (3) an analysis of the intra-cluster and inter-cluster nucleotide similarity of the original sequences.",
+            "cite_spans": [
+                {
+                    "start": 215,
+                    "end": 219,
+                    "text": "[16]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 320,
+                    "end": 323,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Analysis of Transcendental Information Cascades"
+        },
+        {
+            "text": "We perform an analysis of information token entropy and information token evenness in order to understand whether the virus evolution can be considered an open or a closed system. Therefore we assess both measures in an accumulated fashion for each progression step through the ordered nucleotide sequences. In a closed system the information token entropy should strive towards an equilibrium of maximum entropy and not feature any wave-like up and down patterns. If we observe wave-like patterns it means nucleotide sequences at later progression stages feature codon identifiers that have not been observed in earlier nucleotide sequences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Information token entropy and evenness"
+        },
+        {
+            "text": "So to measure information token entropy we assess which unique codon identifiers were seen up to a progression step and how often these were seen. This allows to compute the probability for every codon identifier, which then can be used to determine the information token entropy up to that point following the definition of Shannon entropy given as follows:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Information token entropy and evenness"
+        },
+        {
+            "text": "Network analysis The Transcendental Information Cascade network we constructed can be mathematically and visually analysed in order to find structures that are of particular significance for a single epidemic outbreak or to compare different outbreaks structurally. In this study we focus on the former due to the lack of comparative data about other epidemic outbreaks.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Information token entropy and evenness"
+        },
+        {
+            "text": "We first perform a cluster analysis using the random walk apporach by Blondel et al. [3] on the weighted network that we can construct from our original TIC network by collapsing all edges between the same vertices to unique edges weighted by the sum of the collapsed edges (see Figure 2 for a schematic example and Figure 4 for the actual networks we construct following this approach). Afterwards, we analyse visually the network using the open source software Gephi. In Gephi we scale vertices by their degree and edges by their weight. Furthermore, we colour vertices by their cluster membership. We then run the Yifan Hu [12] layout algorithm (optimal distance: 10,000; relative strength: 0.2; initial step size: 20; step ratio: 0.95; quadtree max level: 50; theta: 0.8; convergence threshold: 1 * 10 \u22124 ; adaptive cooling: enabled) to visualise the network. We repeat the exact same process to construct and visualise three further networks (cf. Cluster evaluation In order to evaluate the meaningfulness of the TIC network against some baseline, we computer the intra-cluster and inter-cluster similarity of the raw nucleotide sequences. This is done by computing all pairwise comparisons of sequences within individual clusters (intra-cluster similarity) and comparison between all sequences from a cluster with all sequences that are not within that cluster (inter-cluster similarity) using the compareStrings function provided by the Biostrings R package [20] . The similarity of two sequences is then simply defined as follows:",
+            "cite_spans": [
+                {
+                    "start": 85,
+                    "end": 88,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 626,
+                    "end": 630,
+                    "text": "[12]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 1465,
+                    "end": 1469,
+                    "text": "[20]",
+                    "ref_id": "BIBREF18"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 279,
+                    "end": 287,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 316,
+                    "end": 324,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Information token entropy and evenness"
+        },
+        {
+            "text": "number of dif f erent nucleotides length of compared nucleotide sequence",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Information token entropy and evenness"
+        },
+        {
+            "text": "It is important to note that not all sequences we obtained had the exact same length (mean length of nucleotide sequences: 29861.95; standard deviation: 28.40705). Hence, we performed this comparison only on the sub-sequence from the first nucleotide position to the maximum nucleotide position of the shorter of the two sequences a and b.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Information token entropy and evenness"
+        },
+        {
+            "text": "Information-theoretic analysis Figure 3 shows the graphs for the information token entropy and information token Informationtheoretic assessment. Both entropy and evenness graphs feature wave-like patterns, indicating that the set of observed unique codon identifiers grows with increasing progression stages while the distribution of all observed unique codon identifiers remains rather even.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 31,
+                    "end": 39,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Results and discussion"
+        },
+        {
+            "text": "evenness. As one can see, these feature the aforementioned wave-like patterns, which means the system can be regarded open in the sense that over time the number of unique codon identifiers grows.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussion"
+        },
+        {
+            "text": "It is important to note that the evenness of the distribution of codon identifiers is relatively high, converging around a value of 0.95. This means that those codon identifiers that have been observed are quite evenly distributed.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussion"
+        },
+        {
+            "text": "These results allow the interpretation that (a) there is evolving variation in the genomic sequences we studied, but (b) there is no indication for the dominance of a particular variance.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussion"
+        },
+        {
+            "text": "The weighted network derived from the original TIC network features a modularity of 0.762 and a diameter of 7, which mainly reflects its small size and its particular structure that results from preserving temporal order in the sense that edges can only ever direct forward in time (i.e. to vertices that represent a later stage). However, with an average degree of 8.671 we find that there is certainly structure that differs from just simple step-by-step forward paths that lead to the consecutively next node. This latter result suggests that some codon paths branch and merge, emphasising that there is an evolving variation in the studied genomic sequences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "From the cluster analysis in combination with a visual inspection of the resulting graph (please refer to Figure 6 as well as Table 11 in the appendix) we find the following patterns that are noteworthy:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 106,
+                    "end": 114,
+                    "text": "Figure 6",
+                    "ref_id": null
+                },
+                {
+                    "start": 126,
+                    "end": 134,
+                    "text": "Table 11",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 At the center of the network one cluster emerges (dark red, cluster 0) that has only few stronger connections within the cluster but features connections to all other clusters and within itself through lower weighted edges. This cluster has no temporal focus, it comprises samples that were collected early as well as later during the outbreak. While the genome sequences that represent the beginning of the progression stage path in this cluster are from China, it then transitions geographically to Australia, Japan, Korea, Germany, Taiwan and Singapore.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 The light red cluster (cluster 1) comprises a coherent sequence of samples taken from patients in the original outbreak region (Wuhan) and is temporally focused on the early progression stages.",
+            "cite_spans": [
+                {
+                    "start": 129,
+                    "end": 136,
+                    "text": "(Wuhan)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 The orange cluster starting from the bottom center of the network (cluster 2) is again first a sequence of samples from the original outbreak region in Wuhan, transitioning to Thailand (Nonthaburi), then back to China (Guangdong), before finishing in France.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 Cluster 4 (light green) is one of the smallest clusters but is spread fairly wide temporally. It features 4 samples taken in China and then transitions geographically to Singapore and France.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 In dark green (cluster 5) we can identify a cluster of genome data that was collected in Chonggqing, the USA and Singapore.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 The light blue cluster (cluster 6) is a temporally quite coherent sequence that links samples taken in Guangdong, Guangzhou and Foshan.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "\u2022 A kind of international cluster (samples from Australia, the USA, England, Finland and Belgium) is represented by the dark blue cluster (cluster 7). Figure 4 . Weighted TIC network. From the original TIC network we generate a weighted network by collapsing all edges between the same vertices to unique edges weighted by the sum of the collapsed edges. The colours represent the nine identified network clusters. Node size represents the degree and edge thickness represents edge weight (in the sense that higher edge weight indicates a higher amount of codon identifiers shared by two vertices). Numeric indices before the genome identifiers represent the progression stage index of the particular vertex in the sequence of all ordered nucleotide sequences we analysed.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 151,
+                    "end": 159,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Network analysis"
+        },
+        {
+            "text": "We suggest that while there are some obvious pathways of high similarity due to temporal order of the samples taken, there are still good indications for geographicaldependencies and transition phases that deserve further investigation. Transition points into and out of cluster 0 are particularly interesting in this regard, especially when the clusters linking in our out feature samples taken outside of China. We suggest that it may be worth to qualitatively assess the human-to-human connections the respective subjects had from which these samples were taken, and the places they have visited if there are no known links between the samples so far.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Network analysis"
+        },
+        {
+            "text": "Triangulating the full TIC network with the networks that focus on individual reading frame similarity only (please refer to Figures 6, 7 and 8 as well as Tables 13, 15 and 17 in the appendix) shows that the macroscopic structure is mostly consistent but much sparser in terms of low-weighted edges.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 108,
+                    "end": 175,
+                    "text": "(please refer to Figures 6, 7 and 8 as well as Tables 13, 15 and 17",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Network analysis"
+        },
+        {
+            "text": "Inter-and intra-cluster similarity From our measurement of the intra-cluster similarity (see Table 1 ) we find that the genomic similarity at the level of nucleotides is low in the central cluster 0, which is expected because this is the largest of all clusters with low temporal coherence. However, cluster 5 also features a slightly lower average similarity with comparably high standard deviation, which indicates that this cluster may be slightly less coherent. The barchart of the inter-cluster analysis results shown in Figure 5 reveals that there are some cluster pairs with high inter-cluster similarity, that the inter-cluster similarity is different between the +3 reading frame network and the other two reading frame networks, and that the pattern of the +3 reading frame network inter-cluster similarity is similar to the one for the entire TIC network. In particular we find that in the +1 and +2 reading frame networks the clusters 1, 4, 6 and 7 are quite similar at the nucleotide level compared to all other clusters that are pairwise distinct. For the entire TIC network and the +3 reading frame network instead we find that clusters 1, 3, 5 and 7 show this kind of similarity. Altogether, these results indicate that (a) in some instances the clustering based on structural characteristics of the TIC network overrides actual genomic similarity, and (b) the choice of the reading frames during TIC construction has an impact on the resulting network that needs to be further investigated.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 93,
+                    "end": 100,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 526,
+                    "end": 534,
+                    "text": "Figure 5",
+                    "ref_id": null
+                }
+            ],
+            "section": "Network analysis"
+        },
+        {
+            "text": "In this paper we presented a novel way to model, visualise and analyse the temporal dynamics of an epidemic outbreak. We applied Transcendental Information Cascades to capture the recurrence and co-occurrence of unique codon identifiers over distinct and temporally ordered nucleotide sequences derived from genetic samples taken from different human subjects. Our case study was focused on the recent outbreak of the novel 2019-nCoV coronavirus. We find clusters and evolution pathways of virus genomes in the constructed Transcendental Information Cascade that are candidates to be investigated further for potential human-to-human transmission paths and genetic evolution of the 2019-nCoV coronavirus.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        },
+        {
+            "text": "Our study was performed as a snapshot case study on a limited sample of virus data. While this was at the time of this study all data that was available, we will need to re-execute this analysis continuously as more data becomes available to check whether any of our results change. Furthermore, our results indicate that experiments with 7/33 . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint Figure 5 . Overview of inter-cluster similarities for (a) the full TIC network, (b) the +1 reading frame network, (c) the +2 reading frame network, and (d) the +3 reading frame network.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 152,
+                    "text": "Figure 5",
+                    "ref_id": null
+                }
+            ],
+            "section": "Conclusion"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "8/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint alternative tokenisations are needed, such as weighting the +1, +2 and +3 reading frames differently (or omitting certain frames entirely) depending on their functional role [10] . We also suggest that it will be important to perform a wider variety of analysis of the generated TIC data (e.g. testing of different network clustering methods, application of dynamical systems analyses techniques) to get more profound insights. Our analysis also does not take measurement biases into account that may results from different techniques used by different laboratories for genome extraction and analysis [7] .",
+            "cite_spans": [
+                {
+                    "start": 318,
+                    "end": 322,
+                    "text": "[10]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 745,
+                    "end": 748,
+                    "text": "[7]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "8/33"
+        },
+        {
+            "text": "In summary, the approach presented in this paper is exploratory and hypotheses generating in nature. It does not confirm or reject any of the hypotheses we generated about the potential transmission and evolution pathways nor does it provide causal explanation for the patterns found. However, the purpose of our work is to provide an alternative view to the epidemic dynamics of the 2019-nCoV outbreak (and potential other outbreaks in the future) that is hidden to state-of-the-art methods, and that may trigger geneticists and epidemiologists to look at pathways in epidemic outbreaks they would not normally be aware of.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "8/33"
+        },
+        {
+            "text": "The software developed for this particular analysis is part of the open scientific software \"R toolchain to construct and analyse Transcendental Information Cascades\" that is available via https://github.com/vuw-c2lab/transcendental-information-cascades/ tree/master/input/2020-02-03-2019nCoV. For reproduction purposes it is necessary to obtain the raw genomic data used in this study from the GISAID EpiFlu Database\u2122.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "8/33"
+        },
+        {
+            "text": "For further reference we provide the raw results of some of our analysis. We particularly point to the tables that provide references for relationships between nucleotide sequences and the cluster membership of nucleotide sequences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "8/33"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11/33"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "18/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint Table 9 . Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.). ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 151,
+                    "text": "Table 9",
+                    "ref_id": null
+                }
+            ],
+            "section": "18/33"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "19/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . 1  801289  2  197353  3  166842  4  123821  5  92366  6  88539  7  87805  20  55715  10  51884  9  32851  22  27681  27  26443  24  24707  14  11886  26  7172  11  7013  13  6058  8  5205  15  3772  12  3304  17  3124  23  2893  16  2240  43  2168  25  2044  29  1968  21  1892  19  1811  28  1807  34  1682  31  1623  18  1601  45  1511  46  1445  30  1422  56  1402  44  1363  60  1344  72  1256  73  1176  38  1172  58  1159  36  1125  39  1071  37  1030  41  1011  55  961  63  911  57  899  59  836  48  832  47  732  71  713  35  685  74  617  42  616  62  529  64  505  53  477  49  474  40  468  33  459  54  405  65  401  61  363  70  358  32  351  78  342  77  323  79  284  75  265  51  4  50  2  67  2  52 1 68 1",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 78,
+                    "end": 795,
+                    "text": "1  801289  2  197353  3  166842  4  123821  5  92366  6  88539  7  87805  20  55715  10  51884  9  32851  22  27681  27  26443  24  24707  14  11886  26  7172  11  7013  13  6058  8  5205  15  3772  12  3304  17  3124  23  2893  16  2240  43  2168  25  2044  29  1968  21  1892  19  1811  28  1807  34  1682  31  1623  18  1601  45  1511  46  1445  30  1422  56  1402  44  1363  60  1344  72  1256  73  1176  38  1172  58  1159  36  1125  39  1071  37  1030  41  1011  55  961  63  911  57  899  59  836  48  832  47  732  71  713  35  685  74  617  42  616  62  529  64  505  53  477  49  474  40  468  33  459  54  405  65  401  61  363  70  358  32  351  78  342  77  323  79  284  75  265  51  4  50  2  67  2  52",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "19/33"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "20/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint Table 11 . Cluster memberships of the nucleotide sequences (full TIC network).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 152,
+                    "text": "Table 11",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "20/33"
+        },
+        {
+            "text": "In-degree Out-degree Degree Cluster Figure 6 . +1 reading frame network.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 36,
+                    "end": 44,
+                    "text": "Figure 6",
+                    "ref_id": null
+                }
+            ],
+            "section": "Sequence ID"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "22/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint Table 13 . Cluster memberships of the nucleotide sequences (network for +1 reading frames).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 152,
+                    "text": "Table 13",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "22/33"
+        },
+        {
+            "text": "In . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Sequence ID"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint Figure 8 . +3 reading frame network.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 152,
+                    "text": "Figure 8",
+                    "ref_id": null
+                }
+            ],
+            "section": "Sequence ID"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "26/33"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint Table 17 . Cluster memberships of the nucleotide sequences (network for +3 reading frames).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 152,
+                    "text": "Table 17",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "26/33"
+        },
+        {
+            "text": "In-degree Out-degree Degree Cluster . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Sequence ID"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint 28/33 . CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Sequence ID"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Sequence ID"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Median-joining networks for inferring intraspecific phylogenies",
+            "authors": [
+                {
+                    "first": "H.-J",
+                    "middle": [],
+                    "last": "Bandelt",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Forster",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "R\u00f6hl",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Molecular biology and evolution",
+            "volume": "16",
+            "issn": "1",
+            "pages": "37--48",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "The 2019-new coronavirus epidemic: evidence for virus evolution",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Benvenuto",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Giovannetti",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ciccozzi",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Spoto",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Angeletti",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ciccozzi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Journal of Medical Virology",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Fast unfolding of communities in large networks",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Blondel",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-L",
+                    "middle": [],
+                    "last": "Guillaume",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Lambiotte",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Lefebvre",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Journal of statistical mechanics: theory and experiment",
+            "volume": "",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "The structure and dynamics of multilayer networks",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Boccaletti",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Bianconi",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Criado",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Del Genio",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "G\u00f3mez-Gardenes",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Romance",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Sendina-Nadal",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Zanin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Physics Reports",
+            "volume": "544",
+            "issn": "1",
+            "pages": "1--122",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Ebola virus disease 2013-2014 outbreak in west africa: an analysis of the epidemic spread and response",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Cenciarelli",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pietropaoli",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Malizia",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Carestia",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "D&apos;amico",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sassolini",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "Di"
+                    ],
+                    "last": "Giovanni",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Rea",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Gabbarini",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tamburrini",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "International journal of microbiology",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Finding functional features in saccharomyces genomes by phylogenetic footprinting",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Cliften",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Sudarsanam",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Desikan",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Fulton",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Fulton",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Majors",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Waterston",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Johnston",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "science",
+            "volume": "301",
+            "issn": "",
+            "pages": "71--76",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Towards standardisation of cell-free dna measurement in plasma: controls for extraction efficiency, fragment size bias and quantification",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Devonshire",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Whale",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gutteridge",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Jones",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cowen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Foy",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Huggett",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Analytical and bioanalytical chemistry",
+            "volume": "406",
+            "issn": "26",
+            "pages": "6499--6512",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Genomic and protein structure modelling analysis depicts the origin and infectivity of 2019-ncov, a new coronavirus which caused a pneumonia outbreak in wuhan",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Dong",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Ye",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Chan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "How translational accuracy influences reading frame maintenance",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Farabaugh",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Bj\u00f6rk",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "The EMBO journal",
+            "volume": "18",
+            "issn": "6",
+            "pages": "1427--1434",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Evolved disease-avoidance mechanisms and contemporary xenophobic attitudes",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Faulkner",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Schaller",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Duncan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Group Processes & Intergroup Relations",
+            "volume": "7",
+            "issn": "",
+            "pages": "333--353",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Efficient, high-quality force-directed graph drawing",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Mathematica Journal",
+            "volume": "10",
+            "issn": "1",
+            "pages": "37--71",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Sequencing and comparison of yeast species to identify genes and regulatory elements",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kellis",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Patterson",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Endrizzi",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Birren",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Lander",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Nature",
+            "volume": "423",
+            "issn": "6937",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Similarity analysis of dna sequences based on codon usage",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Helal",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Chemical physics letters",
+            "volume": "459",
+            "issn": "1-6",
+            "pages": "172--174",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Transmission dynamics of 2019 novel coronavirus (2019-ncov). bioRxiv",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhong",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Xiao",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Rong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "What an entangled web we weave: An information-centric approach to time-evolving socio-technical systems",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Luczak-Roesch",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "O&apos;hara",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Dinneen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Tinati",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Minds and Machines",
+            "volume": "28",
+            "issn": "4",
+            "pages": "709--733",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "From coincidence to purposeful flow? properties of transcendental information cascades",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Luczak-Roesch",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Tinati",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Van Kleek",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Shadbolt",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "IEEE/ACM International Conference on Advances in Social Networks Analysis and Mining (ASONAM)",
+            "volume": "",
+            "issn": "",
+            "pages": "633--638",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "A bayesian approach to phylogeographic clustering",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Manolopoulou",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Legarreta",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Emerson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Brooks",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Tavar\u00e9",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Interface focus",
+            "volume": "1",
+            "issn": "6",
+            "pages": "909--921",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Detecting sequences of system states in temporal networks",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Masuda",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Holme",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Scientific reports",
+            "volume": "9",
+            "issn": "1",
+            "pages": "1--11",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Biostrings: Efficient manipulation of biological strings",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "R D S"
+                    ],
+                    "last": "Pag\u00e8s",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Aboyoun",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Nonlinearity+ networks: A 2020 vision",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Porter",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:1911.03805"
+                ]
+            }
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "The codon adaptation index-a measure of directional synonymous codon usage bias, and its potential applications",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Sharp",
+                    "suffix": ""
+                },
+                {
+                    "first": "W.-H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                }
+            ],
+            "year": 1987,
+            "venue": "Nucleic acids research",
+            "volume": "15",
+            "issn": "3",
+            "pages": "1281--1295",
+            "other_ids": {}
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "-BetaCoV/Beijing/IV DC-BJ-005/2020 43 -BetaCoV/Shandong/IVDC",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Figures 5-7) that are representative of the TIC when exclusively focusing on the codon identifiers of each of the reading frames individually.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Schematic example of the weighted TIC network constructed from nucleotide sequences with tokenised unique codon identifiers.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Figure 3. Informationtheoretic assessment. Both entropy and evenness graphs feature wave-like patterns, indicating that the set of observed unique codon identifiers grows with increasing progression stages while the distribution of all observed unique codon identifiers remains rather even.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Figure 4. Figure 4. Weighted TIC network. From the original TIC network we generate a weighted network by collapsing all edges between the same vertices to unique edges weighted by the sum of the collapsed edges. The colours represent the nine identified network clusters. Node size represents the degree and edge thickness represents edge weight (in the sense that higher edge weight indicates a higher amount of codon identifiers shared by two vertices). Numeric indices before the genome identifiers represent the progression stage index of the particular vertex in the sequence of all ordered nucleotide sequences we analysed.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "BetaCoV/Wuhan/WIV02/2019 63 -BetaCoV/Australia/VICO1/2020 1 16 -BetaCov/Wuhan/WH03/2020 63 -BetaCoV/Australia/VICO1/2020 1 42 -BetaCoV/Hangzhou/HZCDC000 1/2020 63 -BetaCoV/Australia/VICO1/2020 1 10 -BetaCoV/Wuhan/HBCDC-HB-01/2019 64 -BetaCoV/Japan/AI/I-004/2020 1 32 -BetaCoV/Zhejiang/WZ-0 1/2020 64 -BetaCoV/Japan/AI/I-004/2020 1 60 -BetaCoV/Singapore/ 1/2020 64 -BetaCoV/Japan/AI/I-004/2020 1 32 -BetaCoV/Zhejiang/WZ-0 1/2020 65 -BetaCoV/Korea/KCDC03/2020 1 40 -BetaCoV/Beijing/IV DC-BJ-005/2020 65 -BetaCoV/Korea/KCDC03/2020 1",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Intra-cluster similarities.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF6": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF7": {
+            "text": "Edge weight between distinct nucleotide sequences in the Transcendental Information Cascade we constructed (contd.).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF8": {
+            "text": "Frequency of edge distances.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF9": {
+            "text": "Inter-cluster similarities for the full TIC network.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF10": {
+            "text": "Intra-cluster similarities (network for +1 reading frames).author/funder, who has granted medRxiv a license to display the preprint in perpetuity.is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprintFigure 7. +2 reading frame network.author/funder, who has granted medRxiv a license to display the preprint in perpetuity.is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.07.20021139 doi: medRxiv preprint",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF11": {
+            "text": "Cluster memberships of the nucleotide sequences (network for +2 reading frames).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF12": {
+            "text": "Intra-cluster similarities (network for +2 reading frames).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF13": {
+            "text": "Intra-cluster similarities (network for +3 reading frames).",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "We want to thank the laboratories and researchers who contributed the genomic research data used in this study and obtained via the GISAID EpiFlu Database\u2122 3 on Monday, February 10th 2020. The following tables contain information about the origination of the research data used in this study and give credit to the collecting and submitting researchers and laboratories. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "BetaCoV/Belgium/GHB-0302 1/2020",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "annex"
+        }
+    ]
+}

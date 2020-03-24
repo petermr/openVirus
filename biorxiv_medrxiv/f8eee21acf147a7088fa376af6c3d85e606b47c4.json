@@ -1,0 +1,1824 @@
+{
+    "paper_id": "f8eee21acf147a7088fa376af6c3d85e606b47c4",
+    "metadata": {
+        "title": "HCAtk and pyHCA: A Toolkit and Python API for the Hydrophobic Cluster Analysis of Protein Sequences",
+        "authors": [
+            {
+                "first": "Tristan",
+                "middle": [],
+                "last": "Bitard-Feildel",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Laboratoire de Biologie Computationnelle et Quantitative (LCQB)",
+                    "institution": "IBPS",
+                    "location": {
+                        "postCode": "75005",
+                        "settlement": "Paris",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Isabelle",
+                "middle": [],
+                "last": "Callebaut",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "UMR7590",
+                    "institution": "Universit\u00e9 Pierre et Marie Curie -Paris",
+                    "location": {}
+                },
+                "email": "*isabelle.callebaut@impmc.upmc.fr"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Motivation: Detecting protein domains sharing no similarity to known domains, as stored in domain 1 databases, is a challenging problem, particularly for unannotated proteomes, domains emerged recently, 2 fast diverging proteins or domains with intrinsically disordered regions. 3 Results: We developed pyHCA and HCAtk, a python API and standalone tool gathering together 4 improved versions of previously developed methodologies, with new functionalities. The developed tools 5 can be either used from command line or from a python API.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "state of the art of our current knowledge of the protein domain universe [11, 18] . However, many protein 15 sequences escape, at least partially, domain annotation, particularly in non-model organisms and remain 16 in the so-called dark protein sequence universe [4] . Classical methodological approaches model protein 17 domain families as Hidden Markov Models (HMMs). However, to that aim, sequences need to be clustered 18 and aligned based on the identification of sequence similarities. Therefore, proteins from organisms distant 19 from the species considered in the model, fast diverging proteins, recently emerged domains and domains 20 containing disordered regions, are less likely to be annotated using this methodology [5]. Here, in order to 21 provide a comprehensive view of protein domain architectures, we present a standalone software named 22 42 REMOte homoLOgy) [9]. Using as queries domains delineated using Seg-HCA, remote similarity search 43 is performed against protein sequences from the Uniprot database [29] using HHBlits [25]. For each hit, Therefore, the HCA score scales with the density in hydrophobic clusters and in hydrophobic residues 112 inside the clusters. As the HCA score calculation motivation is to provide an estimation of the globular 113 character, i.e. the foldability of an HCA domain, the value of each of the three classes was optimized to 114 maximize the separation between the distributions of the HCA scores computed on disordered sequences 115 5/16 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/249995 doi: bioRxiv preprint 157 conditions. The absence of any clear annotation in the N-terminal part of the protein, including two 158 small regions predicted as disordered, but in which a potential order is detected, suggests the presence of 159 an un-detected domain of unknown function [4]).",
+            "cite_spans": [
+                {
+                    "start": 73,
+                    "end": 77,
+                    "text": "[11,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 78,
+                    "end": 81,
+                    "text": "18]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 264,
+                    "end": 267,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The annotation of a protein sequence is very often the first step of many bioinformatics analyses, for 10 instance for studying the function of a gene or the evolution of organisms. Protein domain annotation 11 dominates analyses, describing a protein as a list of blocks corresponding to evolutionary and functional 12 conserved segments. Protein domain families have been extensively compiled through sequence or 13 structure similarity searches and stored in several public databases. These domain databases represent HCA toolkit (HCAtk), and its associated python API pyHCA. The package is easily installable and 23 extend our previous developed tools making use of the Hydrophobic Cluster Analysis (HCA) of protein 24 sequences [6, 8-10, 12, 24] , with new functionalities. The HCA methodology, based on a two-dimensional 25 representation of protein sequences, highlights clusters of hydrophobic amino acids making up globular 26 domains. More on the HCA methodology can be found in the supplementary materials. 27 ",
+            "cite_spans": [
+                {
+                    "start": 103,
+                    "end": 105,
+                    "text": "10",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 208,
+                    "end": 210,
+                    "text": "11",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 317,
+                    "end": 319,
+                    "text": "12",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 415,
+                    "end": 417,
+                    "text": "13",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 720,
+                    "end": 722,
+                    "text": "24",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 733,
+                    "end": 750,
+                    "text": "[6, 8-10, 12, 24]",
+                    "ref_id": null
+                },
+                {
+                    "start": 827,
+                    "end": 829,
+                    "text": "25",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 933,
+                    "end": 935,
+                    "text": "26",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 1018,
+                    "end": 1020,
+                    "text": "27",
+                    "ref_id": "BIBREF29"
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "Seg-HCA [10] was developed to automatically delineate potential \"foldable\" domains within protein 29 sequences and is the core part of our package. Recently, Piovesan et al. [21] implemented an in-house 30 version of Seg-HCA in FELLS, which allows to nicely visualize different properties of a protein sequence. 31 Our new version of Seg-HCA was rewritten for speed and a score is now computed, describing the general 32 composition in hydrophobic clusters of the delineated foldable domains. This score is compared to an 33 empirical distribution computed over 734 disordered protein sequences from DisProt v7 [20] to produce 34 a p-value. Figure 1A shows the distributions of scores computed using non redundant sequences of The second methodology included in the package is our TREMOLO-HCA software (Traveling through Figure 1 : HCA score and HCA plot example. Panel A, left, shows the normalized HCA score distribution calculated for protein sequences from DisProt v7 (left, orange -disordered sequences) and from PDB (right, violet -globular domains). The HCA p-value assessing the globularity of delineated foldable segment, is computed using the empirical distribution from DisProt sequences. Panel B, right, shows the HCA plots of three BRCT domains from the Pfam family (PF00533). The aligned protein sequences were used as an input and conserved amino acids can be visualized in red (highly conserved) and yellow, in the context of hydrophobic clusters (HC), in order to evaluate the secondary structure conservation, relatively to the HC shapes. originates from the use of a two-dimensional alpha-helical net, connecting hydrophobic amino acids 81 separated by up to three non-hydrophobic amino acids (or a proline) [12] . Hydrophobic clusters de-82 fined in this way (with this hydrophobic alphabet and the connectivity distance associated with the 83 \u03b1-helix) have been shown to match at best regular secondary structures (\u03b1-helices and \u03b2-strands) and 84 to constitute hallmarks of folded domains [8, 30] . Sequence segments delineated by Seg-HCA, which The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/249995 doi: bioRxiv preprint correspond to domains that have the ability to fold, either in an autonomous way or following contact 87 with partners [5, 10] ; these segments are later referred to as HCA domains. The advantage of Seg-HCA 88 for the characterization of the dark proteome is to allow the prediction of these foldable domains from 89 the only information of a single amino acid sequence, without the prior knowledge of homologous sequences. can be considered for evaluating the main propensities of hydrophobic clusters towards RSS [8, 24] .",
+            "cite_spans": [
+                {
+                    "start": 8,
+                    "end": 12,
+                    "text": "[10]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 98,
+                    "end": 100,
+                    "text": "29",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 174,
+                    "end": 178,
+                    "text": "[21]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 203,
+                    "end": 205,
+                    "text": "30",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 312,
+                    "end": 314,
+                    "text": "31",
+                    "ref_id": null
+                },
+                {
+                    "start": 611,
+                    "end": 615,
+                    "text": "[20]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1727,
+                    "end": 1731,
+                    "text": "[12]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 2010,
+                    "end": 2013,
+                    "text": "[8,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 2014,
+                    "end": 2017,
+                    "text": "30]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 2335,
+                    "end": 2338,
+                    "text": "[5,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 2339,
+                    "end": 2342,
+                    "text": "10]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 2731,
+                    "end": 2734,
+                    "text": "[8,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 2735,
+                    "end": 2738,
+                    "text": "24]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 641,
+                    "end": 650,
+                    "text": "Figure 1A",
+                    "ref_id": null
+                },
+                {
+                    "start": 821,
+                    "end": 829,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "28"
+        },
+        {
+            "text": "HCA score 104 The HCA score, used to compute a p-value associated with each HCA domain, is defined as follow. Each 105 residue of an HCA segment is associated with a class regarding the residue type and hydrophobicity. Such 106 a residue is either in an hydrophobic cluster and hydrophobic, in an hydrophobic cluster and hydrophilic, 107 or outside an hydrophobic cluster. A value is attributed to each class and the HCA score is computed as Figure S3 : Disordered regions with low HCA score -example n o 1. The HCA pattern displayed by the disordered region is typical of non globular regions, with very few clusters and many proline (star symbols). The disordered region corresponds to the sequence segment from amino acids 85 to 198 of the human Cyclin-dependent kinase inhibitor p27(Kip1) (Uniprot P46527). Figure S3 corresponds to the C-terminal sequence of the human Cyclin-dependent kinase inhibitor p27. 134 p27Kip1 controls eukaryotic cell division through interactions with cyclin-dependent kinases [22] and is 135 known as a flexible protein [13] , whose stability is associated with phosphorylation. The C-terminal region 136 of p27 has a high flexibility, which provides the molecular basis for the sequential signal transduction 137 conduit that regulates its own degradation and cell division [3, 13] ). The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/249995 doi: bioRxiv preprint has a DNA binding motif [23] , whose activity requires a high level of intrinsic flexibility. Examples of disordered regions with high HCA scores. the TGF-beta receptor [7, 28] . The HCA pattern displayed by the disordered region is similar to patterns 156 observed for foldable regions, suggesting that this small domain is able to fold, at least under particular Figure S5 : Disordered regions with high HCA score -example n o 1. The HCA pattern displayed by this disordered region is similar to patterns observed for foldable regions. Clusters of hydrophobic residues, whose length are typical of stable regular secondary structures, are separated by regions whose lengths are typical of loops. This disordered region corresponds to an internal segment, from amino acids 291 to 352, of the chicken's zinc finger FYVE domain-containing protein 9 (UniProt O95405), without known function.",
+            "cite_spans": [
+                {
+                    "start": 10,
+                    "end": 13,
+                    "text": "104",
+                    "ref_id": null
+                },
+                {
+                    "start": 1009,
+                    "end": 1013,
+                    "text": "[22]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1053,
+                    "end": 1057,
+                    "text": "[13]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1308,
+                    "end": 1311,
+                    "text": "[3,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 1312,
+                    "end": 1315,
+                    "text": "13]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1492,
+                    "end": 1496,
+                    "text": "[23]",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 1637,
+                    "end": 1640,
+                    "text": "[7,",
+                    "ref_id": null
+                },
+                {
+                    "start": 1641,
+                    "end": 1644,
+                    "text": "28]",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 442,
+                    "end": 451,
+                    "text": "Figure S3",
+                    "ref_id": null
+                },
+                {
+                    "start": 811,
+                    "end": 820,
+                    "text": "Figure S3",
+                    "ref_id": null
+                },
+                {
+                    "start": 1833,
+                    "end": 1842,
+                    "text": "Figure S5",
+                    "ref_id": null
+                }
+            ],
+            "section": "103"
+        },
+        {
+            "text": "The second example concerns a disordered region (amino acids 82 to 134) found in another member protein has a high degree of intrinsic disorder, as revealed by the experimental NMR structure of the full 164 length protein, without truncation of the N-or C-terminal regions [15] . No clear function is currently 165 associated with the N-and C-terminal regions of the protein. As for the previous example, the HCA 166 pattern displayed by the disordered region is similar to patterns observed for foldable regions, suggesting 167 that this small domain is able to fold, at least under particular conditions. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/249995 doi: bioRxiv preprint Figure S6 : Disordered regions with high HCA score -example n o 2. The HCA pattern displayed by this disordered region is similar to pattern of foldable regions. Clusters of several hydrophobic residues can be seen close together. The disordered region, (82-134) corresponds to the C-terminal of human Zinc finger protein 593 (UniProt O00488).",
+            "cite_spans": [
+                {
+                    "start": 273,
+                    "end": 277,
+                    "text": "[15]",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 756,
+                    "end": 765,
+                    "text": "Figure S6",
+                    "ref_id": null
+                }
+            ],
+            "section": "103"
+        },
+        {
+            "text": "Examples of PDB sequences with high HCA scores.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "103"
+        },
+        {
+            "text": "169 Figures S7 and S8 show two examples of HCA plots for sequences extracted from the PDB. Figure S7 170 corresponds to the HCA plot of the Archeoglobus fulgidus VapC ribonuclease (Uniprot O28590, amino 171 acids 1 to 156) whose 3D structure has been solved X-ray crystallography (PDB entry 1W8I). This The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/249995 doi: bioRxiv preprint Figure S8 is another example of a globular protein HCA plot, i.e. with a high HCA score. The figure shows the HCA plot of the mature mouse interferon beta (Uniprot P01575, amino acids 22 to 181, PDB 179 entry 1WU3 [26] ). The protein is made of one domain (Pfam amino acids 27 to 179 (PF00143)), including 180 5 long \u03b1-helices with 42% of hydrophobic residues. As for Fig. S7 , the protein contains large hydrophobic 181 clusters, typical of regular secondary structures, separated by loops. Examples of PDB sequences with low HCA scores. (Uniprot protein P59595, PDB entry 2OFZ [16] ). This nucleoprotein has RNA binding activity, packaging 186 the positive strand of the human SARS coronavirus RNA genome into a helical ribonucleocapsid [27] .",
+            "cite_spans": [
+                {
+                    "start": 666,
+                    "end": 670,
+                    "text": "[26]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 1031,
+                    "end": 1035,
+                    "text": "[16]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1191,
+                    "end": 1195,
+                    "text": "[27]",
+                    "ref_id": "BIBREF29"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 4,
+                    "end": 21,
+                    "text": "Figures S7 and S8",
+                    "ref_id": "FIGREF17"
+                },
+                {
+                    "start": 91,
+                    "end": 100,
+                    "text": "Figure S7",
+                    "ref_id": "FIGREF17"
+                },
+                {
+                    "start": 452,
+                    "end": 461,
+                    "text": "Figure S8",
+                    "ref_id": null
+                },
+                {
+                    "start": 820,
+                    "end": 827,
+                    "text": "Fig. S7",
+                    "ref_id": "FIGREF17"
+                }
+            ],
+            "section": "103"
+        },
+        {
+            "text": "The RNA binding activity is mediated by the region encompassing amino acids 45 to 181, such binding 188 activity is usually mediated by a high level of flexibility. The full-length protein is made of one or two Fig. S10 is another example of PDB protein sequence with low HCA score. The HCA plot represents 197 a sequence segment (from amino acids 500 to 629) of the the Staphylococcus aureaus surface protein G Figure S9 : PDB sequence with a low HCA score -example n o 1. The sequence region (Uniprot P5995), amino acids 49 to 174, PDB structure 2OFZ), corresponds to a RNA-binding domain, having large, flexible loops and a few regular secondary structures, constituting a \u03b2-sheet core. (\u03b1-helix: red rectangle \u03b2-strands: yellow arrows, annotation extracted from the experimental 3D structure 2OFZ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 412,
+                    "end": 421,
+                    "text": "Figure S9",
+                    "ref_id": null
+                }
+            ],
+            "section": "187"
+        },
+        {
+            "text": "(SasG) (Uniprot Q2G2B2 sequence, PDB entry 5DBL). The full-length protein is made of 19 domains.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "187"
+        },
+        {
+            "text": "The sequence starts with a signal peptide motif, followed by pairs of G5 domain/E domain (Pfam key factor for the cooperative folding multidomain protein [14] . Once folded, the two domains form an 207 elongated structure, made of small beta strands which correspond on the HCA plot to small clusters.",
+            "cite_spans": [
+                {
+                    "start": 154,
+                    "end": 158,
+                    "text": "[14]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "199"
+        },
+        {
+            "text": "The small \u03b2-strands form triplets-stranded \u03b2-sheets connected by collagen-like triple helical regions. In 209 this particular case, several threonine are found included in \u03b2-beta strand. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/249995 doi: bioRxiv preprint Figure S10 : PDB sequence with low HCA score -example n o 2. The sequence region, (Uniprot Q2G2B2, amino acids 500 to 629, PDB structure entry 5DBL), corresponds to a pair of E/G5 domains of the S. aureus surface protein G. (\u03b2-strand: yellow arrow, annotations extracted from the experimental 3D structure 5DBL).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 336,
+                    "end": 346,
+                    "text": "Figure S10",
+                    "ref_id": null
+                }
+            ],
+            "section": "208"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "The pin-domain ribonucleases and the prokaryotic vapbc toxin-antitoxin array",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Arcus",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Mckenzie",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Robson",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Cook",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Protein Engineering Design and Selection",
+            "volume": "24",
+            "issn": "1-2",
+            "pages": "33--40",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "The g5 domain: a potential n-acetylglucosamine recognition domain involved in biofilm formation",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bateman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "T G"
+                    ],
+                    "last": "Holden",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Yeats",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Bioinformatics",
+            "volume": "21",
+            "issn": "8",
+            "pages": "1301--1303",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Functional consequences of preorganized helical structure in the intrinsically disordered cell-cycle inhibitor p27kip1",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Bienkiewicz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Adkins",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Lumb",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Biochemistry",
+            "volume": "41",
+            "issn": "3",
+            "pages": "752--759",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Exploring the dark foldable proteome by considering hydrophobic amino acids topology",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Bitard-Feildel",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Callebaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Scientific Reports",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Detection of orphan domains in drosophila using \"hydrophobic cluster analysis",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Bitard-Feildel",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Heberlein",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bornberg-Bauer",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Callebaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Biochimie",
+            "volume": "119",
+            "issn": "",
+            "pages": "244--253",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Deciphering protein sequence information through hydrophobic cluster analysis (hca): current status and perspectives. Cellular and molecular life sciences",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Mornon",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "",
+            "volume": "53",
+            "issn": "",
+            "pages": "621--645",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "A map of human genome variation from population-scale sequencing",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Clark",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Collins",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "De La",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Vega",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Donnelly",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Nature",
+            "volume": "467",
+            "issn": "7319",
+            "pages": "1061--1073",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "A generalized analysis of hydrophobic and loop clusters within globular protein sequences",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Eudes",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "Le"
+                    ],
+                    "last": "Tuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Delettr\u00e9",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-P",
+                    "middle": [],
+                    "last": "Mornon",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Callebaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "BMC Structural Biology",
+            "volume": "7",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Comprehensive repertoire of foldable regions within whole genomes",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Faure",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Callebaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Computational Biology",
+            "volume": "9",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Identification of hidden relationships from the coupling of hydrophobic cluster analysis and domain architecture information",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Faure",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Callebaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Bioinformatics",
+            "volume": "29",
+            "issn": "14",
+            "pages": "1726--1759",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "The pfam protein families database: towards a more sustainable future",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Finn",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Coggill",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Eberhardt",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Eddy",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mistry",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Mitchell",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Potter",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Punta",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Qureshi",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sangrador-Vegas",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nucleic acids research",
+            "volume": "44",
+            "issn": "D1",
+            "pages": "279--85",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Hydrophobic cluster analysis: An efficient new way to compare and analyse amino acid sequences",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Gaboriaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Bissery",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Benchetrit",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mornon",
+                    "suffix": ""
+                }
+            ],
+            "year": 1987,
+            "venue": "FEBS Letters",
+            "volume": "224",
+            "issn": "1",
+            "pages": "149--155",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Role of intrinsic flexibility in signal transduction mediated by the cell cycle regulator, p27 kip1",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Galea",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Nourse",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Sivakolundu",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Heller",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Kriwacki",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Journal of molecular biology",
+            "volume": "376",
+            "issn": "3",
+            "pages": "827--865",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Disorder drives cooperative folding in a multidomain protein",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Gruszka",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A T F"
+                    ],
+                    "last": "Mendon\u00e7a",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Paci",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Whelan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hawkhead",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Potts",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Clarke",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Proceedings of the National Academy of Sciences of the United States of America",
+            "volume": "113",
+            "issn": "",
+            "pages": "11841--11846",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "The solution structure of znf593 from homo sapiens reveals a zinc finger in a predominately unstructured protein",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hayes",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lytle",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Volkman",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Peterson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Protein Science",
+            "volume": "17",
+            "issn": "3",
+            "pages": "571--576",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "]pyridin-4-amines as potent and selective inhibitors of lck: Synthesis, sar, and pharmacokinetic properties",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Newcomb",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Nunes",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Bemis",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Mcgowan",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Buchanan",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Dimauro",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Boucher",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Faust",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Discovery of novel",
+            "volume": "2",
+            "issn": "",
+            "pages": "2299--2304",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Mitchell",
+                    "suffix": ""
+                },
+                {
+                    "first": "H.-Y",
+                    "middle": [],
+                    "last": "Chang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Daugherty",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hunter",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Lopez",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Mcanulla",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Mcmenamin",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Nuka",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pesseat",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic acids research",
+            "volume": "43",
+            "issn": "",
+            "pages": "213--234",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/249995"
+                ]
+            }
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "The superfamily 1.75 database in 2014: a doubling of data",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Oates",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Stahlhacke",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Vavoulis",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Smithers",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "J L"
+                    ],
+                    "last": "Rackham",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Sardar",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zaucha",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Thurlby",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gough",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic acids research",
+            "volume": "43",
+            "issn": "",
+            "pages": "227--260",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "More than just tails: intrinsic disorder in histone proteins",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Mizianty",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Xue",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Kurgan",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Uversky",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Molecular BioSystems",
+            "volume": "8",
+            "issn": "7",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Disprot 7.0: A major update of the database of disordered proteins",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Davey",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Davidovi\u0107",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Doszt\u00e1nyi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nucleic Acids Research",
+            "volume": "45",
+            "issn": "D1",
+            "pages": "219--227",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Fells: fast estimator of latent local structure",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Piovesan",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Walsh",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Minervini",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Tosatto",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Bioinformatics",
+            "volume": "33",
+            "issn": "12",
+            "pages": "1889--1891",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Cloning of p27 kip1, a cyclin-dependent kinase inhibitor and a potential mediator of extracellular antimitogenic signals",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Polyak",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Erdjument-Bromage",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Koff",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "Cell",
+            "volume": "76",
+            "issn": "",
+            "pages": "59--66",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Crystal structure of globular domain of histone h5 and its implications for nucleosome binding",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Ramakrishnan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Finch",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Graziano",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Sweet",
+                    "suffix": ""
+                }
+            ],
+            "year": 1993,
+            "venue": "Nature",
+            "volume": "362",
+            "issn": "6417",
+            "pages": "219--223",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "The respective roles of polar/nonpolar binary patterns and amino acid composition in protein regular secondary structures explored exhaustively using hydrophobic cluster analysis",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rebehmed",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Quintus",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-P",
+                    "middle": [],
+                    "last": "Mornon",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Callebaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Proteins: Structure, Function, and Bioinformatics",
+            "volume": "84",
+            "issn": "5",
+            "pages": "624--638",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Hhblits: lightning-fast iterative protein sequence searching by hmm-hmm alignment",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Remmert",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Biegert",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Hauser",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "S\u00f6ding",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nature Methods",
+            "volume": "9",
+            "issn": "2",
+            "pages": "173--175",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Refined crystal structure of recombinant murine interferonb at 2 . 15\u00e5resolution",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Senda",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Saitoh",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Mitsui",
+                    "suffix": ""
+                }
+            ],
+            "year": 1995,
+            "venue": "J. Mol. Biol",
+            "volume": "253",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "The intracellular sites of early replication and budding of sars-coronavirus",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Stertz",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Reichelt",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Spiegel",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kuri",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mart\u00ednez-Sobrido",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Garc\u00eda-Sastre",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Weber",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Kochs",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Virology",
+            "volume": "361",
+            "issn": "",
+            "pages": "304--315",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Sara, a fyve domain protein that recruits smad2 to the tgf-\u03b2 receptor",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Tsukazaki",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Chiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Davison",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Attisano",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Wrana",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Cell",
+            "volume": "95",
+            "issn": "6",
+            "pages": "779--791",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Uniprot: a hub for protein information",
+            "authors": [
+                {
+                    "first": "Uniprot",
+                    "middle": [],
+                    "last": "Consortium",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic acids research",
+            "volume": "43",
+            "issn": "",
+            "pages": "204--216",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Detection of secondary structure elements in proteins by hydrophobic cluster analysis",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Woodcock",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Mornon",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Henrissat",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "Protein engineering",
+            "volume": "5",
+            "issn": "7",
+            "pages": "629--664",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "35 the Protein Data Bank for the set of globular domains and the set of DisProt protein sequences. The 36 resulting p-value can thus be used to evaluate the likelihood of the delineated domains to fold into 37 globular structures. Interestingly, some Seg-HCA domains are reported with a high p-value. A closer 38 inspection revealed these sequences as partially disordered and undergoing possible folding upon binding. 39 A detailed description of scores with some examples is provided in the supplementary material.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "domain arrangement of the Uniprot targets is retrieved from the Interpro database [17]. The final output 45 allows to directly link unknown protein domains, delineated by Seg-HCA, to existing annotations and to 46 analyze these unknown domains in the context of their domain arrangement. The original tool was based on PSI-Blast and the CDD webserver. The new implementations based on HHBlits and Interpro allows a 48 more sensitive detection of protein sequence remote similarity combined with a larger coverage of the 49 protein domain universe thanks to the multiple sources of annotations integrated in Interpro. Several 50 scripts are also provided to easily parse and query the TREMOLO output and to quickly retrieve protein 51 domains of Interpro overlapping the unknown Seg-HCA domains or to retrieve the whole protein domain 52 architectures associated with the Seg-HCA domains.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": ", two drawing functionalities were developed. The first functionality allows visualization of 55 hydrophobic clusters of protein sequences, whether these are aligned or not. For each protein provided in 56 a fasta file, an HCA plot is drawn, allowing the quick inspection of the hydrophobic cluster content of 57 a protein sequence, which gives information about its composition in regular secondary structures. functionality was implemented to highlight conservation between aligned protein sequences on60 their HCA plots. Conserved protein sequence positions can therefore be inspected in the context of their 61 hydrophobic cluster organization (Figure 1B). The second drawing functionality is a new methodology 62 built on the TREMOLO results to easily visualize the known protein domain annotation (from Interpro) 63 and the newly delineated domains in an evolutionary context by using the NCBI taxonomic database. 64 The tree is automatically built by fetching the taxonomic id of the Uniprot target sequences found 65 by TREMOLO thanks to the ete3 python package. The Seg-HCA domains of TREMOLO can then 66 be analyzed in the context of their protein domain arrangement and visualized in terms of taxonomic 67 specificity and domain association (Fig. S1). The HCA toolkit is written in python3 and is provided 68 under the CeCILL-C license agreement. The functions associated with the HCA analyses in the toolkit 69 can also be directly used through a python API and as such can easily be used in other software. 70 Funding 71 This work has been supported by the Agence Nationale de la Recherche (grant number ANR-14-CE10-72 0021) and the Institut National du Cancer (grant number PLBIO14-299). 1 is accessible at https://github.com/T-B-F/pyHCA/blob/master/img/Supplementary_ 76 Fig1.pdf. 77 HCA methodology, HCA plot and Seg-HCA 78 HCA hydrophobic clusters, made of strong hydrophobic amino acids (V, I, L, F, M, Y, W), are different 79 from hydrophobic segments as they can incorporate other, non-hydrophobic residues. This property 80",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "S2 presents the Hydrophobic Cluster Analysis (HCA) methodology and indicates how are 92 generated the HCA plots shown in Figure 1B. From an original 1D amino acid sequence (panel A), a 2D 93 plot is created (panel D) by rolling the amino acid sequence around an \u03b1-helix (panel B) and cutting the 94 helix along the horizontal axis. The helix forms a plane (panel C) on which every line of amino acids 95 corresponds to an helix turn. The plane is duplicated and the hydrophobic clusters are defined by joining 96 contiguous strong hydrophobic amino acids (V, I, L, F, M, Y, W).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "structure (RSS) elements can be easily visualized on the 2D plot, mainly corre-99 sponding to hydrophobic clusters, which are separated from each other by loops. Vertical hydrophobic 100 clusters mainly correspond to \u03b2-strands and horizontal clusters to \u03b1-helices. A dictionary of the most 101 current hydrophobic clusters, established from a comprehensive analysis of experimental 3D structures,102",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "(i) the function mapping the residue i to each class value.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Principle of the HCA plot. Panel A, the protein sequence (1D), in which hydrophobic amino acids are represented as white letters, is written on an \u03b1-helix, displayed on a cylinder (panel B). This one is cut along the horizontal axis and unrolled, in order to get the full environment of each amino acid, as it exists on the 1D sequence (panel C). Strong hydrophobic amino acids (V, I, L, F, M, Y, W) are encircled and their contours are joined (panel D), forming clusters. Horizontal and vertical clusters are mainly associated with alpha helices and beta strands, respectively. from DisProt and on sequences of globular proteins from the PDB. The optimization was performed on 116 a grid search of every combination of integers between [-10; 10]. The best combination was obtained 117 with the values of 10, 9 and -10 for classes of residues in an hydrophobic cluster and hydrophobic, in an 118 hydrophobic cluster and hydrophilic and outside an hydrophobic cluster, respectively.119Finally, a reciprocal inverse Gaussian random distribution was fitted on the DisProt scores distribution 120 and the cumulative density function of this random distribution was used to define the p-value associated 121 to each HCA domain. To avoid problems of scores associated with short HCA domains (\u2264 30 residues), 122 and as the limited number of sequences in DisProt makes difficult to adapt the scores to various sequence 123 lengths, the p-values are not reported in these particular cases. This methodological choice is justified as 124 a minimal number of residues is generally necessary for a protein domain to fold into a globular structure.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "the HCA plot is drawn on top and the DisProt annotation taken from the DisProt webserver 129 is shown at the bottom. These two sequences have HCA patterns typical of disordered proteins, i.e.130    proteins having very few hydrophobic residues, often gathered in HCA clusters of small length and spread 131 along the sequence, this one including many proline residues (star symbols). Both proteins regions shown 132 inFig. S3 and S4have low percentages of hydrophobic amino acids (13% and 6%).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "S4 corresponds to the C-terminal sequence of the chicken Histone H5 protein. Histone proteins 139 have well characterized intrinsic disordered regions which are necessary to their biological function [19] and 140 are targets for post-translational modifications recognized by specific readers. Two serine phosphorylation 141 sites have been identified at position 146 and 167. The abundance of lysine and arginine also suggests 142 possible acetylation/methylation sites. On the other hand, the C-terminal domain of chicken Histone H5",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Disordered regions with low HCA score -example n o 2. The HCA pattern displayed by the disordered region is typical of non globular regions, with very few clusters and many proline (star symbols). The disordered region corresponds to the sequence segment from amino acids 87 to 190 of the chicken Histone H5 protein (Uniprot P02259).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "S5 and S6 show two examples extracted from the right tail of the DisProt HCA score distribution, 146 i.e. proteins with HCA scores similar to the lowest scores of the sequences extracted from PDB (named 147 PDB sequences below). These two examples display HCA patterns including larger hydrophobic clusters 148 (typical of regular secondary structures), as found in globular proteins, but with a slightly lower total 149 content in hydrophobic amino acids (24% for both against 30% expected). The first example concerns a 150 disordered region (amino acids 291 to 352) found in the chicken zing finger FYVE domain-containing 151 protein 9 (UniProt O95405, Fig. S5). The 3D structure of only the FYVE domain has been experimentally 152 characterized, corresponding to the FYVE zinc finger domain (PF01363) (amino acids 663 to 751), the 153 second domain corresponds, from amino acids 1048 to 1400, to a Pfam domain of unknown function 154 (PF11979). The protein regulates the subcellular localization of SMAD2/SMAD3 by recruiting them to 155",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "161 of the zinc finger family (zinc finger protein ZNF593, UniProt O00488, Fig. S6) which belongs to the 162 human species. The zinc finger domain is central (60 to 86) and flanked by two disordered regions. The163",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "172ribonuclease is involved in a toxin-antitoxin module with toxin activity[1] and includes one known domain173 (amino acids 3 to 127 corresponds to the PFAM domain PIN, PF01850). The corresponding structure 174 includes 9 long \u03b1-helices with 40% of hydrophobic amino acids. The dense network of HCA clusters 175 visible in Fig. S7 is typical of globular proteins and the long \u03b1-helices can be visualized as horizontal 176 clusters on the 2D HCA plot.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF17": {
+            "text": "PDB sequence with an high HCA score -example n o 1. This sequence (Uniprot 028590, PDB 1W8I), including amino acids 1 to 156, corresponds a typical globular protein. (\u03b1-helix: red rectangle, annotations extract from the experimental 3D structure 1W8I).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "PDB sequence with an high HCA score -example n o 2. The sequence region (Uniprot P01575, PDB entry 1WU3), including amino acids 22 to 181, corresponds to the PDB structure 1WU3 a typical globular protein. (\u03b1-helix: red rectangle, annotations extracted from the experimental 3D structure 1WU3).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "S9 to S10 are two examples of PDB sequence HCA plots with low HCA scores. Fig. S9 corresponds 184 to the N-terminal domain (amino acids 50 to 174) of the nucleoprotein from human SARS coronavirus 185",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "189 protein domains according to the Pfam database (PF00937, from 15 to 378) or the SUPERFAMILY 190 database (SSF110304, from 28 to 181 and SSF103068, from 252 to 365). The 3D structure of the first SSF 191 domain is made of four \u03b2-strands (from amino acids 61 to 59, 84 to 91, 102 to 113, and 130 to 135) and 192 one small \u03b1-helix (50 to 57), with a large number of flexible loops around the \u03b2-sheet core (Saikatendu et 193 al., 2007). According to the coverage of the sequence by large loops, this protein domain has a lower 194 percentage of hydrophobic residues (26%), than the regularly admitted of 30% limit, characteristic of 195 globular domains.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF22": {
+            "text": "200 PF04650, PF17041) and ends by a cell wall anchor domain (PF00746). Amino acids 501 to 548 and 547 201 to 629 corresponds to a pair of E domain/G5 domain. The G5 domain has only a few conserved amino 202 acids and is supposed to have an adhesive function [2]. As assessed by the presence of small clusters and 203 a relatively weak percentage in strong hydrophobic amino acids, approximatively one half of the SasG 204 repetitive regions are intrinsically unfolded in isolation, but fold in the context of neighboring folded 205 G5 domains, highlighting the role of the intrinsically disordered region of the E/G5 domain pair as a 206",
+            "latex": null,
+            "type": "figure"
+        }
+    },
+    "back_matter": []
+}

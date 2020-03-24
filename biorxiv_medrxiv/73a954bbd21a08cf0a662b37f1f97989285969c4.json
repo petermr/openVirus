@@ -1,0 +1,2554 @@
+{
+    "paper_id": "73a954bbd21a08cf0a662b37f1f97989285969c4",
+    "metadata": {
+        "title": "Prodrug defiance reveals logic-based strategies for treating bacterial resistance",
+        "authors": [
+            {
+                "first": "Brandon",
+                "middle": [
+                    "Alexander"
+                ],
+                "last": "Holt",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Emory School of Medicine",
+                    "location": {
+                        "postCode": "30332",
+                        "settlement": "Atlanta",
+                        "region": "GA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Isabel",
+                "middle": [],
+                "last": "Curro",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Emory School of Medicine",
+                    "location": {
+                        "postCode": "30332",
+                        "settlement": "Atlanta",
+                        "region": "GA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Gabriel",
+                "middle": [
+                    "A"
+                ],
+                "last": "Kwong",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Emory School of Medicine",
+                    "location": {
+                        "postCode": "30332",
+                        "settlement": "Atlanta",
+                        "region": "GA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Classifying the mechanisms of antibiotic failure has led to the development of new treatment strategies for killing bacteria. Among the currently described mechanismswhich include resistance, persistence and tolerancewe propose defiance as a subclass of antibiotic failure specific to prodrugs. Using locked antimicrobial peptides (AMP) that are activated by bacterial 5 proteases as a prototypic prodrug, we observe that although treatment eliminates bacteria across the vast majority of environmental conditions (e.g., temperature, concentration of growth nutrients), bacteria spontaneously switch from susceptibility to defiance under conditions that alter the competing rates between bacterial proliferation and prodrug activation. To identify the determinants of this switch-like behavior, we model bacteria-prodrug dynamics as a multi-rate 10 feedback system and identify a dimensionless quantity we call the Bacterial Advantage Heuristic (BAH) that perfectly classifies bacteria as either defiant or susceptible across a broad range of treatment conditions. By recognizing that the bacterial switch from susceptibility to defiance behaves analogously to electronic transistors, we construct prodrug logic gates (e.g., AND, OR, NOT, etc.) to allow assembly of an integrated 3-bit multi-prodrug circuit that kills defiant bacteria 15 under all possible combinations of BAH values (i.e., 000, 001, \u2026, 111) that represent a broad range of possible treatment conditions. Our study identifies a form of bacterial resistance specific to prodrugs that is described by a predictive dimensionless constant to reveal logic-based treatment strategies using multi-prodrug biological circuits.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The rise of multidrug-resistant bacteria coupled with the lack of newly developed antibiotics has created a serious public health threat 1, 2 . Understanding the causes of antibiotic failure inspires the development of new drugs and informs clinical treatment strategies [3] [4] [5] . These failure mechanisms are broadly classified into three distinct categories (i.e., resistance, 5 persistence, and tolerance), which are characterized by the change in drug concentration and exposure time required to kill bacteria 6 . For example, resistance is characterized by genetic mutations or phenotypic changes which result in bacteria requiring significantly higher concentrations of antibiotic (minimum inhibitory concentration, MIC) to be lethal. By contrast, bacteria exhibiting tolerance or persistence require increased drug exposure time (minimum 10 duration for killing, MDK), with the latter exhibiting a biphasic killing profile (Fig. 1A) . Further, bacteria populations become tolerant through environmental conditions or genetic mutations, whereas persistence is an actively maintained, non-heritable state exhibited by a subpopulation of bacteria. Discriminating between these survival strategies employed by bacteria is crucial for the development of new drugs and clinical treatment decisions 6 . 15",
+            "cite_spans": [
+                {
+                    "start": 137,
+                    "end": 139,
+                    "text": "1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 140,
+                    "end": 141,
+                    "text": "2",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 271,
+                    "end": 274,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 275,
+                    "end": 278,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 279,
+                    "end": 282,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 518,
+                    "end": 519,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 1303,
+                    "end": 1304,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 934,
+                    "end": 943,
+                    "text": "(Fig. 1A)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Antibiotic success is markedly improved by proper titration of drugs, as overdosing leads to off-target toxicity and underdosing increases the likelihood of pathogens developing resistance 7 . However, optimal drug doses are difficult to achieve over the course of treatment because infection burden changes dynamically over time, creating a moving target 7, 8 . Prodrugs, which represent ~10% of all FDA-approved drugs in the last decade, are a promising solution 20 because they may be automatically titrated by a disease-related activation mechanism, increase bioavailability, and reduce the risk of off-target effects 9 . For example, prodrugs such as ganciclovir 10 and isoniazid 11 are administered as biologically inactive forms and are enzymatically activated by the pathogen. Here, we use prototypic auto-titrating prodrugs comprising cationic antimicrobial peptides (AMP), which evolved as a part of innate immunity and display broad-25 spectrum and prokaryote-specific antimicrobial activity 12 . Cationic AMPs act by disrupting bacterial membranes and inducing inflammatory responses 13 , but suffer from off-target toxicity and low stability in vivo 14, 15 . Our AMP prodrugs are activated directly by bacterial proteases, which are a major cause of virulence [16] [17] [18] [19] [20] [21] during infections and important targets for antibiotic development 22 . Of these proteases, outer membrane protease T (OmpT) is a membrane-bound 5 bacterial protein that is widely conserved across gram-negative bacteria of the Enterobacteriaceae family and recognizes a variety of targets that contribute to its virulence (e.g., plasminogen) 18, 19, [23] [24] [25] . In this work, we design cationic AMPs that are locked by charge complexation with anionic peptides and connected with a protease-cleavable linker substrate [26] [27] [28] that is recognized by E. coli protease OmpT, such that increasing concentrations of bacteria 10 activate higher concentrations of free drug.",
+            "cite_spans": [
+                {
+                    "start": 359,
+                    "end": 360,
+                    "text": "8",
+                    "ref_id": null
+                },
+                {
+                    "start": 668,
+                    "end": 670,
+                    "text": "10",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 685,
+                    "end": 687,
+                    "text": "11",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 1003,
+                    "end": 1005,
+                    "text": "12",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 1096,
+                    "end": 1098,
+                    "text": "13",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 1163,
+                    "end": 1166,
+                    "text": "14,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1167,
+                    "end": 1169,
+                    "text": "15",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1273,
+                    "end": 1277,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1278,
+                    "end": 1282,
+                    "text": "[17]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1283,
+                    "end": 1287,
+                    "text": "[18]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1288,
+                    "end": 1292,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1293,
+                    "end": 1297,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 1298,
+                    "end": 1302,
+                    "text": "[21]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1370,
+                    "end": 1372,
+                    "text": "22",
+                    "ref_id": null
+                },
+                {
+                    "start": 1645,
+                    "end": 1648,
+                    "text": "18,",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1649,
+                    "end": 1652,
+                    "text": "19,",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1653,
+                    "end": 1657,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 1658,
+                    "end": 1662,
+                    "text": "[24]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 1663,
+                    "end": 1667,
+                    "text": "[25]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1826,
+                    "end": 1830,
+                    "text": "[26]",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 1831,
+                    "end": 1835,
+                    "text": "[27]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 1836,
+                    "end": 1840,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "While AMP prodrugs eliminate the majority of bacteria, we observe bacteria populations exhibiting a phenotype we named \"defiant\", proliferating in the presence of active drug by consistently outpacing prodrug activation at all stages of growth (i.e., log phase, stationary phase).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "To understand the mechanism by which bacteria become resistant to AMP prodrugs, we built a 15 system of coupled ordinary differential equations (ODE) that model the dynamics of the bacteriaprodrug competition. We use this model to identify a dimensionless quantitythe Bacterial Advantage Heuristic (B.A.H.)which predicts with perfect accuracy whether bacteria will become defiant under a broad range of environmental conditions. At low BAH values, bacteria are susceptible to elimination, but beyond a critical BAH threshold, the bacteria switch to a state of 20 defiance, in which the bacteria proliferate in the presence of activated drug. To combat prodrug failure due to defiance, we design biological circuits that eliminate bacteria under all conditions (BAH values) by recognizing that AMP prodrugs behave analogously to transistors: above a critical BAH threshold (i.e., gate voltage), bacteria (i.e., input current) pass through the prodrug and exhibit defiance. We use this framework to build logic gates with prodrug transistors, which 25 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint we use to construct a multi-prodrug circuit that outputs 0 (i.e., dead bacteria) under all eight combinations of three input BAH values. These quantitative mechanistic insights will inform future drug design and treatment protocols to combat antibiotic resistance.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "To construct bacteria-activated prodrugs, we synthesized cationic (polyarginine) AMPs in charge complexation with anionic peptide locks (polyglutamic acid) by a linker peptide (RRS|RRV) specific for the ubiquitous bacterial protease OmpT 26 . Upon proteolytic cleavage of the linker, the hairpin prodrug is unlocked to release free AMP, creating a mechanism for auto-titration (Fig. 1B) . 10",
+            "cite_spans": [
+                {
+                    "start": 238,
+                    "end": 240,
+                    "text": "26",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 377,
+                    "end": 386,
+                    "text": "(Fig. 1B)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "A bacteria-activatable prodrug targets E. coli protease OmpT"
+        },
+        {
+            "text": "To demonstrate linker specificity for OmpT, we synthesized an activity probe 24, 29-33 with free linker peptides containing a fluorophore-quencher pair and detected OmpT activity in samples incubated with recombinant OmpT or live E. coli culture. Conversely, we observed no activity in samples containing the serine protease inhibitor, Aprotinin, which inhibits OmpT when present in micromolar concentrations 23 (Fig. 1C) . We observed similar cleavage activity using this linker 15 substrate when fully integrated into hairpin AMP drug-lock complexes, confirming that linker presentation within a constrained conformational state did not affect cleavage activity by OmpT (Fig. 1D) . To measure cytotoxicity of unlocked drug, we dosed bacteria with free AMP and observed significant reduction in colonies compared to untreated controls (blue bars) (Fig. 1E,   F ). To confirm prodrug specificity, we synthesized AMP drug-lock complexes using linker peptides 20 specific for OmpT or Tobacco Etch Virus Protease (TEV), which exhibits orthogonal protease specificity 34 . We observed elimination of bacteria only in samples containing OmpT-specific AMP prodrugs (grey bars) or samples treated with both TEV and TEV-specific AMP prodrugs (red bars).",
+            "cite_spans": [
+                {
+                    "start": 409,
+                    "end": 411,
+                    "text": "23",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 412,
+                    "end": 421,
+                    "text": "(Fig. 1C)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 672,
+                    "end": 681,
+                    "text": "(Fig. 1D)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 848,
+                    "end": 861,
+                    "text": "(Fig. 1E,   F",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "A bacteria-activatable prodrug targets E. coli protease OmpT"
+        },
+        {
+            "text": "All control samples containing either TEV-specific prodrug alone or Aprotinin inhibitor did not 6 significantly reduce bacteria load (Fig. 1E, F, Table S1 ). Our results showed that AMP drug-lock complexes are inert and lack cytotoxic activity until activation by protease activity. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint or OmpT expressed on the surface of E. coli (right) against fluorescently labeled hairpin prodrugs (blue lines) or hairpin prodrugs only control (grey lines). Shading represents standard deviation (n = 3). All cleavage assays plotted as fold change in RFU from initial time point. (E) Bacteria viability assay quantifying drug toxicity relative to untreated bacteria control (blue bar). Positive control for AMP toxicity (black bar). Negative control for locked AMP or TEV protease alone (tan 5 bars). Positive control for TEV protease with locked AMP (substrate: ENLYFQ|G, specific to TEV protease) (red bar). Negative control for locked AMP (substrate: RRSRRV, specific to OmpT) with Representative images of bacterial plates used to quantify viability with schematic legend (scale bar = 4 mm). * < 0.05, ** < 0.01, *** < 0.001, and **** < 0.0001.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 133,
+                    "end": 154,
+                    "text": "(Fig. 1E, F, Table S1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "A bacteria-activatable prodrug targets E. coli protease OmpT"
+        },
+        {
+            "text": "To quantitatively understand how the rate of prodrug activation competes with the number 15 of living bacteria, we built a mathematical model using a system of nonlinear ordinary differential equations (ODE). In our system, the three dynamic populations are the Bacteria, B, the Locked drug, L, and the Unlocked drug, U, for which we formulated governing ODEs by considering the system parameters that affect populational change over time. For this prodrug system, increased E. coli growth results in increased proteolytic activation of AMP, which in turn lyses bacteria to 20 create a negative feedback loop. Therefore, we modeled the bacteria population B as increasing (i.e., green dashed arrows) the rate of enzymatic drug conversion (i.e., L to U) and the unlocked drug population U as increasing the rate of bacterial death (Fig 2A) . To account for the fact that bacterial growth rate, r, slows down as environmental resources become limiting (i.e., carrying capacity, Bmax), we used a logistic growth model 35 , which produces an S-shaped curve and has 25 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint been used extensively in biology to study population expansion 36 and tumor growth 37 Here we assumed our system constituted a well-mixed solution of freely diffusing substrates (i.e., locked drug) in large excess, which were valid assumptions for this study since AMP prodrug was present 10 at concentrations ~10 2 micromolar in an aqueous environment. Because the total amount of drug is conserved, we defined the MM activation rate of unlocked drug, U, as opposite of the degradation rate of locked drug L (Equation 1.3) . We further included a term to account for the loss of active AMPs according to a proportionality constant, a * , that represents the number AMP required to kill one E. coli. This term was necessary as AMPs lyse E. coli by intercalating with 15 bacterial membranes 39 and therefore are removed from the system and unable to target additional bacteria.",
+            "cite_spans": [
+                {
+                    "start": 1015,
+                    "end": 1017,
+                    "text": "35",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 1362,
+                    "end": 1364,
+                    "text": "37",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 2069,
+                    "end": 2071,
+                    "text": "39",
+                    "ref_id": "BIBREF38"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 830,
+                    "end": 838,
+                    "text": "(Fig 2A)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1788,
+                    "end": 1802,
+                    "text": "(Equation 1.3)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Kinetic model of prodrug treatment reveals a binary outcome"
+        },
+        {
+            "text": "To fit this model to our system, we measured the values for relevant parameters, including 20 enzymatic efficiency (e.g., kcat, Km), bacterial growth (e.g., r, Bmax), and prodrug activity (e.g., a, . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint a * ) (Fig. S1 , Table S2 ). This allowed us to predict bacteria-prodrug response curves (red and blue dashed lines; Fig. 2B ) across nine distinct combinations of kcat and r values, which we experimentally controlled by altering the ambient temperature and concentration of broth (conditions labeled A1-3, B1-3, and C1-3; Table S3 ). Strikingly, our model anticipated a binary bacterial response to prodrug treatment that would be evident within 24 hours; bacteria were 5 predicted to be either susceptible to the prodrug and die (red dashed lines) or to exhibit a druginvariant phenotype and proliferate to saturating levels (blue dashed lines) (Fig. 2B, C) . To experimentally validate our model predictions, we incubated bacteria with prodrugs under the defined nine conditions, and quantified the number of living bacteria longitudinally over the course of a 24 hour treatment window. Quantified bacterial counts taken during the course of treatment 10 as well as at endpoint closely matched the values predicted by our model (R 2 = 0.84, red and blue dots; Fig. 2B , C) and likewise revealed a binary bacterial response to prodrugs leading to antibiotic failure. We therefore called this form of resistance to prodrugs as bacterial \"defiance.\"",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 419,
+                    "end": 427,
+                    "text": "(Fig. S1",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 430,
+                    "end": 438,
+                    "text": "Table S2",
+                    "ref_id": "TABREF3"
+                },
+                {
+                    "start": 530,
+                    "end": 537,
+                    "text": "Fig. 2B",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 736,
+                    "end": 744,
+                    "text": "Table S3",
+                    "ref_id": "TABREF4"
+                },
+                {
+                    "start": 1060,
+                    "end": 1072,
+                    "text": "(Fig. 2B, C)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1476,
+                    "end": 1483,
+                    "text": "Fig. 2B",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Kinetic model of prodrug treatment reveals a binary outcome"
+        },
+        {
+            "text": "Collectively, these experiments demonstrate that when E. coli are exposed to the AMP prodrug, our model can be used to predict bacterial growth kinetics, which ultimately result in a binary 15 outcome.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Kinetic model of prodrug treatment reveals a binary outcome"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint Schematic depicting that bacterial defiance is characterized by proliferation in the presence of activated drug.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Kinetic model of prodrug treatment reveals a binary outcome"
+        },
+        {
+            "text": "Having demonstrated that bacteria exposed to a prodrug exhibit a binary outcomesusceptibility (i.e., death) or defiance (i.e., survival)we next sought to determine whether the behavior could be quantified by a metric of resistance that could be generalized across broad treatment conditions. Based on our model and experimental validation, we observed that under defiance, 15 populations of live bacteria expanded (i.e., positive growth rate) throughout the course of treatment, which implied that key bacterial growth parameters (e.g., r, Bmax) were greater in value than enzyme-driven death rate parameters (e.g., kcat, Km) (Fig. 2B, 3A) . Therefore, to derive a metric to discriminate between defiant and susceptible bacteria, we used Buckingham Pi theorem to identify a dimensionless quantity that represents the competing balance between growth rate 20 and enzymatic turnover, which we defined as the Bacterial Advantage Heuristic The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint This quantity reflects that bacteria have a higher probability of switching to the defiance phenotype under conditions that promote a faster growth rate, r, and slower enzymatic activity, kcat. To predict the onset of the defiance phenotype, we sought to determine the critical B.A.H. value that distinguishes defiant bacteria from susceptible populations. Using our mathematical model, we simulated >2000 prodrug treatment conditions covering a range of values for r, Bmax, kcat, and Km 5 and identified a critical value of BAH at which bacteria switch from susceptibility to defiance (BAHcrit ~ -11.37) (Fig. 3B) . In other words, for any environmental or genetic condition that produces a BAH > BAHcrit, the bacteria will survive the prodrug treatment, and for BAH < BAHcrit, the bacteria will die. To test the robustness of this switch-like behavior, we modeled treatment outcomes by varying bacterial growth rates (r) and enzymatic efficiencies (kcat) (> 100 points) and 10 found that BAHcrit was time-independent across a range of prodrug treatment durations. (Fig 3C-E) . Additionally, to demonstrate that BAHcrit is independent from any system parameter, we modeled treatment outcomes (> 500 points) by individually fixing each of the four parameters (i.e., r, Bmax, kcat, and Km) in turn and found that BAHcrit was invariant across all conditions tested (Fig   3F-I) . To confirm the value of BAHcrit experimentally, we first used the nine experimental 15 conditions previously tested (A1-3, B1-3, C1-3) to fit the values for kcat and r (Fig S2) , and then used the computationally-derived critical BAH threshold to classify the phenotype of nine bacteriaprodrug treatment conditions. By receiver-operating-characteristic (ROC) analysis, BAHcrit perfectly predicted the onset of defiance (Fig. 3J ,K AUROC = 1.00, n = 9) with 100% specificity and sensitivity. Our model results predicted that changing key system parameters to decrease 20 the B.A.H. below the critical threshold will result in successful treatment of defiant bacteria. To demonstrate this, we took three different AMP prodrugs with distinct linker sequences (Table S1) with increasing kcat values for OmpT to decrease the B.A.H. below BAHcrit, which allowed us to successfully treat previously defiant populations of bacteria (Fig. S3) . These findings are important for the successful design and administration of prodrug therapies, which may be 25 improved by optimizing fundamental pharmacokinetic parameters. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 626,
+                    "end": 639,
+                    "text": "(Fig. 2B, 3A)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1690,
+                    "end": 1699,
+                    "text": "(Fig. 3B)",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 2151,
+                    "end": 2161,
+                    "text": "(Fig 3C-E)",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 2448,
+                    "end": 2460,
+                    "text": "(Fig   3F-I)",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 2631,
+                    "end": 2639,
+                    "text": "(Fig S2)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 2882,
+                    "end": 2890,
+                    "text": "(Fig. 3J",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 3219,
+                    "end": 3229,
+                    "text": "(Table S1)",
+                    "ref_id": "TABREF2"
+                },
+                {
+                    "start": 3387,
+                    "end": 3396,
+                    "text": "(Fig. S3)",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Predicting bacterial defiance with a dimensionless parameter"
+        },
+        {
+            "text": "Our model revealed that bacterial defiance arises during prodrug monotherapy when 5 environmental parameters, as represented by a dimensionless constant, crosses a critical transition BAH value. To combat bacterial defiance, we therefore sought to design a multi-prodrug approach to eliminate defiant bacteria that would otherwise resist treatment to a single prodrug (Fig. 4A) . To do this, we recognized that the bacterial switch from susceptibility to defiance could be considered as behaving analogously to electronic transistorstransistors allow input current 10 (Iin) to pass (Iout) when the gate voltage (G) crosses a threshold, whereas with AMP prodrugs, input bacteria (Bin) survive treatment (Bout) when the BAH (gate) crosses a critical value (Fig. 4B) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 368,
+                    "end": 377,
+                    "text": "(Fig. 4A)",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 754,
+                    "end": 763,
+                    "text": "(Fig. 4B)",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Combating bacterial defiance with prodrug biological circuits"
+        },
+        {
+            "text": "Under this analogy, we postulated that multiple prodrug biological transistors could be used to construct logical operations (i.e., AND, OR, NOT gates) that allow for the design of integrated biological circuits that output state \"0\" (i.e., bacterial death) for all possible inputs. These biological 15 circuits would then be representative of a multi-prodrug strategy to eliminate bacteria even when input BAH variables (i.e., temperature, nutrient level, enzyme activity) would result in a state of defiance for a single prodrug. To accomplish this, we designed complementary N-type and P-type transistors, which are required to construct all possible logic gates 40 . N-type transistors allow input current to pass when the gate signal is above a defined threshold, whereas P-type transistors 20 allow current to pass when the gate signal is below a defined threshold. We constructed N-type transistors with our AMP prodrug system, which allowed input bacteria (Bin = 1) to survive (Bout = 1) when the BAH is above BAHcrit which we used to define the gate threshold (i.e., BAH > BAHcrit equivalent to G = 1; BAH < BAHcrit equivalent to G = 0) (Fig. 4B) . To create P-type transistors, we synthesized heat-triggered liposomes 41 (Fig. S4) loaded with the antibiotic ampicillin 42 , which was 25 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint released at temperatures above 37 o C to kill bacteria (i.e., Bout = 0) (Fig. 4C) . Above this critical temperature, treatment with AMP prodrugs leads to bacterial defiance (i.e., BAH > BAHcrit or G = 1) and E. coli survive prodrug treatment by proliferating significantly faster than prodrug activation 43 . We therefore defined temperatures above 37 o C as corresponding to G = 1 and below as G = 0 for our P-type biological transistor to match inverse gate values for our N-type biological 5",
+            "cite_spans": [
+                {
+                    "start": 1228,
+                    "end": 1230,
+                    "text": "41",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 1279,
+                    "end": 1281,
+                    "text": "42",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 1816,
+                    "end": 1818,
+                    "text": "43",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1146,
+                    "end": 1155,
+                    "text": "(Fig. 4B)",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 1231,
+                    "end": 1240,
+                    "text": "(Fig. S4)",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 1584,
+                    "end": 1593,
+                    "text": "(Fig. 4C)",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Combating bacterial defiance with prodrug biological circuits"
+        },
+        {
+            "text": "transistor. These results demonstrated that antimicrobial drugs could be modeled with similar input and output characteristics compared to N-type and P-type transistors. heat-triggered, drug-loaded liposomes allow the input bacteria (Bin) to survive (Bout = 1) when the gate signal (G) is low (i.e., G = 0 when temperature < Tcrit). All truth tables depict binary inputoutput combinations.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Combating bacterial defiance with prodrug biological circuits"
+        },
+        {
+            "text": "To demonstrate the use of multiple prodrug transistors in biological circuits capable of killing defiant bacteria, we selected three variables (i.e., bacterial nutrients, temperature, linker 15 substrate kcat) that independently influence bacteria-prodrug competition to act as circuit inputs (i.e., A, B, and C respectively). For each circuit input, we assigned the value 0 or 1 by fixing all other variables and choosing one condition that enabled bacterial survival (i.e., IN = 1 when BAH > BAHcrit) and one condition that resulted in bacterial death (i.e., IN = 0 when BAH < BAHcrit). We then designed a biological circuit to kill bacteria (i.e., OUT = 0) under all eight combinations of 20 nutrient (LB Broth = 0% or 2%), temperature (T = 30 o C or 37 o C), and linker substrate (kcat = 7 x 10 7 s -1 or 2 x 10 6 s -1 ) conditions while using three AND gates and one NOT gate (Fig 4A) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 881,
+                    "end": 889,
+                    "text": "(Fig 4A)",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Combating bacterial defiance with prodrug biological circuits"
+        },
+        {
+            "text": "Electronic AND gates are created by placing two transistors in series; similarly, we sequentially dosed bacteria with two prodrugs, each with corresponding BAH values to represent the gate inputs (i.e., A and B). We controlled the corresponding BAH value for each prodrug with the linker 25 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint substrate sequence (e.g., A or B = 0 when kcat = 7 x 10 7 s -1 , A or B = 1 when kcat = 2 x 10 6 s -1 ) and tested all four combinations of the two prodrugs (i.e., AB = 00, 01, 10, and 11). When exposed to all four possible inputs, bacteria only survived the condition with two low kcat prodrugs (i.e., AB = 11), which matched the ideal outputs of an AND gate (Fig. 5B) . These results show that dosing multiple prodrugs in sequence reduces the fraction of bacterial populations that survive (e.g., one 5 prodrug = 50% survival, two prodrugs = 25% survival, etc.). Whereas the AND gate comprised prodrugs in series, we demonstrated one implementation of an OR gate by splitting a population of bacteria in half (i.e., separate wells), dosing each with a different prodrug during the same time interval (i.e., in parallel) and recombining the bacteria post-treatment. Using this circuit, bacteria survived in any case where at least one half of the population was dosed with low kcat prodrug 10 (i.e., AB = 01, 10, or 11), matching the ideal outputs of an OR gate (Fig. 5C) . We created a NOT gate by using a P-type transistor comprising ampicillin-loaded heat-triggered liposomes, which caused bacteria to die at high temperatures (i.e., IN = 1) and survive at low temperatures (i.e., IN = 0). (Fig. 5D) . These results show that heat-triggered liposomes can be used as a fail-safe to kill bacteria above the critical temperature representing the onset of the defiance phenotype. To 15 validate the multi-prodrug circuit, we incubated populations of bacteria under each of the eight environmental conditions with three prodrugs: (1) an AMP prodrug with fixed kcat/Km, (2) an AMP prodrug with kcat/Km determined by input C, and (3) a heat-triggered, drug-loaded liposome (Fig.   4A) . Whereas a single prodrug only eliminated bacteria in half of the input cases (Fig. 5E) , our circuit autonomously eliminated bacteria under all eight combinations of the three environmental 20 signals (Fig. 5F) . These results demonstrate that by utilizing the transistor-like properties of prodrugs, we can design and administer biocircuits that combat bacterial defiance. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint environmental conditions. (E) Bacterial viability assay demonstrating the eight outputs of the autonomous circuit. (F) Representative CFU images for single prodrug and multi-prodrug treatment (scale bar = 4 mm). Error bars represent standard deviation (n = 3). * < 0.05, ** < 0.01, *** < 0.001, and **** < 0.0001.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 866,
+                    "end": 875,
+                    "text": "(Fig. 5B)",
+                    "ref_id": "FIGREF9"
+                },
+                {
+                    "start": 1569,
+                    "end": 1578,
+                    "text": "(Fig. 5C)",
+                    "ref_id": "FIGREF9"
+                },
+                {
+                    "start": 1800,
+                    "end": 1809,
+                    "text": "(Fig. 5D)",
+                    "ref_id": "FIGREF9"
+                },
+                {
+                    "start": 2276,
+                    "end": 2287,
+                    "text": "(Fig.   4A)",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 2367,
+                    "end": 2376,
+                    "text": "(Fig. 5E)",
+                    "ref_id": "FIGREF9"
+                },
+                {
+                    "start": 2491,
+                    "end": 2500,
+                    "text": "(Fig. 5F)",
+                    "ref_id": "FIGREF9"
+                }
+            ],
+            "section": "Combating bacterial defiance with prodrug biological circuits"
+        },
+        {
+            "text": "The rising threat of antibiotic failure has motivated the classification of resistance mechanisms to improve the design of future treatment strategies. In this work, we identified a prodrug-specific subclass of resistance, which we named defiance. To study bacterial defiance, we synthesized an AMP prodrug that was activated by bacterial protease activity and successfully 10 killed E. coli. However, we found that this prodrug failed in conditions where the bacteria grew faster than the rate at which they activated the drug. We developed a mathematical model of the bacteria-prodrug competition and derived a dimensionless constant (BAH), which we used to perfectly predict the onset of the defiance phenotype. These studies revealed that both environmental (e.g., temperature, available nutrients) and pharmacokinetic (e.g., activation rate 15 kcat) parameters can be tuned to engineer successful prodrug therapies. In future work, this information could be leveraged to improve the efficacy of existing prodrugs by tuning the prodrug decay constant (i.e., biological half-life), which directly changes the BAHcrit value. Alternatively, the catalytic efficiency of the prodrug substrate could be tuned to change the BAH value and increase the probability of success, which has been previously demonstrated by engineering 20 prodrug substrates with higher affinity for the enzymatic target 44, 45 .",
+            "cite_spans": [
+                {
+                    "start": 1394,
+                    "end": 1397,
+                    "text": "44,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 1398,
+                    "end": 1400,
+                    "text": "45",
+                    "ref_id": "BIBREF44"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "In our study, insights into bacterial defiance were elucidated in the context of AMP prodrugs that activate by an extracellular mechanism of action. We anticipate that this phenomenon of defiance also extends to prodrugs that are intracellularly activated, which . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint represent the second major category of prodrugs 46 . To account for intracellular activation, our model would include a transport rate term to account for prodrug diffusion across cell membranes 47 . The implications of our model will likely still hold if prodrug transport is not the rate limiting step (i.e., represents a separate mechanism by which bacteria can escape treatment) and is greater than the rate of prodrug activation. This is a reasonable assumption given that the rates of drug 5 diffusion across membranes 48, 49 are on the order 10 10 -10 17 -fold higher than the typical range of prodrug activation rates 50, 51 .",
+            "cite_spans": [
+                {
+                    "start": 526,
+                    "end": 528,
+                    "text": "46",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 673,
+                    "end": 675,
+                    "text": "47",
+                    "ref_id": null
+                },
+                {
+                    "start": 1003,
+                    "end": 1006,
+                    "text": "48,",
+                    "ref_id": "BIBREF47"
+                },
+                {
+                    "start": 1007,
+                    "end": 1009,
+                    "text": "49",
+                    "ref_id": null
+                },
+                {
+                    "start": 1104,
+                    "end": 1107,
+                    "text": "50,",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 1108,
+                    "end": 1110,
+                    "text": "51",
+                    "ref_id": "BIBREF51"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "By comparison to established forms of resistance, prodrug defiance could occur from either genetic or phenotypic changes. For example, both phenotypic resistance (i.e., non-inherited resistance) and tolerance are acquired under specific conditions that affect growth rate, such as 10 in biofilms 6, 52 . By contrast, inherited resistance arises from genetic mutations that alter key bacterial processes including metabolism, enzymatic activity, and drug efflux pumps 53 . In our studies, we demonstrated that environmental conditions (i.e., temperature, nutrient levels) affect the defiance phenotype; however, it is also likely that the onset of defiance could also arise from genetic mutations that affect E. coli growth rates or cleavage activity or proteases [54] [55] [56] . Our findings 15",
+            "cite_spans": [
+                {
+                    "start": 296,
+                    "end": 298,
+                    "text": "6,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 299,
+                    "end": 301,
+                    "text": "52",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 763,
+                    "end": 767,
+                    "text": "[54]",
+                    "ref_id": "BIBREF54"
+                },
+                {
+                    "start": 768,
+                    "end": 772,
+                    "text": "[55]",
+                    "ref_id": null
+                },
+                {
+                    "start": 773,
+                    "end": 777,
+                    "text": "[56]",
+                    "ref_id": "BIBREF56"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "suggest that prodrugs currently used in the clinic may fail due to the onset of bacterial defiance.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "For example, the nitroimidazole class of antibiotics (e.g., metronidazole, dimetridazole, tinidazole, etc.), which is used to treat anaerobic bacteria (e.g., Enterococcus species, Clostridium species, Helicobacter pylori, etc.) represent prodrugs that are activated by bacterial reductases 57 . Genetic studies have revealed that bacterial resistance to nitroimidazole antibiotics is caused by either 20 partial or complete reduction in expression of genes (e.g., rdxA, frxA, etc.) encoding the reductases that activate the prodrug [58] [59] [60] . These changes in the activating enzyme would decrease the rate of prodrug activation, thereby resulting in a reduced overall BAH, that if below BAHcrit for the system, would result in defiance. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint As bacteria-activated prodrugs are an emerging strategy to treat antibiotic resistant infections 9 , our work may provide strategies for preventing defiance-related resistance mechanisms in new and existing prodrugs. To propose strategies for treating prodrug defiance, we leveraged the transistor-like behavior of prodrugs to design a multi-drug circuit to eliminate defiant bacteria that would normally survive the treatment of a single prodrug. In these 5 experiments, we tested eight discrete combinations of three variables (e.g., nutrients, temperature, and linker substrate) and showed that the multi-drug logic circuit effectively eliminated bacteria in all eight conditions. In future work, different variables (e.g., O2, pH, relative biodistribution, etc.) could be included to increase the range of possible treatment conditions. This would require a quantitative understanding of the relationship between the variable and how it 10",
+            "cite_spans": [
+                {
+                    "start": 290,
+                    "end": 292,
+                    "text": "57",
+                    "ref_id": "BIBREF57"
+                },
+                {
+                    "start": 532,
+                    "end": 536,
+                    "text": "[58]",
+                    "ref_id": "BIBREF58"
+                },
+                {
+                    "start": 537,
+                    "end": 541,
+                    "text": "[59]",
+                    "ref_id": "BIBREF59"
+                },
+                {
+                    "start": 542,
+                    "end": 546,
+                    "text": "[60]",
+                    "ref_id": "BIBREF60"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "affects key components of the BAH (i.e., r or kcat). Ideally, these variables will proportionally influence either the growth rate or the enzymatic activity of the bacteria, such as how increasing substrate efficiency increases kcat, which creates one critical value (BAHcrit). By contrast, variables that influence growth rate or enzyme activity with multiple critical values (i.e., inflection points) limit the range of applicability. For example, higher temperatures increase both growth rate and 15 enzymatic activity, but above critical temperatures, protein enzymes denature, resulting in irreversible loss of activity 61 . However, these values are beyond relevant biological values and do not limit the applicability of these prodrug treatments to normal physiological conditions.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Here, we quantitatively studied the mechanism of prodrug defiance and revealed logicbased strategies for successfully treating bacteria. We envision that this body of work will motivate 20 the development of new prodrugs and improve the clinical administration of existing prodrugs, ultimately helping to reduce the burden of antibiotic failure.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "25"
+        },
+        {
+            "text": "To measure drug cytotoxicity, we quantified the percent of viable bacteria when exposed to unlocked AMP drug doses ranging from nanomolar to millimolar concentrations and observed a 5 spike in cytotoxicity in the micromolar range (Fig. S1A) . To calculate bacterial growth rate constants, we incubated bacteria in broth or water at 37 o C and measured OD600 over the course of 8 hours, revealing a higher growth rate in broth consistent with published values 35, 56 (3.0 > 0.1 h -1 ) (Fig. S1B) . To quantify enzymatic velocity, we measured proteolytic velocity (moles L -1 s -1 ) under substrate concentrations ranging from 0-200 uM and fit the Michaelis-Menten equations 10 to this data to calculate kcat and Km (Fig. S1C ). Using these measured parameters (Table S2) , we generated kinetic curves for bacteria number and drug concentration over time. The model showed that after a period of initial bacterial growth, the lagging drug population eliminated the infection burden. While the initial reservoir of locked drug concentration was ~200 \u00b5M, the unlocked drug never rose above 5 \u00b5M (Fig. S1D) , revealing that this system maintains the minimal 15 drug concentration required to kill the infection. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint",
+            "cite_spans": [
+                {
+                    "start": 459,
+                    "end": 462,
+                    "text": "35,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 463,
+                    "end": 465,
+                    "text": "56",
+                    "ref_id": "BIBREF56"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 230,
+                    "end": 240,
+                    "text": "(Fig. S1A)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 484,
+                    "end": 494,
+                    "text": "(Fig. S1B)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 714,
+                    "end": 723,
+                    "text": "(Fig. S1C",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 759,
+                    "end": 769,
+                    "text": "(Table S2)",
+                    "ref_id": "TABREF3"
+                },
+                {
+                    "start": 1091,
+                    "end": 1101,
+                    "text": "(Fig. S1D)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Measuring kinetic parameters for the ODE model"
+        },
+        {
+            "text": "To estimate bacterial growth rate (r) and enzymatic activity (kcat), we used parameter fitting methods to a simplified model without a prodrug (Fig. S3) . In this model, the prodrug is substituted with a fluorescent probe (P), which is activated with the same substrate sequence as the AMP prodrug. To simplify the model, we defined one bacterium, with ~ 2.5 \u00d7 10 3 OmpT proteases per 5 cell 62 , as equivalent to one effective enzyme. The concentration of cleaved fluorescent probe is monitored over time, and the bacterial concentration is quantified at serial time points. We fit this data to the two equations modelling bacterial growth and activation of the fluorescent probe (Equations S1.1, S1.2). The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 143,
+                    "end": 152,
+                    "text": "(Fig. S3)",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Estimating bacterial growth rate and enzymatic activity with parameter fitting"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint OmpT Probe DABCYL-RRSRRV-Lys(5-FAM) ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "25"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "10"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Antibiotics and antibiotic resistance in water environments",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Baquero",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Martinez",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Canton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Current opinion in biotechnology",
+            "volume": "19",
+            "issn": "",
+            "pages": "260--265",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Selection of Resistant Bacteria at Very Low Antibiotic Concentrations",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Gullberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Cyclic AMP Regulates Bacterial Persistence through Repression of the Oxidative Stress Response and SOS-Dependent DNA Repair in Uropathogenic <em>Escherichia coli</em>",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Molina-Quiroz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "mBio",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Microbial persistence and the road to drug resistance",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Lobritz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Collins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Cell host & microbe",
+            "volume": "13",
+            "issn": "10",
+            "pages": "632--642",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Metabolite-enabled eradication of bacterial persisters by aminoglycosides",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Allison",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Brynildsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Collins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nature",
+            "volume": "473",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Distinguishing between resistance, tolerance and persistence to antibiotic treatment",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Brauner",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Fridman",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Gefen",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "Q"
+                    ],
+                    "last": "Balaban",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nature Reviews Microbiology",
+            "volume": "14",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Antibiotic Dose Impact on Resistance Selection in the Community: a Mathematical Model of \u03b2-Lactams and <em>Streptococcus pneumoniae</em> Dynamics",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Opatowski",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Antimicrobial Agents and Chemotherapy",
+            "volume": "54",
+            "issn": "",
+            "pages": "2330--2337",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "The expanding role of prodrugs in contemporary drug design and development",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rautio",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Meanwell",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Di",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hageman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Nature Reviews Drug Discovery",
+            "volume": "17",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Profiles of Drug Substances",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Al-Badr",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Ajarim",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "43",
+            "issn": "",
+            "pages": "1--208",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "The tuberculosis prodrug isoniazid bound to activating peroxidases. The 25",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Metcalfe",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Journal of biological chemistry",
+            "volume": "283",
+            "issn": "",
+            "pages": "6193--6200",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Antimicrobial peptides",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Gallo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Current Biology",
+            "volume": "26",
+            "issn": "",
+            "pages": "14--19",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Antimicrobial Peptides: An Emerging Category of Therapeutic Agents",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mahlapuu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "H\u00e5kansson",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Ringstad",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bj\u00f6rn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Frontiers in Cellular and Infection Microbiology",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Antimicrobial Peptides: Successes, Challenges and Unanswered 30 Questions",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Wimley",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Hristova",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "239",
+            "issn": "",
+            "pages": "27--34",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Cationic antimicrobial peptides : issues for potential clinical use",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bradshaw",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "BioDrugs : clinical immunotherapeutics, biopharmaceuticals and gene therapy",
+            "volume": "17",
+            "issn": "",
+            "pages": "233--240",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Bacterial proteases and virulence",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Frees",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Brondsted",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Ingmer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Sub-cellular biochemistry",
+            "volume": "66",
+            "issn": "",
+            "pages": "161--192",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Proteases in bacterial pathogenesis",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Ingmer",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Brondsted",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Research in microbiology",
+            "volume": "160",
+            "issn": "",
+            "pages": "704--710",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Escherichia coli outer membrane protease OmpT confers resistance to urinary cationic peptides",
+            "authors": [
+                {
+                    "first": "C.-Y",
+                    "middle": [],
+                    "last": "Hui",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Microbiology and Immunology",
+            "volume": "54",
+            "issn": "",
+            "pages": "452--459",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Role of uropathogenic Escherichia coli outer membrane protein T in pathogenesis 40 of urinary tract infection",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "He",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Pathogens and Disease",
+            "volume": "73",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Clostridium difficile Toxins A and B: Insights into Pathogenic Properties and Extraintestinal Effects",
+            "authors": [
+                {
+                    "first": "Di",
+                    "middle": [],
+                    "last": "Bella",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ascenzi",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Siarakas",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Petrosillo",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Di Masi",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Toxins (Basel)",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Bacterial proteases, untapped antimicrobial drug targets",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Culp",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Wright",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "The Journal Of Antibiotics",
+            "volume": "70",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Inhibition of outer membrane proteases of the omptin family by aprotinin",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Brannon",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Infection and immunity",
+            "volume": "83",
+            "issn": "",
+            "pages": "2300--2311",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Substrate Specificity of the Escherichia coli Outer Membrane Protease OmpT",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Mccarter",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Journal of Bacteriology",
+            "volume": "186",
+            "issn": "",
+            "pages": "5919--5925",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "ompT encodes the Escherichia coli outer membrane protease that 5 cleaves T7 RNA polymerase during purification",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Grodberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dunn",
+                    "suffix": ""
+                }
+            ],
+            "year": 1988,
+            "venue": "Journal of Bacteriology",
+            "volume": "170",
+            "issn": "",
+            "pages": "1245--1253",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "In vivo characterization of activatable cell penetrating peptides for targeting protease activity in cancer",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Olson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "382--393",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Potential of host 10 defense peptide prodrugs as neutrophil elastase-dependent anti-infective agents for cystic fibrosis",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Forde",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Humphreys",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Greene",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Fitzgerald-Hughes",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Devocelle",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Antimicrob Agents Chemother",
+            "volume": "58",
+            "issn": "",
+            "pages": "978--985",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Activatable cell penetrating peptides linked to nanoparticles as dual probes for in vivo fluorescence and MR imaging of proteases",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Olson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "107",
+            "issn": "",
+            "pages": "4311--4316",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Mass-encoded synthetic biomarkers for multiplexed urinary monitoring of disease",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kwong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Nat Biotech",
+            "volume": "31",
+            "issn": "",
+            "pages": "63--70",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Nanosensors to Detect Protease Activity In Vivo for Noninvasive Diagnostics",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Holt",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Mac",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kwong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "JoVE",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Non-invasive early detection of acute transplant rejection via nanosensors of 20 granzyme B activity",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Mac",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nature biomedical engineering",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Deconvolving multiplexed protease signatures with substrate reduction and activity clustering",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Zhuang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Holt",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kwong",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Qiu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "bioRxiv",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Fc microparticles can modulate the physical extent and magnitude of complement activity",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Holt",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Biomaterials science",
+            "volume": "5",
+            "issn": "",
+            "pages": "463--474",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Tobacco etch virus protease: mechanism of autolysis and rational design of stable mutants with wild-type catalytic proficiency",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Kapust",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Protein Engineering, Design and Selection",
+            "volume": "14",
+            "issn": "",
+            "pages": "993--1000",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "A new logistic model for bacterial growth",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fujikawa",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kai",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Morozumi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Shokuhin eiseigaku zasshi. Journal of the Food Hygienic Society of Japan",
+            "volume": "44",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Mathematical Researches into the Law of Population Growth Increase. Nouveaux M\u00e9moires de l",
+            "authors": [
+                {
+                    "first": "P.-F",
+                    "middle": [],
+                    "last": "Verhulst",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Acad\u00e9mie Royale des Sciences et Belles-Lettres de Bruxelles",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Parameterizing the Logistic Model of Tumor Growth by DW-MRI and DCE-MRI Data to Predict Treatment Response and Changes in Breast Cancer Cellularity during Neoadjuvant Chemotherapy",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Atuegwu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Translational Oncology",
+            "volume": "6",
+            "issn": "",
+            "pages": "256--264",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Die kinetik der invertinwirkung",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Menten",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Michaelis",
+                    "suffix": ""
+                }
+            ],
+            "year": 1913,
+            "venue": "Biochem Z",
+            "volume": "49",
+            "issn": "",
+            "pages": "333--369",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "How Many Antimicrobial Peptide Molecules Kill a Bacterium? The Case of PMAP-23",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Roversi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "ACS Chemical Biology",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Principles of Transistor Circuits",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Amos",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "James",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "A new temperature-sensitive 40 liposome for use with mild hyperthermia: characterization and testing in a human tumor xenograft model",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Needham",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Anyarambhatla",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Kong",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Dewhirst",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Cancer research",
+            "volume": "60",
+            "issn": "",
+            "pages": "1197--1201",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Ampicillin susceptibility and ampicillin-induced killing rate of Escherichia coli",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Thonus",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Fontijne",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Michel",
+                    "suffix": ""
+                }
+            ],
+            "year": 1982,
+            "venue": "Antimicrobial agents and chemotherapy",
+            "volume": "22",
+            "issn": "",
+            "pages": "386--390",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Effect of Temperature on In Vivo Protein Synthetic Capacity in 45 <em>Escherichia coli</em>",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Farewell",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Neidhardt",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Journal of Bacteriology",
+            "volume": "180",
+            "issn": "",
+            "pages": "4704--4710",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "New enzyme for reductive cancer chemotherapy, YieF, and its improvement by directed evolution",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Barak",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Molecular cancer therapeutics",
+            "volume": "5",
+            "issn": "",
+            "pages": "97--103",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Melanocyte-directed enzyme prodrug therapy (MDEPT): development of a targeted treatment for malignant melanoma",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Jordan",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Khan",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Osborn",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Photiou",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Riley",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Bioorganic & medicinal chemistry",
+            "volume": "7",
+            "issn": "",
+            "pages": "1775--1780",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "A New Classification of Prodrugs: Regulatory Perspectives",
+            "authors": [
+                {
+                    "first": "K.-M",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Pharmaceuticals",
+            "volume": "2",
+            "issn": "",
+            "pages": "77--81",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "A Theoretical Analysis of the Prodrug Delivery System for Treating Antibiotic-Resistant Bacteria",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Murphy",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Walshe",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Devocelle",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "IEEE/ACM Transactions on Computational Biology and Bioinformatics",
+            "volume": "8",
+            "issn": "",
+            "pages": "650--658",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Getting across the cell membrane: an overview for small molecules, peptides, and proteins",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hinner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Methods in molecular biology",
+            "volume": "1266",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "A Comparative Study of Transmembrane Diffusion and Permeation of Ibuprofen across Synthetic Membranes Using Franz Diffusion Cells",
+            "authors": [
+                {
+                    "first": "S.-F",
+                    "middle": [],
+                    "last": "Ng",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rouse",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Sanderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Eccleston",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Pharmaceutics",
+            "volume": "2",
+            "issn": "",
+            "pages": "209--223",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Mechanism of ganciclovir-induced chain termination revealed by resistant viral polymerase mutants with reduced exonuclease activity",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Beardsley",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Coen",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Proc Natl",
+            "volume": "15",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Click and release: bioorthogonal approaches to \"on-demand\" activation of prodrugs",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Ji",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Chemical Society reviews",
+            "volume": "48",
+            "issn": "",
+            "pages": "1077--1094",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Phenotypic Resistance to Antibiotics",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Corona",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Martinez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Antibiotics",
+            "volume": "2",
+            "issn": "",
+            "pages": "237--255",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Microbial and viral drug resistance mechanisms",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Mckeegan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Borges-Walmsley",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Walmsley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Trends in microbiology",
+            "volume": "10",
+            "issn": "",
+            "pages": "8--14",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "In vitro folding, purification and characterization of Escherichia coli outer membrane protease ompT",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kramer",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Zandwijken",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Egmond",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Dekker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "European journal of biochemistry",
+            "volume": "267",
+            "issn": "",
+            "pages": "885--893",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Identification of essential acidic residues of outer membrane protease OmpT supports a novel active site",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kramer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "FEBS letters",
+            "volume": "505",
+            "issn": "",
+            "pages": "426--430",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Growth rate regulation in Escherichia coli",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Jin",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Cagliero",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "FEMS microbiology reviews",
+            "volume": "36",
+            "issn": "",
+            "pages": "269--287",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "Nitroimidazole drugs-action and resistance mechanisms I. Mechanism of action. 30",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Edwards",
+                    "suffix": ""
+                }
+            ],
+            "year": 1993,
+            "venue": "Journal of Antimicrobial Chemotherapy",
+            "volume": "31",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "The role of the rdxA gene in the evolution of metronidazole resistance in Helicobacter pylori",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Jenks",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ferrero",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Labigne",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Journal of Antimicrobial Chemotherapy",
+            "volume": "43",
+            "issn": "",
+            "pages": "753--758",
+            "other_ids": {}
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "Characterization of the genes rdxA 35 and frxA involved in metronidazole resistance in Helicobacter pylori",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Marais",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bilardi",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Cantet",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Mendz",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "M\u00e9graud",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Research in microbiology",
+            "volume": "154",
+            "issn": "",
+            "pages": "137--144",
+            "other_ids": {}
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Structural basis of 5-nitroimidazole antibiotic resistance: the crystal structure of NimA from Deinococcus radiodurans",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Leiros",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "The Journal of biological chemistry",
+            "volume": "279",
+            "issn": "",
+            "pages": "55840--55849",
+            "other_ids": {}
+        },
+        "BIBREF62": {
+            "ref_id": "b62",
+            "title": "Protein abundance profiling of the Escherichia coli cytosol",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ishihama",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC Genomics",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "A bacteria-activatable prodrug targets E. coli protease OmpT (A) Schematic comparing time-dependent killing profiles of bacteria exhibiting tolerance, persistence, or 5 defiance. Red line represents killing profile of susceptible bacteria. (B) A cationic AMP drug (RRRRRRRRR, white rectangle) locked by an anionic peptide lock (EEEEEEEEEEEEE, black rectangle) with a protease-cleavable linker (RRS|RRV, grey u-shape) is activated by OmpT protease (grey pacman) activity. (C) Cleavage assay measuring the activity of recombinant OmpT (grey protease) (left) and OmpT expressed on the surface of E. coli (right) against fluorescence-10 quenched linker substrates (blue lines). Negative control samples contain the inhibitor aprotinin (black triangle, black lines) or linker substrates only (grey lines). Shaded regions represent standard deviation (n = 3). (D) Cleavage assay measuring the activity of recombinant OmpT (left)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "OmpT inhibitor, aprotinin (grey bar). Experimental condition of bacteria treated with locked AMP activated by natively expressed OmpT (white bar). All values normalized and statistically compared to bacteria only control. Error bars represent standard deviation (n = 3). (F) 10",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "To model the rate of enzymatic activation of locked drugs, L, by OmpT, we applied Michaelis-Menten (MM) kinetics 38 , where the rate of substrate activation is determined by the catalytic rate of the reaction, kcat, and the half-maximal substrate concentration, Km (Equation 1.2).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Kinetic model of prodrug defiance reveals a binary outcome. (A) Graphical representation of the multi-rate model of bacteria (B), locked drug (L), and unlocked (U) drug populations. Legend describes the agents associated with each variable. (B) Validating the model with serial CFU measurements (red and blue dots; n = 3, error bars SEM) and ODE model simulations of nine conditions (A1-3, B1-3, C1-3) given extracted growth rate and enzyme 5 kinetics parameter values. (C) Agar plates taken at end-point showing the binary presence (1) or absence (0) of bacterial growth for nine environmental conditions (A1-C3, scale bar = 4 mm).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Predicting bacterial defiance with a dimensionless constant. (A) Schematic depicting competing rates between bacteria growth, prodrug activation, and bacteria death with the relevant parameters. Illustrative graph showing the \"switch\" like behavior that occurs at a critical BAH (BAHcrit) threshold (bacterial defiance = 1 when BAH > BAHcrit, susceptibility = 0 when 5 BAH < BAHcrit) (B) Model prediction (dashed line) and experimental validation (blue dots) of bacteria outcome as a function of BAH to validate the critical defiance value BAHcrit. (C-E) Model simulations of bacteria outcome as a function of BAH for treatment durations 24, 48, and 72 hours. (F-I) Model simulations of bacteria outcome versus BAH by controlling four parameters: r, kcat, Km, and Bmax. In each panel, one of these four variables is fixed while the others are changing. (J) into defiant and susceptible populations based on BAH. (K) Receiveroperating characteristic (ROC) analysis using BAH to classify populations as defiant based on bacteria-driven parameters (r and kcat/Km).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Building biological transistors with prodrugs (A) Logic circuit schematic depicting a function that universally outputs 0 for all possible combinations of three binary inputs. Inputs are 10 environmental variables including bacterial nutrients (brown circles and triangles), ambient temperature (thermometers), and substrate specificity (red substrate = high specificity, blue substrate = low specificity). Depicted parameter values represent experimental conditions. Truth table for universal circuit input-output combinations. (B) Schematic and truth table showing how the AMP prodrug behaves analogously to N-type transistors. Electronic N-type transistors 5 allow the input current (Iin) to pass when the gate voltage (G) is high. Similarly, the N-type prodrug transistor allows the input bacteria (Bin) to survive when the gate signal (G) is high (i.e., G = 1 when BAH > BAHcrit). (C) Schematic and truth table showing how the heat-triggered, drug loaded (black squares) liposomes (black circle) behave analogously to P-type transistors. Electronic Ptype transistors allow the input current (Iin) to pass when the gate voltage (G) is low. Similarly, 10",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Combating bacterial defiance with a logic-based prodrug circuit. (A) Bacterial viability assay validating the function of a prodrug-based AND gate. Schematic depicts two prodrug transistors arranged in series. Blue substrate represents low preference (kcat) for bacterial protease OmpT (blue = low activity), and red substrate represents high preference (kcat) for 5 bacterial protease OmpT (red = high activity). (B) Bacterial viability assay validating the function of a prodrug-based OR gate. Schematic depicts two prodrug transistors arranged in parallel. For AND and OR, input values were controlled with substrate sequence, where the substrate with high kcat/Km corresponds to BAH = 0 and the substrate with low kcat/Km corresponds to BAH = 1. Statistical comparisons are made with 00 condition. (C) Bacterial viability assay validating the 10 function of a prodrug-based NOT gate. Schematic depicts heat-triggered liposome (black circle) loaded with drug (black squares = ampicillin). BAH = 0 corresponds to temperature of 30 o C and BAH = 1 corresponds to 37 o C. All truth tables depict ideal binary input-output combinations. (D) Bacterial viability assay quantifying the outcome of a single prodrug in the context of different",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Measuring kinetic parameters for the ODE model. (A) EC50 measurement on a sample of E. coli exposed to increasing concentrations of AMP. (B) Growth rate calculation of E. Coli in broth and water by measuring OD at 600 nm. (C) Measuring kcat/Km from a series of cleavage assays incubating E. coli at a range of substrate concentrations. (D) Predicting the 5 dynamics of the bacteria and unlocked drug population given empirical parameter values. Error bars are standard deviation (n = 3).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "Estimating bacterial growth rate and enzymatic activity with parameter fitting. (A) 15 Schematic of model used to quantify r and kcat from bacterial cleavage assays. (B) Bacterial cleavage assays (blue line), from which growth rate (r) and enzyme kinetics (kcat/Km) are extracted, and BAH is calculated (inset). Dotted line represents model after parameter fitting. (C) Table of r and kcat values quantified from model in each condition with varying temperature and LB broth concentration.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "Altering drug efficacy with substrate affinity. (A) Bacteria viability assay post 24 hour incubation with drug unlocked by various substrates. Bacterial growth = 1 if colonies were present after plating, and bacterial growth = 0 if there were no colonies present (n = 3). B.A.H. 5 values extrapolated from bacteria + probe velocity measurements fitted to model. (B) Bacteria dynamics predicted by model given three different enzyme kinetics. Linker 1 = RRSRRV, Linker 2 = RKTR, Linker 3 = ENLYFQG.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "Validating heat-triggered liposomes. (A) Schematic depicting function of heattriggered, drug loaded liposomes. Circles represent liposomes, black squares represent drug (ampicillin). (B) Dynamic light scattering of liposome formulation to determine particle size (~35 nm). Histogram is plotted as the mean of independent measurements (n = 3). (C) Fluorescent 15 assay measuring the heat-triggered release of liposome contents. Liposomes were loaded with 100 mM FITC, and heated from 25 o C to 37 o C (indicated by arrow). Grey line represents 30 o C control. Lines are plotted as means of independent measurements, shading represents standard deviation (n = 3). (D) Fluorescent assay measuring the release of FITC from heat triggered liposomes at various temperatures. All samples were heated to 30 o C for 10 minutes, then heated 20 at the plotted temperature for 30 minutes. Measurements are plotted as fold change in RFU between final measurement and measurement at 30 o C. Error bars represent standard deviation (n = 3).",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": ". By contrast, the rate of E. coli death is proportional to the concentration of unlocked drug, U, and the concentration of Bacteria, B, according to a proportionality constant, a, that represents the amount of AMP required to kill E. coli per unit time(Table S2, Equation 1.1).",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Author Contributions: G.A.K. and B.A.H conceived of the idea. G.A.K, B.A.H., and I.C. designed experiments and interpreted results, and wrote the manuscript. B.A.H. and I.C. carried out experiments. Acknowledgments: This work was funded by an NIH Director's New Innovator Award (Award Code Availability: The authors declare that the code supporting the findings of this study is available within the supplementary information files. DPPC and MPPC were purchased from Avanti Polar Lipics, inc. The heat-triggered NOT gate formulation was composed of DPPC:MPPC at the molar ratio 9:1, and were evaporated in cholorform to produce a lipid film. Films were rehydrated in 100% water containing 100 mg/mL ampicillin and were sonicated for 20 minutes. Lipid formulations were then purified using a PD-10 desalting column (GE Healthcare) and size was measured via dynamic light scattering (DLS, 5 Malvern). Statistical Analysis Statistical analysis was performed using statistical packages included in GraphPad Prism 6. To assess the significance of increase in signal due to protease cleavage, we used a two-way ANOVA (without repeated measures) followed by Sidak's multiple comparisons test. A one-way 15 ANOVA followed by Dunnett's multiple comparisons test was used to compare experimental means to cells only control bacterial viability assays. Two-way ANOVA followed by Sidak's multiple comparisons test used to compare experimental means to control for bacterial cytotoxicity at multiple starting concentrations.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/556951 doi: bioRxiv preprint",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Peptide Sequence",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "Variable",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

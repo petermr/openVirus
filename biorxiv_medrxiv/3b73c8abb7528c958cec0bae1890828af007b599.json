@@ -1,0 +1,3523 @@
+{
+    "paper_id": "3b73c8abb7528c958cec0bae1890828af007b599",
+    "metadata": {
+        "title": "How domain growth is implemented determines the long term behaviour of a cell population through its effect on spatial correlations",
+        "authors": [
+            {
+                "first": "Robert",
+                "middle": [
+                    "J H"
+                ],
+                "last": "Ross",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Radcliffe Observatory Quarter",
+                    "location": {
+                        "addrLine": "Woodstock Road",
+                        "postCode": "OX2 6GG",
+                        "settlement": "Oxford"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "R",
+                "middle": [
+                    "E"
+                ],
+                "last": "Baker",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Radcliffe Observatory Quarter",
+                    "location": {
+                        "addrLine": "Woodstock Road",
+                        "postCode": "OX2 6GG",
+                        "settlement": "Oxford"
+                    }
+                },
+                "email": "\u2020baker@maths.ox.ac.uk"
+            },
+            {
+                "first": "C",
+                "middle": [
+                    "A"
+                ],
+                "last": "Yates",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Centre for Mathematical Biology",
+                    "institution": "University of Bath",
+                    "location": {
+                        "addrLine": "Claverton Down",
+                        "postCode": "BA2 7AY",
+                        "settlement": "Bath"
+                    }
+                },
+                "email": "\u2021c.yates@bath.ac.uk"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Domain growth plays an important role in many biological systems, and so the inclusion of domain growth in models of these biological systems is important to understanding how these biological systems function. In this work we present methods to include the effects of domain growth on the evolution of spatial correlations in a continuum approximation of a lattice-based model of cell motility and proliferation. We show that, depending on the way in which domain growth is implemented, different steady-state densities are predicted for an agent population. Furthermore, we demonstrate that the way in which domain growth is implemented can result in the evolution of the agent density depending on the size of the domain. Continuum approximations that ignore spatial correlations cannot capture these behaviours, while those that account for spatial correlations do. These results will be of interest to researchers in developmental biology, as they suggest that the nature of domain growth can determine the characteristics of cell populations. * ross@maths.ox.ac.uk",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In this work we examine how domain growth affects the evolution of spatial correlations between agents in IBMs, and importantly, how the way in which domain growth is implemented affects spatial correlations differently. To do so we use an agent-based (our agents represent 2 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint N x (t) by N y (t), where N x (t) is the number of lattice sites in a row and N y (t) is the number of sites in a column. All simulations are performed with periodic boundary conditions, and throughout this work the lattice spacing, \u2206, is equal to one. For notational convenience we shall now write N x (t) as N x , and N y (t) as N y .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In the IBM each agent is initially assigned to a lattice site, from which it can move or proliferate into an adjacent site. If an agent attempts to move into a site that is already occupied, 3 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Growth is of fundamental importance in biological systems [1, 2] . From embryonic development to tissue renewal, growth plays a central role in the development, maintenance and repair of biological systems throughout their lifetime [3] . Types of isotropic growth that have been observed in biological systems include exponential, linear and logistic [4] [5] [6] [7] [8] [9] [10] [11] . Anisotropic growth also plays an important role in biological systems. For instance apical growth, whereby the tip region of a domain grows, is observed in plant root extension and chick limb outgrowth [12, 13] .",
+            "cite_spans": [
+                {
+                    "start": 58,
+                    "end": 61,
+                    "text": "[1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 62,
+                    "end": 64,
+                    "text": "2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 232,
+                    "end": 235,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 351,
+                    "end": 354,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 355,
+                    "end": 358,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 359,
+                    "end": 362,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 363,
+                    "end": 366,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 367,
+                    "end": 370,
+                    "text": "[8]",
+                    "ref_id": null
+                },
+                {
+                    "start": 371,
+                    "end": 374,
+                    "text": "[9]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 375,
+                    "end": 379,
+                    "text": "[10]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 380,
+                    "end": 384,
+                    "text": "[11]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 589,
+                    "end": 593,
+                    "text": "[12,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 594,
+                    "end": 597,
+                    "text": "13]",
+                    "ref_id": "BIBREF14"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Importantly, growth has also been shown to contribute in the development of biological systems in different ways. Experiments have shown that the advective component of domain growth is important in enabling migrating cells to reach their target site [6] [7] [8] [9] . Meanwhile, theoretical studies have suggested that differential growth rates in developing tissue allow the generation of diverse biological forms and structures [10, 14] . Consequently, it is important to include domain growth in many models of biological systems [1, 2, [6] [7] [8] [9] [14] [15] [16] [17] [18] .",
+            "cite_spans": [
+                {
+                    "start": 251,
+                    "end": 254,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 255,
+                    "end": 258,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 259,
+                    "end": 262,
+                    "text": "[8]",
+                    "ref_id": null
+                },
+                {
+                    "start": 263,
+                    "end": 266,
+                    "text": "[9]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 431,
+                    "end": 435,
+                    "text": "[10,",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 436,
+                    "end": 439,
+                    "text": "14]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 534,
+                    "end": 537,
+                    "text": "[1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 538,
+                    "end": 540,
+                    "text": "2,",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 541,
+                    "end": 544,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 545,
+                    "end": 548,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 549,
+                    "end": 552,
+                    "text": "[8]",
+                    "ref_id": null
+                },
+                {
+                    "start": 553,
+                    "end": 556,
+                    "text": "[9]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 557,
+                    "end": 561,
+                    "text": "[14]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 562,
+                    "end": 566,
+                    "text": "[15]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 567,
+                    "end": 571,
+                    "text": "[16]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 572,
+                    "end": 576,
+                    "text": "[17]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 577,
+                    "end": 581,
+                    "text": "[18]",
+                    "ref_id": "BIBREF19"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Spatial correlations are often observed in biological systems [19] [20] [21] [22] [23] [24] . For instance, in cell populations spatial correlations can be established by cell proliferation, as a new cell is naturally close to its parent cell following division. Individual-based models (IBMs) are able to recapitulate these spatial correlations, whereas models that employ certain mean-field approximations (MFAs), such as the logistic model [25] , and, in a spatially-extended context, the diffusion equation, cannot [26] [27] [28] [29] [30] . Accurate continuum models are important tools for understanding the behaviour of biological systems as, in contrast to IBMs, they generally allow for greater mathematical analysis. This analysis can be crucial in forming a mechanistic understanding of biological systems, which is not always apparent from simply studying the results of a large number of repeats of an IBM. Therefore, in order to derive accurate continuum approximations of IBMs that include cell proliferation it is often necessary to account for the effects of spatial correlations [25, [31] [32] [33] [34] [35] [36] [37] [38] [39] . cells), discrete random-walk model on a two-dimensional square lattice with volume-exclusion.",
+            "cite_spans": [
+                {
+                    "start": 62,
+                    "end": 66,
+                    "text": "[19]",
+                    "ref_id": null
+                },
+                {
+                    "start": 67,
+                    "end": 71,
+                    "text": "[20]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 72,
+                    "end": 76,
+                    "text": "[21]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 77,
+                    "end": 81,
+                    "text": "[22]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 82,
+                    "end": 86,
+                    "text": "[23]",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 87,
+                    "end": 91,
+                    "text": "[24]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 443,
+                    "end": 447,
+                    "text": "[25]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 519,
+                    "end": 523,
+                    "text": "[26]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 524,
+                    "end": 528,
+                    "text": "[27]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 529,
+                    "end": 533,
+                    "text": "[28]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 534,
+                    "end": 538,
+                    "text": "[29]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 539,
+                    "end": 543,
+                    "text": "[30]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 1097,
+                    "end": 1101,
+                    "text": "[25,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 1102,
+                    "end": 1106,
+                    "text": "[31]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 1107,
+                    "end": 1111,
+                    "text": "[32]",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 1112,
+                    "end": 1116,
+                    "text": "[33]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 1117,
+                    "end": 1121,
+                    "text": "[34]",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 1122,
+                    "end": 1126,
+                    "text": "[35]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 1127,
+                    "end": 1131,
+                    "text": "[36]",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 1132,
+                    "end": 1136,
+                    "text": "[37]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 1137,
+                    "end": 1141,
+                    "text": "[38]",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 1142,
+                    "end": 1146,
+                    "text": "[39]",
+                    "ref_id": "BIBREF41"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "We had reasoned that a standard MFA would not be able to capture the behaviours exhibited by the IBM, and that this standard MFA would require correction by the inclusion of spatial correlations in the form of a correlation ordinary differential equation (ODE) to accurately approximate the IBM results. This last point has been shown previously in scenarios without growth [25] .",
+            "cite_spans": [
+                {
+                    "start": 374,
+                    "end": 378,
+                    "text": "[25]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The outline of this work is as follows: to begin with we introduce the IBM and growth mechanisms in Section 2.1. We then define our individual and pairwise density functions, and derive a system of ODEs describing the evolution of the individual and pairwise density functions with respect to time on a growing domain in Sections 2.2-2.3. To test the accuracy of these ODE models we compare them with ensemble averages for the evolution of the macroscopic density from the IBM in Section 3. We demonstrate that the standard MFA is not able to accurately capture the effects of domain growth in the IBM, whereas the ODE models that include the effect of spatial correlations do.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In this section we introduce the IBM and the domain growth mechanisms we employ throughout this work. We then derive equations describing the evolution of the individual and pairwise density functions in the IBM for both growth mechanisms.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model"
+        },
+        {
+            "text": "The IBM is simulated on a two-dimensional square lattice with lattice spacing \u2206 [40] and size to the same overall growth rate when implemented with the same growth rate parameters.",
+            "cite_spans": [
+                {
+                    "start": 80,
+                    "end": 84,
+                    "text": "[40]",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IBM and domain growth mechanisms"
+        },
+        {
+            "text": "(a) (b) Figure 1 : (Colour online). Before and after the growth events for both (a) GM1 and (b) GM2, in which growth is along the x-axis (horizontal direction) for a two-dimensional lattice. In each row the yellow (light grey) site has been chosen to undergo a growth event. Following this the yellow (light grey) site is moved to the right with its contents, for instance an agent (represented by a black cell). The blue (dark grey) sites are the new lattice sites and are always initially empty. The contents of all the other sites remain unaffected, although in some cases their neighbouring sites will change.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 8,
+                    "end": 16,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "IBM and domain growth mechanisms"
+        },
+        {
+            "text": "We define the individual density functions, \u03c1 For instance, (2, 3) would be the lattice site situated in the second row and the third column of the lattice.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "The following derivation for the individual density functions is the same for GM1 and GM2.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "The sum of the individual density functions on a domain of size N x \u00d7 N y at [t + \u03b4t) can be 5 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint written in terms of the individual density functions at time t:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "The terms on the RHS of Eq. (1) correspond to the following events: i) no growth event occurs in [t, t + \u03b4t); ii) a growth event occurs in the horizontal (x) direction in [t, t + \u03b4t); and iii) a growth event occurs in the vertical (y) direction in [t, t + \u03b4t). Due to our initial conditions in the IBM we can assume translational invariance for the probability of an agent occupying a site in this derivation, by this we mean",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "where n indexes any other site on the domain. 1 Therefore we can rewrite Eq. (1) as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "We can simplify Eq. (3) in the following manner",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "If we now rearrange Eq. (4) and take the limit as \u03b4t \u2192 0 we obtain d\u03c1 Nx\u00d7Ny 1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "If we make the approximation \u03c1 ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "This approximation has been previously published [17] , and reasonably implies that domain growth 'dilutes' the agent density. Finally, we simplify Eq. (6) to obtain d\u03c1 Nx\u00d7Ny 1 (m; t) dt = \u2212(P gx + P gy )\u03c1 ",
+            "cite_spans": [
+                {
+                    "start": 49,
+                    "end": 53,
+                    "text": "[17]",
+                    "ref_id": "BIBREF18"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "Eq. (7) describes how exponential domain growth affects agent density. It is important to note that Eq. (7) describes how exponential domain growth affects the evolution of individual density functions because we have defined P gx and P gy as constants. In the course of the following derivation it will be useful to write the pairwise density functions in terms of the distances between sites, therefore we shall rewrite the individual density functions as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "If we substitute Eq. (8) into Eq. (7) we obtain dc(t) dt = \u2212(P gx + P gy )c(t).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "Eq. (9) is a MFA describing the effect of domain growth on the evolution agent density [32] . 7 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 87,
+                    "end": 91,
+                    "text": "[32]",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Individual density functions"
+        },
+        {
+            "text": "We now derive the terms necessary to include the effect of two-dimensional exponential domain growth in the evolution of the pairwise density functions. Importantly, GM1 and GM2 affect the evolution of the pairwise density functions differently. Figure 2 displays two configurations of two agents, which we will term colinear and diagonal. . In (a), two colinear lattice sites share the same row but not the same column (or vice versa). In (b), two lattice sites are diagonal, meaning they do not share the same row or column. In both (a) and (b) r x is the distance between two lattice sites in the horizontal direction, and r y is the distance between two lattice sites in the vertical direction. In (b) this means r x = 3 and r y = 1.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 246,
+                    "end": 254,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Pairwise density functions"
+        },
+        {
+            "text": "The horizontal and vertical distances between sites is measured from their centres as displayed in Fig. 2 (b), and r x is the distance between two lattice sites in the horizontal direction, and r y is the distance between two lattice sites in the vertical direction.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 99,
+                    "end": 105,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Pairwise density functions"
+        },
+        {
+            "text": "We now derive equations for the evolution of the pairwise density functions for GM1 domain growth. We define the pairwise density functions, \u03c1 (m, m + (r x , r y ); t),",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 1"
+        },
+        {
+            "text": "where m is (i, j), with i indexing the row number of a lattice site, j indexing the column number of a lattice site, and (r x , r y ) is a vector that represents a fixed displacement as defined in Fig.   8 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 197,
+                    "end": 205,
+                    "text": "Fig.   8",
+                    "ref_id": "FIGREF11"
+                }
+            ],
+            "section": "Growth mechanism 1"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint 2.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 1"
+        },
+        {
+            "text": "As the initial conditions in the IBM are, on average, spatially uniform we are able to assume translational invariance for the probability of two sites a given displacement being occupied.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 1"
+        },
+        {
+            "text": "This means the pairwise density function can be written as a function of the displacement between two lattice sites, (r x , r y ). Therefore, we will further simplify our notation to obtain \u03c1 Nx\u00d7Ny 2 (m, m + (r x , r y ); t) = \u03c1 (r x , r y ; t).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 1"
+        },
+        {
+            "text": "This 'abuse' of notation, whereby \u03c1 Nx\u00d7Ny 2 is rewritten as a function of the displacement between two lattice sites as opposed to the lattice sites themselves, will prove useful in the following derivation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 1"
+        },
+        {
+            "text": "We begin with the colinear component of the equations for the evolution of the pairwise density functions, that is, the scenario in which the lattice sites in question share the same column or row, as depicted in Fig. 2 (a) . For agents colinear in the horizontal direction, that is, r y = 0, the evolution of the pairwise density functions for GM1 is",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 213,
+                    "end": 223,
+                    "text": "Fig. 2 (a)",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Colinear component"
+        },
+        {
+            "text": "Ny j=1 \u03c1 Nx\u00d7Ny 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "(r x , 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "The terms on the RHS represent: i) no growth event occurs in [t, t + \u03b4t); ii) a growth event occurs in the horizontal direction between agents (r x \u2212 1, 0) apart, moving them (r x , 0) apart on a domain of size N x \u00d7 N y at [t + \u03b4t); iii) a growth event occurs in the horizontal direction at a site that is not in between agents (r x , 0) apart, meaning that they remain (r x , 0) apart but now on a domain of size N x \u00d7 N y at time [t + \u03b4t); and iv) a growth event occurs in the vertical direction (as the sites are horizontally colinear in this a GM1 growth event cannot change the distance between them).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "Similarly, the evolution of the colinear component for GM1 for agents colinear in the verti-",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "Ny j=1 \u03c1 Nx\u00d7Ny 2 (0, r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "As in the case of the individual density functions, we can simplify Eq. (12) to obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "If we apply the approximations 2 ((",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "and 2 This approximation sensibly implies that domain growth 'dilutes' pairwise agent densities.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "10 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": ", Eq. (14) can be rewritten as",
+            "cite_spans": [
+                {
+                    "start": 6,
+                    "end": 10,
+                    "text": "(14)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "Rearranging Eq. (15) and taking the limit as \u03b4t \u2192 0 we finish with d\u03c1 Nx\u00d7Ny 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "The equivalent equation for sites colinear in the vertical direction (see Eq. (13)) is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "11 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Colinear component"
+        },
+        {
+            "text": "For the diagonal component for GM1, that is, neither r x , r y = 0, we have, by similar reasoning",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Diagonal component"
+        },
+        {
+            "text": "If we follow the same procedure as for the colinear component we obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Diagonal component"
+        },
+        {
+            "text": "For the derivation of the evolution of the pairwise density functions with GM2 we refer the reader to Appendix A and simply state the results here. The evolution equation for the colinear",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "(r x , 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "12 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint An analogous equation exists for the vertically colinear component for GM2. The diagonal component for GM2 is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "(r x , r y + 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "If we compare Eqs. (16) and (19)- (21) it is apparent that the length of the domain influences the evolution of the pairwise density functions in the case of GM2, but not in GM1. Therefore, we expect the evolution of the pairwise density functions to be affected by the initial domain size in the case of GM2, but not GM1.",
+            "cite_spans": [
+                {
+                    "start": 19,
+                    "end": 23,
+                    "text": "(16)",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 34,
+                    "end": 38,
+                    "text": "(21)",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Growth mechanism 2"
+        },
+        {
+            "text": "We initially present results for immotile, non-proliferative agents on a growing domain, in which domain growth is exponential. We simulate the scenario in which all lattice sites are occupied by an agent in the IBM on a lattice of size 100 by 100 sites. This means the initial conditions for Eqs. (16) and (19)- (21) are",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "and \u03c1 Nx\u00d7Ny 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "13 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint As previously stated, N x and N y describe the number of lattice sites in the horizontal and vertical directions, respectively. However, as results from the IBM are ensemble averages we substitute N x and N y for their continuum analogues L x (t) and L y (t), respectively. For exponential domain growth L x (t) evolves according to",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The evolution of L y (t) is equivalent. This substitution of N x (t) and N y (t) with L x (t) and L y (t) avoids jump discontinuities in the numerical solutions of Eqs. (16) and (19)- (21), which are not present in the averaged IBM results. To solve our equations numerically we use MATLAB's ode15s.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "In Fig. 3 the numerical solutions of Eqs. (16) and (19) we see the evolution of the pairwise density functions for GM2, and in this case in the evolution of all the colinear and diagonal components is the same. 14 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 9,
+                    "text": "Fig. 3",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Agents on a growing domain"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agents on a growing domain"
+        },
+        {
+            "text": "It has previously been shown how to include the effect of agent motility and proliferation in Eqs. (9) , (16) , and (19)-(21) and so we simply state the result for the individual density function [25, 38, 39] . The evolution of the individual density function for motile and proliferating agents on a growing domain is",
+            "cite_spans": [
+                {
+                    "start": 99,
+                    "end": 102,
+                    "text": "(9)",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 105,
+                    "end": 109,
+                    "text": "(16)",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 196,
+                    "end": 200,
+                    "text": "[25,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 201,
+                    "end": 204,
+                    "text": "38,",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 205,
+                    "end": 208,
+                    "text": "39]",
+                    "ref_id": "BIBREF41"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Agent motility, proliferation and death"
+        },
+        {
+            "text": "As can be seen from Eq. (25) the inclusion of agent proliferation means that pairwise density functions are now present in the equations for the evolution of the individual density functions, which is not the case without agent proliferation (Eq. (9)).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent motility, proliferation and death"
+        },
+        {
+            "text": "To make our results comparable with the large amount of research already completed in this area we display the results in terms of the correlation function [25, [31] [32] [33] [34] [35] [36] [37] [38] [39] . The correlation function [34, 35] is simply defined as",
+            "cite_spans": [
+                {
+                    "start": 156,
+                    "end": 160,
+                    "text": "[25,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 161,
+                    "end": 165,
+                    "text": "[31]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 166,
+                    "end": 170,
+                    "text": "[32]",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 171,
+                    "end": 175,
+                    "text": "[33]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 176,
+                    "end": 180,
+                    "text": "[34]",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 181,
+                    "end": 185,
+                    "text": "[35]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 186,
+                    "end": 190,
+                    "text": "[36]",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 191,
+                    "end": 195,
+                    "text": "[37]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 196,
+                    "end": 200,
+                    "text": "[38]",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 201,
+                    "end": 205,
+                    "text": "[39]",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 233,
+                    "end": 237,
+                    "text": "[34,",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 238,
+                    "end": 241,
+                    "text": "35]",
+                    "ref_id": "BIBREF37"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "The correlation function is a useful variable to work with as F \u2261 1 means that the occupancy of two lattice sites a given distance apart is independent. If we substitute Eq. (26) into Eq.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "(25) we obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "The standard MFA assumes F (1, 0; t) = 1, that is, the effect of spatial correlations is ignored, and so Eq. (27) becomes",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "For the IBM in all simulations we have an initial uniform random seeding of density 0.05. The lattice state of site i of the two-dimensional IBM is described by variable \u03c3 i (i.e. occupied by an 15 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint agent or unoccupied). This means the normalised average agent density for the two-dimensional domain is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "Here 1 A is the indicator function for species A (i.e. 1 if species A occupies site i, and 0 if it does not). As previously discussed, the initial condition in the IBM is achieved by populating a certain number of sites uniformly at random until the initial density is achieved, the initial condition for the correlation function is therefore",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "That is, at all distances there are initially no spatial correlations between agents. We also rescale time to allow for ease of comparison between simulations with different parameters:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "The rescaling of time is necessary to allow the easy comparison of simulations with different parameters. As before we solve our equations numerically with MATLAB's ode15s.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Correlation functions"
+        },
+        {
+            "text": "In Fig. 4 the effects of domain growth via GM1 on the evolution of the macroscopic agent density can be seen. We see that the inclusion of GM1 causes the steady-state density predicted by the standard MFA, Eq. (28), to be incorrect. The steady-state density calculated from an ensemble average from the IBM is lower than the MFA predicts, which the correlation ODE model (Eq. (27)) is able to capture. The rate at which the agent density increases is also reduced in the IBM due to spatial correlations, and the correlations ODE model better approximates this than the MFA. One may expect domain growth to decrease spatial correlations by 'breaking-up' existing agent clusters which, in turn, would allow greater agent movement and cause the MFA to be more accurate. However, the nature of GM1 means that it does not break up agents effectively, only potentially 'freeing-up' one lattice site for two agents in each row/column every growth event (see Fig. 1 ). GM1 also does not cause agents to make 16 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 9,
+                    "text": "Fig. 4",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 951,
+                    "end": 957,
+                    "text": "Fig. 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint new neighbouring agents, with agents and their neighbours moving synchronously in a growth event (except at the position of growth where two columns/rows will be separated). Therefore, the spatial correlations associated with agent proliferation (in conjunction with the dilution of agent density due to domain growth) lower the steady-state density of the agents more than the displacement of agents by domain growth counteracts the spatial correlations established by agent proliferation. In Fig. 5 the effect of GM1 on spatial correlations in both the correlation ODE model and the IBM can be seen. Importantly, we see that as the growth rate is increased the spatial correlations augment. From Fig. 4 this result is to be expected, as domain growth lowers the agent steady-state density but is not effective at reducing spatial correlations. A similar result has previously been observed in the case of agent death [25] . In addition, at the agent steady-state density the spatial correlations do not return to F = 1. This explains why the MFA incorrectly predicts the agent steady-state density, and shows why the correlation ODE model is able to correctly approximate the steady-state density of the IBM. This is because the MFA is only correct when F = 1, which is not the case in the IBM in this scenario with GM1.",
+            "cite_spans": [
+                {
+                    "start": 1050,
+                    "end": 1054,
+                    "text": "[25]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 625,
+                    "end": 631,
+                    "text": "Fig. 5",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 829,
+                    "end": 835,
+                    "text": "Fig. 4",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "17 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint In Fig. 6 the effect of domain growth via GM2 on agent density can be seen. In this case we see that GM2 causes the steady-state density predicted by the MFA to be correct. This is because GM2 is more effective at breaking up agent clusters than GM1, potentially 'freeing-up' one lattice site for four agents in each row/column every growth event. This counteracts the effect of the spatial correlations created by agent proliferation. GM2 also causes agents to change neighbouring agents in the IBM, and so further reduces the spatial correlations associated with agent proliferation. Despite this we see that the correlations ODE model still more accurately predicts the rate at which the agent density evolves, while also accurately approximating the steady-state density in the IBM. In Fig. 7 the effect of GM2 on spatial correlations can be seen in both the correlations ODE model and calculated directly from the IBM. In contrast to GM1 we see that as the growth rate is increased the spatial correlations decrease. We also see that at the steady-state density F = 1, this provides the reason as to why the agent steady-state predicted by the MFA is correct.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 265,
+                    "end": 271,
+                    "text": "Fig. 6",
+                    "ref_id": "FIGREF9"
+                },
+                {
+                    "start": 1052,
+                    "end": 1058,
+                    "text": "Fig. 7",
+                    "ref_id": "FIGREF10"
+                }
+            ],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "19 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "In Fig. 8 we can see that the size of the domain influences the evolution of the agent density in the case of GM2, but not in the case of GM1. In the case of GM2, as the initial domain size is increased the evolution of the macroscopic agent density is accelerated. This is because colinear spatial correlations, established by agent proliferation, are broken down proportional to the domain size in GM2 (Eq. (20) ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 9,
+                    "text": "Fig. 8",
+                    "ref_id": "FIGREF11"
+                },
+                {
+                    "start": 404,
+                    "end": 413,
+                    "text": "(Eq. (20)",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "Finally, in Fig. 9 we see the initial domain size also impacts the evolution of the spatial correlations for GM2, but not for GM1 (the figure displaying this is in Appendix B). In the case of GM2 as the initial domain size is increased the spatial correlations between agents are reduced. 21 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 12,
+                    "end": 18,
+                    "text": "Fig. 9",
+                    "ref_id": "FIGREF12"
+                }
+            ],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Agent motility and proliferation"
+        },
+        {
+            "text": "The importance of accurately including the effect of domain growth in models of biological phenomena is becoming increasingly apparent [1, 2, 6, [14] [15] [16] [17] . Many of the fundamental developmental processes that determine mammalian morphology are either characterised by growth, or occur during it, and so it is possible that growth may play an important role in determining and coordinating cell population behaviour [3, 9] .",
+            "cite_spans": [
+                {
+                    "start": 135,
+                    "end": 138,
+                    "text": "[1,",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 139,
+                    "end": 141,
+                    "text": "2,",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 142,
+                    "end": 144,
+                    "text": "6,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 145,
+                    "end": 149,
+                    "text": "[14]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 150,
+                    "end": 154,
+                    "text": "[15]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 155,
+                    "end": 159,
+                    "text": "[16]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 160,
+                    "end": 164,
+                    "text": "[17]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 426,
+                    "end": 429,
+                    "text": "[3,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 430,
+                    "end": 432,
+                    "text": "9]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion and conclusion"
+        },
+        {
+            "text": "In this work we have studied two different implementations of domain growth. We chose two different, yet potentially biologically relevant growth mechanisms [42] [43] [44] , to highlight how understanding the form of domain growth is crucial. These growth mechanisms originated from thinking about the different ways in which new sites could be added to the IBM domain, and the consequences this may have on agent density. As has been shown in this work, GM1 is an implementation of domain growth that conserves colinear correlations in comparison to diagonal correlations, and GM2 is one that reduces colinear correlations as a rate proportional to the size of the domain. This difference between GM1 and GM2 is why GM2 exhibits a length dependency and GM1 does not. It is important to stress we have used GM1 as an extreme example of growth in which the cell cycles of adjacent cells that are causing the domain to grow are synchronous (i.e. the cells in the underlying tissue), and GM2 as an example of when they are not. In reality, it is unlikely that domain growth in biological systems can be captured by algorithms as simple as GM1 and GM2. However, they represent the simplest and most tractable domain growth mechanisms for this initial study.",
+            "cite_spans": [
+                {
+                    "start": 157,
+                    "end": 161,
+                    "text": "[42]",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 162,
+                    "end": 166,
+                    "text": "[43]",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 167,
+                    "end": 171,
+                    "text": "[44]",
+                    "ref_id": "BIBREF46"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion and conclusion"
+        },
+        {
+            "text": "It is important to acknowledge that we have only looked at scenarios where P p = P m . This case represents a very high rate of cell proliferation relative to motility in a biological context. However, we chose these parameters to highlight the accuracy of our approximate correlation ODE model. In situations where P p < P m the correlation ODE model approximates the IBM results even better, as has been shown previously [25, 39] . We have also only looked at the case when P gx = P gy in order to reduce the computational complexity of solving the model equations, however, the results presented here can be trivially extended to cases where P gx = P gy . 24 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 423,
+                    "end": 427,
+                    "text": "[25,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 428,
+                    "end": 431,
+                    "text": "39]",
+                    "ref_id": "BIBREF41"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion and conclusion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion and conclusion"
+        },
+        {
+            "text": "We wish to stress that the work presented in this manuscript is an initial study on the effect of domain growth on spatial correlations between agents and, as such, we have chosen the simplest modelling framework for this. Therefore, an important consideration is whether the work presented here could be extended to other, perhaps more realistic models, such as an off-lattice IBM. The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion and conclusion"
+        },
+        {
+            "text": "It is simpler to derive the pairwise density functions for GM2 for a domain of size (N x + 1) \u00d7 (N y + 1) (this avoids having (N x \u2212 1) in the denominator of a number of fractions). For GM2 it is also necessary to introduce some new notation. The distance of the lattice site m from the boundary (origin of growth) is m i and m j , i.e. the position of m, and the distance of the lattice site n from boundary, n i and n j , i.e. the position of m + (r x , r y ). The evolution of the pairwise density functions for the diagonal component of GM2 is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "31 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The terms on the RHS of Eq. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "32 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint We rewrite Eq. (33) using\u00f1 x ,m x andm x n x , which are constants defined as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Eqs. (34)-(36) can be evaluated directly. If we do so we obtain:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "We substitute Eqs. (34)-(36) into Eq. (33) to obtain 33 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "That Eqs. (33) and (40) are equivalent can be shown by substituting Eqs. (34)-(36) into Eq. (40) . 34 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 10,
+                    "end": 14,
+                    "text": "(33)",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 19,
+                    "end": 23,
+                    "text": "(40)",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 92,
+                    "end": 96,
+                    "text": "(40)",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "If we now apply the approximation,",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "to Eq. (40) we obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y \u2212 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y + 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "If we rearrange Eq. (42) and take the limit as \u03b4t \u2192 0 we obtain d\u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t) dt = \u2212(P gx (N x + 1) + P gy (N y + 1))\u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t) + P gy N y \u2212\u00f1 y \u2212m y + 2m y n y N y \u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y \u2212 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y + 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x \u2212 1, r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "35 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint which we can simplify further to obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y \u2212 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y + 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x \u2212 1, r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "If we now evaluate Eqs. (r x , r y ; t) dt = (45)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y ; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y \u2212 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , r y + 1; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x \u2212 1, r y ; t) ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "Ny j=1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "2 (m, m + (r x , 0); t).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(47) 37 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "We rewrite Eq. (47) using Eqs. (48) 38 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "We now make the approximation Eq. (41) to obtain \u03c1 (Nx+1)\u00d7(Ny+1) 2 (r x , 0; t + \u03b4t) = (1 \u2212 \u03b4tP gx (N x + 1) \u2212 \u03b4tP gy (N y + 1))\u03c1 (Nx+1)\u00d7(Ny+1) 2 (r x , 0; t) + \u03b4tP gy m y n y N y \u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , 0; t) + \u03b4tP gy N y \u2212\u00f1 y \u2212m y +m y n y N y \u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , 0; t) + \u03b4tP gy \u00f1 y \u2212 1 \u2212m y n y N y +m y N y \u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , \u22121; t) + \u03b4tP gy m y \u2212 1 \u2212m y n y N y +\u00f1 y N y \u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , \u22121; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x \u2212 1, 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "which we can simplify to obtain d\u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , 0; t) dt = \u2212P gx (r x + 1)\u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x \u2212 1, 0; t) + P gy \u2212(N y + 1) + 2m y n y N y + N y \u2212\u00f1 y \u2212m y \u03c1 (r x , 0; t) dt = \u2212P gx (r x + 1)\u03c1 (Nx+1)\u00d7(Ny+1) 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x \u2212 1, 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "(r x , 0; t)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "This is Eq. (20) in the main text.",
+            "cite_spans": [
+                {
+                    "start": 12,
+                    "end": 16,
+                    "text": "(20)",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "39 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint Appendix B: The evolution of the spatial correlations for GM1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "In Fig. 10 the evolution of the spatial correlations for GM1 can be seen. 40 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 10,
+                    "text": "Fig. 10",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/041509 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Imaging morphogenesis: Technological advances and biological insights",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Keller",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Science",
+            "volume": "340",
+            "issn": "6137",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Cell migration during morphogenesis",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Aman",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Piotrowski",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Developmental Biology",
+            "volume": "341",
+            "issn": "1",
+            "pages": "20--33",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Principles of Development",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wolpert",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Quantitative threedimensional analysis of embryonic chick morphogenesis via microcomputed tomography",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Min",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Recknagel",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Riccio",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Butcher",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "The Anatomical Record: Advances in Integrative Anatomy and Evolutionary Biology",
+            "volume": "294",
+            "issn": "",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Mathematical modelling of digit specification by a sonic hedgehog gradient",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Woolley",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Tickle",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Maini",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Towers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Developmental Dynamics",
+            "volume": "243",
+            "issn": "2",
+            "pages": "290--298",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Multiscale mechanisms of cell migration during development: theory and experiment",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Mclennan",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Dyson",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Prather",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Morrison",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Maini",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kulesa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Development",
+            "volume": "139",
+            "issn": "16",
+            "pages": "2935--2944",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Neural crest migration is driven by a few trailblazer cells with a unique molecular signature narrowly confined to the invasive front",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Mclennan",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schumacher",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Morrison",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Teddy",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ridenour",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Box",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Semerad",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Mcdowell",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kay",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Maini",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kulesa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Development",
+            "volume": "142",
+            "issn": "11",
+            "pages": "2014--2025",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "VEGF signals induce trailblazer cell identity that drives neural crest migration",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Kulesa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Developmental Biology",
+            "volume": "407",
+            "issn": "1",
+            "pages": "12--25",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Reconciling diverse mammalian 26",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Mort",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "J H"
+                    ],
+                    "last": "Ross",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hainey",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Harrison",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Keighren",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Landini",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Painter",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Jackson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Yates",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "authors": [],
+            "year": 2016,
+            "venue": "Nature Communications",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/041509"
+                ]
+            }
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Modeling proliferative tissue growth: A general approach and an avian case study",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Binder",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Landman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mariani",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Newgreen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Physical Review E",
+            "volume": "78",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Perspectives on modelling human growth: Mathematical models and growth biology",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Annals of Human Biology",
+            "volume": "39",
+            "issn": "5",
+            "pages": "342--351",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Growth and development of the root apical meristem",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Perilli",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "Di"
+                    ],
+                    "last": "Mambro",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Sabatini",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Current Opinion in Plant Biology",
+            "volume": "15",
+            "issn": "1",
+            "pages": "17--23",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "FGF-2: apical ectodermal ridge growth signal for chick limb development",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Fallon",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Lopez",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ros",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Savage",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Olwin",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Simandl",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "Science",
+            "volume": "264",
+            "issn": "5155",
+            "pages": "104--107",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Generation of diverse biological forms through combinatorial interactions between tissue polarity and growth",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Kennaway",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Coen",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Green",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bangham",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "PLoS Computational Biology",
+            "volume": "7",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Dynamic scaling of morphogen gradients on growing domains",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Fried",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Iber",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nature Communications",
+            "volume": "5",
+            "issn": "5077",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Reaction and diffusion on growing domains: Scenarios for robust pattern formation",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Crampin",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gaffney",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Maini",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Bulletin of Mathematical Biology",
+            "volume": "61",
+            "issn": "6",
+            "pages": "1093--1120",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "From microscopic to macroscopic descriptions of cell migration on growing domains",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Yates",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Erban",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Bulletin of Mathematical Biology",
+            "volume": "72",
+            "issn": "3",
+            "pages": "719--762",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Discrete and continuous models for tissue growth and shrinkage",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Yates",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Journal of Theoretical Biology",
+            "volume": "350",
+            "issn": "",
+            "pages": "37--48",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Towards a unified descriptive theory for spatial ecology: predicting biodiversity patterns across spatial scales",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Kunin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Methods in Ecology and Evolution",
+            "volume": "6",
+            "issn": "3",
+            "pages": "324--332",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Understanding the spatial clustering of severe acute respiratory syndrome (SARS) in Hong Kong",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Lai",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Wong",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hedley",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Lo",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Kong",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Environmental Health Perspectives",
+            "volume": "112",
+            "issn": "15",
+            "pages": "1550--1556",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Spatial analysis of multi-species exclusion processes: application to neural crest cell migration in the embryonic gut",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Binder",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Landman",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Newgreen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Simkin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Takahashi",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Bulletin of Mathematical Biology",
+            "volume": "74",
+            "issn": "2",
+            "pages": "474--90",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Quantifying spatial structure in experimental observations and agent-based simulations using pair-correlation functions",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Binder",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Physical Review E",
+            "volume": "88",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Distinguishing between mechanisms of cell aggregation using pair-correlation functions",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J G"
+                    ],
+                    "last": "Agnew",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E F"
+                    ],
+                    "last": "Green",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Brown",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Binder",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Journal of Theoretical Biology",
+            "volume": "352",
+            "issn": "",
+            "pages": "16--23",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "A spatial model predicts that dispersal and cell turnover limit intratumour heterogeneity",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Waclaw",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Bozic",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Pittman",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Hruban",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Vogelstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Nowak",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nature",
+            "volume": "525",
+            "issn": "7568",
+            "pages": "261--264",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Correcting mean-field approximations for birth-deathmovement processes",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Physical Review E",
+            "volume": "82",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Exclusion processes on a growing domain",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Binder",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Landman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Journal of Theoretical Biology",
+            "volume": "259",
+            "issn": "3",
+            "pages": "541--551",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Nonlinear diffusion and exclusion processes with contact interactions",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Fernando",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Landman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Physical Review E",
+            "volume": "81",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "The role of cell-cell adhesion in wound healing",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Khain",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Sander",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Schneider-Mizell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Journal of Statistical Physics",
+            "volume": "128",
+            "issn": "1-2",
+            "pages": "209--218",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Myopic random walkers and exclusion processes: Single and multispecies",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Landman",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Fernando",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Physica A",
+            "volume": "390",
+            "issn": "",
+            "pages": "3742--3753",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Pathlines in exclusion processes",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Landman",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Hughes",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Physical Review E",
+            "volume": "79",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Invasion and extinction in the meanfield approximation for a spatial host-pathogen model",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A M"
+                    ],
+                    "last": "De Aguiar",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Rauch",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Bar-Yam",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Journal of Statistical Physics",
+            "volume": "114",
+            "issn": "5-6",
+            "pages": "1417--1451",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Stochastic spatial models: From simulations to mean-field and local structure approximations",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Hiebeler",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "Journal of Theoretical Biology",
+            "volume": "187",
+            "issn": "3",
+            "pages": "307--319",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Individual-based lattice model for spatial spread of epidemics",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fuk\u015b",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Lawniczak",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Discrete Dynamics in Nature and Society",
+            "volume": "6",
+            "issn": "3",
+            "pages": "191--200",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "A theoretical stochastic model for the A+ 1 2 B \u2192 0 reaction",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mai",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Kuzovkov",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "Von"
+                    ],
+                    "last": "Niessen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1993,
+            "venue": "Journal of Chemical Physics",
+            "volume": "98",
+            "issn": "12",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "A general stochastic model for the description of surface reaction systems",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mai",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Kuzovkov",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "Von"
+                    ],
+                    "last": "Niessen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "Physica A",
+            "volume": "203",
+            "issn": "",
+            "pages": "298--315",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Corrected mean-field models for spatially dependent advection-diffusion-reaction phenomena",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Physical Review E",
+            "volume": "83",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Mean-field descriptions of collective migration with strong adhesion",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Johnston",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Physical Review E",
+            "volume": "85",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Incorporating spatial correlations into multispecies mean-field models",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Markham",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Maini",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gaffney",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Physical Review E",
+            "volume": "88",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Simplified method for including spatial correlations in mean-field approximations",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Markham",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Baker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Physical Review E",
+            "volume": "87",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Stochastic Interacting Systems: Contact, Voter, and Exclusion Processes",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Liggett",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Exact stochastic simulaton of coupled chemical reactions",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Gillespie",
+                    "suffix": ""
+                }
+            ],
+            "year": 1977,
+            "venue": "Journal of Physical Chemistry",
+            "volume": "81",
+            "issn": "25",
+            "pages": "2340--2361",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Cell cycle progression in the developing Drosophila eye: roughex encodes a novel protein required for the establishment of G1",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Thomas",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gunning",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Cho",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Zipursky",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "Cell",
+            "volume": "77",
+            "issn": "7",
+            "pages": "1003--1014",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "My what big eyes you have: How the Drosophila retina grows",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Kumar",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Developmental Neurobiology",
+            "volume": "71",
+            "issn": "12",
+            "pages": "1133--1152",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Asynchronous cell cycle and asymmetric vacuolar inheritance in true hyphae of Candida albicans",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Barelle",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Bohula",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Kron",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Wessels",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Soll",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sch\u00e4fer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J P"
+                    ],
+                    "last": "Brown",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "A R"
+                    ],
+                    "last": "Gow",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Eukaryotic cell",
+            "volume": "2",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/041509"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "m; t), as the probability that site m is occupied by an agent at time t on a domain of size N x \u00d7 N y , where m is the vector (i, j), with i indexing the row number of a lattice site, and j indexing the column number of a lattice site.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "The two types of configuration of lattice sites: (a) colinear and (b) diagonal. The lattice sites in question are labelled m and n and bordered by blue (thick border)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "m, n; t), as the probability sites m and n are occupied at time t on a domain of size N x \u00d7 N y (where m = n). We now rewrite \u03c1 Nx\u00d7Ny 2 (m, n; t) in terms of a displacement vector between lattice sites,",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "-(21) are shown for the evolution of the pairwise density functions on a growing domain. InFig. 3(a) we see the evolution of the pairwise density functions for GM1, and the difference in the evolution of the colinear and diagonal components, as we would expect. In the absence of agent motility and proliferation the evolution of the pairwise density functions for all colinear distances (i.e. \u2206, 2\u2206, 3\u2206, . . . ) is the same for GM1, this is also the case for the diagonal component. Conversely, InFig. 3 (b)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "(Colour online): The evolution of the colinear and diagonal components of the pairwise density functions for (a) GM1 and (b) GM2. P gx = P gy = 0.1.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "(Colour online): For GM1 including pairwise correlations in a correlation ODE model provides a more accurate approximation of the evolution of the macroscopic density in the IBM than the MFA. (a) P m = 1, P p = 1, P gx = 0.05, P gy = 0.05, (b) P m = 1, P p = 1, P gx = 0.1, P gy = 0.1.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "(Colour online): Increasing the growth rates, P gx and P gy , causes the pairwise correlations to augment for GM1 in the correlation ODE model (compare (a) with (b)), and in the IBM (compare (c) and (d)). In the case of GM1 the pairwise correlations do not return to F = 1. In (a)-(d) the distance increases from \u2206 to 6\u2206 in steps of \u2206. Increasing distance is from top to bottom as indicated by the arrows. The parameters for (a) and (c) are P m = 1, P p = 1, P gx = 0.05, P gy = 0.05, and for (b) and (d) are P m = 1, P p = 1, P gx = 0.1, P gy = 0.1. 18 author/funder. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "(Colour online): For GM2 including pairwise correlations in a correlation ODE model provides a more accurate approximation of the results of the evolution of the macroscopic density in the IBM. (a) P m = 1, P p = 1, P gx = 0.05, P gy = 0.05, (b) P m = 1, P p = 1, P gx = 0.1, P gy = 0.1.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "(Colour online): For GM2 increasing the growth rate, P gx and P gy , causes the pairwise correlations to shrink in the correlation ODE model (compare (a) with (b)), and in the IBM (compare (c) and (d)). In the case of GM2 the pairwise correlations return to F = 1. The distance increases from \u2206 to 6\u2206 in steps of \u2206. Increasing distance is from top to bottom as indicated by the arrows. The parameters for (a) and (c) are P m = 1, P p = 1, P gx = 0.05, P gy = 0.05, and in (b) and (d) are P m = 1, P p = 1, P gx = 0.1, P gy = 0.1. 20 author/funder. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "(Colour online): Altering the initial size of the domain does not cause the evolution of the agent density to change for GM1, but does for GM2. As the initial size of the domain is increased, from 50 by 50 to 200 by 200 lattice sites, the evolution of the agent density to steady-state remains the same in GM1 as can be seen in (a) IBM and (b) correlation ODE model. In the case of GM2 altering the initial domain size does cause the evolution of the agent density to change. As the initial size of the domain is increased, from 50 by 50 to 200 by 200 lattice sites, the evolution of the agent density accelerates in GM2 as can be seen in (c) IBM and (d) correlation ODE model. P m = 1, P p = 1, P gx = 0.1, P gy = 0.1 for all. 22 author/funder. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "(Colour online): Altering the initial size of the domain changes the evolution of the pairwise correlations in the case of GM2. In the case of GM2 the correlations are reduced as the initial domain size becomes larger. IBM: (a) 50 by 50, (b) 100 by 100, (c) 200 by 200. Correlation ODE model: (d) 50 by 50, (e) 100 by 100, (f) 200 by 200. Increasing distance is from top to bottom as indicated by the arrows.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "RJHR would like to thank the UK's Engineering and Physical Sciences Research Council (EP-SRC) for funding through a studentship at the Systems Biology programme of The University of Oxford's Doctoral Training Centre. The authors would also like to thank Matthew Simpson and Deborah Markham for useful discussions.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "(32) represent: i) no growth occurs in [t + \u03b4t), ii) the sum of pairwise density functions (r x , r y ) apart on a domain of size (N x + 1)(N y ) multiplied by the probability that a growth event occurs in the vertical direction and both agents are moved by it, iii) the sum of pairwise density functions (r x , r y ) apart on a domain of size (N x + 1)(N y ) multiplied by the probability that a growth event occurs in the vertical direction and both agents are not moved by it, iv) the sum of pairwise density functions (r x , r y \u2212 1) apart on a domain of size (N x + 1)(N y ) multiplied by the probability that a growth event occurs in the vertical direction and m+(r x , r y ) moves and m does not move (we can write this in terms of a displacement vector: (r x , r y \u2212 1)), and v) the sum of pairwise density functions (r x , r y + 1) apart on a domain of size (N x + 1)(N y ) multiplied by the probability that a growth event occurs in the vertical direction and m moves and m+(r x , r y ) does not move. The rest of the terms are the equivalent for growth in the horizontal direction. First, we assume translational invariance and simplify Eq. (32) to obtain",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "(Colour online): Altering the initial size of the domain does not change the evolution of the pairwise correlations in the case of GM1. IBM: (a) 50 by 50, (b) 100 by 100, (c) 200 by 200. Correlation ODE model: (d) 50 by 50, (e) 100 by 100, (f) 200 by 200. Increasing distance is from top to bottom as indicated by the arrows.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF1": {
+            "text": "(r x + 1, r y ; t). (46) This is Eq. (21) of the main text. author/funder. All rights reserved. No reuse allowed without permission.Growth mechanism 2 colinear componentFor the colinear component we have (assuming that lattice sites are horizontally colinear, i.e. r",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

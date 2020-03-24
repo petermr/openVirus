@@ -1,0 +1,2986 @@
+{
+    "paper_id": "2ffc83b88bc84615273e97d8109e5439ce4dce60",
+    "metadata": {
+        "title": "Adaptive Estimation for Epidemic Renewal and Phylogenetic Skyline Models",
+        "authors": [
+            {
+                "first": "Kris",
+                "middle": [
+                    "V"
+                ],
+                "last": "Parag",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "MRC Centre for Global Infectious Disease Analysis",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "W2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": "k.parag@imperial.ac.uk"
+            },
+            {
+                "first": "Christl",
+                "middle": [
+                    "A"
+                ],
+                "last": "Donnelly",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "MRC Centre for Global Infectious Disease Analysis",
+                    "institution": "Imperial College London",
+                    "location": {
+                        "postCode": "W2 1PG",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Estimating temporal changes in a target population from phylogenetic or count data is an important problem in ecology and epidemiology. Reliable estimates can provide key insights into the climatic and biological drivers influencing the diversity or structure of that population and evidence hypotheses concerning its future growth or decline. In infectious disease applications, the individuals infected across an epidemic form the target population. The renewal model estimates the effective reproduction number, R, of the epidemic from counts of its observed cases. The skyline model infers the effective population size, N, underlying a phylogeny of sequences sampled from that epidemic. Practically, R measures ongoing epidemic growth while N informs on historical caseload. While both models solve distinct problems, the reliability of their estimates depends on p-dimensional piecewise-constant functions. If p is misspecified, the model might underfit significant changes or overfit noise and promote a spurious understanding of the epidemic, which might misguide intervention policies or misinform forecasts. Surprisingly, no transparent yet principled approach for optimising p exists. Usually, p is heuristically set, or obscurely controlled via complex algorithms. We present a computable and interpretable p-selection method based on the minimum description length (MDL) formalism of information theory. Unlike many standard model selection techniques, MDL accounts for the additional statistical complexity induced by how parameters interact. As a result, our method optimises p so that R and N estimates properly adapt to the available data. It also outperforms comparable Akaike and Bayesian information criteria on several classification problems. Our approach requires some knowledge of the parameter space and exposes the similarities between renewal and skyline models.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Inferring the temporal trends or dynamics of a target population is an important problem in ecology, evolution and systematics. Reliable estimates of the demographic changes underlying empirical data sampled from an animal or human population, for example, can corroborate or refute hypotheses about the historical and ongoing influence of environmental or anthropogenic factors, or inform on the major forces shaping the diversity and structure of that population [40] [13] . In infectious disease epidemiology, where the target population is often the number of infected individuals (infecteds), demographic fluctuations can provide insight into key shifts in the fitness and transmissibility of a pathogen and motivate or validate public health intervention policy [34] [3] .",
+            "cite_spans": [
+                {
+                    "start": 465,
+                    "end": 469,
+                    "text": "[40]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 470,
+                    "end": 474,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 768,
+                    "end": 772,
+                    "text": "[34]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 773,
+                    "end": 776,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "Sampled phylogenies (or genealogies) and incidence curves (or epi-curves) are two related but distinct types of empirical data that inform about the population dynamics and ecology of infectious epidemics. Phylogenies map the tree of ancestral relationships among genetic sequences that were sampled from the infected population [6] . They facilitate a retrospective view of epidemic dynamics by allowing estimation of the historical effective size or diversity of that population. Incidence curves chart the number of infecteds observed longitudinally across the epidemic [43] . They provide insight into the ongoing rate of spread of that epidemic, by enabling the inference of its effective reproduction number. Minimal examples of each empirical data type are given in (a)(i) and (b)(ii) of Fig. 1 .",
+            "cite_spans": [
+                {
+                    "start": 329,
+                    "end": 332,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 573,
+                    "end": 577,
+                    "text": "[43]",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 795,
+                    "end": 801,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "The effective reproduction number at time s, R(s), is a key diagnostic of whether an outbreak is growing or under control.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "It defines how many secondary infections an infected will, on average, generate [43] . The renewal or branching process model [7] is a popular approach for inferring R(s) from epicurves that generalises the Lotka-Euler equation from ecology [42] . Renewal models describe how fluctuations in R(s) modulate the tree-like propagation structure of an epidemic and have been used to predict Ebola virus disease case counts and assess the transmissibility of pandemic influenza, for example [8] [4] [23] . Here s indicates discrete time e.g. days.",
+            "cite_spans": [
+                {
+                    "start": 80,
+                    "end": 84,
+                    "text": "[43]",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 126,
+                    "end": 129,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 241,
+                    "end": 245,
+                    "text": "[42]",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 486,
+                    "end": 489,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 490,
+                    "end": 493,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 494,
+                    "end": 498,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "The effective population size at t, N (t), is a popular proxy for census (or true) population size that derives from the genetic diversity of the target demography. When applied to epidemics, N (t) measures the number of infecteds contributing offspring (i.e. transmitting the disease) to the next generation [13] . The skyline plot model [32] is a prominent means of estimating N (t) from phylogenies that extends the Kingman coalescent process from population genetics [16] . Skyline models explain how variations in N (t) influence the shape and size of the infected genealogy and have informed on the historical transmission and origin of HIV, influenza and hepatitis C, among others [31] [18] [34] . Here t is continuous and usually in units of genealogical time.",
+            "cite_spans": [
+                {
+                    "start": 309,
+                    "end": 313,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 339,
+                    "end": 343,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 471,
+                    "end": 475,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 688,
+                    "end": 692,
+                    "text": "[31]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 698,
+                    "end": 702,
+                    "text": "[34]",
+                    "ref_id": "BIBREF33"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "While renewal and skyline models depict very different aspects of an infectious disease, they possess some statistical similarities. Foremost is their approximation of N (t) and R(s) by p-dimensional, piecewise-constant functions (see (iii) in Fig. 1 ). Here p is the number of parameters to be inferred from the data and time is regressive for phylogenies but progressive for incidence curves. The choice of p is critical to the quality of inference. Models with large p can better track rapid changes but are susceptible to noise and uncertainty (overfitting) [4] . Smaller p improves estimate precision but reduces flexibility, easily over-smoothing (underfitting) salient changes [20] . Optimally selecting p, in a manner that is justified by the available data, is integral to deriving reliable and sensible conclusions from these models.",
+            "cite_spans": [
+                {
+                    "start": 562,
+                    "end": 565,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 684,
+                    "end": 688,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 244,
+                    "end": 250,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "Surprisingly, no transparent, principled and easily computable p-selection strategy exists. In renewal models, p is often set by trial and error, or defined using heuristic sliding windows [4] [7] . Existing theory on window choice is limited, with [4] positing a bound on the minimum number of infecteds a window should contain for a given level of estimate uncertainty and [23] initially proposing a 'na\u00efverational' squared error based window-sizing approach, which they subsequently found inferior to other subjective window choices examined in that study. In skyline models, this problem has been more actively researched because the classic skyline plot [32] , which forms the core of most modern skyline methods, overfits by construction i.e. it infers a parameter per data-point. Accordingly, various approaches for reducing p, by ensuring that each population size parameter is informed by groups of data-points, have been proposed.",
+            "cite_spans": [
+                {
+                    "start": 189,
+                    "end": 192,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 193,
+                    "end": 196,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 249,
+                    "end": 252,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 375,
+                    "end": 379,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 659,
+                    "end": 663,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "The generalised skyline plot [38] uses a small sample correction to the Akaike information criterion (AIC) to achieve one such grouping in an interpretable and computable fashion. However, basing analyses solely on the AIC can still lead to overfitting [15] . The Bayesian skyline plot built on the generalised skyline by additionally incorporating a prior distribution that assumed an exponentially distributed autocorrelation between successive parameters [6] . This implicitly influenced group choices but is known to oversmooth or underfit [20] . As a result, later approaches such as the Skyride and Skygrid reverted to the classic skyline plot and applied Gaussian-Markov smoothing prior distributions to achieve implicit grouping [20] [9] . However, these methods also raised concerns about underfitting and the relationship between model selection and smoothing prior settings is obscure [29] .",
+            "cite_spans": [
+                {
+                    "start": 29,
+                    "end": 33,
+                    "text": "[38]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 253,
+                    "end": 257,
+                    "text": "[15]",
+                    "ref_id": null
+                },
+                {
+                    "start": 458,
+                    "end": 461,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 544,
+                    "end": 548,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 737,
+                    "end": 741,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 742,
+                    "end": 745,
+                    "text": "[9]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 896,
+                    "end": 900,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "Other approaches to effective population size model selection are considerably more involved. The extended Bayesian skyline plot and multiple change-point method use piecewiselinear functions and apply Bayesian stochastic search variable selection [12] and reversible jump MCMC [24] to optimise p. These algorithms, while capable, are more computationally demanding, and lack interpretability (their results are not easily debugged and linear functions do not possess the biological meaningfulness of constant ones, which estimate the harmonic mean of time-varying population sizes [32] ). Note that we assume phylogenetic data is available without error (i.e. we do not consider extensions of the above or subsequent methods to genealogical uncertainty) and limit the definition of skyline models to those with piecewise-constant functions. In Fig. A4 of the Appendix we illustrate estimates from some of these approaches on an HIV dataset.",
+            "cite_spans": [
+                {
+                    "start": 248,
+                    "end": 252,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 278,
+                    "end": 282,
+                    "text": "[24]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 582,
+                    "end": 586,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 845,
+                    "end": 852,
+                    "text": "Fig. A4",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "New p-selection metrics, which can balance between the interpretability of the generalised skyline and the power of more sophisticated Bayesian selection methods, are therefore needed. Here we attempt to answer this need by developing and validating a minimum description length (MDL)-based approach that unifies renewal and skyline model selection. MDL is a formalism from information theory that treats model selection as equivalent to finding the best way of compressing observed data (i.e. its shortest description) [35] . MDL is advantageous because it includes both model dimensionality and parametric complexity within its definition of model complexity [36] . Parametric complexity describes how the functional relationship between parameters matters [21] , and is usually ignored by standard selection criteria. However, MDL is generally difficult to compute [10] , which may explain why it has not penetrated the epidemiological or phylodynamics literature.",
+            "cite_spans": [
+                {
+                    "start": 520,
+                    "end": 524,
+                    "text": "[35]",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 661,
+                    "end": 665,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 759,
+                    "end": 763,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 868,
+                    "end": 872,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "We overcome this issue by deriving a tractable Fisher information approximation (FIA) to MDL. This is achieved by recognising that sampled phylogenies and incidence curves both sit within a Poisson point process framework and by capitalising on the piecewise-constant structure of skyline and renewal models. The result is a pair of analogous FIA metrics that lead to adaptive estimates of N (t) and R(s) by selecting the p most justified by the observed Poisson data. These expressions decompose model complexity into clearly interpretable contributions and are as computable as the standard AIC and the Bayesian information criteria (BIC). We find, over a range of selection problems, that the FIA generally outperforms the AIC and BIC, emphasising the importance of including parametric complexity. This improvement requires some knowledge about the piecewise parameter space domain.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "The phylogenetic skyline and epidemic renewal models are popular approaches to solving epidemiological inference problems. The skyline plot or model [13] infers the hidden, time-varying effective population size, N (t), from a phylogeny of sequences sampled from that infected population; while the renewal or branching process model [8] estimates the hidden, time-varying effective reproduction number, R(s), from the observed incidence of an infectious disease. Here t indicates continuous time, which is progressive (moving from past to present) in the renewal model, but reversed (retrospective) in the skyline. We initially use R(t) here before deriving R(s). While both models solve different problems, they approximate their variable of interest, \u03b8(t), with a p-dimensional piecewiseconstant function, and assume a Poisson point process relationship between it and the observed data, Y (t), as in Eq. (1).",
+            "cite_spans": [
+                {
+                    "start": 149,
+                    "end": 153,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 334,
+                    "end": 337,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "Here \u03b8(t) is either N (t) or R(t) and Y (t) is either phylogenetic or incidence data, depending on the model of interest. The j th piecewise component of \u03b8(t), which is valid over the closed interval \u2206 j , is \u03b8 j . The rate function, \u00b5 \u03b8 (t) depends on \u03b8(t) and allows us to treat the usually distinct skyline and renewal models within the same Poisson point process framework. We want to estimate the parameter vector",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint z v P l K p W C x a e p p Q L 8 I j w U J G s D a S b 1 c G E d Z j g n n W m v n O g / b t q l N z 5 k C r x C 1 I F Q o 0 f f t r M I x J G l G h C c d K 9 V 0 n 0 V 6 G p W a E 0 1 l 5 k C q a Y D L B I 9 o 3 V O C I K i + b B 5 + h M 6 M M U R h L 8 4 R G c / X 3 R o Y j p a Z R Y C b z m G r Z y 8 X / v H 6 q w 2 s v Y y J J N R V k c S h M O d I x y l t A Q y Y p 0 X x q C C a S m a y I j L H E R J u u y q Y E d / n L q 6 R T r 7 k X t f r 9 Z b V x U 9 R R g h M 4 h X N w 4 Q o a c A d N a A O B F J 7 h F d 6 s J + v F e r c + F q N r V r F z D H 9 g f f 4 A x T C T K A = = < / l a t e x i t > I m Fig. 1 : Skyline and renewal model inference problems. The left panels (a) show how the reconstructed phylogeny of infecteds (i) leads to (branching) coalescent events, which form the Poisson count record of (ii). The timing of these observable events encodes information about the piecewise effective population size function to be inferred in (iii). The right panels (b) indicate how infecteds, which naturally conform to the Poisson count record of (i) are usually only observed at the resolution of days or weeks, leading to the Poisson histogram record in (ii). The number of infecteds in these histogram bins inform on the piecewise effective reproduction number in (iii). Both models feature data with m = 4 and involve p = 2 parameters to be estimated. See Materials and Methods for notation.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 827,
+                    "end": 833,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "We consider two fundamental mechanisms for observing Y T 0 and then show how they apply to skyline and renewal models. The first, known as a Poisson count record [37] , involves having access to every event time of the Poisson process i.e. Y T 0 is observed directly. Eq. (2) gives the likelihood of these data, in which a total of m events occur.",
+            "cite_spans": [
+                {
+                    "start": 162,
+                    "end": 166,
+                    "text": "[37]",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "The u th event time is t u and t m = T = p j=1 \u2206 j . The set \u03ba j = {u : t u \u2208 \u2206 j } collects all event indices within the j th piecewise interval and \u00b5 \u03b8j emphasises that the parameter controlling the rate in \u2206 j is \u03b8 j . We denote the portion of events falling within \u2206 j as m j so that p j=1 m j = m. The number of elements in \u03ba j is therefore m j with the first and last of these m j event times delimiting \u2206 j . The size of the data is also summarised by m.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "The second is called a Poisson histogram record [37] and applies when individual events are not observed. Instead only counts of the events occurring within time bins are available and the size of the data is now defined by the number of bins. We redefine m for this data type as the number of bins so that it again controls data size. The s th bin has width b s and count c s and we use X m 1 to denote the bin transformed version of Y T 0 . The likelihood is then given by Eq. (3) .",
+            "cite_spans": [
+                {
+                    "start": 48,
+                    "end": 52,
+                    "text": "[37]",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 479,
+                    "end": 482,
+                    "text": "(3)",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "Here\u03bc \u03b8 (s) := bs \u00b5 \u03b8 (t) dt is the Poisson rate integrated across the s th observation bin and \u03ba j again defines the indices (of bins in this case) that are controlled by \u03b8 j . The time interval over which \u03b8 j is valid is \u2206 j = s\u2208\u03baj b s . Fig. 1 illustrates the relationship between histogram and count records. We now . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint detail how these observation schemes apply to phylogenetic and incidence data and hence skyline and renewal models.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 240,
+                    "end": 246,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "The skyline model is based on the coalescent approach to phylogenetics [16] . Here genetic sequences (lineages) sampled from an infected population across time elicit a reconstructed phylogeny or tree, in which these lineages successively merge into their common ancestor. The observed branching or coalescent times of this tree form a Poisson point process that contains information about the piecewise effective population parameters N := [N 1 , . . . , N p ]. Since the coalescent events times, {t u } are observable, phylogentic data correspond to a Poisson count record. The rate underlying the events for t \u2208 \u2206 j is \u00b5 Nj = l(t) 2 N \u22121 j with l(t) counting the lineages in the phylogeny at time t (this increases at sample event times and decrements at coalescent times).",
+            "cite_spans": [
+                {
+                    "start": 71,
+                    "end": 75,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "The log-likelihood of the observed, serially sampled tree data, denoted by count record T T 0 is then derived from Eq. (2) to obtain Eq. (4), which is equivalent to standard skyline loglikelihoods [6] , but with constant terms removed.",
+            "cite_spans": [
+                {
+                    "start": 197,
+                    "end": 200,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "Here \u03c9 j := \u2206j l(t) 2 dt and m j counts the number of coalescent events falling within \u2206 j . The endpoints of \u2206 j coincide with coalescent event times, as in [32] [6] [25] . Fig. 1a outlines the skyline coalescent inference problem and summarises its notation. Since N (t) can have a large dynamic range (e.g. for exponentially growing epidemics) we will analyse the skyline model under the robust log transform [28] , which ensures good statistical properties.",
+            "cite_spans": [
+                {
+                    "start": 158,
+                    "end": 162,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 167,
+                    "end": 171,
+                    "text": "[25]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 412,
+                    "end": 416,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 174,
+                    "end": 181,
+                    "text": "Fig. 1a",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "The maximum likelihood estimate (MLE), and Fisher information (FI) are important measures for describing how estimates of N (or log N ) depend on T T 0 . We compute the MLE, logN j , and FI, I(log N j ), of the skyline model by solving \u2207 N p = 0 and E[\u2212\u2207 2",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "N p ] and then log-transforming, with \u2207 N := { \u2202 /\u2202Nj} as the vector derivative operator [17] . The result is Eq. (5) [28] .",
+            "cite_spans": [
+                {
+                    "start": 89,
+                    "end": 93,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 118,
+                    "end": 122,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "For a given p, the MLE controls the per-segment bias because as m j increases log N j \u2212 logN j decreases. The FI defines the precision i.e. the inverse of the variance around the MLEs, and also (directly) improves with m j . We will find these two quantities to be integral to formulating our approach to pmodel selection. The FI and MLE control the per-segment performance, while p determines how well the overall piecewise function adapts to the underlying generating process. The renewal model is based on the classic (Lotka-Euler) renewal equation or branching process approach to epidemic transmission [42] . This states that the number of new infecteds depends on past incidence through the generation time distribution, and the effective reproduction number R(s). As incidence is usually observed on a coarse temporal scale (e.g. days or weeks), exact infection times are not available. As a result, incidence data conform to a Poisson histogram record with the number of infecteds observed in the s th bin denoted I(s). For simplicity we assume daily bins. The generation time distribution is specified by w(u), the probability that an infected takes between u \u2212 1 and u days to transmit that infection [7] .",
+            "cite_spans": [
+                {
+                    "start": 607,
+                    "end": 611,
+                    "text": "[42]",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 1211,
+                    "end": 1214,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "The total infectiousness of the disease is \u039b(s) := s\u22121 u=1 I(s \u2212 u)w(u). We make the common assumptions that w(u) is known (it is disease specific) and stationary (does not change with time) [4] . If an epidemic is observed for m days then the historical incidence counts, I m 1 , constitute the histogram record informing on the piecewise parameters to be estimated, R = [R 1 , . . . , R p ]. The renewal equation asserts that E[I(s)] = \u039b(s)R(s) [7] . Setting this as the integrated bin rate\u03bc R (s) leads to the log-likelihood of Eq. (6) from Eq. (3).",
+            "cite_spans": [
+                {
+                    "start": 191,
+                    "end": 194,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 447,
+                    "end": 450,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "Here \u03bb j := s\u2208\u03baj \u039b(s) and i j := s\u2208\u03baj I(s) are sums across the indices \u03ba j , which define the m j bins composing \u2206 j . Eq. (6) is equivalent to the standard renewal log-likelihood [8] but with the constant terms removed.",
+            "cite_spans": [
+                {
+                    "start": 180,
+                    "end": 183,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "This derivation emphasises the statistical similarity between count and histogram records (and hence skyline and renewal models) and allows generalisation to variable width histogram records (e.g. irregularly timed epi-curves). Fig. 1b illustrates the renewal inference problem and its notation. We can compute the MLE and robust FI from Eq. (6) as Eq. (7) [8] [28] .",
+            "cite_spans": [
+                {
+                    "start": 361,
+                    "end": 365,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 228,
+                    "end": 235,
+                    "text": "Fig. 1b",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "As each m j becomes large the per-segment bias R j \u2212R j decreases. Using results from [28] , we find the square root transform of R to be robust for renewal models i.e. it guarantees optimal estimation properties. We compute the FI under this parametrisation to reveal that the total infectiousness controls the precision around our MLEs (via \u03bb j ). This will also improve as m j increases, but with the caveat that the parameters underlying bigger epidemics (specified by larger historical incidence values, and controlled through \u039b(s)) are easier to estimate than those of smaller ones. In both models we therefore find a clear piecewise separation of MLEs and FIs. Per-segment bias and precision depend on the quantity of data apportioned to each parameter. This data division is controlled by p, which balances persegment performance against the overall fit of the model to its generating process. Thus, model dimensionality fundamentally controls inference quality. Large p means more segments, which can adapt to rapid N (t) or R(s) changes. However, this also rarefies the per-segment data (grouped sums like \u03bb j or m j decrease) with both models becoming unidentifiable if p > m. Small p improves segment inference, but stiffens the model. We next explore information theoretic p-selection methods that formally utilise these MLEs and FIs in their decision making.",
+            "cite_spans": [
+                {
+                    "start": 86,
+                    "end": 90,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Phylogenetic Skyline and Epidemic Renewal Models"
+        },
+        {
+            "text": "Our proposed approach to model selection relies on the MDL framework of [35] . This treats modelling as an attempt to compress the regularities in the observed data, which is equivalent to learning about its statistical structure. MDL evaluates a p-parameter model, M p , in terms of its code length . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint (in e.g. nats or bits) as M p = \u03c6(M p )+\u03c6(Y T 0 | M p ) [10] . Here \u03c6(x) computes the length to encode x and Y T 0 is the observed data. M p is the sum of the information required to describe M p and the data given that M p is chosen. More complex models have larger \u03c6(M p ) (more bits are needed to describe the model), and smaller \u03c6(Y T 0 | M p ) (as complex models can better fit the data, there is less remaining information to detail).",
+            "cite_spans": [
+                {
+                    "start": 72,
+                    "end": 76,
+                    "text": "[35]",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 571,
+                    "end": 575,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "If n models are used to describe Y T 0 then the model with p * = arg min 1\u2264p\u2264n M p best compresses or most succinctly represents the data. The model with p * is known to possess the desirable properties of generalisability and consistency [10] . The first means that M p * provides good predictions on newly observed data (i.e. it fits the underlying data generating process instead of a specific instance of data from that process), while the second indicates that the selected p * will converge to the true model index (if one exists) as data increase [30] [1] . If \u03b8 represents the p-parameter vector of M p and ZT 0 is a potential instance of data derived from the same generating process as Y then the MDL code lengths can be reframed as",
+            "cite_spans": [
+                {
+                    "start": 239,
+                    "end": 243,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 554,
+                    "end": 558,
+                    "text": "[30]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 559,
+                    "end": 562,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "The first term of MDL p describes the goodness-of-fit of the model to the observed data, while the second term balances this against the fit to unobserved data (\u03b8 Z is the MLE of the parameters of M p but with ZT 0 as data) from the same process. This is done over all possible data that could be obtained from that process (hence the integral with respect to dZ) and measures the generalisability of the model. This generalisability term is usually intractable. We therefore use a well known FI approximation from [36] , which we denote FIA p for M p in Eq. (8), with 'det' as the matrix determinant.",
+            "cite_spans": [
+                {
+                    "start": 515,
+                    "end": 519,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "The approximation of Eq. (8) is good, provided certain regularity conditions are met. These mostly relate to the FI being identifiable and continuous in \u03b8, and are not issues for either skyline or renewal models [21] . While we will apply the FIA within a class of renewal or skyline models, this restriction is unnecessary. The FIA can be used to select among any variously parametrised and non-nested models [10] . The FIA not only maintains the advantages of MDL, but also has strong links to Bayesian model selection (BMS). BMS compares models based on their posterior evidence i.e. [15] . BMS and MDL are considered the two most complete and rigorous model selection measures [10] . As with MDL, the BMS integral is often intractable and it can be difficult to disentangle and interpret how the formulation of M p impacts its associated complexity according to these metrics [30] . Interestingly, if a Jeffreys prior distribution is used for P(\u03b8), then it can be shown that BMS p \u2248 FIA p (via an asymptotic expansion) [21] . Consequently, the FIA uniquely trades off between the performance of BMS and MDL for some computational ease.",
+            "cite_spans": [
+                {
+                    "start": 212,
+                    "end": 216,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 410,
+                    "end": 414,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 587,
+                    "end": 591,
+                    "text": "[15]",
+                    "ref_id": null
+                },
+                {
+                    "start": 681,
+                    "end": 685,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 880,
+                    "end": 884,
+                    "text": "[30]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 1023,
+                    "end": 1027,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "However, this trade-off is not perfect. For many model classes the integral of the FI in Eq. (8) can be divergent or difficult to compute [10] . At the other end of the computability-completeness spectrum are standard metrics such as the AIC and BIC, which are quick and simple to construct, calculate and interpret. These generally penalise a goodness-of-fit term (e.g. p (\u03b8)) with the number of parameters p and may also consider the total size of the data m. Unfortunately, these methods often ignore the parametric complexity of a model, which measures the contribution of the functional form of a model to its overall complexity. Parametric complexity explains why two-parameter sinusoidal and exponential models have non-identical complexities, for example. This concept is detailed in [30] and [10] and corresponds to the FI integral.",
+            "cite_spans": [
+                {
+                    "start": 138,
+                    "end": 142,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 792,
+                    "end": 796,
+                    "text": "[30]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 801,
+                    "end": 805,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "This provides the statistical context for our proposing the FIA as a meaningful metric for skyline and renewal models. In Results we will show that the piecewise separable MLEs and FIs (Eq. (5) and Eq. (7)) of these models not only ensure that the FI integral is tractable, but also guarantee that Eq. (8) is no more difficult to compute than the AIC or BIC. Consequently, our proposed adaptation of the FIA is able to combine the simplicity of standard measures such as the AIC and BIC while still capturing the more sophisticated and comprehensive descriptions of complexity inherent to the BMS and MDL by including parametric complexity. This point is embodied by the relationship between the FIA and BIC. As data size asymptotically increases the parametric complexity becomes less important (it does not grow with m) and FIA p \u2192 BIC p . The BIC is hence a coarser approximation to both the MDL and BMS, than the FIA [21] .",
+            "cite_spans": [
+                {
+                    "start": 921,
+                    "end": 925,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "While the FIA achieves a favourable compromise among interpretability, completeness and computability in its description of complexity, it does depend on roughly specifying the domain of the FI integral. We will generally assume some arbitrary but sensible domain. However, when this is not possible the Qian-Kunsch approximation to MDL, denoted QK p and given in Eq. (9), can be used [33] .",
+            "cite_spans": [
+                {
+                    "start": 385,
+                    "end": 389,
+                    "text": "[33]",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "This approximation trades off some interpretability and performance for the benefit of not having to demarcate the multidimensional domain of integration. Lastly, we provide some intuition about Eq. (8), which balances fit via the maximum log-likelihood p (\u03b8) against model complexity, which can be thought of as a geometric volume defining the set of distinguishable behaviours (i.e. parameter distributions) that can be generated from the model. This volume is composed of two terms. The first, p 2 log m 2\u03c0 , shows, unsurprisingly, that higher model dimensionality, p, expands the volume of possible behaviours. Less obvious is the fact that increased data size m also enlarges this volume because distinguishability improves with inference resolution. The second term, which is parametric complexity, is invariant to transformations of \u03b8, independent of m and is an explicit volume integral measuring how different functional relationships among the parameters, defined via the FI, influence the possible, distinguishable behaviours the model can depict [10] . The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint",
+            "cite_spans": [
+                {
+                    "start": 1058,
+                    "end": 1062,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model and Parametric Complexity"
+        },
+        {
+            "text": "The inference performance of both the renewal and skyline models, for a given dataset, strongly depends on the chosen model dimensionality, p. As observed previously, current approaches to p-selection utilise ad-hoc rules or elaborate algorithms that are difficult to interrogate. Here we emphasise why finding an optimal p, denoted p * , is important and illustrate the pitfalls of inadequately balancing bias and precision. We start by proving that overfitting is a guaranteed consequence of depending solely on the log-likelihood for p-selection. While this may seem obvious, early formulations of piecewise models did over-parametrise by setting p = m [38] and our proof can be applied more generally e.g. when selecting among models with p < m. Substituting the MLEs of Eq. (5) and Eq. (7) into Eq. (4) and Eq. (6), we get Eq. (10).",
+            "cite_spans": [
+                {
+                    "start": 656,
+                    "end": 660,
+                    "text": "[38]",
+                    "ref_id": "BIBREF37"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "Both the renewal and skyline log-likelihoods take the form p (\u03b8) = p j=1 \u03b1 j log \u03b1j \u03b2j , due to their inherent and dominant piecewise-Poisson structure. Here \u03b1 j and \u03b2 j are grouped variables that are directly computed from the observed data (T T 0 or I m 1 ). The most complex model supportable by the data is at",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "As the data size (m) is fixed, we can clump the i indices falling within the duration of the j th group \u2206 j as \u03b1 j = i\u2208\u03baj \u03b1 i and \u03b2 j = i\u2208\u03baj \u03b2 i . The log-sum inequality from [5] states that i\u2208\u03baj \u03b1 i log \u03b1i \u03b2i \u2265 i\u2208\u03baj \u03b1 i log i\u2208\u03ba j \u03b1i / i\u2208\u03ba j \u03b2i . Repeating this across all possible p groupings results in Eq. (11) .",
+            "cite_spans": [
+                {
+                    "start": 175,
+                    "end": 178,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 309,
+                    "end": 313,
+                    "text": "(11)",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "Thus, log-likelihood based model selection always chooses the highest dimensional renewal or skyline model. This result also holds when solving Eq. (11) over a subset of all possible p, provided smaller p models are non-overlapping groupings of larger p ones [11] . Thus, it is necessary to penalise p (\u03b8) with some term that increases with p.",
+            "cite_spans": [
+                {
+                    "start": 259,
+                    "end": 263,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "The highest p-model is most sensitive to changes in \u03b8(t), but extremely noisy and likely to overfit the data. This noise is reflected in a poor FI. From Eq. (5) and Eq. (7) it is clear that grouping linearly increases the FI, hence smoothing noise. However, this improved precision comes with lower flexibility. At the extreme of p = 1, for example, \u03b8(t) is approximated by a single, perennial parameter, and the log-likelihood 1 ",
+            "cite_spans": [
+                {
+                    "start": 428,
+                    "end": 429,
+                    "text": "1",
+                    "ref_id": "BIBREF0"
+                }
+            ],
+            "ref_spans": [],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "is unchanged for all combinations of data that produce the same grouped sums. This oversmooths and underfits. We will always select p * = 1 if our log-likelihood penalty is too sensitive to dimensionality.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "We now present some concrete examples of bad model selection. We use adjacent groupings of size k to control p i.e. every \u03ba j clumps k successive indices (the last index is m). In Fig. 2a we examine skyline models with periodic exponential fluctuations ((i)-(ii)) and bottleneck variations ((iii)-(iv)). The periodic case describes seasonal epidemic oscillations in in-fecteds, while the bottleneck simulates the severe decline that results from a catastrophic event. In Fig. 2b we investigate renewal models featuring cyclical ((i)-(ii)) and sigmoidal ((iii)-(iv)) R(s) dynamics. The cyclical model depicts the pattern of spread for a seasonal epidemic (e.g. influenza), while the sigmoidal one portrays a vaccination policy that quickly leads to outbreak control.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 180,
+                    "end": 187,
+                    "text": "Fig. 2a",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 471,
+                    "end": 478,
+                    "text": "Fig. 2b",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "In both Fig. 2a and Fig. 2b we observe underfitting at low p ((i) and (iii)) and overfitting at high p ((ii) and (iv)). The detrimental effects of choosing the wrong model are not only dramatic, but also realistic. For example, in the skyline examples the underfitted case corresponds to the fundamental Kingman coalescent model [16] , which is often used as a null model in phylogenetics. Alternatively, the classic skyline [32] , which is at the core of many coalescent inference algorithms, is exactly as noisy as the overfitted case. Correctly penalising the log-likelihood is therefore essential for good estimation, and forms the subject of the subsequent section.",
+            "cite_spans": [
+                {
+                    "start": 329,
+                    "end": 333,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 425,
+                    "end": 429,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 8,
+                    "end": 15,
+                    "text": "Fig. 2a",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 20,
+                    "end": 27,
+                    "text": "Fig. 2b",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "The Insufficiency of Log-Likelihoods"
+        },
+        {
+            "text": "Having clarified the impact of non-adaptive estimation, we develop and appraise various, easily-computed, model selection metrics, in terms of how they penalise renewal and skyline log-likelihoods. The most common and popular metrics are the AIC and BIC [15] , which we reformulate in Eq. (12) and Eq. (13), with (\u03b1 j , \u03b2 j ) = (m j , \u03c9 j ) or (i j , \u03bb j ) for skyline and renewal models respectively.",
+            "cite_spans": [
+                {
+                    "start": 254,
+                    "end": 258,
+                    "text": "[15]",
+                    "ref_id": null
+                },
+                {
+                    "start": 289,
+                    "end": 293,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "By decomposing the AIC and BIC on a per-segment basis (for a model with p segments or dimensions), as in Eq. (12) and Eq. (13), we gain insight into exactly how they penalise the log-likelihood. Specifically, the AIC simply treats model dimensionality as a proxy for complexity, while the BIC also factors in the total dimension of the available data. A small sample correction to the AIC, which adds a further p+1 /m\u2212p\u22121 to the penalty in Eq. (12) , was used in [38] for skyline models. We found this correction inconsequential to our later simulations and so used the standard AIC only. As discussed in Materials and Methods, these metrics are insufficient descriptions because they ignore parametric complexity. Consequently, we suggested the MDL approximations of Eq. (8) and Eq. (9) . We now derive and specialise these expressions to skyline and renewal models. Adapting the FIA metric of Eq. (8) forms a key result of this work. Its integral term, \u2126 = log det[m \u22121 I(\u03b8)] 1 2 , can, in general, be intractable [36] . However, the piecewise structure of both the skyline and renewal models, which leads to orthogonal (diagonal) FI matrices, allows us to decompose det[m \u22121 I(\u03b8)] m \u22121 I j (\u03b8 j ) with I j (\u03b8 j ) as the j th diagonal element of I(\u03b8), which only depends on \u03b8 j . Note that \u03b8 = N or R for the skyline and renewal model respectively.",
+            "cite_spans": [
+                {
+                    "start": 109,
+                    "end": 113,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 444,
+                    "end": 448,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 463,
+                    "end": 467,
+                    "text": "[38]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 784,
+                    "end": 787,
+                    "text": "(9)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 1016,
+                    "end": 1020,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "Using this decomposition we can partition \u2126 across each piecewise segment as \u2212 p 2 log m + log The I j (\u03b8 j ) 1 2 d\u03b8 j is known to be invariant to parameter transformations [10] . This is easily verified by using the FI change of variable formula [17] . This asserts that I j (\u03b8 j ) = d\u03b7j d\u03b8j 2 I j (\u03b7 j ), with \u03b7 j as some function of \u03b8 j . The orthogonality of our piecewise-constant FI matrices allows this component-by-component transformation. Hence",
+            "cite_spans": [
+                {
+                    "start": 173,
+                    "end": 177,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 247,
+                    "end": 251,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "We let \u03b7 j denote the robust transform of log \u03b8 j or 2 \u03b8 j for the skyline or renewal model, respectively. Robust transforms make the integral more transparent by removing the dependence of I j (\u03b7 j ) on \u03b7 j [28] .",
+            "cite_spans": [
+                {
+                    "start": 208,
+                    "end": 212,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "Hence we use Eq. (5) (I j (\u03b7 j ) = m j ) and Eq. (7) (I j (\u03b7 j ) = \u03bb j ) to further obtain I j (\u03b7 j ) 1 2 d\u03b7 j = I j (\u03b7 j ) 1 2 1 d\u03b7 j and \u2126 = \u2212 p 2 log m + p j=1 1 2 log I j (\u03b7 j ) + log 1 d\u03b7 j . The domain of integration for each parameter is all that remains to be solved. We make the reasonable assumption that each piecewise parameter, \u03b8 j , has an identical domain. This is N j \u2208 [1, v] and R j \u2208 [0, v], with v as an unknown modeldependent maximum. The minima of 1 and 0 are sensible for these models. This gives 1 d\u03b7 j = log v or 2 \u221a v for the skyline or renewal model. Substituting into \u2126 and Eq. (8) yields Eq. (14) and Eq. (15) .",
+            "cite_spans": [
+                {
+                    "start": 621,
+                    "end": 625,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 634,
+                    "end": 638,
+                    "text": "(15)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "Eq. (14) and Eq. (15) present an interesting and more complete view of piecewise model complexity. Comparing to Eq. (13) reveals that the FIA further accounts for how the data are divided among segments, making explicit use of the robust FI of each model. This is an improvement over simply using the (clumped) data dimension m. Intriguingly, the maximum value of each parameter to be inferred, v, is also central to computing model complexity. This makes sense as models with larger parameter spaces can describe more types of dynamical behaviours [10] . By comparing these terms we can disentangle the relative contribution of the data and parameter spaces to complexity.",
+            "cite_spans": [
+                {
+                    "start": 549,
+                    "end": 553,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "One limitation of the FIA is its dependence on the unknown v, which is assumed finite. This is reasonable as similar assumptions would be implicitly made to compute the BMS or MDL (in cases where they are tractable). The QK metric [33] , which also approximates the MDL, partially resolves this issue. We compute QK p by substituting FIs and MLEs into Eq. (9) . Expressions identical to Eq. (14) and Eq. (15) result, except for the v-based terms, which are replaced as in Eq. (16) and Eq. (17).",
+            "cite_spans": [
+                {
+                    "start": 231,
+                    "end": 235,
+                    "text": "[33]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 356,
+                    "end": 359,
+                    "text": "(9)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 391,
+                    "end": 395,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 476,
+                    "end": 480,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "QK p :",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "These replacements require no knowledge of the parameter domain, but still approximate the parametric complexity of the model [33] . However, in gaining this domain independence we lose some performance (see later sections), and transparency. Importantly, both the FIA and QK are as easy to compute as the AIC or BIC. The similarity in the skyline and renewal model expressions reflects the significance of their piecewise-Poisson structure. We next investigate the practical performance of these metrics.",
+            "cite_spans": [
+                {
+                    "start": 126,
+                    "end": 130,
+                    "text": "[33]",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Minimum Description Length Selection"
+        },
+        {
+            "text": "We validate our FIA approach on several renewal inference problems. We simulate incidence curves, I m 1 , via the renewal . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint or branching process relation I(s) \u223c Poiss(\u039b(s)R(s)) with R(s) as the true effective reproduction number that we wish to estimate. We construct \u039b(s) using a gamma generation time distribution that approximates the one used in [23] for Ebola virus outbreaks. We initialise each epidemic with 10 infecteds as in [4] . We condition on the epidemic not dying out, and remove initial sequences of zero incidence to ensure model identifiability. We consider an observation period of m = 400 days, and select among models with 10 \u2264 k \u2264 m such that m is divisible by k. Here k counts how many days are grouped to form a piecewise segment (i.e. the size of every \u03ba j ), and model dimensionality, p, is bijective in k i.e. pk = m.",
+            "cite_spans": [
+                {
+                    "start": 563,
+                    "end": 567,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 647,
+                    "end": 650,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Adaptive Estimation: Epidemic Renewal Models"
+        },
+        {
+            "text": "We apply the criteria developed above to select among possible p-parameter (or k-grouped) renewal models. For the FIA we set v = 100 as a conservative upper bound on the reproduction number domain. We start by highlighting how the FIA (1) regulates between the over and underfitting extremes from Fig. 2b, and (2) updates its selected p * as the data increase. These points are illustrated in Fig. 3a and Fig. 3b . Graphs (i) and (iii) exemplify (1) as the FIA ((iii)) reduces p from the maximum chosen by the log-likelihood ((i)), leading to estimates that balance noise against dimensionality. Interestingly, the FIA chooses a minimum of segments for the sigmoidal fall in Fig. 3b , and so pinpoints its key dynamics. As the observed data are increased (graphs (ii) and (iv) of Fig. 3a and Fig. 3b ) the FIA adapts p to reflect the improved resolution that is now justified, hence demonstrating (2). The increased data use 5 more, conditionally independent (on R(s)) I m 1 curves and has size 6m. The i j and \u03bb j used now sum over every of the I m 1 curves. While the above examples provide practical insight into the merits of the FIA, they cannot rigorously assess its performance, since continuous R(s) functions have no true p = p * or k * = m /p * . We therefore study two problems in which a true p * exists: a simple binary classification, and a more complex piecewise model search. In both, we benchmark the FIA against the AIC, BIC and QK criteria over the same set of simulated I m 1 curves. We note that, when R(s) is piecewiseconstant, increasing the number of conditionally independent curves improves the probability of recovering p * . We discuss the results of the first problem in the Appendix (see Fig. A1 ), where we show that the FIA most accurately identifies between a null model of an uncontrolled epidemic and an alternative model featuring rapid outbreak control. The FIA uniformly outperforms all other metrics at every p * in this problem, with the QK a close second.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 297,
+                    "end": 313,
+                    "text": "Fig. 2b, and (2)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 393,
+                    "end": 400,
+                    "text": "Fig. 3a",
+                    "ref_id": null
+                },
+                {
+                    "start": 405,
+                    "end": 412,
+                    "text": "Fig. 3b",
+                    "ref_id": null
+                },
+                {
+                    "start": 675,
+                    "end": 682,
+                    "text": "Fig. 3b",
+                    "ref_id": null
+                },
+                {
+                    "start": 780,
+                    "end": 787,
+                    "text": "Fig. 3a",
+                    "ref_id": null
+                },
+                {
+                    "start": 792,
+                    "end": 799,
+                    "text": "Fig. 3b",
+                    "ref_id": null
+                },
+                {
+                    "start": 1718,
+                    "end": 1725,
+                    "text": "Fig. A1",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "Adaptive Estimation: Epidemic Renewal Models"
+        },
+        {
+            "text": "For the second, more complicated problem, we consider models involving piecewise-constant R(s) changes after every k * days, with k * looping over 20 \u2264 k \u2264 m and p * k * = m = 400 days. For every k * we generate 10 5 independent epidemics, allowing R(s) to vary in each run, with magnitudes uniformly drawn from [R min , R max ]. Fig. 4a illustrates typical random telegraph R(s) models at each k * (these change in magnitude for each run). Key selection results are shown in Fig. 4b with R min = 0.5, (R max , \u03bd) = [5, 100] in (i) and [1.5, 1.5] in (ii). In both cases, the FIA attains the best overall accuracy i.e. P(p = p * ), followed by the QK (which overlaps the FIA curve in (i)), BIC and AIC. The dominance of (a) (b) Fig. 3 : Adaptive cyclical and sigmoidal estimation with FIA. In (a) and (b), graphs (i)-(ii) present optimal loglikelihood based R(s) MLEs for 1 ((i)) and 6 ((ii)) observed incidence data streams, simulated under renewal models with time-varying effective reproduction numbers. Graphs (iii)-(iv) give the FIA adaptive estimates at the same settings with v = 100. Panels (a) and (b) examine cyclical and sigmoidal (also called logistic) reproduction number profiles, respectively. both MDL-based criteria suggests that parametric complexity is important. However, the FIA can do worse than the BIC and QK when v is large compared to R max (or if R min is notably above 0). We discuss these cases in the Appendix (see Fig. A3 ), explaining why v = 1.5 is used in (ii).",
+            "cite_spans": [
+                {
+                    "start": 516,
+                    "end": 519,
+                    "text": "[5,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 520,
+                    "end": 524,
+                    "text": "100]",
+                    "ref_id": null
+                },
+                {
+                    "start": 536,
+                    "end": 546,
+                    "text": "[1.5, 1.5]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 330,
+                    "end": 337,
+                    "text": "Fig. 4a",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 476,
+                    "end": 483,
+                    "text": "Fig. 4b",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 727,
+                    "end": 733,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 1444,
+                    "end": 1451,
+                    "text": "Fig. A3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Adaptive Estimation: Epidemic Renewal Models"
+        },
+        {
+            "text": "We verify the FIA performance on several skyline problems. We simulate serially sampled phylogenies with sampled tips spread evenly over some interval using the phylodyn R package of [14] . Increasing the sampling density within that interval increases overall data size m (each pair of sampled tips can produce a coalescent event). We define our p segments as groups of k coalescent events. Skyline model selection is more involved because the end-points of the p segments coincide with coalescent events. While this ensures statistical identifiability, it means that grouping is sensitive to phylogenetic noise [38] , and that p changes for a given k if m varies (m = pk). This can result in MLEs, even at optimal groupings, appearing delayed or biased relative to N (t), when N (t) is not a grouped piecewise function. Methods are currently under development to resolve these biases [25] . Nevertheless, we start by examining how our FIA approach mediates the extremes of Fig. 2a . We restrict our grouping parameter to 4 \u2264 k \u2264 80, set v = 10 3 (max N (t) = 300) and apply the FIA of Eq. (14) to obtain Fig. 5a and Fig. 5b . Two points are immediately visible: (1) the FIA ((iii)-(iv)) regulates the noise from the log-likelihood ((i)-(ii)), and (2) the FIA supports higher p * when the data are increased ((iv)). Specifically, the FIA characterises the bottleneck of Fig. 5b using a minimum of segments but with a delay. As data accumulate, more groups can be justified and so the FIA is able to compensate for the delay. Note that the last 1-2 coalescent events are often truncated, as they can span half the time-scale, and bias all model selection criteria [22] . In the Appendix (see Fig. A4 ) we show how the sensitivity of the FIA to event density compares to other methods on empirical data (see Materials and Methods). We consider two model selection problems involving a piecewise-constant N (t), to formally evaluate the FIA against the QK, BIC and AIC. We slightly abuse notation by redefining m as the number of coalescent events per piecewise segment. The first is a binary hypothesis test between a Kingman coalescent null model [16] and an alternative with a single shift to N (t). We investigate this problem in the Appendix and show in Fig. A2 (i) that the FIA is, on average, better at selecting the true model than other criteria, with the QK a close second. Further, these metrics generally improve in accuracy with increased data. Closer examination also reveals that the FIA and QK have the best overall true positive and lowest false positive rates (Fig. A2(ii) ).",
+            "cite_spans": [
+                {
+                    "start": 183,
+                    "end": 187,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 613,
+                    "end": 617,
+                    "text": "[38]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 886,
+                    "end": 890,
+                    "text": "[25]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1091,
+                    "end": 1095,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1664,
+                    "end": 1668,
+                    "text": "[22]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 2147,
+                    "end": 2151,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 975,
+                    "end": 982,
+                    "text": "Fig. 2a",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1106,
+                    "end": 1125,
+                    "text": "Fig. 5a and Fig. 5b",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 1371,
+                    "end": 1378,
+                    "text": "Fig. 5b",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 1692,
+                    "end": 1699,
+                    "text": "Fig. A4",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 2257,
+                    "end": 2264,
+                    "text": "Fig. A2",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 2576,
+                    "end": 2588,
+                    "text": "(Fig. A2(ii)",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Adaptive Estimation: Phylogenetic Skyline Models"
+        },
+        {
+            "text": "The second classification problem is more complex, requiring selection from among 5 possible square waves, with halfperiods that are powers of 2. We define 15 change-point times at multiples of \u03c4 = 50 time units (i.e. there are 16 components) and allow N (t) to fluctuate between maximum N max and 1 /2 N max . At each change-point and 0, equal numbers of samples are introduced, to allow approximately m coalescent events per component (the phylogeny has 16m total events). The possible models are in Fig. 6a . A similar problem, but for Gaussian MDL selection, was investigated in [11] . We simulate 200 phylogenies from each wave and compute the probability that each metric selects the correct model (i.e. P(p = p * )) at N max = 300 ((i)) and 600 ((ii)) with v = 10 3 in Fig. 6b . The group size (k) search space is m times the half-period of every wave.",
+            "cite_spans": [
+                {
+                    "start": 583,
+                    "end": 587,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 502,
+                    "end": 509,
+                    "text": "Fig. 6a",
+                    "ref_id": null
+                },
+                {
+                    "start": 776,
+                    "end": 783,
+                    "text": "Fig. 6b",
+                    "ref_id": null
+                }
+            ],
+            "section": "Adaptive Estimation: Phylogenetic Skyline Models"
+        },
+        {
+            "text": "The FIA has the best overall accuracy at both N max settings, though the BIC is not far behind. The QK displays slightly worse performance than the BIC and the AIC is the worst (except at low m). At N max = 300 ((i)), there is a greater mismatch with v and so the FIA is not as dominant. As N max = 600 ((ii)) gets closer to v this issue dissipates. We discuss this dependence of FIA on v in the Appendix (see Fig. A3 ). Observe that the P(p = p * ) improves for most metrics as the sample phylogeny data size (m) increases (consistency). The strong performance of the FIA confirms the impact of parametric complexity, while the suboptimal QK curves suggest that these advantages are sometimes only real- ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 410,
+                    "end": 417,
+                    "text": "Fig. A3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Adaptive Estimation: Phylogenetic Skyline Models"
+        },
+        {
+            "text": "Identifying the salient fluctuations in effective population size, N (t), and effective reproduction number, R(s), is essential to understanding the retrospective and continuing behaviour of an epidemic, at the population level. A significant swing in R(s) could inform on whether an outbreak is exponentially growing (e.g. if R(s) > 1 for a sustained period) (a) (b) Fig. 6 : Skyline model selection. We simulate 200 sampled phylogenies from each of the 5 square wave models of (a), with m coalescent events per segment. Each square wave varies between N max and 1 /2 N max (ratios shown on y axes), and occurs with varying half-periods over 16 segments (x axes) of duration \u03c4 . Each phylogeny contains sampled tips at 0 and every multiple of \u03c4 time units after. Panel (b) gives the probability that several model selection criteria select the true (p * ) model from among these waves at v = 10 3 for N max = 300 ((i)) and N max = 600 ((ii)). The FIA is the most accurate criteria on average and improves with m and as v gets closer to the true N max .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 368,
+                    "end": 374,
+                    "text": "Fig. 6",
+                    "ref_id": null
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "or if enacted control measures are working (e.g. if R(s) falls rapidly below 1) [4] [8] . Similarly, sharp changes in N (t) could evidence the historical impact of a public health policy (e.g. if N (t) has a bottleneck or logistic growth) or corroborate hypotheses about past transmissions (e.g. if N (t) correlates with seasonal changes) [34] [31] . Together, N (t) and R(s) . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint can provide a holistic view of the temporal dynamics of an epidemic, with their change-points signifying the impact of climatic, ecological and anthropogenic factors [13] .",
+            "cite_spans": [
+                {
+                    "start": 84,
+                    "end": 87,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 344,
+                    "end": 348,
+                    "text": "[31]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 757,
+                    "end": 761,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "Piecewise-constant approaches, such as the skyline and renewal models, are a tractable and popular way of separating insignificant fluctuations (the constant segments) from meaningful ones (the change-points). However, the efficacy of these models requires principled and data-justified selection of their dimension, p. Failure to do so, as in Fig. 2 , could result in salient changes being misidentified (i.e. underfitting) or random noise being over-interpreted (i.e. overfitting). Existing approaches to p-selection for renewal models usually involve heuristics or trial and error [4] . Skyline models feature a more developed set of p-selection methods but many of these, though widely used, are either computationally complex (e.g. involving sophisticated MCMC algorithms) [12] or difficult to interpret (e.g. when p is implicitly controlled with smoothing prior distributions) [13] [29] .",
+            "cite_spans": [
+                {
+                    "start": 584,
+                    "end": 587,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 778,
+                    "end": 782,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 883,
+                    "end": 887,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 888,
+                    "end": 892,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 344,
+                    "end": 350,
+                    "text": "Fig. 2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "We therefore focussed on finding a p-selection metric that favourably compromises among simplicity, transparency and performance. We started by proving that ascribing p solely on the evidence of the log-likelihood (i.e. the model fit) guarantees overfitting (see Eq. (11)). Consequently, it is absolutely necessary to penalise the log-likelihood with a measure of model complexity. However, getting this measure wrong can just as easily lead to underfitting. This is a known issue in common skyline methods that apply smoothing prior distributions for example, where the prior-induced penalty is unclear [20] . Standard metrics, such as the AIC and BIC, are easy to compute and offer transparent penalties; treating model complexity as either equivalent to p or p mediated by the observed data size (see Eq. (12) and Eq. (13)). However, this description, while useful, is incomplete, and neglects parametric complexity [36] .",
+            "cite_spans": [
+                {
+                    "start": 604,
+                    "end": 608,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 808,
+                    "end": 812,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 919,
+                    "end": 923,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "Parametric complexity describes how the functional relationship among parameters matters. MDL and BMS, which are the most powerful model selection methods, both account for parametric complexity but are often intractable [10] . The general FIA of Eq. (8) approximates both the MDL and BMS and defines this complexity as an integral across parameter space [21] . Unfortunately, this integral is often difficult to evaluate, also rendering the FIA impractical. However, we found that the piecewise-constant nature of renewal and skyline models, together with their Poisson data structures, allowed us to analytically solve this integral and obtain Eq. (14) and Eq. (15) . These form our main results, are of similar computability to the AIC and BIC, and disaggregate model complexity into interpretable elements as follows for Eq. (15) .",
+            "cite_spans": [
+                {
+                    "start": 221,
+                    "end": 225,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 355,
+                    "end": 359,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 650,
+                    "end": 654,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 663,
+                    "end": 667,
+                    "text": "(15)",
+                    "ref_id": null
+                },
+                {
+                    "start": 829,
+                    "end": 833,
+                    "text": "(15)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "parametric complexity model fit versus complexity A similar breakdown exists for Eq. (14) . Intriguingly, the parametric complexity now only depends on the unknown parameter domain maximum, v.",
+            "cite_spans": [
+                {
+                    "start": 85,
+                    "end": 89,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "Knowledge of v is the main cost of our metric. This parameter limit requirement is not unusual and can often improve estimates. In [26] and [27] this knowledge facilitated exact inference from sampled phylogenies, for example. Similar domain choices are also implicitly made when setting prior distributions on R(s) and N (t) or practically performing MCMC sampling. In Fig. A3 we explored the effect of misspecifying v. While drastic mismatches between the true and assumed v can be detrimental, we found that in some cases poor knowledge of v can be inconsequential. We adapted the QK metric [33] to obtain Eq. (16) and Eq. (17) which, though less interpretable than the FIA, also somewhat account for parametric complexity and offer good performance should reasonable knowledge of v be unavailable.",
+            "cite_spans": [
+                {
+                    "start": 131,
+                    "end": 135,
+                    "text": "[26]",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 140,
+                    "end": 144,
+                    "text": "[27]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 594,
+                    "end": 598,
+                    "text": "[33]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 613,
+                    "end": 617,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 370,
+                    "end": 377,
+                    "text": "Fig. A3",
+                    "ref_id": null
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "The FIA balances performance with simplicity. The MDL method it approximates has the desirable theoretical properties of generalisability (it mediates overfitting and underfitting) and consistency (it selects the true model with increasing probability as data accumulate) [10] . We therefore investigated whether the FIA maintained these properties. In Fig. 3 and Fig. 5 we demonstrated that the FIA not only inherits the generalisability property, but also regulates its selections based on the available data. Higher data resolution supports larger p as both bias and variance can be simultaneously reduced under these conditions [41] . Fig. 4, Fig. 6, Fig. A1 and Fig. A2 confirmed the consistency of the FIA, in addition to benchmarking its performance against the comparable AIC and BIC. We found that the FIA consistently outperformed all other metrics, provided that v was not drastically misspecified.",
+            "cite_spans": [
+                {
+                    "start": 272,
+                    "end": 276,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 632,
+                    "end": 636,
+                    "text": "[41]",
+                    "ref_id": "BIBREF40"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 353,
+                    "end": 359,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 364,
+                    "end": 370,
+                    "text": "Fig. 5",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 639,
+                    "end": 662,
+                    "text": "Fig. 4, Fig. 6, Fig. A1",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 667,
+                    "end": 674,
+                    "text": "Fig. A2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "We recommend the FIA as a principled, transparent and computationally simple means of adaptively estimating informative changes in N (t) and R(s), and for diagnosing the relative contributions of different components of model complexity. Specifically, the FIA can be easily interfaced with the EpiEstim and projections packages [4] [23] , which are common renewal model toolboxes for analysing real epidemic data, to formalise the window size choices used in R(s) inference. Until now, these choices have been subjective. For skyline analyses, we propose the FIA as a useful diagnostic for verifying the N (t) estimates generated by phylogenetic software such as BEAST or phylodyn [39] [14] . This can help validate or interrogate the outputs of common but complex MCMC methods and guard against known issues such as oversmoothing (underfitting) [20] .",
+            "cite_spans": [
+                {
+                    "start": 328,
+                    "end": 331,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 332,
+                    "end": 336,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 681,
+                    "end": 685,
+                    "text": "[39]",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 686,
+                    "end": 690,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 846,
+                    "end": 850,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "Sampled phylogenies and incidence curves, and hence sky- The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint line and renewal models, have often been treated separately in the epidemiological and phylodynamics literature. While they do solve different problems, we showed how refocussing on their shared piecewise-Poisson framework exposed their common complexity properties. Our information theoretic approach could also generate broad insight into other distinct models in genetics, molecular evolution and ecology [28] . The structured coalescent model is often used to estimate migration rate and population size changes from phylogeographic data [2] while sequential Markovian coalescent methods are widely applied to infer demographic changes from metazoan genomes [19] . These models involve Poisson count and histogram records and piecewise parameter sets and are promising candidates for future application of our metrics. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint simulating rapid control at m /2 (inset of Fig. A1 ). We randomly generate 10 3 epidemics with some null model probability (P (p * = 1)) and compute the frequentist probability that each criteria selects the correct model (P (p = p * )) in Fig. A1 . We find that the FIA uniformly outperforms all other criteria, with the QK as its closest competitor. The AIC performs poorly, as does \u2212 p (R) (not shown), because they are biased towards the more complex model. Relative metric performance is unchanged if we instead set R(s \u2265 m /2) = 2.5 (an accelerating epidemic). of several selection criteria is tested on a binary classification problem in which the null model 1 has no change in R(s) (solid, inset), while the alternative model 2 has a rapid decline (dashed, inset). We generate 10 3 independent incidence curves randomly according to model 1 with probability P(p * = 1), and compute the ability of each criteria to decipher the correct model, P(p = p * ). The FIA outperforms other metrics at every p * with QK a close second.",
+            "cite_spans": [
+                {
+                    "start": 614,
+                    "end": 618,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 748,
+                    "end": 751,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 868,
+                    "end": 872,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1221,
+                    "end": 1228,
+                    "text": "Fig. A1",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 1418,
+                    "end": 1425,
+                    "text": "Fig. A1",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "For the skyline problem we test between a Kingman coalescent null model [16] with N 1 = 1000, and an alternative with a single shift to N 2 = 500 that simulates rapid change potentially due to some environmental driver at \u03c4 = 250 units. We set v = 10 5 and generate 500 replicate phylogenies, with m controlling the quantity of data available per piecewise component (so the total number of coalescent events is 2m). This is a slight abuse of previous definitions of m but is more useful here as we want p * = 1 for the null model and p * = 2 for the alternative. We introduce sampled tips at 0 and \u03c4 time units only. The grouping parameter search space is 4 \u2264 k \u2264 2m with p = 2m /k. Fig. A2 presents our main results, showing that the FIA is, overall, more accurate (achieving a higher P(p = p * )) with the QK second. We find relative performance is largely unchanged with v and when \u03c4 is doubled. Observe that all metrics except the AIC (which is known to be inconsistent) improve with data size, m.",
+            "cite_spans": [
+                {
+                    "start": 72,
+                    "end": 76,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 684,
+                    "end": 691,
+                    "text": "Fig. A2",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "In Results we found the FIA to be a viable and top performing model selection strategy, when compared to standard metrics of similar computability such as the AIC and BIC. However, the FIA can do worse if the parameter maximum v is large relative to the actual space from which R(s) or N (t) is drawn. In such cases, the incorrect parameter bounds can cause the FIA to overestimate the complexity of the generating renewal or skyline models. While the QK criteria offers a more stable and reasonably performing MDL alternative, it is less interpretable. Here we examine the nature of this v dependence, and discuss some general issues limiting piecewise model selection.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Weaknesses of Piecewise Model Selection"
+        },
+        {
+            "text": "In Fig. 4b(ii) we showed the FIA outperforming other metrics for a model selection problem over piecewise R(s) functions drawn within the artificial range [0.5, 1.5] (the AIC was better at higher p due to its tendency to overfit). We achieved this by setting v to the true R max = 1.5. However, when there is a significant mismatch between v and R max we find that the FIA is notably inferior to the QK and BIC. Fig. A3a illustrates, at v = 100 and 6, how the magnitude of this mismatch influences relative performance. However, this effect is not always important, as seen in Fig. 4b(i) where R max = 6 and \u03bd = 100. The skyline model also has this FIA v-dependence. We re-examine the square wave model selection problem of Fig. 6b , but for v ranging between 10 2 and 10 5 . Fig. A3b plots the resulting changes in the FIA detection probability at N max = 300 ((i)) and 600 ((ii)). There we observe, that while the FIA is sensitive to v, it still performs well over the entire range. Thus, the FIA can sometimes be a choice selection metric, even in the absence of reasonable Fig. 4b (ii) but at different v. The accuracy of the FIA clearly depends on the discrepancy between v and R max = 1.5, and becomes inferior when v is dramatically above this maximum ((i)). In (b) we revisit the simulations of Fig. 6a , but vary v between 10 2 and 10 5 . The AIC, BIC and QK from Fig. 6a are in cyan, while the best and worst case FIA values are in grey. While the FIA does depend on v, interestingly, its performance is still superior on average. for both N max = 300 ((i)) and 600 ((ii)).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 14,
+                    "text": "Fig. 4b(ii)",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 412,
+                    "end": 420,
+                    "text": "Fig. A3a",
+                    "ref_id": null
+                },
+                {
+                    "start": 577,
+                    "end": 587,
+                    "text": "Fig. 4b(i)",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 724,
+                    "end": 731,
+                    "text": "Fig. 6b",
+                    "ref_id": null
+                },
+                {
+                    "start": 776,
+                    "end": 784,
+                    "text": "Fig. A3b",
+                    "ref_id": null
+                },
+                {
+                    "start": 1077,
+                    "end": 1084,
+                    "text": "Fig. 4b",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 1303,
+                    "end": 1310,
+                    "text": "Fig. 6a",
+                    "ref_id": null
+                },
+                {
+                    "start": 1373,
+                    "end": 1380,
+                    "text": "Fig. 6a",
+                    "ref_id": null
+                }
+            ],
+            "section": "Weaknesses of Piecewise Model Selection"
+        },
+        {
+            "text": "parameter space knowledge.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Weaknesses of Piecewise Model Selection"
+        },
+        {
+            "text": "Lastly, we comment on some general issues limiting pselection performance of any metric on renewal and skyline models. The MLEs and FIs of the renewal model depend on the \u03bb j and i j groups. As a result, epidemics with low observed incidence (i.e. likely to have i j = 0) and diseases possessing sharp (low variance) generation time distributions (i.e. likely to feature \u03bb j = 0 ) will be difficult to adaptively estimate. Hence, we conditioned on the outbreak not dying out. Similarly, the MLEs and FIs of the skyline are sensitive to m j , meaning that it is necessary to ensure each group has coalescent events falling within its duration. Forcing segment end-points to coincide with coalescent events, as in [6] , guards against this identifiability problem [28] . However, skyline model selection remains difficult even after averting this issue.",
+            "cite_spans": [
+                {
+                    "start": 712,
+                    "end": 715,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 762,
+                    "end": 766,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Weaknesses of Piecewise Model Selection"
+        },
+        {
+            "text": "This follows from the random timing of coalescent events, which means that regular k groupings can miss change-points, and that long branches can bias analysis [25] . These are known skyline plot issues and evidence why we truncated the last few events in the N (t) simulations. Further, there will always be limits to the maximum temporal precision attainable by R(s) and N (t) estimates under renewal and skyline models. It is impossible to infer changes in R(s) on a finer time scale than that of the observed incidence curve or estimate more N (t) segments than the number of available coalescent events [28] . This cautions against naively applying the criteria we have developed here. It is necessary to first understand and then prepare for these preconditions before sensible model selection results can be obtained. Practical model selection is rarely straightforward and the performance of most metrics is often only strictly guaranteed asymptotically [10] .",
+            "cite_spans": [
+                {
+                    "start": 160,
+                    "end": 164,
+                    "text": "[25]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 608,
+                    "end": 612,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 962,
+                    "end": 966,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Weaknesses of Piecewise Model Selection"
+        },
+        {
+            "text": "We consider an empirical, ultrametric phylogeny composed of HIV-1 sequences sampled in 1997 from the Democratic Republic of Congo. This dataset was previously examined in [38] . In Fig. A4 we illustrate several estimates of the effective population size underling this phylogeny. As a baseline we plot the classic skyline plot [32] for this phylogeny in grey on (i), (ii) and (iv). This represents the maximally parametrised skyline model and is known to overfit. Because the classic skyline converts every coalescent interval into a population size estimate, it also portrays where the events in the HIV tree are located. The clustering of estimates across indicates that this period is notably more informative (i.e. has a higher count record event density) than others around it.",
+            "cite_spans": [
+                {
+                    "start": 171,
+                    "end": 175,
+                    "text": "[38]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 327,
+                    "end": 331,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 181,
+                    "end": 188,
+                    "text": "Fig. A4",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Empirical Case Study: HIV-1"
+        },
+        {
+            "text": "We investigate two extremes of skyline model selection methodology. In Fig. A4 (i) we consider the generalised skyline plot, which uses a small sample AIC. This method is simple, computable and improves on the noisy classic skyline by using p * = 13. However, it does require more extensive optimisation than our metrics (it chooses groups based on their durations) and can be susceptible to overfitting [15] . In (ii) we plot estimates from the multiple change-point method of [24] . This approach is computationally intensive and lacks transparency but uses powerful reversible jump MCMC algorithms. Its output smooths over all demographic fluctuations.",
+            "cite_spans": [
+                {
+                    "start": 404,
+                    "end": 408,
+                    "text": "[15]",
+                    "ref_id": null
+                },
+                {
+                    "start": 478,
+                    "end": 482,
+                    "text": "[24]",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 71,
+                    "end": 78,
+                    "text": "Fig. A4",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Empirical Case Study: HIV-1"
+        },
+        {
+            "text": "In (iv) we compute the FIA solution with \u03bd = 2000, which mediates between (i) and (ii). The FIA responds to the varying data-density across the tree by using notably more parameters than (i) in the 1940-1980 period, where it can be confident of a smooth trend, and fewer otherwise. This approach to group choice was theoretically supported in [28] . In (iii) we compare the FIA (p * = 16) and BIC (p * = 8) curves, where we find . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint that they agree at small p due to the large sample size in that region (the BIC is an asymptotic approximation to the FIA). However, at larger p, where the space of parameter interactions is more notable, the parametric complexity terms matter.",
+            "cite_spans": [
+                {
+                    "start": 343,
+                    "end": 347,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Empirical Case Study: HIV-1"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/703751 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Empirical Case Study: HIV-1"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "The minimum description length principle in coding and modeling",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Barron",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Rissanen",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "IEEE Trans. Info. Theo",
+            "volume": "44",
+            "issn": "6",
+            "pages": "2743--60",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Maximum Likelihood Estimation of a Migration Matrix and Effective Population Sizes in n Subpopulations by using a Coalescent Approach",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Beerli",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Felsenstein",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "",
+            "volume": "98",
+            "issn": "",
+            "pages": "4563--68",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Measuring the path toward malaria elimination",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Churcher",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Novotny",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Science",
+            "volume": "344",
+            "issn": "6189",
+            "pages": "1230--1232",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "A new framework and software to estimate time-varying reproduction numbers during epidemics",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Am. J. Epidemiol",
+            "volume": "178",
+            "issn": "9",
+            "pages": "1505--1517",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Elements of Information Theory",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Cover",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Thomas",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Bayesian coalescent inference of past population dynamics from molecular sequences",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Drummond",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Shapiro",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Mol. Biol. Evol",
+            "volume": "22",
+            "issn": "5",
+            "pages": "1185--92",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Estimating individual and household reproduction numbers in an emerging epidemic",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "PLoS One",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Influenza transmission in households during the 1918 pandemic",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Cummings",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Klinkenberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Am. J. Epidemiol",
+            "volume": "174",
+            "issn": "5",
+            "pages": "505--519",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Improving Bayesian Population Dynamics Inference: A Coalescent-Based Model for Multiple Loci",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gill",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lemey",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Faria",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Shapiro",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Suchard",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Mol. Biol. Evol",
+            "volume": "30",
+            "issn": "3",
+            "pages": "713--737",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "The Minimum Description Length Principle",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Grunwald",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Advances in Minimum Description Length: Theory and Applications, chapter Applications of MDL to selected families of models",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Hanson",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Fu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Bayesian inference of population size history from multiple loci",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Heled",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Drummond",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC Evol. Biol",
+            "volume": "8",
+            "issn": "289",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Skyline-plot methods for estimating demographic history from nucleotide sequences",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Shapiro",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Mol. Ecol. Res",
+            "volume": "11",
+            "issn": "",
+            "pages": "423--457",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "PHYLODYN: an R package for phylodynamic simulation and inference",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Karcher",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Palacios",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Mol. Ecol. Res",
+            "volume": "17",
+            "issn": "",
+            "pages": "96--100",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "On the genealogy of large populations",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Kingman",
+                    "suffix": ""
+                }
+            ],
+            "year": 1982,
+            "venue": "J. Appl. Prob",
+            "volume": "19",
+            "issn": "",
+            "pages": "27--43",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Theory of Point Estimation",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Lehmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Casella",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Tracing the origin and history of the HIV-2 epidemic",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Lemey",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "",
+            "volume": "100",
+            "issn": "",
+            "pages": "6588--92",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Inference of human population history from individual whole-genome sequences",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Durbin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nature",
+            "volume": "475",
+            "issn": "7357",
+            "pages": "493--499",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Smooth skyride through a rough skyline: Bayesian coalescent-based inference of population dynamics",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "V Minin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Bloomquist",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Suchard",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Mol. Biol. Evol",
+            "volume": "25",
+            "issn": "7",
+            "pages": "1459--71",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Model selection by normalized maximum likelihood",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Myung",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Navarro",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pitt",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "J. Math. Psychol",
+            "volume": "50",
+            "issn": "",
+            "pages": "167--79",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Handbook of Statistical Genetics: Coalescent Theory",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Nordborg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "A simple approach to measure transmissibility and forecast incidence",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Nouvellet",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Garske",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemics",
+            "volume": "22",
+            "issn": "",
+            "pages": "29--35",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Inference of demographic history from genealogical trees using reversible jump Markov chain Monte Carlo",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "R Opgen-Rhein",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Fahrmeir",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Strimmer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "BMC Evol. Biol",
+            "volume": "5",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Jointly inferring the dynamics of population size and sampling intensity from molecular sequences",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Du Plessis",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Mol. Biol. Evol",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Optimal point process filtering and estimation of the coalescent process",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "J. Theor. Biol",
+            "volume": "421",
+            "issn": "",
+            "pages": "153--67",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Exact bayesian inference for phylogenetic birthdeath models",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Bioinformatics",
+            "volume": "34",
+            "issn": "21",
+            "pages": "3638--3683",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Robust design for coalescent model inference",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Syst. Biol",
+            "volume": "68",
+            "issn": "5",
+            "pages": "730--773",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Are skyline plot-based demographic estimates overly dependent on smoothing prior assumptions? BioRxiv, 920215",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Parag",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Toward a method of selecting among computational models of cognition",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pitt",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Myung",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Psych. Rev",
+            "volume": "109",
+            "issn": "3",
+            "pages": "472--91",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "The epidemic behavior of the hepatitis C virus",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "O Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Charleston",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gupta",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Science",
+            "volume": "292",
+            "issn": "5525",
+            "pages": "2323--2328",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "An integrated framework for the inference of viral population history from reconstructed genealogies",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "O Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Harvey",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Genetics",
+            "volume": "155",
+            "issn": "",
+            "pages": "1429--1466",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Some notes on Rissanen's stochastic complexity",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Qian",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Kunsch",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "IEEE Trans. Info. Theo",
+            "volume": "44",
+            "issn": "2",
+            "pages": "782--788",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "The genomic and epidemiological dynamics of human influenza A virus",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Nelson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Nature",
+            "volume": "453",
+            "issn": "7195",
+            "pages": "615--619",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Modeling by shortest data description",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rissanen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1978,
+            "venue": "Automatica",
+            "volume": "14",
+            "issn": "",
+            "pages": "465--71",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Fisher information and stochastic complexity",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rissanen",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "IEEE Trans. Info. Theo",
+            "volume": "42",
+            "issn": "1",
+            "pages": "40--47",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Random Point Processes in Time and Space",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Snyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Miller",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Exploring the demographic history of DNA sequences using the generalized skyline plot",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Strimmer",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pybus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Mol. Biol. Evol",
+            "volume": "18",
+            "issn": "12",
+            "pages": "2298--305",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Bayesian phylogenetic and phylodynamic data integration using BEAST 1.10. Virus Evol, 4(vey016)",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Suchard",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lemey",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Baele",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Complex Population Dynamics: A Theoretical/Empirical Synthesis",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Turchin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Catching up faster by switching sooner: a predictive approach to adaptive estimation with an application to the AIC-BIC dilemma",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "T Van Erven",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Grunwald",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "J. R. Statist. Soc. B",
+            "volume": "74",
+            "issn": "3",
+            "pages": "361--417",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "How generation intervals shape the relationship between growth rates and reproductive numbers",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Proc. R. Soc. B",
+            "volume": "274",
+            "issn": "",
+            "pages": "599--604",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Different epidemic curves for severe acute respiratory syndrome reveal similar impacts of control measures",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Teunis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Am. J. Epidemiol",
+            "volume": "160",
+            "issn": "6",
+            "pages": "509--525",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF3": {
+            "text": "Skyline and renewal model under and overfitting. Small p leads to smooth but biased estimates characteristic of underfitting ((i) and (iii) in (a) and (b)). Large p results in noisy estimates that respond well to changes. This is symptomatic of overfitting ((ii) and (iv) in (a) and (b)). The MLEs (logN or R) are in cyan and the true log N (t) or R(s) in black. Panel (a) shows cyclic and bottleneck skyline models at m = 800 and (b) focuses on sinusoidal and sigmoidal renewal models at m = 400.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Renewal model selection. We simulate 10 5 epidemics from renewal models with 20 \u2264 k \u2264 m = 400 and p = m /k. We test the ability of several model selection criteria to recover the true p = p * from this set. Each epidemic has an independent, piecewise-constant R(s), examples of which are shown in (a). These models change in amplitude but not k for every simulation. Panel (b) shows the probability of detecting the true model against p * and (i) considers R(s) \u2208 [0.5,5] with v = 100 while (ii) uses R(s) \u2208 [0.5, 1.5] and v = 1.5. The FIA performs best at every p * in (i) and overall in (ii).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Adaptive periodic and bottleneck estimation with FIA. For (a) and (b), graphs (i)-(ii) present inferred N (t) under optimal log-likelihood groupings, while (iii)-(iv) show corresponding estimates under the FIA at v = 10 3 . Graphs (i) and (iii) feature m = 400 while (ii) and (iv) have m = 1000 (data size increases). Panels (a) and (b) respectively consider periodically exponential and bottleneck population size changes, with phylogenies sampled approximately uniformly over [0, 50] and [0, 60] time units.isable when this complexity component is properly specified.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "KVP and CAD acknowledge joint funding from the UK Medical Research Council (MRC) and the UK Department for International Development (DFID) under the MRC/DFID Concordat agreement and the EDCTP2 programme supported by the European Union (grant MR/R015600/1). CAD thanks the UK National Institute for Health Research Health Protection Research Unit (NIHR HPRU) in Modelling Methodology at Imperial College London in partnership with Public Health England (PHE) for funding (grant HPRU-2012-10080) APPENDIX Binary Model Selection We examine the binary classification performance of the FIA, QK, BIC and AIC for both renewal and skyline models. For the first we set m = 200 days and use a constant null model with R(s) = 1.5, to exemplify an uncontrolled epidemic. The alternative model changes to R(s \u2265 m /2)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Binary renewal model selection. The consistency",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Binary skyline model selection. We simulate 500 conditionally independent phylogenies from skyline models and test the classification ability of model selection criteria. The null model is a Kingman coalescent with N 1 = 1000, and the alternative features a sharp fall to N 2 = 500 at \u03c4 = 250 time units. The sampled tips of the phylogeny are introduced at 0 and \u03c4 only. Graph (i) gives the probability of correct classification P(p * = 1) as a function of data size m. The FIA performs best, on average, but the BIC is better at small m. Graph (ii) gives the true (TPR) and false positive rates (FPR). The FIA and QK have the best overall rates.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "FIA parameter space sensitivity. In (a) we repeat the simulations from",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "HIV demographic estimates. We estimate the population size history underlying an empirical HIV phylogeny with m = 192 coalescent events. All tips of this tree are sampled in 1997 from the Democratic Republic of Congo. We plot the generalised skyline, the multiple change-point method and the FIA-optimised skyline estimates in (i), (ii) and (iv) in black against the classic skyline in grey. In (iii) we show the optimisation over p of the FIA (black) against its associated BIC (grey).",
+            "latex": null,
+            "type": "figure"
+        }
+    },
+    "back_matter": []
+}

@@ -1,0 +1,478 @@
+{
+    "paper_id": "e901cf35efbad09a224f2c500f7aef1f6d2d3b6a",
+    "metadata": {
+        "title": "How to make more from exposure data? An integrated machine Author Contributions Data Accessibility Statement Running Title Machine learning and pathogen exposure risk",
+        "authors": [
+            {
+                "first": "Nicholas",
+                "middle": [
+                    "M"
+                ],
+                "last": "Fountain-Jones",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Minnesota",
+                    "location": {
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Gustavo",
+                "middle": [],
+                "last": "Machado",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "North Carolina State University",
+                    "location": {
+                        "settlement": "North 8 Carolina",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Scott",
+                "middle": [],
+                "last": "Carver",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Tasmania",
+                    "location": {
+                        "country": "Australia"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Craig",
+                "middle": [],
+                "last": "Packer",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Minnesota",
+                    "location": {
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Mariana",
+                "middle": [],
+                "last": "",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Recamonde",
+                "middle": [
+                    "-"
+                ],
+                "last": "Mendoza",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Minnesota",
+                    "location": {
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Meggan",
+                "middle": [
+                    "E"
+                ],
+                "last": "Craft",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Minnesota",
+                    "location": {
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "1. Predicting infectious disease dynamics is a central challenge in disease ecology. Models 36 that can assess which individuals are most at risk of being exposed to a pathogen not only 37 provide valuable insights into disease transmission and dynamics but can also guide 38 management interventions. Constructing such models for wild animal populations, 39 however, is particularly challenging; often only serological data is available on a subset 40 of individuals and non-linear relationships between variables are common. 41 42 2. Here we take advantage of the latest advances in statistical machine learning to construct 43 pathogen-risk models that automatically incorporate complex non-linear relationships 44 with minimal statistical assumptions from ecological data with missing values. Our 45 approach compares multiple machine learning algorithms in a unified environment to 46 find the model with the best predictive performance and uses game theory to better 47 interpret results. We apply this framework on two major pathogens that infect African 48 lions: canine distemper virus (CDV) and feline parvovirus.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "49 50",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "3. Our modelling approach provided enhanced predictive performance compared to more 51 traditional approaches, as well as new insights into disease risks in a wild population. We 52 were able to efficiently capture and visualise strong non-linear patterns, as well as model 53 complex interactions between variables in shaping exposure risk from CDV and feline 54 parvovirus. For example, we found that lions were more likely to be exposed to CDV at a 55 young age but only in low rainfall years. 56 57 . CC-BY-NC-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/569012 doi: bioRxiv preprint 3 4. When combined with our data calibration approach, our framework helped us to answer 58 questions about risk of pathogen exposure which are difficult to address with previous 59 methods. Our framework not only has the potential to aid in predicting disease risk in 60 animal populations, but also can be used to build robust predictive models suitable for 61 other ecological applications such as modelling species distribution or diversity patterns.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "An individual's risk of infection by a pathogen is dependent upon a wide variety of host and 2.2 Pre-processing 166 167 It is important to account for missing data either by imputation or removal prior to model 168 construction (Fig. 2) . Some machine learning algorithms, such as gradient boosting, bin missing 169 data as a separate node in the decision tree (Friedman, 2002, Fig. S1 ), however other algorithms 170 such as SVM are less flexible. In order to compare predictive performance across models, 171 missing data can either be imputed or removed from the dataset. Although providing specific 172 advice on whether to include missing data or not is outside the scope of this paper (see 173 Nakagawa & Freckleton, 2008), we provide an option if imputation is suitable for the study 174 problem. We integrated the 'missForest' (Stekhoven & B\u00fchlmann, 2012 ) machine-learning 175 imputation routine (using the RF algorithm) into our pipeline, as it has been found to have low The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/569012 doi: bioRxiv preprint Yellow boxes indicate which data split is being tested in that particular 'fold'. We incorporated an internal repeated 10-fold cross-validation (CV) process to estimate model 199 performance. CV can help prevent overfitting and artificial inflation of accuracy due to use of the The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/569012 doi: bioRxiv preprint sensitivity and specificity for classification models). Another advantage of this package is that it 208 can perform classification or regression using 237 different types of models from generalized 209 linear models (GLMs such as logistic regression) to complex machine learning and Bayesian 210 models using a standardized approach (see Kuhn, 2008 for a complete list of models).",
+            "cite_spans": [
+                {
+                    "start": 112,
+                    "end": 119,
+                    "text": "166 167",
+                    "ref_id": null
+                },
+                {
+                    "start": 507,
+                    "end": 510,
+                    "text": "171",
+                    "ref_id": null
+                },
+                {
+                    "start": 696,
+                    "end": 699,
+                    "text": "173",
+                    "ref_id": null
+                },
+                {
+                    "start": 791,
+                    "end": 794,
+                    "text": "174",
+                    "ref_id": null
+                },
+                {
+                    "start": 835,
+                    "end": 862,
+                    "text": "(Stekhoven & B\u00fchlmann, 2012",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 882,
+                    "end": 885,
+                    "text": "175",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 228,
+                    "end": 236,
+                    "text": "(Fig. 2)",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 361,
+                    "end": 385,
+                    "text": "(Friedman, 2002, Fig. S1",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "64"
+        },
+        {
+            "text": "In our pipeline, we compare supervised machine learning algorithms (RF, SVM, and GBM) as 212 well as logistic regression. These models are among the most popular and best tested machine 213 learning methods, but all operate in different ways, and this can in turn can impact predictive For both CDV and parvovirus, machine learning models had higher predictive performance 316 (higher AUC) compared to logistic regression models (Table 1) The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/569012 doi: bioRxiv preprint Using our calibration approach further improved the overall predictive performance of each 320 pathogen by increasing the sensitivity of the models (i.e., they more able to correctly identify 321 positives), however, there was a trade-off with reduced specificity. For example, our calibrated 322 CDV model had a 7% increase in AUC with an 23% increase in sensitivity but 18% decrease in 323 specificity compared to the uncalibrated model ( The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/569012 doi: bioRxiv preprint Age and rainfall were the most important features predicting CDV exposure, but both features 338 were relatively less important in the calibrated models (Fig. 3) . Even though the features 339 associated with exposure risk in each model were broadly similar for both pathogens, the 340 relationships between each feature and exposure risk varied. Partial dependency plots showed 341 that risk of CDV increased relatively linearly across age classes in in the uncalibrated model 342 (Fig. 3b) , whereas in the calibrated model exposure risk was much more constant across age 343 classes with an increase in risk in individuals between 1-2 y.o. (Fig. 3f) . Rainfall also showed 344 different relationships in each model with reduced exposure risk when the average monthly 345 rainfall > 40 mm in the age calibrated model (Fig. 3c) . There was a much shallower decline in 346 CDV risk associated with rainfall in the calibrated model (Fig 3e) compared to the uncalibrated 347 model (Fig. 3c) . The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/569012 doi: bioRxiv preprint Fig. 3 : Plots showing the differences in model predictions and the features that contribute to Similar to CDV, age sampled followed by rainfall were the most important features associated 362 with parvovirus exposure risk in the uncalibrated models (Fig. S4a) . Parvovirus exposure risk 363 slightly increased across age classes in the uncalibrated models, however in the calibrated 364 models exposure risk increased rapidly at early ages (0-1), but then was relatively constant 365 across ages >3 (Fig. S4b) . The signature of rainfall on parvovirus risk in the uncalibrated model 366 was remarkably like that of CDV with a large drop in risk when the monthly rainfall was > 40 367 mm a month (Fig. S4c) . However, rainfall was much less important in the calibrated model ( Fig.   368 S4d). Strikingly epidemic year was important in the calibrated model with exposure risk much 369 higher for animals likely exposed in the 1992 epidemic (Fig. S4f) . We further interrogated the calibrated models to visualize how interactions between features 374 could be important for exposure risk of both pathogens. We focussed on interactions with 375 epidemic year, as we were interested to see if exposure risk could vary with each outbreak (see 376 Fig. S5 for a summary of all interactions detected). For CDV, the strongest interaction with 377 epidemic year was age exposed (Fig. 4a) . Even though exposure risk was predicted to be 378 reasonably similar in each CDV outbreak (Fig. S6) ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 429,
+                    "end": 438,
+                    "text": "(Table 1)",
+                    "ref_id": "TABREF1"
+                },
+                {
+                    "start": 1331,
+                    "end": 1339,
+                    "text": "(Fig. 3)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1660,
+                    "end": 1669,
+                    "text": "(Fig. 3b)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1821,
+                    "end": 1830,
+                    "text": "(Fig. 3f)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1997,
+                    "end": 2006,
+                    "text": "(Fig. 3c)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2109,
+                    "end": 2117,
+                    "text": "(Fig 3e)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2157,
+                    "end": 2166,
+                    "text": "(Fig. 3c)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2318,
+                    "end": 2324,
+                    "text": "Fig. 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 2568,
+                    "end": 2578,
+                    "text": "(Fig. S4a)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2818,
+                    "end": 2828,
+                    "text": "(Fig. S4b)",
+                    "ref_id": null
+                },
+                {
+                    "start": 3014,
+                    "end": 3024,
+                    "text": "(Fig. S4c)",
+                    "ref_id": null
+                },
+                {
+                    "start": 3095,
+                    "end": 3105,
+                    "text": "Fig.   368",
+                    "ref_id": null
+                },
+                {
+                    "start": 3258,
+                    "end": 3268,
+                    "text": "(Fig. S4f)",
+                    "ref_id": null
+                },
+                {
+                    "start": 3561,
+                    "end": 3568,
+                    "text": "Fig. S5",
+                    "ref_id": null
+                },
+                {
+                    "start": 3688,
+                    "end": 3697,
+                    "text": "(Fig. 4a)",
+                    "ref_id": null
+                },
+                {
+                    "start": 3790,
+                    "end": 3799,
+                    "text": "(Fig. S6)",
+                    "ref_id": null
+                }
+            ],
+            "section": "211"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "A comparison of random forests, 590 boosting and support vector machines for genomic selection",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Ogutu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H.-P",
+                    "middle": [],
+                    "last": "Piepho",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Schulz-Streeck",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "BMC Proceedings",
+            "volume": "5",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1753-6561-5-S3-S11"
+                ]
+            }
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Viruses of the Serengeti: patterns of infection and mortality in African lions",
+            "authors": [],
+            "year": null,
+            "venue": "Journal",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Missforest-Non-parametric missing value imputation 611 for mixed-type data",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Stekhoven",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "B\u00fchlmann",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Bioinformatics",
+            "volume": "28",
+            "issn": "1",
+            "pages": "112--118",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/bioinformatics/btr597"
+                ]
+            }
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Explaining prediction models and individual predictions 613 with feature contributions",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "\u0160trumbelj",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Kononenko",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Knowledge and Information Systems",
+            "volume": "41",
+            "issn": "3",
+            "pages": "647--665",
+            "other_ids": {
+                "DOI": [
+                    "10.1007/s10115-013-0679-x"
+                ]
+            }
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Advantages and disadvantages of using artificial neural networks versus logistic 616 regression for predicting medical outcomes",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Tu",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "Journal of Clinical Epidemiology",
+            "volume": "49",
+            "issn": "11",
+            "pages": "617--1225",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0895-4356(96)00002-9"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "176 error rates with ecological data (Penone et al., 2014).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Flow chart showing the steps in our machine learning pipeline. Vertical text in bold 180 indicates how the chart relates to sections of the main text and vignette (Text S1, sections 1-3 181 respectively).TP: True positive, FP: False positive, FN: False negative, TN: True negative.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "200 same data for training and validation steps (Fig. 2). To run and evaluate each model, our pipeline 201 uses the 'caret' (classification and regression training) package in R (Kuhn, 2008). Not only does 202 this package provide a streamlined approach to tuning parameters for a wide variety of models, 203 including machine learning models, it also offers functions that directly enable robust 204 comparisons of model performance. The 'train' function uses resampling to evaluate how tuning 205 parameters such as learning rate (see Elith et al., 2008) can impact model performance and 206'chooses' the optimal model with the highest performance via the confusion matrix (e.g.,",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "214 performance as measured by AUC (Marmion, et al., 2009; Ogutu, Piepho, & Schulz-Streeck, 215 2011). In brief, for classification problems, SVMs use vectors and kernel functions that 216 maximizes the margin between classes of data on a hyperplane (see Scho\u0308lkopf & Smola, 2002 217 for model details). In contrast, RF and GBM are tree-based algorithms that iteratively split data 218 into increasingly pure 'sets', with the main difference being that GBM fits trees sequentially with 219 each new tree helping correct errors from the previous (Friedman, 2002). For RF, the trees are fit 220 independently with each iteration (see Fig. S1 for a more detailed comparison). 221 Imbalanced proportions of the outcome of interest are common in disease ecology, where for 222 example, prevalence of the pathogen is < 50%; imbalanced proportions can influence the approach calculates Shapely values from the final model that assign 'payouts' to 'players' 275 depending on their contribution towards the prediction (Brdar et al., 2016; Molnar, 2018b; 276 \u0160trumbelj & Kononenko, 2014). The players cooperate with each other and obtain a certain 277 'gain' from that cooperation. In this case, the 'payout' is the model prediction, 'players' are the 278 feature values of the observation (e.g., host sex) and the 'gain' is the model prediction for this 279 observation (e.g., was the host exposed or not) minus the average prediction of all observations 280 (on average what is probability of a host being exposed) (Molnar, 2018b). More specifically, 281 Shapely values, defined by a value function (Va), compute feature effects (\u03d5ij) S is a subset of the features (or players), x is the vector features values for observation i 285 and p is the number of features. Vaxi is the prediction of feature values in S marginalized by 286 features not in S: were collected from 300 individual lions of known age (estimated to the month) 292 in the Serengeti Ecosystem, Tanzania between 1984 and 1994. Of these individuals, 40% were 293 seropositive for CDV and 30% for parvovirus (see Hofmann-Lehmann et al., 1996; Roelke-via aerosol, whereas parvovirus can be either transmitted directly or through 296 environmental contamination. CDV and parvovirus are considered to have epidemic cycles in the 297 Serengeti lion population (Hofmann-Lehmann et al., 1996; Packer et al., 1999). Chi-square tests 298 of year-prevalence relationships supported three epidemic years for both viruses: ~1977, 1981 299 and 1994 for CDV and 1977, 1985 and 1992 for parvovirus (Packer et al., 1999). Subsequent 300 Bayesian state-space analysis of this data further confirmed these years as epidemic years for 301 CDV and parvovirus (Behdenna et al., in press; Viana et al., 2015).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "We selected 17 features and calibrated them where appropriate (as detailed in 2.1 Data 303 calibration). See Text S2 for feature selection details. Each model, including logistic regression, 304 was performed following the steps outlined in our pipeline. We compared the predictive 305 performance of the models using calibrated and uncalibrated feature sets (hereafter calibrated or 306 uncalibrated models) to assess how differences in calibration could change the exposure risk 307 predictions. Uncalibrated feature sets were calculated based on the date an individual was 308 sampled, rather than going through the process outlined in 2.1 Data calibration. learning models with calibrated feauture sets have higher predictive 313 performance 314 315",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": ". For example, predictions of 317 parvovirus were only just better than random using logistic regression model (AUC = 0.54),",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": ", exposure risk was higher for lions 2-5 y.o. in developments coupled with advances in pathogen detection are likely to provide even more 484 resolution on the drivers of pathogen exposure risk. Jones, N. ., Packer, C., Jacquot, M., Blanchet, G., Terio, K., & Craft, M. . (in press). 528 Endemic infection can shape exposure to novel pathogens: Pathogen co-occurrence 529 networks in the Serengeti lions. Ecology Letters. 530 Friedman, J. H. (2002). Stochastic gradient boosting. Computational Statistics & Data Analysis, 531 38(4), 367-378. doi:10.1016/S0167-9473(01)00065-2 532 Friedman, J. H., & Popescu, B. E. (2008). Predictive learning via rule ensembles. The Annals of 533 Applied Statistics, 2(3), 916-954. doi:10.1214/07-AOAS148 534 Gilbert, A. T., Fooks, A. R., Hayman, D. T. S., Horton, D. L., M\u00fcller, T., Plowright, R., \u2026 535 Rupprecht, C. E. (2013). Deciphering serology to understand the ecology of infectious 536 diseases in wildlife. EcoHealth, 10(3), 298-313. doi:10.1007/s10393-013-0856-0 537 Goldstein, A., Kapelner, A., Bleich, J., & Pitkin, E. (2015). Peeking inside the black box: 538 Visualizing statistical learning with plots of individual conditional expectation. Journal of 539 Computational and Graphical Statistics, 24(1), 44-65. doi:10.1080/10618600.2014.907095 540 Goldstein, E., Pitzer, V. E., O'Hagan, J. J., & Lipsitch, M. (2017). Temporally varying relative 541 risks for infectious diseases. Epidemiology. NIH Public Access. 542 doi:10.1097/EDE.0000000000000571 543 Han, B. A., Schmidt, J. P., Alexander, L. W., Bowden, S. E., Hayman, D. T. S., & Drake, J. M. 544 (2016). Undiscovered bat hosts of Filoviruses. PLOS Neglected Tropical Diseases, 10(7), 545 e0004815. doi:10.1371/journal.pntd.Lehmann, R., Fehr, D., Grob, M., Elgizoli, M., Packer, C., Martenson, J. S., \u2026 Lutz, 550 H. (1996). Prevalence of antibodies to feline parvovirus, calicivirus, herpesvirus, 551 coronavirus, and immunodeficiency virus and of feline leukemia virus antigen and the 552 interrelationship of these viral infections in free-ranging lions in East Africa. Clinical and 553 Vaccine Immunology, 3(5), 554-562. Retrieved from 554 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC170405/pdf/030554.pdf 555 Hollings, T., Robinson, A., van Andel, M., Jewell, C., & Burgman, M. (2017). Species 556 distribution models: A comparison of statistical approaches for livestock and disease 557 epidemics. PLOS ONE, 12(8), e0183626. doi:10.1371/journal.pone.0183626 558 Kohavi, R., & John, G. H. (1997). Wrappers for feature subset selection. Artificial Intelligence, 559 97(1-2), 273-324. doi:10.1016/S0004-3702(97)00043-X 560 Kuhn, M. (2008). Building Predictive Models in R Using the caret Package. Journal of 561 Statistical Software, 28(5), 1-26. doi:10.18637/jss.v028.i05 562 Kursa, M. B., & Rudnicki, W. R. (2010). Feature selection with the Boruta Package. Journal of 563 Statistical Software, 36(11), 1-13. doi:10.18637/jss.v036.i11 564 Lachish, S., Gopalaswamy, A. M., Knowles, S. C. L., & Sheldon, B. C. (2012). Site-occupancy 565 modelling as a novel framework for assessing test sensitivity and estimating wildlife disease 566 prevalence from imperfect diagnostic tests. Methods in Ecology and Evolution, 3(2), 339-. In NIPS 2016 Workshop on Interpretable Machine Learning in Complex 570 Systems. Retrieved from http://arxiv.org/abs/1611.07478 571 Machado, G., Mendoza, M. R., & Corbellini, L. G. (2015). What variables are important in 572 predicting bovine viral diarrhea virus? A random forest approach. Veterinary Research, 573 46(1), 85. doi:10.1186/s13567-015-0219-7 574 Marmion, M., Parviainen, M., Luoto, M., Heikkinen, R. K., & Thuiller, W. (2009). Evaluation of 575 consensus methods in predictive species distribution modelling. Diversity and Distributions, 576 15(1), 59-69. doi:10.1111/j.1472-4642.2008.00491.x",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It Another important step before constructing a model, particularly for relatively small data sets186 with large numbers of features, is to select features that are relevant and informative for prediction. Reducing the feature set used in models not only increases the efficiency of the algorithms, but also improves the accuracy of many machine learning algorithms (Kohavi & John, 1997; Kursa & Rudnicki, 2010). In our pipeline, we use the 'Boruta' (Kursa & Rudnicki, 2010) feature selection algorithm for reducing the feature set to just those relevant for prediction prior to model building. The Boruta routine has been found to be the one of the most powerful 192 approaches to select relevant features (Degenhardt, Seifert, & Szymczak, 2017) and does so by 193 measuring the importance of each variable using an RF-based algorithm (Kursa & Rudnicki,",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": ". The features considered relevant in each model were relatively consistent(Table 1). However, there were some important exceptions with, for example, sex only relevant for parvovirus exposure in the calibrated model. In contrast, rainfall was relevant for predicting parvovirus exposure in the uncalibrated model but not in the",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Model performance and relevant features for each model. If a feature was not relevant in any model it was excluded using the Boruta algorithm. Tick indicates that this feature was relevant in the model with a variable importance score >1.1 (i.e., permutated error increases by 1.1 after permutation). Spec: specificity, Sens: sensitivity. RF: Random Forest model had the best predictive performance. GBM: Gradient Boosting Model had the best performance. Features 332 not included in the table were not the most important in any model. *: Age exposed rather than age sampled. SeeFig. S3for Boruta results andTable S2for Model calibration alters feature-risk relationships",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

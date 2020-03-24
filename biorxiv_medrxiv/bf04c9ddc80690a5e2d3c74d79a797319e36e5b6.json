@@ -1,0 +1,3053 @@
+{
+    "paper_id": "bf04c9ddc80690a5e2d3c74d79a797319e36e5b6",
+    "metadata": {
+        "title": "",
+        "authors": []
+    },
+    "abstract": [
+        {
+            "text": "The large magnitude of protein-protein interaction (PPI) pairs within the human interactome necessitates the development of predictive models and screening tools to better understand this fundamental molecular communication. However, despite enormous efforts from various groups to develop predictive techniques in the last decade, PPI complex structures are in general still very challenging to predict due to the large number of degrees of freedom. In this study, we use the binding complex of human profilin (PFN1) and polyproline-10 (P10) as a model system to examine various approaches, with the aim of going beyond normal protein docking for PPI prediction and evaluation. The potential of mean force (PMF) was first obtained from the timeconsuming umbrella sampling, which confirmed that the most stable binding structure identified by the maximal PMF difference is indeed the crystallographic binding structure. Moreover, crucial residues previously identified in experimental studies, W3, H133 and S137 of PFN1, were found to form favorable hydrogen bonds with P10, suggesting a zipping process during the binding between PFN1 and P10. We then explored both regular molecular dynamics (MD) and steered molecular dynamics (SMD) simulations, seeking for better criteria of ranking the PPI prediction. Despite valuable information obtained from conventional MD simulations, neither the commonly used interaction energy between the two binding parties nor the long-term root mean square displacement (RMSD) correlates well with the PMF results. On the other hand, with a sizable collection of trajectories, we demonstrated that the average rupture work calculated from SMD simulations correlates fairly well with the PMFs (R 2 = 0.67), making it a promising PPI screening method. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Polyproline recognition domains were identified in large varieties of proteins involved in intracellular signaling, including WW domains, SH3 domains, EVH1 domains, GYF domains, PFN proteins, and UEV domain. [1] [2] [3] [4] [5] [6] [7] Their binding partners, polyproline or proline rich motifs, were found in proteins of vital importance for drug discoveries, including HIV-1 PTAP motif 7 , p53 PXXP motif 8 , Zinc finger proteins 9 , and Huntingtin protein 10 . So far, the omnipresence of polyproline is still not fully understood. For example, in Huntingtin protein, it was found that the polyglutamine length and polyproline length undergo a co-evolution from primitive organisms to human beings 10 , which may indicate a regulatory role of polyproline length in its biological",
+            "cite_spans": [
+                {
+                    "start": 208,
+                    "end": 211,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 212,
+                    "end": 215,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 216,
+                    "end": 219,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 220,
+                    "end": 223,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 224,
+                    "end": 227,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 228,
+                    "end": 231,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 232,
+                    "end": 235,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 407,
+                    "end": 408,
+                    "text": "8",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 432,
+                    "end": 433,
+                    "text": "9",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 459,
+                    "end": 461,
+                    "text": "10",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "functions. Yet the mechanism how Huntingtin proteins are regulated remains unknown.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Therefore, it is critical to understand how proline enriched domains interact with polyproline recognition proteins, and more specifically, how the protein-protein interaction (PPI) interface conformations are determined.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "PPI structure prediction is a very challenging problem computationally due to the complexity associated with the underlying multibody interactions. 11 There are a few promising methods developed already, mostly for protein-protein docking, including ClusPro 12 , HADDOCK 13 , pyDockWeb 14 , and GRAMM-X 15 . These methods have proven successful in certain systems, especially when proteins are rigid and/or small; however, none of them could provide reliable criteria to determine the most trustworthy prediction. Every year the Critical Assessment of PRediction of Interactions (CAPRI) contest 16 is held multiple times to test and improve various methods and protocols. Within the CAPRI framework, the contestants can submit up to 10 structures (with preferences), and the final scores are assessed based on how many hits are predicted successfully. Generally since there is no crystal structure for comparison, in past practices people used multiple models and compared the predictions, or used other empirical scoring functions to narrow down the selections. [17] [18] Unfortunately, conflicting and confusing results from different models are frequently obtained, which complicates further assessments of the PPI structures. To overcome this shortcoming, we explore the idea of applying free energy calculations, conventional molecular dynamics (MD) simulations, and steered molecular All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 148,
+                    "end": 150,
+                    "text": "11",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 286,
+                    "end": 288,
+                    "text": "14",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 303,
+                    "end": 305,
+                    "text": "15",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 595,
+                    "end": 597,
+                    "text": "16",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1063,
+                    "end": 1067,
+                    "text": "[17]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1068,
+                    "end": 1072,
+                    "text": "[18]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint dynamics (SMD) simulations to enhance the PPI protein docking scores (by the previously benchmarked GRAMM-X 15 ) for better ranking of all predicted structures using state-of-the-art molecular modeling techniques.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Specifically, we use human profilin (PFN1) and polyproline-10 (P10) as a model system. The PPI pair PFN1-P10 is picked due to its importance and simplicity: P10 is a relatively rigid peptide adopting a polyproline II (PPII) helix 19 that binds to surface aromatic residues of PFN1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The crystal structure of PFN1-P10 has been determined by two independent experimental groups 20-21 , proving the benchmark for the predictive computational methods. Meanwhile a challenging aspect of this system is that proline has unusual solution properties, identified as an anomalous residue in terms of its hydrophobicity [22] [23] . Thus, PFN1-P10 provides us with two possible validation tests within one system. The first is to validate if the force field guided simulations are able to reproduce experimental findings. We conducted free energy calculations to compare the crystal structure with the best structure predicted and also to investigate its associated binding mechanism. Along the latter line, we uncovered a zipping process during the binding of P10 with PFN1, highlighting the importance of W3, H133 and S137 of PFN1. The second is to examine MD simulations, steered molecular dynamics (SMD) simulations, and free energy calculations in comparison with the protein docking score (from GRAMM-X) in order to improve the ranking of docked structures and potentially go beyond protein-protein docking. We found that by following the protocol of using SMD simulation on the GRAMM-X docked structures, we were able to rank the relative stability of the PPI docked structures with reasonably high confidence.",
+            "cite_spans": [
+                {
+                    "start": 326,
+                    "end": 330,
+                    "text": "[22]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 331,
+                    "end": 335,
+                    "text": "[23]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The PFN1 and P10 structures were taken from the X-ray co-crystal binding complex structure deposited in protein data bank (PDB ID: 1AWI 20 ). Each of the individual protein structures was uploaded separately to the previously benchmarked protein-protein docking web server GRAMM-X 15 (http://vakser.compbio.ku.edu/resources/gramm/grammx/) to obtain the docked All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Molecular docking and MD simulations"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint complex structures (referred to as binding modes hereafter). The top 10 binding modes (ranked by scores, mode1 to mode10) were chosen for the latter simulations, along with the crystal structure (named mode11).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Molecular docking and MD simulations"
+        },
+        {
+            "text": "MD simulations were performed with GROMACS 5.1.2 package 24 . The 11 PFN1-P10 binding modes were evaluated in simulations using the OPLS-AA force field 25 with virtual sites for hydrogen atoms. Following similar protocols in our previous studies [26] [27] [28] [29] [30] [31] [32] [33] [34] [35] , all systems were solvated in 8\u00d78\u00d78 nm 3 TIP3P water boxes with 150 mM NaCl. Steepest descent method was used to minimize the solvated PFN1-P10 complexes for 10000 steps. The electrostatic interactions were calculated with particle mesh Ewald (PME) method, while the van der Waals (VDW) interactions were handled with smooth cutoffs with the cutoff distance set to 1 nm. For each mode, a 50 ps of isochoric-isothermic (NVT, 310K) simulation with 1 fs timestep were then performed to equilibrate the systems. A series of 400 ns isobaric-isothermic (NPT, 310K, 1bar) simulations with 4 fs timestep were performed during production runs.",
+            "cite_spans": [
+                {
+                    "start": 246,
+                    "end": 250,
+                    "text": "[26]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 251,
+                    "end": 255,
+                    "text": "[27]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 256,
+                    "end": 260,
+                    "text": "[28]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 261,
+                    "end": 265,
+                    "text": "[29]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 266,
+                    "end": 270,
+                    "text": "[30]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 271,
+                    "end": 275,
+                    "text": "[31]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 276,
+                    "end": 280,
+                    "text": "[32]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 281,
+                    "end": 285,
+                    "text": "[33]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 286,
+                    "end": 290,
+                    "text": "[34]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 291,
+                    "end": 295,
+                    "text": "[35]",
+                    "ref_id": "BIBREF33"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Molecular docking and MD simulations"
+        },
+        {
+            "text": "We recorded the snapshots every 40 ps from the 400-ns MD simulations mentioned above.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Interaction energy (IE)"
+        },
+        {
+            "text": "Water and salt were not included in the calculations of IE. With the same cutoff scheme and periodic boundary conditions as the MD simulations, we calculated the total energy of PFN1-P10 complexes (E PFN1-P10 ) and the energy of individual PFN1, P10 domains (E PFN1 , E P10 ) in vacuo.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Interaction energy (IE)"
+        },
+        {
+            "text": "The IE is therefore calculated as:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Interaction energy (IE)"
+        },
+        {
+            "text": "Umbrella sampling was performed using the minimized PFN1-P10 complexes to obtain the binding free energies. Harmonic restraints between alpha carbons (with force constants set to 1000 kJ/mol/nm 2 ) were imposed on the individual domains (PFN1 and P10) to prevent them from unfolding. We utilized the center of mass (COM) distance between PFN1 and P10 as the collective variable. The window size of umbrella sampling was set as 0.1 nm, resulting in roughly 20 windows for any PFN1-P10 complexes. The simulations lasted 20 ns for each window. PME, VDW interactions and neighbor-list settings were the same as those used in MD All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Umbrella sampling and PMF"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint simulations. Due to the rigidity of the system, only the translational and rotational corrections are needed to calculate the binding free energy of each binding mode. 36 We omit this step because this correction is a constant offset for PFN1-P10 system, and absolute binding free energy is not the main interest in this study.",
+            "cite_spans": [
+                {
+                    "start": 314,
+                    "end": 316,
+                    "text": "36",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Umbrella sampling and PMF"
+        },
+        {
+            "text": "Constant velocity SMD 37 was adopted to calculate the rupture force and rupture work of PFN1-P10 complexes. Two velocities were tested in this research (1 nm/ns and 0.1 nm/ns) along the COM distance collective variable. A total of 10 replicas were performed for each of the complexes at both velocities. Isochoric-isothermic (NVT) ensemble was used for the simulations, while all other conditions remain the same as those used in the MD simulations. The force spectra were recorded during the SMD simulations at a 0.4 ps interval. Simple maximal forces were extracted from the force spectra and the averages among 10 replicas were reported in Table   S1 . Integrations of the force spectra over the COM distances were calculated, where the maximal work in the integrated curve (see supporting information) was defined as the rupture work.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 643,
+                    "end": 653,
+                    "text": "Table   S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Steered molecular dynamics (SMD) and rupture work"
+        },
+        {
+            "text": "We use a previously benchmarked GRAMM-X 15 to obtain the initial PFN1-P10 binding structures to determine the binding modes. The rigid docking algorithm is suitable for PFN1-P10 based on the root mean square displacements (RMSDs) of PFN1 and P10 during the MD simulations (see below). Figure 1 shows the top 10 docked protein-protein structures ranked by the prediction scores from mode1 to mode10 (most stable to least stable) as well as the crystal structure mode11 (PDB ID: 1AWI) added for completeness. Note that the co-crystal structure binding mode was predicted by GRAMM-X (mode9).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 285,
+                    "end": 293,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Results and discussions GRAMM-X prefers hydrophobic binding interfaces for PFN1-P10"
+        },
+        {
+            "text": "We then analyzed interfacial residue binding for all 11 binding modes. By the proximity of the binding interfaces, we divided them into 4 categories. Category I (mode1, mode2, mode8)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussions GRAMM-X prefers hydrophobic binding interfaces for PFN1-P10"
+        },
+        {
+            "text": "consists of a mostly hydrophobic binding interface on PFN1 (here we refer to PFN1 only All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussions GRAMM-X prefers hydrophobic binding interfaces for PFN1-P10"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint because P10 is homogeneous and is therefore omitted later) with residues W3, N4, I7, D8, M11, A12, C16, Q17, S29, V30, W31, A32, A33, V34, P35, and K115 (62.5% hydrophobic). Category II (mode3, mode6, mode10) utilizes a mixed hydrophobic/hydrophilic binding interface, consisting of Y24, K25, D26, S27, P28, D41, T43, P44, A45, E46, V47, G48, V49, V51, G52, K53, D54, S57, F58, N61, G62, L63, T64, and G67 (37.5% hydrophobic). Category III (mode4, mode5, mode7) is also featured by a mixed hydrophobic/hydrophilic binding interface, but consisting of a different set of residues Y59, S61, V72, I73, R74, D86, R88, A95, P96, T97, N99, E116, G117, V118, H119, G120, G121, N124, and K125 (31.6% hydrophobic). Finally, Category IV (mode9, mode11) makes the use of the binding groove from the crystal structure between the N-terminal \u03b1 helix and C-terminal \u03b1 helix, mainly contributed by G2, W3, N4, Y6, D26, S27, S29, W31, H133, L134, S137, and Y139 (41.7% hydrophobic). Since both the highest scores mode1 and mode2 are in Category I, GRAMM-X seems to prefer a more hydrophobic binding interface for PFN1-P10, although it also picks out mixed binding interfaces, including the co-crystal binding interface -mode9 in Category IV.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussions GRAMM-X prefers hydrophobic binding interfaces for PFN1-P10"
+        },
+        {
+            "text": "These 11 binding modes are used as the starting points for the binding free energy calculations with umbrella sampling, as well as MD simulations and SMD simulations. In the following sections we will explore these different methods in an effort to go beyond the normal (rigid) protein-protein docking for a better ranking of the binding strengths for the 11 binding modes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and discussions GRAMM-X prefers hydrophobic binding interfaces for PFN1-P10"
+        },
+        {
+            "text": "Umbrella sampling was adopted here to estimate the binding free energies of the 11 binding modes for the purpose of finding a practical approach of ranking binding modes from PPI docking programs and to explore the associated binding mechanism. The most rigorous way of calculating binding free energies has been discussed in multiple previous papers and is not the main focus in this study. 36, 38 Here, we used a simplified way of finding the relative binding free energy to ensure specifically that the calculated PMF differences directly correlate with the binding mode stability, by setting the two end points to be the final binding modes (shown in Figure 1 ) and their respective unbound states (defined when the minimal distance between the All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 392,
+                    "end": 395,
+                    "text": "36,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 396,
+                    "end": 398,
+                    "text": "38",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 655,
+                    "end": 663,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "PMFs from umbrella sampling predict crystal structures to be the most stable binding modes"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint two proteins, with the same conformations as in the final binding mode, is larger than 1 nm). The structures of PFN1 and P10 are restricted based on their relatively high rigidity found in the MD simulations (discussed below). This also makes the prediction of the trend of binding free energies straightforward as only a constant translational/rotational correction is needed (which is therefore omitted). Additionally, because free energy is a thermodynamic state function, the difference between the bound state and unbound state is a constant regardless of paths. With the reasons stated above, we conclude that the trend found in PMF differences between the bound state and the unbound state is the same as the trend in binding free energies.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "PMFs from umbrella sampling predict crystal structures to be the most stable binding modes"
+        },
+        {
+            "text": "The obtained PMF curves are shown in Figure 2A . The lowest binding free energies come from mode7 (Category III), mode9 and mode11 (Category IV). One important finding is that OPLS-AA force field is capable of predicting the most stable binding structure of PFN1-P10, namely the Category IV co-crystal structures (mode9, mode11). A closer look at the binding interfaces reveals that hydrophobic interfaces such as mode1 leads to a roughly 6 kcal/mol penalty compared to the mixed binding interfaces provided by mode7, mode10 and mode11 ( Figure 2B ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 37,
+                    "end": 46,
+                    "text": "Figure 2A",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 538,
+                    "end": 547,
+                    "text": "Figure 2B",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "PMFs from umbrella sampling predict crystal structures to be the most stable binding modes"
+        },
+        {
+            "text": "Such findings further solidify the argument that polyprolines are not as hydrophobic as implied in some hydrophobicity scales [39] [40] . In the next section we discuss the detailed binding mechanism unveiled from umbrella-sampling simulations.",
+            "cite_spans": [
+                {
+                    "start": 126,
+                    "end": 130,
+                    "text": "[39]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 131,
+                    "end": 135,
+                    "text": "[40]",
+                    "ref_id": "BIBREF38"
+                }
+            ],
+            "ref_spans": [],
+            "section": "PMFs from umbrella sampling predict crystal structures to be the most stable binding modes"
+        },
+        {
+            "text": "To examine the binding mechanism between PFN1 and P10, we analyzed the number of hydrogen bonds between them during the umbrella sampling simulations with Category IV binding modes (mode9, mode11). The time-lapse counts of hydrogen bonds paired with the representative snapshots are shown in Figure 3 (mode9) and Figure S1 (mode11). Residues W3, Y6, H133, S137 and Y139 are found to contribute significantly to the PFN1-P10 contacts, in which W3 41 , H133 41 and S137 42 were also previously suggested to be crucial experimentally.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 292,
+                    "end": 300,
+                    "text": "Figure 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 313,
+                    "end": 322,
+                    "text": "Figure S1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "The main contributions from tryptophans and tyrosines are consistent with previous experimental findings that prolines tend to form aromatic-proline stacking 43 , which is only seen in the crystal binding pocket (Category IV). These observations suggest that ideally, scoring functions should be tuned so that such interaction can be better captured.",
+            "cite_spans": [
+                {
+                    "start": 158,
+                    "end": 160,
+                    "text": "43",
+                    "ref_id": "BIBREF40"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint Next we examined how the binding process evolves when P10 approaches PFN1. A stepwise view of how hydrogen bonds form and break during umbrella sampling is shown in Figure 3 , which illustrates how P10 binds PFN1 through a \"zipping\" mechanism. Hydrogen bonds are first formed between the C-terminus of P10 (residue 9~10) and PFN1. Then the interactions gradually move along the chain to the N-terminal direction, up to the middle portion of the P10 (residue 5~6). The aromatic-proline stacking was also examined during the binding process. We defined an aromatic-proline stacking index (S) based on the minimal distances from any proline side chain on P10 to the side chains of W3, Y6, Y139 from PFN1",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 311,
+                    "end": 319,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": ", respectively):",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "where",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "The \"cutoff\" switching distance of 0.4 nm was used because the average equivalent VDW radius of a residue is roughly 0.4 nm in coarse-grained models. Therefore, the close packing between two residues requires the distance to be smaller than 0.4 nm. For example, S = 0.8 indicates that the average minimal distance between any proline in P10 to W3, Y6, Y139 from PFN1 is 0.52 nm. Figure S2 shows that aromatic-proline stacking reaches the highest strength when P10 is close to PFN1 with a step function type of behavior. Combining Figure 3 and Figure S2 , we observed a concerted formation of hydrogen bonds and aromatic-proline stacking when P10 approaches PFN1. This \"zipping\" mechanism is reproducible with two different binding modes for the crystal binding pocket: mode9 ( Figure 3 ) and mode11 ( Figure S1 ). Thus, in addition to the conventional aromatic-proline interaction dominated mechanism, we demonstrated that hydrogen bonds between PFN1 residues (serines, tyrosines and tryptophans) and prolines also contribute significantly to the interactions, thus resulting in a \"zipping\" mechanism. Such observation also helps to explain the \"anomaly\" of the hydrophobicity of prolines discussed before 22 .",
+            "cite_spans": [
+                {
+                    "start": 1206,
+                    "end": 1208,
+                    "text": "22",
+                    "ref_id": "BIBREF19"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 379,
+                    "end": 388,
+                    "text": "Figure S2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 530,
+                    "end": 538,
+                    "text": "Figure 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 543,
+                    "end": 552,
+                    "text": "Figure S2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 777,
+                    "end": 785,
+                    "text": "Figure 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 801,
+                    "end": 810,
+                    "text": "Figure S1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Binding mechanism of P10 in the crystal binding pocket of PFN1"
+        },
+        {
+            "text": "The most straightforward way of testing binding interface stability is to calculate the RMSDs of the binding modes from MD simulations. For each of the 11 initial structures prepared above, we run 400 ns of unrestrained MD simulations. We first looked at the RMSDs of individual proteins to examine their rigidity. RMSDs of PFN1 with respect to aligned initial structures are plotted in Figure S3A . With values always below 0.4 nm, PFN1 stays rigid throughout all simulations for all 11 binding modes, agreeing with the previous experimental findings 20 . Not surprisingly, the RMSDs of P10 with respect to the aligned initial structure ( Figure S3B ) stay below 0.3 nm. The structure of P10 stays as a polyproline II (PPII) helix throughout all of the simulations. This agrees with the widely accepted notion that polyproline should be a rigid PPII helix when the repeat length is smaller than 10. 19 However, the RMSDs of the PFN1-P10 complex with respect to the aligned initial structure ( Figure S3C ) indicate that the binding interfaces can change significantly in some of the binding modes. For example, mode3 (bright red) reaches as high as Figure S3C , while PFN1 and P10 remains stable individually ( Figure S3A and Figure S3B ). The RMSDs of P10 with respect to the initial complex structure (not aligned, Figure S3D ) further fortify this observation, displaying a similar trend to Figure S3C .",
+            "cite_spans": [
+                {
+                    "start": 552,
+                    "end": 554,
+                    "text": "20",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 900,
+                    "end": 902,
+                    "text": "19",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 387,
+                    "end": 397,
+                    "text": "Figure S3A",
+                    "ref_id": null
+                },
+                {
+                    "start": 640,
+                    "end": 650,
+                    "text": "Figure S3B",
+                    "ref_id": null
+                },
+                {
+                    "start": 994,
+                    "end": 1004,
+                    "text": "Figure S3C",
+                    "ref_id": null
+                },
+                {
+                    "start": 1150,
+                    "end": 1160,
+                    "text": "Figure S3C",
+                    "ref_id": null
+                },
+                {
+                    "start": 1212,
+                    "end": 1222,
+                    "text": "Figure S3A",
+                    "ref_id": null
+                },
+                {
+                    "start": 1227,
+                    "end": 1237,
+                    "text": "Figure S3B",
+                    "ref_id": null
+                },
+                {
+                    "start": 1318,
+                    "end": 1328,
+                    "text": "Figure S3D",
+                    "ref_id": null
+                },
+                {
+                    "start": 1395,
+                    "end": 1405,
+                    "text": "Figure S3C",
+                    "ref_id": null
+                }
+            ],
+            "section": "MD simulations disfavor hydrophobic binding interfaces"
+        },
+        {
+            "text": "To further observe what contributes to the RMSDs, we plotted the interfacial residue frequency in Figure S4 , with the initial occurrence frequency (0-50 ns) shown in Figure S4A , and final frequency (200-400 ns) shown in Figure S4B . The binding modes that feature major interfacial residue shifts are mode2, mode3, mode6, mode7 and mode8, mainly from Category I and Category II binding modes. More specifically, mode2 and mode8 in Category I deviate from the original hydrophobic interfacial binding, with mode2 transitioning to Category III and mode8 transitioning to Category IV, respectively. Even the relatively stable binding mode in Category I (mode1) shows a slight increase in the C-terminal region, which is the signature binding site of the co-crystal structure (Category IV). The mixed hydrophobic/hydrophilic binding interface Category II is also not very stable, with mode3 moving towards a hybrid Category II and Category III binding mode, and mode6 moving towards Category IV binding mode. Overall, all binding modes from Category I (mode1, mode2, mode8) and Category II (mode3, mode6, mode10) have tendencies to shift towards Category III and Category IV, which clearly indicates that MD simulations prefer the mixed hydrophobic/hydrophilic binding interfaces for P10. This All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 98,
+                    "end": 107,
+                    "text": "Figure S4",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 167,
+                    "end": 177,
+                    "text": "Figure S4A",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 222,
+                    "end": 232,
+                    "text": "Figure S4B",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "nm RMSD in"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint is also phenomenologically in agreement with the umbrella sampling which predicts mode7 (Category III), mode9 and mode11 (Category IV) to be the most stable binding modes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "nm RMSD in"
+        },
+        {
+            "text": "Additionally, PFN1 C-terminus plays an important role in the final binding interfaces of mode6, mode7, mode8, mode9 and mode11. Without doubt, MD simulations (with the OPLS-AA force field) are capable to capture relevant binding features between PFN1 and P10. To further investigate if direct MD data are sufficient to warrant a reliable way of ranking the binding structures, we make several measurements discussed below.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "nm RMSD in"
+        },
+        {
+            "text": "To differentiate the short-term stability and long-term stability of the binding interfaces, we calculated the average RMSDs over 0-50 ns and 200-400 ns in Table S1 . Interestingly, the trends of the two calculated RMSDs are vastly different. We found a positive correlation between short-term (50 ns) RMSD and PMF differences. In contrast, no correlation was found between long-term (400 ns) RMSD and PMF differences (See Supporting Information and Figure S5 for details).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 156,
+                    "end": 164,
+                    "text": "Table S1",
+                    "ref_id": null
+                },
+                {
+                    "start": 450,
+                    "end": 459,
+                    "text": "Figure S5",
+                    "ref_id": null
+                }
+            ],
+            "section": "nm RMSD in"
+        },
+        {
+            "text": "Interaction energies (IEs) of PFN1-P10 are calculated with Equation 1 (see method for details).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "nm RMSD in"
+        },
+        {
+            "text": "Similar to RMSDs, we summarized the average IEs from 0-50 ns and 200-400 ns in Table S1, respectively. As expected, the direct IEs are unable to recover the trend in binding free energies, regardless of short-term IEs or long-term IEs (see Supporting Information and Figure S5 for details), due to the lack of entropy contributions.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 79,
+                    "end": 88,
+                    "text": "Table S1,",
+                    "ref_id": null
+                },
+                {
+                    "start": 267,
+                    "end": 276,
+                    "text": "Figure S5",
+                    "ref_id": null
+                }
+            ],
+            "section": "nm RMSD in"
+        },
+        {
+            "text": "Based on Jarzynski's inequality 44 , the experimental atomic force microscopy (AFM) method has proven capable of recovering the binding free energies of complicated systems such as proteindrug complexes. 45 Concurrently, substantial efforts have been applied to adjust and optimize SMD to obtain accurate binding free energies computationally using the same inequlaity. [46] [47] [48] [49] [50] [51] [52] [53] Note that even though the original Jarzynski's inequality does not require a working threshold of the rupture rate, it was largely accepted the slower the rate is, the more accurate the results will be. 47 In general, there are limitations in using SMD for free energy calculations due to insufficient sampling sizes; however, it is still worth comparing SMD to other PPI methods.",
+            "cite_spans": [
+                {
+                    "start": 32,
+                    "end": 34,
+                    "text": "44",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 204,
+                    "end": 206,
+                    "text": "45",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 370,
+                    "end": 374,
+                    "text": "[46]",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 375,
+                    "end": 379,
+                    "text": "[47]",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 380,
+                    "end": 384,
+                    "text": "[48]",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 385,
+                    "end": 389,
+                    "text": "[49]",
+                    "ref_id": null
+                },
+                {
+                    "start": 390,
+                    "end": 394,
+                    "text": "[50]",
+                    "ref_id": "BIBREF48"
+                },
+                {
+                    "start": 395,
+                    "end": 399,
+                    "text": "[51]",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 400,
+                    "end": 404,
+                    "text": "[52]",
+                    "ref_id": "BIBREF50"
+                },
+                {
+                    "start": 405,
+                    "end": 409,
+                    "text": "[53]",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 613,
+                    "end": 615,
+                    "text": "47",
+                    "ref_id": "BIBREF44"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint Without applying the optimization suggested for calculating binding free energies, here we test the applicability of using SMD as a fast method to rank the docked structures of PPI pairs such as PFN1-P10. We compare constant velocity SMD simulations with different pulling speeds (1 nm/ns and 0.1 nm/ns) to the properties acquired from MD simulations (RMSDs and IEs). The basic protocols of SMD can be found in the Methods section. The integrated work curves are shown in Figure S6 , Figure S7 . The maximal forces and rupture works are listed in Table S1 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 618,
+                    "end": 627,
+                    "text": "Figure S6",
+                    "ref_id": null
+                },
+                {
+                    "start": 630,
+                    "end": 639,
+                    "text": "Figure S7",
+                    "ref_id": null
+                },
+                {
+                    "start": 693,
+                    "end": 701,
+                    "text": "Table S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "With the simplest first order cumulant expansion approximation, we calculated the average rupture works from 10 replicas of SMD simulations for each of the PFN1-P10 binding modes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "The rupture works calculated from two rupture speeds (1nm/ns and 0.1 nm/ns) both correlate well with the PMF differences (Figure 4 A, Figure 4 C), where R 2 is 0.49 for 1 nm/ns SMD, and 0.67 for 0.1 nm/ns SMD. The absolute values of rupture works from 0.1nm/ns SMD (<-15 kcal/mol) are closer to the PMF differences (see Table S1 for details), compared to the range (-10 ~ -30 kcal/mol) from 1 nm/ns SMD. This is in agreement with previous practice on free energy estimations from SMD simulations. 47 For our purpose, instead of following the common sense of \"the slower the better\" in the field (0.01 or even 0.001 nm/ns), we use a relatively fast rupture speed (1 or 0.1 nm/ns) to rank the docked structures. For example, each simulation only takes ~2.5 ns or ~25 ns for SMD with 1nm/ns or 0.1nm/ns rupture speed, respectively. This means that from 2.5 ns\u00d710 replicas = 25 ns of simulations in total, a trend in PMFs can be predicted by SMD with high confidence, as compared to the 50 ns of MD simulation sampling a local well on the free energy landscape, or 20\u00d720 = 400 ns of umbrella sampling for numerous binding modes from one PPI pair. Moreover, the replica numbers can be reduced to 6 to reach a comparable R 2 (see Figure S8 A, Figure S8 B) which further decreases the total simulation time to 15 ns (for 1 nm/ns SMD).",
+            "cite_spans": [
+                {
+                    "start": 497,
+                    "end": 499,
+                    "text": "47",
+                    "ref_id": "BIBREF44"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 121,
+                    "end": 142,
+                    "text": "(Figure 4 A, Figure 4",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 320,
+                    "end": 328,
+                    "text": "Table S1",
+                    "ref_id": null
+                },
+                {
+                    "start": 1224,
+                    "end": 1233,
+                    "text": "Figure S8",
+                    "ref_id": null
+                },
+                {
+                    "start": 1237,
+                    "end": 1246,
+                    "text": "Figure S8",
+                    "ref_id": null
+                }
+            ],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "A correlation between AFM maximal forces and binding constant was reported in a cell adhesion study 54 and an antibody-antigen unbinding study 54 . Here we investigate how maximal forces from SMD (with a much faster rupture rate) correlate with the PMFs. With two rupture rates, R 2 is calculated to be 0.53 for 1 nm/ns SMD, and 0.21 for 0.1 nm/ns SMD, respectively. Dependent on the separation pathway selected on a free energy landscape, overall maximal forces are unsatisfactory for predicting the trend of binding free energies. The correlation may simply come All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 100,
+                    "end": 102,
+                    "text": "54",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 143,
+                    "end": 145,
+                    "text": "54",
+                    "ref_id": "BIBREF52"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint from the one between maximal forces and rupture works (R 2 is 0.65 for 1 nm/ns SMD and 0.51 for 0.1 nm/ns SMD) in this particular practice.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "In Figure S9 , we compare how the 5 properties (average RMSDs from MD over the first 50ns, maximal forces from two sets of SMD, and rupture works from two sets of SMD) rank the 11 binding modes as compared with PMFs. The correlation coefficients between the ranks are similar compared to the correlation coefficients between the absolute values ( Figure S9 A-E), ruling out the \"clustering effect\" of the data (meaning the ranks may be interchangeable when absolute numbers are close). In Figure S9 F, we list the most stable binding modes predicted from the 5 metrics. Interestingly, mode7 is the most stable binding mode for 4 out of 5 metrics except for the rupture work (from 1 nm/ns SMD) where mode4 (in Category III along with mode7) is predicted to be the most stable. The ranks of mode11 are reliable except for maximal forces (from 0.1 nm/ns SMD). The ranks of mode9 are also high in the list but may be affected by its structural flexibility seen in the MD simulations. Notably, the top ranks derived from the rupture works from SMD correspond well to the most stable binding structures obtained from the umbrella sampling, indicating that this technique could provide a fast and reliable way of ranking the PPI binding modes from the protein docking programs such as GRAMM-X.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 12,
+                    "text": "Figure S9",
+                    "ref_id": null
+                },
+                {
+                    "start": 347,
+                    "end": 356,
+                    "text": "Figure S9",
+                    "ref_id": null
+                },
+                {
+                    "start": 489,
+                    "end": 498,
+                    "text": "Figure S9",
+                    "ref_id": null
+                }
+            ],
+            "section": "Rank binding structures with SMD results"
+        },
+        {
+            "text": "In this paper we systematically study the PPI binding structures of PFN1-P10 using the protein docking program GRAMM-X, regular MD simulations, free energy methods (umbrella sampling) and SMD simulations, with the aim of going beyond normal protein docking for PPI prediction and evaluation. We demonstrate that the OPLS-AA force field guided umbrella sampling is able to identify the crystal structure as the most stable binding structure, which also appears in the top 10 list from GRAMM-X. Our comparative analysis shows that aromatic-proline stacking contributes the most to the stabilization of PFN1-P10 binding, along with the formation of hydrogen bonds between serines/tyrosines/tryptophans and prolines. Although regular MD simulations provide mixed information in terms of predicting the most stable binding structure, yet we find that 50 ns RMSDs might be useful with cautions for ranking the PPI prediction (see Supporting Information for details). On the other hand, SMD simulations provide a fast and All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint reliable way of identifying the binding mode with the lowest binding free energy, as shown by a correlation coefficient (R 2 ) as high as 0.7 (from the rank order correlation). We argue that even though the rigidity of both PFN1 and P10 may prevent us from generalizing the conclusion, by applying some constraints, SMD can be used to quickly screen the stable binding modes found from docking programs. With a clearer understanding of the advantages and disadvantages of various PPI techniques tested, we hope to expand them with a fast binding-mode-screening method to study PPI pairs found in the human interactome network 55 .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        },
+        {
+            "text": "Ranking binding structures with MD results. Summarized data of MD simulations (RMSDs, IEs), umbrella sampling simulations (PMFs), and SMD simulations (maximal forces, rupture works)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Supporting Information"
+        },
+        {
+            "text": "in Table S1 . Binding mechanism of mode11 in Figure S1 . Aromatic-proline stacking index measurements for umbrella sampling in Figure S2 . RMSD of PFN, P10 and the whole complex from MD simulations in Figure S3 . Initial binding interface and final binding interface from MD simulations in Figure S4 . Correlation between MD simulation results and PMF differences in Figure S5 . SMD work curves of PFN-P10 in Figure S6 , Figure S7 . Correlation coefficient analyses versus number of trials in Figure S8 . Rank order correlations in Figure S9 . All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 11,
+                    "text": "Table S1",
+                    "ref_id": null
+                },
+                {
+                    "start": 45,
+                    "end": 54,
+                    "text": "Figure S1",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 127,
+                    "end": 136,
+                    "text": "Figure S2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 201,
+                    "end": 210,
+                    "text": "Figure S3",
+                    "ref_id": null
+                },
+                {
+                    "start": 290,
+                    "end": 299,
+                    "text": "Figure S4",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 367,
+                    "end": 376,
+                    "text": "Figure S5",
+                    "ref_id": null
+                },
+                {
+                    "start": 409,
+                    "end": 418,
+                    "text": "Figure S6",
+                    "ref_id": null
+                },
+                {
+                    "start": 421,
+                    "end": 430,
+                    "text": "Figure S7",
+                    "ref_id": null
+                },
+                {
+                    "start": 493,
+                    "end": 502,
+                    "text": "Figure S8",
+                    "ref_id": null
+                },
+                {
+                    "start": 532,
+                    "end": 541,
+                    "text": "Figure S9",
+                    "ref_id": null
+                }
+            ],
+            "section": "Supporting Information"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint positive: blue; and negative: red). P10 is highlighted with purple shade. The top scored mode1 mainly utilizes a hydrophobic interface. Meanwhile, the binding modes with the lowest binding free energies (mode7, mode9 and mode11) utilize a mixed hydrophobic/hydrophilic interface. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Supporting Information"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint Figure 3 . Illustrations of PFN1-P10 binding mechanism (mode9). Representative structures from window 1.6 nm to 2.7 nm are shown from (A) to (L). Only N-terminal \u03b1 helix and C-terminal \u03b1 helix of PFN1 are shown in visible secondary structure representations. P10 is shown as a black string representation. Typical residues involved in the interfacial hydrogen bonds are shown in bead and stick models (PFN1-W3 (white), PFN1-S137 (green), PFN1-Y139 (green), P10-P7 (red), P10-P8 (yellow) and P10-P9 (blue)). The average occurrence frequency of hydrogen bonds All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 146,
+                    "end": 154,
+                    "text": "Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Supporting Information"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint 20 are plotted under each of the structures. The x axis lists all dominant hydrogen bond pairs: 2 stands for S137-P2 (the order is PFN1-P10, omitted thereafter); 3 stands for S137-P3; 5 stands for Y139-P5; 6 stands for Y139-P6; 6' stands for W3-P6; 7 stands for W3-P7; 7' stands for Y139-P7; 8 stands for W3-P8; 9 stands for G2-P9; 10 stands for Y139-P10; 10' stands for S137-P10. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/418830 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Supporting Information"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "The Structure and Function of Proline Recognition Domains",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zarrinpar",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Bhattacharyya",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Lim",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Homo",
+            "volume": "332",
+            "issn": "80",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Sh3 Domains: Complexity in Moderation",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Mayer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Journal of cell science",
+            "volume": "114",
+            "issn": "7",
+            "pages": "1253--1263",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Structural Basis for Phosphoserine-Proline Recognition by Group Iv Ww Domains",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Verdecia",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Bowman",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Lu",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hunter",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Noel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Nature Structural & Molecular Biology",
+            "volume": "7",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Homer Binds a Novel Proline-Rich Motif and Links Group 1 Metabotropic Glutamate Receptors with Ip3 Receptors",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Tu",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Xiao",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Yuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Lanahan",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Leoffert",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Linden",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Worley",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Neuron",
+            "volume": "21",
+            "issn": "4",
+            "pages": "717--726",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Identification of a Proline-Binding Motif Regulating Cd2-Triggered T Lymphocyte Activation",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Nishizawa",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Freund",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Wagner",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Reinherz",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "",
+            "issn": "",
+            "pages": "14897--14902",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "A Role for Polyproline Motifs in the Spinal Muscular Atrophy Protein Smn Profilins Bind to and Colocalize with Smn in Nuclear Gems",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Giesemann",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Rathke-Hartlieb",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Rothkegel",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Bartsch",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Buchmeier",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Jockusch",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Jockusch",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Journal of Biological Chemistry",
+            "volume": "274",
+            "issn": "53",
+            "pages": "37908--37914",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Structure of the Tsg101 Uev Domain in Complex with the Ptap Motif of the Hiv-1 P6 Protein",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Pornillos",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Alam",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Davis",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Sundquist",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Nature Structural & Molecular Biology",
+            "volume": "9",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "The Proline-Rich Domain of P53 Is Required for Cooperation with Anti-Neoplastic Agents to Promote Apoptosis of Tumor Cells",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Baptiste",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Friedlander",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Prives",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Oncogene",
+            "volume": "21",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Proline: The Distribution, Frequency, Positioning, and Common Functional Roles of Proline and Polyproline Sequences in the Human Proteome",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Morgan",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rubenstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zuccato",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Valenza",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Cattaneo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Physiological reviews",
+            "volume": "8",
+            "issn": "1",
+            "pages": "905--981",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Prediction of Protein-Protein Interactions by Docking Methods",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J E"
+                    ],
+                    "last": "Sternberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Current Opinion in Structural Biology",
+            "volume": "12",
+            "issn": "1",
+            "pages": "28--35",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Cluspro: Performance in Capri Rounds 6-11 and the New Server",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Comeau",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kozakov",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Brenke",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Beglov",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Vajda",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Proteins: Structure, Function, and Bioinformatics",
+            "volume": "69",
+            "issn": "4",
+            "pages": "781--785",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "The Haddock Web Server for Data-Driven Biomolecular Docking",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "De Vries",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Van Dijk",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Bonvin",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Nature protocols",
+            "volume": "2010",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Pydockweb: A Web Server for Rigid-Body Protein-Protein Docking Using Electrostatics and Desolvation Scoring",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Jim\u00e9nez-Garc\u00eda",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Pons",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Fern\u00e1ndez-Recio",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Bioinformatics",
+            "volume": "29",
+            "issn": "13",
+            "pages": "1698--1699",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Gramm-X Public Web Server for Protein-Protein Docking",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tovchigrechko",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Vakser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Nucleic acids research",
+            "volume": "34",
+            "issn": "suppl_2",
+            "pages": "310--314",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Assessing Predictions of Protein-Protein Interaction: The Capri Experiment",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Janin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Protein science",
+            "volume": "14",
+            "issn": "2",
+            "pages": "278--283",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Predicted Binding Site Information Improves Model Ranking in Protein Docking Using Experimental and Computer-Generated Target Structures",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Maheshwari",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Brylinski",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Xue",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Jordan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "El-Manzalawy",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Dobbs",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Honavar",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Proceedings of the 2nd ACM Conference on Bioinformatics",
+            "volume": "2015",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Revisited with Single-Molecule Fluorescence",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Schuler",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Lipman",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Steinbach",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kumke",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Eaton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Proceedings of the National Academy of Sciences of the United States of America",
+            "volume": "102",
+            "issn": "",
+            "pages": "2754--2759",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Structure of the Profilin-Poly-L-Proline Complex Involved in Morphogenesis and Cytoskeletal Regulation",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Mahoney",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Janmey",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Almo",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "Nature Structural & Molecular Biology",
+            "volume": "4",
+            "issn": "11",
+            "pages": "953--960",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Structural Basis for the Recruitment of Profilin-Actin Complexes During Filament Elongation by Ena/Vasp",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Ferron",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Rebowski",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Dominguez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "The EMBO Journal",
+            "volume": "26",
+            "issn": "21",
+            "pages": "4597--4606",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Unusual Solution Properties of Proline and Its Interaction with Proteins",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Schobert",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Tschesche",
+                    "suffix": ""
+                }
+            ],
+            "year": 1978,
+            "venue": "Biochimica et Biophysica Acta (BBA)-General Subjects",
+            "volume": "541",
+            "issn": "2",
+            "pages": "270--277",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "The Anomalous Hydrophilic Character of Proline",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Gibbs",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Radzicka",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Wolfenden",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "J. Am. Chem. Soc",
+            "volume": "113",
+            "issn": "12",
+            "pages": "4714--4715",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Gromacs: High Performance Molecular Simulations through Multi-Level Parallelism from Laptops to Supercomputers",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Abraham",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Murtola",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Schulz",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "P\u00e1ll",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Hess",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Lindahl",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "1",
+            "issn": "",
+            "pages": "19--25",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Evaluation and Reparametrization of the Opls-Aa Force Field for Proteins Via Comparison with Accurate Quantum Chemical Calculations on Peptides",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kaminski",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Friesner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tirado-Rives",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Jorgensen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "The Journal of Physical Chemistry B",
+            "volume": "",
+            "issn": "28",
+            "pages": "6474--6487",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "The Free Energy Landscape for \u0392 Hairpin Folding in Explicit Water",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Berne",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Germain",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "",
+            "issn": "26",
+            "pages": "14931--14936",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Free Energy Simulations Reveal a Double Mutant Avian H5n1",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Das",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Royyuru",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Molecular Dynamics Simulations of Ago Silencing Complexes Reveal a Large Repertoire of Admissible 'Seed-Less' Targets",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Xia",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Clark",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Huynh",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Loher",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "H.-W",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Rigoutsos",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Scientific reports",
+            "volume": "2",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Urea-Induced Drying of Hydrophobic Nanotubes: Comparison of Different Urea Models",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Xiu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Das",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fang",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "The Journal of Physical Chemistry B",
+            "volume": "",
+            "issn": "12",
+            "pages": "2988--2994",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Reduced Cytotoxicity of Graphene Nanosheets Mediated by Blood-Protein Coating",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Chong",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Ge",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Garate",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Gu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Weber",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "ACS nano",
+            "volume": "2015",
+            "issn": "6",
+            "pages": "5713--5724",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Potential Toxicity of Graphene to Cell Functions Via Disrupting Protein-Protein Interactions",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Luan",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Huynh",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "ACS nano",
+            "volume": "2014",
+            "issn": "1",
+            "pages": "663--669",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Protein Corona Mitigates the Cytotoxicity of Graphene Oxide by Reducing Its Physical Interaction with Cell Membrane",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Duan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Kang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Tian",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Garate",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Ge",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nanoscale",
+            "volume": "7",
+            "issn": "37",
+            "pages": "15214--15238",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Hydration and Dewetting near Graphite-Ch(3) and Graphite-Cooh Plates",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Ye",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "J. Phys. Chem. B",
+            "volume": "",
+            "issn": "28",
+            "pages": "13639--13687",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Exploring the Protein Folding Free Energy Landscape: Coupling Replica Exchange Method with P3me/Respa Algorithm",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "J. Mol. Graph. Model",
+            "volume": "22",
+            "issn": "5",
+            "pages": "451--63",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Cytotoxicity of Graphene: Recent Advances and Future Perspective",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Wiley Interdiscip Rev Nanomed Nanobiotechnol",
+            "volume": "6",
+            "issn": "5",
+            "pages": "452--74",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Good Practices in Free-Energy Calculations",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Pohorille",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Jarzynski",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Chipot",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "The Journal of Physical Chemistry B",
+            "volume": "",
+            "issn": "32",
+            "pages": "10235--10253",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Steered Molecular Dynamics. Computational molecular dynamics: challenges, methods",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Izrailev",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Stepaniants",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Isralewitz",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kosztin",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Lu",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Molnar",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wriggers",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Schulten",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "",
+            "volume": "4",
+            "issn": "",
+            "pages": "39--65",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Absolute Binding Free Energy Calculations Using Molecular Dynamics Simulations with Restraining Potentials",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Deng",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Roux",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Biophysical journal",
+            "volume": "91",
+            "issn": "8",
+            "pages": "2798--2814",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Experimentally Determined Hydrophobicity Scale for Proteins",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Wimley",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Nature structural biology",
+            "volume": "1996",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Isolation and Characterization of Two Mutants of Human Profilin I That Do Not Bind Poly (L-Proline)",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Moon",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Fleming",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bj\u00f6rkegren-Sj\u00f6gren",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Korenbaum",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Nordberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Lindberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Karlsson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "108",
+            "issn": "",
+            "pages": "258--264",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Phosphorylation of Profilin by Rock1 Regulates Polyglutamine Aggregation",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shao",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Welch",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Diprospero",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Diamond",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Molecular and cellular biology",
+            "volume": "28",
+            "issn": "17",
+            "pages": "5196--5208",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Aromatic-Proline Interactions: Electronically Tunable Ch/\u03a0 Interactions",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Zondlo",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Accounts of chemical research",
+            "volume": "2012",
+            "issn": "4",
+            "pages": "1039--1049",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Nonequilibrium Equality for Free Energy Differences",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Jarzynski",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "Physical Review Letters",
+            "volume": "78",
+            "issn": "14",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Free Energy Reconstruction from Nonequilibrium Single-Molecule Pulling Experiments",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Hummer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Szabo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "",
+            "issn": "7",
+            "pages": "3658--3661",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Free Energy Calculation from Steered Molecular Dynamics Simulations Using Jarzynski's Equality. The Journal of chemical physics",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Khalili-Araghi",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Tajkhorshid",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Schulten",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "",
+            "volume": "119",
+            "issn": "",
+            "pages": "3559--3566",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Calculating Potentials of Mean Force from Steered Molecular Dynamics Simulations",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Schulten",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "The Journal of chemical physics",
+            "volume": "120",
+            "issn": "13",
+            "pages": "5946--5961",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Free Energy Calculations with Non-Equilibrium Methods: Applications of the Jarzynski Relationship. Theoretical Chemistry Accounts",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Xiong",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Crespo",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Marti",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Estrin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Roitberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "",
+            "volume": "116",
+            "issn": "",
+            "pages": "338--346",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/418830"
+                ]
+            }
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Hybrid Steered Molecular Dynamics Approach to Computing Absolute Binding Free Energy of Ligand-Protein Complexes: A Brute Force Approach That Is Fast and Accurate",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Journal of chemical theory and computation",
+            "volume": "11",
+            "issn": "4",
+            "pages": "1928--1938",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Protein-Protein Interaction Investigated by Steered Molecular Dynamics: The Tcr-Pmhc Complex",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cuendet",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Michielin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Biophysical journal",
+            "volume": "95",
+            "issn": "8",
+            "pages": "3575--3590",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "The Effect of Different Force Applications on the Protein-Protein Complex Barnase-Barstar",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Neumann",
+                    "suffix": ""
+                },
+                {
+                    "first": "K.-E",
+                    "middle": [],
+                    "last": "Gottschalk",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Biophysical journal",
+            "volume": "97",
+            "issn": "6",
+            "pages": "1687--1699",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "Steered Molecular Dynamics Simulations for Studying Protein-Ligand Interaction in Cyclin-Dependent Kinase 5",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Patel",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Berteotti",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ronsisvalle",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Rocchia",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cavalli",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Journal of chemical information and modeling",
+            "volume": "54",
+            "issn": "2",
+            "pages": "470--480",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Toward Quantitative Estimates of Binding Affinities for Protein-Ligand Systems Involving Large Inhibitor Compounds: A Steered Molecular Dynamics Simulation Route",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Nicolini",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Frezzato",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Gellini",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Bizzarri",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Chelli",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Journal of computational chemistry",
+            "volume": "2013",
+            "issn": "18",
+            "pages": "1561--1576",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Models for the Specific Adhesion of Cells to Cells",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Bell",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Science",
+            "volume": "",
+            "issn": "4342",
+            "pages": "618--627",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "String V10: Protein-Protein Interaction Networks, Integrated over the Tree of Life",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Szklarczyk",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Franceschini",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Wyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Forslund",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Heller",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Huerta-Cepas",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Simonovic",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Roth",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Santos",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Tsafou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nucleic acids research",
+            "volume": "43",
+            "issn": "D1",
+            "pages": "447--452",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/418830"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Top 10 scored human profilin (PFN1)-polyproline 10 (P10) docked structures from docking program GRAMM-X (Mode1 to Mode10). Mode11 is taken from the crystal structure (PDB ID: 1AWI).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "(A) PMF curves from umbrella sampling. (B) Representative binding modes where PFN1 is colored by molecular surface and residue types (hydrophobic: white; hydrophilic: green;",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Correlation between SMD results (rupture work, maximal force) and PMF differences.(A) Rupture work calculated from 1 nm/ns SMD. (B) Maximal force recorded from 1 nm/ns SMD. (C) Rupture work calculated from 0.1 nm/ns SMD. (D) Maximal force recorded from 0.1 nm/ns SMD. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "and Polyproline-10 through Binding Mode",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "We would like to thank Joseph A. Morrone, Hongsuk Kang, Frank Vazquez, Sangyun Lee, Serena Chen, Leticia Toledo-Sherman and Tien Huynh for their help with work. This work was partially funded by CHDI Foundation Inc., a charitable foundation that funds research into Huntington's disease. RZ acknowledges the support of the IBM Blue Gene Science Program (W1258591, W1464125, W1464164).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgement"
+        }
+    ]
+}

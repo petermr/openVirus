@@ -1,0 +1,1145 @@
+{
+    "paper_id": "4b56993a4d0f091e70ef5dec2e5a61c3043f752e",
+    "metadata": {
+        "title": "DeepTracer: Predicting Backbone Atomic Structure from High Resolution Cryo-EM Den- sity Maps of Protein Complexes XXXXXXX Received on XXXXX; revised on XXXXX; accepted on XXXXX",
+        "authors": [
+            {
+                "first": "Jonas",
+                "middle": [],
+                "last": "Pfab",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Washington",
+                    "location": {
+                        "settlement": "Bothell",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Dong",
+                "middle": [],
+                "last": "Si",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Washington",
+                    "location": {
+                        "settlement": "Bothell",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Motivation: Accurately determining the atomic structure of proteins represents a fundamental problem in the field of structural bioinformatics. A solution would be significant as protein structure information could be utilized in the medical field, e.g. in the development of vaccines for new viruses. This paper focuses on predicting the protein structure based on 3D images of the proteins captured through cryogenic electron microscopes (cryo-EM). A fully automated computationally efficient protein structure prediction method would be particularly beneficial in the field of cryo-EM as the technology allows researchers to photograph multiple large protein complexes in a single study, which means that a fast prediction method could allow for a high throughput of derived protein structures. We present a deep learning approach, DeepTracer, for predicting locations of the backbone atoms, secondary structure elements, and the amino acid types. In order to connect the predicted amino acids into chains, we applied a modified traveling salesman algorithm. Results: We trained our deep learning model on experimental cryo-EM density maps and tested it on a set of 50 density maps. We found that our new approach predicted protein structures with an average RMSD value of 1.18 and a coverage of 87.5%. Furthermore, we detected secondary structure information for 87.2% of amino acids correctly. We also showed preliminarily that 25.2% of amino acid types could be predicted directly from the 3D cryo-EM density map, considering 20 different types in total. Finally, we noted that the prediction runtime of DeepTracer is significantly improved compared to other methods. It predicts a large protein complex structure of more than 30,000 amino acids in only 2 hours. Availability: The repository of this project will be published.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "There are two main approaches to predict protein structures: homology modeling and de novo structure prediction. They differ in such that homology modeling requires structural knowledge about a homologous protein for its prediction while de novo methods do not. This limits the",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Proteins represent an essential building block in all organisms. They perform crucial functions such as DNA replication, responding to stimuli, and many more [1] . Each protein consists of a sequence of the same 20 kinds of amino acids, while all amino acids are made up of a carbon, carbonalpha (C\u03b1), and nitrogen atom, as well as a side chain which determines the amino acid type and is connected to the C\u03b1 atom. The functionality of a protein is determined through its structure, defined by the three-dimensional (3D) arrangement of the amino acids that make up the protein [2] .",
+            "cite_spans": [
+                {
+                    "start": 158,
+                    "end": 161,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 577,
+                    "end": 580,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "As a consequence, knowledge about the structure of a protein helps to gain a deeper understanding about its behavior. This can be particularly useful, e.g., in the development of new vaccines and drugs for new viruses such as Novel Coronavirus (2019-nCoV) [3] - [5] , as the surface proteins of a virus determine how it will interact with a person [6] , [7] . Therefore, it is fundamentally important to be able to accurately predict the 3D structure of a protein.",
+            "cite_spans": [
+                {
+                    "start": 256,
+                    "end": 259,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 262,
+                    "end": 265,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 348,
+                    "end": 351,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 354,
+                    "end": 357,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "application range of homology modeling, since homologues proteins must be obtained first before making predictions, which is why we aim at the more challenging de novo structure prediction. Traditionally, research on de novo protein structure prediction was focused on inferring the 3D structure through the protein's amino acid sequence [8] . This approach is beneficial as the determination of the sequence is relatively straightforward. Methods that follow this approach either use geometric calculations to estimate the protein structure [9] , [10] , or they use deep learning techniques, such as Google's AlphaFold [11] . While these methodologies have led to impressive results, their accuracy is naturally limited as the amino acid sequence does not completely contain the protein's structural information, especially for very large protein complexes [12] .",
+            "cite_spans": [
+                {
+                    "start": 338,
+                    "end": 341,
+                    "text": "[8]",
+                    "ref_id": null
+                },
+                {
+                    "start": 542,
+                    "end": 545,
+                    "text": "[9]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 548,
+                    "end": 552,
+                    "text": "[10]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 620,
+                    "end": 624,
+                    "text": "[11]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 858,
+                    "end": 862,
+                    "text": "[12]",
+                    "ref_id": "BIBREF14"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Throughout the last decade, technological advancements in cryogenic electron microscopy (cryo-EM) have provided a new approach to solve the structure determination problem. Cryo-EM allows researchers to capture 3D images of large protein complexes by cooling them to cryogenic temperatures without the need of a costly crystallization of the protein [13] . In recent years the resolution of these images has increased to a nearatomic level which led to an exponential gain in popularity of the technology [14] . A 3D image captured through cryo-EM is an electron density map (see Fig 1) . It represents the volume of the protein complex through a 3D grid of voxels. Each voxel stores the electron density value, meaning the probability that an electron is present, for its location. Latest developments in the field of cryo-EM have allowed researchers to capture many high-resolution density maps from large protein complexes in the course of a single study [15] . This makes the ability to predict protein structures from cryo-EM maps fully automatically even more significant as it allows for a very high throughput of protein structures derived from cryo-EM maps. The structure of a protein can be estimated from its density map, intuitively by placing the amino acids in such way that the resulting structure fits well into the density map. While this sounds like a simple task it becomes very challenging due to lower local resolutions as well as noise created through errors in the cryo-EM. Currently, there are several existing methods that perform protein structure predictions based on cryo-EM data such as Phenix and Rosetta [16] , [17] . They both use conventional algorithms to place and connect the amino acids of the protein. However, they often struggle to identify amino acids as such and, therefore, tend to have a low coverage on large protein complex [18] . Furthermore, their long runtime is a problem. The prediction of small density maps can take up to several days rendering the method practically useless for the prediction of large proteins. The C-CNN method, another protein structure prediction application which utilizes deep learning techniques, achieves better results in terms of coverage [18] . However, it requires some manual input and the runtime could be further improved. Additionally, it predicts the location of C\u03b1 atoms without information about their amino acid type. Therefore, we present the DeepTracer, a new fully automated method for the prediction of protein structures from cryo-EM density maps, with the goal of improving the runtime by applying a 3D U-Net in combination with a modified travelling salesman algorithm and having the ability of recognizing the amino acid type from 3D cryo-EM density maps.",
+            "cite_spans": [
+                {
+                    "start": 350,
+                    "end": 354,
+                    "text": "[13]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 505,
+                    "end": 509,
+                    "text": "[14]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 958,
+                    "end": 962,
+                    "text": "[15]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1635,
+                    "end": 1639,
+                    "text": "[16]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1642,
+                    "end": 1646,
+                    "text": "[17]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 1870,
+                    "end": 1874,
+                    "text": "[18]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 2220,
+                    "end": 2224,
+                    "text": "[18]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 580,
+                    "end": 586,
+                    "text": "Fig 1)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "The functionality of our new DeepTracer is explained in the Methods section. In the Results section, the DeepTracer is applied on a test set of 30 density maps in order to assess and compare its accuracy with other methods. The implications of the project and possible future work is examined in Discussion. Finally, we recapture our findings in the Conclusion section.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The full prediction pipeline of the DeepTracer includes many different steps. In this section we will look at the major ones and explain how they create a protein structure based of a density map. We begin by looking at the 3D U-Net which predicts confidence maps that show where e.g. atoms might be or where which secondary structure is likely to be present. Next, we will examine how the DeepTracer uses this information to place the actual amino acids, as well as how it connects them into chains to form the protein structure. Finally, we discuss how secondary structure information can be used to refine predicted \u03b1-helices.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Methods"
+        },
+        {
+            "text": "The deep learning model represents the central entity in the structure prediction. Its job is to predict not only the locations of amino acids but also secondary structure positions and amino acid types. To explain its realization, we start by looking at its architecture. Then, we move on to the data collection and preprocessing steps and finally describe the model's training process.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. 3D U-Net Deep Learning Model"
+        },
+        {
+            "text": "The U-Net model gets its name from the U-shape of its architecture which is optimized for segmentation tasks on medical images [19] . The detailed architecture of the model can be seen in Fig 2. The cryo-EM density maps are fed to the 64 # input layer. The output layer has the same 64 # shape with N different channels. The number of channels depends hereby on what the U-Net is predicting (e.g. the secondary structure U-Net has three channels for loops, sheets, and helices). The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.12.946772 doi: bioRxiv preprint As mentioned above, the U-Net should predict multiple things, including the amino acid positions, secondary structure elements, as well as the amino acid types. Therefore, the model consists of three parallel U-Nets as shown in Fig 3. The first one is responsible for predicting the amino acid positions. As the Ca atom of each amino acid is central to its position we can reduce this task to only predicting the Ca atoms of the protein structure. Additionally, this U-Net also predicts the backbone location of the protein, which is defined as the position of all Ca, C, and N atoms of the structure. This prediction will later on be useful in order to connect the amino acids into chains. Thus, the output of the C\u03b1 atoms U-Net has two channels. The second U-Net is responsible for predicting the secondary structure elements and, therefore, its output has three channels, one for each structural element (\u03b1-helix, loop, and sheet). Finally, the third U-Net is tasked to predict the amino acid types of the protein structure. Since there are 20 different types of amino acids occurring in nature its output has the same number of channels. In Now that we have looked at the architecture of the model, we can continue with the data collection. In order for the deep learning model to learn common noises and errors present in cryo-EM density maps we decided to train the U-Net using experimental data rather than density maps simulated from solved structures such as [18] . We downloaded the density maps from the EMDataResource website [20] in combination with their solved protein structures which function as the ground truth for the training process. We obtained the solved structures from the RCSB Protein Data Bank [21] . Since this paper is focused on high resolution maps, we only used density maps with a resolution of 4\u00c5 or better. In total we used 411 different density maps to build the training and validation sets.",
+            "cite_spans": [
+                {
+                    "start": 127,
+                    "end": 131,
+                    "text": "[19]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 2089,
+                    "end": 2093,
+                    "text": "[18]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 2159,
+                    "end": 2163,
+                    "text": "[20]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 2343,
+                    "end": 2347,
+                    "text": "[21]",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 188,
+                    "end": 194,
+                    "text": "Fig 2.",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 849,
+                    "end": 855,
+                    "text": "Fig 3.",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "A. 3D U-Net Deep Learning Model"
+        },
+        {
+            "text": "The preprocessing steps can be split into preparing the cryo-EM density maps and creating the different labels based on the solved structures. For the experimental density maps we have to make sure that the voxel size equals one, meaning that every voxel measures 1\u00c5. Furthermore, we need to adjust the dimensions of the map to the 64 # input dimensions of the model as seen in Fig 2. This is done by splitting the maps into several 64 # big cubes. In order to avoid errors at the borders of the cubes we overlay them partly such that we only use the 50 # center voxels of each cube to reconstruct the output maps to the original dimensions of the density map. By splitting the 411 density maps that we collected in this manner, we retrieve 16,070 training examples. To create the labels that the model can be trained on, we use the solved structure to create masks by filtering out the corresponding atoms and setting all voxels within a certain distance to those atoms to one. For the C\u03b1 mask we filter only the C\u03b1 atoms of the protein structure and set all directly neighboring voxels around them to one. The backbone mask is created similarly except that we use all C\u03b1, C, and N atoms. To generate the secondary structure masks, we filter out all atoms for each structural element and set all voxels within a distance of two around each filtered atom to one. Finally, to create the amino acid type masks we filter out all atoms for each amino acid type and set all neighboring voxels to one for each atom. In total this gives us 25 different masks for each training example (C\u03b1 mask, backbone mask, three secondary structure masks, and 20 amino acid type masks).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 378,
+                    "end": 384,
+                    "text": "Fig 2.",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "A. 3D U-Net Deep Learning Model"
+        },
+        {
+            "text": "As mentioned above, the determining factor for the position of an amino acid is the position of its C\u03b1 atom. In order to place the C\u03b1 atoms in the 3D space we use the Ca atoms confidence map as well as the backbone confidence map. The backbone map is used to identify different chains and the Ca atoms map to find the locations of the Ca atom.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Placing C\u03b1 atoms"
+        },
+        {
+            "text": "Before we place any C\u03b1 atoms, we try to identify separate chains in the protein structure. This will help us later when connecting the atoms and improves the runtime of the connection process. In order to discern the chains, we identify connected areas of voxels that have a confidence value of 0.5 or higher. An example of the chains identified from a backbone prediction can be seen in Fig 5. We can now mask all other confidence maps with each chain area that we identified in order to continue the prediction independently for all chains. The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.12.946772 doi: bioRxiv preprint Next, we place the actual C\u03b1 atoms in two simple steps, using the masked C\u03b1 confidence maps. First, we find the initial atom locations by calculating local minima in the confidence map within a neighborhood of one voxel and a minimum value of 0.6. The value of 0.6 was chosen after some testing as it produced the most accurate results. This gives us a list of voxel indices. However, as atoms can have floating point coordinates, we try to improve this initial location by calculating the center of mass for 3 # cubes around each local minimum. The resulting values are used as the coordinates for the C\u03b1 atoms of the protein structure.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 388,
+                    "end": 394,
+                    "text": "Fig 5.",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "B. Placing C\u03b1 atoms"
+        },
+        {
+            "text": "In this prediction step, we use the predicted C\u03b1 atoms and connect them into chains using a travelling salesman algorithm (TSP) [22] . However, instead of using the Euclidean distances between atoms to measure the total length of the path, we use a custom confidence score that expresses how confident we are that two atoms share a connection. The task of the TSP algorithm is then to connect the atoms into chains such that they maximize the sum of all confidence scores.",
+            "cite_spans": [
+                {
+                    "start": 128,
+                    "end": 132,
+                    "text": "[22]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "C. Tracing Backbone"
+        },
+        {
+            "text": "The calculation of the confidence score between two atoms takes two factors into consideration: The Euclidean distance between them, as well as the average confidence of voxels that lay in between the atoms in the backbone prediction. Let ( , , ) be the normal probability density function at with mean and standard deviation , /,0 the Euclidean distance between atoms a and b, and /,0 the average backbone confidence between atoms a and b. We define the confidence score as shown in equation 1. The constant 3.8 was chosen as the mean for the distances between two atoms as this corresponds to the average distance found in nature. The standard deviation parameters of 5 and 0.3 where selected based on test runs. They were intentionally chosen higher than in the distribution found in solved structures, in order to cut some slack for prediction inaccuracies. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Tracing Backbone"
+        },
+        {
+            "text": "In order to apply the TSP algorithm, we also need to specify a start/end point. However, we do not know yet at which atom the chain will start and end. Therefore, we add a new atom that is connected to every other atom with a confidence of 1. This atom is then specified as the start/end and later on removed from the actual chain. An example of the application of the TSP on a list of C\u03b1 atoms can be seen in ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Tracing Backbone"
+        },
+        {
+            "text": "The last prediction step is responsible for refining modelled \u03b1-helices. Here for, we can exploit the fact that the shape of an \u03b1-helix has a general definition which is valid across proteins [23] . Since the U-Net predicts the confidence of secondary structure elements, as shown in Fig 4, we know which amino acids belong to an \u03b1-helix based on the confidence of their region in space. We combine this knowledge of \u03b1-helix locations and their shape attributes in order to adjust the appropriate C\u03b1 atoms to better fit the shape of a natural \u03b1-helix structure.",
+            "cite_spans": [
+                {
+                    "start": 192,
+                    "end": 196,
+                    "text": "[23]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 284,
+                    "end": 290,
+                    "text": "Fig 4,",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "D. Helix Refinement"
+        },
+        {
+            "text": "For an \u03b1-helix which centers around the z-axis, we can use Equation 2 to model its shape where the variables s and r represent the initial shift and rotation of the helix. The values 2.11 and 1.149 are constants that define the radius and pitch of the helix to best match those of an \u03b1-helix.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "D. Helix Refinement"
+        },
+        {
+            "text": "however, cannot be used to describe an \u03b1-helix which does not center around the z-axis or whose shape is not a straight cylinder. Since this is the case for most \u03b1-helices, it is necessary to adjust the equation in such way that it will address these issues. With the aim of doing so, we first locate the screw axis, the center line around which the helix winds itself, for each \u03b1-helix. This is achieved by calculating the centroid of consecutive intervals of the \u03b1-helix and then connecting them to approximate the true curve. An example of an \u03b1-helix and its calculated screw axis can be seen in Now that we know the location and shape of the screw axis for the \u03b1helix, we need to incorporate this information into Equation 2. This is achieved by interpreting t as the distance that we travelled on the screw axis and use the unit direction vector of the screw axis at a certain point t as the new z axis. Next, we can find the new y-axis by calculating the cross product of the x-axis and the new z-axis and then normalizing it. Finally, we can get the new x-axis by calculating the cross product of the new z and y-axis and normalizing it again. By concatenating the three new axes we can get a rotation matrix RM with which we can calculate the point of the \u03b1-helix for any value t as shown in Equation 3. Now, we need to know the values t at which we have to insert C\u03b1 atoms. Since we know that an \u03b1-helix has a rise of 1.5\u00c5 per residue [23] we can increase t in steps of 1.5 and add a new C\u03b1 atom at \u03b1-helix(t).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "D. Helix Refinement"
+        },
+        {
+            "text": "In the final step we minimize the average distance from the C\u03b1 atoms of the refined \u03b1-helix to the C\u03b1 atoms of the original prediction. This is done by applying a minimization algorithm 1 over the variables s and r to try different initial shifts and rotations. The final results of the \u03b1-helix refinement step are shown in The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.12.946772 doi: bioRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "D. Helix Refinement"
+        },
+        {
+            "text": "In order to gain a better understanding about the performance of the Deep-Tracer we will apply it to a test set of 30 experimental density maps and evaluate the predictions using different metrics. Additionally, we will compare its performance against Phenix, as well as the C-CNN backbone prediction method.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "We measure the accuracy of a predicted protein structure by comparing it to its corresponding solved structure using the following metrics. First, the root-mean-square deviation (RMSD) value describes the average distance between atoms of the predicted and solved protein structure. This gives us an idea how close the predicted atoms are to their correct counter parts. However, this does not give us any information about the percentage of atoms that we have correctly identified. For this purpose, we calculate the coverage value, which expresses the percentage of atoms in the solved structure that lay within 3\u00c5 of a predicted atom. Finally, we evaluate the false-positive percentage which is the number of atoms that were predicted further than 3\u00c5 from any atom in the solved structure, divided by the total number of predicted atoms. In addition to the metrics that we use to compare the other methods to the DeepTracer, we also calculate the secondary structure and amino acid type accuracy. We cannot evaluate these for the other methods as they utilize the U-Net confidence maps rather than the predicted protein structure. The secondary structure accuracy is defined as the percentage of atoms from the solved structure whose secondary structure type equals the one predicted by the U-Net for its location. The amino acid type accuracy is calculated in the same way. In Table 1 , we can see the test results for all 30 density maps. 2 Number of C\u03b1 atoms in the solved protein structure 3 Percentage of atoms that were predicted further than 3A away from any atoms in the solved structure 4 Percentage of atoms from the solved structure that lay within 1A of a predicted atom 5 Percentage of atoms from the solved structure for which the U-Net correctly predicted the secondary structure 6 Percentage of atoms from the solved structure for which the U-Net correctly predicted the amino acid type (missing entries indicate that the solved structure did not contain amino acid type information)",
+            "cite_spans": [
+                {
+                    "start": 1444,
+                    "end": 1445,
+                    "text": "2",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 1497,
+                    "end": 1498,
+                    "text": "3",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 1599,
+                    "end": 1600,
+                    "text": "4",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 1686,
+                    "end": 1687,
+                    "text": "5",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 1798,
+                    "end": 1799,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1381,
+                    "end": 1388,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": ". CC-BY 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.12.946772 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "In order to get a better idea of the implications of the results we take a closer look at the protein structures predicted by the DeepTracer and Phenix for the EMD-6272 density map (rotavirus VP6) and compare them to the solved structure (see Fig 9) . We can see in the highlighted areas that the DeepTracer incorrectly connected amino acids in two cases. However, all predicted amino acids are still connected as a single chain. In comparison to that the prediction of Phenix is fragmented into multiple chains. Furthermore, amino acids appear to be missing from the prediction explaining the coverage difference of 8.1% (see Table 1 ). The predicted secondary structure elements in the Phenix prediction, particularly for sheets, appear also much less accurate than the ones made by the DeepTracer. Another noteworthy observation, although not a fair comparison as Phenix predicts more than just the backbone structure, is that the prediction runtime of Phenix for the EMD-6272 map was 1 hour and 45 minutes while the runtime of the DeepTracer for the same map was 40 seconds. As mentioned in the introduction, a central goal of the DeepTracer was to improve the runtime of protein structure predictions. This makes it possible to predict ever larger density maps which allows for a more versatile application of the method. In order to compare the runtime of the Deep-Tracer with the C-CNN method we measure the execution time of each method for the prediction of multiple density maps. A scatter plot of the measured times is depicted in Fig 10.   Fig 10. Scatter plot of prediction runtimes (y-axis) of the DeepTracer (blue) and the C-CNN method (red) for various density maps against the number of predicted atoms (x-axis). In order to see the runtimes more clearly, we use a logarithmic scale with a base of 4.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 243,
+                    "end": 249,
+                    "text": "Fig 9)",
+                    "ref_id": "FIGREF16"
+                },
+                {
+                    "start": 627,
+                    "end": 634,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 1542,
+                    "end": 1604,
+                    "text": "Fig 10.   Fig 10. Scatter plot of prediction runtimes (y-axis)",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "In order to evaluate the runtime of the DeepTracer for larger proteins we predicted the EMD-4903 density map (echovirus 1 intact particle). The number of predicted atoms for this map was 32,446. The execution of the end-to-end prediction pipeline of the DeepTracer took only two hours. As a point of comparison, the expected runtime of the C-CNN method for the same density map is more than 5 days assuming the trend in In addition to the location and secondary structure of amino acids, the DeepTracer also predicts their types. As reported in Table 1 we assigned the correct type out of the 20 possible amino acid types with an accuracy of 25.2%. In order to get a better idea of what that result means we look at a specific structure prediction. For the EMD-6272 density map, we predicted the correct amino acid type for 31.49% of amino acids. Note that this is predicted solely from 3D map without using any genetic information of the protein. In Fig 12 The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.12.946772 doi: bioRxiv preprint solved structure. The sequence was created by walking along the predicted chain of amino acids and noting down the type of each amino acid. The predicted amino acids from 3D could potentially be utilized for the reference of future full-atom structure prediction. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 545,
+                    "end": 552,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 948,
+                    "end": 957,
+                    "text": "In Fig 12",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The final goal of the DeepTracer is to accurately predict the complete protein structure from high resolution cryo-EM density maps. In this section we evaluate how close we are to this goal, based on the results presented in the previous section, as well as discuss what further work is necessary.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "When looking at the results reported in Table 1 , we can note a couple of things. First, we see that the percentage of false positives predicted by the DeepTracer has increased by 1.9% compared to the C-CNN method. This can be explained through the manual thresholding which reduces noises in the experimental density maps and is utilized in the C-CNN method. However, considering that this step introduces manual effort to the prediction process, this is an acceptable concession as our new method is fully automated. Next, we see that the coverage percentage of the Deep-Tracer beats Phenix by over 20%. However, it still lacks behind the C-CNN method by 3%. On the contrary, Phenix performs best for RMSD, beating the DeepTracer by 0.08 and the C-CNN method by 0.09. If we compare the DeepTracer to Phenix based on these two metrics, we can see that the coverage improvements significantly outweigh the small deterioration in RMSD. However, compared to the C-CNN method there is no significant difference regarding the RMSD and coverage. As mentioned in the introduction, we wanted to focus not only on the prediction accuracy, but also on the runtime of the predictions. And here we can discern immense differences. For the prediction of smaller structures. the C-CNN method took at least 20 minutes while the DeepTracer ran small predictions in a matter of seconds. However, the bigger implications lay in the prediction of larger proteins. For around 6000 atoms the C-CNN method took over 24 hours to finish, whereas the DeepTracer only needed around 20 minutes, for some even less than 5 minutes. Particularly, the trendline is interesting as it gives us an idea of how the methods will behave for very large proteins. The C-CNN trendline seems almost linear above 2000 predicted proteins and the runtime seems to quadruple when 6000 predicted atoms are reached. If this trend continues then we could expect a 75-fold runtime increase in order to predict 100,000 atoms. The runtimes of DeepTracer, however, seem to remain flat once a certain number of atoms is reached which would mean that very large proteins could be predicted within a reasonable runtime. This can be explained by the chain identification step that is applied before the prediction of any atom. While larger proteins consist of more chains than smaller ones, the number of atoms in the chains does not necessarily grow. As each chain is processed separately this means that if the chain lengths remain constant and only the number of chains gets larger the runtime grows linearly with the number of chains.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 40,
+                    "end": 47,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "In addition to the false-positive percentage, the coverage, and the RMSD we also calculated the secondary structure and amino acid type accuracy for the DeepTracer using the confidence maps predicted by U-Net. We can see that the secondary structure prediction performs well with an average accuracy of 81.72%. We also show that deep learning could discern different types of amino acids based on the density maps. Particularly, as this is only the preliminary stage of predicting amino acid type directly from 3D cryo-EM density map. It gives promise for future improvements through a more elaborate training of the U-Net with more data. Furthermore, we plan to include the amino acid sequence as an input parameter, so that we can map the predicted sequence with the input sequence and refine our prediction. For this sequence mapping work, an amino acid type prediction accuracy of around 30% from 3D could be already helpful. Particularly, as we can see from Fig 12 that the U-Net tends to correctly predict the type of consecutive amino acids, likely due to high local resolutions. As it is very unlikely that this happens by chance, we can use this information to map the input sequence to our 3D backbone atom and amino acids prediction.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 963,
+                    "end": 969,
+                    "text": "Fig 12",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "In this paper, we presented the DeepTracer, a fully automated tool which can accurately predict backbone protein structures based on 3D cryo-EM density maps. In terms of accuracy, we were able to outperform the established structure prediction method Phenix by over 20% in structure coverage with only a slight RMSD increase of 0.08. Compared to the deep learning-based C-CNN method we achieved a slightly better RMSD by a margin of 0.01 with a slightly decreased coverage of 3%. In contrast with the C-CNN method, this fully automated method requires no manually set parameters. And the vastly reduced runtime allows us to predict protein structures within minutes instead of days. This is significant, as it allows the researchers to apply the DeepTracer on very large density maps and expect results maximally within a couple of hours. Furthermore, we achieved preliminary results in the amino acid type prediction from 3D with an accuracy of 25.2%. This gives promise to the incorporation of amino acid sequence into the prediction pipeline. Since the predicted amino acids from 3D could potentially be utilized for the reference of future full-atom structure prediction. In the future, we expect to use the amino acid type information to extend the functionality of the DeepTracer such that it can predict the protein full atom structure, including the side chains of the amino acids.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        },
+        {
+            "text": ". CC-BY 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.12.946772 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Introduction to Protein Structure. Garland Science",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Branden",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tooze",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "The Anatomy and Taxonomy of Protein Structure",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Richardson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1981,
+            "venue": "Advances in Protein Chemistry",
+            "volume": "34",
+            "issn": "",
+            "pages": "167--339",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Wuhan coronavirus 2019-nCoV -what we can find out on a structural bioinformatics level",
+            "authors": [],
+            "year": 2020,
+            "venue": "",
+            "volume": "23",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Evolution of the novel coronavirus from the ongoing Wuhan outbreak and modeling of its spike protein for risk of human transmission",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Sci. CHINA Life Sci",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1007/s11427-020-1637-5"
+                ]
+            }
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Return of the Coronavirus: 2019-nCoV",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Gralinski",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Menachery",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Viruses",
+            "volume": "12",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.3390/v12020135"
+                ]
+            }
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Protein Structure Based Strategies for Antigen Discovery and Vaccine Development Against Malaria and Other Pathogens",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Corradin",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Villard",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Kajava",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Application of the Three-Dimensional Structures of Protein Target Molecules in Structure-Based Drug Design | Journal of Medicinal Chemistry",
+            "authors": [],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1021/jm00034a001"
+                ]
+            }
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Protein sequencing by tandem mass spectrometry",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hauer",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Proc. Natl. Acad. Sci",
+            "authors": [],
+            "year": 1986,
+            "venue": "",
+            "volume": "83",
+            "issn": "",
+            "pages": "6233--6237",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.83.17.6233"
+                ]
+            }
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "[32] GOR method for predicting protein secondary structure from amino acid sequence",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Garnier",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-F",
+                    "middle": [],
+                    "last": "Gibrat",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Robson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "Methods in Enzymology",
+            "volume": "266",
+            "issn": "",
+            "pages": "540--553",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Protein Structure Prediction: Recognition of Primary, Secondary, and Tertiary Structural Features from Amino Acid Sequence",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Eisenhaber",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Persson",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Argos",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Crit. Rev. Biochem",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Improved protein structure prediction using potentials from deep learning",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Senior",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Nature",
+            "volume": "",
+            "issn": "",
+            "pages": "1--5",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/s41586-019-1923-7"
+                ]
+            }
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Empirical limits for template-based protein structure prediction: the CASP5 example",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Contreras-Moreira",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Ezkurdia",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Tress",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Valencia",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "FEBS Lett",
+            "volume": "579",
+            "issn": "5",
+            "pages": "1203--1207",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.febslet.2005.01.014"
+                ]
+            }
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Cryo-EM",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Nogales",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Curr. Biol",
+            "volume": "28",
+            "issn": "19",
+            "pages": "1127--1128",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.cub.2018.07.016"
+                ]
+            }
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Breaking Cryo-EM Resolution Barriers to Facilitate Drug Discovery",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Merk",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Cell",
+            "volume": "165",
+            "issn": "7",
+            "pages": "1698--1707",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.cell.2016.05.040"
+                ]
+            }
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Cryo-EM structures of Helicobacter pylori vacuolating cytotoxin A oligomeric assemblies at near-atomic resolution",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Proc. Natl. Acad. Sci",
+            "volume": "116",
+            "issn": "14",
+            "pages": "6800--6805",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.1821959116"
+                ]
+            }
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "PHENIX : a comprehensive Python-based system for macromolecular structure solution",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Adams",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Acta Crystallogr",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Protein Structure Prediction Using Rosetta",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Rohl",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "E M"
+                    ],
+                    "last": "Strauss",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "M S"
+                    ],
+                    "last": "Misura",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Baker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Methods in Enzymology",
+            "volume": "383",
+            "issn": "",
+            "pages": "66--93",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Cascaded-CNN: Deep Learning to Predict Protein Backbone Structure from High-Resolution Cryo-EM Density Maps",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Moritz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/572990"
+                ]
+            }
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Ronneberger",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Fischer",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Brox",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "EMDataResource",
+            "authors": [],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "RCSB PDB: Homepage",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "P D"
+                    ],
+                    "last": "Bank",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Traveling Salesman Problem | OR-Tools",
+            "authors": [],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Introduction to Peptides and Proteins",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "EMD-6272 (rotavirus VP6) Density Map (left) and its corresponding solved structure PDB-3j9s depicted in ribbon (center) and backbone view (right).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Architecture of the U-Net as used by the DeepTracer. The blue boxes show the output maps of the different layers where the dimensions of the maps are depicted on the left and the number of channels is depicted on top.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Fig 4 we can see an example output for each of the U-Nets with the density map from Fig 1 as input.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Architecture of the deep learning model, which includes three parallel U-Nets. The blue boxes show the input and output maps of the model, with their dimensions noted to the left and the number of channels marked below.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Example output confidence maps of the model for the EMD-6272 density map. (A) and (B) are both the output of the C\u03b1 atom U-Net and show the C\u03b1 atom locations (A) as well as the backbone of the protein (B). (C) shows the output of the secondary structure U-Net with a-helices in yellow, loops in purple, and sheets in red. In (D) we can see the output of the amino acid type U-Net where each color represents a different type of amino acid.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Backbone prediction of EMD-0478 density map (human TPC2 channel) (human TPC2 channel) with identified chains marked in different colors.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Fig 6.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Predicted C\u03b1 atoms for EMD-4054 density map (major capsid protein) (major capsid protein) in blue before (left) and after (right) the backbone tracing step compared to the true structure in pink.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "Fig 7.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "\u03b1-Helix extracted from the backbone prediction of the EMD-8515 density map in tan color and its screw axis in teal color.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "Fig 8.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "\u03b1-Helix extracted from the prediction of the EMD-8515 density map. (Top) Original prediction before the helix-refinement step. (Center) \u03b1-Helix after the refinement. (Bottom) Direct comparison of original prediction in tan color, refined prediction colored in teal, and the solved structure (PDB-5u70) in pink color.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "Solved PDB-3j9s protein structure (blue) and predictions by the DeepTracer (green) and Phenix (yellow) for EMD-6272 density map (rotavirus VP6). Highlighted areas show where the DeepTracer connected the amino acids incorrectly.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF17": {
+            "text": "Fig 11continues for larger proteins. The original density map next to the prediction of the DeepTracer can be seen inFig 11.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "Density map (left) of EMD-4903 (echovirus 1 intact particle) and its predicted protein structure (right), containing more than 30,000 atoms.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "we can see an extract of the amino acid sequence as predicted by the DeepTracer, compared to the sequence of the",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "ASP GLU ALA ALA THR LEU PHE PRO TRP TRP ASN ASP ARG GLU GLU PHE PHE TYR TYR PHE SER SER ASN TRP PRO PRO ASN HIS PRO ARG ASP SER THR VAL ASN ILE ARG ARG PRO LEU ALA ASN ALA SER VAL THR VAL VAL PRO THR LEU THR ILE LYS ILE THRSER ALA VAL THR ASN ASP PRO VAL THR SER LYS PRO ASN ILE MET ILE ALA THR VAL GLU GLU THR ILE ARG SER HIS ALA VAL THR ILE ALA THR VAL PHE PRO PRO PRO PHE LYS TRP ASN GLU LEU VAL SER TYR PHE TYR ARG ARG GLU GLU LEU LEU GLN ARG VAL TYR VAL VAL ALA SER LEU ARG ALA GLU ILE PRO ARG ARG ARG PRO ALA VAL ALA ALA LEU PHE PRO ASN ALA GLN PRO PHE GLU HIS HIS HIS TYR SER CYS ALA ILE ASN ALA ALA ASN THR GLN GLN PHE GLU HIS ILE VAL GLN LEU ARG ARG VAL LEU THR THR ALA THR ILE THR LEU LEU PRO ASP LEU THR LEU ARG ILE GLU SER ALA VAL CYS GLU SER VAL LEU ALA ASP ALA SER GLU THR MET LEU ALA ASN VAL THR SER VAL ARG GLN GLU TYR ALA ILE PRO VAL GLY PRO VAL PHE PRO PRO GLY MET ASN TRP THR ASP LEU ILE ASN TYR TYR SER ARG ARG GLU ASP ASN LEU GLN ARG VAL PHE THR VAL ALA SER ILE ARG SER MET LEU VAL LYS LYS LYS Fig 12. Extract of the amino acid sequence predicted by the DeepTracer for the EMD-6272 density map (top) compared to the sequence of the solved structure PDB-3j9s (bottom). Correctly predicted amino acids are highlighted in red.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Prediction results of the Phenix, C-CNN, and DeepTracer methods for 30 experimental density map.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

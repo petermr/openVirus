@@ -1,0 +1,4342 @@
+{
+    "paper_id": "0624a12abfe85c8b5070850d912a2db4cd453236",
+    "metadata": {
+        "title": "TALC: Transcription Aware Long Read Correction",
+        "authors": [
+            {
+                "first": "Lucile",
+                "middle": [],
+                "last": "Broseus",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Universit\u00e9 de Montpellier",
+                    "location": {
+                        "settlement": "Montpellier",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Aubin",
+                "middle": [],
+                "last": "Thomas",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Universit\u00e9 de Montpellier",
+                    "location": {
+                        "settlement": "Montpellier",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Andrew",
+                "middle": [
+                    "J"
+                ],
+                "last": "Oldfield",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Universit\u00e9 de Montpellier",
+                    "location": {
+                        "settlement": "Montpellier",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Dany",
+                "middle": [],
+                "last": "Severac",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "MGX-Montpellier GenomiX",
+                    "location": {
+                        "addrLine": "141 Rue de la Cardonille",
+                        "postCode": "Cedex 5 34094",
+                        "settlement": "Montpellier",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Emeric",
+                "middle": [],
+                "last": "Dubois",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "MGX-Montpellier GenomiX",
+                    "location": {
+                        "addrLine": "141 Rue de la Cardonille",
+                        "postCode": "Cedex 5 34094",
+                        "settlement": "Montpellier",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "William",
+                "middle": [],
+                "last": "Ritchie",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Universit\u00e9 de Montpellier",
+                    "location": {
+                        "settlement": "Montpellier",
+                        "country": "France"
+                    }
+                },
+                "email": "william.ritchie@igh.cnrs.fr"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Long-read sequencing technologies are invaluable for determining complex RNA transcript architectures but are error-prone. Numerous \"hybrid correction\" algorithms have been developed for genomic data that correct long reads by exploiting the accuracy and depth of short reads sequenced from the same sample. These algorithms are not suited for correcting more complex transcriptome sequencing data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We have created a novel algorithm called TALC (Transcription Aware Long Read Correction) which models changes in RNA expression and isoform representation in a weighted De-Bruijn graph to correct long reads from transcriptome studies. We show that transcription aware correction by TALC improves the accuracy of the whole spectrum of downstream RNA-seq applications and is thus necessary for transcriptome analyses that use long read technology.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Recent advances in RNA sequencing (RNA-seq) technologies have revealed that transcription is more pervasive (1) , more diverse (2) and more cryptic (3) than expected (4) (5) (6) . Given the major role that RNA processing plays in disease and normal biology, it is crucial to ascertain the existence of novel isoforms and to accurately quantify their abundance. Second generation RNA-seq technologies such as Illumina are well suited to the tasks of assessing gene expression levels and determining proximal exon connectivity. They produce numerous sequencing reads at a low cost ensuring sufficient representation of most transcripts. However, because the RNA or cDNA is fragmented during short RNA-seq protocols, long range connectivity can only be computationally inferred. These predictions based on short reads struggle to correctly identify transcript isoforms that contain multiple alternative exons (7) or that contain retained introns (8, 9) . In these cases, long-read (LR) sequencing technologies are invaluable because they can sequence entire molecules in one pass and thus capture long-range connectivity of complex isoforms.",
+            "cite_spans": [
+                {
+                    "start": 108,
+                    "end": 111,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 127,
+                    "end": 130,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 166,
+                    "end": 169,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 170,
+                    "end": 173,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 174,
+                    "end": 177,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 906,
+                    "end": 909,
+                    "text": "(7)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 943,
+                    "end": 946,
+                    "text": "(8,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 947,
+                    "end": 949,
+                    "text": "9)",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "LR technologies however produce less reads than short read (SR) sequencing approaches (10) for similar costs and have higher error rates. In many cases these higher error rates can prevent the correct identification of isoforms (11) (12) (13) . Although several alignment software (14) (15) (16) (17) (18) are optimized to handle these errors, their shortcomings confound transcript identification and annotation. Many reads cannot be aligned and regions",
+            "cite_spans": [
+                {
+                    "start": 86,
+                    "end": 90,
+                    "text": "(10)",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 228,
+                    "end": 232,
+                    "text": "(11)",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 233,
+                    "end": 237,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 238,
+                    "end": 242,
+                    "text": "(13)",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 281,
+                    "end": 285,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 286,
+                    "end": 290,
+                    "text": "(15)",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 291,
+                    "end": 295,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 296,
+                    "end": 300,
+                    "text": "(17)",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 301,
+                    "end": 305,
+                    "text": "(18)",
+                    "ref_id": "BIBREF17"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "where the sequencing error rates are higher such as UTRs frequently produce ambiguous alignments. Secondly, they struggle to identify splice junctions, notably those flanking small structural variants such as small exons or alternative 5' and 3' splice sites. This impacts the evaluation of exon skipping events and worsens the quality of transcript assembly (12) . These drawbacks prompted the development of algorithms, referred to as hybrid methods (19) (20) (21) (22) , that take advantage of SR depth and accuracy to compensate LR shortcomings.",
+            "cite_spans": [
+                {
+                    "start": 359,
+                    "end": 363,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 452,
+                    "end": 456,
+                    "text": "(19)",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 457,
+                    "end": 461,
+                    "text": "(20)",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 462,
+                    "end": 466,
+                    "text": "(21)",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 467,
+                    "end": 471,
+                    "text": "(22)",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Numerous algorithms have been proposed to combine long and short reads into high-accuracy long reads (23) .",
+            "cite_spans": [
+                {
+                    "start": 101,
+                    "end": 105,
+                    "text": "(23)",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "A first approach is to correct long reads by local consensus inferred from short read multi-alignments (24) (25) (26) (27) .",
+            "cite_spans": [
+                {
+                    "start": 103,
+                    "end": 107,
+                    "text": "(24)",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 108,
+                    "end": 112,
+                    "text": "(25)",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 113,
+                    "end": 117,
+                    "text": "(26)",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 118,
+                    "end": 122,
+                    "text": "(27)",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "This strategy is generally slow and computationally intensive. More importantly, it tends to show poor performances over low-expressed regions, and a risk of bias toward major isoforms. Therefore, they may not be suitable for transcriptome and single cell datasets where isoform representation may vary considerably. In the second approach (28) (29) (30) (31) , short reads are considered as the fragments of a reference transcriptome, and roughly assembled using a graph structure, onto which long reads are aligned (32) . However, sequencing errors in SR datasets, complex transcript architectures and sequence duplicates often lead to extremely complex graph structures (33, 34 ) that elicit graph simplifications or exploration heuristics to keep computations tractable. Most hybrid correction algorithms were primarily intended to be applied to genomic data with the aim to improve the quality of genome assemblies. As such, they typically rely on assumptions that fit DNA-seq data properties and thus a linear reference genome. According to this, bifurcation nodes and tips (dead-ends in the graph) are assumed to originate mainly from sequencing errors and not transcript processing events. In addition, genome sequencing benefits from a relatively uniform read coverage and therefore the graph is simplified by discarding a priori all nodes whose count is below a user-defined threshold. The fact that these approaches are not adapted for RNA-seq data have been extensively discussed in previous works on transcript assembly (34) and short read correction (35, 36) and their impact on long read correction can be easily anticipated. RNA-seq data display highly uneven coverage, even across a same genomic location, thus the frequency of sequencing errors varies depending on the surrounding coverage depth. Tips may correspond to the start or end of a transcript and finally specific regions such as 3' ends of transcripts, are frequently under covered.",
+            "cite_spans": [
+                {
+                    "start": 340,
+                    "end": 344,
+                    "text": "(28)",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 345,
+                    "end": 349,
+                    "text": "(29)",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 350,
+                    "end": 354,
+                    "text": "(30)",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 355,
+                    "end": 359,
+                    "text": "(31)",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 517,
+                    "end": 521,
+                    "text": "(32)",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 673,
+                    "end": 677,
+                    "text": "(33,",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 678,
+                    "end": 680,
+                    "text": "34",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 1564,
+                    "end": 1568,
+                    "text": "(35,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 1569,
+                    "end": 1572,
+                    "text": "36)",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "We have developed TALC for Transcription Aware long-read Correction which addresses RNA-seq data specificities by incorporating coverage analysis throughout the correction process. TALC considers transcript expression and the existence of isoforms to correct LRs. For the purpose of testing TALC, we generated Oxford Nanopore direct RNA sequencing reads and Illumina short reads on an MCF10A human cell line and downloaded LR and SR data from the GM12878 human cell line and a Spike-In experiment. We demonstrate that after TALC correction, long reads map with higher sequence identity and with less errors in exon assembly than currently used methods. The gains observed following TALC were tested on simulated long reads as well as on real reads. Figure 1 illustrates the methodology behind TALC and highlights how it considers transcript abundance and architecture to correct long reads. The first step of TALC graph-based procedure is to consider short reads as a raw reference transcriptome by merging them through a weighted De-Bruijn Graph (DBG) structure (28, 32) , whose nodes represent k-mers. For each node, we record their k-mer abundance in the SR dataset. Thus, any sequence of transcripts expressed in the RNA-seq sample should appear as a unique path of the graph. The long read is corrected by finding the right sequence of nodes to which it corresponds in the DBG built from short reads. Paths corresponding to true transcripts should display consistent k-mer coverage except in regions where the existence of multiple isoforms may alter the coverage such as at splice junctions ( Figure 2) . We thus propose a method of graph exploration that considers k-mer count variation consistent with transcript abundance and isoform existence (adaptive count thresholding).",
+            "cite_spans": [
+                {
+                    "start": 1063,
+                    "end": 1067,
+                    "text": "(28,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 1068,
+                    "end": 1071,
+                    "text": "32)",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 749,
+                    "end": 757,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 1599,
+                    "end": 1608,
+                    "text": "Figure 2)",
+                    "ref_id": null
+                }
+            ],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "As in (28) , the LR sequence is first divided into solid regions (stretches of k-mers shared with the SRs) interspersed with weak regions (stretches of likely erroneous k-mers).",
+            "cite_spans": [
+                {
+                    "start": 6,
+                    "end": 10,
+                    "text": "(28)",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Determining anchor points"
+        },
+        {
+            "text": "To crop background noise that frequently surround solid regions, we first estimate the frequency of k-mers resulting from sequencing errors in the SR. The count of k-mers containing a sequencing error in SR is assumed to follow a Poisson distribution whose mean should be less than the average noise level \u03bb . An estimate of \u03bb is taken as the average coverage depth across the LR multiplied by the per base error rate in SR, whose estimates were found to be higher in RNA-seq datasets than in genomic data, ranging from 1% to 3% (35) .",
+            "cite_spans": [
+                {
+                    "start": 529,
+                    "end": 533,
+                    "text": "(35)",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Determining anchor points"
+        },
+        {
+            "text": "A robust estimate of the average depth is derived a priori from the shared k-mer counts: the 15% smallest and 10% highest counts are removed and the mean is calculated from all the remaining k-mers. K-mers whose count We then split solid regions into anchor points with contrasting k-mer coverage. To this end, we inspect the regions coverage and each k-mer at which an abrupt count variation is detected is selected (cf Competing paths section below). K-mers at the tips of a region are always selected, and additional k-mers may be picked so as to have at least three distinct anchor points per solid region.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Determining anchor points"
+        },
+        {
+            "text": "Once the long read is anchored, the DBG is explored in-between any couple of consecutive anchors, in search for the error-free path matching the inner weak region.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Determining anchor points"
+        },
+        {
+            "text": "In TALC, a path in the DBG is defined as an ordered list of connected k-mers (nodes) which are weighted by their number of occurrences in the SR dataset. When a k-mer is mapped to a LR, we attribute its weight to the mapped region of the LR and use the term coverage. Thus, when we speak of coverage of a LR, it is in effect the weight of the k-mer that mapped to that region.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "Abrupt changes in the coverage depth can be caused by alternative splicing events, duplicate k-mers, or sequencing bias in SR. These abrupt changes are termed split-coverage.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "Nodes in a DBG are either simple, which means there exists only one successor k-mer in the data, or admit at least two successors, and thus can be extended by several distinct paths. We will refer to them as bifurcation nodes. Exploration is implemented as a breadth-first approach where at each bifurcation, only the next nodes whose count is considered consistent with the coverage of the current path will be followed. More precisely, at a given step n0, the k-mers database is queried for the counts of its four possible successors: (nA, nC, nG, nT).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "And we want to assess which of these make up valid extensions of the current path.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "We need to infer two things: whether n0 is close to a split-coverage event, in which case the exploration might be split into several competing paths; and which nodes are likely erroneous and should be filtered-out. To this end, we use the following decision rules (cf: Supplementary Materials):",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "1) If there is only one non-zero k-mer, there is no decision to make.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "2) If there are at least two non-zero k-mers, we postulate that most of the time, there is no real split coverage event at n0, so that its count provides a good estimate of the downstream coverage depth, from which both the correct successor (say nL) and a local noise threshold can be inferred.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": "Accordingly, allowing to the consistence of the coverage, we pose as a null model: When the counts (nA, nC, nG, nT) do not fit this null model, we infer the current bifurcation is due to a changepoint and the exploration is split into all downstream nodes. At each new node, the expected count and the noise level are thus re-estimated, allowing an adaptive filtering-out of erroneous k-mers. Therefore, a true path is expected to be mostly made of count-consistent nodes possibly with a few change-point nodes. And the more a path admits change-points the less likely it is to represent the sequence of a true transcript.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Selective Exploration of the DBG"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.10.901728 doi: bioRxiv preprint TALC favours coverage-consistent exploration of the DBG. As opposed to LoRDEC (28) , all paths passing the test described above are explored in parallel by a breadth-first approach. When the number of parallel paths exceeds a specified threshold, an evaluation is performed: all on-going paths are compared to the LR sequence and the least similar ones are stopped. This allows a more local and gradual evaluation of the similarity between the paths and the long read and we believe it contributes to reduces the inclusion of small sequencing errors from the SRs into the LR.",
+            "cite_spans": [
+                {
+                    "start": 304,
+                    "end": 308,
+                    "text": "(28)",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Competing paths"
+        },
+        {
+            "text": "All paths which successfully bridge both Solid Regions are scored by their edit distance with the LR. The most similar one is considered suitable for further validation. Its sequence is aligned against the LR's; if the percent identity score with the LR is higher than a user-specified threshold (by default 70%), we assume we have likely found the best candidate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Competing paths"
+        },
+        {
+            "text": "Compared to inner weak regions (flanked on both sides by a solid region), the correction of weak border regions (flanked only on one side by a solid region) raises additional problems. Firstly, there is no clear targeted anchor point at which to stop exploration. Secondly, UTR sequences often contain low complexity regions and duplicated k-mers, which leads to increased complexity in the DBG. Finally, borders of transcripts suffer from higher sequencing bias in short reads (notably in 3' ends of transcripts). The two last points make k-mer coverage more erratic and over dispersed. In certain cases, incomplete coverage UTR extremities (eg: rare longer UTR forms) can sometime prevent a full-length correction entirely. For these reasons, we rely more heavily on sequence length and similarity between the visited paths and the LR's to direct graph exploration across those regions. More exactly, graph exploration is monitored in a same manner as described above (cf:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Border exploration"
+        },
+        {
+            "text": "Selective Exploration of the DBG) until the paths's length matches the border's length. When the number of consecutive errors exceeds a given threshold, the corresponding paths are stopped.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Border exploration"
+        },
+        {
+            "text": "When there are no more branches to investigate (that is all possibilities have ended in dead-ends of the graph or have been stopped), the very last error-prone bases of all interrupted paths are trimmed (cf: Supplementary Materials). To elect the best border path, we first search for it among the paths that were at least as long as the portion of the read we are attempting to correct, despite the constraints on sequence similarity. We choose the one having the smallest edit distance with the LR, and the most consistent coverage if there are ex-aequo. If no long border path could be found, shorter paths are compared and the one with highest similarity to the LR is selected.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Border exploration"
+        },
+        {
+            "text": "Paths in the DBG that successfully bridge two Solid Regions are first ranked according to their sequence similarity with the Weak Region's. The similarity is computed as the edit distance between sequences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Choosing between multiple paths whose scores are tied"
+        },
+        {
+            "text": "We notice that the exploration stage often provides several solution paths having the exact same alignment score (this occurs for example when there are variants in sub-sequences that have been inserted or deleted from the LR), so that we cannot decide between them based on sequence information only. In order to choose between these equally-scoring paths, we perform a second ranking using count variation: the path with the least changepoints wins.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Choosing between multiple paths whose scores are tied"
+        },
+        {
+            "text": "We compared the corrections made by TALC with six other state of the art hybrid correctors: FMLRC (31), CoLoRMap (26), Jabba (29) , Hercules (27) , LoRDEC (28) and LSC (24) . We chose FMLRC, Jabba, LoRDEC and ColoRMap as they were found to be the top performers according to a recent benchmark on genomic data (37) . We added Hercules because it was a very recent method not yet benchmarked. We also included LSC for it is (with LoRDEC) currently applied in numerous transcriptomic studies combining long and short reads (38-41).",
+            "cite_spans": [
+                {
+                    "start": 125,
+                    "end": 129,
+                    "text": "(29)",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 141,
+                    "end": 145,
+                    "text": "(27)",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 155,
+                    "end": 159,
+                    "text": "(28)",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 168,
+                    "end": 172,
+                    "text": "(24)",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 310,
+                    "end": 314,
+                    "text": "(37)",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Benchmarked algorithms"
+        },
+        {
+            "text": "Though it was well suited for RNA-seq data, according to (42), we could not include NaS (43) as it depends on a third-party proprietary software (Newbler assembler) that is no longer available.",
+            "cite_spans": [
+                {
+                    "start": 88,
+                    "end": 92,
+                    "text": "(43)",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Benchmarked algorithms"
+        },
+        {
+            "text": "Several algorithms (eg: CoLoRMap, LSC and Jabba) exclude uncorrected reads from the final output file.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarked algorithms"
+        },
+        {
+            "text": "However, to allow a fair comparison with the other methods, we systematically added back all discarded raw sequences before evaluation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarked algorithms"
+        },
+        {
+            "text": "All jobs were run using 15 CPUs with 512 gigabytes of available RAM. If a job was not finished after 1 week, it was terminated (Jabba failed to finish within a week and had to be finally remove from the analysis; as already observed in (27), LSC could not scale to the biggest size real LR datasets; Hercules is absent from several tests too, due to long running times and heavy computational requirements, chiefly in its short read alignment phase).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarked algorithms"
+        },
+        {
+            "text": "LoRDEC and TALC were run with the recommended size of k-mers set to 21 (28, 44) , and FMLRC with its default parameters.",
+            "cite_spans": [
+                {
+                    "start": 71,
+                    "end": 75,
+                    "text": "(28,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 76,
+                    "end": 79,
+                    "text": "44)",
+                    "ref_id": "BIBREF43"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Benchmarked algorithms"
+        },
+        {
+            "text": "To evaluate the efficiency of these algorithms, we made use of two publicly available and one in-house SR and LR matched real datasets. The first dataset comes from a MinION cDNA sequencing experiment of ERCC Mix1",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark datasets"
+        },
+        {
+            "text": "Spike-Ins (45) . The second one is provided by the NA12878 consortium (4) By using real datasets with contrasting error models (cf: Supplementary Material) to compare these methods instead of a computationally generated one we are testing them in authentic conditions. However, the drawback of using real data is that it is impossible to measure precisely the number of good corrections performed because the entire repertoire of transcripts and their true abundance is unknown; there is no reference transcriptome that perfectly matches the MCF10A and GM12878 cells. For example, (4) reconstructed about 78 000 highconfidence isoforms from the GM12878 datasets and found that the majority were absent from reference databases (4, 46) . The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.10.901728 doi: bioRxiv preprint",
+            "cite_spans": [
+                {
+                    "start": 10,
+                    "end": 14,
+                    "text": "(45)",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 727,
+                    "end": 730,
+                    "text": "(4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 731,
+                    "end": 734,
+                    "text": "46)",
+                    "ref_id": "BIBREF45"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Benchmark datasets"
+        },
+        {
+            "text": "To work around this problem, we used the (raw) LR data to measure the abundance of transcripts in MCF10A and GM12878 cells (Supplementary Materials). From this LR-derived transcriptome, we simulated long ONT reads that respect the error rates that we observed in the sequencing data. Thus, we have a dataset of reads that are derived from the MCF10A and GM12878 transcriptomes and for which we know the exact structure and abundance of each isoform. This enables us to evaluate performances on a simulated LR dataset derived from the MCF10A and GM12878 transcriptomes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark datasets"
+        },
+        {
+            "text": "We wished to use the recently published evaluation tool, LC_EC_analyser (42) . Unfortunately, it does not scale to our real size datasets (seemingly because of AlignQC issues in memory management). Nonetheless, we used analogous criteria (see below). Scripts designed to perform our evaluation are avalaible at: https://gitlab.igh.cnrs.fr/lbroseus/TransAT.",
+            "cite_spans": [
+                {
+                    "start": 72,
+                    "end": 76,
+                    "text": "(42)",
+                    "ref_id": "BIBREF41"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Measures of evaluation"
+        },
+        {
+            "text": "To assess the behaviour and performance of the 7 correction methods, we computed multiple indicators that are summarized in Tables 1-3 and Supplementary tables 1-3. These indicators can be broken down into two categories: standard sequence quality indicators and transcriptome-specific indicators.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 124,
+                    "end": 134,
+                    "text": "Tables 1-3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Measures of evaluation"
+        },
+        {
+            "text": "These include the base accuracy between the LR and the molecule from which the LR was generated, the various error rates (mismatches, insertions, deletions), and the percentage of primary alignments to the reference genome. They are common benchmarks for genomic data. In addition, we verified that the different correction algorithms were able to maintained the initial read length.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Standard sequence quality indicators"
+        },
+        {
+            "text": "When evaluating correction methods on real data, performance metrics can be unintentionally skewed because the molecule that was sequenced is unknown. For example, a correction method that would simply replace a LR by a known transcript sequence to which it was most similar could obtain a high percentage of mapped reads and low error rates but would not correctly represent the sequenced transcriptome. Thus, to further evaluate the 7 correction methods in this paper, we computed two sets of transcriptome-specific indicators which are directed towards the two major applications of RNA-seq experiments: transcript-level quantification (11, 47) and isoform recovery (12) . For this we considered two types of data: a real ERCC Spike-In dataset and two simulated LR data mimicking the real MCF10A and GM12878 experiments. ERCC Spike-In data have known theoretical concentrations from which we could gauge how each correction method would impact transcript counts accuracy. Simulated LRs datasets mimicking the real MCF10A and GM12878 datasets both in terms of error-model and transcript-level expression (cf: Supplementary Material) allows us to extend our observations on ERCC data to more complex transcriptomes. Importantly, it gives us insight into the capacity of a hybrid corrector to preserve and clarify transcript structure at the read resolution. For measuring the impact of correction on structure and transcript assembly accuracies, we computed the proportion of (simulated) long reads whose transcript structure could be correctly elucidated by aligners and their ability to preserve true exon connectivity and to improve false ones (cf : Tables 2A and 2B) . The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.10.901728 doi: bioRxiv preprint",
+            "cite_spans": [
+                {
+                    "start": 639,
+                    "end": 643,
+                    "text": "(11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 644,
+                    "end": 647,
+                    "text": "47)",
+                    "ref_id": "BIBREF46"
+                },
+                {
+                    "start": 669,
+                    "end": 673,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1652,
+                    "end": 1671,
+                    "text": ": Tables 2A and 2B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Transcriptome-specific indicators"
+        },
+        {
+            "text": "Our first measure of performance was the number of mapped reads following correction (Table 1) . This was evaluated for all 7 methods using three different aligners: Minimap2 (15), GMAP (14) and GraphMap (16) . For all three aligners, we kept default parameters suggested for ONT data by their respective authors. We chose Minimap2 and GraphMap as they were specifically designed for long mRNA reads and GMAP because it was considered the best splice-aware aligner for long RNA data according to a recent benchmark (48) . TALC shows consistently high mapping numbers regardless of the aligner used. It's closest competitor in this aspect, LoRDEC, has a high number of mapped reads with Minimap2 and GMAP but this drops to the lowest number of all methods with GraphMap. We noticed a similar trend at the gene-level assessment where LoRDEC correctly associated LRs with their gene of origin when Minimap2 or GMAP were used but was one of the worst performers with GraphMap (Supplementary Table 2A ). This can be explained by the rather high mismatch rate that remains after LoRDEC correction (partly due to the insertion of false SNPs from SRs sequencing errors, Supplementary Table 1C) .",
+            "cite_spans": [
+                {
+                    "start": 186,
+                    "end": 190,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 204,
+                    "end": 208,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 515,
+                    "end": 519,
+                    "text": "(48)",
+                    "ref_id": "BIBREF47"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 85,
+                    "end": 94,
+                    "text": "(Table 1)",
+                    "ref_id": null
+                },
+                {
+                    "start": 987,
+                    "end": 995,
+                    "text": "Table 2A",
+                    "ref_id": null
+                },
+                {
+                    "start": 1162,
+                    "end": 1185,
+                    "text": "Supplementary Table 1C)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Sequence quality of long reads"
+        },
+        {
+            "text": "Based on these alignments, we computed the base accuracy of corrected reads as in (47) ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Sequence quality of long reads"
+        },
+        {
+            "text": "Long read technologies are often used to determine entire transcript architecture including alternative start or end sites (49) . Hence, it is important that correction algorithms include a strategy to delimitate RNA read borders accurately. To compare the length of corrected sequences to the raw read, we calculated the relative distances between the raw and the corrected read length over all real datasets (cf: Supplementary Table and Supplementary Figure 1E) . Overall, the methods considered seem to control read length with an average 2% to 3% difference in length with the raw read. CoLoRMap was the only exception as we found that it extended reads with an additional 5%-13.61% which could cause the correction to drastically overextend the transcript borders.",
+            "cite_spans": [
+                {
+                    "start": 123,
+                    "end": 127,
+                    "text": "(49)",
+                    "ref_id": "BIBREF48"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 415,
+                    "end": 438,
+                    "text": "Supplementary Table and",
+                    "ref_id": null
+                },
+                {
+                    "start": 453,
+                    "end": 463,
+                    "text": "Figure 1E)",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Read length conservation"
+        },
+        {
+            "text": "LR technologies are able to capture the full connectivity between exons of transcripts. Although this does not necessarily require nucleotide resolution of the transcript, the error rate of current LR technologies is sufficiently high to confound exon connectivity analysis ( Figure 3A ). Here we define \"structural errors\" as the incorrect inclusion or deletion of an exon or the incorrect identification of exonic boundaries. We developed a method to systematically identify these errors ( Figure 3B and Supplementary Material) and evaluated the impact of LR correction methods on them. Because the mapping approach used to assign LRs to a given transcript may impact on structural errors we again tested three mapping approaches: mapping of LRs to a reference genome . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.10.901728 doi: bioRxiv preprint (hg38) using GMAP (14) and Minimap2 (15) , mapping of LRs to a reference transcriptome (hg38, ENSEMBL release 97) using GraphMap (16) . In our evaluation, we measured for each exon, how many were properly identified after correction (Tables 2A and 2B ). If these exons were already properly identified before correction, we say that they were preserved by the correction algorithm; if they were not, we say that they were clarified by the correction algorithm (Table 2B) .",
+            "cite_spans": [
+                {
+                    "start": 1014,
+                    "end": 1018,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1032,
+                    "end": 1036,
+                    "text": "(15)",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1125,
+                    "end": 1129,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 276,
+                    "end": 285,
+                    "text": "Figure 3A",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 492,
+                    "end": 501,
+                    "text": "Figure 3B",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 1229,
+                    "end": 1246,
+                    "text": "(Tables 2A and 2B",
+                    "ref_id": null
+                },
+                {
+                    "start": 1456,
+                    "end": 1466,
+                    "text": "(Table 2B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Exon structure preservation and clarification"
+        },
+        {
+            "text": "Regardless of the mapping strategy, we found that TALC is systematically in the top two best algorithms and globally performs the best. Again, we notice that other algorithms may compete with TALC on specific criteria given specific aligners but their performance drops drastically in other conditions. For example, when using the Minimap2 aligner, LSC slightly outperforms TALC in preserving the number of properly assigned exons (99.3% versus 98.5% preserved exons) but is very poor at correcting exons that were initially incorrect (14.8% versus 56.6% clarified exons).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Exon structure preservation and clarification"
+        },
+        {
+            "text": "To our knowledge, there is no algorithm dedicated to long read transcript-level quantitation (11, 47) . The authors of (47) tested several strategies to assess whether Nanopore data were fit for quantification. We reproduced their approaches based on Salmon (Salmon quasi-mapping). When splice-aware genome alignment was applicable, we also tested the approach Minimap2+Salmon. For comparison, we added a third approach, independent of Salmon, and simply based on GraphMap transcript assignments. Quantitation was realised on real Spike-In data (transcript-level) and on simulated datasets (gene-level and transcript-level). On simulated data, this analysis suggests that read correction results in a significant overall improvement of gene-level quantification accuracy (cf: Supplementary Table 2A ), all correction methods providing a rather similar gain in accuracy. This observation seems to hold also at the transcript-level, when using Salmon quasi-mapping mode, both on simulated datasets (Supplementary Table 2B ) and real Spike-In data (cf: Table 3 ). But, surprisingly, a prior alignment step (using either Minimap2 or GraphMap) seem to level the estimates.",
+            "cite_spans": [
+                {
+                    "start": 93,
+                    "end": 97,
+                    "text": "(11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 98,
+                    "end": 101,
+                    "text": "47)",
+                    "ref_id": "BIBREF46"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 776,
+                    "end": 798,
+                    "text": "Supplementary Table 2A",
+                    "ref_id": null
+                },
+                {
+                    "start": 996,
+                    "end": 1019,
+                    "text": "(Supplementary Table 2B",
+                    "ref_id": null
+                },
+                {
+                    "start": 1050,
+                    "end": 1057,
+                    "text": "Table 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "Gene and Transcript-level quantitation"
+        },
+        {
+            "text": "High error rates of long read sequencing technologies can substantially bias the assignment of reads to unique transcripts and can also introduce major structural errors in de novo transcript prediction. Consistent with a previous study (12) , we show that proper hybrid correction can provide significant improvement in the quality of downstream transcriptome analyses. However, all existing hybrid correction algorithms, designed originally to improve genome assembly, are not all suitable for RNA-seq data (42) .",
+            "cite_spans": [
+                {
+                    "start": 237,
+                    "end": 241,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 509,
+                    "end": 513,
+                    "text": "(42)",
+                    "ref_id": "BIBREF41"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "We propose a hybrid correction method tailored to RNA sequencing that considers transcript abundance to detect the possible existence of splice junctions and correct RNA long reads. This information is used to guide the exploration of a graph structure by eliminating edges that are not consistent in terms of transcript abundance while simultaneously using an adaptive threshold to account for the existence of multiple transcript isoforms. By eliminating inconsistent nodes, TALC reduces the inclusion of false nucleotide variants present in short read . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.10.901728 doi: bioRxiv preprint data. And by integrating coverage information, it can efficiently detect and account for the existence of multiple transcript isoforms.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "We tested the efficiency of our approach on three real and two simulated datasets. Globally, TALC shows better correction than currently used methods both in base accuracy and alignment rates but more importantly it conserves the exon connectivity in transcripts. Although other state of the art correction algorithms compete with TALC on specific applications, they have clear deficiencies on other important criteria that we summarize here.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "FMLRC was the fastest software included in our benchmark. Additionally, it does very well on base accuracy.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "However, it showed poor performances over most transcript-specific measures. This behaviour may be due to its approach for filtering \"erroneous\" k-mers. The threshold is read-specific but is computed a priori from the median SR read coverage (31) . This likely deletes minor isoforms k-mers when the difference in coverage with the major isoform is high. In addition, we noticed that FMLRC tended to trim reads.",
+            "cite_spans": [
+                {
+                    "start": 242,
+                    "end": 246,
+                    "text": "(31)",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Although it has long running times on real size datasets (cf: Supplementary Table 3 TALC displayed a good capacity to improve sequence quality while preserving splicing variants and proved robust to all error profiles considered. In addition, it provided rather consistent results whatever the aligner that was usedacross all aligners. Overall, TALC is systematically amongst the best performers across all metrics seems fitted to improveand improves the quality of transcriptome assemblies.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 76,
+                    "end": 83,
+                    "text": "Table 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Given the recent discovery of numerous novel functional transcripts in multiple organs (3, 58) , the re-evaluation of transcript diversity and complexity in model organisms (4, 5, 59, 60) ",
+            "cite_spans": [
+                {
+                    "start": 87,
+                    "end": 90,
+                    "text": "(3,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 91,
+                    "end": 94,
+                    "text": "58)",
+                    "ref_id": "BIBREF57"
+                },
+                {
+                    "start": 173,
+                    "end": 176,
+                    "text": "(4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 177,
+                    "end": 179,
+                    "text": "5,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 180,
+                    "end": 183,
+                    "text": "59,",
+                    "ref_id": "BIBREF58"
+                },
+                {
+                    "start": 184,
+                    "end": 187,
+                    "text": "60)",
+                    "ref_id": "BIBREF59"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Nanopore direct-RNA multiple assets in viral transcriptome research (61-64), TALC's capacity to correct the entire gamut of transcripts, and preserve the correct transcript structure may prove increasingly valuable. Table 1 : Usual alignment-based statistics for the 7 correction methods tested: primary alignment rates and base accuracy (real LR data corrected by real SR data). Only the best reported alignment is counted. The two best performance scores are colored in green and the worst in red. Base accuracy is calculated as in (4) (cf: Base accuracy computation in Supplementary Materials). Complementary summary statistics, error rates and similar results on simulated datasets can be found in Supplementary Materials. Table 2A : Overall impact of hybrid correction methods on transcript structure (real SR data, simulated LR data). For each aligner, we consider all exons from the transcripts that generated the LR if the LR mapped to the correct gene (#Exons evaluated). We computed the proportion of exons that were correctly mapped (%Identified), and the fraction of full-length LRs for which all exons could be accurately identified (error-free structure). The set of exons that could be evaluated varies between tools as it depends on the reads that could be mapped to the correct gene of origin. An exon is considered as identified if its genomic position is fully overlapped and the exon boundaries recognized by the aligner differ by no more than 10 bp (4). The copyright holder for this preprint (which was not peer-reviewed) is the . Table 2B : Improvement of hybrid correction methods on local transcript structure compared to raw data (real SR data, simulated LR data). To evaluate the improvement on exon identification, we computed the number of exons properly mapped in raw data that are still properly mapped after correction (number of exons preserved) and the number of exons missed by the aligner in the raw data that are properly assigned after correction (number of exons clarified). For each correction method, we only consider LRs that aligned to the correct genomic locus both in the raw and in the corrected data set. The copyright holder for this preprint (which was not peer-reviewed) is the . Table 3 : Impact of hybrid correction methods on Spike-In transcript quantification (real LR data corrected by real SR data). Transcript expression levels were computed using three approaches: the first two are based on Salmon (57) and presented in (47) of the long read (green peaks). From the solid regions, TALC will then determine anchor points. These will be used as entry points into the DBG; regions between these anchor points are called weak regions and will be corrected. To extract anchor points from the solid regions TALC will first crop background noise that frequently surround solid regions (red cross). The second step in determining anchors is to search for sudden changes in coverage within a solid region. These changes may correspond to divergent transcript architectures and should be explored separately. Thus, a solid region will be split into as many anchors as there are changes in coverage.",
+            "cite_spans": [
+                {
+                    "start": 2457,
+                    "end": 2461,
+                    "text": "(57)",
+                    "ref_id": "BIBREF56"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 216,
+                    "end": 223,
+                    "text": "Table 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 727,
+                    "end": 735,
+                    "text": "Table 2A",
+                    "ref_id": null
+                },
+                {
+                    "start": 1553,
+                    "end": 1561,
+                    "text": "Table 2B",
+                    "ref_id": null
+                },
+                {
+                    "start": 2230,
+                    "end": 2237,
+                    "text": "Table 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "and the growing interest in Oxford"
+        },
+        {
+            "text": "Finally, to correct weak paths between anchors, TALC will explore consistent paths. TALC explores the DBG, . CC-BY-NC-ND 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.01.10.901728 doi: bioRxiv preprint following paths of similar k-mer coverage. When the exploration reaches a potential transcriptional event such as a splice site (red dot), the exploration will branch out to account for the existence of multiple isoforms with varying coverage. Figure 2 : Example of K-mer coverage across a long read before and after TALC correction. We mapped the k-mers discovered in the short-read (SR) sequencing of MCF10A cells onto one of the long reads (LR) sequenced from the same sample. The x-axis represents each nucleotide of the LR, the y-axis shows the abundance of the mapped k-mers in the SR sample. Blue shading at the bottom of the figure highlights the correspondence between the transcript to which the long read was mapped and the read itself; red shading highlights alternative transcript architectures that could explain the sudden changes in the k-mer coverage of the graph. Alternative isoforms are annotated using ENSEMBL transcript annotation. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 577,
+                    "end": 585,
+                    "text": "Figure 2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Simulated"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "The Transcriptional Landscape of the Mammalian Genome",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Carninci",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kasukawa",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Katayama",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gough",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Frith",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Maeda",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Oyama",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Ravasi",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Lenhard",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wells",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Science",
+            "volume": "309",
+            "issn": "",
+            "pages": "1559--1563",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "A promoter-level mammalian expression atlas",
+            "authors": [],
+            "year": 2014,
+            "venue": "",
+            "volume": "507",
+            "issn": "",
+            "pages": "462--470",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Nanopore long-read RNAseq reveals widespread transcriptional variation among the surface receptors of individual B cells",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Byrne",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Beaudin",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Olsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Jain",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Cole",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Palmer",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Dubois",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Forsberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Akeson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Vollmers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nat Commun",
+            "volume": "8",
+            "issn": "",
+            "pages": "1--11",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Nanopore native RNA sequencing of a human poly(A) transcriptome",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Workman",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Jain",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Tyson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Razaghi",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Zuzarte",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Gilpatrick",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Payne",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Quick",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nat Methods",
+            "volume": "16",
+            "issn": "",
+            "pages": "1297--1305",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Nanopore direct RNA sequencing maps the complexity of Arabidopsis mRNA processing and m6A modification",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Parker",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Knop",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Sherwood",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schurch",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Mackinnon",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Gould",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hall",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Barton",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Direct full-length RNA sequencing reveals unexpected transcriptome complexity during Caenorhabditis elegans development",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Ding",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Bi",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Genome Res",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/gr.251512.119"
+                ]
+            }
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Determining exon connectivity in complex mRNAs by nanopore sequencing",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Bolisetty",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Rajadinakaran",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Graveley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Genome Biology",
+            "volume": "16",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "IRFinder: assessing the impact of intron retention on mammalian gene expression",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Middleton",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Thomas",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Singh",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Au",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Wong",
+                    "suffix": ""
+                },
+                {
+                    "first": ".-L",
+                    "middle": [],
+                    "last": "Bomane",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cosson",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Eyras",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rasko",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E J"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Genome Biology",
+            "volume": "18",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Challenges in detecting and quantifying intron retention from next generation sequencing data",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Broseus",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Ritchie",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Computational and Structural Biotechnology Journal",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.csbj.2020.02.010"
+                ]
+            }
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "DNA sequencing at 40: past, present and future",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shendure",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Balasubramanian",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Church",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Gilbert",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Rogers",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Schloss",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Waterston",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nature",
+            "volume": "550",
+            "issn": "",
+            "pages": "345--353",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Transcriptome profiling of mouse samples using nanopore sequencing of cDNA and RNA molecules",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Sessegolo",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Cruaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Silva",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cologne",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Dubarry",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Derrien",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Lacroix",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-M",
+                    "middle": [],
+                    "last": "Aury",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Sci Rep",
+            "volume": "9",
+            "issn": "",
+            "pages": "1--12",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Evaluating approaches to find exon chains based on long reads",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kuosmanen",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Norri",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "M\u00e4kinen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Brief Bioinform",
+            "volume": "19",
+            "issn": "",
+            "pages": "404--414",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "SQANTI: extensive characterization of long-read transcript sequences for quality control in full-length transcriptome identification and quantification",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tardaguila",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Fuente",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Marti",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Pereira",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Pardo-Palacios",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Risco",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ferrell",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mellado",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Macchietto",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Verheggen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Genome Res",
+            "volume": "28",
+            "issn": "",
+            "pages": "396--411",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "GMAP: a genomic mapping and alignment program for mRNA and EST sequences",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Watanabe",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Bioinformatics",
+            "volume": "21",
+            "issn": "",
+            "pages": "1859--1875",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Minimap2: pairwise alignment for nucleotide sequences",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Bioinformatics",
+            "volume": "34",
+            "issn": "",
+            "pages": "3094--3100",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Fast and sensitive mapping of nanopore sequencing reads with GraphMap",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Sovi\u0107",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "\u0160iki\u0107",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Wilm",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Fenlon",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Nagarajan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nat Commun",
+            "volume": "7",
+            "issn": "",
+            "pages": "1--11",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Magic-BLAST, an accurate RNA-seq aligner for long and short reads",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Boratyn",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Thierry-Mieg",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Thierry-Mieg",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Busby",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Madden",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "BMC Bioinformatics",
+            "volume": "20",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "2019) deSALT: fast and accurate long transcriptomic read alignment with de Bruijn graph-based index",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Zang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Genome Biology",
+            "volume": "20",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Hybrid de novo tandem repeat detection using short and long reads",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Fertin",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Jean",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Radulescu",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Rusu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "BMC Medical Genomics",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "IDP-ASE: haplotyping and quantifying allele-specific expression at the gene and gene isoform level by hybrid sequencing",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Deonovic",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Weirather",
+                    "suffix": ""
+                },
+                {
+                    "first": "X.-J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Au",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nucleic Acids Res",
+            "volume": "45",
+            "issn": "",
+            "pages": "32--32",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Characterization of fusion genes and the significantly expressed fusion isoforms in breast cancer by hybrid sequencing",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Weirather",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Afshar",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Clark",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Tseng",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Powers",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Underwood",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zabner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Korlach",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Wong",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Au",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic Acids Res",
+            "volume": "43",
+            "issn": "",
+            "pages": "116--116",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "IDP-denovo: de novo transcriptome assembly and isoform annotation by hybrid sequencing",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Fu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Yao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Au",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Bioinformatics",
+            "volume": "34",
+            "issn": "",
+            "pages": "2168--2176",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Opportunities and challenges in long-read sequencing data analysis",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Amarasinghe",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Su",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Dong",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zappia",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Ritchie",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Gouil",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Genome Biology",
+            "volume": "21",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Improving PacBio Long Read Accuracy by Short Read Alignment",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "proovread : large-scale high-accuracy PacBio correction through iterative short read consensus",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hackl",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Hedrich",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Schultz",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "F\u00f6rster",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Bioinformatics",
+            "volume": "30",
+            "issn": "",
+            "pages": "3004--3011",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "CoLoRMap: Correcting Long Reads by Mapping short reads",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Haghshenas",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Hach",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Sahinalp",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Chauve",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Bioinformatics",
+            "volume": "32",
+            "issn": "",
+            "pages": "545--551",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Hercules: a profile HMM-based hybrid error correction algorithm for long reads",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Firtina",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Bar-Joseph",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Alkan",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Cicek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Nucleic Acids Res",
+            "volume": "46",
+            "issn": "",
+            "pages": "125--125",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "LoRDEC: accurate and efficient long read error correction",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Salmela",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rivals",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Bioinformatics",
+            "volume": "30",
+            "issn": "",
+            "pages": "3506--3514",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Jabba: hybrid error correction for long sequencing reads",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Miclotte",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Heydari",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Demeester",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Rombauts",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Van De Peer",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Audenaert",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Fostier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Algorithms for Molecular Biology",
+            "volume": "11",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "HALC: High throughput algorithm for long read error correction",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Lan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "BMC Bioinformatics",
+            "volume": "18",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "FMLRC: Hybrid long read error correction using an FM-index",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Holt",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mcmillan",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Jones",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "BMC Bioinformatics",
+            "volume": "19",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Read mapping on de Bruijn graphs",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Limasset",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Cazaux",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Rivals",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Peterlongo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "BMC Bioinformatics",
+            "volume": "17",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Playing hide and seek with repeats in local and global de novo transcriptome assembly of short RNA-seq reads",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Lima",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Sinaimeri",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Sacomoto",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Lopez-Maestre",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Marchet",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Miele",
+                    "suffix": ""
+                },
+                {
+                    "first": "M.-F",
+                    "middle": [],
+                    "last": "Sagot",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Lacroix",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Algorithms for Molecular Biology",
+            "volume": "12",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "IDBA-tran: a more robust de novo de Bruijn graph assembler for transcriptomes with uneven expression levels",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "C M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "S.-M",
+                    "middle": [],
+                    "last": "Yiu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M.-J",
+                    "middle": [],
+                    "last": "Lv",
+                    "suffix": ""
+                },
+                {
+                    "first": "X.-G",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "Y L"
+                    ],
+                    "last": "Chin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Bioinformatics",
+            "volume": "29",
+            "issn": "",
+            "pages": "326--334",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Probabilistic error correction for RNA sequencing",
+            "authors": [
+                {
+                    "first": "H.-S",
+                    "middle": [],
+                    "last": "Le",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Schulz",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Mccauley",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Hinman",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Bar-Joseph",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Nucleic Acids Res",
+            "volume": "41",
+            "issn": "",
+            "pages": "109--109",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Rcorrector: efficient and accurate error correction for Illumina RNA-seq reads. GigaScience, 4",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Florea",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "A comparative evaluation of hybrid error correction methods for errorprone long reads",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Fu",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Au",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Genome Biology",
+            "volume": "20",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Gaining comprehensive biological insight into the transcriptome by performing a broad-spectrum RNA-seq analysis",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "M E"
+                    ],
+                    "last": "Sahraeian",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mohiyuddin",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Sebra",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Tilgner",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Afshar",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Au",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Asadi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Gerstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Wong",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Snyder",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nat Commun",
+            "volume": "8",
+            "issn": "",
+            "pages": "1--15",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Abiotic Stresses Modulate Landscape of Poplar Transcriptome via Alternative Splicing, Differential Intron Retention, and Isoform Ratio Switching",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Filichkin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hamilton",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Dharmawardhana",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Singh",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Sullivan",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ben-Hur",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "S N"
+                    ],
+                    "last": "Reddy",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Jaiswal",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Front. Plant Sci",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Transcriptomic profiles of 33 opium poppy samples in different tissues, growth phases, and cultivars",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Luo",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Gong",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Su",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Kong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Sci Data",
+            "volume": "6",
+            "issn": "",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Unveiling novel targets of paclitaxel resistance by single molecule longread RNA sequencing in breast cancer",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Lian",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Shao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Sci Rep",
+            "volume": "9",
+            "issn": "",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Comparative assessment of long-read error correction software applied to Nanopore RNA-sequencing data",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Lima",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Marchet",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Caboche",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Da Silva",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Istace",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-M",
+                    "middle": [],
+                    "last": "Aury",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Touzet",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Chikhi",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Brief Bioinform",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/bib/bbz058"
+                ]
+            }
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Genome assembly using Nanopore-guided long and error-free DNA reads",
+            "authors": [
+                {
+                    "first": "M.-A",
+                    "middle": [],
+                    "last": "Madoui",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Engelen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Cruaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Belser",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Bertrand",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Alberti",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Lemainque",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Wincker",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-M",
+                    "middle": [],
+                    "last": "Aury",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "BMC Genomics",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Using reads to annotate the genome: influence of length, background distribution, and sequence errors on prediction capacity",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Philippe",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Boureux",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Br\u00e9h\u00e9lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tarhio",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Commes",
+                    "suffix": ""
+                },
+                {
+                    "first": "\u00c9",
+                    "middle": [],
+                    "last": "Rivals",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Nucleic Acids Res",
+            "volume": "37",
+            "issn": "",
+            "pages": "104--104",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Benchmarking of the Oxford Nanopore MinION sequencing for quantitative and qualitative assessment of cDNA populations",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Oikonomopoulos",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Djambazian",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Badescu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Ragoussis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Sci Rep",
+            "volume": "6",
+            "issn": "",
+            "pages": "1--13",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Getting the Entire Message: Progress in Isoform Sequencing",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hardwick",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Joglekar",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Flicek",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Frankish",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "U"
+                    ],
+                    "last": "Tilgner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Front. Genet",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "A comprehensive examination of Nanopore native RNA sequencing for characterization of complex transcriptomes",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Soneson",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Yao",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bratus-Neuenschwander",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Patrignani",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Robinson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hussain",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nat Commun",
+            "volume": "10",
+            "issn": "",
+            "pages": "1--14",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Evaluation of tools for long read RNA-seq spliceaware alignment",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Kri\u017eanovi\u0107",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Echchiki",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Roux",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "\u0160iki\u0107",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Bioinformatics",
+            "volume": "34",
+            "issn": "",
+            "pages": "748--754",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Alternative start and termination sites of transcription drive most transcript isoform differences across human tissues",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Reyes",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Huber",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Nucleic Acids Res",
+            "volume": "46",
+            "issn": "",
+            "pages": "582--592",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Swimming downstream: statistical analysis of differential transcript usage following Salmon quantification",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Love",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Soneson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Patro",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "SUPPA2: fast, accurate, and uncertainty-aware differential splicing analysis across multiple conditions",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Trincado",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Entizne",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Hysenaj",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Singh",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Skalic",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Elliott",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Eyras",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Genome Biology",
+            "volume": "19",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Fundamental Concepts of Compositional Data Analysis",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Van Den Boogaart",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Tolosana-Delgado",
+                    "suffix": ""
+                },
+                {
+                    "first": "R!",
+                    "middle": [],
+                    "last": "; R, Use",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Springer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "13--50",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "compositions\": A unified R package to analyze compositional data",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Van Den Boogaart",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Tolosana-Delgado",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Computers & Geosciences",
+            "volume": "34",
+            "issn": "",
+            "pages": "320--338",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "It's all relative: analyzing microbiome data as compositions",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Gloor",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Pawlowsky-Glahn",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Egozcue",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Annals of Epidemiology",
+            "volume": "26",
+            "issn": "",
+            "pages": "322--329",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Understanding sequencing data as compositions: an outlook and review",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Quinn",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Erb",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Richardson",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Crowley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Bioinformatics",
+            "volume": "34",
+            "issn": "",
+            "pages": "2870--2878",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "A field guide for the compositional analysis of any-omics data",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Quinn",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Erb",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Gloor",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Notredame",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Richardson",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Crowley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Salmon provides fast and bias-aware quantification of transcript expression",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Patro",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Duggal",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Love",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Irizarry",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Kingsford",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nat Methods",
+            "volume": "14",
+            "issn": "",
+            "pages": "417--419",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "Long-read sequencing reveals the complex splicing profile of the psychiatric risk gene CACNA1C in human brain",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Clark",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Wrzesinski",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Garcia",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "A L"
+                    ],
+                    "last": "Hall",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kleinman",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hyde",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Weinberger",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Harrison",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Haerty",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Tunbridge",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Mol Psychiatry",
+            "volume": "25",
+            "issn": "",
+            "pages": "37--47",
+            "other_ids": {}
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "A survey of transcriptome complexity in Sus scrofa using single-molecule long-read sequencing",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Fu",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zou",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "DNA Res",
+            "volume": "25",
+            "issn": "",
+            "pages": "421--437",
+            "other_ids": {}
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "Full-length transcriptome reconstruction reveals a large diversity of RNA and protein isoforms in rat hippocampus",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "You",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Langer",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hou",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Rupprecht",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Vlatkovic",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Quedenau",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Tushev",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Epstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Schaefke",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nat Commun",
+            "volume": "10",
+            "issn": "",
+            "pages": "1--15",
+            "other_ids": {}
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Long-Read Sequencing -A Powerful Tool in Viral Transcriptome Research",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Boldogk\u0151i",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Moldov\u00e1n",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Bal\u00e1zs",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Snyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Tomb\u00e1cz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Trends in Microbiology",
+            "volume": "27",
+            "issn": "",
+            "pages": "578--592",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Direct RNA Sequencing of the Coding Complete Influenza A",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Keller",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Rambo-Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Wilson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ridenour",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Shepard",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Stark",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Neuhaus",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Dugan",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Wentworth",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Barnes",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Virus Genome. Sci Rep",
+            "volume": "8",
+            "issn": "",
+            "pages": "1--8",
+            "other_ids": {}
+        },
+        "BIBREF63": {
+            "ref_id": "b63",
+            "title": "Direct RNA nanopore sequencing of full-length coronavirus genomes provides novel insights into structural variants and enables modification analysis",
+            "authors": [],
+            "year": null,
+            "venue": "Genome Res",
+            "volume": "29",
+            "issn": "",
+            "pages": "1545--1554",
+            "other_ids": {}
+        },
+        "BIBREF64": {
+            "ref_id": "b64",
+            "title": "Transcriptome-wide analysis of a baculovirus using nanopore sequencing",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Boldogk\u0151i",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Moldov\u00e1n",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sz\u0171cs",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Tomb\u00e1cz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Sci Data",
+            "volume": "5",
+            "issn": "",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "SeqAn An efficient, generic C++ library for sequence analysis",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "D\u00f6ring",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Weese",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Rausch",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Reinert",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC Bioinformatics",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "The SeqAn C++ template library for efficient sequence analysis: A resource for programmers",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Reinert",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Dadi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ehrhardt",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Hauswedell",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Mehringer",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Rahn",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Pockrandt",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Winkler",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Siragusa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Journal of Biotechnology",
+            "volume": "261",
+            "issn": "",
+            "pages": "157--168",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "nL | (n0 & no split coverage event) ~ Poisson(n0) and sum (nJ, J\u2260L) ~ Poisson(n0*\u03b5)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "and was generated on the GM12878 B-Lymphocyte cell line. Because there was no SR dataset provided with this experiment, we used the GM12878 Illumina data from an a earlier study (cf: Supplementary Material). Lastly, we performed our own ONT direct RNA sequencing and matched Illumina mRNA sequencing on the MCF10A cell line (cf: Supplementary Material).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "), CoLoRMap exhibits interesting properties when applied to RNA-seq data. Analysis on simulated data indicates it can fairly improve the reoncstruction of the inner body of transcrits. Nonetheless, it lacks a specific strategy to stop correction at the borders, and has a marked tendency to extend reads. This feature, though relevant for genome assembly, can be detrimental on RNA-seq data when the corrected read originates from a gene which expressed multiple UTR forms or undergoes alternative transcription start and end.Consistent with conclusions from(42), LoRDEC demonstrates very good results on most the transcriptomespecific indicators. Its main drawback is a lower base accuracy due to the inclusion of many sequencing errors from the SRs into the LRs, especially across high SR coverage regions. Additionally, it's performances vary dramatically between aligners.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "False exons are estimated by measuring sequences longer than 25 bp introduced in the intronic region of the transcript of origin.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "This work was supported by the Agence Nationale de la Recherche [ANRJCJC -WIRED], the Labex EpiGenMed [ANR-10-LABX-12-01] and the MUSE initiative [GECKO]. DS acknowledges financial support from France G\u00e9nomique National infrastructure, funded as part of \"Investissement d'avenir\" program managed by Agence Nationale pour la Recherche [ANR-10-INBS-09]. 67. Mar\u00e7ais,G. and Kingsford,C. (2011) A fast, lock-free approach for efficient parallel counting of occurrences of k-mers. Bioinformatics, 27, 764-770. Overview of the TALC algorithm. TALC's correction procedure begins by creating a weighted DBG (DBG) from the k-mer counts of the SRs. It then searches for common sequences between the LRs and the k-mers of the DBG. Stretches of common k-mers are called Solid Regions and are assumed to be error-free parts",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Structural errors in long reads after different correction methods. A) Screenshot of the IGV viewer showing long reads aligned to the genome with GMAP. A structural error (insertion) has occurred in the non-corrected long reads (red circle). B) Overview of our approach to finding structural errors which are either deletions or insertions in LRs computationally generated from a given transcript.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "(cf: Table 1 and Supplementary tables 1A to 1C). To assess whether the benchmark performances depended on the coverage in SRs, we also computed the summary statistics of base accuracy according to the gene coverage depth in SRs (cf: Supplementary table 1D). The results of this analysis show that TALC globally performs well on this measure and across the entire range of SR coverage bins. It's closest competitors for base accuracy are CoLoRMap and FMLRC.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "MCF10A transcriptome BY-NC-ND 4.0 International license author/funder. It is made available under a",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "and transcriptome assignment using GraphMap. The expected number of reads per Spike-In transcripts was then estimated by multiplying theoretical values by the total number of LRs in the MinION dataset. Error rates were finally obtained as the absolute value of the difference: Expected value -Estimated value. To account for diverging transcript expression levels we also reported relative errors (Expected value -Estimate)/Expected value.DATA AVAILABILITY AND IMPLEMENTATIONTALC is written in C++ and uses the SeqAn library(65,66). The program is freely available under the CECILL licence in the GitLab repository (https://gitlab.igh.cnrs.fr/lbroseus/TALC). Currently, the De Bruijn graph is built from k-mer counts files as output by Jellyfish2 (67). https://gitlab.igh.cnrs.fr/lbroseus/TransAT. Direct RNA Nanopore and Illumina RNA-seq MCF10A samples have been deposited on GEO under accession number GSE126638. LB developed and implemented the algorithm. LB and WR devised the analyses and planned the experiments. AT provided valuable suggestions for the implementation. AJO cultured MCF10A cells and extracted their RNA. DS carried out the sequencing, and ED performed the base calling of the MiNION sample. LB and WR wrote the article. All authors read and approved the final manuscript.We wish to acknowledge the Genotoul platform (genotoul.fr) for providing us with calculation time on their servers.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The authors declare that they have no competing interests.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CONFLICT OF INTEREST"
+        }
+    ]
+}

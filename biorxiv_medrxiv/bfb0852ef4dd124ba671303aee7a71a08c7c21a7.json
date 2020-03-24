@@ -1,0 +1,2220 @@
+{
+    "paper_id": "bfb0852ef4dd124ba671303aee7a71a08c7c21a7",
+    "metadata": {
+        "title": "An automated data processing and analysis pipeline for transmembrane proteins in detergent solutions",
+        "authors": [
+            {
+                "first": "D",
+                "middle": [],
+                "last": "Molodenskiy",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "H",
+                "middle": [],
+                "last": "Mertens",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "D",
+                "middle": [],
+                "last": "Svergun",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The application of small angle X-ray scattering (SAXS) to the structural characterization of transmembrane proteins (MPs) in detergent solutions has become a routine procedure at the most synchrotron BioSAXS beamlines around the world. SAXS provides overall parameters and low resolution shapes of solubilized MPs, but is also meaningfully employed in hybrid modeling procedures that combine scattering data with information provided by high-resolution techniques (eg. macromolecular crystallography, nuclear magnetic resonance and cryo-electron microscopy). Structural modeling of MPs from SAXS data is non-trivial, and the necessary computational procedures require further formalization and facilitation. We propose an automated pipeline integrated with the laboratory-information management system ISPyB, aimed at preliminary SAXS analysis and the first-step reconstruction of MPs in detergent solutions, in order to streamline high-throughput studies, especially at synchrotron beamlines. The pipeline queries an ISPyB database for available a priori information via dedicated services, estimates model-free SAXS parameters and generates preliminary models utilizing either ab initio, high-resolution-based, or mixed/hybrid methods. The results of the automated analysis can be inspected online using the standard ISPyB interface and the estimated modeling parameters may be utilized for further in-depth modeling beyond the pipeline. Examples of the pipeline results for the modelling of the tetrameric alpha-helical membrane channel Aquaporin0 and mechanosensitive channel T2, solubilized by n-Dodecyl \u03b2-D-maltoside are presented. We demonstrate how the increasing amount a priori information improves the model resolution and enables deeper insights into the molecular structure of protein-detergent complexes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Small angle X-ray scattering (SAXS) using synchrotron radiation is a powerful technique for the structural characterization of transmembrane proteins (MPs) in detergent solutions Overall structural characterization and modeling of MPs from SAXS data is non-trivial, and the necessary computational procedures require further formalization and facilitation. We propose an automated pipeline integrated with the laboratory-information management system ISPyB, aimed at preliminary SAXS analysis and modelling of MPs in detergent solutions, in order to streamline high-throughput studies, especially at synchrotron beamlines. author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Membrane proteins (MPs) are crucial for the normal functioning of an organism as they are involved in essential processes including signalling, nutrient and ion transport, maintaining biological membrane structure and integrity (1) (2) (3) (4) . They are encoded by about 30% of the human genome (5) and are major targets for modern therapeutic drugs. This makes structural studies of MP solutions extremely important both scientifically and medically (6) (7) (8) (9) (10) .",
+            "cite_spans": [
+                {
+                    "start": 228,
+                    "end": 231,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 232,
+                    "end": 235,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 236,
+                    "end": 239,
+                    "text": "(3)",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 240,
+                    "end": 243,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 296,
+                    "end": 299,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 452,
+                    "end": 455,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 456,
+                    "end": 459,
+                    "text": "(7)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 460,
+                    "end": 463,
+                    "text": "(8)",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 464,
+                    "end": 467,
+                    "text": "(9)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 468,
+                    "end": 472,
+                    "text": "(10)",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "The defining structural feature of an integral MP is the presence of a large contiguous apolar surface, facilitating the insertion of the protein into the hydrophobic lipid alkyl chain interior of a biological membrane. In order to characterize MPs in vitro, one needs to substitute the natural phospholipid bilayer with an artificial amphiphilic environment that supports the functional state.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "At present the majority of investigators studying MPs utilize readily available and inexpensive surfactant systems or detergents (small amphiphilic molecules) (6, 8) . However, a common problem observed is the destabilization of protein structure following exposure to detergent molecules (11, 12) . Fortunately, the development of milder detergents and detergent stabilized bilayer systems (bicelles) has helped to overcome this problem (7, 8, 13, 14) . Importantly, the solution behaviour of many commercially available detergents has been well characterised using a range of techniques, including small angle X-ray scattering (SAXS) (15) . Micellar solutions of such detergents have been shown to adopt characteristic sizes, which can be reliably separated from detergent-protein complexes of interest using chromatographic techniques, eg. high performance liquid chromatography (HPLC).",
+            "cite_spans": [
+                {
+                    "start": 159,
+                    "end": 162,
+                    "text": "(6,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 163,
+                    "end": 165,
+                    "text": "8)",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 289,
+                    "end": 293,
+                    "text": "(11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 294,
+                    "end": 297,
+                    "text": "12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 438,
+                    "end": 441,
+                    "text": "(7,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 442,
+                    "end": 444,
+                    "text": "8,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 445,
+                    "end": 448,
+                    "text": "13,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 449,
+                    "end": 452,
+                    "text": "14)",
+                    "ref_id": null
+                },
+                {
+                    "start": 636,
+                    "end": 640,
+                    "text": "(15)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Recently, MPs have become increasingly popular objects for small angle scattering investigations (16) (17) (18) (19) thanks to the availability of improved online size-exclusion chromatography (SEC-SAXS) set-ups at dedicated SAXS synchrotron beamlines. Integrated HPLC facilitates simultaneous sample purification and X-ray data acquisition, separating the scattering signal from protein, detergent and protein-detergent complexes (PDCs) that appear in the elution profile. Direct measurement of the mobile phase (ie. buffer) and elution peaks corresponding to the macromolecule(s) of interest enable a rapid and robust sample characterization following a well-defined sequence of data reduction procedures (20) . These procedures are amenable to automation and can be further coupled to advanced analysis and modeling approaches for MP systems, such as those detailed below.",
+            "cite_spans": [
+                {
+                    "start": 97,
+                    "end": 101,
+                    "text": "(16)",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 102,
+                    "end": 106,
+                    "text": "(17)",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 107,
+                    "end": 111,
+                    "text": "(18)",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 112,
+                    "end": 116,
+                    "text": "(19)",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 707,
+                    "end": 711,
+                    "text": "(20)",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Unambiguous reconstruction of protein shape from a detergent solubilised MP is hampered by the strong scattering signal of bound detergent, typically forming a corona around the lipophilic trans-membrane region. The corona consists of hydrophobic and hydrophilic components, with significantly different scattering/electron densities. Thus the results of standard SAXS modelling procedures are, in such cases, non-realistic and ambiguous. Using complementary data from small-angle neutron scattering (SANS) including contrast matching approaches to isolate scattering from each solution component, the ambiguity of models calculated from detergent solubilised MPs can be reduced (21) (22) (23) (24) . It was recently shown that SANS data recorded at several contrast points together with an a priori estimate of detergent aggregation number, allow one to reliably reconstruct the shapes of MPs in detergent solutions (24) . In this publication it was suggested that a minimum of two SANS curves, collected under different contrast conditions, are required to obtain a stable solution. This requirement is necessary to isolate the signals from the two principal contributions to the scattering intensity, from the protein itself and from the hydrophillic part of the detergent corona. For this purpose the author developed an ab initio algorithm with a four-phase bead model for a protein: (1) protein, (2) detergent heads, (3) detergent tails, and (4) solvent (24) . An additional set of geometrical and symmetrical constraints was also required.",
+            "cite_spans": [
+                {
+                    "start": 679,
+                    "end": 683,
+                    "text": "(21)",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 684,
+                    "end": 688,
+                    "text": "(22)",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 689,
+                    "end": 693,
+                    "text": "(23)",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 694,
+                    "end": 698,
+                    "text": "(24)",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 917,
+                    "end": 921,
+                    "text": "(24)",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1460,
+                    "end": 1464,
+                    "text": "(24)",
+                    "ref_id": "BIBREF24"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "In comparison to shape reconstruction from multi-contrast SANS data, reconstruction of MPs from a single SAXS curve is significantly more challenging as the contributions from different phases are difficult to separate. Nevertheless, in view of the relative ease of access to X-ray facilities and lower sample consumption, compared to that of neutron sources, SAXS-based approaches to MP characterization are increasingly popular. A recent work on the tetrameric water-channel protein Aquaporin0 (25) showed that if an atomic structure of the protein is available, it is possible to reconstruct the entire complex by combining online SEC-SAXS with refractometry measurements. In that case, it was essential to use the available a priori information about the PDC in order to provide sufficient restraints on the model for a meaningful reconstruction. In the present paper we further formalize this approach and develop an automatic pipeline to build models of PDC utilizing a priori information taken from a dedicated database.",
+            "cite_spans": [
+                {
+                    "start": 496,
+                    "end": 500,
+                    "text": "(25)",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Given the rapidly growing interest in the applications of SAXS to study MPs, systematic storage of the relevant information is urgently required. The ISPyB information system (26) , a database dedicated to biological SAXS (BioSAXS) and crystallographic experiments on synchrotron beamlines, offers an appropriate framework. ISPyB is already employed at major European synchrotrons (Petra-III, ESRF, SOLEIL, DIAMOND, MAX IV) to facilitate the data flow beginning with the sample tracking and ending with its structural characterization and visualization of the generated models.",
+            "cite_spans": [
+                {
+                    "start": 175,
+                    "end": 179,
+                    "text": "(26)",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "In order to be used in this project, the ISPyB database was extended to store information on the available high-resolution structures of MPs (e.g. homologs or crystallographic models), aminoacid sequences in FASTA format and chemical formulae of the given detergent tails and heads. The latter are used for the calculation of electron densities and approximate sizes of the detergent corona in the modelling. The electron density values can also be provided directly by the user for the cases when the automatic calculations are impossible or the values are not considered to be sufficiently accurate. Depending on the amount of a priori information, the pipeline decides whether it is possible to automatically reconstruct the model and, if so, builds it utilizing either the multiphase ab initio program MONSA (27) or the hybrid modelling program MEMPROT (28) . The starting parameters for the relevant fitting procedures are evaluated based on the available data stored in ISPyB, with the hybrid approach (25) executing upon detection of a high resolution protein component. In the absence of a high resolution protein structure the ab initio reconstruction is executed utilizing information about the amino-acid sequence of the MP, chemical formula of the detergent and additional data on the other solvent/solute components to assess the shape of the PDC.",
+            "cite_spans": [
+                {
+                    "start": 812,
+                    "end": 816,
+                    "text": "(27)",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 857,
+                    "end": 861,
+                    "text": "(28)",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "The automated membrane protein pipeline (AMPP) described herein, is implemented at the P12 beamline of the EMBL at Petra-III storage ring (synchrotron DESY, Hamburg, Germany) as an extension of a standard SEC-SAXS pipeline SASFLOW. It is integrated into the beamline control software BECQUEREL (29) operating the beamline. If the MP-related fields in the ISPyB database are lacking, BECQUEREL runs a standard pipeline mode for soluble proteins, using the program DAMMIF (30) for a single-phase ab initio shape determination. The MPrelated extension starts by default if the connection with ISPyB is established by the control software, and the membrane-specific fields in the ISPyB database are filled. The system has been optimized through extensive testing on different MPs in detergent solutions, and several examples of its applications are presented below.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "The published SAXS data of the tetrameric \u03b1-helical membrane channel, Aquaporin0 solubilized by n-Dodecyl \u03b2-D-Maltoside (25, 28) was used for the pipeline testing. This sample corresponds to a reliably reconstituted PDC with known geometrical parameters of a detergent corona providing a test case with the modeling program MEMPROT (28) . The model of the Aquaporin0-detergent complex (24, 25, 28) was used as a reference for the models generated by AMPP. Additional pipeline tests were conducted using the experimental SEC-SAXS data for the mechanosensitive T2 channel solubilized n-Dodecyl \u03b2-D-Maltoside (31) downloaded from the SASBDB database (www.sasbdb.org, ID SASDCY6)) (32).",
+            "cite_spans": [
+                {
+                    "start": 120,
+                    "end": 124,
+                    "text": "(25,",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 125,
+                    "end": 128,
+                    "text": "28)",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 332,
+                    "end": 336,
+                    "text": "(28)",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 385,
+                    "end": 389,
+                    "text": "(24,",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 390,
+                    "end": 393,
+                    "text": "25,",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 394,
+                    "end": 397,
+                    "text": "28)",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Materials."
+        },
+        {
+            "text": "The AMPP is implemented as an extension of SASFLOW (33) , an automated data reduction and analysis pipeline currently running at P12. AMPP utilizes several modules and modeling programs available in the ATSAS package (34) and, in addition, calls the program MEMPROT (28) . The primary data analysis is executed directly upon completion of a SEC-SAXS data acquisition and proceeds in the following workflow ( Figure. 1) Radial integration of 2D SAXS images by RADAVER (33) (typically 1000-3000 frames are collected for a standard SEC-SAXS run set with one second exposure per image/frame). 2) Determination of the buffer and sample ranges from the elution profile using CHROMIXS (35) , an important analysis component of the pipeline specifically designed for SEC-SAXS analysis. CHROMIXS automatically identifies both buffer and sample regions in the elution profile, and performs frame averaging and subtraction to produce the SAXS curve of the purified component for subsequent analysis (Figure 2 ). It is worth noting that CHROMIXS is capable of identifying multiple elution peaks, providing the users with a set of distinct SAXS curves from individual fractions, if present. 3) Calculation of the overall parameters (radius of gyration R g , maximum size D max , excluded volume V Porod , molecular weight MW) and the generation of relevant plots (Guinier plot: ln I(s) vs s 2 ; Kratky plot: I(s)s 2 vs s; and the real-space distance distribution function: P(r) vs r) for all subtracted curves. An example of these plots for the mechanosensitive T2 channel data is shown in the generated summary table (Figure. 3). These parameters are employed for the evaluation of the search volume to conduct the ab initio reconstruction using MONSA or for the hybrid MEMPROT fitting procedures. 4) Querying and collecting the available a priori information from the ISPyB database via dedicated Simple Object Access Protocol (SOAP) web services. Depending on the results, one of the three modeling paths is executed for the subsequent modeling ( Figure. 1):",
+            "cite_spans": [
+                {
+                    "start": 51,
+                    "end": 55,
+                    "text": "(33)",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 217,
+                    "end": 221,
+                    "text": "(34)",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 266,
+                    "end": 270,
+                    "text": "(28)",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 678,
+                    "end": 682,
+                    "text": "(35)",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 408,
+                    "end": 415,
+                    "text": "Figure.",
+                    "ref_id": null
+                },
+                {
+                    "start": 988,
+                    "end": 997,
+                    "text": "(Figure 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 1605,
+                    "end": 1613,
+                    "text": "(Figure.",
+                    "ref_id": null
+                },
+                {
+                    "start": 2037,
+                    "end": 2044,
+                    "text": "Figure.",
+                    "ref_id": null
+                }
+            ],
+            "section": "Computational methods"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Computational methods"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/714303 doi: bioRxiv preprint Figure. 1. Workflow of the pipeline extension for MPs. The pipeline utilizes a priori data from the ISPyB database, calculates overall SAXS parameters and decides, which software to employ for the subsequent analysis. Figure. 2. An elution profile of T2 membrane protein, built by CHROMIXS from 1600 consequent SEC-SAXS data sets (average intensity versus frame number). The frames corresponding to the buffer and sample are automatically identified (marked by red and green, respectively), averaged and subtracted one from the other. The resulting curve is displayed in PRIMUS interface (inset). Initial estimates of the length of the detergent tail and head components are done using the Tanford formula for the detergent tail length: l c = 1.5 + 1.265n c , where n c is the total number of carbon atoms. The starting parameters for the evaluation of the corona geometry using MEMPROT (28) are determined as follows:",
+            "cite_spans": [
+                {
+                    "start": 1018,
+                    "end": 1022,
+                    "text": "(28)",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 131,
+                    "end": 138,
+                    "text": "Figure.",
+                    "ref_id": null
+                },
+                {
+                    "start": 349,
+                    "end": 356,
+                    "text": "Figure.",
+                    "ref_id": null
+                }
+            ],
+            "section": "Computational methods"
+        },
+        {
+            "text": "For a spherical (ellipticity, e = 1) detergent torus with the height (a) and cross-sectional axes (minor = b/e, major = b\u2022e) equal to the length of a detergent tail (Tanford tail ), the geometrical parameters are set as: a = b = t = Tanford tail (28) (Figure 4) , where t is the thickness of the hydrophilic detergent head group. Although the hydrophobic tail of a detergent is typically slightly longer than its hydrophilic head, this assumption appears to be a reasonable first approximation for the further refinement. AMPP employs the MEMPROT minimization procedure, refining the starting parameters within a limited range, estimated empirically based on several tests conducted on different MPs. The a, b and t parameters are searched in the \u00b1 1/3(Tanford tail ) range, while ellipticity and rotation parameters are kept fixed in order to speed up the computations. The hydrophobic radius of the model is taken as a + t = 2\u2022Tanford tail , which is in a good agreement with the statistical mean value of transmembrane thickness D Transmemb \u2248 30 \u00b13 \u00c5, obtained from the OPM database (36) (https://opm.phar.umich.edu/types/1). The maximum value of D Transmemb is checked during the modelling such that it does not exceed 45 \u00c5.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 251,
+                    "end": 261,
+                    "text": "(Figure 4)",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Computational methods"
+        },
+        {
+            "text": "The electron densities can be either provided directly via the ISPyB interface or calculated from the protein primary sequence (in FASTA format) or from the chemical formula using the built-in look-up tables (37, 38) . Knowledge of the detergent chemical formula is mandatory as it provides additional information to constrain the geometry of the MP model. When the high resolution models are not available, ab initio low resolution bead modeling is performed by MONSA (27), allowing for three phases with distinct contrasts corresponding to the protein (phase 1), detergent tails (phase 2) and detergent heads (phase 3). For each phase the contrast is calculated and the search space confined to a cylinder and two coaxial spherical hemi-tori ( Figure 5A ), thus avoiding contacts between the hydrophobic regions and solvent in the final model. A spherical region is fixed for the protein phase in the vicinity of the origin of coordinates, while the rest of the cylindrical region is free to become either protein or solvent. Penalties for the model discontinuity and looseness are applied during the simulated annealing procedure as described in the original paper (27) . Three additional boundary regions between the phases ( Figure 5A ) have a thickness of a few Angstrom allowing MONSA to select the optimum phase assignment during the fitting. The boundary beads (eg. between phases 1 and 2) are allowed to be assigned to either phase 1 or phase 2 ( Figure 5A ). The model is sought within a spherical search volume of diameter d = D max , where the protein can be surrounded by twostacked tori (detergent tails and heads) with the lengths evaluated from the Tanford formula ( Figure 5B ). The transmembrane diameter is calculated as:",
+            "cite_spans": [
+                {
+                    "start": 208,
+                    "end": 212,
+                    "text": "(37,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 213,
+                    "end": 216,
+                    "text": "38)",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 1168,
+                    "end": 1172,
+                    "text": "(27)",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 746,
+                    "end": 755,
+                    "text": "Figure 5A",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1230,
+                    "end": 1239,
+                    "text": "Figure 5A",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1457,
+                    "end": 1466,
+                    "text": "Figure 5A",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1684,
+                    "end": 1693,
+                    "text": "Figure 5B",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "MODELING PATH 2: Electron densities of a protein and chemical formulae of detergent heads/tails are known, but the high resolution model of the protein is not available."
+        },
+        {
+            "text": "where Length (head) is considered to be the same as the Tanford (tail) , given that for the most common detergent molecules it is typically smaller or equal to that of the tail. The expected author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 64,
+                    "end": 70,
+                    "text": "(tail)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "MODELING PATH 2: Electron densities of a protein and chemical formulae of detergent heads/tails are known, but the high resolution model of the protein is not available."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/714303 doi: bioRxiv preprint values for toroidal volumes and R g values of detergent phases are calculated on the fly from geometrical considerations (39) and serve as additional constrains while modelling. The total computed volume and R g of the particle is then compared to the experimental V Porod and R g , obtained from step 2. If available, information from complementary methods (e.g. phase volumes or phase R g ) can be used to improve the reliability of the final model. Using a spherical 40 beads-per-diameter MONSA grid, together with the above mentioned geometrical restrictions, reliable low resolution models were obtained in a reasonable processing time about 10-15 minutes on a desktop PC (Intel Xeon CPU 3.7 GHz 8 Cores, 12.5 GB RAM). This algorithm is generally applicable to the reconstruction of both transmembrane and membraneassociated proteins. In the case of membrane-associated proteins one can simply shift the fixed \"protein\" phase to the edge/surface of the detergent disc and extend the protein/solvent phase cylinder outside the entire detergent disc region. ",
+            "cite_spans": [
+                {
+                    "start": 252,
+                    "end": 256,
+                    "text": "(39)",
+                    "ref_id": "BIBREF39"
+                }
+            ],
+            "ref_spans": [],
+            "section": "MODELING PATH 2: Electron densities of a protein and chemical formulae of detergent heads/tails are known, but the high resolution model of the protein is not available."
+        },
+        {
+            "text": "In this case neither MONSA nor MEMPROT modeling is employed. The pipeline works in the standard SEC-SAXS mode and the low-resolution model is built by DAMMIF (the phase choice only between the PDC and solvent). The pipeline reconstructs low-resolution models from the low-s region (typically s max < 1.0 nm -1 ) of the experimental SAXS data ab initio, minimizing the contribution from the inhomogeneous internal structrure and describing only the overall particle author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MODELING PATH 3: A priori information from ISPyB is not sufficient to generate the required constraints."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/714303 doi: bioRxiv preprint shape. The value of s max for the initial reconstruction is automatically estimated from the first local minimum of the experimental SAXS curve. MP model have been computed, the pipeline  builds a file in the xml format with the final summary table, gathering together all the results in a compact and human/machine-readable form (Figure 3 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 276,
+                    "end": 380,
+                    "text": "MP model have been computed, the pipeline  builds a file in the xml format with the final summary table,",
+                    "ref_id": null
+                },
+                {
+                    "start": 461,
+                    "end": 470,
+                    "text": "(Figure 3",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "MODELING PATH 3: A priori information from ISPyB is not sufficient to generate the required constraints."
+        },
+        {
+            "text": "Upon completion the pipeline compresses the calculated 1D SEC-SAXS profiles into a single HDF5 file and reports them back together with the final model into the ISPyB database. The data from the buffer and sample regions, subtracted curves and overall SAXS parameters for each detected peak in the elution profile are displayed in a convenient tabular form (Figure 3 ). It is worth noting that the summary table generated is applicable to all SEC-SAXS runs conducted at the P12 beamline and is not restricted to the measurement and analysis of MPs. For example, it is often the case that the sample exists in solution as a mixture of different states (eg. multiple oligomeric states of a protein or complex), which are separated chromatographically. In this case, AMPP will determine the shapes of individual components in the mixture using the modeling path 3. The pipeline is therefore generally applicable.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 357,
+                    "end": 366,
+                    "text": "(Figure 3",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "5) As soon as the overall SAXS parameters and the"
+        },
+        {
+            "text": "The results generated can be inspected online using the ISPyB web-server (26) . The ISPyB database and web services were extended to accommodate the information on chemical formulae and electron densities of detergents, as well as FASTA amino acid sequences and electron densities of the MPs and buffers. The SEC-SAXS elution profile and the final model can be visualized in the existing ISPyB GUI, as the pipeline output files are compatible with the required format.",
+            "cite_spans": [
+                {
+                    "start": 73,
+                    "end": 77,
+                    "text": "(26)",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "5) As soon as the overall SAXS parameters and the"
+        },
+        {
+            "text": "To test the modelling components of the AMPP, we performed an automatic structural characterization of a tetrameric \u03b1-helical membrane channel Aquaporin0 in DDM solution. The AMPP was utilized in all three pipeline regimes: i) with the high resolution model available ii) with detergent composition and the protein primary structure (FASTA sequence) known iii) plain ab initio modelling (no a priori information). The models generated from these three modelling trajectories are displayed in Figure 6 (as the protein was known to be tetrameric, P4 symmetry was utilized in MONSA and DAMMIF). Figure. 6. Examples of automatically reconstructed Aquaporin0 PDC models by the AMPP pipeline utilizing MEMPROT (hybrid modeling with known protein model (PDB:2B6P) and unknown detergent belt) (A), MONSA (multi-phase ab initio, the model was built from precalculated searching volume; fourfold symmetry around z-axis is imposed) (B) and DAMMIF(C) (single phase ab initio also with P4 symmetry applied). The first row shows the side view cross-section of the PDC components that is represented with a section inside the detergent corona; protein beads are green for ab initio models and colored according to atom type for the hybrid model, detergent tails and heads are blue and red, respectively. The second and third rows represent the top and the side view of the models.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 492,
+                    "end": 500,
+                    "text": "Figure 6",
+                    "ref_id": null
+                },
+                {
+                    "start": 592,
+                    "end": 599,
+                    "text": "Figure.",
+                    "ref_id": null
+                }
+            ],
+            "section": "RESULTS AND DISCUSSION"
+        },
+        {
+            "text": "Expectedly, the automatically generated Aquaporin0 models display more adequate structural details with increasing amount of a priori information. The single phase based model generated ab initio by DAMMIF (Fig. 6C) provides only the overall shape roughly approximating that of the protein-detergent complex. This reflects the limitation of the ab initio shape determination procedure, which must assume constant density inside the particle. The more information-rich multi-phase MONSA and MEMPROT models (Fig. 6B, A) display a good level of similarity, with the hybrid model generated using the latter program being more detailed and arguably having a higher resolution. For the multi-phase MONSA modeling path the starting cylindrical search volume used for protein-solvent phases was considerably larger than the final model and contains a spherical core with the fixed protein phase (green area shown in Figure 5B ). However, after the minimization procedure the volume occupied by the protein phase becomes only slightly larger than the central fixed spherical volume, and the MONSA models do display protrusions resembling the four \u03b1-helical \"legs\" expected for Aquaporin0. These models are similar to those generated using the hybrid modeling path with MEMPROT, where the protein structure is assumed to be known.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 206,
+                    "end": 215,
+                    "text": "(Fig. 6C)",
+                    "ref_id": null
+                },
+                {
+                    "start": 505,
+                    "end": 517,
+                    "text": "(Fig. 6B, A)",
+                    "ref_id": null
+                },
+                {
+                    "start": 908,
+                    "end": 917,
+                    "text": "Figure 5B",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "RESULTS AND DISCUSSION"
+        },
+        {
+            "text": "The automatically generated models using the three modeling paths of the pipeline provide good fits to the experimental data at low angles, thus the overall particle shapes coincide and are well described by the data. The deviations observed at higher resolution ( Figure 7) reflect contributions from the detergents including the complex contrast situation, which is not accurately captured by the simplified modeling procedures used. This intentional simplification was justified for the sake of speed, such that preliminary models are generated that describe the gross structure of PDCs and do not attempt to describe internal inhomogeneties. One of the simplifications we implemented for the MEMPROT modeling was to assume a horizontal detergent torus with a circular geometry, and a fixed ellipticity e = 1. It should be stressed, that further model refinement is recommended in order to obtain more accurate and detailed models, using initial parameters suggested by the pipeline, and as necessary additional penalties as required (such as increased penalty for looseness and/or discontinuity, a higher number of experimental points and dummy beads in the MONSA grid, free ellipticity parameter for MEMPROT, etc). Similar results were obtained from the mechanosensitive channel T2 experimental data obtained at the P12 beamline (Figures 7b-8 ). There is a high degree of similarity between the three types of models generated, and interestingly, MONSA does reconstruct models with a void in the protein phase (green beads in Figure 8 ). This void is maintained also when an increased penalty for the bead discontinuity during minimization is introduced. Upon inspection, the high resolution model of a homologous structure, the MscS ion channel of T. tengcongensis (PDB: 3T9N) also displays a void in the extracellular domain of the structure. Thus the multiphase ab initio reconstruction reliably generates features consistent with those expected for the T2 ion channel. Figure. 8. Automatically reconstructed T2 models by the AMPP pipeline utilizing MEMPROT (hybrid modeling: 3T9N pdb model with found shape of detergent corona) (A), MONSA (multi-phase ab initio with P7 symmetry) (B) and DAMMIF (single phase ab initio, P7 symmetry) (C). The first row shows the side view cross-section of the PDC components that is represented with a section inside the detergent corona; protein beads are green for ab initio models and colored according to atom type for the hybrid model, detergent tails and heads are blue and red, respectively. The second and third rows represent the top and the side view of the models. The reconstructed MONSA model of the T2 channel protein fit the data reasonably well up to s = 0.25 \u00c5 -1 . The on-the-fly generated MEMPROT model fits only up to s = 0.09 \u00c5 -1 , which corresponds to the real-space resolution D = 2\u03c0/s ~ 60 \u00c5.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 265,
+                    "end": 274,
+                    "text": "Figure 7)",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 1334,
+                    "end": 1347,
+                    "text": "(Figures 7b-8",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 1531,
+                    "end": 1539,
+                    "text": "Figure 8",
+                    "ref_id": null
+                },
+                {
+                    "start": 1978,
+                    "end": 1985,
+                    "text": "Figure.",
+                    "ref_id": null
+                }
+            ],
+            "section": "RESULTS AND DISCUSSION"
+        },
+        {
+            "text": "It is also worth noting that atomistic models are often incomplete, missing eg. density for flexible loops which could not be resolved at high resolution. In general, to reliably reconstruct a PDC it is recommended to utilize both methods (full ab initio with MONSA, and hybrid with MEMPROT) and compare the results. Thus, the ab initio modelling is an important component of the automated MP modelling procedure implemented here.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "RESULTS AND DISCUSSION"
+        },
+        {
+            "text": "In summary, an automated SAXS-based data analysis pipeline modified for multi-contrast systems has been developed and implemented at the P12 beamline of the EMBL (Petra-III, Hamburg). The pipeline facilitates the determination of the overall parameters and automated construction of low-resolution structures of solubilized PDCs. Given that the interpretation of the SAXS data from membrane proteins is by far non-trivial task, these results and models are",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "RESULTS AND DISCUSSION"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Caveolins, a Family of Scaffolding Proteins for Organizing \"Preassembled Signaling Complexes\" at the Plasma Membrane",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Okamoto",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Schlegel",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Scherer",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Lisanti",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "J. Biol. Chem",
+            "volume": "273",
+            "issn": "",
+            "pages": "5419--5422",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Structure and function of bacterial outer membrane proteins: barrels in a nutshell",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Koebnik",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Locher",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Van Gelder",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Mol. Microbiol",
+            "volume": "37",
+            "issn": "",
+            "pages": "239--253",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Ion Channels/Excitable Membranes",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Terlau",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Kirchhoff",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Encyclopedic Reference of Genomics and Proteomics in Molecular Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "913--916",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Mechanisms of TGF-\u03b2 Signaling from Cell Membrane to the Nucleus",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Shi",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Massagu\u00e9",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Cell",
+            "volume": "113",
+            "issn": "",
+            "pages": "685--700",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Genome-wide analysis of integral membrane proteins from eubacterial, archaean, and eukaryotic organisms",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Wallin",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Von Heijne",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Protein Sci",
+            "volume": "7",
+            "issn": "",
+            "pages": "1029--1038",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Characterization of membrane proteins in detergent solutions",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Tanford",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Reynolds",
+                    "suffix": ""
+                }
+            ],
+            "year": 1976,
+            "venue": "Blochmuca Btophwtca Acta",
+            "volume": "457",
+            "issn": "",
+            "pages": "133--170",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Phase separation of integral membrane proteins in Triton X-114 solution",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bordier",
+                    "suffix": ""
+                }
+            ],
+            "year": 1981,
+            "venue": "J. Biol. Chem",
+            "volume": "256",
+            "issn": "",
+            "pages": "1604--1607",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Membrane proteins, lipids and detergents: not just a soap opera",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Seddon",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Curnow",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Booth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Biochim. Biophys. Acta -Biomembr",
+            "volume": "1666",
+            "issn": "",
+            "pages": "105--117",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Membrane-protein topology",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Von Heijne",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Nat. Rev. Mol. Cell Biol",
+            "volume": "7",
+            "issn": "",
+            "pages": "909--918",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Reconstitution of Membrane Proteins in Liposomes",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Verch\u00e8re",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Broutin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Picard",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Methods in Molecular Biology",
+            "volume": "",
+            "issn": "",
+            "pages": "259--282",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Effects of detergent solubilization on the hyaluronate-binding protein from membranes of simian virus 40-transformed 3T3 cells",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Underhill",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Chi-Rosso",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Toole",
+                    "suffix": ""
+                }
+            ],
+            "year": 1983,
+            "venue": "J. Biol. Chem",
+            "volume": "258",
+            "issn": "",
+            "pages": "8086--8091",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Detergents for the stabilization and crystallization of membrane proteins",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Priv\u00e9",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Methods",
+            "volume": "41",
+            "issn": "",
+            "pages": "388--397",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Resistance of cell membranes to different detergents",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Schuck",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Honsho",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Ekroos",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Shevchenko",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Simons",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Proc. Natl. Acad. Sci",
+            "volume": "100",
+            "issn": "",
+            "pages": "5795--5800",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Contrast-Matched Isotropic Bicelles: A Versatile Tool to Specifically Probe the Solution Structure of Peripheral Membrane Proteins Using SANS",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Appavou",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-F",
+                    "middle": [],
+                    "last": "Le Rumeur",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hubert",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Combet",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Langmuir",
+            "volume": "33",
+            "issn": "",
+            "pages": "6572--6580",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Dependence of Micelle Size and Shape on Detergent Alkyl Chain Length and Head Group",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Oliver",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lipfert",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Fox",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Lo",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Doniach",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Columbus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS One",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "PDBTM: Protein Data Bank of transmembrane proteins after 8 years",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kozma",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Simon",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Tusn\u00e1dy",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Nucleic Acids Res",
+            "volume": "41",
+            "issn": "",
+            "pages": "524--529",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Small-angle scattering gives direct structural information about a membrane protein inside a lipid environment",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "A R"
+                    ],
+                    "last": "Kynde",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Skar-Gislinge",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Pedersen",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Midtgaard",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Simonsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Schweins",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Mortensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Arleth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Acta Crystallogr. Sect. D Biol. Crystallogr",
+            "volume": "70",
+            "issn": "",
+            "pages": "371--383",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Stealth carriers for low-resolution structure determination of membrane proteins in solution",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Maric",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Skar-Gislinge",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Midtgaard",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Thygesen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Schiller",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Frielinghaus",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Moulin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Haertlein",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Forsyth",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pomorski",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Arleth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Acta Crystallogr. Sect. D Biol. Crystallogr",
+            "volume": "70",
+            "issn": "",
+            "pages": "317--328",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Self-assembling peptides form nanodiscs that stabilize membrane proteins",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Midtgaard",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Pedersen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J K"
+                    ],
+                    "last": "Kirkensgaard",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "S\u00f8rensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Mortensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Jensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Arleth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Soft Matter",
+            "volume": "10",
+            "issn": "",
+            "pages": "738--752",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Online Size-exclusion and Ion-exchange Chromatography on a SAXS Beamline",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Brennich",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Round",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hutin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "J. Vis. Exp",
+            "volume": "",
+            "issn": "",
+            "pages": "1--9",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Modular Structure of Solubilized Human Apolipoprotein B-100",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Johs",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hammel",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Waldner",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Laggner",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Prassl",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "J. Biol. Chem",
+            "volume": "281",
+            "issn": "",
+            "pages": "19732--19739",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Insight into the Structure of Light-Harvesting Complex II and Its Stabilization in Detergent Solution",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Cardoso",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Smolensky",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Heller",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "O&apos;neill",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "J. Phys. Chem. B",
+            "volume": "113",
+            "issn": "",
+            "pages": "16377--16383",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Three-dimensional Model of Human Platelet Integrin \u03b1IIb\u03b23 in Solution Obtained by Small Angle Neutron Scattering",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Nogales",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Garc\u00eda",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "P\u00e9rez",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Callow",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Ezquerra",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gonz\u00e1lez-Rodr\u00edguez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "J. Biol. Chem",
+            "volume": "285",
+            "issn": "",
+            "pages": "1023--1031",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Low-Resolution Structure of Detergent-Solubilized Membrane Proteins from Small-Angle Scattering Data",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Koutsioubas",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Biophys. J",
+            "volume": "113",
+            "issn": "",
+            "pages": "2373--2382",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Modeling Detergent Organization around Aquaporin-0 Using Small-Angle X-ray Scattering",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Berthaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Manzi",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "P\u00e9rez",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Mangenot",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "J. Am. Chem. Soc",
+            "volume": "134",
+            "issn": "",
+            "pages": "10080--10088",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "ISPyB for BioSAXS, the gateway to user autonomy in solution scattering experiments",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "De Maria Antolinos",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Pernot",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Brennich",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Kieffer",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Bowler",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Delageniere",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ohlsson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Monaco",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ashton",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Franke",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Svergun",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Mcsweeney",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Gordon",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Round",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Acta Crystallogr. Sect. D Biol. Crystallogr",
+            "volume": "71",
+            "issn": "",
+            "pages": "76--85",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Restoring low resolution structure of biological macromolecules from solution scattering using simulated annealing",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Biophys. J",
+            "volume": "65",
+            "issn": "",
+            "pages": "2879--2886",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Memprot : a program to model the detergent corona around a membrane protein based on SEC-SAXS data",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "P\u00e9rez",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Koutsioubas",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Acta Crystallogr. Sect. D Biol. Crystallogr",
+            "volume": "71",
+            "issn": "",
+            "pages": "86--93",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Integrated beamline control and data acquisition for small-angle X-ray scattering at the P12 BioSAXS beamline at PETRAIII storage ring DESY",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Hajizadeh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Franke",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "J. Synchrotron Radiat",
+            "volume": "25",
+            "issn": "",
+            "pages": "906--914",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "DAMMIF , a program for rapid ab-initio shape determination in small-angle scattering",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Franke",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "J. Appl. Crystallogr",
+            "volume": "42",
+            "issn": "",
+            "pages": "342--346",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Saposin Lipid Nanoparticles: A Highly Versatile and Modular Tool for Membrane Protein Research",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Flayhan",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "D T"
+                    ],
+                    "last": "Mertens",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ural-Blimke",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Martinez Molledo",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "L\u00f6w",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Structure",
+            "volume": "26",
+            "issn": "",
+            "pages": "345--355",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "SASBDB, a repository for biological small-angle scattering data",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Valentini",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Kikhney",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Previtali",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Jeffries",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic Acids Res",
+            "volume": "43",
+            "issn": "",
+            "pages": "357--363",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Automated acquisition and analysis of small angle X-ray scattering data",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Franke",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Kikhney",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Nucl. Instruments Methods Phys. Res. Sect. A Accel. Spectrometers, Detect. Assoc. Equip",
+            "volume": "689",
+            "issn": "",
+            "pages": "52--59",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "ATSAS 2.8 : a comprehensive data analysis suite for small-angle scattering from macromolecular solutions",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Franke",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Petoukhov",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Konarev",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Panjkovich",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tuukkanen",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "D T"
+                    ],
+                    "last": "Mertens",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Kikhney",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Hajizadeh",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Franklin",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Jeffries",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "J. Appl. Crystallogr",
+            "volume": "50",
+            "issn": "",
+            "pages": "1212--1225",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "CHROMIXS: automatic and interactive analysis of chromatography-coupled small-angle X-ray scattering data",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Panjkovich",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Svergun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Bioinformatics",
+            "volume": "34",
+            "issn": "",
+            "pages": "1944--1946",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "OPM database and PPM web server: resources for positioning of proteins in membranes",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Lomize",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Pogozheva",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Joo",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Mosberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lomize",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Nucleic Acids Res",
+            "volume": "40",
+            "issn": "",
+            "pages": "370--376",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "An improved method for calculating the contribution of solvent to the X-ray diffraction pattern of biological molecules",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "D B"
+                    ],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Macrae",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Suzuki",
+                    "suffix": ""
+                }
+            ],
+            "year": 1978,
+            "venue": "J. Appl. Crystallogr",
+            "volume": "11",
+            "issn": "",
+            "pages": "693--694",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "The packing density in proteins: standard radii and volumes 1 1Edited by",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tsai",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Taylor",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Chothia",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gerstein",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "J. Mol. Biol",
+            "volume": "290",
+            "issn": "",
+            "pages": "253--266",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Radii of gyration and scattering functions of a torus and its derivatives",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kawaguchi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "J. Appl. Crystallogr",
+            "volume": "34",
+            "issn": "",
+            "pages": "580--584",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF1": {
+            "text": "An example of the automatic SAXS analysis of T2 in detergent solution at the P12 beamline (PETRA-III). The sample and buffer ranges of frames on SEC-SAXS chromatogram as determined automatically by CHROMIXS are shown in the Frame# field. In this study, a high resolution model was available in the ISPyB database and the modeling was performed by MEMPROT. A thumbnail of the obtained model is displayed in the DAM field. MODELING PATH 1: High resolution model of the protein and chemical formulae of the detergent heads and tails are available.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Starting geometrical parameters of a corona for MEMPROT modeling are calculated based on the SAXS curve and a priori information from ISPyB. The hydrocarbon tails of the detergent are modelled as an elliptical hollow torus of the height a and cross-sectional minor and major axes b/e and be, where e is an ellepticity of the torus.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "(A) Three-phase grid with boundary regions between phases (marked by cyan) and a model that is sought taking into account phase volumes and radii of gyration (B). D max is considered to be orthogonal to transmembrane region as depicted at the picture. Radius of sphere, exterior and interior radii of tori are calculated from D max and the Tanford length.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "SAXS data from Aquaporin0 (1) and T2 (2) samples and its fit by DAMMIF, MONSA and MEMPROT models. \u03c7 2 = 1.7 (1 -DAMMIF); 12.5 (1 -MONSA); 61 (1 -MEMPROT); 3.4 (2 -DAMMIF); 17.6 (2 -MONSA); 20 (2 -MEMPROT).",
+            "latex": null,
+            "type": "figure"
+        }
+    },
+    "back_matter": []
+}

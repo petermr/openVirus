@@ -1,0 +1,952 @@
+{
+    "paper_id": "f056da9c64fbf00a4645ae326e8a4339d015d155",
+    "metadata": {
+        "title": "SIANN: Strain Identification by Alignment to Near Neighbors",
+        "authors": [
+            {
+                "first": "Samuel",
+                "middle": [
+                    "S"
+                ],
+                "last": "Minot",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Stephen",
+                "middle": [
+                    "D"
+                ],
+                "last": "Turner",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Krista",
+                "middle": [
+                    "L"
+                ],
+                "last": "Ternus",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Dana",
+                "middle": [
+                    "R"
+                ],
+                "last": "Kadavy",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Next-generation sequencing is increasingly being used to study samples composed of mixtures of organisms, such as in clinical applications where the presence of a pathogen at very low abundance may be highly important. We present an analytical method (SIANN: Strain Identification by Alignment to Near Neighbors) specifically designed to rapidly detect a set of target organisms in mixed samples that achieves a high degree of species-and strain-specificity by aligning short sequence reads to the genomes of near neighbor organisms, as well as that of the target. Empirical benchmarking alongside the current state-of-the-art methods shows an extremely high Positive Predictive Value, even at very low abundances of the target organism in a mixed sample. SIANN is available as an Illumina BaseSpace app, as well as through Signature Science, LLC. SIANN results are presented in a streamlined report designed to be comprehensible to the non-specialist user, providing a powerful tool for rapid species detection in a mixed sample. By focusing on a set of (customizable) target organisms and their near neighbors, SIANN can operate quickly and with low computational requirements while delivering highly accurate results.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "There are many different methods that characterize the mixture of organisms present within a metagenomic dataset. Such datasets are generated when a complex environmental sample is processed by a \"next-generation\" high-throughput genome sequencing protocol, and they consist of large numbers of short nucleotide sequences. Each sequence represents a small fragment of a randomly selected genome from the very large collection of genomes present in the source sample. Those sequences indicate the presence of one organism or another according to their similarity to a set of known reference genomes. While a given sequence may be unique to one species, it also may be found in diverse organisms across the tree of life. Therefore, one analytical challenge (among many) is to take that collection of sequences (likely numbering in the millions) and accurately determine what species are present in the sample. Here we describe a novel method (SIANN: Strain Identification by Alignment to Near Neighbors) that is specifically designed to rapidly detect a set of targeted organisms from a metagenomic dataset by aligning reads to genomic regions that are unique at the strain or species level.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The analytical question motivating a particular piece of metagenomic bioinformatic analysis may vary widely by user and sample type (Segata, et al., 2013) . For example, the function of the human gut microbiome may depend on the relative abundance of hundreds of species of bacteria and the types of metabolic genes they contain (Wu, et al., 2011; Schloissnig, et al., 2013) . In contrast, the clinical treatment of a patient may depend on whether or not a particular virus, or a consortium of co-infecting pathogens, is/are detected in their blood. It is this second class of presence/absence questions that SIANN is designed to address. SIANN is appropriate for situations in which a user wants to know whether a particular organism or set of organisms is present in a sample, but isn't interested in the functions encoded in their genomes, the relative abundance of each organism, or any other more in-depth analysis.",
+            "cite_spans": [
+                {
+                    "start": 132,
+                    "end": 154,
+                    "text": "(Segata, et al., 2013)",
+                    "ref_id": null
+                },
+                {
+                    "start": 329,
+                    "end": 347,
+                    "text": "(Wu, et al., 2011;",
+                    "ref_id": null
+                },
+                {
+                    "start": 348,
+                    "end": 374,
+                    "text": "Schloissnig, et al., 2013)",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Metagenomic classification methods are based on a wide variety of theoretical underpinnings. The basic varieties include alignment of reads to various nucleotide databases or exact matching to nucleotide or protein signature sequences (or kmers). A representative set of recent methods are described in Table 1 (also see Bazinet & Cummings 2012) .",
+            "cite_spans": [
+                {
+                    "start": 321,
+                    "end": 345,
+                    "text": "Bazinet & Cummings 2012)",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 303,
+                    "end": 310,
+                    "text": "Table 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Approach"
+        },
+        {
+            "text": "Alignment to large nucleotide database Huson, et al., 2011 PhymmBL Alignment to large nucleotide database with interpolated Markov models Brady & Salzberg, 2011 Metaphyler Alignment to clade-specific marker genes Liu, et al., Overall, these methods are designed to either classify individual reads to, and/or predict the total abundance of, clades (e.g. genus or species) across the entire tree of life. They generally require reference databases that are very large and/or require a large amount of processing to generate. The gap SIANN is designed to fill is when the entire tree of life is irrelevant, and only predefined subsets of organisms need to be detected. For an underlying method we chose read alignment to diagnostic genomic regions because the algorithms for read alignment are highly parallelizable and have been optimized heavily by the community at large (the current implementation of SIANN uses bowtie2 [Langmead & Salzberg, 2012] for the alignment function, but can be adapted to any alignment algorithm). This approach is distinct from using cladespecific marker genes (Segata, et al., 2012) because unique regions that are larger, smaller, or outside of genes can also be used. Furthermore, this approach supports the rapid construction of custom databases using reference genome sets that require only minimal user-supplied structure.",
+            "cite_spans": [
+                {
+                    "start": 39,
+                    "end": 66,
+                    "text": "Huson, et al., 2011 PhymmBL",
+                    "ref_id": null
+                },
+                {
+                    "start": 138,
+                    "end": 160,
+                    "text": "Brady & Salzberg, 2011",
+                    "ref_id": null
+                },
+                {
+                    "start": 213,
+                    "end": 225,
+                    "text": "Liu, et al.,",
+                    "ref_id": null
+                },
+                {
+                    "start": 922,
+                    "end": 949,
+                    "text": "[Langmead & Salzberg, 2012]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 1090,
+                    "end": 1112,
+                    "text": "(Segata, et al., 2012)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "To understand the principle at work, consider a set of reads that have been aligned to the genomes of several strains belonging to two species. Some regions of those genomes are species-specific, some are strain-specific, and some are shared ( Figure  1a ). When a set of reads is aligned to those genomes such that each read is placed in as many locations as it has a match (at a reasonably stringent threshold), visual inspection of the distribution of reads yields an intuitive understanding of the true source organism as Species I/Strain B (Figure 1b ). If Strain B were not present in the reference database, it would still be clear that the organism was an unknown strain of Species I.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 244,
+                    "end": 254,
+                    "text": "Figure  1a",
+                    "ref_id": null
+                },
+                {
+                    "start": 545,
+                    "end": 555,
+                    "text": "(Figure 1b",
+                    "ref_id": null
+                }
+            ],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "The unique identification of a species or strain is quantified by the proportion of the genome that is determined to be species-or strain-specific (defined as reads that are aligned to regions that are species-or strain-specific). Each species and strain is then assigned a numerical measure of the proportion that is covered by these diagnostic reads, and that proportional measure is compared to the ideal case, where sequences from a single organism (generated in silico) are aligned against the database in an identical manner. After that normalization factor is applied, the resulting score indicates whether the source sample contained any of the organisms in the reference database. Figure 1 . A) For a group of strains belonging to two different species, some regions may be unique to each species (region 1), while other regions may be unique to strains within each species (regions 2 and 3). B) A set of reads are aligned to these genomes, and the ones that align in a species-or strain-specific manner are identified by the combination of genomes to which they align. In this example, Strain B of Species I is the organism identified.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 690,
+                    "end": 698,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "The analysis is conducted independently on both the species and the strain level, so that if the true strain is not present in the database, the species of origin will still be identified. While many methods consider the complete taxonomic tree and assign reads to the least common ancestor, SIANN considers only two taxonomic levels: species and strain, throwing out anything that is not unique at one of those levels and thus obviating many of the confounding factors introduced by manually curated taxonomies.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "The example shown in Figure 1b indicates that species-specific reads are identified as reads that align to one species (Species I, in that case) but not the other. If Species II were not present in the example shown in Figure 1b , a much larger number of reads would be assigned as \"species-specific,\" when in fact those regions are shared with other species. Therefore, the ability of this method to identify strain-and species-specific sequences is a direct function of the inclusion of near neighbors in the reference database. This characteristic is shared among many classification algorithms, but it is of particular note for this method when users have an opportunity to construct their own database.. In order to detect a target species with a high degree of specificity (reducing false positives), it is necessary to include other related species in the reference database. Only by parallel alignment to those near neighbors can the redundant sequences be separated from the species-specific ones. For example, in order to detect Bacillus anthracis in a sample, it would be necessary to include other species of Bacilli in the reference database so that the presence of B. cereus or B. thuringiensis in a sample does not lead to a false call for B. anthracis.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 21,
+                    "end": 30,
+                    "text": "Figure 1b",
+                    "ref_id": null
+                },
+                {
+                    "start": 219,
+                    "end": 228,
+                    "text": "Figure 1b",
+                    "ref_id": null
+                }
+            ],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "The nomenclature of genus, species, and strain is potentially problematic because it does not correspond to a consistent degree of evolutionary distance or genomic distinctiveness. The ability to distinguish two organisms by any method using genomic sequence data is proportional to the amount of each genome that is shared or unique. One might assume that any two organisms of the same species will have a relatively predictable amount of shared genomic identity. However, some pairs of organisms from the same species may have less in common than other pairs of organisms from different species or even genera. This ambiguity impacts SIANN in two ways. If two organisms have very little genomic sequence to distinguish them, the sensitivity of SIANN to detect either one will diminish (the rate of false negatives will increase as the likelihood of sequencing unique regions decreases). Conversely, if an organism is extremely dissimilar to the near neighbors selected for the database, the specificity with which SIANN detects that organism will decline (the rate of false positives will increase as the number of related genomes available in the database decreases). For example, if a database contained only E. coli and B.anthracis, a sample containing B. cereus would be misidentified as contraining B. anthracis. In the intended use case, a database targeting B. anthracis would contain B. cereus and a number of other near neighbors to prevent that kind of misidentification. It would be convenient to say that an ideal database can be made by calculating the ideal genetic distance between all references and then finding an ideal set of organisms to make up that database, but the behavior of any database will be governed by the particular genomes of the organisms it encounters in the wild. Because not all organisms evolve in the same manner (differences in mutation rate, horizontal gene transfer, recombination, etc), the suitability of a database and method to detect a given organism can only be determined by thorough validation and benchmarking, as well as updating the reference database as needed. Users of SIANN may construct their own custom databases to include newly identified genomes or specific subsets of genomes that best suit their research interests.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "Steps to construct a custom database:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "1. Select a set of target organisms 2. Gather a set of genome sequences for those target organisms as well as a matched set of near neighbors 3. Using those reference genome sequences as an input, SIANN will: a. Construct a reference index for alignment b. Simulate a set of reads from each genome c. Align each of those simulated read sets to all of the reference genomes d. Calculate the proportion of each reference genome that is strain-or species-specific e. [If two organisms do not have a minimal amount of unique sequences that exceeds the rate of sequencing error, SIANN asks that all but one of those organisms are removed from the database to eliminate redundancy. Note that the user can provide a single representative genome with multiple strain names so that the redundant strain names are not lost.]",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "The files contained within each SIANN database are a compressed genomic index and a list containing the proportion of each reference genome that was found to be strainor species-specific during database construction.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "To run SIANN:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "1. Select a pre-made SIANN database and a set of sequences to be analyzed, and 2. SIANN will: a. Align each of the reads against the reference genomes b. Calculate the proportion of each reference genome that is strain-or species-specific within those reads c. Compare that proportion to the simulated ideal case generated during database creation . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint d. Calculate the probability that the given results could be generated by random chance e. Report the normalized proportion and non-parametric statistic of likelihood for each strain and species in the reference database. The normalized proportion of the genome covered by strain-or speciesspecific reads is the primary statistic reported by this tool.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Name Method Reference MEGAN"
+        },
+        {
+            "text": "The performance of SIANN (version 1.6) was tested in comparison to the following stateof-the-art metagenomic classification programs: LMAT (version 1.2), MetaPhlAn (version 1.7.7), and Kraken (version 0.9.1b). All of the programs in Table 1 were investigated for this effort, and three were chosen based on their ability to run on our high-performance computing cluster with an execution time and memory requirement that would be suitable to a clinical lab. Each program was run on a set of 600 simulated datasets generated by MetaSim (Richter, et al., 2008) . Each dataset consisted of 15,000,000 reads (100bp single-ended) with Illumina-simulated error (fourth-degree polynomial) (Korbel, et al., 2009) . The 600 datasets were broken into 12 sets of 50 replicates. Each of the 12 sets contained organisms at different levels of abundance as shown in Table 2 .",
+            "cite_spans": [
+                {
+                    "start": 535,
+                    "end": 558,
+                    "text": "(Richter, et al., 2008)",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 682,
+                    "end": 704,
+                    "text": "(Korbel, et al., 2009)",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 233,
+                    "end": 240,
+                    "text": "Table 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 852,
+                    "end": 859,
+                    "text": "Table 2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Benchmarking"
+        },
+        {
+            "text": "Organisms were specifically chosen in pairs so that the ability to distinguish these near neighbors could be determined. The abundances were staggered at 4-fold intervals so that a wide range could be evaluated. All known species of near neighbors for each of the 12 target organisms were included in the reference database used by SIANN for this benchmarking (\"Target Pathogen Database\") and are shown in Appendix 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarking"
+        },
+        {
+            "text": "Each program outputs a distinct measure. Kraken and LMAT both count the reads assigned to each taxon, MetaPhlAn calculates the abundance, and SIANN outputs a measure of the proportion of diagnostic genomic regions present. To put these measures on an even footing, we empirically calculated the false positive rate for each method over all 600 samples, at each possible measure of output. Because each dataset is made up of known organisms, any result can be classified as true or false. Therefore, for any possible result (say, 513 reads classified by LMAT or 1.6% abundance assigned by MetaPhlAn), one can calculate the proportion of calls with at least the same amount of support that were correct (True Positives/[True Positives+False Positives]), over all of the 600 datasets. That measure is commonly given as Positive Predictive Value (PPV). For each program, the results can be translated from the raw value into a PPV that is based on this empirical measure of error. The key item of interest is the PPV value for the results that we know to be true positives, the defined spike organisms. Another way of describing this approach is to say that the results of each program have been normalized to the false positive error rate that was empirically observed. If another set of samples were generated, the PPV vs. raw value curve ( Figure 2 ) would likely fall differently, but in this case it gives us a means of comparing a diverse set of methods against the same ground truth. If method 1 detects an organism with a higher PPV than method 2 does, it means that method 1 has fewer false positives in the range that it reports true positives, which is the definition of utility in this setting.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1339,
+                    "end": 1347,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Benchmarking"
+        },
+        {
+            "text": "For each method, PPV was calculated as a function of raw output value. Briefly, this was done by compiling the output for all 600 samples, labeling each result as false or true based on the sample set that it came from, and then calculating (at each possible value of output) what the proportion of TP/[TP+FP] was for results with at least that level of raw output. Some simplification steps were taken, such as focusing on the specieslevel assignments (for comparison with methods that do not perform strain assignment), and only taking the top hit for each species from each dataset. Custom R and BASH scripts were used for the data compilation and analysis.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmarking"
+        },
+        {
+            "text": "The relationship of raw output value to PPV is shown for each of the four methods in Figure 2 . The point at which PPV is very close to 1 (where 95% of results are true positives) is ~41,000 reads for Kraken, ~2,800 reads for LMAT, ~38% abundance for MetaPhlAn, and 0.21 for SIANN. For SIANN this means that having 38% of the species-unique genome covered by reads resulted in the vast majority of calls being accurate. . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint For readassignment methods (such as LMAT and Kraken), manual inspection of the results may yield a different understanding of confidence than is presented here, or in any automated analysis.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 85,
+                    "end": 93,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "For example, while each read that is assigned by LMAT and Kraken fall above a certain cutoff for speciesspecificity, some individual reads may be much more specific than others. One could identify a read that aligns to a single species of bacteria with 100% accuracy over its 300bp length, with the next closest match being only 90% similar. It is extremely unlikely that a 300bp exact match would arise due to random chance, and so the user could say with confidence that the organism of interest is found within the sequence data (not considering contamination, horizontal gene transfer, etc). However, such an approach is not currently implemented in an automated method, and many of the steps needed to make that assertion are performed manually by a domain expert, including alignment to near neighbors and ensuring that the read does not fall within a transposon, plasmid, etc. Therefore, while one could say that a single read is all that is needed to state with high PPV that an organism is present, the amount of reads assigned in an automated manner needed to achieve that level of PPV will number in the thousands (Fig 2) . Table 2 ), and each program (boxes at top), across a maximum of 50 replicates (indicated by the size of each point). Note that the reference database for MetaPhlAn does not include viruses, and the reference database for Kraken does not include RNA viruses (e.g., Hanta virus).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1125,
+                    "end": 1132,
+                    "text": "(Fig 2)",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 1135,
+                    "end": 1142,
+                    "text": "Table 2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint The next phase of benchmarking was to determine how many raw input reads were needed to achieve the threshold for high PPV. To demonstrate this we plotted the known abundance of each spike organism against the PPV value generated by each method (Figure 3 ). Each point (an organism at a known level of abundance) is comprised of a maximum of 50 replicates, where the diameter of each point increases with an increasing number of replicates. For demonstration purposes we are showing two pairs of bacteria and three viruses. Recall that for each of the pairs of bacteria (and the two poxviruses) any sample containing one did not contain the other (as shown in Table 1 ). The empty boxes result from the organisms not being called at any abundance. For MetaPhlAn, that is a result of no viruses being included in the version of the reference database available for this analysis. Kraken assigned no reads to Hanta virus because viral RNA genomes were not included in this version of the reference database (personal communication with D. Wood). This emphasizes the point that a) the ability to create custom databases targeting organisms of interest can be valuable, and b) the performance of any method must be benchmarked against each potential target of interest.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 460,
+                    "end": 469,
+                    "text": "(Figure 3",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 875,
+                    "end": 882,
+                    "text": "Table 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "All methods were able identify the bulk of organisms in their databases at high abundances (75% and 18%, Figure 3 ), however performance varied considerably at lower abundances and depended on the particular organism and method used. SIANN detected each organism at high confidence, even at levels as low as 0.3% and 0.07% of the total.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 105,
+                    "end": 113,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The process of detecting trace amounts of a specific organism in a complex mixture of DNA is challenging enough for an expert, but that pales in comparison to the difficulty of accomplishing the same certainty of detection in an automated manner. The results presented here show that SIANN rapidly detects the presence of a given set of organisms with a high degree of specificity and sensitivity. For example, at the 95% confidence (PPV) cutoff of 0.2, SIANN reliably detects all of the organisms tested here at as low as 0.3% abundance. This strong performance is likely due to the fact that SIANN is able to use a method (read alignment to whole genomes) that would be far too computationally costly if it were applied to the entire collection of known genomes. By focusing on a set of (customizable) target organisms and their near neighbors, SIANN can operate quickly and with low computational requirements while delivering highly accurate results. SIANN is available on Illumina's BaseSpace (www.basespace.illumina.com) as a NativeApp, with the database tested here (Appendix 1), as well as a database made from the NCBI representative set of prokaryotic genomes (ftp://ftp.ncbi.nlm.nih.gov/genomes/genome_reports/) (Appendix 2) and the complete set of NCBI viral genomes (ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/) (Appendix 3).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint BaseSpace was chosen as an appropriate release platform because while the entire set of software and dependencies can be deployed by the user from within a graphical user interface, the actual computation takes place in a controlled 'cloud' environment. Such a distribution strategy obviates the need to satisfy the multiple software or OS dependencies that often arises with academic computational methods. Results for SIANN are compiled into a report format, showing both the organisms that surpass 95% confidence, as well as the closest strain match for each species. The default view masks the raw data output, so that the results are human-readable and do not present extraneous information. While the code for execution and databaseconstruction on a users system is available from Signature Science, LLC, additional databases on the BaseSpace platform can be made available upon request.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "There is a neverending list of questions that one could ask of metagenomic sequencing data generated from important samples. Instead of answering them all, we demonstrate a technique with a very narrow focus that is able to report with a high degree of confidence whether a given set of organisms is present in a sample. These results are presented to the user in a comprehensible format, and accessible on a commonly-used web platform. The world of bioinformatics will continue to progress and develop more sophisticated tools for metagenomic analysis, and we hope that the utility of SIANN will convince others to package and benchmark their tools in a way that they can be used with confidence by the larger public, as well as the research community.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Scalable metagenomic taxonomy classification using a reference genome database",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Ames",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hysom",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Gardner",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Lloyd",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Gokhale",
+                    "suffix": ""
+                },
+                {
+                    "first": "Allen",
+                    "middle": [],
+                    "last": "Je",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Bioinformatics",
+            "volume": "29",
+            "issn": "18",
+            "pages": "2253--60",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/bioinformatics/btt389"
+                ]
+            }
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "A comparative evaluation of sequence classification programs",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Bazinet",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Cummings",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "BMC Bioinformatics",
+            "volume": "13",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1471-2105-13-92"
+                ]
+            }
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Rapid phylogenetic and functional classification of short genomic fragments with signature peptides",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Berendzen",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Bruno",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Cohn",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hengartner",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Kuske",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Mcmahon",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Wolinsky",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "BMC Research Notes",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1756-0500-5-460"
+                ]
+            }
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Phymm and PhymmBL: metagenomic phylogenetic classification with interpolated Markov models",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Brady",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Salzberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Nature Methods",
+            "volume": "6",
+            "issn": "9",
+            "pages": "673--679",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nmeth.1358"
+                ]
+            }
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Integrative analysis of environmental sequences using MEGAN4",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Huson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Mitra",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Weber",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Ruscheweyh",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Schuster",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Genome Research",
+            "volume": "21",
+            "issn": "",
+            "pages": "1552--1560",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "PEMer: a computational framework with simulation-based error models for inferring genomic structural variants from massive paired-end sequencing data",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Korbel",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Abyzov",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Mu",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Carriero",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Cayting",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Snyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Gerstein",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Fast gapped-read alignment with Bowtie 2",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Langmead",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Salzberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Nature Methods",
+            "volume": "9",
+            "issn": "",
+            "pages": "357--359",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Accurate and fast estimation of taxonomic profiles from metagenomic shotgun sequences",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Gibbons",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ghodsi",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Treangen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pop",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "BMC Genomics",
+            "volume": "12",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "MetaSim: a sequencing simulator for genomics and metagenomics",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Richter",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Ott",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Auch",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Schmid",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Huson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "PLoS One",
+            "volume": "3",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0003373"
+                ]
+            }
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Genomic variation landscape of the human gut microbiome",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Schloissnig",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Arumugam",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Sunagawa",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mitreva",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tap",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Waller",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Mende",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Kultima",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Kota",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Sunyaev",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Weinstock",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Bork",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Nature",
+            "volume": "493",
+            "issn": "7430",
+            "pages": "45--50",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature11711"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Relationship of reported value for each program (horizontal axis, log scale) to the empirically-determined Positive Predictive Value (PPV), shown on the vertical axis. While the exact values depend on the test data used, the general values at significant cutoff values (0.8, 0.9, 0.95 PPV) remain relatively constant across different datasets (data not shown).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "The Positive Predictive Value (PPV, vertical axis) is shown for each organism (boxes on right), at each level of known abundance (horizontal axis, see",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": ". Summary of methods for metagenomic classification.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Table 2. The abundance of each target organism in each set of simulated datasets. Each set is indicated by the number in the top row, and was generated with 50 replicates.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "Segata N, Waldron L, Ballarini A, Narasimhan V,Jousson O, and Huttenhower C (2012). Metagenomic microbial community profiling using unique clade-specific marker genes. NatureMethods, 9(8):811-4. doi: 10.1038/nmeth.2066. Sunagawa S, Mende DR, Zeller G, Izquierdo-Carrasco F, Berger SA, Kultima JR, Coelho LP, Arumugam M, Tap J, Nielsen HB, Rasmussen S, Brunak S, Pedersen O, Guarner F, de Vos WM, Wang J, Li J, Dor\u00e9 J, Ehrlich SD, Stamatakis A & Bork P (2013). Metagenomic species profiling using universal phylogenetic marker genes. Nature Methods, 10, 1196-1199 (2013) doi:10.1038/nmeth.2693 Wood DE and Salzberg SL. Ultrafast metagenomic sequence classification using exact alignments. In submission. Wu GD, Chen J, Hoffmann C, Bittinger K, Chen YY, Keilbaugh SA, Bewtra M, Knights D, Walters WA, Knight R, Sinha R, Gilroy E, Gupta K, Baldassano R, Nessel L, Li H, Bushman FD, Lewis JD (2011). Linking long-term dietary patterns with gut microbial enterotypes. Science. 334(6052):105-8. doi: 10.1126/science.1208344. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint Appendix 2: Viral Database Abaca bunchy top virus DNA-C Abaca bunchy top virus DNA-M Abaca bunchy top virus DNA-The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101Circovirus-like genome BBC-A Circovirus-like genome CB-A Circovirus-like genome CB-B Circovirus-like genome RW-A Circovirus-like genome RW-B Circovirus-like genome RW-C Circovirus-like genome RW-D Circovirus-like genome RW-E Circovirus-like genome SAR-A Circovirus-like genome SAR-B Citrus psorosis virus RNA1 Citrus psorosis virus RNA2 Citrus psorosis virus RNA3The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprintThe copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprintThe copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder.It . https://doi.org/10.1101/001727 doi: bioRxiv preprint Thermovirga lienii DSM 17291 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/001727 doi: bioRxiv preprint Thermus scotoductus SA 01 Thermus sp CCB US3 UF1 Thermus thermophilus HB27 Vibrio cholerae O1 biovar El Tor str N16961 Vibrio fischeri ES114 Vibrio furnissii NCTC 11218 Vibrio harveyi ATCC BAA 1116 . CC-BY-NC-ND 4.0 International license is made available under a",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

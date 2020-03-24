@@ -1,0 +1,4073 @@
+{
+    "paper_id": "06c1b3535b83251cf92c01258b5048beeab7a460",
+    "metadata": {
+        "title": "Beyond R 0 : the importance of contact tracing when predicting epidemics",
+        "authors": [
+            {
+                "first": "Laurent",
+                "middle": [],
+                "last": "H\u00e9bert-Dufresne",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Vermont",
+                    "location": {
+                        "postCode": "05405",
+                        "settlement": "Burlington",
+                        "region": "VT"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Benjamin",
+                "middle": [
+                    "M"
+                ],
+                "last": "Althouse",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Samuel",
+                "middle": [
+                    "V"
+                ],
+                "last": "Scarpino",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Northeastern University",
+                    "location": {
+                        "postCode": "02115",
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Antoine",
+                "middle": [],
+                "last": "Allard",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "D\u00e9partement de physique, de g\u00e9nie physique et d'optique",
+                    "institution": "Universit\u00e9 Laval",
+                    "location": {
+                        "postCode": "G1V 0A6",
+                        "settlement": "Qu\u00e9bec",
+                        "region": "Qc",
+                        "country": "Canada"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The basic reproductive number -R 0 -is one of the most common and most commonly misapplied numbers in public health. Nevertheless, estimating R 0 for every transmissible pathogen, emerging or endemic, remains a priority for epidemiologists the world over. Although often used to compare outbreaks and forecast pandemic risk, this single number belies the complexity that two different pathogens can exhibit, even when they have the same R 0 . Here, we show how predicting outbreak size requires both an estimate of R 0 and an estimate of the heterogeneity in the number of secondary infections. To facilitate rapid determination of outbreak risk, we propose a reformulation of a classic result from random network theory that relies on contact tracing data to simultaneously determine the first moment (R 0 ) and the higher moments (representing the heterogeneity) in the distribution of secondary infections. Further, we show how this framework is robust in the face of the typically limited amount of data for emerging pathogens. Lastly, we demonstrate that without data on the heterogeneity in secondary infections for emerging pathogens like 2019-nCoV, the uncertainty in outbreak size ranges dramatically, in the case of 2019-nCoV from 5-40% of susceptible individuals. Taken together, our work highlights the critical need for contact tracing during emerging infectious disease outbreaks and the need to look beyond R 0 when predicting epidemic size.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The basic reproductive number -R 0 -is one of the most common and most commonly misapplied numbers in public health. Nevertheless, estimating R 0 for every transmissible pathogen, emerging or endemic, remains a priority for epidemiologists the world over. Although often used to compare outbreaks and forecast pandemic risk, this single number belies the complexity that two different pathogens can exhibit, even when they have the same R 0 . Here, we show how predicting outbreak size requires both an estimate of R 0 and an estimate of the heterogeneity in the number of secondary infections. To facilitate rapid determination of outbreak risk, we propose a reformulation of a classic result from random network theory that relies on contact tracing data to simultaneously determine the first moment (R 0 ) and the higher moments (representing the heterogeneity) in the distribution of secondary infections. Further, we show how this framework is robust in the face of the typically limited amount of data for emerging pathogens. Lastly, we demonstrate that without data on the heterogeneity in secondary infections for emerging pathogens like 2019-nCoV, the uncertainty in outbreak size ranges dramatically, in the case of 2019-nCoV from 5-40% of susceptible individuals. Taken together, our work highlights the critical need for contact tracing during emerging infectious disease outbreaks and the need to look beyond R 0 when predicting epidemic size.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "In 1918, individuals infected with influenza typically passed on the virus to between 1 and 2 of their social contacts [1] . The same was true for those infected with Ebola virus during the 2014 outbreak in West Africa [2, 3] . Nevertheless, Ebola virus disease infected a tenth of one percent of the number of individuals believed to have been infected by the 1918 Influenza virus [4, 5] . While improvements in healthcare and public health measures, as well as changes in human behavior, partially explain the massive discrepancy between Ebola virus disease in 2014 and influenza in 1918 [6] , there is another critical difference between these two diseases: heterogeneity in the number secondary cases resulting from a single infected individual. Here, we demonstrate analytically that quantifying the variability in the number of secondary infections via contact tracing is critically important for quantifying the transmission risk of novel pathogens and further show how a lack of publicly available contact tracing data on cases of novel coronavirus (2019-nCoV) prevents the global public health community from determining the true pandemic risk of this novel virus.",
+            "cite_spans": [
+                {
+                    "start": 119,
+                    "end": 122,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 219,
+                    "end": 222,
+                    "text": "[2,",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 223,
+                    "end": 225,
+                    "text": "3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 382,
+                    "end": 385,
+                    "text": "[4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 386,
+                    "end": 388,
+                    "text": "5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 590,
+                    "end": 593,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "The basic reproduction number of an epidemic, R 0 , is the expected number of secondary cases [7] , or infections, produced by a primary case over the course of their infectious period in a completely susceptible population [8] . It is a simple metric that is commonly used to describe the transmissibilty of emerging and endemic pathogens [9] . If R 0 = 2, one case turns to two, on average, and two turn to four as the epidemic grows. And if R 0 < 1, the epidemic will die out. However, we are seldom concerned with epidemics that emerge and quickly die out. To observe an epidemic requires some level of sustained transmission, i.e., R 0 > 1. Almost 100 years ago, pioneering work from Kermack and McKendrick [10] [11] [12] first demonstrated how to estimate the final size of an epidemic for a pathogen with R 0 > 1. Specifically, they consider a scenario such that:",
+            "cite_spans": [
+                {
+                    "start": 94,
+                    "end": 97,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 224,
+                    "end": 227,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 340,
+                    "end": 343,
+                    "text": "[9]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 712,
+                    "end": 716,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 717,
+                    "end": 721,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 722,
+                    "end": 726,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "1. the disease results in complete immunity or death, 2. all individuals are equally susceptible, 3. the disease is transmitted in a closed population, 4. contacts occur according to the law of mass-action, 5. and the population is large enough to justify a deterministic analysis. Under these assumptions, Kermack and McKendrick show that an epidemic with a given R 0 will infect a fixed fraction R(\u221e) of the susceptible population by solving",
+            "cite_spans": [
+                {
+                    "start": 307,
+                    "end": 318,
+                    "text": "Kermack and",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "This solution describes a final outbreak size equal to 0 when R 0 \u2264 1 and increasing as 1 \u2212 exp(\u2212R 0 ) when R 0 > 1. Therefore, a larger R 0 leads to a larger outbreak which infects the entire population in the limit R 0 \u2192 \u221e. This direct relationship between R 0 and the final epidemic size is at the core of the conventional wisdom that a larger R 0 will cause a larger outbreak and small variations in R 0 can lead to vastly different total case counts. Unfortunately, the equation relating R 0 to final outbreak size from Kermack and McKendrick is only valid when all the above assumptions hold, which in practice is rarely the case. In fact, seemingly trivial violations of the above assumptions can lead to vastly different outbreak sizes even when R 0 is held constant. As a result, relying on R 0 alone is often misleading when comparing different pathogens or outbreaks of the same pathogen in different settings [13] [14] [15] . This is especially critical considering that most outbreaks are not shaped by the \"average\" individuals but rather by a minority of superspreading events [13, 16] . For example, public health officials are currently trying determine whether 2019-nCoV can be contained or whether it will cause a pandemic [17] . Despite numerous estimates of 2019-nCoV's R 0 (ranging from 1.5 to just under 4 [18] [19] [20] [21] [22] [23] ), as we discussed above in the comparison of Ebola virus disease and 1918 influenza, whether-like SARS-2019-nCoV can be contained or-like 2009 H1N1-2019-nCoV will cause a pandemic depends largely on the heterogeneity in the number of secondary infections. Indeed, recent work modeling the effectiveness of contact tracing and isolation on preventing 2019-nCoV concluded that the probability of containing the outbreak was significantly lower if 2019-nCoV heterogeneity in secondary infections was low, like influenza, as compared to higher, like SARS [24] . To more fully quantify how heterogeneity in the number of secondary infections affects outbreak size, we turn towards network epidemiology and derive an equation for the total number of infected individuals using all moments of the distribution of secondary infections.",
+            "cite_spans": [
+                {
+                    "start": 921,
+                    "end": 925,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 926,
+                    "end": 930,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 931,
+                    "end": 935,
+                    "text": "[15]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1092,
+                    "end": 1096,
+                    "text": "[13,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 1097,
+                    "end": 1100,
+                    "text": "16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1242,
+                    "end": 1246,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 1329,
+                    "end": 1333,
+                    "text": "[18]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1334,
+                    "end": 1338,
+                    "text": "[19]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 1339,
+                    "end": 1343,
+                    "text": "[20]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1344,
+                    "end": 1348,
+                    "text": "[21]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 1349,
+                    "end": 1353,
+                    "text": "[22]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 1354,
+                    "end": 1358,
+                    "text": "[23]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 1911,
+                    "end": 1915,
+                    "text": "[24]",
+                    "ref_id": "BIBREF24"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "Random network theory allows us to relax some of assumptions made by Kermack and McKendrick, mainly to account for heterogeneity and stochasticity in the number of secondary infections caused by a given individual.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "We first follow the analysis of Ref. [25] and define G 0 (x) as the probability generating function (PGF) of the degree distribution {p k } (number of contacts), i.e.",
+            "cite_spans": [
+                {
+                    "start": 37,
+                    "end": 41,
+                    "text": "[25]",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "When following a random edge, we define the excess degree as the number of other edges around that node. Because an edge is k times more likely to reach a node of degree k than a node of degree 1, the excess degree distribution is generated by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "where k is the average degree and acts as a normalisation constant, and G 0 (x) denotes the derivative of G 0 (x) with respect to x. We now assume that the network in question is the network of all edges that would transmit a disease if given the chance.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "Consequently, G 1 (x) generates the number of secondary infections that individual nodes would cause if infected. And, if we infect a random node as the patient zero, its entire connected component (a maximal subset of nodes between which paths exists between all pairs of nodes) will be infected. To calculate the largest possible epidemic, we thus look for the size of the giant connected component (GCC).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "To calculate the size of the GCC, we first look for the probability u that following a random edge leads to a node not part of the GCC. For that node to not be part of the GCC, all of its excess edges must also not lead to the GCC. This simple observation leads to the self-consistent equation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "The size of the GCC is a fraction of the full population N that we will denote R(\u221e) because it corresponds to the potential, macroscopic, outbreak size. Noting that a node of degree k is not in the GCC with probability u k , R(\u221e) can be written as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "because it contains all nodes except those with no edges leading to the GCC. This solution is exact in the limit of large population size.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "II. ANALYSIS FROM NETWORK THEORY"
+        },
+        {
+            "text": "The network approach naturally accounts for heterogeneity, meaning that some individuals will cause more infections than others. The network approach also accounts for stochasticity explicitly: Even with R 0 > 1, there is a probability 1 \u2212 R(\u221e) that patient zero lies outside of the giant outbreak and therefore only leads to a small outbreak that does not invade the population.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "III. REINTERPRETATION AND RESULTS"
+        },
+        {
+            "text": "However, the analysis in terms of PGFs is obviously more involved than simply assuming mass-action mixing and solving Eq. (1). In fact, the PGF G 0 (x) requires a full distribution of secondary cases per primary case, which will in practice involve a polynomial of high order.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "III. REINTERPRETATION AND RESULTS"
+        },
+        {
+            "text": "To clarify and potentially simplify the approach, we propose to reformulate the classic network model in terms of the cumulant generating function (CGF) of secondary cases. The CGF K(y) of a random variable X can be written as K(y) = \u03ba n y n /n! where \u03ba n are the cumulants of the distribution of secondary infections. These are useful because the cumulants are easier to interpret, i.e., \u03ba 1 is simply the average number of secondary cases R 0 , \u03ba 2 is the underlying variance, \u03ba 3 is related to the skewness and \u03ba 4 to the kurtosis of the full distribution. By definition, a PGF G(x) of a random variable is linked to K(y) through G(x) = exp [K (ln x)]. Therefore, we can replace the PGF G 1 (x) for the distribution of secondary infections by a function in terms of the cumulants of that distribution.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "III. REINTERPRETATION AND RESULTS"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "III. REINTERPRETATION AND RESULTS"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "III. REINTERPRETATION AND RESULTS"
+        },
+        {
+            "text": "FIG. 1. Illustration of the absence of a direct relationship between R 0 and the final outbreak size, R(\u221e), using three different distributions for the number of secondary infections per infected individual. All three distributions are negative binomials [13] with distinct average, R 0 , and variance, \u03c3 2 . R(\u221e) is computed by solving Eqs. (4) and (5).",
+            "cite_spans": [
+                {
+                    "start": 255,
+                    "end": 259,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                }
+            ],
+            "ref_spans": [],
+            "section": "III. REINTERPRETATION AND RESULTS"
+        },
+        {
+            "text": "Using the cumulants \u03ba n , we can re-write G 1 (x) as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "which is obviously not as practical as a simple polynomial when solving for u = G C 1 (u). However, in some cases, cumulants can have significant advantage over the polynomial representation. For instance, the cumulants of a sum of independent random variables are simply the sum of the cumulants -convenient when dealing with diseases with multiple modes of transmission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "We can quickly derive Kermack and McKendrick's result from the previous generating function since their solution involves a well-mixed population, which is equivalent to a Poisson distribution of secondary infections in our framework. G C 1 (x) is convenient for a Poisson distribution because its cumulants \u03ba n = R 0 \u2200n. Moreover, since G 0 (x) = G 1 (x) in the Poisson case, we know that the final proportion of susceptible individuals is directly given by u = G C 1 (u), or",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "Taking the logarithm of the exponential term from this last equation yields Kermack and McKendrick's formula. For more general distributions, it is useful to rewrite Eq. (6) as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "The solution to u = G C 1 (u) gives the probability that every infection caused by patient zero fails to generate an epidemic. Importantly, Eq. (8) has an alternating nature because ln x is negative for x < 1 such that its n-th power is positive when n is even and negative when n is odd.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "This observation, that the moments of Eq. (8) alternate, can be interpreted as follows. A disease needs a high average number of secondary infections (high \u03ba 1 = R 0 ) to spread, but given that average, a disease with small variance in secondary infections will spread much more reliably and be less likely to stochastically die out (see Fig. 1 ). Given a variance, a disease with high skewness (i.e., with positive deviation contributing to most of the variance) will be more stable than a disease with negative skewness (i.e. with most deviations being towards small secondary infections). Given a skewness, a disease will be more stable if it has frequent small positive deviations rather than infrequent large deviations -hence a smaller kurtosis -as stochastic die out could easily occur before any of those large infrequent deviations occur.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 338,
+                    "end": 344,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "Clearly, our re-interpretation already highlights a striking result: Higher moments of the distribution of secondary cases can lead a disease with a lower R 0 to more easily invade a population and to reach a larger final outbreak size than a disease with a higher R 0 . We can investigate this conclusion further using a simple example of normally distributed secondary infections.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A. Analysis of cumulants and derivation of Kermack-McKendrick"
+        },
+        {
+            "text": "A second useful application of the cumulants formulation involves diseases with a large reproductive number R 0 whose distribution of secondary infections can be convincingly modeled by a normal distribution. The raw moments of a normal distribution are quite complicated, but the cumulants are simple: \u03ba 1 is equal to the mean R 0 , \u03ba 2 is equal to the variance \u03c3 2 , and all other cumulants are 0. We can thus write",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Normal distributions and the impact of variance"
+        },
+        {
+            "text": "and solving for u = G C 1 (u) yields",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Normal distributions and the impact of variance"
+        },
+        {
+            "text": "This equation can then be used for direct comparison of the probability of invasion of two different diseases with normal distributions of secondary infections. Given a transmission event from patient zero to a susceptible individual, disease B will be more likely to invade the population than disease A if",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Normal distributions and the impact of variance"
+        },
+        {
+            "text": "For example, a disease with half the basic reproductive number of another will still be more likely to invade a population and lead to a larger outbreak if its variance is only slightly less than half the variance of the other disease.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Normal distributions and the impact of variance"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Normal distributions and the impact of variance"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02. 10.20021725 doi: medRxiv preprint FIG. 2. Final size of outbreaks with different R 0 and distributions of secondary cases. We use a negative binomial distribution of secondary cases and scan realistic range of parameters. Most importantly, the range of parameters corresponding to the current outbreak of 2019-nCoV is highlighted by a red box. The range of potential R0 comes from a 95% confidence interval using a early data and a classic deterministic models [18, 19] . The range of dispersion parameter k comes from analogy with severe acute respiratory syndrome [13, 24] . Most importantly, with fixed average, the dispersion parameter is inversely proportional to the variance of the underlying distribution of second cases.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "10.20021725",
+                    "ref_id": null
+                },
+                {
+                    "start": 572,
+                    "end": 576,
+                    "text": "[18,",
+                    "ref_id": null
+                },
+                {
+                    "start": 577,
+                    "end": 580,
+                    "text": "19]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 677,
+                    "end": 681,
+                    "text": "[13,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 682,
+                    "end": 685,
+                    "text": "24]",
+                    "ref_id": "BIBREF24"
+                }
+            ],
+            "ref_spans": [],
+            "section": "B. Normal distributions and the impact of variance"
+        },
+        {
+            "text": "From re-emerging pathogens like yellow fever and measles to emerging threats like MERS-CoV and Ebola, the World Health Organization monitored 119 different infectious disease outbreaks in 2019 alone [26] . For each of these outbreaks, predicting both the epidemic potential and the most likely number of cases is critically important for responding efficiently and effectively. This need for rapid situation awareness is why R 0 is so widely used in public health. However, our main analysis, and Eq. (11) in particular, show that not only is R 0 insufficient in fully determining the final size of an outbreak, but having a larger outbreak with a lower R 0 is relatively easy considering the randomness associated with most transmission events and the heterogeneity of physical contacts. To address the need for rapid quantification of risk, while acknowledging the shortcomings of R 0 , we use network science methods to derive both the probability of an epidemic and its final size.",
+            "cite_spans": [
+                {
+                    "start": 199,
+                    "end": 203,
+                    "text": "[26]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 501,
+                    "end": 505,
+                    "text": "(11)",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "However, these results are not without important caveats. Specifically, we must remember that distributions of secondary cases, just like R 0 itself, are just as much a product of a pathogen as of the population in which it spreads. For example, aspects of the social contact network [27] , metapopulation structure [28, 29] , mobility [30, 31] , adaptive behavior [32, 33] , higher-order contact structure [34, 35] , and even other pathogens [36, 37] , all interact to cause complex patterns of disease emergence, spread, and persistence. Therefore, great care must be taken when using any of these tools to compare outbreaks or to inform current events with past data.",
+            "cite_spans": [
+                {
+                    "start": 284,
+                    "end": 288,
+                    "text": "[27]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 316,
+                    "end": 320,
+                    "text": "[28,",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 321,
+                    "end": 324,
+                    "text": "29]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 336,
+                    "end": 340,
+                    "text": "[30,",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 341,
+                    "end": 344,
+                    "text": "31]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 365,
+                    "end": 369,
+                    "text": "[32,",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 370,
+                    "end": 373,
+                    "text": "33]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 407,
+                    "end": 411,
+                    "text": "[34,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 412,
+                    "end": 415,
+                    "text": "35]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 443,
+                    "end": 447,
+                    "text": "[36,",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 448,
+                    "end": 451,
+                    "text": "37]",
+                    "ref_id": "BIBREF37"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "Three types of data could potentially be used in real time to improve predictions by considering secondary case heterogeneity. First, contact tracing data whose objective is to identify people who may have come into contact with an infectious individual. While mostly a preventive measure to identify cases before complications, it directly informs us about potential secondary cases caused by a single individual, and therefore provides us with an estimate for G 1 (x). Both for generating accurate predictions of epidemic risk and controlling the outbreak, it is vital to begin contact tracing before numerous transmission chains become widely distributed across space [38, 39] Second, viral genome sequences provide information on both the timing of the outbreak [40] [41] [42] and structure of secondary cases [43] [44] [45] . For example, methods exist to reconstruct transmission trees for sampled sequences using simple mutational models to construct a likelihood for a specific transmission tree [46, 47] and translate coalescent rates into key epidemiological parameters [48] [49] [50] . Despite the potential for genome sequencing to revolutionize outbreak response, the global public health community still struggles to coordinate data sharing across international borders, between academic researchers, and with private companies [51] [52] [53] .",
+            "cite_spans": [
+                {
+                    "start": 671,
+                    "end": 675,
+                    "text": "[38,",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 676,
+                    "end": 679,
+                    "text": "39]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 766,
+                    "end": 770,
+                    "text": "[40]",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 771,
+                    "end": 775,
+                    "text": "[41]",
+                    "ref_id": null
+                },
+                {
+                    "start": 776,
+                    "end": 780,
+                    "text": "[42]",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 814,
+                    "end": 818,
+                    "text": "[43]",
+                    "ref_id": null
+                },
+                {
+                    "start": 819,
+                    "end": 823,
+                    "text": "[44]",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 824,
+                    "end": 828,
+                    "text": "[45]",
+                    "ref_id": "BIBREF46"
+                },
+                {
+                    "start": 1004,
+                    "end": 1008,
+                    "text": "[46,",
+                    "ref_id": "BIBREF47"
+                },
+                {
+                    "start": 1009,
+                    "end": 1012,
+                    "text": "47]",
+                    "ref_id": "BIBREF48"
+                },
+                {
+                    "start": 1080,
+                    "end": 1084,
+                    "text": "[48]",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 1085,
+                    "end": 1089,
+                    "text": "[49]",
+                    "ref_id": "BIBREF50"
+                },
+                {
+                    "start": 1090,
+                    "end": 1094,
+                    "text": "[50]",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 1342,
+                    "end": 1346,
+                    "text": "[51]",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 1347,
+                    "end": 1351,
+                    "text": "[52]",
+                    "ref_id": "BIBREF53"
+                },
+                {
+                    "start": 1352,
+                    "end": 1356,
+                    "text": "[53]",
+                    "ref_id": "BIBREF54"
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "Third, and most often the first available real time information on novel pathogens, are data related to similar past outbreaks. For example, in Fig. 2 we make a range of predictions for the final size of 2019-nCoV in Wuhan based on R 0 estimates from early cases [18, 19] and for the underlying distribution of secondary cases by analogy with the severe acute respiratory syndrome in similar population [13] . Based on this uncertainty, we obtain a range of final outbreak size (given as a fraction of the total susceptible population) between 5% and 40%. Critically, this large range stems from uncertainty in the heterogeneity of secondary infections. If the heterogeneity is large, sustained transmission is mostly maintained by so-called \"super-spreading\" events, then the outbreak is both more likely to end stochastically, less likely to spread extensively, as well as easier to manage with contact tracing, screening and infection control [24] . With less heterogeneity, the outbreak almost certainly cannot be contained and we must prepare for a pandemic of 2019-nCoV [54, 55] . Clearly, we are in dire need of contact tracing data and/or high-resolution pathogen genome surveillance for this outbreak.",
+            "cite_spans": [
+                {
+                    "start": 263,
+                    "end": 267,
+                    "text": "[18,",
+                    "ref_id": null
+                },
+                {
+                    "start": 268,
+                    "end": 271,
+                    "text": "19]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 403,
+                    "end": 407,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 946,
+                    "end": 950,
+                    "text": "[24]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1076,
+                    "end": 1080,
+                    "text": "[54,",
+                    "ref_id": "BIBREF55"
+                },
+                {
+                    "start": 1081,
+                    "end": 1084,
+                    "text": "55]",
+                    "ref_id": "BIBREF56"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 150,
+                    "text": "Fig. 2",
+                    "ref_id": null
+                }
+            ],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "In conclusion, we reiterate that when accounting for the full distribution of secondary cases caused by an infected individual, there is no direct relationship between R 0 and the size of an outbreak. We also stress that both R 0 and the full secondary case distribution are not properties of the disease itself, but instead set by properties of the pathogen, the host population and the context of the outbreak. Nevertheless, we provide a straightforward methodology for translating estimates of transmission heterogeneity into epidemic forecasts. Altogether, predicting outbreak size based on early data is an incredibly complex challenge but one that is increasingly within reach due to new mathematical analyses and faster communication of public health data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        },
+        {
+            "text": "is the (which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02. 10.20021725 doi: medRxiv preprint ",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 144,
+                    "text": "10.20021725 doi: medRxiv preprint",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "IV. DISCUSSION"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Estimates of the reproduction number for seasonal, pandemic, and zoonotic influenza: a systematic review of the literature",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Biggerstaff",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Reed",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gambhir",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Finelli",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "BMC Infect. Dis",
+            "volume": "14",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1471-2334-14-480"
+                ]
+            }
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Ebola Virus Disease in West Africa -The First 9 Months of the Epidemic and Forward Projections",
+            "authors": [],
+            "year": 2014,
+            "venue": "N. Engl. J. Med",
+            "volume": "371",
+            "issn": "",
+            "pages": "1481--1495",
+            "other_ids": {
+                "DOI": [
+                    "10.1056/NEJMoa1411100"
+                ]
+            }
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Estimating the Reproduction Number of Ebola Virus (EBOV) During the 2014 Outbreak in West Africa",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Althaus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLOS Curr",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/currents.outbreaks.91afb5e0f279e7f29e7056095255b288"
+                ]
+            }
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Transmissibility of 1918 pandemic influenza",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Mills",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Robins",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Nature",
+            "volume": "432",
+            "issn": "",
+            "pages": "904--906",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature03063"
+                ]
+            }
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Understanding Ebola: the 2014 epidemic",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Kaner",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Schaack",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Global. Health",
+            "volume": "12",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/s12992-016-0194-4"
+                ]
+            }
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "The effect of public health measures on the 1918 influenza pandemic in U.S. cities",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "C J"
+                    ],
+                    "last": "Bootsma",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "104",
+            "issn": "",
+            "pages": "7588--7593",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.0611071104"
+                ]
+            }
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "A technical but important caveat: We use the word \"case\" in a generic sense to represent any infection, even if too mild to meet the clinical case definition",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "The legacy of Kermack and McKendrick",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Diekmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A J"
+                    ],
+                    "last": "Metz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A P"
+                    ],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                }
+            ],
+            "year": 1995,
+            "venue": "Epidemic Model. Their Struct. Relat. to Data",
+            "volume": "",
+            "issn": "",
+            "pages": "95--115",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "How Bad Will the Coronavirus Outbreak Get? Here Are 6 Key Factors",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Sheikh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Watkins",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gr\u00f6ndahl",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "The New York Times",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "A Contribution to the Mathematical Theory of Epidemics",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Kermack",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Mckendrick",
+                    "suffix": ""
+                }
+            ],
+            "year": 1927,
+            "venue": "Proc. R. Soc. A",
+            "volume": "115",
+            "issn": "",
+            "pages": "700--721",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rspa.1927.0118"
+                ]
+            }
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Contributions to the Mathematical Theory of Epidemics. II. The Problem of Endemicity",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Kermack",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Mckendrick",
+                    "suffix": ""
+                }
+            ],
+            "year": 1932,
+            "venue": "Proc. R. Soc. A",
+            "volume": "138",
+            "issn": "",
+            "pages": "55--83",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rspa.1932.0171"
+                ]
+            }
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Contributions to the Mathematical Theory of Epidemics. III. Further Studies of the Problem of Endemicity",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Kermack",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Mckendrick",
+                    "suffix": ""
+                }
+            ],
+            "year": 1933,
+            "venue": "Proc. R. Soc. A",
+            "volume": "141",
+            "issn": "",
+            "pages": "94--122",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rspa.1933.0106"
+                ]
+            }
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Superspreading and the effect of individual variation on disease emergence",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schreiber",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kopp",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nature",
+            "volume": "438",
+            "issn": "",
+            "pages": "355--359",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature04153"
+                ]
+            }
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "When individual behaviour matters: homogeneous and network models in epidemiology",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bansal",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Meyers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "J. R. Soc. Interface",
+            "volume": "4",
+            "issn": "",
+            "pages": "879--891",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rsif.2007.1100"
+                ]
+            }
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "A monotonic relationship between the variability of the infectious period and final size in pairwise epidemic modelling",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Vizi",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Kiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Miller",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "R\u00f6st",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:1712.06026"
+                ]
+            }
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Network theory and SARS: Predicting outbreak diversity",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Meyers",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Pourbohloul",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E J"
+                    ],
+                    "last": "Newman",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Skowronski",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Brunham",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "J. Theor. Biol",
+            "volume": "232",
+            "issn": "",
+            "pages": "71--81",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.jtbi.2004.07.026"
+                ]
+            }
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Nowcasting and forecasting the potential domestic and international spread of the 2019-nCoV outbreak originating in Wuhan, China: a modelling study",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Lancet",
+            "volume": "",
+            "issn": "",
+            "pages": "30260--30269",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0140-6736(20)30260-9"
+                ]
+            }
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Cowling",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Feng",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "N. Engl. J. Med",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1056/NEJMoa2001316"
+                ]
+            }
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Novel coronavirus 2019-nCoV: early estimation of epidemiological parameters and epidemic predictions",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Read",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R E"
+                    ],
+                    "last": "Bridgen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A T"
+                    ],
+                    "last": "Cummings",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Jewell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "medRxiv",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.01.23.20018549"
+                ]
+            }
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Clinical features of patients infected with 2019 novel coronavirus in",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Gu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Cheng",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Xia",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Yin",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Xiao",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Jin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Cao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "30183--30188",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0140-6736(20)30183-5"
+                ]
+            }
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Pattern of early human-tohuman transmission of Wuhan 2019-nCoV",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Riou",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Althaus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "bioRxiv",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/2020.01.23.917351"
+                ]
+            }
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Early Transmissibility Assessment of a Novel Coronavirus in Wuhan, China",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Majumder",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Mandl",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "SSRN Electron. J",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.2139/ssrn.3524675"
+                ]
+            }
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Feasibility of controlling 2019-ncov outbreaks by isolation of cases and contacts",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hellewell",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Abbott",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gimma",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ni Bosse",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Jarvis",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Russell",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Munday",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Kucharski",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Edmunds",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Funk",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eggo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Random graphs with arbitrary degree distributions and their applications",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "E J"
+                    ],
+                    "last": "Newman",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Strogatz",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Watts",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Phys. Rev. E",
+            "volume": "64",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1103/PhysRevE.64.026118"
+                ]
+            }
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "WHO disease outbreaks by year: 2019",
+            "authors": [],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "2020--2022",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Epidemic outbreaks in complex heterogeneous networks",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Moreno",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Pastor-Satorras",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Eur. Phys. J. B",
+            "volume": "26",
+            "issn": "",
+            "pages": "521--529",
+            "other_ids": {
+                "DOI": [
+                    "10.1140/epjb/e20020122"
+                ]
+            }
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Epidemic modeling in metapopulation systems with heterogeneous coupling pattern: Theory and simulations",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Colizza",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "J. Theor. Biol",
+            "volume": "251",
+            "issn": "",
+            "pages": "450--467",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.jtbi.2007.11.028"
+                ]
+            }
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Multiscale, resurgent epidemics in a hierarchical metapopulation model",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Watts",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Muhamad",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Medina",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Dodds",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "102",
+            "issn": "",
+            "pages": "11157--11162",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.0501226102"
+                ]
+            }
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "The role of the airline transportation network in the prediction and predictability of global epidemics",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Colizza",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Barrat",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Barth\u00e9lemy",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "103",
+            "issn": "",
+            "pages": "2015--2020",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.0510525103"
+                ]
+            }
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Impact of human mobility on the emergence of dengue epidemics in Pakistan",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Wesolowski",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Qureshi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Boni",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Sunds\u00f8y",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Johansson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Rasheed",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Eng\u00f8-Monsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Buckee",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "112",
+            "issn": "",
+            "pages": "11887--11892",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.1504964112"
+                ]
+            }
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "The effect of a prudent adaptive behaviour on disease transmission",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Scarpino",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Allard",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "H\u00e9bert-Dufresne",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Nat. Phys",
+            "volume": "12",
+            "issn": "",
+            "pages": "1042--1046",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nphys3832"
+                ]
+            }
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Epidemic cycles driven by host behaviour",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Althouse",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "H\u00e9bert-Dufresne",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "J. R. Soc. Interface",
+            "volume": "11",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rsif.2014.0575"
+                ]
+            }
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Propagation dynamics on networks featuring complex topologies",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "H\u00e9bert-Dufresne",
+                    "suffix": ""
+                },
+                {
+                    "first": "P.-A",
+                    "middle": [],
+                    "last": "No\u00ebl",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Marceau",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Allard",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dub\u00e9",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Phys. Rev. E",
+            "volume": "82",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1103/PhysRevE.82.036115"
+                ]
+            }
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Effects of Heterogeneous and Clustered Contact Patterns on Infectious Disease Dynamics",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Volz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Miller",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Galvani",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Meyers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "PLOS Comput. Biol",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1002042"
+                ]
+            }
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Complex dynamics of synergistic coinfections on realistically clustered networks",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "H\u00e9bert-Dufresne",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Althouse",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "112",
+            "issn": "",
+            "pages": "10551--10556",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.1507820112"
+                ]
+            }
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Interacting contagions are indistinguishable from social reinforcement",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "H\u00e9bert-Dufresne",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Scarpino",
+                    "suffix": ""
+                },
+                {
+                    "first": "J.-G",
+                    "middle": [],
+                    "last": "Young",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "arXiv",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:1906.01147"
+                ]
+            }
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "When is contact tracing not enough to stop an outbreak?",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Dhillon",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Srikrishna",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Lancet Infect. Dis",
+            "volume": "18",
+            "issn": "",
+            "pages": "1302--1304",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S1473-3099(18)30656-X"
+                ]
+            }
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "The Effectiveness of Contact Tracing in Emerging Epidemics",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Klinkenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "PLOS ONE",
+            "volume": "1",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0000012"
+                ]
+            }
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Origins and evolutionary genomics of the 2009 swine-origin H1N1 influenza A epidemic",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "J D"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Vijaykrishna",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bahl",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Lycett",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Worobey",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Cheung",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Raghwani",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bhatt",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S M"
+                    ],
+                    "last": "Peiris",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Nature",
+            "volume": "459",
+            "issn": "",
+            "pages": "1122--1125",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature08182"
+                ]
+            }
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "An Observational, Laboratory-Based Study of Outbreaks of Middle East Respiratory Syndrome Coronavirus in Jeddah and Riyadh",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Drosten",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Muth",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Corman",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Hussain",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Masri",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Hajomar",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Landt",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Assiri",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Eckerle",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Shangiti",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Al-Tawfiq",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Albarrak",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zumla",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Memish",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Clin. Infect. Dis",
+            "volume": "60",
+            "issn": "",
+            "pages": "369--377",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/cid/ciu812"
+                ]
+            }
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Ebola Outbreak Reveals Clustered Transmission",
+            "authors": [],
+            "year": 2015,
+            "venue": "Clin. Infect. Dis",
+            "volume": "60",
+            "issn": "",
+            "pages": "1079--1082",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/cid/ciu1131"
+                ]
+            }
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Rapid outbreak sequencing of Ebola virus",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Arias",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Watson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Asogun",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Tobin",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "V T"
+                    ],
+                    "last": "Phan",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Jah",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "E G"
+                    ],
+                    "last": "Wadoum",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Meredith",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Thorne",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Caddy",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tarawalie",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Langat",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Dudas",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Faria",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Dellicour",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kamara",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Kargbo",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Kamara",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Gevao",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Cooper",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Newport",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Horby",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dunning",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Sahr",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Brooks",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J H"
+                    ],
+                    "last": "Simpson",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Groppelli",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Mulakken",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Rhodes",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Akpablie",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Yoti",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lamunu",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Vitto",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Otim",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Owilli",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Boateng",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Okoror",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Omomoh",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Oyakhilome",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Omiunu",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Yemisis",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Adomeh",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ehikhiametalor",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Akhilomen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Aire",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kurth",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Cook",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Baumann",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gabriel",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "W\u00f6lfel",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "Di"
+                    ],
+                    "last": "Caro",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Carroll",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "G\u00fcnther",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Redd",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Naidoo",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Kellam",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Goodfellow",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Cotten",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Virus Evol",
+            "volume": "2",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/ve/vew016"
+                ]
+            }
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Ebola Virus Epidemiology, Transmission, and Evolution during Seven Months in Sierra Leone",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Dudas",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Wohl",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Goba",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "L M"
+                    ],
+                    "last": "Whitmer",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Andersen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Sealfon",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Ladner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Kugelman",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Matranga",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Winnicki",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Qu",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Gire",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gladden-Young",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Jalloh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Nosamiefan",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Yozwiak",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Moses",
+                    "suffix": ""
+                },
+                {
+                    "first": "P.-P",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Schaffner",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Bird",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Towner",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mamoh",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gbakie",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Kanneh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kargbo",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L B"
+                    ],
+                    "last": "Massally",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Kamara",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Konuwa",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Sellu",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Jalloh",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Mustapha",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Foday",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Yillah",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Erickson",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Sealy",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Blau",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Paddock",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Brault",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Amman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Basile",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bearden",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Belser",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bergeron",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Campbell",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Chakrabarti",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Dodd",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Flint",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gibbons",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Goodman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Klena",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mc-Mullan",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Morgan",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Russell",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Salzer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Sanchez",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Jungreis",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Tomkins-Tinch",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kislyuk",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "F F"
+                    ],
+                    "last": "Lin ; G",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Palacios",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Ndiaye",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Happi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gevao",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Vandi",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Kargbo",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Holmes",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bedford",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Gnirke",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Str\u00f6her",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Garry",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Sabeti",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "161",
+            "issn": "",
+            "pages": "1516--1526",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.cell.2015.06.007"
+                ]
+            }
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Bayesian Reconstruction of Disease Outbreaks by Combining Epidemiologic and Genomic Data",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Jombart",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Didelot",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLOS Comput. Biol",
+            "volume": "10",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1003457"
+                ]
+            }
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Bayesian inference of transmission chains using timing of symptoms, pathogen genomes and contact data",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Campbell",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Jombart",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "PLOS Comput. Biol",
+            "volume": "15",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1006930"
+                ]
+            }
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Viral Phylodynamics",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Volz",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Koelle",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Bedford",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLOS Comput. Biol",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1002947"
+                ]
+            }
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "BEAST 2.5: An advanced software platform for Bayesian evolutionary analysis",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Bouckaert",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Vaughan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Barido-Sottani",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Duch\u00eane",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Fourment",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gavryushkina",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Heled",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Jones",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "K\u00fchnert",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "De Maio",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Matschiner",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Mendes",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "M\u00fcller",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ogilvie",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Plessis",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Popinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Rasmussen",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Siveroni",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Suchard",
+                    "suffix": ""
+                },
+                {
+                    "first": "C.-H",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Stadler",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drummond",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "PLOS Comput. Biol",
+            "volume": "15",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1006650"
+                ]
+            }
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Birth-death skyline plot reveals temporal changes of epidemic spread in HIV and hepatitis C virus (HCV)",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Stadler",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kuhnert",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bonhoeffer",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drummond",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "110",
+            "issn": "",
+            "pages": "228--233",
+            "other_ids": {
+                "DOI": [
+                    "10.1073/pnas.1207965110"
+                ]
+            }
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Real-time digital pathogen surveillance -the time is now",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gardy",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Loman",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Genome Biol",
+            "volume": "16",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/s13059-015-0726-x"
+                ]
+            }
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Sequencing in the time of Ebola",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Van Puyvelde",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Argimon",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nat. Rev. Microbiol",
+            "volume": "17",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/s41579-018-0130-0"
+                ]
+            }
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Tracking virus outbreaks in the twenty-first century",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Grubaugh",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Ladner",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Lemey",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Holmes",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Andersen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nat. Microbiol",
+            "volume": "4",
+            "issn": "",
+            "pages": "10--19",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/s41564-018-0296-2"
+                ]
+            }
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "A Novel Coronavirus Emerging in China -Key Questions for Impact Assessment",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Munster",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Koopmans",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Van Doremalen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Van Riel",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "De Wit",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "N. Engl. J. Med",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1056/NEJMp2000929"
+                ]
+            }
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Transmissibility of 2019-nCoV",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Imai",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Dorigatti",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Baguelin",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "3",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {},
+    "back_matter": []
+}

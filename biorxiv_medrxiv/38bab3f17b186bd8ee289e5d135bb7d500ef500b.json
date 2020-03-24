@@ -1,0 +1,2349 @@
+{
+    "paper_id": "38bab3f17b186bd8ee289e5d135bb7d500ef500b",
+    "metadata": {
+        "title": "Title: Probabilistic reconstruction of measles transmission Authors",
+        "authors": [
+            {
+                "first": "Alexis",
+                "middle": [],
+                "last": "Robert",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "London School of Hygiene",
+                    "location": {
+                        "addrLine": "Keppel Street",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Adam",
+                "middle": [
+                    "J"
+                ],
+                "last": "Kucharski",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "London School of Hygiene",
+                    "location": {
+                        "addrLine": "Keppel Street",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Paul",
+                "middle": [
+                    "A"
+                ],
+                "last": "Gastanaduy",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Prabasaj",
+                "middle": [],
+                "last": "Paul",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "London School of Hygiene & Tropical Medicine",
+                    "location": {
+                        "addrLine": "10 Keppel Street",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Sebastian",
+                "middle": [],
+                "last": "Funk",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "London School of Hygiene",
+                    "location": {
+                        "addrLine": "Keppel Street",
+                        "settlement": "London",
+                        "country": "UK"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Pockets of susceptibility resulting from spatial or social heterogeneity in vaccine coverage can drive 16 measles outbreaks, as cases imported into such pockets are likely to cause further transmission and lead 17 to large transmission clusters. Characterising the dynamics of transmission is essential for identifying 18 which individuals and regions might be most at risk. 19",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "As data from detailed contact tracing investigations are not available in many settings, we combined 20 age, location, genotype, and onset date of cases in order to probabilistically reconstruct the importation 21 status and transmission clusters within a newly developed R package called o2geosocial. 22",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We compared our inferred cluster size distributions to 737 transmission clusters identified through 23 detailed contact-tracing in the United States between 2001 and 2016. We were able to reconstruct the 24 importation status of the cases and found good agreement between the inferred and reference clusters. 25",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The results were improved when the contact-tracing investigations were used to set the importation 26 status before running the model. 27",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "from unrelated cases can be very close genetically and genetic sequences from measles cases are not 56 usually indicative of direct transmission links [27, 28] . 57",
+            "cite_spans": [
+                {
+                    "start": 151,
+                    "end": 155,
+                    "text": "[27,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 156,
+                    "end": 159,
+                    "text": "28]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "As measles is highly infectious, under-immunized communities (also called pockets of susceptibles) 58 resulting from local heterogeneity in vaccine coverage can lead to large, long-lasting outbreaks [30] [31] [32] [33] [34] . 59",
+            "cite_spans": [
+                {
+                    "start": 199,
+                    "end": 203,
+                    "text": "[30]",
+                    "ref_id": null
+                },
+                {
+                    "start": 204,
+                    "end": 208,
+                    "text": "[31]",
+                    "ref_id": null
+                },
+                {
+                    "start": 209,
+                    "end": 213,
+                    "text": "[32]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 214,
+                    "end": 218,
+                    "text": "[33]",
+                    "ref_id": null
+                },
+                {
+                    "start": 219,
+                    "end": 223,
+                    "text": "[34]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Detecting these pockets of susceptibles can be challenging, as historical local values of coverage 60 throughout a given country are rarely available. The size distribution of transmission trees resulting 61 from each importation during outbreaks (otherwise known as the cluster size distribution) will depend 62 both on individual factors (e.g. age of the imported case which might affect contact patterns) and 63 community factors (e.g. the history of coverage in the area) [35, 36] . The size of a cluster can therefore 64 reflect the level of susceptibility of individuals directly and indirectly connected to the index case 65 [37, 38] . 66",
+            "cite_spans": [
+                {
+                    "start": 476,
+                    "end": 480,
+                    "text": "[35,",
+                    "ref_id": null
+                },
+                {
+                    "start": 481,
+                    "end": 484,
+                    "text": "36]",
+                    "ref_id": null
+                },
+                {
+                    "start": 632,
+                    "end": 636,
+                    "text": "[37,",
+                    "ref_id": null
+                },
+                {
+                    "start": 637,
+                    "end": 640,
+                    "text": "38]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Here we introduced a model combining age, location, genotype, and rash onset date of cases to 67 reconstruct probabilistic transmission trees. We chose these features to make the model applicable to a 68 wide range of settings as they are commonly reported and informative on transmission. We wrote the 69 R package o2geosocial to conduct inference on individual-level data using this model. It is based on 70 the package outbreaker2 and is designed for outbreaks with partial sampling of cases, or uninformative 71 genetic sequences, such as measles outbreaks [9, 39] . We used the likelihood of transmission links 72 between different cases to estimate their importation status. We compared the inferred importation We allowed for missing generations between cases due to an unreported individual, and corresponds 89 to the number of generations between and . We calculated the temporal probability of transmission 90 between and from the number of days between the dates of infection of the two cases and and 91 the generation time of the disease (t). This probability of infection was quantified by ( \u2212 , ), 92 ( ) = \u220f , where \u03a0 is the convolution operator. We used an exponential distribution ( | ) to 93 quantify the probability of observing missing generation between and from the conditional report 94 ratio which quantifies the probability of missing generation between two connected cases in a cluster. 95",
+            "cite_spans": [
+                {
+                    "start": 561,
+                    "end": 564,
+                    "text": "[9,",
+                    "ref_id": null
+                },
+                {
+                    "start": 565,
+                    "end": 568,
+                    "text": "39]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "It does not correspond to the overall report ratio of an outbreak as entire missing clusters, or unreported 96 cases infected after the last case or before the ancestor of a cluster are not included in . The \"ancestor\" 97 is the earliest identified case of a cluster. 98 ( , , ) was defined as the probability of transmission between age groups and . This 99 probability corresponds to the proportion of contacts to the age group that originated from and 100 can be deduced from studies such as Polymod [36] . We defined ( , ) as the probability of 101 observing the pathogen genotype in case in the tree containing case j. There can only be one 102 measles virus genotype per transmission tree, or cases with unreported genotype. 103 Five of the proposals had already been implemented in the outbreaker2 package and were adapted to 126 this setting: i) change the number of generations between two cases; ii) change the conditional report 127 ratio ; iii) change the time of infection; iv) change the infector of a case (if the case is not the ancestor 128 of a tree); v) swap infector-infectee (if none is the ancestor of a tree). 129",
+            "cite_spans": [
+                {
+                    "start": 503,
+                    "end": 507,
+                    "text": "[36]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "We added two proposals to change and , the spatial kernel parameters. For each proposal, the 130 probability of transmission between every geographical unit was re calculated with the new values. 131",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Depending on the number of geographical units, this calculation considerably slowed down the 132 algorithm. Therefore, when or were estimated, we limited the maximal number of missing 133 generations to 1 (max ( ) = 2). Finally, the last proposal was designed to change the ancestor of the 134 tree whilst conserving the overall number of trees ( Figure 1 ). 135",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 347,
+                    "end": 355,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "Unrelated measles cases stemming from different importations and different regions can be part of the 137 same dataset. Grouping cases and excluding unrealistic transmission links reduces the number of 138 possible trees and speeds up the MCMC runs. To do so, we listed each case's potential infectors using 139 three criteria: i) The potential infectors must be of the same genotype as the case, or have unreported 140 genotype, ii) The location of potential infectors must be less than km away from the case and iii) the 141 potential infectors must have been reported later than days before the case. This threshold should be 142 determined from the maximum plausible generation time of the disease. The spatial threshold should 143 be defined according to the relevance of long-distance transmissions. Cases with no potential infector 144 were considered as importations. Otherwise, they were grouped together with i) their potential infectors 145 and ii) cases with common potential infectors. 146",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Inference of importation status and cluster 136"
+        },
+        {
+            "text": "After grouping the cases, we estimated their importation status and the cluster size distribution using 147 two runs of MCMC ( Figure 2 ). The first run was shorter and aimed at removing the most unlikely 148 connections among each group, as they can reflect unrealistic estimates for incubation periods or 149 generation times and corrupt the estimation of the date of infection. We defined a reference threshold , 150 whereby if the individual value of log-likelihood L i was worse than , then the connection between 151 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 127,
+                    "end": 135,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Inference of importation status and cluster 136"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint and their index was considered unlikely. In Outbreaker2, was a relative value, defined from a quantile 152 of the individual log-likelihoods. In o2geosocial, can be a relative value or an absolute value, chosen 153 from the number of components of the likelihood. For each sample saved from the short run, we 154 computed the number of unlikely connections n. If there was no iteration where all connections where 155 better than , min(n) new importations were added to the initial tree for the long run ( Figure 2) . Figure S1 ). The 176 importation status, 5-year age group, onset date, county, and state of residence were fully reported for 177 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 643,
+                    "end": 652,
+                    "text": "Figure 2)",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 655,
+                    "end": 664,
+                    "text": "Figure S1",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Inference of importation status and cluster 136"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint 2,077 cases. The 21 cases with missing data were discarded. 25% of the cases were classified as 178 importations. 39% of the cases had their genotype reported. The dataset of 2,077 cases is referred to as 179 \"reference dataset\" in the results section, and was used to evaluate the performance of the inference 180 method. 181",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Inference of importation status and cluster 136"
+        },
+        {
+            "text": "Among cases with complete data, 737 independent clusters, containing 1 to 380 cases, were 182 reconstructed through contact tracing investigations. Not every identified case could be linked to an 183 importation, and some transmission clusters contained multiple imported cases (e.g. when related 184",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Inference of importation status and cluster 136"
+        },
+        {
+            "text": "individuals travel together to a foreign country and were infected there). Out of the 737 reference 185 clusters, 38 had several cases classified as importations, 256 had none identified. 186",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Inference of importation status and cluster 136"
+        },
+        {
+            "text": "The distributions and priors used in the studies are listed in Table 1 . As no studies quantifying the 188 probability of age-specific contacts have been carried out in the United States, we used the estimates 189 from the POLYMOD study in the UK [36] . The incubation period and the generation time of measles 190 were taken from previous studies [47] [48] [49] . We used the population centroid of each county to compute 191 the distance matrix[50]. We used a beta distribution as the prior of the conditional report ratio [8] . The 192 mean of the prior distribution was calculated using the number of clusters whose first case was not 193 classified as an imported case, meaning the investigations were not able to trace back to the first case 194 imported. As there was no prior information on the possible values of the spatial parameters, we used 195 uniform distributions as priors for and . 196",
+            "cite_spans": [
+                {
+                    "start": 247,
+                    "end": 251,
+                    "text": "[36]",
+                    "ref_id": null
+                },
+                {
+                    "start": 348,
+                    "end": 352,
+                    "text": "[47]",
+                    "ref_id": null
+                },
+                {
+                    "start": 353,
+                    "end": 357,
+                    "text": "[48]",
+                    "ref_id": null
+                },
+                {
+                    "start": 358,
+                    "end": 362,
+                    "text": "[49]",
+                    "ref_id": null
+                },
+                {
+                    "start": 525,
+                    "end": 528,
+                    "text": "[8]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 63,
+                    "end": 70,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Model and parameters 187"
+        },
+        {
+            "text": "For pre-clustering of cases, we set the temporal threshold to 30 days, which is above the 97.5% upper 197 quantile of the generation time with a missing generation. We were interested in local transmission to 198 describe the impact of an imported case on a community. But we only had information on the county 199 of residency for each case. Counties are large geographical units: the average county land area is 200 2,911km 2 and the maximum values reach 50,000km 2 . Therefore, we set the spatial threshold to 100km 201 to exclude long distance transmission, while still allowing for cross-county transmission. 202 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model and parameters 187"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint Finally, we tested several relative and absolute importation thresholds . Absolute values were 203 calculated from a factor , multiplied by the number of components in , excluding the binary genetic 204 component. Tested values were k = 0.05 ( = \u221215) and k = 0.1 ( = \u221211). Connections were 205 considered unlikely if the log-likelihood was worse than . Relative values were quantiles of all 206 recorded log-likelihoods in the sampled trees (Table 1) . 207",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 548,
+                    "end": 557,
+                    "text": "(Table 1)",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Using the contact tracing investigations, we considered three different initial distributions of the 208 importation status. In scenario 1, there was no inference of the importation status of cases, and the first 209 case of each epidemiological cluster was classified as importation (Ideal importation). In scenario 2: 210 there was no inference of the importation status of cases, and all cases identified as importation in the 211 contact tracing investigations were classified as importations (Epidemiological importation). Finally, in 212 Scenario 3, the importation status of cases was inferred, using different thresholds , and using no prior 213 information on the importation status of cases or the importation status from the contact tracing 214",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In order to compare the inferred and reference clusters, we calculated for each case i) the proportion of 216 the reference cluster correctly inferred (sensitivity) and ii) the proportion of the inferred cluster that was 217 part of the reference cluster (precision). These values were calculated at every iteration, and the median 218 values were used to evaluate the fit obtained with different values of . We also used the inferred cluster 219 size distribution to the reference data. The credibility intervals for each case are reported in the 220 Supplement (Supplement Figure S2 ). 221",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 575,
+                    "end": 584,
+                    "text": "Figure S2",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "investigations. 215"
+        },
+        {
+            "text": "We clustered 2,077 measles cases reported in the United States between January 2001 and December 223 2016 using their onset date, age groups, location and genotype. Using the contact tracing investigations, 224 we considered three different initial importation status distribution: i) only the ancestors of each 225 epidemiological cluster (first case of each cluster) were importations (ideal importation), ii) all cases 226 classified as importation in the contact tracing investigations were importations (epidemiological 227 importation), iii) no prior information on importation status of cases. The importation status of the cases 228 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "222"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint was therefore not probabilistically inferred in scenario 1 and 2. The short preliminary run was 30,000 229 iterations and 70,000 iterations. For each run, the trace of the posterior distribution shows the 230 convergence of the algorithm (Supplement Figure S3) . 231",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 357,
+                    "end": 367,
+                    "text": "Figure S3)",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In scenario 1, we did not infer the importation status of cases. The inferred cluster size distribution 232 matched the contact tracing investigations ( Figure 4A ); 98% of the reference singletons were also 233 isolated in the inferred cluster. For 94% (95% Credibility Interval: 91-98%) of cases, the inferred cluster 234 had a sensitivity and precision above 75%, meaning more than 75% of the cases in the inferred cluster 235 were in the reference cluster, and more than 75% of the cases in the reference cluster were in the inferred 236 cluster ( Figure 4B ). For 80% (78 -93%) of cases, the inferred clusters were a perfect match with the 237 reference clusters. The cluster size distribution stratified by state was similar to the contact tracing 238 investigations (Supplement Figure S4 ). Therefore, when each ancestor was considered as an 239 importation, the inferred clusters were very close to the reference ones. 240",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 153,
+                    "end": 162,
+                    "text": "Figure 4A",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 552,
+                    "end": 561,
+                    "text": "Figure 4B",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 785,
+                    "end": 794,
+                    "text": "Figure S4",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In scenario 2, we used the importation status distribution of cases reported in the contact tracing 241 investigations (539 importations). Pre-clustering highlighted 165 cases with no potential infector, which 242 were also classified as importations. We observed discrepancies between the inferred cluster size 243 distribution and the reference one: Among the 704 cases inferred as importation, 61 (9%) were not 244 importations in the reference cluster. Furthermore, 94 cases were the ancestor of a reference cluster and 245",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "were not classified as importations in the inferred clusters (13%). The overall cluster size distribution 246 matched the reference distribution, but 111 reference singletons were inferred as part of transmission 247 clusters ( Figure 4A , Supplement Figure S5 ). Although the precision of the inferred cluster was above 248 75% for 93% (88-93%) of the cases, 31% (6-39%) had a sensitivity score below 0.5, meaning they were 249 classified with less than half of their reference clusters ( Figure 4C ). The discrepancies observed in this 250 scenario are due to inconsistencies between the importation status distribution and the clustering of 251 cases in the contact tracing investigations, as reference clusters that gathered several importations were 252 split into different inferred clusters in Scenario 2. 253",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 228,
+                    "end": 237,
+                    "text": "Figure 4A",
+                    "ref_id": "FIGREF8"
+                },
+                {
+                    "start": 251,
+                    "end": 260,
+                    "text": "Figure S5",
+                    "ref_id": "FIGREF10"
+                },
+                {
+                    "start": 490,
+                    "end": 499,
+                    "text": "Figure 4C",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In scenario 3, the importation status of cases was inferred from a threshold . For each case , if the log-254 likelihood was worse than , the connection between the case and its index was removed and the 255 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint case was considered imported. Firstly, using an absolute factor k = 0.05 ( = \u221215), 586 (581-593) 256 cases were classified as importations, 361 (355-369) of them were singletons. These numbers are much 257 lower than the reference datasets that contains 737 clusters, and 539 singletons ( Figure 5A , Supplement 258 Figure S6 ). We observed very few misclassifications of importation status and singletons (15 (10-22) 259 misclassified importations, 4 (0-14) misclassified singletons), and the cluster size distribution for 260 clusters including two cases and more was very similar to the reference one. The precision of the 261 reconstructed cluster was very high (above 75% for 88% (85-93%) of cases) ( Figure 5B) . Overall, the 262 algorithm was not able to accurately identify importations and singletons as the threshold was too low 263 to eliminate some unrealistic connections, but the inferred larger clusters matched their reference 264 counterparts. 265",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 396,
+                    "end": 405,
+                    "text": "Figure 5A",
+                    "ref_id": "FIGREF10"
+                },
+                {
+                    "start": 423,
+                    "end": 432,
+                    "text": "Figure S6",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 813,
+                    "end": 823,
+                    "text": "Figure 5B)",
+                    "ref_id": "FIGREF10"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We then observed the impact of increasing on the inferred cluster size distribution. Runs obtained 266",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "using an absolute threshold with = 0.10 ( = \u221211) and 95% relative threshold yielded very similar 267 results. The number of cases inferred as importations was higher than in previous runs, while all 268 remaining links showed good connection between cases. The number of importations was closer to the 269 reference dataset, and the number of singletons was greater than the reference. Nevertheless, the 11% 270 (10-12%) of the inferred importations was not classified as importation in the reference clusters. 271",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Furthermore, the number of two-case chains was overestimated, and bigger clusters were likely to be 272 split because of the removal of weaker connections. Therefore, increasing did not improve the cluster 273 size distribution, as many importations in the reference clusters were not identified and the number of 274 mismatches increased (Supplement Figures S7) . 275",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 351,
+                    "end": 362,
+                    "text": "Figures S7)",
+                    "ref_id": null
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Finally, we combined prior information and inference of importation status. Cases considered as 276 importations in the contact tracing investigations were set as importations, and we inferred the 277 importation status of the remaining cases. We used a low threshold, to remove the least likely 278 transmission links ( = 0.05). Including prior information led to some misclassification of importation 279 status due to the inconsistencies between the epidemiological importation status and the reference 280 clusters. As in scenario 2, some cases were classified with only part of their reference clusters because 281 clusters with several importations were split into different clusters. Indeed, the sensitivity score of 34% 282 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint (7-51%) of cases was below 0.5. Nevertheless, the cluster size distribution observed in the simulation 283 was the closest to the reference clusters. There were 725 (719-731) clusters, 89% of importations were 284 also ancestors of reference clusters and the number of singletons matched the reference clusters ( Figure  285 5A-C). The inferred clusters of 88% (86-94%) of the cases had a precision score of 1, showing they 286 were clustered without any false positives. Despite discrepancies in several states (Massachusetts, 287 Ohio), the cluster size distribution stratified by state showed good agreement with the reference clusters 288 (Supplement Figures S8) . 289",
+            "cite_spans": [
+                {
+                    "start": 619,
+                    "end": 634,
+                    "text": "(Massachusetts,",
+                    "ref_id": null
+                },
+                {
+                    "start": 635,
+                    "end": 638,
+                    "text": "287",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 420,
+                    "end": 431,
+                    "text": "Figure  285",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 762,
+                    "end": 773,
+                    "text": "Figures S8)",
+                    "ref_id": null
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The conditional report ratio in the transmission chains and the spatial parameters and was 290 estimated in each scenario. The parameter estimates did not depend on the prior importation status 291 distribution or the value of . was consistently estimated above 90%, showing a low number of 292 missing generations between cases (Supplement Figure S9 ). This number is not representative of the 293 overall report ratio, which is usually much lower[51], and does not take into account missing 294 importations in singletons and chains. High values of show that the reported cases can be connected 295 without missing generations. 296",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 341,
+                    "end": 350,
+                    "text": "Figure S9",
+                    "ref_id": "FIGREF13"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "There was little variation in the estimates of the spatial parameters between the different scenarios. The 297 population parameter was estimated between 0.6 and 1 for every scenario, and the distance parameter 298 b was between 0.08 and 0.12. In every scenario, more than 80% of the inferred transmission were 299 between cases distant of less than 10km, and few long-distance transmissions were recorded (50-300 100km), hence although most of the reconstructed connections were between cases from the same 301 county, the algorithm was able to identify clusters spreading over several counties or states (Supplement 302 Figure S10 ). 303",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 622,
+                    "end": 632,
+                    "text": "Figure S10",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We highlighted the added value of including the spatial distance between cases in the likelihood by 304 comparing the cluster size distribution inferred by selecting certain components of (Supplement 305 Figure S11 ). The credibility intervals were much wider when the distance between cases is not part of 306 the likelihood, and the number of chains containing 2 to 10 cases was over estimated. The important 307 impact of the spatial component of likelihood was also due to the widespread American territory, and 308 could be lower in a different setting. 309 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 204,
+                    "end": 214,
+                    "text": "Figure S11",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We used the ratio of the number of importations over the number of subsequent cases per state to 310 evaluate the intensity of transmission in each state between 2001 and 2016 ( Figure 6 ). The maps 311 obtained in the scenario 1 (ideal scenario) or in scenario 3 (estimation of importation, with 312 epidemiological importations and = 0.05) were very similar. We only observed minor differences, 313 for example in South Dakota and in Massachusetts, where the ratios were higher in scenario 3. The 314 highest ratio (31.8 in scenario 1) was observed in Ohio, and is mostly due to a 383 case outbreak in 315 2014 [32] . We observed major differences between the incidence map ( Figure 3A Similarly, we used the inferred transmission chain to compute the inferred reproduction number in each 320 state. According to the model, about 60% cases did not cause future transmission, and about 5% caused 321 more than 5 subsequent cases (Supplement Figure S12) . These numbers were consistent in each run. 322",
+            "cite_spans": [
+                {
+                    "start": 613,
+                    "end": 617,
+                    "text": "[32]",
+                    "ref_id": "BIBREF37"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 178,
+                    "end": 186,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 678,
+                    "end": 687,
+                    "text": "Figure 3A",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 942,
+                    "end": 953,
+                    "text": "Figure S12)",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The geographical distribution of reproduction number was very similar to the importation -subsequent 323 cases ratio (Supplement Figure S13) . 324",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 129,
+                    "end": 140,
+                    "text": "Figure S13)",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We developed the R package o2geosocial to classify measles cases into transmission clusters and 326 estimate their importation status using routinely collected surveillance data (genotype, age, onset date 327 and location of the cases). As recently observed during the 2018-2019 measles outbreak in New York, 328 delays in childhood vaccination, local susceptibility, and increased contacts can lead to large outbreaks 329 following importations [52, 53] . Therefore, we were interested in highlighting the effect of imported 330 cases on communities and we focused on short distance transmission to identify areas where they 331 repeatedly caused subsequent transmission chains. Although this is not predictive of future 332 transmission, it highlights communities with potential for large transmission clusters. 333",
+            "cite_spans": [
+                {
+                    "start": 446,
+                    "end": 450,
+                    "text": "[52,",
+                    "ref_id": null
+                },
+                {
+                    "start": 451,
+                    "end": 454,
+                    "text": "53]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "325"
+        },
+        {
+            "text": "We compared the inferred transmission clusters to the contact tracing investigations of 2,077 confirmed 334 measles cases reported in the United States between 2001 and 2016. We were able to produce reliable 335 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "325"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint estimates of known transmission clusters using epidemiological features with only few 336 misclassifications. Estimating the importation status of cases without prior knowledge was challenging 337 and caused uncertainty on the results. We tested different threshold to eliminate unlikely 338 transmissions, and we were able to identify most of the imported cases. Nevertheless, if several cases 339 were imported in the same region at a similar time, we could not find all of them without discarding 340 valid transmission events, and increasing the number of false positives. When we used the importation 341 status as defined in the contact tracing investigations without probabilistic inference (scenario 1 and 2) , 342 the reconstructed clusters were similar to the reference ones. Results were also conclusive when we 343 combined prior information and importation inference. The reconstruction of transmission greatly 344 depends on the epidemiological investigations to identify measles importations in a community. 345",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 805,
+                    "end": 823,
+                    "text": "(scenario 1 and 2)",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We used the genotype to censor connections between cases when it was reported, as there can be only 346 one reported genotype per transmission cluster. Using a simulated dataset (toy_outbreak_long in 347 o2geosocial), we explored the impact of increasing the proportion of genotyped cases on clustering and 348 observed it could help identify the number of concurrent transmission trees when multiple genotypes 349 are co-circulating. Moreover, we introduced a spatial component to the likelihood of connection 350 between cases using an exponential gravity model. Previous studies showed this model was able to 351 capture short distance dynamics better than other gravity models, and was easy to parametrise. 352",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Introducing the spatial component greatly improved the precision and the sensitivity of the 353 reconstructed clusters (Supplement Figure S11) , and the parameter estimates were robust in the different 354",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 131,
+                    "end": 142,
+                    "text": "Figure S11)",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The final results on the clustering of the 2,077 cases using o2geosocial were obtained in 7 hours for 356 each run of 100,000 iterations on a standard desktop computer (Intel Core i7, 3.20 GHz 6 cores), which 357 is much faster than previous implementations of outbreaker and outbreaker2. With the addition of the 358 pre-clustering step, whereby we reduced the number of potential infectors for each case, the algorithm 359 ran faster. For smaller chains (50,000 iterations), 4 hours were needed to estimate the importation status 360 and cluster the cases. The code for the package and the analysis developed in this project is shared on 361 Github (https://github.com/alxsrobert/o2geosocial and alxsrobert/datapaperMO), with an illustrative 362 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "scenarios. 355"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint toy dataset, and can be used to analyse recent outbreaks where contact-tracing investigations were not 363 carried out. 364",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Although the results obtained are promising, it should be noted that the dynamics of measles 365 transmission in the United States are likely to be very specific to this location. Indeed, there were less 366 than 700 annual cases between 2001 and 2016. These cases were scattered across a large area, which 367 made the pre-clustering of cases very efficient as we focused on short-distance transmission. In smaller 368 or more endemic settings, the number of potential infectors per cases after the pre-clustering step might 369 be higher, which would increase the running time. 370",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Furthermore, as the location of each case was deduced from the population centroid of counties, we 371 assumed that the distance between cases from the same county was effectively zero. American counties 372 are large and widespread geographical units that can include more than 1 million individuals. For future 373 use of o2geosocial, more accurate information on the location of cases could improve cluster inference 374 by identifying multiple importations in a given county. Because cases are reported by the state of 375 residency, we had to ignore that cases may have been out of the reported county or state during their 376 incubation and infectious period, which has been seen during some outbreaks, such as the 2015 \"Disney 377 outbreak\" in California [54] . 378",
+            "cite_spans": [
+                {
+                    "start": 763,
+                    "end": 767,
+                    "text": "[54]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We did not include prior information on the local susceptibility of the different areas affected in 379 o2geosocial, and these could be estimated using historical values of local coverage. However, protocols 380 to estimate local vaccination coverage can differ in time and space and be difficult to compare, or 381 unavailable at the local level. Furthermore, these estimates are cross-sectional in nature, and might not 382 take into account catch-up vaccination campaigns, or immunity induced by previous outbreaks. Local 383 seroprevalence surveys could identify pockets of susceptibles, but they have not been carried out on a 384 subnational scale in most countries [55] . 385",
+            "cite_spans": [
+                {
+                    "start": 672,
+                    "end": 676,
+                    "text": "[55]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "There has been no national quantitative analysis of age-specific contact patterns carried out in the United 386 observed between European countries, and a previous projection of the social contact matrix in the 389 United States yielded similar results [56] . POLYMOD data was probably the most reliable source of 390 information we could use to deduce an estimate of the contact matrix in the United States. 391 ",
+            "cite_spans": [
+                {
+                    "start": 253,
+                    "end": 257,
+                    "text": "[56]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "425"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "433"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint sensitivity of the clusters for each case in scenario 3, with a 5% relative threshold, cases are classified in a category 457 depending on the proportion of their reference cluster that were inferred in the same cluster. Panel C: Same when 458 importation status is taken from the contact tracing investigations and inferred using a 5% relative threshold.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ". CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "459"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity. is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint outbreaks in the UK, is it when and where, rather than if? A database cohort study of childhood 566 . CC-BY 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity. is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.13.20020891 doi: medRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Transmission intensity and impact of control 469 policies on the foot and mouth epidemic in Great Britain",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Nature",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Different Epidemic Curves for Severe Acute Respiratory Syndrome 472",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Teunis",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Superspreading and the effect of individual 474 variation on disease emergence",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schreiber",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kopp",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nature",
+            "volume": "438",
+            "issn": "",
+            "pages": "355--364",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature04153.475"
+                ]
+            }
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Chains of 476 transmission and control of Ebola virus disease in Conakry, Guinea, in 2014: an observational 477 study",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Faye",
+                    "suffix": ""
+                },
+                {
+                    "first": "P-Y",
+                    "middle": [],
+                    "last": "Bo\u00eblle",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Heleze",
+                    "suffix": ""
+                },
+                {
+                    "first": "Faye",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Loucoubar",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Magassouba",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Lancet Infect Dis",
+            "volume": "15",
+            "issn": "",
+            "pages": "320--326",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S1473-3099(14)71075-8"
+                ]
+            }
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Relating phylogenetic trees to transmission trees 479 of infectious disease outbreaks",
+            "authors": [
+                {
+                    "first": "Rjf",
+                    "middle": [],
+                    "last": "Ypma",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Van Ballegooijen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Genetics",
+            "volume": "195",
+            "issn": "",
+            "pages": "1055--62",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "How generation intervals shape the relationship between growth rates 482 and reproductive numbers",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Proc R Soc B Biol Sci",
+            "volume": "274",
+            "issn": "",
+            "pages": "599--604",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Methods to infer transmission risk factors in complex outbreak 485 data",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "J R Soc Interface",
+            "volume": "9",
+            "issn": "",
+            "pages": "456--69",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rsif.2011.0379.486"
+                ]
+            }
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Disease Outbreaks by Combining Epidemiologic and Genomic Data",
+            "authors": [],
+            "year": 2014,
+            "venue": "PLoS Comput Biol",
+            "volume": "488",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1003457"
+                ]
+            }
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "elucidates Ebola virus origin and transmission during the 2014 outbreak",
+            "authors": [],
+            "year": 2014,
+            "venue": "Science (80-)",
+            "volume": "517",
+            "issn": "",
+            "pages": "1369--1372",
+            "other_ids": {
+                "DOI": [
+                    "10.1126/science.1259657"
+                ]
+            }
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Temporal 519 and spatial analysis of the 2014-2015 Ebola virus outbreak in West Africa",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Carroll",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Matthews",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hiscox",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Elmore",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Pollakis",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nature",
+            "volume": "524",
+            "issn": "",
+            "pages": "97--520",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature14594"
+                ]
+            }
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "genome sequence analysis of 14 SARS coronavirus isolates and common mutations associated 523 with putative origins of infection",
+            "authors": [],
+            "year": 2003,
+            "venue": "Lancet",
+            "volume": "361",
+            "issn": "03",
+            "pages": "13414--13423",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S0140-5246736"
+                ]
+            }
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Evolutionary analysis of the dynamics of viral infectious disease",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Nat",
+            "volume": "526",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Unifying the 528",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Gog",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jln",
+                    "middle": [],
+                    "last": "Wood",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Daly",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Mumford",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Epidemiological and Evolutionary Dynamics of Pathogens",
+            "authors": [],
+            "year": 2004,
+            "venue": "Science",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "When are pathogen genome sequences 530 informative of transmission events?",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Campbell",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Strang",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "Cori",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Jombart",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLoS Pathog",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Global distribution 533 of measles genotypes and measles molecular epidemiology",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Rota",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Brown",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Mankertz",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Santibanez",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Shulga",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Muller",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "J Infect Dis",
+            "volume": "204",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Measles molecular epidemiology : What does it tell us and why is it 536 important?",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hiebert",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Severini",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Canada Commun Dis Rep CCDR",
+            "volume": "40",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Whole-genome sequencing of 542 measles virus genotypes H1 and D8 during outbreaks of infection following the",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Gardy",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Naus",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Amlani",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Chung",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Winter Games reveals viral transmission routes",
+            "authors": [],
+            "year": 2015,
+            "venue": "J Infect Dis",
+            "volume": "212",
+            "issn": "",
+            "pages": "1574--1582",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Measles virus nomenclature Update",
+            "authors": [],
+            "year": 2012,
+            "venue": "Wkly Epidemiol Rec",
+            "volume": "549",
+            "issn": "",
+            "pages": "73--80",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.actatropica.2012.04.013"
+                ]
+            }
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Heterogeneity in coverage for measles and 551 varicella vaccination in toddlers -Analysis of factors influencing parental acceptance",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Hagemann",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Streng",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kraemer",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Liese",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "BMC",
+            "volume": "552",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "The effect of heterogeneity in uptake 554 of the measles, mumps, and rubella vaccine on the potential for outbreaks of measles: A 555 modelling study",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Glasser",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Feng",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Omer",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Rodewald",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Lancet Infect Dis",
+            "volume": "16",
+            "issn": "",
+            "pages": "599--605",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/S1473-556"
+                ]
+            }
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "A Measles Outbreak in 558 an Underimmunized Amish Community in Ohio",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gasta\u00f1aduy",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Budd",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Fisher",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Redd",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Fletcher",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Miller",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "N Engl J Med",
+            "volume": "375",
+            "issn": "",
+            "pages": "1343--54",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Large measles epidemic in the Netherlands",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Woudenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Van Binnendijk",
+                    "suffix": ""
+                },
+                {
+                    "first": "Eam",
+                    "middle": [],
+                    "last": "Sanders",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "De",
+                    "middle": [],
+                    "last": "Melker",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Ruijs",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wlm",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Eurosurveillance",
+            "volume": "22",
+            "issn": "",
+            "pages": "1--9",
+            "other_ids": {
+                "DOI": [
+                    "10.2807/1560-5637917.ES.2017.22.3.30443"
+                ]
+            }
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Measles population susceptibility in Liverpool",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Keenan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ghebrehewet",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Vivancos",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Seddon",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Macpherson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Hungerford",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "BMJ Open",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Characterizing the Transmission Potential of Zoonotic Infections 569 from Minor Outbreaks",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Kucharski",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Edmunds",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "PLoS Comput Biol",
+            "volume": "11",
+            "issn": "",
+            "pages": "1--17",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Social contacts and 572 mixing patterns relevant to the spread of infectious diseases",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mossong",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Hens",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Jit",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Beutels",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Auranen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Mikolajczyk",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "PLoS Med",
+            "volume": "5",
+            "issn": "",
+            "pages": "381--91",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Inference of R0 and Transmission Heterogeneity from the Size 575 Distribution of Stuttering Chains",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Blumberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lloyd-Smith",
+                    "middle": [],
+                    "last": "Jo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Comput Biol",
+            "volume": "9",
+            "issn": "",
+            "pages": "1--17",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Identifying 578 postelimination trends for the introduction and transmissibility of measles in the United States",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Blumberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wta",
+                    "middle": [],
+                    "last": "Enanoria",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Lietman",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Porco",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Systematic comparison of trip distribution laws and 584 models",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lenormand",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bassolas",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Ramasco",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "J Transp Geogr",
+            "volume": "51",
+            "issn": "",
+            "pages": "158--69",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.jtrangeo.2015.12.008.585"
+                ]
+            }
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "The P 1 P 2/D hypothesis: On the intercity movement of persons",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Zipf",
+                    "suffix": ""
+                }
+            ],
+            "year": 1946,
+            "venue": "Am Sociol Rev",
+            "volume": "586",
+            "issn": "",
+            "pages": "677--86",
+            "other_ids": {
+                "DOI": [
+                    "10.2307/2657358"
+                ]
+            }
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "A Universal Model of Commuting Networks",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lenormand",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Huet",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Gargiulo",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Deffuant",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "An introduction to MCMC for machine learning",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Andrieu",
+                    "suffix": ""
+                },
+                {
+                    "first": "De",
+                    "middle": [],
+                    "last": "Freitas",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Doucet",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Jordan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Centers for Disease Control and Prevention (CDC). National Notifiable Disease Surveillance 597 System: measles/rubeola 2013",
+            "authors": [],
+            "year": 2013,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Incubation periods of acute 600 respiratory viral infections: a systematic review",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lessler",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Reich",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Brookmeyer",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Perl",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Nelson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "9",
+            "issn": "",
+            "pages": "291--300",
+            "other_ids": {}
+        },
+        "BIBREF63": {
+            "ref_id": "b63",
+            "title": "The correlation between infectivity and incubation period of 603 measles, estimated from households with two cases",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Klinkenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Nishiura",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "J Theor Biol",
+            "volume": "284",
+            "issn": "",
+            "pages": "52--60",
+            "other_ids": {}
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "The Interval between Successive Cases of an Infectious Disease",
+            "authors": [
+                {
+                    "first": "Pem",
+                    "middle": [],
+                    "last": "Fine",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Am J Epidemiol",
+            "volume": "606",
+            "issn": "",
+            "pages": "1039--1086",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/aje/kwg251"
+                ]
+            }
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "US Census Bureau. Centers of Population for the",
+            "authors": [],
+            "year": 2010,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF67": {
+            "ref_id": "b67",
+            "title": "The tip of the iceberg : 611 incompleteness of measles reporting during a large outbreak in The Netherlands",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Woudenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Woonink",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Kerkhof",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Cox",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wlm",
+                    "middle": [],
+                    "last": "Ruijs",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "2013--2014",
+            "other_ids": {}
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "Measles outbreak--California",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zipprich",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Winter",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hacker",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xia",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Watt",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Harriman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "64",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF73": {
+            "ref_id": "b73",
+            "title": "Measles elimination, immunity, serosurveys, and other immunity gap diagnostic 624 tools",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Durrheim",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "J Infect Dis",
+            "volume": "218",
+            "issn": "",
+            "pages": "341--344",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/infdis/jiy138"
+                ]
+            }
+        },
+        "BIBREF74": {
+            "ref_id": "b74",
+            "title": "Projecting social contact matrices in 152 countries using contact 626 surveys and demographic data",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Prem",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Cook",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Jit",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "PLoS Comput Biol",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "73 status and cluster size distribution to the transmission clusters identified via contact tracing during 74 measles outbreaks in the United States between 2001 and 2016from L ji (\uf071), the log-likelihood of case being infected by case as a function of 82 infection times and and model parameters \uf071, and the timing of , the date of infection of , relative 83 to the date of symptom onset . We defined ( \u2212 ) as the probability density of observing if 84 case i was infected at time (i.e. f represents the distribution of incubation periods). The log-likelihood 85 of transmission L ji was computed from five components reflecting the age group, genotype, location, 86 and inferred date of infection of cases and , and the generation time of the disease: 87 L ji ( , , \uf071) = log ( ( | ) * ( ) ( \u2212 ) * ( ) ( , ) * ( , ) * ( ) ( , | , )) ( 2 ) 88",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": ", we ran a long MCMC chain and obtained samples from the posterior distribution. After 157 removing the burn-in period and thinning the chain, we deleted the unlikely transmission links in each 158 iteration and identified transmission clusters. Therefore, unlike the previous versions of outbreaker2, 159 the number of importations in each sample can vary and the individual probability of being an 160 importation can be computed (Figure 2). 161 Validation case study: measles outbreaks in the United States between 2001 and 2016 162 Data 163 To evaluate the performance of the model, we inferred the transmission clusters from a dataset that also 164 included information on whether measles cases were part of a cluster based on contact tracing 165 investigations. Measles cases in the United States are reported by healthcare providers and clinical 166 laboratories to their corresponding health department. Each case is investigated by local and state health 167 departments classified according to standard case definitions[46], and linked into clusters 168 epidemiologically (e.g., by establishing a direct contact or a shared location between cases, or when 169 cases are part of a specific community where an outbreak is occurring). Cases are considered 170 internationally imported if at least part of the exposure period (7-21 days before rash onset) occurred 171 outside the United States and rash occurred within 21 days of entry into the United States, with no 172 known exposure to measles in the United States during the exposure period. 173 Confirmed measles cases are routinely reported by state health departments to the CDC. 2,098 measles 174 cases were reported in the United States between January 2001 and December 2016. The number of 175 annual cases did not exceed 700 cases during this time period (Figure 3, Supplement",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": ") and the ratio per 316 state. Indeed, although 403 cases were reported in California (highest number in the US), importations 317 caused on average 1.32 subsequent cases in scenario 1 (1.60 in scenario 3), showing a high proportion 318 of reported cases were inferred as importations. 319",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "can cause large outbreaks in countries with high national vaccine coverage, 393 and identifying potential foyers of transmission in post-elimination settings is key for outbreak 394 prevention and control. We have presented a method for estimating the cluster size distribution of past 395 measles outbreaks from routinely collected surveillance data. We found that adding prior knowledge 396 on the importation status of cases improved the inference of the transmission clusters. Although the 397 method was able to identify a proportion of importations, epidemiological investigations on the history 398 of travel and exposure reduced uncertainty on the clustering of cases. We believe these investigations 399 are needed to produce reliable estimates of past transmission clusters. In lieu of the importation status, 400 if multiple genotypes are co-circulating, increasing the proportion of genotyped cases could help discard 401 potential connections and find imported cases. Even with limited information, this method was able to 402 infer probabilistic transmission clusters in a fast and efficient way. 403The findings and conclusions in this report are those of the authors and do not necessarily represent 412 the official position of the Centers for Disease Control and Prevention, US Department of",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Example of the change of ancestors. Panel A represent the initial tree, B is the new tree proposed after 418 the movement. Initially, there are two ancestors (cases 1 and 2) in a group of 9 cases. 3 and 7 have different 419 genotypes and cannot be part of the same tree, the genotypes of the other cases are not reported. The date of 420infection is in increasing order (1 is the first case, 9 is the last). Therefore, 1 is the only potential infector for 2.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "One new ancestor was randomly drawn to conserve the number of trees. In this example, 7 is the new ancestor422 (6 was the only other possibility). The ratio of the posterior densities of A and B were then used to determine 423 whether to accept or reject the proposal, according to the Metropolis-Hastings algorithm. This movement ensures 424 good mixing of the potential ancestors of the transmission clusters.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Estimating importation status and cluster size distributions in two MCMC runs. Step 1: Initial tree obtained 427 after pre-clustering, with the minimum number of importations (here 2, as there are two reported genotypes). Step 428 2: Samples from the first short run, with red line showing connection worse than the arbitrary threshold . Step 3: 429 Initial tree for the final run, with 1 more importation than in step 1, which corresponds to the minimum number of 430 unlikely transmissions at step 2. Step 4: Samples from the long run. Step 5: Final trees used to compute cluster 431 size distribution and importation status of each case. Case 7 is an importation in one third of the final samples, 432 whereas case 3 is an importation in all of them.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Panel A: number of cases per state and Panel B: Annual number of cases reported in the United States 435 between 2001 and 2016. Alaska and Hawaii are not shown on Panel A.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Description of transmission clusters inferred using prior knowledge on importation status of cases. Panel440 A: Cluster size distribution for the scenario 1 and 2 (grey and dark grey), compared to the reference clusters 441 (lighgrey). Arrows represent the 95% credibility intervals of each estimate. Only clusters containing at least 2 cases 442 are represented. Insert: Number of importations and number of isolated cases (singletons) in scenario 1 and 2, and 443 in the reference clusters. For each scenario, the horizontal dark line represents the number of importations that are 444 also importations in the reference clusters, same for singletons. Panel B: Heatmap representing the precision and 445 sensitivity of the clusters for each case in scenario 1, cases are classified in a category depending on the proportion 446 of their reference cluster that were inferred in the same cluster (x-axis) and the proportion of mismatches in the 447 inferred cluster. Panel C: Same for scenario 2.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "Description of transmission clusters generated with inferred importation status of cases. Panel A: Cluster 451 size distribution for different value of threshold in the scenario 3 (sorted by shades of grey), compared to the 452 reference clusters (lighgrey). Arrows represent the 95% credibility intervals of each estimate. Only clusters 453 containing at least 2 cases are represented. Insert: Number of importations and number of isolated cases importations in the reference clusters, same for singletons. Panel B: Heatmap representing the precision and",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Ratio of the number of importations over the number of subsequent cases in each state in A/ Scenario 1 461 (Ideal importations) and B/ Scenario 3 with epidemiological importations and = 0.05. Grey states represent states 462 that did not report any case. 463 Tables 464",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "analysis of epidemic trees with reference to the 2001 UK foot-and-mouth 494 outbreak. Proc R Soc B Biol Sci 2003. https://doi.org/10.1098/rspb.2002.2191. 495 [11] Cauchemez S, Bo\u00eblle PY, Donnelly CA, Ferguson NM, Thomas G, Leung GM, et al. Real-time 496 estimates in early detection of SARS. Emerg Infect Dis 2006Kendall M, Ayabina D, Colijn C. Estimating transmission from genetic and epidemiological 501 data: a metric to compare transmission trees 2016:1-22. https://doi.org/10.1214/17-STS637. 502 [14] Worby CJ, O'Neill PD, Kypraios T, Robotham J V., De Angelis D, Cartwright EJP, et al. 503 Reconstructing transmission trees for communicable diseases using densely sampled genetic 504 data. Ann Appl Stat 2016. https://doi.org/10.//doi.org/10.1371/journal.pcbi.1004633. 508 [16] Spada E, Sagliocca L, Sourdis J, Garbuglia AR, Poggi V, De Fusco C, et al. Use of the minimum 509 spanning tree model for molecular epidemiological investigation of a nosocomial outbreak of 510 hepatitis C virus infection. J Clin Microbiol 2004. https://doi.org/10.1128/JCM.42.Mollentze N, Nel LH, Townsend S, le Roux K, Hampson K, Haydon DT, et al. A bayesian 513 approach for inferring the dynamics of partially observed endemic infectious diseases from 514 space-time-genetic data. Proc R Soc B Biol Sci 2014. https://doi.org/10.1098/rspb.2013.3251. 515 [18] Gire SK, Goba A, Andersen KG, Sealfon RSG, Park DJ, Kanneh L, et al. Genomic surveillance 516",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "] Gasta\u00f1aduy PA, Funk S, Paul P, Tatham L, Fisher N, Budd J, et al. Impact of public health 615 responses during ameasles outbreak in an amish community in Ohio: Modeling the dynamics of 616",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Values of parameters used to cluster cases declared in the United States",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "We acknowledge Thibaut Jombart for technical support and feedback on the analysis plan. 405",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "404"
+        }
+    ]
+}

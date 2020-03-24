@@ -1,0 +1,2531 @@
+{
+    "paper_id": "eccef80cfbe078235df22398f195d5db462d8000",
+    "metadata": {
+        "title": "Mapping a viral phylogeny onto outbreak trees to improve host transmission inference",
+        "authors": [
+            {
+                "first": "Jonathan",
+                "middle": [
+                    "E"
+                ],
+                "last": "Allen",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Lawrence Livermore National Laboratory",
+                    "location": {
+                        "postCode": "94551",
+                        "settlement": "Livermore",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Stephan",
+                "middle": [
+                    "P"
+                ],
+                "last": "Velsko",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Lawrence Livermore National Laboratory",
+                    "location": {
+                        "postCode": "94551",
+                        "settlement": "Livermore",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Stephan",
+                "middle": [
+                    "P"
+                ],
+                "last": "Gov;",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Lawrence Livermore National Laboratory",
+                    "location": {
+                        "postCode": "94551",
+                        "settlement": "Livermore",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Velsko -Velsko2@llnl",
+                "middle": [],
+                "last": "Gov;",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Lawrence Livermore National Laboratory",
+                    "location": {
+                        "postCode": "94551",
+                        "settlement": "Livermore",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Background: Developing methods to reconstruct transmission histories for viral outbreaks could provide critical information to support locating sources of disease transmission. Phylogenetic methods used to measure the degree of relatedness among sequenced viral samples have proven useful in identifying potential outbreak sources.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The complex nature of infectious disease, however, makes it difficult to assign a rigorously defined quantitative confidence value assessing the likelihood of a true direct transmission event using genetic data alone.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Results: A new method is presented to calculate a confidence value assessing the likelihood of a transmission event using both phylogenetic inference and limited knowledge of incubation and infectious duration times. The method is applied to simulations of a foot and mouth disease (FMD) outbreak to demonstrate how the combination of both phylogenetic and epidemiology data can be used to strengthen the assessment of the likelihood of direct transmission over methods using just phylogenetic data or infection timing data alone. The method is applied to a previous FMD outbreak to identify areas where over confidence in previously inferred direct transmission may exist. Conclusion: Combining knowledge from viral evolution and epidemiology within a single integrated transmission inference framework is an important approach to assess the potential likelihood of transmission events and makes clear how specific features of a virus' spread through the course of an outbreak will directly determine the potential for confidence in inferred host transmission links. Background Developing methods to protect against RNA virus outbreaks in the face of constantly changing disease dynamics remains one of the great public health challenges of our time. One small piece of this problem involves determining the host-pathogen transmission history to identify an outbreak's origin. In recent cases such as the 2003 SARS outbreak [1, 2], H5N1 influenza [3] infection in humans and Marburgvirus [4], phylogenetic inference has been used to help identify potential outbreak sources. Typically, a collection of sequences from candidate related sources are compared to infer transmission links between the most closely related sequences. These methods have been used beyond the public health domain to provide evidence in HIV [5, 6] and other forensic investigations [7] to help infer when a suspect is involved in infecting a victim. P (\u03b4, \u03c3|M ) rather than P (\u03b4|M ). This reflects the desire to estimate the probability of observing the genetic relation \u03b4 in conjunction with infection related timing values for the transmission hypothesis M . The \u03c3 parameter values are motivated by a SEIR type infection concept [22], which describes a host in one of four 5 . CC-BY-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": ": Schematic of transmission links overlaid on phylogenetic trees T 0 (left tree) and T 1 (right tree). Transmission links are shown as directed edges connecting two infected hosts X 0 to X 1 and Y 0 to Y 1 respectively.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "While phylogenetic data helps establish the evolutionary relationships among the sequenced viral samples, there are no well established tools to translate these results to explicitly infer host to host transmission links with confidence values that accurately capture the uncertainty of host transmission inference. The result is a sampling and transmission inference process that could lead to false confidence when using genetic data to establish host to host transmission [8, 9] .",
+            "cite_spans": [
+                {
+                    "start": 475,
+                    "end": 478,
+                    "text": "[8,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 479,
+                    "end": 481,
+                    "text": "9]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "Complementary to the viral genome sequencing advances is contact tracing work to find host to host transmission patterns independent of molecular genetic sequence data [10] [11] [12] [13] . Previously a transmission inference framework was described that estimates the probability of viral transmission between two hosts using both viral sequence samples and contact tracing data [14, 15] . The method uses labeled training sets from past outbreaks to correlate models of viral evolution associated with direct transmission and indirect transmission to assign a posterior probability that gives a confidence value for inferring a transmission relationship between two infected hosts. One of the limitations of the approach is the need for a robust training set, which can limit application to novel outbreaks. Even when training data is available, a training set over-represented with local outbreak features could skew confidence values. Thus, there is a need to develop additional tools to mitigate limits introduced from training. One feature that can be difficult to accurately account for with limited exemplars is time series data. The objective of this article is to present an approach to incorporate time series data with molecular genetic sequence data to measure the uncertainty of host to host transmission events in the face of limited training data and variability in host infection times. Efforts to integrate models of epidemiology and genetic evolution have been ongoing for some time [16] [17] [18] [19] , yet less work has focused on the specific problem of measuring the certainty of inferring individual host transmission events. One related effort is a method called SeqTrack, which was used to examine the origins of the 2009 H1N1 outbreak [20] . This work is similar to our previous transmission inference [14] approach with a few key differences. Rather than inferring a host transmission graph, a genealogy tree is inferred where nodes represent sequence samples and edges between nodes link a sequence to putative descendants. Sample collection times exclude some candidate edges and edge weights represent genetic distances between two sequences. The genealogy tree is inferred by finding the directed graph analog of the minimum spanning tree. Given the elapsed time between two sequences and a per day mutation rate, a confidence value is assigned for direct genealogy linkages. The framework presented here is a more general framework where variable within host evolution times are assumed to play a role. A second closely related effort is the work to recover transmission links between farms applied to the 2001 FMD outbreak [21] .",
+            "cite_spans": [
+                {
+                    "start": 168,
+                    "end": 172,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 173,
+                    "end": 177,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 178,
+                    "end": 182,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 183,
+                    "end": 187,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 380,
+                    "end": 384,
+                    "text": "[14,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 385,
+                    "end": 388,
+                    "text": "15]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1502,
+                    "end": 1506,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 1507,
+                    "end": 1511,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 1512,
+                    "end": 1516,
+                    "text": "[18]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 1517,
+                    "end": 1521,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 1763,
+                    "end": 1767,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 1830,
+                    "end": 1834,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 2658,
+                    "end": 2662,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "FMD samples were collected and sequenced and an inferred phylogenetic tree was used in conjunction with farm infection times to evaluate the most likely transmission tree. Data from that study is used here and a comparison with this work will be covered in detail later in the paper. While the Cottam et al. approach evaluates a putative outbreak tree overlaid onto a single phylogenetic tree, our main contribution is to provide a framework that models features of transmission inference not previously considered. In particular, uncertainty in transmission inference is newly captured by explicitly considering unobserved nodes in the outbreak tree and uncertainty of phylogeny through the use of multiple potentially competing phylogenetic inferences. The result is a more realistic measure of uncertainty when assigning a transmission link. The framework's added use of competing transmission hypotheses does, however, come with an increased computational cost. The remainder of the paper details the modifications to our original framework, shows how new information is used in simulations and real data, details important differences with the Cottam et al. approach and introduces a way for dealing with limitations introduced by the framework's increased computational cost.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "The previous framework is briefly reviewed to motivate the notation used to incorporate outbreak timing data. For any two infected hosts A and B, distance \u03b4 = \u03b4(A, B) defines a genetic distance between samples taken from the two hosts. In the simplest form one sequenced sample is available for each host and the genetic relationship is described by a Jukes-Cantor like distance measure (\u03b4 can take on more complex forms as will be described later). The variable M represents the number of edges (ignoring direction) linking two nodes in an outbreak tree where nodes represent infected entities and edges represent directed transmission events from a source to a recipient. For the direct transmission hypothesis M=1 the posterior probability is defined to be:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "where P (\u03b4|M > 1) = n M =2 P (\u03b4|M )P (M ) for some maximum transmission chain length n. P (\u03b4|M ) is estimated from labeled training data using density estimators or fitting the observed data to a distribution such as Poisson, Negative Binomial or Gamma.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "The modified framework explicitly combines knowledge of viral infection times within the genetic based transmission inference framework. This is accomplished by adding a parameter \u03c3 and computing the value states 1) Susceptible (S) to infection 2) Exposed (E) to an infection (but not infectious) 3) Infectious (I)able to transmit virus to other hosts and 4) Recovered state (R) -where the host is no longer able to transmit the virus. The SEIR model describes outbreak dynamics in a homogeneous mixing population and since the focus of the framework is to predict individual host to host transmission relationships a pre-determined outbreak tree is used, which excludes hosts in the susceptible state. Figure 2 shows the graphical representation of two infected hosts A and B linked by a direct transmission event. Each circle represents a discrete time point marking the transition between states or time intervals. Transmission time points marked red in Figure 2 denote the time of transmission from Host A to Host B. Sample time points marked in purple represent times when viral samples are collected for sequencing. The representation is analogous to a phylogenetic tree where branches (or tree edges) represent time intervals and nodes represent fixed time points. Here edges or transmission events between infected nodes represent instantaneous time events and the host nodes represent time intervals defined by a linear chain of discrete events. The motivation for this representation is to employ a sufficiently realistic epidemiology model to describe the transmission relationships of interest and use existing methods for modeling viral evolution by mapping them to the epidemiology model.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 703,
+                    "end": 711,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 957,
+                    "end": 965,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Algorithm"
+        },
+        {
+            "text": "The modified framework reports the probability of jointly observing both the inferred genetic relationship between sequences from host A and B and the timing events associated with the viral infections of the two hosts. A key phylogenetic inferred parameter becomes the estimated \"wall clock\" time of the inferred most 6 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint recent common ancestor between the time stamped sequence samples taken from the two hosts and potentially using samples from the larger outbreak. Here the Bayesian estimation software BEAST [23] is used to estimate a series of candidate phylogenetic relationships and inferred times, weighted by a likelihood value for each estimate. Transmission hypothesis testing determines whether the constraints implied by the hypothesis are consistent with the inferred most recent common ancestor times. Next, a description for estimating the probability of direct transmission is given, which is then extended to evaluate any transmission relationship between two nodes in an outbreak tree.",
+            "cite_spans": [
+                {
+                    "start": 723,
+                    "end": 727,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "Probability distributions describe the expected exposure time and the expected infectious time in the host.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "An additional key requirement is the assignment of a fixed time point to each observed host that is relative to some global time clock. The point in time context can always be satisfied by assuming that the time is noted when a sample is collected from each infected individual. An alternative is to assume a fixed recovery time. For notational simplicity, a fixed recovery time is used although a comparable procedure is available for working from sample times as the reference. With host X recovery time R X , infectious time duration inf X occurring with probability P (inf X ) and exposure time exp X occurring with probability ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "and P (E A |exp A , inf A , R A ) = P (exp A ) \u00d7 P (inf A ) respectively. Now the genetic relation parameter \u03b4 is a set of estimates M RCAT i for 1 \u2264 i \u2264 q where q is a finite integer determined during an independent phylogenetic parameter estimation process. (For example, using Bayesian genetic inference software BEAST, a default value could be q = 10, 000 estimates.) The direct transmission hypothesis is tested by finding the infection time intervals that are consistent with the inferred most recent common ancestor Figure 3 : Example mapping of a two leaf phylogenetic tree onto the host node n (A or B). E n is the initial infection time, I n is initial infectious time, T A is transmission time from host A to host B. S n,1 is the sample collection time (for the first of potentially multiple samples) and R n is the initial recovery time. G \u2212 S A,1 and G \u2212 S B,1 are genetic sequences for the sampled isolates. MRCAT is an inferred time that occurs within the time interval: E A \u2264 M RCAT < T A .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 523,
+                    "end": 531,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Algorithm"
+        },
+        {
+            "text": "times and is described as follows:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "and",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "where Z is a normalizing constant that reflects the maximum probability value of the individual timing interval events independent of constraints.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "To maintain consistency with previous descriptions of the original framework [14] , the transmission hypothesis M up to now was described by an integer value, which reports the number of edges in a tree separating the two nodes in question. This is sufficient for genetic only transmission inference when genetic distance is computed without regard to transmission direction. Thus, different sub tree configurations containing the same number of edges are treated identically without regard to transmission direction. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint edges, there are k distinct sub trees that must be evaluated.",
+            "cite_spans": [
+                {
+                    "start": 77,
+                    "end": 81,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "The color coding of nodes in Figure 4 highlights the two distinct node types in the hypothesis testing framework. The hypothesis test considers an outbreak tree with \"observed\" nodes and \"hidden\" nodes. ",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 29,
+                    "end": 37,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Algorithm"
+        },
+        {
+            "text": "and the calculation of P (\u03c3, \u03b4|t M ) invokes a recursive tree traversal procedure to check the possible transmission timing values that are consistent with the transmission hypothesis t M . Hidden nodes cannot be tied to a global reference time but rather occur within a time range that is relative to the reference time points specified by the observed nodes and satisfy the transmission and phylogenetic constraints. A tree traversal process sets the range of possible infection times using the reference time points for the observed nodes. One of two traversal procedures is invoked depending on the sub tree structure: directed linear chain, where an observed node A is the source and the last node in the transmission chain is the other observed node B (see for example the bottom panel in Figure 4 ). The alternative traversal process is invoked when the two observed nodes are linked by transmission from a common source as shown in Figure   9 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . 5. Figure 5 shows an example of the tree traversal process for one specific instance of t M where M = 3.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 795,
+                    "end": 803,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 940,
+                    "end": 950,
+                    "text": "Figure   9",
+                    "ref_id": "FIGREF17"
+                },
+                {
+                    "start": 1113,
+                    "end": 1121,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Algorithm"
+        },
+        {
+            "text": "The common source sub tree traversal algorithm starts with each observed node (leaf) independently and moves up the tree to the root. Each node n is assigned an earliest infection time E min,n and a latest infection time E max,n . The parent of node n is assigned an earliest and latest infection time for each minimum and maximum future initial infection time at node n. The total number of possible initial infection time ranges for the source node is 2 d /2 where d is the length of the chain from the source to the leaf. The set of initial timing event ranges derived from one observable node are compared with the set of infection time ranges derived from the other observable node to determine whether there is a candidate infection time interval that supports the tree's transmission hypothesis linking both observed nodes. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "A similar procedure is applied for the linear transmission chain case. Here the algorithm starts with the observed source node and propagates candidate infection timing intervals forward to the next recipient node (rather than backwards to the parent node) until the final observable node is reached and the set of possible infection timing intervals is compared with terminal node timing to determine if a candidate 10 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint timing interval supports the proposed transmission chain hypothesis.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "The key drawback to the method is computational cost. There are 2 d+1 timing assignments that must be ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm"
+        },
+        {
+            "text": "To evaluate the potential strength of inference from combining sequence and timing data, a simulation was used to generate genetic sequences from pre-defined outbreak conditions. The simulation uses a generative stochastic process for P (\u03c3, \u03b4|t M =1 ) and takes the following parameters as input:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "\u2022 A tree of infected hosts and their respective transmission links.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "\u2022 Two probability density functions P inc and P inf determining the length of time intervals inc n and inf n respectively for each node n in a outbreak tree.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "\u2022 A transmission probability density function P trans determining the probability of transmitting the virus from host A to host B at time t within time interval inf A .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "\u2022 A sample probability density function P sample determining when a sequence sample is collected within time interval inf A for host A.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "\u2022 A per day mutation rate and an initial source index sequence.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "A single run simulates an outbreak by propagating sequences across the pre-specified outbreak tree. The index case node A's initial infection time is set to 0 (e.g. E A = 0) and the initial infectious time I A and recovery time R A are determined by values drawn from the P inc and P inf distributions. Secondary infected host B's initial infection time E B is determined by drawing from the P trans distribution to fix the time within the infectious interval from I A to R A that the actual transmission event takes place. The index sequence evolves daily according to the per day mutation rate with distinct sequence stored for each host n for each day from E n to R n . When host A transmits the virus to host B at time t, the sequence in host A at time t becomes the seed sequence for host B. A single sequence is used to represent each host node, the chosen sampled sequence is determined by P sample , which gives a discrete time point within the infectious 11 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint time interval from I n to R n in host node n. Sampled sequences are assumed to be taken following presentation of symptoms in the infected individual. This simulation approach is similar to a related effort to use an epidemic simulation model to construct large scale seasonal outbreaks of measles with viral genome sequence data [24] . Simulations were used to evaluate different viral sampling strategies for their proficiency in reconstructing viral population histories. A key difference with the work presented here is the focus on recovering individual host transmission chains rather than homogeneous host population infection models [25] .",
+            "cite_spans": [
+                {
+                    "start": 1509,
+                    "end": 1513,
+                    "text": "[24]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 1820,
+                    "end": 1824,
+                    "text": "[25]",
+                    "ref_id": "BIBREF24"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "Using the simulated sampled sequences from host nodes, phylogenetic trees were generated with BEAST running 1,000,000 iterations with 100,000 initial runs discarded and evaluating 10,000 sampled trees. The HKY nucleotide substitution model was used with fixed variation, and a relaxed molecular clock [26] with exponential distribution and a fixed population size coalescent model. The genetic distance between two sequences was taken to be the sum of the absolute time difference between two leaves in the tree and the most recent common ancestor. The final distance value is the weighted average over all available inferred trees. The same set of most recent common ancestor times was used as input to the method for integrating time with genetic data. For the test results reported below, the probability distributions for the incubation time and infectious duration time were taken to be uniform across a pre-determined range described below.",
+            "cite_spans": [
+                {
+                    "start": 301,
+                    "end": 305,
+                    "text": "[26]",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": "The simulator reflects reported features from the 2001 UK FMD outbreak described in [21] . Infected hosts here do not reflect individual animals but rather infected farms. An average incubation time of 5 days is assumed with a variation between 2 and 14 days determined by a gamma distribution. The infectious time interval varied from 1 to 10 days drawn from a distribution model on previously described time intervals given by [21] . The objective was to evaluate the impact of combining the genetic data with timing information and apply the evaluation methods to the original 2001 UK FMD outbreak data to assess the confidence of the associated transmission links predicted using similar evidence but using the new inference approach. A per day mutation rate of 2.226 \u00d7 10 \u22125 is used following a previously published report [10] . Figure 6 shows the tree used for the simulation. The tree is based on a subset of the 2001 outbreak given in [21] . The nodes labeled with two character codes were added to the published tree to connect nodes thought to be linked indirectly such that the total time duration distribution generated from repeated The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint to the most probable collection of incubation times independent of the hypothesis. Here just a single set of incubation and infectious duration times are considered (the true time) and thus every pair of nodes with a timing pattern consistent with the predicted transmission event occurs with probability 1. Thus, the false positive rate reflects the fact that roughly 3% of node pairs that are not linked have a timing pattern consistent with the potential for direct transmission. These pairs likely refer to \"siblings\" or other nodes that are close by in the tree. This provides a baseline measure for quantifying the difficulty of the inference problem and shows that when exact timing knowledge is available the possible transmission inferences become highly constrained. The MRCAT-Only line shows the other end of the spectrum where there are no explicit timing constraints to prevent inference of direct transmission. The plot shows that a low confidence threshold is required to correctly identify all true direct transmission links, which shows that there is a wide overlap between the genetic distance range for both direct and indirectly linked hosts.",
+            "cite_spans": [
+                {
+                    "start": 84,
+                    "end": 88,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 429,
+                    "end": 433,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 828,
+                    "end": 832,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 944,
+                    "end": 948,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 835,
+                    "end": 843,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF11"
+                }
+            ],
+            "section": "Testing"
+        },
+        {
+            "text": "Combining the two approaches shows that the already low false positive rate from the highly constrained timing data can be reduced still further by adding the constraints introduced by the timing data inferred from the time stamped genetic sequence data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Testing"
+        },
+        {
+            "text": ". CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint Figure 7 illustrates how the algorithm works but assumes unrealistically precise knowledge of incubation and infectious duration times. Figure 8 shows the same comparison, but reducing the knowledge of incubation and infectious times. There are two distinct parameter settings shown in the Figure 8 . One setting where every observed node is assumed to have an incubation time that could range from 2 to 9 days with equal probability and the estimated infectious duration for each node is based on the known window but assigned and uncertainty of plus or minus one day (Combined:2-9 in Figure 8 ). The second setting is identical except the incubation time is assumed to extend from 2 to 14 days (Combined:2-14 in Figure 8 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 212,
+                    "end": 220,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 348,
+                    "end": 356,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF14"
+                },
+                {
+                    "start": 502,
+                    "end": 510,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF14"
+                },
+                {
+                    "start": 798,
+                    "end": 806,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF14"
+                },
+                {
+                    "start": 926,
+                    "end": 934,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF14"
+                }
+            ],
+            "section": "15"
+        },
+        {
+            "text": "The Timing-Only plot uses the 2 to 9 day incubation window and shows that (without using the genetic data) the range of possible timing scenarios more than triples the number of node pairs that are falsely linked by direct transmission from 3% to 10%. Combining the data sources shows improved inference with The key here seems to be the uncertainty associated with assigning a time to the most recent common ancestor. Longer incubation times open more plausible phylogenetic scenarios where two hosts are falsely linked by direct transmission but are actually linked by a shared infectious source. One potential way to strengthen inference could be to collect more sequences per farm spread over multiple time points, which in some situations may reduce the range of most likely most recent common ancestor times. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint trees. The algorithm starts at the leaves of the parsimony tree and assigns the inferred common ancestor nodes to one of the farms (with a descendant leaf) as the putative source. All possible tree labellings are evaluated using an infection time likelihood score, which similar to our approach estimates likely infection times based on estimated incubation and infectious duration times. Several important differences between the two approaches emerge after examining the differences in output. One difference is that our method incorporates putative unobserved farms into transmission hypothesis tests, which help prevent over confidence in certain transmission inferences. As will be discussed in the next section, this can also form the basis for supporting a more flexible framework for evaluating more sparsely sampled outbreaks. A second difference is that multiple phylogenetic tree topologies are used in the form of multiple most recent The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint Figure 10 : Likelihood for different transmission hypothesis for C to P and O to P, with different transmission chain lengths M. tree nodes to phylogenetic tree nodes whereas our method assigns phylogenetic tree nodes to outbreak tree nodes, which represent variable length time. The significance of these differences is that the new framework can test many additional plausible transmission hypotheses, which would otherwise be ignored.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 2060,
+                    "end": 2069,
+                    "text": "Figure 10",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "15"
+        },
+        {
+            "text": "Despite the differences, there was largely strong consensus for predictions between the two methods with all of the farms linked with high confidence in [21] predicted in the new method except the K to B link (results not shown). The contiguous edges marked in black show transmission inferences that match [21] .",
+            "cite_spans": [
+                {
+                    "start": 153,
+                    "end": 157,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 307,
+                    "end": 311,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "Linkage between K and B required increasing the infectious window beyond the initial reported estimate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "To make a complete comparison the discrepancy is noted and the infectious window was increased to 4 days to accommodate the possibility of a transmission link from K to B. The two dashed edges show links made by the new inference tool not present in the most probable transmission tree reported in [21] . The two red edges show the direct transmission inferences in the most likely Cottam outbreak tree that are not present in the most probable tree reported here. Next the key differences in the two approaches are discussed with respect to differences in observed transmission inference. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint Figure 10 shows the likelihood scores for each of the individual transmission hypothesis linking C to P and O to P. The x-axis is labeled by the number of intermediate host nodes (+ 1). Adjacent unlabeled values have the same M value but a different sub tree structure. The figure shows that the direct hypothesis scores are nearly identical but the alternative hypothesis for M=2 shows that an indirect link for O to P is more plausible. Thus, the explicit scoring of alternative transmission hypotheses involving hypothetical infected farms highlight potential transmission inference ambiguity. In the case of the Cottam tree, the potential for an O to P link is not discussed, however, it appears that this possibility may be precluded due to the structure of the parsimony tree.",
+            "cite_spans": [
+                {
+                    "start": 298,
+                    "end": 302,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 739,
+                    "end": 748,
+                    "text": "Figure 10",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "15"
+        },
+        {
+            "text": "\u2022 Use of multiple most recent common ancestor time estimates in addition to transmission time is included in the transmission likelihood calculation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "For farm O, the current method more clearly favors B as the source over K. Figure 11 The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint Figure 12 : Portion of the maximum credibility tree. Phylogenetic tree leaves represent sequence taken from four farms: O, C, D, M and P. The putative transmission chain O to C to P to M is overlaid onto the phylogenetic tree, with each farm assigned to an ancestral node.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 75,
+                    "end": 84,
+                    "text": "Figure 11",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 234,
+                    "end": 243,
+                    "text": "Figure 12",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "15"
+        },
+        {
+            "text": "The red area exceeds the blue area indicating that the inferred MRCA times between B and O are more frequently consistent with the B to O direct transmission hypothesis than the K to O alternative. Similar to the previous case, it appears that the inferred tree used in Cottam may preclude the possibility of a K to B to O transmission path.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "\u2022 Farm transmission is modeled to occur instantaneously (with respect to time) and the variable length evolution occurs within the host.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "The maximum credibility tree shown in Figure 12 indicates the limitation of using the inferred ancestral nodes as the basis for reconstruction of the outbreak tree. The transmission chain O to C to P to M includes a 0 length branch from C to P that suggests a transmission from farm C to farm P with no genetic variation in the virus, which would be rejected as unlikely given minimum incubation times and the expected mutation rate. In the new method, however, since farm infections are represented by time intervals, the initial infection time of farm C can be shown to occur higher up the tree between two phylogenetic tree nodes, which would imply some mutation to occur on farm C prior to transmission to farm P. Thus, mapping the inferred phylogeny onto the outbreak tree rather than assigning outbreak nodes to phylogenetic tree nodes allows for the consideration of transmission hypotheses that would otherwise be excluded.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 38,
+                    "end": 47,
+                    "text": "Figure 12",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "15"
+        },
+        {
+            "text": "A strength of the Cottam et al. approach is that the transmission tree is built using all the sequences collectively by iteratively labeling the internal tree nodes rather than treating pairs of sequences independently, thus some transmission hypotheses conceivably could be more readily rejected by looking at multiple farms simultaneously. The new method shows the use of multiple tree topologies in a way that is similar to other recent applications [27] and demonstrates a natural way to incorporate multiple tree topologies in a single sequence comparison procedure. One potential improvement to the Cottam et al.",
+            "cite_spans": [
+                {
+                    "start": 453,
+                    "end": 457,
+                    "text": "[27]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "approach would be to include additional candidate tree topologies for evaluation and report likelihood 20 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint values that are averaged across multiple trees.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "15"
+        },
+        {
+            "text": "While it may be possible to densely sample from an outbreak in select circumstances, in many cases only sparse sampling is possible and this is likely to be another limitation of the published Cottam et al.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Establishing transmission links in a sparsely sampled outbreak"
+        },
+        {
+            "text": "approach, which used dense farm sampling. Integrating phylogenetic data with infection timing data to infer more distant transmission linkages, however, is expected to be considerably more difficult. Intuitively, distinguishing between a transmission chain of length 20 from a chain of length 25 is not likely given the range of possible infection times. This is not a limitation of the method but a limitation of exploitable transmission inference knowledge. Nevertheless, a potential contribution of the method presented here is that if it is possible to relax the requirements of an exhaustive search of infection times, the framework could be used to more precisely quantify the uncertainty associated with making inherently more difficult transmission inferences and thus shed light on the conditions where more distant transmission links can be made.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Establishing transmission links in a sparsely sampled outbreak"
+        },
+        {
+            "text": "To investigate this problem we introduce two random sampling steps to the algorithm, which when not implemented would otherwise preclude consideration of longer transmission chains. The first sampling step is to draw k different timing samples from the underlying incubation and infectious time duration distributions P inc and P inf respectively. For the results described here k was set to 50. The second random sampling step is in the tree traversal procedure illustrated in Figure 5 , which is designed to determine whether there is a sequence of timing events for a particular transmission chain and a given collection of infection time durations that is consistent with the inferred most recent common ancestor time. Rather than an exhaustive search, a fixed number of random trials are taken. This approach is thus biased against inferring links requiring rarely occurring timing intervals that would be required to support the most recent common ancestor time. We note that additional sampling strategies could be implemented to make this approach more robust, however, the current modifications should be sufficient for evaluating the potential to apply this approach to larger sparsely sampled outbreaks.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 478,
+                    "end": 486,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Establishing transmission links in a sparsely sampled outbreak"
+        },
+        {
+            "text": "For evaluation a variation on the previously described FMD outbreak simulation is used. Rather than using the smaller fixed tree topology, a tree topology was generated at random starting with an index node and randomly generating child nodes using a branching factor of 1.5, a maximal outbreak duration of 110 days and a maximal node size of 2,000. 100 trees were generated and the 40 trials that generated trees with 2,000 nodes were selected for further analysis. For each tree a pair of nodes was chosen at random to 21 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint Figure 13 : An example maximum credibility tree for a sparsely sampled simulated FMD outbreak. Tree leaves are labeled with numbers corresponding to nodes taken from a 2,000 node simulated outbreak tree. Select node pairs with known transmission relationships were evaluated. The selected node pairs are labeled by their transmission links using blue edges to link pairs and the path length marked in blue. The two sub trees are connected by a common root (not shown for image compactness).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 736,
+                    "end": 745,
+                    "text": "Figure 13",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Establishing transmission links in a sparsely sampled outbreak"
+        },
+        {
+            "text": "represent each path length present in the tree starting from 1 up to the maximal observed path length. To limit computational costs, only odd path lengths were evaluated. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint Figure 16 show P (\u03b4|M ) values averaged over the 40 random trials. For clarity the two figures are used to separate the distributions into two classes, those with peaks at M \u22645 and those that peak at M > 5. (Note that the maximal path length observed was 37, however, due to the 2,000 tree node limit, longer path lengths occur less frequently in the 40 trial experiment and thus path lengths with less than 40 observations are not shown.) The results show that the framework assigns a likelihood score that roughly reflects the true underlying path length. In particular, all path lengths less than 10 clearly peak at M=1 or M=5 in the figure. The results do suggest room for improvement, however, since path lengths for M=11-17 still show their maximum likelihood value at M=5. A possible reason for this is that for longer transmission chains the space of inconsistent infection times may expand at a rate that is not proportional to the increase in the number consistent infection times. Since the method uses a fixed random sample size this would favor shorter more constrained transmission hypotheses. Nevertheless, even where the likelihood value peaks at M=5, for longer transmission chains the likelihood values for M > 5 come increasingly closer to the peak until there is finally a peak shift at path length 19 from M=5 to M=10. It is interesting to note that as the path length increases, the peak likelihood value decreases quantifying the increasing ambiguity associated with making long transmission chain inferences. Despite this difficulty, the results indicate that in many cases it may be possible to assign a transmission relationship using a more inclusive class of transmission chain lengths. For example, nodes linked by a transmission path length less than 10 appear to be fairly distinct from those separated by path lengths greater than 20. These distinctions could prove to be of critical importance, particularly when evaluated in the context of an underlying contact network.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 320,
+                    "end": 329,
+                    "text": "Figure 16",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Establishing transmission links in a sparsely sampled outbreak"
+        },
+        {
+            "text": "It is important to note that while the presented method is designed to use prior knowledge of viral infection timing patterns, uniform probability distributions were used since an accurate estimate of the distribution is not likely in the general case. More generally since the method requires both viral evolution and epidemiology knowledge there are significant outstanding challenges not addressed in this report. The method makes the simplifying assumption of a neutral evolution model without recombination. This assumption may be appropriate for certain acute viral infection types where host immunity does not play a significant role, however, chronic infections with wider persistent circulation of multiple subtypes increase the chances to misinterpret the transmission process. Additional work is need to ensure that any violation 25 . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint of assumptions of evolution are detected and (ideally) corrected. The model currently lacks inter-species evolution modeling and as sequencing technology advances there will be opportunities to better measure within host viral populations [28] and the affects on the genetic features of the recipient host's initial seeding population. A consequence of this limited knowledge is reliance on a potentially simplifying feature of viral population structure. When testing direct transmission hypotheses the most recent common ancestor between sequences sampled from the source and recipient are assumed to reside in the source host.",
+            "cite_spans": [
+                {
+                    "start": 1295,
+                    "end": 1299,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "However, with a sufficiently large and genetically diverse host population it is at least conceivable that the most recent common ancestor resides in an earlier predecessor node.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "With respect to epidemiology modeling, the paper assumes there are accurate values for P (M ), which describe the prior knowledge about the relative frequency of the different types of transmission chains.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "There has been considerable progress in this area in recent years linking contact networks with the more traditional stochastic compartmentalized transmission models to yield estimates [11, 29] that can be inferred using knowledge gleaned from previous outbreaks. Moreover, there are other potentially useful epidemiological models that could be substituted for the SEIR approach presented here [30] . Another important area of development is the use of sequence data and a coalescent model to estimate epidemiological parameters. Recent work demonstrates the potential to estimate parameters for a SIR model from genetic sequence data [31] , which could provide an important basis for specifying the epidemiological parameters for transmission inference, when limited non-genome sequence derived observation is available. A strength of the approach is to provide a framework that can readily make use of increasing amounts of knowledge for a particular outbreak. For example, awareness of infections may increase during the course of an outbreak and thus favor using two different priors for the infectious duration times, one at an early outbreak stage and another at a later stage of the outbreak. Other clinical features of infection can be taken into account either by changing prior likelihoods for alternatives in the underlying outbreak tree structure or by making adjustment to priors in the timing distributions. In some cases prior knowledge could be used to narrow the window of possible infection times and greatly strengthen the confidence of transmission inference. In other cases prior knowledge may end up increasing the window of possible infection times and thus highlight the inherent complexity of reconstructing transmission events.",
+            "cite_spans": [
+                {
+                    "start": 185,
+                    "end": 189,
+                    "text": "[11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 190,
+                    "end": 193,
+                    "text": "29]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 395,
+                    "end": 399,
+                    "text": "[30]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 636,
+                    "end": 640,
+                    "text": "[31]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": ". CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/010389 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "26"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Molecular Evolution of the SARS Coronavirus During the Course of the SARS Epidemic in China",
+            "authors": [
+                {
+                    "first": "Tcsme",
+                    "middle": [],
+                    "last": "Consortium",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Science",
+            "volume": "303",
+            "issn": "5664",
+            "pages": "1666--1669",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Bats Are Natural Reservoirs of SARS-Like Coronaviruses",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Shi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Epstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Crameri",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mceachern",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Field",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Daszak",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Eaton",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Science",
+            "volume": "310",
+            "issn": "5748",
+            "pages": "676--679",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Characterization of an Avian Influenza A (H5N1) Virus Isolated from a Child with a Fatal Respiratory Illness",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Subbarao",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Klimov",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Katz",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Regnery",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Lim",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Hall",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Perdue",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Swayne",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bender",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hemphill",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Rowe",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Shaw",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Fukuda",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Cox",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Science",
+            "volume": "279",
+            "issn": "5349",
+            "pages": "393--396",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Marburgvirus Genomics and Association with a Large Hemorrhagic Fever Outbreak in Angola",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Towner",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Khristova",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Sealy",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Vincent",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Erickson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Bawiec",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hartman",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Comer",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Zaki",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Stroher",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Gomes Da Silva",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Castillo",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Rollin",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Ksiazek",
+                    "suffix": ""
+                },
+                {
+                    "first": "Nichol",
+                    "middle": [],
+                    "last": "St",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "J. Virol",
+            "volume": "80",
+            "issn": "13",
+            "pages": "6497--6516",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Molecular Epidemiology of HIV Transmission in a Dental Practice",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ou",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ciesielski",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Myers",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Bandea",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Luo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Btm",
+                    "middle": [],
+                    "last": "Korber",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Mullins",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Schochetman",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Berkelman",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Economou",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Witte",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Furman",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Satten",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Maclnnes",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Curran",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Jaffe",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Group",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Group",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "Science",
+            "volume": "256",
+            "issn": "5060",
+            "pages": "1165--1171",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Molecular evidence of HIV-1 transmission in a criminal case",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Metzker",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Mindell",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Ptak",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gibbs",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Hillis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Proceedings of the National Academy of Sciences of the United States of America",
+            "volume": "99",
+            "issn": "",
+            "pages": "14292--14297",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "The first case of criminalization of transmission of hepatitis B in the UK: defendant sentenced to two years imprisonment on the grounds of hepatitis B deoxyribonucleic acid sequencing",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Mohanty",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Int J STD AIDS",
+            "volume": "20",
+            "issn": "8",
+            "pages": "587--589",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "The microbial forensic use of HIV sequences",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Learn",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Mullins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "HIV Sequence Compendium",
+            "volume": "",
+            "issn": "",
+            "pages": "22--37",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Reconstruction of HIV-1 transmission chains for forensic purposes",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Leitner",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Albert",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "AIDS Rev",
+            "volume": "2",
+            "issn": "",
+            "pages": "241--251",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Transmission Dynamics of the Etiological Agent of SARS in Hong Kong: Impact of Public Health Interventions",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Ghani",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Abu-Raddad",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hedley",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Lam",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "Q"
+                    ],
+                    "last": "Thach",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Chau",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Chan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Lo",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Tsang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "Emc",
+                    "middle": [],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Science",
+            "volume": "300",
+            "issn": "",
+            "pages": "1961--1966",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Disease contact tracing in random and clustered networks",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Kiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Green",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Kao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Proc R Soc B",
+            "volume": "272",
+            "issn": "",
+            "pages": "1407--1414",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Epidemiology and Control of SARS in Singapore",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Goh",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Cutter",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Heng",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Koh",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Kwok",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Toh",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Chew",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Ann Acad Med",
+            "volume": "35",
+            "issn": "",
+            "pages": "301--316",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "When individual behaviour matters: homogenous and network models in epidemiology",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bansal",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Meyers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "J R Soc Interface",
+            "volume": "4",
+            "issn": "",
+            "pages": "879--891",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "A Statistical Framework for Microbial Source Attribution Part 1: Forensic inferences on disease transmission networks",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Velsko",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Allen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Cunningham",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "A Statistical Framework for Microbial Source Attribution: Measuring uncertainty in host transmission events inferred from genetic data",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Allen",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Velsko",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Unifying the Epidemiological and Evolutionary Dynamics of Pathogens",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Gog",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jln",
+                    "middle": [],
+                    "last": "Wood",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Daly",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Mumford",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Holmes",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Science",
+            "volume": "303",
+            "issn": "",
+            "pages": "327--332",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Infecting epidemiology with genetics: a new frontier in disease ecology",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Archie",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Luikart",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ezenwa",
+                    "middle": [],
+                    "last": "Vo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Trends in Ecology an dEvolution",
+            "volume": "24",
+            "issn": "",
+            "pages": "21--30",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Evolutionary analysis of the dynamics of disease",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Pybus",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Nature Rev Genetics",
+            "volume": "10",
+            "issn": "",
+            "pages": "540--549",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Viral phylodynamics and the search for an 'effective number of infections",
+            "authors": [
+                {
+                    "first": "Sdw",
+                    "middle": [],
+                    "last": "Frost",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Volz",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Philosophical Transactions of the Royal Society B: Biological Sciences",
+            "volume": "",
+            "issn": "",
+            "pages": "1879--1890",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Reconstructing disease outbreaks from genetic data: a graph approach",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Jombart",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Eggo",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dodd",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Balloux",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Heredity",
+            "volume": "",
+            "issn": "",
+            "pages": "383--390",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Integrating genetic and epidemiological data to determine transmission pathways of foot-and-mouth disease virus",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Cottam",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Thebaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wadsworth",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gloster",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mansley",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Paton",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "King",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Haydon",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Proc. R. Soc. B",
+            "volume": "275",
+            "issn": "",
+            "pages": "887--895",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Dynamiucal behavior of epidemiological models with nonlinear incidence rates",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hethcote",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Levin",
+                    "suffix": ""
+                }
+            ],
+            "year": 1987,
+            "venue": "J of Mathematical Biology",
+            "volume": "25",
+            "issn": "",
+            "pages": "359--380",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "BEAST: Bayesian evolutionary analysis by sampling trees",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drummond",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "BMC Evol Biol",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Protocols for sampling viral sequences to study epidemic dynamics",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Stack",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Welch",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Ferrari",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "U"
+                    ],
+                    "last": "Shapiro",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "J R Soc Interface",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Dynamics of measles epidemics: estimating scaling of transmission rates using a time series SIR model",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Bj\u00f8rnstad",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Finglenst\u00e4dt",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Ecological monographs",
+            "volume": "72",
+            "issn": "",
+            "pages": "169--184",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Relaxed Phylogenetics and Dating with Confidence",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drummond",
+                    "suffix": ""
+                },
+                {
+                    "first": "Syw",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Phillips",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "PLoS Biol",
+            "volume": "4",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Uncovering Genomic Reassortments among Influenza Strains by Enumerating Maximal Bicliques",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Nagarajan",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Kingsford",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "IEEE International Conference on Bioinformatics and Biomedicine",
+            "volume": "",
+            "issn": "",
+            "pages": "223--230",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Viral Population Estimation Using Pyrosequencing",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Eriksson",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Pachter",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Mitsuya",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Rhee",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Gharizadeh",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ronaghi",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Shafer",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Beerenwinkel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "PLoS Comput Biol",
+            "volume": "4",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Infectious disease control using contact tracing in random and scale-free networks",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Kiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Green",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Kao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "J R Soc Interface",
+            "volume": "3",
+            "issn": "",
+            "pages": "55--62",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Mathematical models of infectious disease transmission",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Grassly",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Nature Reviews Microbiolgy",
+            "volume": "6",
+            "issn": "",
+            "pages": "477--487",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "shows a simple schematic to illustrate the variable host infection time transmission inference problem. The figure shows two simple trees, T 0 and T 1 (left and right tree respectively) where the infected hosts are overlaid as circles on the trees to show the transmission event from host X 0 to X 1 in T 0 and Y 0 to Y 1 in T 1 . The larger circle for Y 1 represents a longer infection time and the two trees represent the evolutionary relationship between the sequences. Assuming comparable homogeneous nucleotide substitution rates, the longer branch length in T 1 could be explained by the longer infection time in host Y 1 prior to sampling. Including the direct transmission branch lengths from T 0 and T 1 in a single genetic based transmission inference model leads to a distribution of genetic distances associated with direct transmission for a wider range of values. Thus, estimating accurate confidence values means ensuring that a representative sampling from the true distribution of infection times can be obtained. To measure the impact of this problem, a new method is introduced to incorporate variation in infection times when assigning a final posterior probability confidence value. The proposed method forgoes the use of training data by relying on prior knowledge of viral infection times to act as a constraint in conjunction with phylogenetic data. The results show that with knowledge of infection times confidence in transmission inference can be high and even with limited knowledge of timing patterns, high confidence values can be obtained that exceed the training based methods. Thus, this new transmission inference approach allows for the use of clinical observations of infection to be combined with inferred viral evolution when training data is not available to measure uncertainty associated with specific transmission hypotheses.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Host infection time model. The small circle nodes denote discrete time events and edges denote time intervals. The large blue circles denote a single infected host.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "(exp X ), the direct transmission hypothesis that host A transmitted the virus to host B is calculated by evaluating all pairwise combinations of exp x and inf x for each host. Candidate transmission events are marked by cases where the infectious time interval for host A overlaps with a potential initial infection time for host B and the inferred most recent common ancestor time for the sequence samples occurs after the initial infection time of A and prior to the initial infection time of B.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "shows the notation and the constraints for the most recent common ancestor time (MRCAT). Theinitial infection time E B of host B is E B = R B \u2212 inf B \u2212 exp B and similarly the initial infection time E A for host A is E A = R A \u2212 inf A \u2212 exp A ,which leads to the constraints defined by the specific transmission hypothesis. The transmission constraint C 1 (E B , R A , I A ) returns 1 if I A \u2264 E B < R A and 0 otherwise. The most recent common ancestor constraint C 2 (M RCAT, E B , E A ) returns 1 if E A \u2264 M RCAT < E B and 0 otherwise. The probability of",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "shows how the time series process of outbreak events distinguishes transmission direction. For a sub tree connecting two nodes with k edges, there are k distinct sub trees with each sub tree representing a distinct potential source node for the infection. For example, the transmission sub tree with two edges separating host A and B has two possible sub trees to describe the transmission relationship between the two hosts, one where the source node is A and one sub tree where A and B receive the infection through direct transmission from a common source. In general for a transmission hypothesis linking two nodes by",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Transmission chains. The nodes labeled \"s\" represent the putative infection source. Blue nodes represent the two hosts (A and B) with sequenced samples. Green nodes reflect putative infected (hidden) intermediate hosts. Examples of transmission chains from length 1 (the direct transmission case) to 4 are shown.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "The hidden nodes are marked green in the figure and represent infected individuals where no direct observable data is available. The hidden nodes explicitly model the probability of the alternative transmission hypothesis linking two observed nodes A and B. To evaluate the M > 1 case an evaluation procedure for each sub tree t M \u2208 T M (A, B) is used. Thus, P (\u03c3, \u03b4|M > 1) becomes the value of the most probable alternative hypothesis:",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Tree traversal procedure (right panel) for the transmission hypothesis shown in the left panel. Left panel shows a transmission hypothesis linking two observed infected nodes A and B (marked in blue), connected by a common unobserved labeled source node marked 0 and two intermediate source nodes marked 1 and 2. The right panel shows the post order tree traversal, where the observed time stamp for each observed node serves as the starting point and the possible infection times for each source node are computed by moving up the tree.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "The consistency function g(t M , IN C, IN F, M RCAT ) checks the sub tree t M assuming each node n is assigned a fixed incubation time interval inc n \u2208 IN C and a fixed infectious time interval inf n \u2208 IN F and returns 1 if the constraints are met and 0 otherwise. The final probability calculation is the set of timing intervals that maximize the product of the individual timing probabilities over all nodes:",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "considered for each combination of timing intervals. If the number of possible distinct values for inc n and inf n is x the number of timing interval combinations becomes x M +1 . Thus, there is a practical limit to the maximal value for M and x. Measuring the potential linkages for distantly related host pairs can be determined by viewing the estimated probability values of linkage up to the maximum M and when all probability values are low, M can be inferred to be too small to allow transmission inference.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "simulations covered the same time frame of 110 days reported for the outbreak. Results are based on 50 independent outbreak simulations. In the genetic distance only based framework labeled training data is used to estimate the likelihood of observing a genetic distance under the different possible transmission hypotheses. In the modified framework, a prior belief of how the virus spreads replaces the evidence",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "Tree used to generate simulated sequences and reflect known transmission links. Two character codes reflect hypothetical farms included in the tree and edges represent transmission relationships between infected farms.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Performance with knowledge of timing. ROC curves showing the ability to correctly infer direct transmission cases (Sensitivity) versus falsely labeling indirect transmission pairs as direct transmission cases (False Positive Rate) using different confidence cut off values. Three methods are shown, using exact knowledge of timing data alone (Timing-Only), using only genetic data (MRCAT-Only) or combining the two and assuming exact knowledge of infection times.from a training set. To evaluate the two approaches, 5 fold cross-validation takes the 50 randomly generated outbreaks and partitions the outbreaks into 5 non overlapping sets of 10 distinct outbreaks to evaluate predicted transmission link accuracy using the remaining 40 outbreaks for training. Evaluations are repeated 5 times to report performance for all 50 outbreaks. When training data is not needed, statistics are simply collected on all 50 outbreaks in one step. Three basic prediction methods are compared -using genetic data only, using the epidemiology timing data only and using both lines of evidence together to inform the final prediction.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "shows a ROC curve for the rate of true direct transmission links identified (y-axis) versus the rate of host nodes falsely predicted to be linked (x-axis) using different prediction cutoff values. First consider prediction accuracy with near perfect knowledge of the timing events for the observed host nodes shown by the Timing-Only plot inFigure 7. The linear plot reflects the fact that the method generates a single prediction value so that above a certain cutoff either all of the true direct transmission links are predicted at the expense of falsely predicting transmission links for 3% of the other non-linked host node pairs or using a lower cutoff yields no predicted links. Recall that the calculation is meant to represent the most probable collection of incubation and infectious times consistent with the transmission hypothesis",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "Limited timing knowledge. ROC curves showing the ability to correctly infer direct transmission cases (Sensitivity) versus falsely labeling indirect transmission pairs as direct transmission cases (False Positive Rate) using different confidence cut off values. Four methods are shown, using only timing data (Timing-Only), using only genetic data (MRCAT-Only) or combining the two assuming either a 2-14 day incubation period (Combined:2-14) or a 2-9 day incubation period (Combined:2-9).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "consistently higher sensitivity levels and less false positives. The results also show there are clear performance trade offs illustrating the underlying difficulty of the problem. On the one hand capping the maximal incubation time at 9 days greatly constrains the number of plausible transmission hypotheses, thus limiting the number of false positives. The trade off is that for the transmission cases where the incubation time actually exceeds 9 days the true positives can be missed, thus there is a hard upper bound on the sensitivity rate that is less than 1. Further relaxing restrictions to allow for the longer incubation times of up to 14 days allows detection of all true positives, but the number of false positives increases too.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "A second experiment was conducted to re-examine the transmission relationships reported by Cottom et al.on samples taken from a subset of farms infected during the 2001 United Kingdom outbreak. Although the true outbreak tree cannot be empirically determined, re-examination of this dataset proved useful in determining whether our new transmission inference method using similar information as input would lead to similar conclusions. Moreover, differences in output should highlight important differences in the two approaches and help assess the strengths and weaknesses of the different approaches.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF17": {
+            "text": "shows the higher confidence inferred transmission links for the published 2001 outbreak data with whole viral genome sequence data available for each farm. An incubation window of 2 to 14 days and an estimated infectious time interval with a 1 day uncertainty was used to find the most likely",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "A most likely inferred transmission tree with links comparing the tree to previous reports. Red lines show novel links and dashed lines show previously reported alternative links. Each node represents an infected farm. chain. Cottom et al. similarly apply a transmission inference algorithm to the data using a closely related approach that takes both estimated infection times and genetic sequence data as input. Cottom et al. use a statistical parsimony tree relating the collection of sequences as the basis for building putative transmission",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "common ancestor time estimates, which better reflect the uncertainty of phylogenetic inference. Finally, a key difference is in the information representation format. The Cottom et al. approach assigns",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "Transmission hypotheses include the potential for intermediate unobserved farm involvement to estimate confidence values.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF21": {
+            "text": "Inferred most recent common ancestor times. Range of inferred most recent common ancestor times (MRCAT) between the B,O sequence pairs (red) and the K,O sequence pairs. Shaded area under the two curves show the time intervals consistent with the respective transmission hypotheses. For farm P, the new method only slightly favors an alternative source -C over O (0.57 versus 0.59) making it impossible to preclude either farm as the likely source. The favoring of C over O can be explained in part by differences in the alternative hypothesis likelihood scores.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF22": {
+            "text": "shows weighted probability density estimates for the most recent common ancestor times for B and O (red) and K and O (blue). The red and blue shaded area under the curves show the range of predicted initial infection times consistent with the MRCAT and the direct transmission hypothesis for B to O and K to O respectively.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF23": {
+            "text": "shows an example consensus tree for the selected pairs taken from an outbreak chosen at random. The directed edges labeled in blue show the path lengths connecting the selected nodes with the path length labels from 1 to the maximum observed (23) for this particular outbreak tree. The tree infers evolutionary relationships that are generally consistent with what would be expected given the different transmission chain lengths observed. For example, a path length of 23 separates node 628 from 1740 and indeed the two nodes end up in two different subclades of the tree. The key question becomes can additional information be obtained by incorporating knowledge of infection times and alternative transmission hypothesis testing with the phylogenetic data to better capture the range of possible relationships among the infected farms. To answer this, we first show the likelihood evaluation for the node pairs taken from the tree in Figure 13 and then show the same likelihood evaluations averaged across all Likelihood values are given for the 12 selected transmission pairs shown in Figure 13. Each node pair is evaluated for different values of M from 1 to 35 and the true path length for each node pair is shown in the legend. randomized outbreak trials. To limit computational costs, evaluated path lengths start with 1 and 5 and continue in intervals of 5 up to 35. The likelihood value P (\u03b4|M ) is reported as the maximal likelihood value for all alternative sub trees of path length M. Figure 14 shows the value of P (\u03b4|M ) for each pair of nodes with node pairs labeled by their true transmission path length. For the sampled outbreak shown in Figure 13, with the exception of M=11, node pairs for path lengths up to 15 show P (\u03b4|M ) values that favor a specific hypothesis or a small subset of hypotheses. As the true path length increases, the average likelihood value drops and the distinction between different path lengths becomes less clear. For the node pair separated by path length of 15 for example, there are clearly higher values for inferring a path length from between 5 and 20, but there is limited distinction within this range. For the most part the framework largely reinforces what is visualized using the consensus phylogenetic tree. An interesting case, however, is the node pair (1255, 1888) linked by a transmission chain of 9, compared with node pair (713, 1119)separated by chain length 13. In the framework, both pairs of nodes have likelihood values that peak at M=5, however the alternative transmission hypotheses for linking (713, 1119) with M=10 or M=15 are much higher than they are for the (1255, 1881) case. This is an example where the relationships inferred by the tree may be misconstrued without the explicit use of a transmission inference framework. It is important to note that the transmission framework does not resolve all conflicts. For the M=11 case",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF24": {
+            "text": "Likelihood values for all node pairs for a select path length averaged across all 40 trials. Plot shows path lengths where the average likelihood value peaks at M=5 or less. node pair (138, 184), the nodes show up in two different subclades suggesting a more distant transmission relationship, than might be expected by the arrangement of other pairs in the same subclade and separated by longer transmission chains. In this case, the transmission inference framework also suggests a more distant transmission link, given the relatively uniform distribution of low P (\u03b4|M ) values.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF25": {
+            "text": "Figure 15 and Figure 16 show P (\u03b4|M ) values averaged over the 40 random trials. For clarity the two",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF26": {
+            "text": "Likelihood values for node pairs connected by longer path lengths. Plot is similar toFigure 15but shows path lengths where the average likelihood value peaks at M > 5.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF27": {
+            "text": "ConclusionA new method is presented that takes as input a collection of time-stamped viral genomes and basic knowledge about the timing features of the infection, the underlying transmission network and returns confidence values that assess the probability of correctly inferring host transmission links. Simulations of an FMD outbreak show how the combined use of the epidemiology based timing constraints with the phylogenetic inferred most recent common ancestor times improve confidence in transmission inference over methods that rely on just one individual feature. The simulations show that labeled training data measuring genetic distance between direct and indirect transmission cases can be used without the additional knowledge of the features of the viral transmission, however, appropriate training data in some cases may not be available. The approach presented is expected to provide a basis for building flexible tools to more readily map inferred viral evolutionary relationships onto epidemiological models to more accurately quantify host transmission relationships. Authors' contributions JEA and SPV conceived and designed methods. JEA implemented experiments and drafted the manuscript. JEA and SPV analyzed results.",
+            "latex": null,
+            "type": "figure"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The authors acknowledge funding for this work from the U.S. Department of Homeland Security. This work was performed under the auspices of the U.S. Department of Energy by Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgments"
+        }
+    ]
+}

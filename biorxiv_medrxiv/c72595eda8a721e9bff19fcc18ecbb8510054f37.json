@@ -1,0 +1,496 @@
+{
+    "paper_id": "c72595eda8a721e9bff19fcc18ecbb8510054f37",
+    "metadata": {
+        "title": "Identification of the relative timing of infectiousness 1 and symptom onset for outbreak control 2",
+        "authors": [
+            {
+                "first": "Robert",
+                "middle": [
+                    "C"
+                ],
+                "last": "Cope",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Stochastic Modelling & Operations Research",
+                    "location": {}
+                },
+                "email": ""
+            },
+            {
+                "first": "Joshua",
+                "middle": [
+                    "V"
+                ],
+                "last": "Ross",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Stochastic Modelling & Operations Research",
+                    "location": {}
+                },
+                "email": "6joshua.ross@adelaide.edu.au."
+            }
+        ]
+    },
+    "abstract": [],
+    "body_text": [
+        {
+            "text": "The timing of infectiousness relative to symptom onset has been identified as a key factor in 21 ability to control an outbreak (11). The explanation is intuitive: If symptoms appear before 22 infectiousness, then contact tracing and isolation strategies will be effective, whereas for post-23 infectiousness symptom presentation, broader, non-symptom based strategies must be adopted.",
+            "cite_spans": [
+                {
+                    "start": 190,
+                    "end": 192,
+                    "text": "22",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction 20"
+        },
+        {
+            "text": "Epidemic model 90 We demonstrate using an example system of a novel infectious disease, spreading in a popu-91 lation structured into households. We assume that the population is large and mixing between 92 households is random, such that after a household is initially infected, the remaining transmis-93 sion within the household is independent of transmission outside the household (5, 27). There-94 fore, transmission dynamics within households can be modelled independently (4). Given this 95 novel etiological agent, we wish to determine if symptom onset occurs at the time of infection, 96 infectiousness, or recovery (i.e., these are the three candidate models we wish to discriminate). 97 The model behaviours are otherwise assumed identical. To be emphatic, the underlying disease 98 dynamics is identical in all three models, each differing only in when observations are made, 99 corresponding to different timings of symptom onset (Figure 1a) . 100 101 We model the epidemic dynamics in households as a continuous-time Markov chain ( Figure   102 1a) (15). Individuals transition from susceptible (S) to exposed (E), then to infectious (I), and 103 finally to recovered (R), with rates as described in Table 1. 104 Table 1 : Events, transitions and rates within a household.",
+            "cite_spans": [
+                {
+                    "start": 15,
+                    "end": 17,
+                    "text": "90",
+                    "ref_id": null
+                },
+                {
+                    "start": 594,
+                    "end": 596,
+                    "text": "96",
+                    "ref_id": null
+                },
+                {
+                    "start": 695,
+                    "end": 697,
+                    "text": "97",
+                    "ref_id": null
+                },
+                {
+                    "start": 888,
+                    "end": 890,
+                    "text": "99",
+                    "ref_id": null
+                },
+                {
+                    "start": 961,
+                    "end": 964,
+                    "text": "101",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 943,
+                    "end": 954,
+                    "text": "(Figure 1a)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1046,
+                    "end": 1058,
+                    "text": "Figure   102",
+                    "ref_id": null
+                },
+                {
+                    "start": 1214,
+                    "end": 1222,
+                    "text": "Table 1.",
+                    "ref_id": null
+                },
+                {
+                    "start": 1227,
+                    "end": 1234,
+                    "text": "Table 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "89"
+        },
+        {
+            "text": "Transition Rate Infection (S, I) \u2192 (S \u2212 1, E + 1) \u03b2SI/(N \u2212 1) Infectiousness (E, I) \u2192 (E \u2212 1, I + 1) \u03c3E Recovery (I, R) \u2192 (I \u2212 1, R + 1) \u03b3I",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Description"
+        },
+        {
+            "text": "We assign a distribution to each parameter (Supplemental Figure S1 ), based on physical 105 quantities to reflect the assumed prior knowledge of the etiological agent:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 57,
+                    "end": 66,
+                    "text": "Figure S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Description"
+        },
+        {
+            "text": "\u2022 1 \u03c3 \u223c Gamma(6, 1/2), representing a mean exposed duration of 3 days (mode at approxi- -Sample a set of parameters \u03b8 = (R 0 , \u03c3, \u03b3) from the (prior) distributions.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "106"
+        },
+        {
+            "text": "-Simulate N h households given these parameters.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "134"
+        },
+        {
+            "text": "-Repeat this process N s times. The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint ered design.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "135"
+        },
+        {
+            "text": "\u2022 Construct a random forest that predicts the model label, given the simulations.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "138"
+        },
+        {
+            "text": "\u2022 Assess the accuracy of the process on a left-out test set.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "139"
+        },
+        {
+            "text": "Once a design has been chosen, to employ this process when an outbreak is observed it would be To more effectively use the household data in training the random forest, we summarize raw 147 household data as daily histograms of incidence, as in Figure 1c . That is, we count the propor-148 tion of households that, on day d, observed an incidence of i, and then use the resultant (design Conducting a First Few Hundred-style study can be extremely labour intensive. Consequently, 155 we wish to assess the potential for model discrimination when sampling is only performed on a 156 subset of days, rather than every day. If we choose to only sample on D < 14 days, within the 157 first 14 days following the first symptomatic case in each household, we must necessarily also 158 choose the optimal days on which to sample. We choose those days that produce the highest The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint Rather than evaluating the full set of possible designs, or applying an optimisation algorithm, 165 we propose a heuristic for efficiently finding high-quality designs of a given size. This heuristic 166 is to perform random forest model selection on the largest possible design, extract the random 167 forest feature importance Figure 1b) , and use this random forest feature importance to rank 168 design points. Specifically, days are ranked on their maximum feature importance; the sum of 169 the importance of features from a day was also tested, but had inferior performance. A design 170 of size d uses the highest-ranked d design points. The random forest feature importance metric 171 we use is the mean decrease in Gini impurity (24) of a feature across the trees in the random 172 forest (this metric is easily extracted from the python scikit-learn random forest algorithm (23)).",
+            "cite_spans": [
+                {
+                    "start": 480,
+                    "end": 483,
+                    "text": "155",
+                    "ref_id": null
+                },
+                {
+                    "start": 1096,
+                    "end": 1099,
+                    "text": "165",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 245,
+                    "end": 254,
+                    "text": "Figure 1c",
+                    "ref_id": null
+                },
+                {
+                    "start": 1329,
+                    "end": 1339,
+                    "text": "Figure 1b)",
+                    "ref_id": null
+                }
+            ],
+            "section": "140"
+        },
+        {
+            "text": "Random forest-based Bayesian model discrimination was able to accurately discriminate rela- The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint known epidemic parameters produced substantial increases in accuracy (Supplemental Figure   195 S3).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 306,
+                    "end": 318,
+                    "text": "Figure   195",
+                    "ref_id": null
+                }
+            ],
+            "section": "174"
+        },
+        {
+            "text": "The key design points (i.e., sampling days) for optimal designs were consistently the first 197 day (Figure 2b) , followed by other days early in the outbreak (i.e., days 2-4), and the final 198 sampling day (day 14). Days 6-13 typically had little impact on model discrimination accuracy 199 (i.e., optimal Accuracy consistently levelled off as design size increased beyond 5; Figure 1d , 200 Supplemental Figure S3 ), and the optimal combination of these days varied due to stochasticity 201 in both training and test data. This is consistent with the feature importance used to develop 202 the heuristic (Figure 1b) , i.e., those days that were consistently optimal were those with highest 203 feature importance. It is remarkable that it is possible to discriminate models so accurately, given that they share 220 identical epidemic dynamics, and only differ in observation. The non-parametric nature of the 221 random forest is able to use small but clear differences between models (e.g., Figure 2c ) to 222 extract sufficient information to discriminate them. Combining the raw household data to form 223 summary statistics is critical to this: if the raw household data is used rather than the summary Figure 1 : (a) Model schematic describing: transitions between states within each household continuous-time Markov chain; the three observation models being discriminated between; and, the way that these household-level data are observed. (b) Random forest feature importance for the full 14-day design, used to construct the heuristic for smaller designs. (c) Histogram summaries of the daily household-level data under a given design, used as predictors in the random forest. (d) Resulting random forest accuracy as design size increases, for the true optimal design (solid lines) and heuristic solution (crosses with dashed line). These results correspond to households of size 5, with 10,000 training samples from each model, each with parameters drawn from the distributions displayed in Supplemental Figure S1 . 9 . CC-BY-NC 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint Figure 2 : (a) Accuracy of model discrimination in designs of size 5, as the number of households increases, and under partial observation. Note that p obs is not a fixed parameter but is sampled from a distribution; the listed value is its mean. The case with mean p obs of 0.5 was sampled from a Beta(5,5) distribution, and a mean p obs of 0.75 from a Beta(7.5,2.5) distribution. (b) Difference between heuristic designs (coloured points) and optimal designs (black boxes) as the design size increases. Note that the heuristic selects the optimal design at design sizes 4, 5, 13, and 14. (c) Distribution of training sample observations (under each model and number of households) for the most important feature under the heuristic: the proportion of households with 2 cases observed on day 1. These results correspond to households of size 5, with 10,000 training samples from each model, each with parameters drawn from the distributions that appear in Supplemental Figure S1 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 100,
+                    "end": 111,
+                    "text": "(Figure 2b)",
+                    "ref_id": null
+                },
+                {
+                    "start": 378,
+                    "end": 387,
+                    "text": "Figure 1d",
+                    "ref_id": null
+                },
+                {
+                    "start": 407,
+                    "end": 416,
+                    "text": "Figure S3",
+                    "ref_id": null
+                },
+                {
+                    "start": 607,
+                    "end": 618,
+                    "text": "(Figure 1b)",
+                    "ref_id": null
+                },
+                {
+                    "start": 995,
+                    "end": 1004,
+                    "text": "Figure 2c",
+                    "ref_id": null
+                },
+                {
+                    "start": 1210,
+                    "end": 1218,
+                    "text": "Figure 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 2016,
+                    "end": 2025,
+                    "text": "Figure S1",
+                    "ref_id": null
+                },
+                {
+                    "start": 2242,
+                    "end": 2250,
+                    "text": "Figure 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 3212,
+                    "end": 3221,
+                    "text": "Figure S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "196"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint statistics, accuracy is substantially lower (Supplemental Figure S4 ). While it can be difficult 225 to interpret the classifications made by a random forest-classifier, interrogating key individual 226 predictors (as in Figure 2c ) provides clarity, and elucidates why feature importance provides a 227 useful heuristic for choosing optimal designs (20). The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 270,
+                    "end": 279,
+                    "text": "Figure S4",
+                    "ref_id": null
+                },
+                {
+                    "start": 433,
+                    "end": 442,
+                    "text": "Figure 2c",
+                    "ref_id": null
+                }
+            ],
+            "section": "10"
+        },
+        {
+            "text": "The supplemental information contains:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "10"
+        },
+        {
+            "text": "\u2022 Plots of the prior distribution for each epidemic parameter used to generate the household 340 data (Fig. S1 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 102,
+                    "end": 110,
+                    "text": "(Fig. S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "339"
+        },
+        {
+            "text": "\u2022 A comparison of the accuracy of model discrimination as the size of households in the 342 model varies from 3 to 7. This includes both the complete observation scenarios, and the 343 scenarios wherein p obs = 0.5 (Fig. S2) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 215,
+                    "end": 224,
+                    "text": "(Fig. S2)",
+                    "ref_id": null
+                }
+            ],
+            "section": "341"
+        },
+        {
+            "text": "\u2022 A comparison of the accuracy of model discrimination when parameters are known (fixed) 345 values versus values sampled from the prior distributions; and of the impact of using 1,000 346 versus 10,000 training samples (Fig. S3 ).",
+            "cite_spans": [
+                {
+                    "start": 89,
+                    "end": 92,
+                    "text": "345",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 220,
+                    "end": 228,
+                    "text": "(Fig. S3",
+                    "ref_id": null
+                }
+            ],
+            "section": "344"
+        },
+        {
+            "text": "\u2022 Model discrimination accuracy when the random forests are trained on the raw, unsum-348 marised data rather than the histogram summaries that appear in the main text (Fig. S4) . Figure S3 : Impact on accuracy of optimal designs as with fixed parameters vs. parameters sampled from distributions, and with 1,000 vs. 10,000 training samples. Based on households of size 5.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 168,
+                    "end": 177,
+                    "text": "(Fig. S4)",
+                    "ref_id": null
+                },
+                {
+                    "start": 180,
+                    "end": 189,
+                    "text": "Figure S3",
+                    "ref_id": null
+                }
+            ],
+            "section": "347"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint Figure S4 : Performance of random forest model discrimination when raw data were used as predictors, rather than histogram summaries (with results in Figure 1d ). Based on households of size 5, with 10,000 training points, and random parameters.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 212,
+                    "end": 221,
+                    "text": "Figure S4",
+                    "ref_id": null
+                },
+                {
+                    "start": 362,
+                    "end": 371,
+                    "text": "Figure 1d",
+                    "ref_id": null
+                }
+            ],
+            "section": "19"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license author/funder. It is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/571547 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "20"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "SMC2: an efficient algorithm for sequential",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Chopin",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Jacob",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Papaspiliopoulos",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF1": {
+            "text": "141 input to the (trained) random forest, to obtain a prediction of which model it is most consistent 142 with. 143 Random forests were constructed using the Python scikit-learn RandomForestClassifier al-144 gorithm (23), with 200 trees.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "149 size) \u00d7 (household size + 1) data vector as the new random forest predictors. For example, 150 with designs of size 5, households of size 5, and 200 households, the raw data would consist 151 of 5 \u00d7 200 = 1000 predictors, whereas the histogram summaries would consist of 5 \u00d7",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "159classification accuracy on a left-out test set. This design problem is small, with only 14 D designs 160 of size D (or 2 14 = 16, 384 total designs) to evaluate, so we apply exhaustive search in this case; 161 however a combinatorial optimisation algorithm could be applied and would likely be necessary 162 in a more complex design problem to search for the optimal design.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "175 tive timing of symptoms and infectiousness for simulated household-stratified symptom-onset 176 data: with 200 households of size 5, accuracy was 0.923 (with random parameters, and 10,000 177 training simulations per model). Accuracy was reduced with fewer households: to 0.853 with 178 100 households, and 0.657 with only 25 households (Figure 1d). These results were robust with 179 respect to variation in household size, with accuracy ranging from 0.892 with 200 households 180 of size 3 to 0.935 with 200 households of size 7.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "model discrimination remained accurate when only a small subset of daily 183 household data were observed, when the observations were from an optimal design: a design of 184 size 5 and 190 households was sufficient to produce a classification accuracy of \u2265 0.90 (Figure 185 1d, Figure 2a). Accuracy increased as the design size (i.e., number of days of surveillance) and 186 the number of households increased. The heuristic produced the exact optimal design at design 187 sizes 4 and 5 (Figure 2b), and an effectively indistinguishable level of accuracy compared to 188the optimal for larger design sizes(Figure 1d). The heuristic ensured a substantial reduction 189 in computation time: to produceFigure 1d, 39 random forests were required when using the 190 heuristic, compared to 49,107 random forests to produce the optimal results. We also explored 191 the impact of varying household size, the amount of training data used, and of using fixed, 192 known parameters rather than parameters sampled from a distribution: larger households and 193 more training points produced small increases in accuracy (SupplementalFigures S2, S3)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "the impact of asymptomatic infections on model discrimination, we repeated the 206 analysis, except with each individual only being symptomatic (at the point that they otherwise 207 would) with probability p obs (again, sampled from a prior distribution). This partial observation 208 made model discrimination substantially more challenging: with designs of size 5 and 200 209 households (Figure 2a), accuracy was 0.796 when p obs had a mean of 0.75, and accuracy was 210 0.653 when p obs had a mean of 0.5 (compared to 0.908 with complete observation).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "the relative timing of symptom onset and infectiousness in an emerging epidemic is 213 critical to outbreak control. We have demonstrated that it is not only possible to accurately iden-214 tify the relative timing based upon household-stratified data available early in an outbreak, but 215 that it can be done without observing each household every day. Moreover, we can use random 216 forest feature importance to inform a heuristic that vastly reduces the computation necessary to 217 choose high-accuracy designs.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "of model discrimination decreases substantially as the proportion of cases that 230 are asymptomatic increases. However, this can be compensated by increasing the number of 231 households. The outbreaks in which early control is most critical are likely to be those in which 232 most individuals are symptomatic, due to symptoms being strongly correlated with severity, for 233 example hospitalisations and deaths. 234 235In some situations it may be necessary to consider more complicated surveillance schemes, 236 in which case it may not be possible to evaluate the exact optimal design by exhaustive search.237However, the heuristic proposed here should remain effective in more complicated design 238 spaces, provided they have a similar form, i.e., designs of a given size are a subset of designs of 239 larger sizes upon which the random forest can be trained to extract feature importance.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "any model-based study. Here assumptions include: a constant house-242 hold size; enrolling each household in the study at the instant its first member shows symptoms;243    and, most critically, assuming that the underlying epidemic model is true. It is possible to select 244 between models that differ in addition to observation process; however any increase in the num-245 ber of models to classify will likely result in increased computation and potentially decreased future, the aim is to combine Bayesian model discrimination and parameter estimation 249 in an online manner. Improving estimates of parameters improves the ability to discriminate250 models, and, more certainty regarding the model likely reduces variance in parameter estimates. 251 This would allow for unified characterisation of all factors influencing the ability to control an T. Day, A. Park, N. Madras, A. Gumel and J. Wu When Is Quarantine a Useful Con-285 trol Strategy for Emerging Infectious Diseases?, American Journal of Epidemiology 163, 286 479485, https://doi.org/10.1093/aje/kwj056 (2006).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": ".B. Dehideniya, C.C. Drovandi and J.M. McGree Optimal Bayesian design for discrimi-288 nating between models with intractable likelihoods in epidemiology. Computational Statis-289 tics Data Analysis 124, 277-297, https://doi.org/10.1016/j.csda.2018.03.004 (2018).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "290 10. C.C. Drovandi and R.A. McCutchan Alive SMC2: Bayesian model selection for low-count 291 time series models with intractable likelihoods. Biometrics 72, 344-353 (2016).292 11. C. Fraser, S. Riley, R.M. Anderson and N.M. Ferguson Factors that make an infectious 293 disease outbreak controllable. Proc. Natl. Acad. Sci. U.S.A. 101(16): 61466151 (2004).294 12. A.B. van Gageldonk-Lafeber, M.A. van der Sande, A. Meijer, I.H. Friesema, G.A. Donker, 295 J. Reimerink et al. Utility of the first few100 approach during the 2009 influenza A(H1N1) 296 pandemic in the Netherlands. Antimicrob. Resist. Infect. Control. 1:30 (2012).297 13. M. Hainy, D.J. Price, O. Restif and C. Drovandi Optimal Bayesian design for model dis-298 crimination via classification. https://arxiv.org/abs/1809.05301 (2018). 299 14. Y.H. Hsieh, C.C. King, C.W. Chen, M.S. Ho, J.Y. Lee, F.C. Liu, Y.C. Wu, et al. Quarantine 300 for SARS, Taiwan. Emerging infectious diseases 11, 278-82 (2005).301 15. M.J. Keeling and J.V. Ross On methods for studying stochastic disease dynamics. Journal 302 of the Royal Society Interface 5, 171-181 (2008).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF17": {
+            "text": "303 16. T.G. Ksiazek, E. Erdman, C.S. Goldsmith, S.R. Zaki, T. Peret, S. Emery, S. Tong, C. Ur-304 bani, J.A. Comer, W. Lim, et al. A Novel Coronavirus Associated with Severe Acute Res-305 piratory Syndrome. N. Engl. J. Med. 348 ,1953-1966 (2003).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "306 17. L.L. Lau, B.J. Cowling, V.J. Fang, K.H. Chan, E.H. Lau, et al. Viral shedding and clinical 307 illness in naturally acquired influenza virus infections. J Infect Dis 201, 15091516 (2010).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "Distributions Change in accuracy of optimal designs as household size increases from 3 to 7, under complete observation and mean p obs = 0.5. Based on 10,000 training simulations and parameters sampled from distributions.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "representing a mean infectious duration of 3 days (mode at approxwithin the household is observed daily; i.e., the instant that the first individual in a household 120 shows symptoms is time zero. Then, the number of cases seen before time 1 constitutes the first 121 observation, between time 1 and 2 the next observation, and so on. This proceeds for 14 days, with any symptoms occurring after time 14 not observed.When testing the effect of asymptomatic infections on model discrimination, we sample an additional parameter, p obs , the probability that an individual shows symptoms at the time theyTo attempt to discriminate models, we use the approximate Bayesian random forest approach Select a number of simulations, N s , and a number of households, N h .",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

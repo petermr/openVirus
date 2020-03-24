@@ -1,0 +1,1161 @@
+{
+    "paper_id": "672ca9b6e50e26c49fc7be2ef3b4f685badf9db1",
+    "metadata": {
+        "title": "Modeling and Prediction of the 2019 Coronavirus Disease Spreading in China Incorporating Human Migration Data",
+        "authors": [
+            {
+                "first": "Choujun",
+                "middle": [],
+                "last": "Zhan",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "South China Normal University",
+                    "location": {
+                        "settlement": "Guangzhou",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Chi",
+                "middle": [
+                    "K"
+                ],
+                "last": "Tse",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "City University of Hong Kong",
+                    "location": {
+                        "settlement": "Hong Kong"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Yuxia",
+                "middle": [],
+                "last": "Fu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Nanfang College of Sun Yat-Sen University",
+                    "location": {
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Zhikang",
+                "middle": [],
+                "last": "Lai",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Nanfang College of Sun Yat-Sen University",
+                    "location": {
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Haijun",
+                "middle": [],
+                "last": "Zhang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Harbin Institute of Technology",
+                    "location": {
+                        "settlement": "Shenzhen",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "This study integrates the daily intercity migration data with the classic Susceptible-Exposed-Infected-Removed (SEIR) model to construct a new model suitable for describing the dynamics of epidemic spreading of Coronavirus Disease 2019 in China. Daily intercity migration data for 367 cities in China are collected from Baidu Migration, a mobile-app based human migration tracking data system. Historical data of infected, recovered and death cases from official source are used for model fitting. The set of model parameters obtained from best data fitting using a constrained nonlinear optimization procedure is used for estimation of the dynamics of epidemic spreading in the coming weeks. Our results show that the number of infections in most cities in China will peak between mid February to early March 2020, with about 0.8%, less than 0.1% and less than 0.01% of the population eventually infected in Wuhan, Hubei Province and the rest of China, respectively.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The Coronavirus Disease 2019 (COVID-19) (known earlier as New Coronavirus Infected Pneumonia) began to spread since December 2019 from Wuhan, which has been widely regarded as the epicenter of the epidemic, to almost all provinces throughout China and 28 other countries. Human-to-human transmission had been found to occur in some early Wuhan cases in mid December [1] , and the high volume and frequency of movement of people from Wuhan to other cities and between cities is thus an obvious cause for the wide and rapid spread of the disease throughout the country. The Susceptible-Exposed-Infected-Removed (SEIR) model has traditionally been used to study epidemic spreading with various forms of networks of transmission which define the contact topology [2] , such as scalefree networks [3, 4, 5] , small-world networks [6, 7] , Oregon graph [8, 9] , and adaptive networks [10] . Moreover, in most studies, the contact process assumes that the contagion expands at a certain rate from an infected individual to his/her neighbor, and that the spreading process takes place in a single population (network). The COVID-19 outbreak, however, began to occur and escalate in a special holiday period in China (about 20 days surrounding the Lunar New Year), during which a huge volume of intercity travel took place, resulting in outbreaks in multiple regions connected by an active transportation network. Thus, in order to understand the COVID-19 spreading process in China, it is essential to examine the human migration dynamics, especially between the epicenter Wuhan and other Chinese cities. A recent study has also revealed the risk of transmission of the virus from Wuhan to other cities [11] .",
+            "cite_spans": [
+                {
+                    "start": 366,
+                    "end": 369,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 759,
+                    "end": 762,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 792,
+                    "end": 795,
+                    "text": "[3,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 796,
+                    "end": 798,
+                    "text": "4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 799,
+                    "end": 801,
+                    "text": "5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 825,
+                    "end": 828,
+                    "text": "[6,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 829,
+                    "end": 831,
+                    "text": "7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 847,
+                    "end": 850,
+                    "text": "[8,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 851,
+                    "end": 853,
+                    "text": "9]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 878,
+                    "end": 882,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 1695,
+                    "end": 1699,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In this paper, we utilize the human migration data collected from Baidu Migration [12] , which provides historical indicative daily volume of travellers to/from and between 367 cities in China. To demonstrate the impact of intercity traffic on the COVID-19 epidemic spreading, we plot in Figure 1 the number of infected individuals in different cities versus the inflow traffic volume from Wuhan, which clearly shows that for cities farther away from Wuhan, the number of infected individuals almost increases linearly with the inflow traffic from Wuhan. In view of the importance of human migration dynamics to the disease spreading process, we combine, in this study, intercity travel data collected from Baidu Migration [12] with the traditional SEIR model [2] to build a new dynamic model for the spreading of COVID-19 in China. Using official historical data of infected, recovered and death cases in 367 cities, we perform fitting of the data to estimate the best set of model parameters, which are then used to estimate the number of individuals exposed to the virus in each city and to predict the extent of spreading in the coming months. Our study shows that the number of infected cases in various Chinese cities will peak between mid February to early March 2020, with about 0.8%, less than 0.1% and less than 0.01% of the population eventually infected in Wuhan, Hubei Province, and the rest of China, respectively.",
+            "cite_spans": [
+                {
+                    "start": 82,
+                    "end": 86,
+                    "text": "[12]",
+                    "ref_id": null
+                },
+                {
+                    "start": 723,
+                    "end": 727,
+                    "text": "[12]",
+                    "ref_id": null
+                },
+                {
+                    "start": 760,
+                    "end": 763,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 288,
+                    "end": 296,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "In the remainder of the paper, we first introduce the official daily infection data and the intercity migration data used in this study. The SEIR model is modified to incorporate the human migration dynamics, giving a realistic model suitable for studying the COVID-19 epidemic spreading dynamics. Historical data of infected, recovered and death cases from official source and data of daily intercity traffic (number of travellers between cities) extracted from Baidu Migration are used to generate the model parameters, which then enable estimation of the propagation of the epidemic in the coming months. We will conclude with a brief discussion of our estimation of the propagation and the reasonableness of our estimation in view of the measures taken by the Chinese authorities in controlling the spreading of this new disease.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The availability of official data of infected cases in China varies from city to city. Wuhan, being the epicenter, has the first confirmed case of COVID-19 infection on December 8, 2019 [1] . Most other cities in China began to report cases of COVID-19 infections around mid January 2020. Our data of daily infected and recovered cases, and death tolls, are based on the official data released by the National Health Commission of China, and the daily data used in our study are from January 24, 2020, to February 16, 2020, including the daily total number of confirmed cases in each city, daily total cumulative number of confirmed cases in each city, daily cumulative number of recovered cases in each city, and daily cumulative death toll in each city. It should be emphasized that the official data may not be the actual (true) data. Although the earliest confirmed case appeared on December 8, 2019, subsequent missing cases were expected to be significant in Hubei Province in the early stage of the epidemic outbreak. Systematic updates of 08Dec19 19Dec19 31Dec19 12Jan20 23Jan20 04Feb20 16Feb20 0 1 2 3 4 10 4",
+            "cite_spans": [
+                {
+                    "start": 186,
+                    "end": 189,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Official Data of COVID-19 Cases"
+        },
+        {
+            "text": "(a) Wuhan 20Jan20 24Jan20 29Jan20 02Feb20 07Feb20 11Feb20 16Feb20 0 100 200 300 400 (b) Beijing 21Jan20 25Jan20 29Jan20 03Feb20 07Feb20 11Feb20 16Feb20 (e) Guangzhou 21Jan20 25Jan20 29Jan20 03Feb20 07Feb20 11Feb20 16Feb20 infection data in other cities began after January 17, 2020. Figure 2 shows the number of confirmed infected cases, recovered cases and death tolls of six major Chinese cities.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 283,
+                    "end": 291,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Official Data of COVID-19 Cases"
+        },
+        {
+            "text": "As human-to-human transmission has been confirmed to occur in the spreading of COVID-19, gatherings of people and intercity travel of infected and exposed individuals within China have been the main drives that escalate the spreading of the virus. The period (around 20 days) surrounding the Lunar New Year (mid January to early February in 2020) is the most important holiday period in China. Migrant workers and students travel from major cities to country towns for family reunions, and return to the cities at the end of the holiday period. Holiday goers also travel to and from tourist cities. China's Ministry of Transport estimates around 3 billion trips to be taken during this period. Wuhan, being a major transport hub and having a large number of higher education institutions as well as manufacturing plants, is among the cities with the largest outflow and inflow traffic before and after the Chinese New Year festival. Our study aims to incorporate these important human migration dynamics in the construction of the spreading model. We collect daily intercity travel data in China from Baidu Migration, which is a mobile-app based big data system recording movements of mobile phone users. Specifically, we have collected Baidu Migration data for 367 cities (or administrative regions) in China over the period of January 1, 2020, to February 13, 2020. The data provide the migration strengths of cities which are indicative measures of the human traffic volume moving in and out of individual cities and administrative regions, as depicted by the inflow and outflow networks shown in Figure 3 (a).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1600,
+                    "end": 1608,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Intercity Travel Data"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint Based on the collected data, we construct the migration matrix, which is given as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "4 . CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity. where K is the number of the cities or administrative regions (K = 367 in this study), and m i j (t) is the migrant volume from city i to city j at time t. Migration matrix M thus effectively describes the network of cities with human movement constituting the links of the network, as shown in Figure 3 (a). Several properties of M are worth noting:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 458,
+                    "end": 466,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "3"
+        },
+        {
+            "text": "\u2022 M records migration from one city to another. Movement within a city is not counted, i.e., m ii (t) = 0 for all i.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "\u2022 M is non-symmetric as traffic from one city to another is not necessarily reciprocal at any given time, i.e., m i j (t) m ji (t).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "\u2022 Number of outflow migrants of city i at time t is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "\u2022 Number of inflow migrants of city i at time t is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "3"
+        },
+        {
+            "text": "The charts in Figure 3 (b) plot the daily total inflow and outflow migration strengths of Wuhan, showing the abrupt decrease of migration strengths after the city shut down all inbound and outbound traffic from January 24, 2020. A visualization of migration matrix M is given in Figure 4 , where x-axis and y-axis correspond to city i and city j, respectively, and the color intensity indicates the migrant volume.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 14,
+                    "end": 22,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 279,
+                    "end": 287,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "3"
+        },
+        {
+            "text": "In the SEIR model, each individual in a population may assume one of four possible states at any time in the dynamic process of epidemic spreading, namely, susceptible (S), exposed (E), infected (I) and recovered/removed 5 . CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model"
+        },
+        {
+            "text": "The copyright holder for this preprint .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "(R). The dynamics of the epidemic can be described by the following set of equations:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where S (t), E(t), I(t) and R(t) are, respectively, the number of people susceptible to the disease, exposed (being able to infect others but having no symptoms), infected (diagnosed as confirmed cases), and recovered (including death cases); \u03b2 is the exposition rate (infection rate of susceptible individuals); \u03ba is the infection rate of exposed individuals; and \u03b3 is the recovery rate. For simplicity, recovered individuals include patients recovered from the disease and death tolls. In discrete form, the SEIR model can be represented by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ", with t being a daily count. As the incubation period for COVID-19 can be up to 14 days, the number of exposed individuals (who show no symptom but are able to infect others) plays a crucial role in the spreading of the disease. The state E, which is not available from the official data, is thus an important state in our model. Furthermore, combining death toll with the recovered number as state R will simplify the computation without affecting the accuracy of our data fitting and subsequent estimation. Suppose, for city i, the four states are S i (t), E i (t), I i (t) and R i (t), at time t. Here, we also define a total susceptible population, N s i , which is the eventual number of infected individuals in city i. Moreover, if city i has a population of P i and the eventual percentage of infection is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The classic SEIR model would give \u2206I i as the difference between the number of exposed individuals who become infected and the number of removed individuals. However, the onset of the COVID-19 epidemic has occurred in a special period of time in China, during which a huge migration traffic is being carried among cities, leading to a highly rapid transmission of the disease throughout the country. In view of this special migration factor, the SEIR model should incorporate the human migration dynamics in order to capture the essential features of the dynamics of the spreading. In particular, for city i, in addition to the abovementioned classic interpretation, the daily increase in the number of infected cases should also include the inflow of infected individuals from other cities, less the outflow of removed cases from city i. In reality, inflow and outflow of exposed individuals to and from the city are also important and to be estimated in the model. Thus, if m i j (t) people move from city i to city j on day t, and the population of city i is P i (t), then the number of infected individuals moving from city i to city j is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Also, the number of migrants leaving from city j is N i=1 m ji , and the number of infected cases that have migrated out of city j is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where P j (t) is the population of city j on day t. Thus, the increase in infected cases on day t in city j is given by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where \u2206I j (t) = I j (t + 1) \u2212 I j (t) and \u03ba j (t) is the infection rate in city j on day t, i.e., the rate at which exposed individuals become infected. Moreover, infected individuals, once confirmed, would unlikely be able to migrate to another city.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "6"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We thus implement this condition by writing (8) as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where 0 < k I 1 is a constant representing the possibility of an infected individual moving from one city to another. Likewise, incorporating the migrant dynamics, the increase in exposed individuals on day t in city j is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ", \u03b2 j is the infection rate of susceptible individuals in city j, and \u03b1 j is the infection rate of exposed individuals in city j. In a likewise fashion, we have",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In the above derivation, we should note that",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "\u2022 the recovered individuals are assumed to stay in city j;",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "\u2022 the recovery rates in different cities are assumed to be different due to varied quality of treatments and availability of medical facilities;",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "\u2022 the recovery rates increase as time goes, as treatment methods are expected to improve gradually (i.e., taking \u03b3 j (t) as a monotonically increasing function);",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "\u2022 the evetual recovery rates in all cities will converge to the same constant \u0393 \u2248 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In addition, due to intercity migration, the population of city j on day t would increase or decrease according to",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where \u2206P j (t) = P j (t + 1) \u2212 P j (t). Thus, the total susceptible population should be",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where \u2206N s j (t) = N s j (t + 1) \u2212 N s j (t).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "7 . CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In summary, our modified SEIR model with consideration of human migration dynamics, for city j, is given by",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ",",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ",",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": ",",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where subscript j denotes the city itself, and subscript i denotes another city from/to which people migrate on day t. Letting X j (t) be the extended state vector, i.e.,",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where f (x) is the right side of (15), and \u00b5 j is the set of parameters including \u03b1 j , \u03b2 j , \u03b3 j , \u03ba j and \u03b4 j . For computational convenience, we write (15) as",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "In performing the data fitting, we assume \u03b1 j (t), \u03b2 j (t), \u03b3 j (t), \u03ba j (t), and \u03b4 j are constants throughout the period of spreading, and the spreading begins at t 0 , at which N s j (t 0 ) = \u03b4 j P j (t 0 ).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The model represented by (17) describes the dynamics of the epidemic propagation with consideration of human migration dynamics. The parameters in model (17) are unknown and to be estimated from historical data. We solve this parameter identification problem via constrained nonlinear programming (CNLP), with the objective of finding an estimated growth trajectory that fits the data. An estimated number of infected cases of each city can be generated from (15) with unknown set \u03b8 j , i.e.,",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Parameter Identification"
+        },
+        {
+            "text": "where I j,0 = I j (t 0 ) is the initial number of infections in city j, and {\u03b1 j , \u03b2 j , \u03b3 j , \u03ba j , \u03b4 j } are parameters that determine the rates of spreading and recovery in city j. Then, the unknown set is \u0398 = {\u03b8 1 , \u03b8 2 , \u00b7 \u00b7 \u00b7 , \u03b8 K } essentially has 5K unknowns, where K is the number of cities, thus requiring an enormous effort of computation. Here, to gain computational efficiency, we assume that",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Parameter Identification"
+        },
+        {
+            "text": "\u2022 all cities share one parameter set \u03b8 = {\u03b1, \u03b2, \u03ba, \u03b3};",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Parameter Identification"
+        },
+        {
+            "text": "\u2022 the numbers of initial infected and exposed individuals in city i are \u03bb I I i (t 0 ) and \u03bb E I i (t 0 ), respectively, where \u03bb I and \u03bb E are constant;",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Parameter Identification"
+        },
+        {
+            "text": "\u2022 each city has an independent \u03b4 i .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Parameter Identification"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "8"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint Then, the size of the unknown set becomes computationally manageable, i.e., \u0398 = {\u03b1, \u03b2, \u03ba, \u03b3, \u03b4 i , \u03bb I , \u03bb E }.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "Finally, the parameter estimation problem can be formulated as the following constrained nonlinear optimization problem:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where F(\u00b7) represents model (15) andx(t) = [\u00ce(t),R(t), E(t), S (t), P(t), N s (t)] is the set of estimated variables, with unknown set \u0398, which is bounded between \u0398 L and \u0398 U . In this work, an inverse approach is taken to find the unknown parameters and states by solving (19). The Root Mean Square Percentage Error (RMSPE) is adopted as the criterion, i.e., fitting error, to measure the difference between the number of infected individuals generated by the model and the official daily infection data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "where K is the number of cities to be evaluated.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We perform data fitting of the model, described by (17), using historical daily infection data provided by the National Health Commission of China, from January 24, 2020 to February 13, 2020. Our approach, as described in the previous section, is to apply constrained nonlinear programming to find the best set of estimates for the unknown parameters and states. Data fitting for all 367 cities are performed. Values are updated iteratively in the optimization process. Moreover, since all parameters, like infection rates, are to be generated by fitting data with the model, the integrity of the data becomes crucial. As the official Wuhan data are expected to deviate from the true values quite significantly during the early outbreak stage due to uncertainty in diagnosis and other issues related to reporting of the epidemic by the local government, we have allowed the fitting errors for Wuhan to expand over a reasonable range, while the fitting errors for most other cities remain small. In addition, as the epidemic propagates in time, effective control measures and improved public education would reduce the infection rates for the susceptible and exposed individuals, making these parameters time varying in reality. Nonetheless, our fitting assumes these parameters being constant during the short fitting period for computational simplicity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results and Discussions"
+        },
+        {
+            "text": "The propagation profiles, in terms of the number of infected individuals and estimated number of exposed individuals, for all 367 cities are estimated. As limited by space, we only show in Figure 5 the results for 20 selected cities. This model can also provide projections of the number of infected and exposed individuals in the next 200 days, as shown in Figure 6 , which clearly show that the daily infection would reach a peak sooner or later. By running the identification algorithm, we identify the optimal parameter set as \u03b1 = 0.5869, \u03b2 = 0.8949, \u03ba = 0.1008, and \u03b3 = 0.0602. From the estimated propagation profiles of the COVID-19 epidemic for all 367 cities, we have the following findings:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 189,
+                    "end": 197,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 358,
+                    "end": 366,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF10"
+                }
+            ],
+            "section": "Results and Discussions"
+        },
+        {
+            "text": "\u2022 For most cities in China, the infection numbers will peak between mid February to early March 2020, as shown in Figure 7 (a).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 114,
+                    "end": 122,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF11"
+                }
+            ],
+            "section": "Results and Discussions"
+        },
+        {
+            "text": "\u2022 The peak number of infected individuals will be between 1,000 to 5,000 for cities in Hubei, and that outside Hubei will be below 500, as shown in Figure 7 (b).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 148,
+                    "end": 156,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF11"
+                }
+            ],
+            "section": "Results and Discussions"
+        },
+        {
+            "text": "\u2022 At the end, about 0.8%, less than 0.1% and less than 0.01% of the population will get infected in Wuhan, Hubei Province and the rest of China, respectively, as graphically presented in Figure 7 (c).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 187,
+                    "end": 195,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF11"
+                }
+            ],
+            "section": "Results and Discussions"
+        },
+        {
+            "text": ". CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "9"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint 24Jan20 27Jan20 31Jan20 04Feb20 08Feb20 12Feb20 16Feb20 24Jan20 27Jan20 31Jan20 04Feb20 08Feb20 12Feb20 16Feb20 0 100 200 300 Number of exposed (estimated) (k) Chongqing 24Jan20 27Jan20 31Jan20 04Feb20 08Feb20 12Feb20 16Feb20 24Jan20 27Jan20 31Jan20 04Feb20 08Feb20 12Feb20 16Feb20 0 20 40 60 Number of exposed (estimated) (l) Suzhou 24Jan20 27Jan20 31Jan20 04Feb20 08Feb20 12Feb20 16Feb20 is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint 24Jan20 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 20 40 60 80 Number of exposed (estimated) (p) Xian 24Jan20 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 20 40 60 Number of infections (official) Number of infections (estimated) 24Jan20 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 10 20 30 40 Number of exposed (estimated) (q) Hong Kong 24Jan20 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 1000 2000 3000 Number of infections (official) Number of infections (estimated) 24Jan20 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 500 1000 1500 2000 2500 Number of exposed (estimated) (r) Xiaogan 24Jan20 01Mar20 07Apr20 14May20 20Jun20 27Jul20 02Sep20 0 would lead to different results and quite diverged conclusions. For instance, an AI-powered simulation run had forecasted 2.5 billion people to be infected in 45 days [13] . Academics in Hong Kong expected 1.4 million eventually infected in the city of 7.5 million people. Our results, however, do not seem to agree with such forecasts. In fact, our 11 . CC-BY-NC 4.0 International license It is made available under a is the author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 999,
+                    "end": 1003,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                }
+            ],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "(which was not peer-reviewed) The copyright holder for this preprint . https://doi.org/10.1101/2020.02.18.20024570 doi: medRxiv preprint results are expected to be conservative, under normal circumstances, in the sense that the severity and duration of the epidemic could be over-estimated. This is because stringent measures have been taken to limit travel and hence to curb the spreading of the virus since late January 2020. The infection rates should be progressively reduced, with the effect of reducing the number of infected individuals as well as mitigating of the peak times. Furthermore, climate factors may also play a role in the epidemic spreading. As temperature generally rises from February to May, the infection peaks would unlikely occur later than the predicted times as the new coronavirus epidemic is generally known to subside in warm weather. Based on our findings and assuming no drastic change in infection rates (e.g., schools and workplaces remain closed and intercity travel limited), we can conclude, with optimism, that the COVID-19 epidemic would end around April 2020.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "(which was not peer-reviewed)"
+        },
+        {
+            "text": "We employ human migration data to provide information on intercity travel that is crucial to the transmission of the new coronavirus disease from its epicenter Wuhan to other parts of China. Our model for the disease spreading is essentially the classic SEIR model, with intercity travel data supplying the essential information about the number of infected, exposed and recovered individuals moving between different cities. All parameters of the model, including infection rates, recovery rates, and eventual percentage of infected population for 367 cities in China, are identified by fitting the official data with the model using a constrained nonlinear programming procedure. Using these parameters, estimates of the number of exposed individuals in 367 cities as well as projections into the next 200 days are also found. Our model, however, does not consider the contact network topology that would be necessary if details of the transmission process, such as superspreading events, are to be captured. Nonetheless, our model provides a very reasonable estimation of the propagation of average numbers of exposed, infected and recovered individuals, despite missing details of fluctuation (e.g., sudden surge due to a superspreading event). The main conclusion of our study is that the COVID-19 epidemic spreading will peak between mid February to early March 2020, with about 0.8%, less than 0.1% and less than 0.01% of the population eventually infected in Wuhan, Hubei Province and the rest of China, respectively.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusion"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Early transmission dynamics in Wuhan China of novel coronavirus-infected pneumonia",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Tong",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Leung",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Wong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "New England Journal of Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1056/NEJMoa2001316"
+                ]
+            }
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Mathematical Tools for Understanding Infectious Disease Dynamics",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Diekmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Britton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Epidemic spreading in scale-free networks",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Pastor-Satorras",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Physical Review Letters",
+            "volume": "86",
+            "issn": "14",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Absence of epidemic threshold in scale-free networks with degree correlations",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Bogun\u00e1",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Pastor-Satorras",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Physical Review Letters",
+            "volume": "90",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Super-spreaders and the rate of transmission of the SARS virus",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Small",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Tse",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Walker",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Physica D",
+            "volume": "215",
+            "issn": "",
+            "pages": "146--158",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Small world and scale free network model of transmission of SARS",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Small",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Tse",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "International Journal of Bifurcation and Chaos",
+            "volume": "15",
+            "issn": "5",
+            "pages": "1745--1756",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Clustering model for transmission of the SARS virus: Application to epidemic control and risk assessment",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Small",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Tse",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Physica A",
+            "volume": "351",
+            "issn": "",
+            "pages": "499--511",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Epidemic spreading in real networks: An eigenvalue viewpoint",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Chakrabarti",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Faloutsos",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Proceedings of International Symposium on Reliable Distributed Systems",
+            "volume": "",
+            "issn": "",
+            "pages": "25--34",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Epidemic thresholds in real networks",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Chakrabarti",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Leskovec",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Faloutsos",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "ACM Transactions on Information and System Security (TISSEC)",
+            "volume": "10",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Epidemic dynamics on an adaptive network",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Gross",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J D"
+                    ],
+                    "last": "Lima",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Blasius",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Physical review letters",
+            "volume": "96",
+            "issn": "20",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Risk of transportation of 2019 novel coronavirus disease from Wuhan to other cities in China",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Du",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Cowling",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Meyers",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Emerging Infectious Disease",
+            "volume": "26",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.3201/eid2601.200146"
+                ]
+            }
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "AI predicts coronavirus could infect 2.5 billion and kill 53 million",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Koetsier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Number of infected individuals in various cities on 13/Feb/2020 versus the city's inflow traffic from Wuhan. Inflow traffic of each city from Wuhan is quantified by migration strength from Wuhan extracted from Baidu Migration data.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Daily data of COVID-19 infections in six Chinese cities from December 8, 2019 to February 13, 2020. (a) Wuhan (available from December 8, 2019); (b) Beijing (available from January 20, 2020); (c) Chongqing (available from January 20, 2020); (d) Shenzhen (available from January 19, 2020); (e) Guangzhou (available from January 21, 2020); (d) Tianjin (available from January 21, 2020).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "(a) Illustration of travel network of major cities in China with arrows indicating direction of travel and darkness of lines indicating migration strengths (relative traffic volumes); (b) total inflow/outflow of travellers to/from Wuhan from/to other Chinese cities using Baidu Migration data. Inflow and outflow data of each city with individual cities are also collected to form m i j .",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Visualization of migration volume (log(m i j )) from city i (x-axis) to city j (y-axis) on January 23, 2020.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Official number of infected individuals and estimated number of infected individuals in 20 selected cities in China (upper), and estimated number of exposed individuals (lower). Opinions diverge in the social media on the estimated extent of the outbreak of the new coronavirus disease (COVID-19). While there are pure speculations, there are also predictions based on rigorous study of the spreading dynamics. Different models used for prediction and different assumptions made regarding the transmission",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "Prediction of the number of infected (upper) and exposed individuals (lower) in 20 selected cites in China for the next 200 days Chongqing for the next 200 days.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "(a) Distribution of peak time; (b) distribution of peak number of infections; (c) distribution of proportion of the population eventually infected in a city.",
+            "latex": null,
+            "type": "figure"
+        }
+    },
+    "back_matter": []
+}

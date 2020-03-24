@@ -1,0 +1,4141 @@
+{
+    "paper_id": "1dfcd4615a8763e053bd2fdb845f09fab68109f1",
+    "metadata": {
+        "title": "",
+        "authors": [
+            {
+                "first": "Miles",
+                "middle": [
+                    "D"
+                ],
+                "last": "Miller-Dickson",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Brown University",
+                    "location": {
+                        "postCode": "02906",
+                        "settlement": "Providence",
+                        "region": "RI",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Victor",
+                "middle": [
+                    "A"
+                ],
+                "last": "Meszaros",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Brown University",
+                    "location": {
+                        "postCode": "02906",
+                        "settlement": "Providence",
+                        "region": "RI",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Francis",
+                "middle": [],
+                "last": "Baffour-Awuah Junior",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Vermont",
+                    "location": {
+                        "postCode": "05405",
+                        "settlement": "Burlington",
+                        "region": "VT",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Salvador",
+                "middle": [],
+                "last": "Almagro-Moreno",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Burnett School of Biomedical Sciences -University of Central Florida",
+                    "location": {
+                        "postCode": "32827",
+                        "settlement": "Orlando",
+                        "region": "FL",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "C",
+                "middle": [
+                    "Brandon"
+                ],
+                "last": "Ogbunugafor",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Brown University",
+                    "location": {
+                        "postCode": "02906",
+                        "settlement": "Providence",
+                        "region": "RI",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "While the ecology of infectious disease is a rich field with decades worth of empirical evidence and theory, there are aspects that remain relatively under-examined. One example is the importance of the free-living survival stage of certain pathogens, and especially is cases where they are transmitted indirectly between hosts through an environmental reservoir intermediate. In this study, we develop an integrated, broadly applicable mathematical method to examine diseases fitting this description-the waterborne, abiotic and other indirectly transmitted (W.A.I.T.) infection framework. To demonstrate its utility, we construct realistic models of two very different epidemic scenarios: cholera in a densely populated setting with limited access to clean drinking water and hepatitis C virus in an urban setting of injection-drug users. Using these two exemplars, we find that the W.A.I.T. model fortifies the centrality of reservoir dynamics in the \"sit and wait\" infection strategy, and provides a way to simulate a diverse set of intervention strategies.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "E cology and evolutionary biology have provided a theoretical basis for understanding how interactions between pathogens and their environment shape epidemics. When combined with quantitative modeling methods, it offers a full systems perspective that has helped to characterize the actors, forces and interactions that create infectious diseases [1] - [9] . Classically, the pathogen-host interaction is the presumptive central determinant of infectious disease, and consequently, the focus of modeling efforts: understand it, model it carefully, and one gains a picture for how epidemics arise and persist.",
+            "cite_spans": [
+                {
+                    "start": 347,
+                    "end": 350,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 353,
+                    "end": 356,
+                    "text": "[9]",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "These methods have been successful in balancing simplicity with generality, and have spawned different classes of models, summarized both in terms of the particular mathematical instruments applied (e.g. discrete-time, continuous models, network models, etc) and the particular biologies of host-pathogen systems (e.g. sexually-transmitted, vectorborne disease, food-borne pathogen, etc) [5] , [6] . These methods have been effective in many cases, supported by dozens of examples where they have captured the essential character or dynamics of an epidemic [6] , [8] . While these existing classifications have served an effective organizational and pedagogical purpose, there remains room for growth in how we translate certain epidemic phenomenon into theoretical formalism.",
+            "cite_spans": [
+                {
+                    "start": 388,
+                    "end": 391,
+                    "text": "[5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 394,
+                    "end": 397,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 557,
+                    "end": 560,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 563,
+                    "end": 566,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "A concept that has been the object of recent inquiry includes infections transmitted indirectly between hosts via a surface or reservoir intermediate-often abiotic-where the pathogen lives freely and independently of a host [10] - [27] , sometimes described as \"sit and wait\" infections [28] . Much of this research has concentrated on fomite, aerosol and airborne-transmitted viruses [10] , [11] , [13] , [14] , [16] , [19] , [22] and waterborne infections [12] , [17] , [23] , [26] , [29] - [33] . Other studies have focused on systems where pathogens are growing in the environment [18] , or have explored indirectly-transmitted infections in theoretical terms [21] , [24] . One framework for studying indirect, environmental transmission-the environmental infection transmission systems (E.I.T.S)-is engineered with explicit constraints that render its application necessarily narrow [15] . We offer that these prior treatments are individual examples of a general phenomenon that would benefit from a mathematical treatment that is both more rigorous and more broadly applicable. This new formalism should accommodate a widerrange of pathogens than have been previously considered and should emphasize how the environment can comprise multiple discrete dynamic entities (not unlike how host populations are often modeled).",
+            "cite_spans": [
+                {
+                    "start": 224,
+                    "end": 228,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 231,
+                    "end": 235,
+                    "text": "[27]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 287,
+                    "end": 291,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 385,
+                    "end": 389,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 392,
+                    "end": 396,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 399,
+                    "end": 403,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 406,
+                    "end": 410,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 413,
+                    "end": 417,
+                    "text": "[16]",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 420,
+                    "end": 424,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 427,
+                    "end": 431,
+                    "text": "[22]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 458,
+                    "end": 462,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 465,
+                    "end": 469,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 472,
+                    "end": 476,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 479,
+                    "end": 483,
+                    "text": "[26]",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 486,
+                    "end": 490,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 493,
+                    "end": 497,
+                    "text": "[33]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 585,
+                    "end": 589,
+                    "text": "[18]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 664,
+                    "end": 668,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 671,
+                    "end": 675,
+                    "text": "[24]",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 888,
+                    "end": 892,
+                    "text": "[15]",
+                    "ref_id": "BIBREF14"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "In this study, we develop the \"waterborne, abiotic and other indirectly transmitted\" (W.A.I.T. or WAIT) paradigm, a generalized framework for understanding \"sit and wait\" pathogens that are indirectly transmitted through an environmental reservoir intermediate. As the WAIT perspective specifically focuses on the peculiar dynamics of environmental compartments, we argue that it is imbued with more features and applies to a broader set of examples than prior treatments. To demonstrate its novelty and range of application, we fully examine its common relevance to two otherwise disparate modern diseases: cholera and hepatitis C virus. The study proceeds in stages: (1) we first introduce a purely theoretical iteration of WAIT using a standard epidemiological model, explaining how to conceptualize an infection in terms of the WAIT framework, and deriving the reproductive number (R 0 ) using analytical methods. (2) We apply the WAIT perspective to a waterborne disease that has been the object of several modeling exercises: the transmission of Vibrio cholerae in a densely populated setting with limited access to clean drinking water. (3) We then apply the WAIT perspective to a completely different, less-explored disease case: an HCV epidemic among injection drug users (IDU) in a modern urban setting. These constitute different epidemics in terms of pathogen type (Vibrio cholerae is a Gram-negative bacterium, HCV a single-stranded RNA virus) and setting. Nonetheless, we conceptualize and model each epidemic scenario, highlighting mathematical features that are unique to the WAIT framework. We discuss how this lens provides new perspective on cholera outbreaks and especially the modern HCV epidemic.",
+            "cite_spans": [
+                {
+                    "start": 669,
+                    "end": 672,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 918,
+                    "end": 921,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [],
+            "section": "I. INTRODUCTION"
+        },
+        {
+            "text": "While the emphasis of our examination will reside in how we analyze several modern epidemic systems with the WAIT framework, for explanatory purposes we will begin by describing how it modifies very basic concepts in a classic, purposefully prosaic susceptible-infected-recovered (S-I-R or SIR) mathematical model. While this is analogous to prior methods used to discuss indirect or environmental transmission [17] , a full appreciation of both cases discussed in this study (cholera and HCV) would benefit from a full, transparent explanation of the WAIT model-building process. The method is defined by modeling changes in a population of susceptible hosts (\"S\"), infected hosts (\"I\") and recovered (\"R\"). Classically, flow through the system is defined by contact between susceptible and infected individuals, often driven by a \u03b2 factor, or transmission coefficient.",
+            "cite_spans": [
+                {
+                    "start": 411,
+                    "end": 415,
+                    "text": "[17]",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Description"
+        },
+        {
+            "text": "The WAIT framework would apply to a scenario where the individuals in such a system become infected through an environmental intermediate. Figure 1 is a compartmental model that depicts this interaction, with the two [W] (for \"WAIT\") compartments influencing (dashed line) the flow of hosts from the susceptible to infected compartments.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 139,
+                    "end": 147,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "A. Description"
+        },
+        {
+            "text": "The S, I, and R compartments represent the usual susceptible, infected, and recovered populations of hosts. W u and W i represent uninfected and infected populations of environmental hosts, respectively.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. The adapted SIR compartmental diagram"
+        },
+        {
+            "text": "In traditional SIR models, the rate of new infection (arrow from the S compartment to the I) is generally proportional to the product of the susceptible and the infected populations, i.e. proportional to SI. In the WAIT framework, the environmental compartment, and not a host, drives the rate of infection. In this specific example, the W i compartment drives the infection such that the rate of infection is proportional to SW i . Fig. 1 : Adapted SIR compartmental diagram. This depicts a standard SIR style compartmental model with the added compartments (shaded) corresponding to the WAIT environment. Note the dynamical properties of the W i and W u compartments. It is these dynamics that set the WAIT perspective apart from others: environments are often dynamical systems, with an ecology of their own.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 433,
+                    "end": 439,
+                    "text": "Fig. 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "B. The adapted SIR compartmental diagram"
+        },
+        {
+            "text": "The epidemic is then driven by a series of interactions: interactions between uninfected (susceptible) hosts S and the infected (transmitting) environmental compartment W i and interactions between infected individuals I and the uninfected environmental compartment W u . The epidemic is sustained through infected hosts I depositing pathogen into the environmental intermediate, creating new infection in the reservoir, which can then interact with and infect more susceptible hosts S, in a process resembling a feedback loop. The dynamics of such a system as we have chosen to model them are captured by the set of dynamical equations below and can be visualized in Figure 1 . A derivation of the terms in the model can be read in the Supplemental Appendix.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 668,
+                    "end": 676,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "B. The adapted SIR compartmental diagram"
+        },
+        {
+            "text": "Equations 1-5 define the prosaic SIR model. \u03c0 S is the birthrate of new susceptible hosts in the environment and \u00b5 is the fractional death rate of hosts. In this context, \u03b2 represents the strength of the interaction between the susceptible hosts S and the environment. This will generally be proportional to the rate of contact between the two, and will generally include a factor in it that accounts for the probability that an exposure event actually leads to a new infected host. Similarly, \u03b1 characterizes the strength of interaction between infected hosts I and the environmental reservoir; it is also generally proportional to the contact rate between the two and will contain a factor accounting for the probability that when an environmental agent is exposed to infection, it will render the agent infected. \u03bd represents the fractional recovery rate, \u03c0 W is the birthrate of new uninfected environmental agents, and k is the fractional death rate of the environmental agents.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "D. WAIT framework influences the basic reproductive number in a standard SIR model",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "As an example of how the WAIT model provides a new take on traditional concepts, we briefly consider how the value of the basic reproductive ratio R 0 in this model compares to its SIR counterpart. While R 0 can have different theoretical formulations, we rely on definitions as provided by Jones (2007) [34] and Diekmann et al. 2009 [35] . In a density-dependent SIR model with constant birth of susceptible hosts \u03c0 S and death rate proportional to the host population \u2212\u00b5S, the R 0 value is given by:",
+            "cite_spans": [
+                {
+                    "start": 304,
+                    "end": 308,
+                    "text": "[34]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 313,
+                    "end": 338,
+                    "text": "Diekmann et al. 2009 [35]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "or sometimes, more simply, R SIR 0 = \u03b2/\u03bd, depending on the form of the SIR equations used, e.g. density-dependent, frequency-dependent, constant population, etc. \u03b2 in this equation is the traditional transmission coefficient. In this classic case, it represents the coupling strength between two non-environmental agents, and not one between the environment and the traditional hosts, as in the WAIT iteration. \u03c0 S , \u00b5, and \u03bd have the same interpretation as in our model.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "Alternatively, the value of R 0 for the WAIT iteration takes the form:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "The R 0 formulae (equations 6-7) highlight differences between the models: The square root in the WAIT version arises as a consequence of implementing two infected agents (I and W i ) into the model, as opposed to just one in the SIR case. Next, one notices that the \u03b2 factor in the SIR formula is augmented by the additional factor \u03b1 in the WAIT formula, representing a kind of shared dependence between the couplings controlling the I-interaction (\u03b1) and the Sinteraction (\u03b2), with the environment. Analogously, what was the responsibility of \u03c0 S in the SIR formula is now a shared dependence on \u03c0 S /\u03c0 W , the ratio of the birthrate of susceptible hosts to that of uninfected environmental agents.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "In this case, the two appear as a ratio under the square root, as opposed to a product in the \u03b1\u03b2 case, indicating that these parameters have opposite effects on the value of R 0 : when \u03c0 W is increased, R 0 decreases, but when \u03c0 S is increased, R 0 increases. Whereas, both the \u03b1 and \u03b2 terms will increase the value of R 0 when increased. This presentation allows one to disaggregate the dependencies of the disease burden, as parameterized by R 0 , between hosts and environmental agents.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "An additional observation can be made regarding the form of the R 0 in the WAIT iteration. R W AIT 0 can be viewed as a geometric mean of two other R 0 -like values: (1) number of new host infections caused infected environmental agents, and (2) number of new environmental agent infections caused by infected hosts. The first of these R 0 -like quantities can be calculated using the rate equations above (1) (2) (3) (4) (5) , assuming that the system is near the disease free equilibrium (DFE)the regime where R 0 is calculated. One will find that the rate of new host infections caused by infected environmental agents, near the DFE, is given by \u03b2\u03c0 S /(\u00b5\u03c0 W ). The second R 0 -like quantity refers to the number of new environmental agent infections caused by infected hosts, near the DFE. One will find that this value is given by, \u03b1/(\u00b5+\u03bd). Thus, one can see that the form of R 0 given in equation 7 can be written as,",
+            "cite_spans": [
+                {
+                    "start": 406,
+                    "end": 409,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 410,
+                    "end": 413,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 414,
+                    "end": 417,
+                    "text": "(3)",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 418,
+                    "end": 421,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 422,
+                    "end": 425,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                }
+            ],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "The details of the full calculation can be found in the Supplemental Appendix. Thus, the full R 0 for the WAIT system represents a kind of average of the associated R 0 values for the different modes of transmission. By stressing the role of environmental reservoirs, this modelling perspective has the capacity to dissect properties of dynamics that other models may omit.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C. Analytic Equations"
+        },
+        {
+            "text": "Constructing models using the WAIT framework requires an understanding of the specific biologies of the agents involved in the system of interest. Consequently, the use of the WAIT framework is as much a conceptual exercise as it is a mathematical one, driven by domain expertise on the problem of interest. The implementation of the framework can be summarized by three key concept-activities:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "E. Basic rules for building a WAIT model"
+        },
+        {
+            "text": "\u2022 Identify the relevant agent-compartments that define the dynamics of the system of interest (e.g. S, I, R, latent infected, etc.) and construct a compartmental model that captures interactions between them.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "E. Basic rules for building a WAIT model"
+        },
+        {
+            "text": "\u2022 If infection in the system is driven by interactions between hosts and an environmental reservoir, one can consider and model dynamics of the latter independently. One should ask how pathogens are deposited in this reservoir, and if/how the pathogen of interest replicates and/or survives in this setting. This is a key point of innovation, as it allows the modeler to think carefully about the biology and ecology of the environmental reservoir.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "E. Basic rules for building a WAIT model"
+        },
+        {
+            "text": "\u2022 Consider how the WAIT reservoir interacts with hosts. How does this interaction occur? What parameters would define how effectively pathogens are transmitted into the reservoir? Note that the nature of this reservoir can be : it can be large or small, liquid or solid, mobile or immobile, and there could also be multiple reservoirs. It is generally abiotic in nature, as the transmitting reservoir isn't a living organism as in vector-borne diseases (one could consider some exceptions, but these descriptions hold for most cases).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "E. Basic rules for building a WAIT model"
+        },
+        {
+            "text": "Having proposed a brief outline for how to think about and model a disease system using the WAIT perspective, we will apply it to two different, modern epidemic scenarios: first cholera in a densely populated setting with limited access to clean drinking water, and then hepatitis C virus in a community of injection drug users.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "E. Basic rules for building a WAIT model"
+        },
+        {
+            "text": "Here we present a WAIT-style model of cholera (caused by the gram negative bacterium Vibrio cholerae), which has been the object of prior modeling efforts [12] , [29] - [31] , [33] . This specific iteration is based on a simulation of a 2010 outbreak in Haiti [32] . It is set with a population of 400,000 (the approximate population of the Carrefour section of Port Au Prince, Haiti), features seven ordinary differential equations, seven compartmentalized agents, and twenty parameters. It contains high-infectious and low-infectious water reservoirs, which are the mode of transmission [36] . Recent studies have examined other modes of transmission in cholera, (including transmission within households) [37] , but we have chosen to focus on waterborne transmission. Treatment and prevention is undertaken via vaccination, antibiotic administration, and modification of the contaminated water dynamics.",
+            "cite_spans": [
+                {
+                    "start": 155,
+                    "end": 159,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 162,
+                    "end": 166,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 169,
+                    "end": 173,
+                    "text": "[31]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 176,
+                    "end": 180,
+                    "text": "[33]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 260,
+                    "end": 264,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 589,
+                    "end": 593,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 708,
+                    "end": 712,
+                    "text": "[37]",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Description"
+        },
+        {
+            "text": "The model can be visualized using a compartmental diagram as seen in Figure 2 . Some general features, which reflect findings in prior studies [32] , [36] , [38] , include the following:",
+            "cite_spans": [
+                {
+                    "start": 143,
+                    "end": 147,
+                    "text": "[32]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 150,
+                    "end": 154,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 157,
+                    "end": 161,
+                    "text": "[38]",
+                    "ref_id": "BIBREF37"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 69,
+                    "end": 77,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "B. Cholera WAIT model: compartmental diagram"
+        },
+        {
+            "text": "\u2022 Disease is acquired by individuals as they become infected from drinking water from either the lowinfectious or high-infectious reservoirs. \u2022 Infected individuals (symptomatic and asymptomatic)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Cholera WAIT model: compartmental diagram"
+        },
+        {
+            "text": "shed bacteria into the high-infectious reservoir. \u2022 Bacteria are removed from the system either via decay in the low-infectious reservoir, or via the death of infected individuals. These reservoirs differ in how much V. cholerae exist in a given amount of water, with the high-infectious reservoir much more likely to cause disease.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Cholera WAIT model: compartmental diagram"
+        },
+        {
+            "text": "\u2022 Some individuals are vaccinated and individuals return to the susceptible compartment as their vaccine induced immunity wanes. \u2022 Individuals enter and exit the system via equal natural birth and death rates, as well as a death rate due to the disease. Since natural birth and death rates are equal, and additional death can occur from disease, there is a loss of susceptible individuals as the model moves forward through time.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Cholera WAIT model: compartmental diagram"
+        },
+        {
+            "text": "C. Cholera WAIT model: Analytic equations and parameters The set of ordinary differential equations (Eq. 9-15) define the dynamics of the system. As outlined in the \"elementary adapted S.I.R example,\" the environmental dynamics are realized within their own set of differential equations. \u03ba L,H +B L,H terms in Eq. 9-11 quantify the likelihood that an individual, per day, will be infected with V. cholerae given the contaminated water consumption rate \u03b1. These terms are constructed using the minimum low and high infectious reservoir dose in units of cells per day. Other notable terms include, \u03b1 the water consumption rate and \u03be s the symptomatic individuals excretion rate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Cholera WAIT model: compartmental diagram"
+        },
+        {
+            "text": "The initial conditions across all simulations included a population of 400,000 susceptible individuals with an initial small amount of Vibrio cholerae present in each reservoir to prime the outbreak (5 cells in each reservoir). Additionally, the values of the symptomatic, asymptomatic, vaccinated, and recovered compartments were set to zero.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. Cholera WAIT model: compartmental diagram"
+        },
+        {
+            "text": "The simulation was constructed with a time step resolution of 10,000 over a period of 130 days. Figure 3 provides an overview of the dynamics of the disease and the effect of potential interventions. From these simulations, we can observe the behavior of the infected populations (symptomatic and asymptomatic), both of which grow rapidly in the first 20 days of simulation time ( Figure 3A ). The symptomatic group peaks first, shortly after which the asymptomatic group rises to a higher value. The decay that is seen in the latter days of the outbreak naturally occurs as the total number of susceptible individuals decreases. Further discussion regarding the long term behavior of the model, as well as the susceptible, recovered and vaccinated populations can be found in the Supplemental Appendix.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 96,
+                    "end": 104,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 381,
+                    "end": 390,
+                    "text": "Figure 3A",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "D. Cholera WAIT model: disease dynamics"
+        },
+        {
+            "text": "Using the WAIT environmental reservoir equations, one can model the relative changes in water reservoir infectiousness. In Figure 3b , we observe the high-infectious reservoir peak first, driven by the symptomatic population's shedding of bacteria into the aquatic environmental reservoir. This behavior is is propelled by high excretion rate of symptomatically infected individuals (\u03be s ), which is three orders of magnitude larger than (\u03be A ). The high-infectious reservoir drives the rise of new infected cases. As the system moves forward in time, the high-infectious reservoir decays via the \u03c7 parameter, which shifts the disease-driving burden to the low-infectious reservoir.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 123,
+                    "end": 132,
+                    "text": "Figure 3b",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "D. Cholera WAIT model: disease dynamics"
+        },
+        {
+            "text": "Vaccination is approximated as a constant number of individuals vaccinated per day, resulting in a linear increase in the vaccinated population. On long time scales (greater than 2500 days) the recovered population peaks and declines as the total number of susceptible individuals ultimately decays, which no longer resembles realistic disease dynamics. Further exploration of this behavior can be found in the Supplemental Appendix.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "D. Cholera WAIT model: disease dynamics"
+        },
+        {
+            "text": "E. Cholera WAIT model parameters influence the R 0",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "D. Cholera WAIT model: disease dynamics"
+        },
+        {
+            "text": "The R 0 provides a signature of the average infectiousness of a given pathogen in a given setting [34] , [35] . In this model, given the parameters, R 0 = 0.199 (A derivation of the analytic expression for R 0 , as well as details regarding the sensitivity analysis, can be found in the Supplementary Appendix.) Thus, in its current configuration, the model does not describe a self-sustaining epidemic. (This is observable through the decay of the asymptomatic and symptomatic cases as depicted in Figure 3a) . Additionally, the eigenvalues of the Jacobian matrix for the ODE system at the diseasefree equilibrium are real numbers less then or equal to zero, with the largest eigenvalue being zero. Consequently, given enough time, the flow of disease will move to the disease free equilibrium. Compound staggered interventions mimicking an example real world disease management strategy.",
+            "cite_spans": [
+                {
+                    "start": 98,
+                    "end": 102,
+                    "text": "[34]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 105,
+                    "end": 109,
+                    "text": "[35]",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 499,
+                    "end": 509,
+                    "text": "Figure 3a)",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "D. Cholera WAIT model: disease dynamics"
+        },
+        {
+            "text": "The relative sensitivity of R 0 to changes in the model parameters was examined, and we find that p, W , \u03b1, and \u03be S are the four most sensitive parameters. These include two parameters strongly related to WAIT aspects of the model: the rate of contaminated water consumption \u03b1, and the total water reservoir size W . Further analysis was also conducted to better understand how adjustments to the model parameters can push R 0 > 1. The results of these analysis can be found in the Supplemental Appendix.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "D. Cholera WAIT model: disease dynamics"
+        },
+        {
+            "text": "Having explained the model structure and analyzed parameter influences on the basic reproductive ratio, we then analyzed a range of potential interventions, comparing their impact on various properties of the cholera dynamics. Specifically, we examine three types of interventions: vaccination, antibiotic administration, and water purification. Each were realized by modifying the respective model parameters that encode information relevant to that intervention. Figure 3 shows various iterations of the simulation, tracking the sum of both symptomatic and asymptomatic individuals in the standard model (Figure 3a) , with various different interventions implemented (3c, 3d). In Figure 3c , we observe how the effect of daily vaccine administration manifests most clearly in the longer term (>100 days) behavior of the dynamics, where it can eventually exceed the effects of reduction in contaminated water consumption (if vaccine effectiveness is sufficiently high). We can also see the large impact of instantaneously reducing contaminated water consumption on the number of infected individuals (in terms of both number of infected individuals, and the rate at which that impact manifests). For example, increasing antibiotic, and vaccine administration two-fold has less immediate impact on disease dynamics than decreasing contaminated water consumption even by a quarter. Together, the cholera WAIT model offers the hypothesis that ideal interventions might include a combination of long-term (e.g. vaccination) and short-term (e.g. water purification) interventions to limit the number of infected cases.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 465,
+                    "end": 473,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 606,
+                    "end": 617,
+                    "text": "(Figure 3a)",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 682,
+                    "end": 691,
+                    "text": "Figure 3c",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "F. Cholera WAIT model and simulated interventions: antibiotics, vaccination and water purification"
+        },
+        {
+            "text": "Lastly, compound intervention dynamics are considered (Figure 3d) . These aim to simulate disease management strategies where, given practical strategies such as resource allocation and response time, a staggered or combined response is more likely to be implemented. We chose this particular compound intervention to demonstrate how the WAIT model can broadly accommodate the types of modifications that represent public health interventions.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 54,
+                    "end": 65,
+                    "text": "(Figure 3d)",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "F. Cholera WAIT model and simulated interventions: antibiotics, vaccination and water purification"
+        },
+        {
+            "text": "6 . CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/525089 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "F. Cholera WAIT model and simulated interventions: antibiotics, vaccination and water purification"
+        },
+        {
+            "text": "The HCV model describes a population of approximately 170,000 individuals-based on estimates of the size of the IDU community in New York City [56] -where infected injection drug users may migrate into the population. In this model, needles serve as the environmental intermediate for infection, and the sharing of infected needles will constitute the means of transmitting new infection. Note that while the term \"needle\" is only one part of a syringe, we use it to refer to the entire syringe. HCV can also be transmitted sexually [57] , but in this paper we restrict our attention to transmission through infected needles. As with the cholera model, this section of the main text focuses on the main structure and dynamical properties of the model. Further model details and discussion can be found in the Supplemental Appendix.",
+            "cite_spans": [
+                {
+                    "start": 143,
+                    "end": 147,
+                    "text": "[56]",
+                    "ref_id": "BIBREF56"
+                },
+                {
+                    "start": 533,
+                    "end": 537,
+                    "text": "[57]",
+                    "ref_id": "BIBREF57"
+                }
+            ],
+            "ref_spans": [],
+            "section": "A. Description"
+        },
+        {
+            "text": "We model the dynamics of needle populations, injection drug users, and infected individuals through a series of five ordinary differential equations. The compartments, labeled S, I E , I L , N u , and N i represent the populations of susceptible individuals, early-infected individuals (sometimes referred to as acutely infected), late-stage infected individuals (sometimes referred to as chronically infected), uninfected needles, and infected needles, respectively. This model has several features:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B. HCV WAIT model: Compartmental diagram"
+        },
+        {
+            "text": "\u2022 The susceptible compartment refers to individuals who are injecting drugs and who are sharing needles with other members in the IDU community. \u2022 The needle population is divided into two compartments: infected and uninfected, and we model the dynamics of each compartment separately. \u2022 New infections (of both people and needles) will depend on the fraction of infected or uninfected needles in circulation. \u2022 There are various estimates for the ability of HCV to survive in needles [58] [59] . We incorporate HCV freeliving survival via the parameter , which quantifies the rate at which the virus spontaneously clears from infected needles.",
+            "cite_spans": [
+                {
+                    "start": 485,
+                    "end": 489,
+                    "text": "[58]",
+                    "ref_id": null
+                },
+                {
+                    "start": 490,
+                    "end": 494,
+                    "text": "[59]",
+                    "ref_id": "BIBREF59"
+                }
+            ],
+            "ref_spans": [],
+            "section": "B. HCV WAIT model: Compartmental diagram"
+        },
+        {
+            "text": "The dynamics of the HCV transmission process are governed by equations 16-20. The population of individuals who are being treated and those who have recovered are not explicitly modeled in this WAIT iteration, as the dynamics of treatment and recovery are not central to the questions explored in this study. There are, however, several modeling studies of HCV that focus on treatment [60] - [63] , and their effects are not ignored in the HCV WAIT model. Entering or leaving treatment (and re-entering the susceptible population, as in case of drug relapse in the IDU population) are approximated by the \"birth\" terms \u03c0 S and \u03c0 T and removal terms \u2212\u03c4 I L and \u2212\u03c4 I E .",
+            "cite_spans": [
+                {
+                    "start": 385,
+                    "end": 389,
+                    "text": "[60]",
+                    "ref_id": "BIBREF60"
+                },
+                {
+                    "start": 392,
+                    "end": 396,
+                    "text": "[63]",
+                    "ref_id": "BIBREF63"
+                }
+            ],
+            "ref_spans": [],
+            "section": "C. HCV WAIT model: Analytic equations and parameters"
+        },
+        {
+            "text": "\u03c0 S is the birthrate (via migration or first-time use) of new members into a given community of injection drug users (constant in this model). This includes those who may be returning to the population of IDU after recovering from HCV. \u03c0 T represents the rate that individuals enter the infected stage coming from an unsuccessful treatment program. \u03c6 represents the daily fraction of individuals infected with HCV who spontaneously clear the infection. c represents the rate of sharing a needle with another user (infected or otherwise) per capita. \u03b2 represents the probability that an uninfected individual will convert to HCV+ after injection with an infected needle. \u00b5 is the combined fractional death and IDU cessation rate (individuals who leave the IDU community). \u03c0 I represents the rate of migration of early stage infected individuals into the study population of IDU (assumed to be constant). \u03c9 is the daily fraction of earlystage infected individuals who progress to the late-stage of infection. \u03c4 is the daily fraction of infected individuals who go into treatment. \u03c0 N is the rate of introduction of uninfected needles into the population of IDU. \u03b3 is the average number of injections per user per day. \u03b6 represents the probability that a new needle becomes infected after use by an infected user. k u is the daily fraction of uninfected needles which are discarded. k i is the daily fraction of infected needles which are discarded. Lastly, is the fraction of infected needles which become uninfected in the period of a day due to deactivation (or \"death\") of virus populations on the needle. Parameter values and sources can be seen in Table II .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1651,
+                    "end": 1659,
+                    "text": "Table II",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "C. HCV WAIT model: Analytic equations and parameters"
+        },
+        {
+            "text": "Having constructed and elaborated on the details of the HCV WAIT model, we now explore how parameters related to the environment (in this case, those framing the population of infected needles) influence the R 0 . We directly measured the influence of parameters on the R 0 by considering the effect of modifying the parameters. The value of R 0 was calculated using established methods [34] , [35] , and is also found to conform to a geometric mean of two other R 0 -like quantities, just as in our adapted SIR model in section II. The full calculation and its presentation as a geometric mean is outlined in the Supplemental Appendix.",
+            "cite_spans": [
+                {
+                    "start": 387,
+                    "end": 391,
+                    "text": "[34]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 394,
+                    "end": 398,
+                    "text": "[35]",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [],
+            "section": "D. HCV WAIT model parameters influence the R 0"
+        },
+        {
+            "text": "From the form of R 0 given in equation 21, one could surmise that several parameters in the formula have comparable sensitivities. We tested this directly by calculating the Partial Rank Correlation Coefficient (PRCC) for each of the parameters in the model, with respect to R 0 , based on methods used in prior studies [64] . We find that parameters related to an interaction with the environmental reservoir (the population of needles) such as k u (the fractional discard rate of uninfected needles), \u03b3 (the rate of daily injections per capita), and \u03c0 N (the birthrate of new needles) are as central to HCV dynamics as traditionally considered parameters, such as \u03c0 S (the birthrate of susceptibles), c (the contact or sharing rate of IDU), or \u00b5 (the combined death and cessation rate of IDU) ( Figure 5 ). This fortifies the notion that WAIT-specific properties dictate the spread of HCV, providing opportunities to explore more precise targeting by public health interventions.",
+            "cite_spans": [
+                {
+                    "start": 320,
+                    "end": 324,
+                    "text": "[64]",
+                    "ref_id": "BIBREF64"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 797,
+                    "end": 805,
+                    "text": "Figure 5",
+                    "ref_id": null
+                }
+            ],
+            "section": "D. HCV WAIT model parameters influence the R 0"
+        },
+        {
+            "text": "Having demonstrated the structural relevance of the WAIT framework in terms of how it influences the basic reproductive number, we can consider the utility of the model with respect to other properties, including how it offers insight into potential interventions. Fig. 5 : R 0 sensitivity in HCV: the Partial Rank Correlation Coefficient (PRCC). A PRCC calculation was performed for R 0 using Latin Hypercube Sampling. Parameters were sampled from uniform distributions with widths specified by the ranges given in Table II . The PRCC calculation was repeated for 50 independent iterations. The average of these iterations is shown here, with the standard deviations for each parameter shown as the error bars.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 265,
+                    "end": 271,
+                    "text": "Fig. 5",
+                    "ref_id": null
+                },
+                {
+                    "start": 516,
+                    "end": 524,
+                    "text": "Table II",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "E. HCV WAIT model and simulated interventions: needleexchange programs"
+        },
+        {
+            "text": "One such intervention may be the implementation of needle-exchange programs. Needle-exchange programs are an example of \"harm reduction\" public health strategies that aim to reduce harm stemming from behaviors that put the affected individuals or communities at risk [65] . These policies are controversial, but have been demonstrated to be effective interventions for HIV and HCV in certain settings [66] . With respect to the HCV WAIT model, some of these programs (especially ones targeting injection equipment, like safe injection sites) can increase the discard rate of infected needles by providing a safe location to use and discard needles, while also providing uninfected needles to IDU. In our model, parameters like the needle discard rate, k i and k u , and \u03c0 N are affected by needle exchange programs. Figure  6 demonstrates how R 0 is affected by these parameters. One can see that R 0 can be reduced by increasing k i -the infected needle discard rate-along a fixed value of \u03c0 Nthe birthrate of uninfected needles-and that increasing \u03c0 N along a fixed value of k i has the same effect. It is also evident that R 0 can be reduced more rapidly by increasing k i and \u03c0 N simultaneously, as expected. In this way, the proportion of infected needles is reduced because of an increase in clean needles and a reduction of infected ones, lowering R 0 .",
+            "cite_spans": [
+                {
+                    "start": 267,
+                    "end": 271,
+                    "text": "[65]",
+                    "ref_id": "BIBREF65"
+                },
+                {
+                    "start": 401,
+                    "end": 405,
+                    "text": "[66]",
+                    "ref_id": "BIBREF66"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 816,
+                    "end": 825,
+                    "text": "Figure  6",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "E. HCV WAIT model and simulated interventions: needleexchange programs"
+        },
+        {
+            "text": "In Figure 6 , we demonstrate how changing k u and k i modifies the value of R 0 . Notice that R 0 is reduced by increasing k i across fixed values of k u . The opposite effect is observed when increasing k u along fixed values of k i . That is, removing infected needles at an increased rate may decrease infection risk in a population of IDU, while doing the opposite can increase the risk. One can also see that increasing k u and k i simultaneously along the dashed linewhere k u = k i -will increase R 0 . This indicates that if a distinction between infected and uninfected needles cannot be established in a given setting, then it may be more helpful to add a higher proportion of uninfected needles than it would be to remove a higher proportion of all needles.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 3,
+                    "end": 11,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "E. HCV WAIT model and simulated interventions: needleexchange programs"
+        },
+        {
+            "text": "In this study, we propose a framework-the waterborne, abiotic and other indirectly transmitted pathogen paradigm (WAIT)-for modeling infectious diseases where transmission is dictated by an interaction between hosts and dynamic multi-compartment environmental reservoirs. We use it to explore two very different modern epidemics of significant public health consequence: cholera and hepatitis C virus. We first establish it through a simple form, an elementary adapted SIR formulation, and highlight how it modifies fundamental properties of epidemics such as the basic reproductive number (R 0 ). We then build mathematical models to explore cholera and HCV disease dynamics. We demonstrate how the integrated framework highlights potentially overlooked properties of these systems, and highlights potential avenues for intervention. The model is compatible with existing canon in epidemiology, and can accommodate theory in the ecology and evolution of infectious disease. For example, the \"curse of the pharaoh hypothesis,\" which predicts that pathogens with high free-living survival can be more virulent [78] , can be modeled on a population scale using the WAIT framework. In addition, its careful treatment of environmental dynamics makes it amenable to questions regarding how changes in climate, social policy, or behavior may influence the spread of disease.",
+            "cite_spans": [
+                {
+                    "start": 1109,
+                    "end": 1113,
+                    "text": "[78]",
+                    "ref_id": "BIBREF78"
+                }
+            ],
+            "ref_spans": [],
+            "section": "V. DISCUSSION"
+        },
+        {
+            "text": "In the context of cholera, modeling the aquatic reservoir allows us to interrogate the interplay between several notable aspects of cholera epidemics. For example, the interaction between the relative size of the body of water and changes in infected populations, and the notion that the symptomatic and asymptomatic infectious populations fuel different aspects of the epidemic (initial and longer-term phase, respectively). These are areas of present and future inquiry.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "V. DISCUSSION"
+        },
+        {
+            "text": "In the context of HCV, the WAIT perspective reveals that the dynamics of injection needle populations are crucial to the spread of HCV, which offers a lens on approaches that might attenuate outbreaks of HCV. To the best of our knowledge, no existing mathematical model of HCV epidemiology has interrogated the dynamics in this manner. It is our hope that the HCV modeling community exploits and improves upon this perspective by further adapting the model to study HCV in specific settings.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "V. DISCUSSION"
+        },
+        {
+            "text": "More generally, The WAIT framework is driven by a contextual understanding of the disease dynamics, where the model parameterization follows the intuition of the scientist. Consequently, it broadens the scope of diseases that can be responsibly understood using mathematical or computational models, potentially generates hypotheses, and fosters improved recapitulation (and possibly prediction) of epidemics driven by \"sit and wait\" pathogens.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "V. DISCUSSION"
+        },
+        {
+            "text": "The authors would like to thank B.Linas for input on the parameters. The authors would like to thank J.Andrews, I.Diakite, S.Robinson, S.Scarpino for various contributions on the topic.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "ACKNOWLEDGMENTS"
+        },
+        {
+            "text": "Code for the mathematical models presented in this manuscript are available on GitHub (https://github.com/OgPlexus).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CODE AVAILABILITY"
+        },
+        {
+            "text": ". CC-BY-NC-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/525089 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "CODE AVAILABILITY"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Population biology of infectious diseases: Part i",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Roy",
+                    "suffix": ""
+                },
+                {
+                    "first": "Robert M",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1979,
+            "venue": "Nature",
+            "volume": "280",
+            "issn": "5721",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Population biology of infectious diseases: Part ii",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Robert",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Roy M Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1979,
+            "venue": "Nature",
+            "volume": "280",
+            "issn": "5722",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Infectious diseases of humans: dynamics and control",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Roy",
+                    "suffix": ""
+                },
+                {
+                    "first": "Robert M",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "The mathematics of infectious diseases",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Herbert W Hethcote",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "SIAM review",
+            "volume": "42",
+            "issn": "4",
+            "pages": "599--653",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Modeling infectious diseases in humans and animals",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Matt",
+                    "suffix": ""
+                },
+                {
+                    "first": "Pejman",
+                    "middle": [],
+                    "last": "Keeling",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rohani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "A biologist's guide to mathematical modeling in ecology and evolution",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Sarah",
+                    "suffix": ""
+                },
+                {
+                    "first": "Troy",
+                    "middle": [],
+                    "last": "Otto",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Day",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Complexity in mathematical models of public health policies: a guide for consumers of models",
+            "authors": [
+                {
+                    "first": "Sanjay",
+                    "middle": [],
+                    "last": "Basu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jason",
+                    "middle": [],
+                    "last": "Andrews",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS medicine",
+            "volume": "10",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Opinion: Mathematical models: A key tool for outbreak response",
+            "authors": [
+                {
+                    "first": "Elizabeth",
+                    "middle": [],
+                    "last": "Eric T Lofgren",
+                    "suffix": ""
+                },
+                {
+                    "first": "Caitlin",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Halloran",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rivers",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "John",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Drake",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Travis",
+                    "suffix": ""
+                },
+                {
+                    "first": "Bryan",
+                    "middle": [],
+                    "last": "Porco",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wan",
+                    "middle": [],
+                    "last": "Lewis",
+                    "suffix": ""
+                },
+                {
+                    "first": "Alessandro",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jeffrey",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Shaman",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Joseph",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "111",
+            "issn": "51",
+            "pages": "18095--18096",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Quantitative viral ecology: dynamics of viruses and their microbial hosts",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Joshua",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Weitz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "",
+            "volume": "73",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Aerosol transmission of rhinovirus colds",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Elliot",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Dick",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Lance",
+                    "suffix": ""
+                },
+                {
+                    "first": "Kathy",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Jennings",
+                    "suffix": ""
+                },
+                {
+                    "first": "Catherine",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Mink",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Wartgow",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Stanley L Inborn",
+                    "suffix": ""
+                }
+            ],
+            "year": 1987,
+            "venue": "Journal of Infectious Diseases",
+            "volume": "156",
+            "issn": "3",
+            "pages": "442--448",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Survival of enteric viruses on environmental fomites",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Xavier Abad",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Rosa",
+                    "suffix": ""
+                },
+                {
+                    "first": "Albert",
+                    "middle": [],
+                    "last": "Pinto",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Bosch",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "Applied and environmental microbiology",
+            "volume": "60",
+            "issn": "10",
+            "pages": "3704--3710",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Endemic and epidemic dynamics of cholera: the role of the aquatic reservoir",
+            "authors": [
+                {
+                    "first": "Cl\u00e1udia",
+                    "middle": [],
+                    "last": "Torres",
+                    "suffix": ""
+                },
+                {
+                    "first": "Code\u00e7o",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "BMC Infectious diseases",
+            "volume": "1",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Significance of fomites in the spread of respiratory and enteric viral disease",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Stephanie",
+                    "suffix": ""
+                },
+                {
+                    "first": "Charles",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Boone",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gerba",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Applied and Environmental Microbiology",
+            "volume": "73",
+            "issn": "6",
+            "pages": "1687--1696",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Inactivation of influenza a viruses in the environment and modes of transmission: a critical review",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Thomas",
+                    "suffix": ""
+                },
+                {
+                    "first": "Nikolaos I",
+                    "middle": [],
+                    "last": "Weber",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Stilianakis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Journal of infection",
+            "volume": "57",
+            "issn": "5",
+            "pages": "361--373",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Dynamics and control of infections transmitted from person to person through the environment",
+            "authors": [
+                {
+                    "first": "Sheng",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Joseph",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Ian",
+                    "suffix": ""
+                },
+                {
+                    "first": "James",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Spicknall",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Koopman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "American journal of epidemiology",
+            "volume": "170",
+            "issn": "2",
+            "pages": "257--265",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Aerosol transmission of influenza a virus: a review of new studies",
+            "authors": [
+                {
+                    "first": "Raymond",
+                    "middle": [],
+                    "last": "Tellier",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Journal of the Royal Society Interface",
+            "volume": "",
+            "issn": "6",
+            "pages": "783--790",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Multiple transmission pathways and disease dynamics in a waterborne pathogen model",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Joseph",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Tien",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "David",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Earn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Bulletin of mathematical biology",
+            "volume": "72",
+            "issn": "6",
+            "pages": "1506--1533",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Reproduction numbers for infections with free-living pathogens growing in the environment",
+            "authors": [
+                {
+                    "first": "Majid",
+                    "middle": [],
+                    "last": "Bani-Yaghoub",
+                    "suffix": ""
+                },
+                {
+                    "first": "Raju",
+                    "middle": [],
+                    "last": "Gautam",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zhisheng",
+                    "middle": [],
+                    "last": "Shuai",
+                    "suffix": ""
+                },
+                {
+                    "first": "Renata",
+                    "middle": [],
+                    "last": "Van Den Driessche",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ivanek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Journal of biological dynamics",
+            "volume": "6",
+            "issn": "2",
+            "pages": "923--940",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Model analysis of fomite mediated influenza transmission",
+            "authors": [
+                {
+                    "first": "Jijun",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Joseph",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Ian",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sheng",
+                    "middle": [],
+                    "last": "Spicknall",
+                    "suffix": ""
+                },
+                {
+                    "first": "James",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Koopman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "PloS one",
+            "volume": "7",
+            "issn": "12",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Role of environmental persistence in pathogen transmission: a mathematical modeling approach",
+            "authors": [
+                {
+                    "first": "Romulus",
+                    "middle": [],
+                    "last": "Breban",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Journal of Mathematical Biology",
+            "volume": "66",
+            "issn": "3",
+            "pages": "535--546",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Distinguishing between indirect and direct modes of transmission using epidemiological time series",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Michael",
+                    "suffix": ""
+                },
+                {
+                    "first": "Joshua",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Cortez",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Weitz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "The American Naturalist",
+            "volume": "181",
+            "issn": "2",
+            "pages": "43--52",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Stability of middle east respiratory syndrome coronavirus (mers-cov) under different environmental conditions",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Van Doremalen",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Bushmaker",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Munster",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Eurosurveillance",
+            "volume": "18",
+            "issn": "38",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Model for disease dynamics of a waterborne pathogen on a random network",
+            "authors": [
+                {
+                    "first": "Meili",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Junling",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Van Den Driessche",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Journal of mathematical biology",
+            "volume": "71",
+            "issn": "4",
+            "pages": "961--977",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Environmentally transmitted parasites: Host-jumping in a heterogeneous environment",
+            "authors": [
+                {
+                    "first": "Thomas",
+                    "middle": [],
+                    "last": "Caraco",
+                    "suffix": ""
+                },
+                {
+                    "first": "Carrie",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cizauskas",
+                    "suffix": ""
+                },
+                {
+                    "first": "Nang",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Journal of theoretical biology",
+            "volume": "397",
+            "issn": "",
+            "pages": "33--42",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Modeling biphasic environmental decay of pathogens and implications for risk analysis",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Andrew",
+                    "suffix": ""
+                },
+                {
+                    "first": "Marisa",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Brouwer",
+                    "suffix": ""
+                },
+                {
+                    "first": "Justin",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Remais",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Philip",
+                    "suffix": ""
+                },
+                {
+                    "first": "Rafael",
+                    "middle": [],
+                    "last": "Collender",
+                    "suffix": ""
+                },
+                {
+                    "first": "Joseph Ns",
+                    "middle": [],
+                    "last": "Meza",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Environmental science & technology",
+            "volume": "51",
+            "issn": "4",
+            "pages": "2186--2196",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Dose-response relationships for environmentally mediated infectious disease transmission models",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Andrew",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Brouwer",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Mark",
+                    "suffix": ""
+                },
+                {
+                    "first": "Marisa",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Weir",
+                    "suffix": ""
+                },
+                {
+                    "first": "Rafael",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "Joseph Ns",
+                    "middle": [],
+                    "last": "Meza",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "PLoS computational biology",
+            "volume": "13",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Who acquires infection from whom and how? disentangling multihost and multi-mode transmission dynamics in the 'elimination'era",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Joanne",
+                    "suffix": ""
+                },
+                {
+                    "first": "Anna",
+                    "middle": [],
+                    "last": "Webster",
+                    "suffix": ""
+                },
+                {
+                    "first": "James",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Borlase",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rudge",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Phil. Trans. R. Soc. B",
+            "volume": "372",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Pathogen survival in the external environment and the evolution of virulence",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bruno",
+                    "suffix": ""
+                },
+                {
+                    "first": "Paul",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Walther",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Ewald",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Biological Reviews",
+            "volume": "79",
+            "issn": "4",
+            "pages": "849--869",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "On spatially explicit models of cholera epidemics",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Bertuzzo",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Casagrandi",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gatto",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rodriguez-Iturbe",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Rinaldo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Journal of the Royal Society Interface",
+            "volume": "7",
+            "issn": "43",
+            "pages": "321--333",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Modelling cholera epidemics: the role of waterways, human mobility and sanitation",
+            "authors": [
+                {
+                    "first": "Lorenzo",
+                    "middle": [],
+                    "last": "Mari",
+                    "suffix": ""
+                },
+                {
+                    "first": "Enrico",
+                    "middle": [],
+                    "last": "Bertuzzo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lorenzo",
+                    "middle": [],
+                    "last": "Righetto",
+                    "suffix": ""
+                },
+                {
+                    "first": "Renato",
+                    "middle": [],
+                    "last": "Casagrandi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Marino",
+                    "middle": [],
+                    "last": "Gatto",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ignacio",
+                    "middle": [],
+                    "last": "Rodriguez-Iturbe",
+                    "suffix": ""
+                },
+                {
+                    "first": "Andrea",
+                    "middle": [],
+                    "last": "Rinaldo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of the Royal Society Interface",
+            "volume": "9",
+            "issn": "67",
+            "pages": "376--388",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Cholera epidemic in haiti, 2010: using a transmission model to explain spatial spread of disease and identify optimal control interventions",
+            "authors": [
+                {
+                    "first": "Joseph",
+                    "middle": [],
+                    "last": "Ashleigh R Tuite",
+                    "suffix": ""
+                },
+                {
+                    "first": "Marisa",
+                    "middle": [],
+                    "last": "Tien",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "David",
+                    "suffix": ""
+                },
+                {
+                    "first": "Junling",
+                    "middle": [],
+                    "last": "Earn",
+                    "suffix": ""
+                },
+                {
+                    "first": "David",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Fisman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Annals of internal medicine",
+            "volume": "154",
+            "issn": "9",
+            "pages": "593--601",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Transmission dynamics and control of cholera in haiti: an epidemic model",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Jason",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sanjay",
+                    "middle": [],
+                    "last": "Andrews",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Basu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "The Lancet",
+            "volume": "377",
+            "issn": "9773",
+            "pages": "1248--1255",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "A cholera model in a patchy environment with water and human movement",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Marisa",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zhisheng",
+                    "middle": [],
+                    "last": "Eisenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Shuai",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Joseph",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Tien",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Van Den Driessche",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Mathematical Biosciences",
+            "volume": "246",
+            "issn": "1",
+            "pages": "105--112",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Notes on r0. California: Department of Anthropological Sciences",
+            "authors": [
+                {
+                    "first": "James",
+                    "middle": [],
+                    "last": "Holland",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jones",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "The construction of next-generation matrices for compartmental epidemic models",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Diekmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A P"
+                    ],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Roberts",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Journal of the Royal Society Interface",
+            "volume": "7",
+            "issn": "",
+            "pages": "873--885",
+            "other_ids": {
+                "DOI": [
+                    "10.1098/rsif.2009.0386"
+                ]
+            }
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Cholera: environmental reservoirs and impact on disease transmission",
+            "authors": [
+                {
+                    "first": "Salvador",
+                    "middle": [],
+                    "last": "Almagro",
+                    "suffix": ""
+                },
+                {
+                    "first": "-",
+                    "middle": [],
+                    "last": "Moreno",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ronald K",
+                    "middle": [],
+                    "last": "Taylor",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Microbiology spectrum",
+            "volume": "1",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "A prospective cohort study comparing household contact and water vibrio cholerae isolates in households of cholera patients in rural bangladesh",
+            "authors": [
+                {
+                    "first": "Christine",
+                    "middle": [
+                        "Marie"
+                    ],
+                    "last": "George",
+                    "suffix": ""
+                },
+                {
+                    "first": "Khaled",
+                    "middle": [],
+                    "last": "Hasan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Shirajum",
+                    "middle": [],
+                    "last": "Monira",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zillur",
+                    "middle": [],
+                    "last": "Rahman",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Saif-Ur-Rahman",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mahamud-Ur",
+                    "middle": [],
+                    "last": "Rashid",
+                    "suffix": ""
+                },
+                {
+                    "first": "Fatema",
+                    "middle": [],
+                    "last": "Zohura",
+                    "suffix": ""
+                },
+                {
+                    "first": "Tahmina",
+                    "middle": [],
+                    "last": "Parvin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Md",
+                    "middle": [],
+                    "last": "Sazzadul Islam Bhuyian",
+                    "suffix": ""
+                },
+                {
+                    "first": "Md",
+                    "middle": [],
+                    "last": "Toslim Mahmud",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLoS neglected tropical diseases",
+            "volume": "12",
+            "issn": "7",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Hyperinfectivity: A critical element in the ability of v. cholerae to cause epidemics?",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Hartley",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Morris",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "PLOS Medicine",
+            "volume": "3",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pmed.0030007"
+                ]
+            }
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Mathematical assessment of the role of environmental factors on the dynamical transmission of cholera",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Kolaye",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bowong",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Houe",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Aziz-Alaoui",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Cadivel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Domestic Water Source, Sanitation and High Risk of Bacteriological Diseases in the Urban Slum: Case of Cholera in Makoko",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Ayeni",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "",
+            "volume": "2",
+            "issn": "",
+            "pages": "12--15",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Hyperinfectivity of human-passaged vibrio cholerae can be modeled by growth in the infant mouse",
+            "authors": [
+                {
+                    "first": "Ashfaqul",
+                    "middle": [],
+                    "last": "Alam",
+                    "suffix": ""
+                },
+                {
+                    "first": "Regina",
+                    "middle": [],
+                    "last": "Larocque",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jason",
+                    "middle": [],
+                    "last": "Harris",
+                    "suffix": ""
+                },
+                {
+                    "first": "Cecily",
+                    "middle": [],
+                    "last": "Vanderspurt",
+                    "suffix": ""
+                },
+                {
+                    "first": "Edward",
+                    "middle": [],
+                    "last": "Ryan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Firdausi",
+                    "middle": [],
+                    "last": "Qadri",
+                    "suffix": ""
+                },
+                {
+                    "first": "Stephen",
+                    "middle": [],
+                    "last": "Calderwood",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Infection and Immunity",
+            "volume": "73",
+            "issn": "10",
+            "pages": "6674--6679",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Department of Economic and Population Division Social Affairs",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Merrell",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Butler",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Qadri",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Dolganov",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Alam",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Camilli",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Nature",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Minist\u00e8re de la sant\u00e9du cameroun, donn\u00e9es chol\u00e9ra",
+            "authors": [],
+            "year": 2014,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Effects of doxycycline in actively purging cholera patients: A double-blind clinical trial",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Rahaman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Majid",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Alam",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Islam",
+                    "suffix": ""
+                }
+            ],
+            "year": 1976,
+            "venue": "Antimicrobial Agents and Chemotherapy",
+            "volume": "10",
+            "issn": "4",
+            "pages": "610--612",
+            "other_ids": {
+                "DOI": [
+                    "10.1128/AAC.10.4.610"
+                ]
+            }
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Cholera vaccine field trials in east pakistan. 2. effectiveness in the field",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Benenson",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Mosley",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Fahimuddin",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Oseasohn",
+                    "suffix": ""
+                }
+            ],
+            "year": 1968,
+            "venue": "",
+            "volume": "38",
+            "issn": "",
+            "pages": "359--372",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Volunteer studies of deletion mutants of vibrio cholerae o1 prepared by recombinant techniques",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Levine",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Kaper",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Herrington",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Losonsky",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Morris",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Clements",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Hall",
+                    "suffix": ""
+                }
+            ],
+            "year": 1988,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "The spectrum of cholera in rural east pakistan. i. correlation of bacteriologic and serologic results",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Woodward",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Mosley",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Mccormack",
+                    "suffix": ""
+                }
+            ],
+            "year": 1970,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Lessons learnt from 12 oral cholera vaccine campaigns in resource-poor settings",
+            "authors": [
+                {
+                    "first": "Amber",
+                    "middle": [],
+                    "last": "Hsiao",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Sachin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Vittal",
+                    "middle": [],
+                    "last": "Desai",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jean-Louis Excler Laura",
+                    "middle": [],
+                    "last": "Mogasale",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Digilio",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Bulletin of the World Health Organization",
+            "volume": "",
+            "issn": "95",
+            "pages": "303--312",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "Longterm effectiveness against cholera of oral killed wholecell vaccine produced in vietnam",
+            "authors": [
+                {
+                    "first": "V",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Thiem",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Deen",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Von",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Canh",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Anh",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Clemens",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Efficacy and safety of a modified killed-whole-cell oral cholera vaccine in india: An interim analysis of a cluster-randomized, doubleblind",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lopez",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kanungo",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Paisley",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Manna",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ali",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Clemens",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Sur",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Cholera and Post Earthquake Response in Haiti",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Hartley",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Morris",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "1",
+            "issn": "",
+            "pages": "1--9",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Single-dose azithromycin for childhood cholera",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Khan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Water resources assessment of haiti",
+            "authors": [],
+            "year": 1999,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Declining seroprevalence in a very large hiv epidemic: injecting drug users in new york city",
+            "authors": [
+                {
+                    "first": "Don C Des",
+                    "middle": [],
+                    "last": "Jarlais",
+                    "suffix": ""
+                },
+                {
+                    "first": "Theresa",
+                    "middle": [],
+                    "last": "Perlis",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sherry",
+                    "middle": [],
+                    "last": "Samuel R Friedman",
+                    "suffix": ""
+                },
+                {
+                    "first": "Timothy",
+                    "middle": [],
+                    "last": "Deren",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jo",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Chapman",
+                    "suffix": ""
+                },
+                {
+                    "first": "Stephanie",
+                    "middle": [],
+                    "last": "Sotheran",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mark",
+                    "middle": [],
+                    "last": "Tortu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Denise",
+                    "middle": [],
+                    "last": "Beardsley",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lucia",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Paone",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Torian",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "American journal of public health",
+            "volume": "88",
+            "issn": "12",
+            "pages": "1801--1806",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "Sexual transmission of hepatitis c virus among monogamous heterosexual couples: The hcv partners study",
+            "authors": [
+                {
+                    "first": "Norah",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Terrault",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jennifer",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Dodge",
+                    "suffix": ""
+                },
+                {
+                    "first": "Edward",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Murphy",
+                    "suffix": ""
+                },
+                {
+                    "first": "John",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Tavis",
+                    "suffix": ""
+                },
+                {
+                    "first": "Alexi",
+                    "middle": [],
+                    "last": "Kiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Levin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Robert",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Gish",
+                    "suffix": ""
+                },
+                {
+                    "first": "Michael",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Busch",
+                    "suffix": ""
+                },
+                {
+                    "first": "Arthur",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Reingold",
+                    "suffix": ""
+                },
+                {
+                    "first": "Miriam",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Alter",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Hepatology",
+            "volume": "57",
+            "issn": "3",
+            "pages": "881--889",
+            "other_ids": {}
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "Survival of hepatitis c virus in syringes: Implication for transmission among injection drug users",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Paintsil",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Peters",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Lindenbach",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Heimer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "The Journal of Infectious Diseases",
+            "volume": "202",
+            "issn": "7",
+            "pages": "984--990",
+            "other_ids": {
+                "DOI": [
+                    "10.1086/656212"
+                ]
+            }
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Can needle and syringe programmes and opiate substitution therapy achieve substantial reductions in hepatitis c virus prevalence? model projections for different epidemic settings",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Vickerman",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Turner",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hickman",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "Addiction",
+            "volume": "107",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Hickman M. Optimal control of hepatitis c antiviral treatment programme delivery for prevention amongst a population of injecting drug users",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Pitcher",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Vickerman",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vassall",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "PLoS ONE",
+            "volume": "6",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0022309"
+                ]
+            }
+        },
+        "BIBREF62": {
+            "ref_id": "b62",
+            "title": "Model projections on the impact of hcv treatment in the prevention of hcv transmission among people who inject drugs in europe",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Brummer-Korvenkontio",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Carrieri",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Dalgard",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dillon",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Goldberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hutchinson",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Jauffret-Roustide",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "K\u00e5berg",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Matser",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Maticic",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Midgard",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Mravcik",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "\u00d8vrehus",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Prins",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Reimer",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Robaeys",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Schulte",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Van Santen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zimmermann",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Vickerman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hickman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Journal of Hepetology",
+            "volume": "68",
+            "issn": "3",
+            "pages": "402--411",
+            "other_ids": {}
+        },
+        "BIBREF63": {
+            "ref_id": "b63",
+            "title": "Hepatitis c virus treatment for prevention among people who inject drugs: modeling treatment scale-up in the age of direct-acting antivirals",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Natasha",
+                    "suffix": ""
+                },
+                {
+                    "first": "Peter",
+                    "middle": [],
+                    "last": "Martin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jason",
+                    "middle": [],
+                    "last": "Vickerman",
+                    "suffix": ""
+                },
+                {
+                    "first": "Margaret",
+                    "middle": [],
+                    "last": "Grebely",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hellard",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Sharon",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hutchinson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Viviane",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lima",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Graham",
+                    "suffix": ""
+                },
+                {
+                    "first": "John",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Foster",
+                    "suffix": ""
+                },
+                {
+                    "first": "David",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dillon",
+                    "suffix": ""
+                },
+                {
+                    "first": "Gregory",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Goldberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Dore",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Hepatology",
+            "volume": "58",
+            "issn": "5",
+            "pages": "1598--1609",
+            "other_ids": {}
+        },
+        "BIBREF64": {
+            "ref_id": "b64",
+            "title": "Sensitivity and uncertainty analysis of complex models of disease transmission: An hiv model, as an example",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Blower",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Dowlatabadi",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "International Statistical Review",
+            "volume": "62",
+            "issn": "2",
+            "pages": "229--243",
+            "other_ids": {}
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "Harm reduction: Pragmatic strategies for managing high-risk behaviors",
+            "authors": [
+                {
+                    "first": "Mary",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "G Alan Marlatt",
+                    "suffix": ""
+                },
+                {
+                    "first": "Katie",
+                    "middle": [],
+                    "last": "Larimer",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Witkiewitz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "Full participation in harm reduction programmes is associated with decreased risk for human immunodeficiency virus and hepatitis c virus: evidence from the amsterdam cohort studies among drug users",
+            "authors": [
+                {
+                    "first": "Charlotte",
+                    "middle": [],
+                    "last": "Van Den",
+                    "suffix": ""
+                },
+                {
+                    "first": "Colette",
+                    "middle": [],
+                    "last": "Berg",
+                    "suffix": ""
+                },
+                {
+                    "first": "Giel",
+                    "middle": [],
+                    "last": "Smit",
+                    "suffix": ""
+                },
+                {
+                    "first": "Roel",
+                    "middle": [],
+                    "last": "Van Brussel",
+                    "suffix": ""
+                },
+                {
+                    "first": "Maria",
+                    "middle": [],
+                    "last": "Coutinho",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Prins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Addiction",
+            "volume": "102",
+            "issn": "9",
+            "pages": "1454--1462",
+            "other_ids": {}
+        },
+        "BIBREF67": {
+            "ref_id": "b67",
+            "title": "Spontaneous viral clearance following acute hepatitis c infection: a systematic review of longitudinal studies",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Micallef",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kaldor",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dore",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Journal of Viral Hepatitis",
+            "volume": "13",
+            "issn": "1",
+            "pages": "34--41",
+            "other_ids": {}
+        },
+        "BIBREF68": {
+            "ref_id": "b68",
+            "title": "Angelos Hatzakis. Hcv elimination among people who inject drugs. modelling pre-and post-who elimination era",
+            "authors": [
+                {
+                    "first": "Ilias",
+                    "middle": [],
+                    "last": "Gountas",
+                    "suffix": ""
+                },
+                {
+                    "first": "Vana",
+                    "middle": [],
+                    "last": "Sypsa",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sarah",
+                    "middle": [],
+                    "last": "Blach",
+                    "suffix": ""
+                },
+                {
+                    "first": "Homie",
+                    "middle": [],
+                    "last": "Razavi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLOS ONE",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0202109"
+                ]
+            }
+        },
+        "BIBREF69": {
+            "ref_id": "b69",
+            "title": "Recommendations for follow-up of health-care workers after occupational exposure to hepatitis c virus",
+            "authors": [],
+            "year": 1997,
+            "venue": "Centers for Disease Control and Prevention (CDC)",
+            "volume": "46",
+            "issn": "",
+            "pages": "603--606",
+            "other_ids": {}
+        },
+        "BIBREF70": {
+            "ref_id": "b70",
+            "title": "Hepatitis c virus (hcv) prevalence, and injecting risk behaviour in multiple sites in england in 2004",
+            "authors": [
+                {
+                    "first": "M1",
+                    "middle": [],
+                    "last": "Hickman",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Hope",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Brady",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Madden",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Jones",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Honor",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Holloway",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Ncube",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Parry",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Journal of Viral Hepatitis",
+            "volume": "14",
+            "issn": "9",
+            "pages": "645--652",
+            "other_ids": {}
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "Natural history of liver fibrosis progression in patients with chronic hepatitis c. The Lancet",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Poynard",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Bedossa",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Opolon",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "",
+            "volume": "349",
+            "issn": "",
+            "pages": "825--857",
+            "other_ids": {}
+        },
+        "BIBREF72": {
+            "ref_id": "b72",
+            "title": "Transmission Dynamics of Hepatitis C with Control Strategies",
+            "authors": [
+                {
+                    "first": "Adnan",
+                    "middle": [],
+                    "last": "Khan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sultan",
+                    "middle": [],
+                    "last": "Sial",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mudassar",
+                    "middle": [],
+                    "last": "Imran",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "The Journal of Computational Medicine",
+            "volume": "",
+            "issn": "654050",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1155/2014/654050"
+                ]
+            }
+        },
+        "BIBREF73": {
+            "ref_id": "b73",
+            "title": "578 uptake of hepatitis c virus (hcv) treatment among injection drug users (idus) in vancouver, canada",
+            "authors": [
+                {
+                    "first": "Jason",
+                    "middle": [],
+                    "last": "Grebely",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Conway",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Raffa",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Lai",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mel",
+                    "middle": [],
+                    "last": "Krajden",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mark",
+                    "middle": [],
+                    "last": "Tyndall",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Journal of Hepatology",
+            "volume": "44",
+            "issn": "6",
+            "pages": "214--215",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0202109"
+                ]
+            }
+        },
+        "BIBREF74": {
+            "ref_id": "b74",
+            "title": "Among injection drug users, interest is high, but access low to hcv antiviral therapy",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Seal",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kral",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lorvick",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Gee",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tsui",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Journal of General Internal Medicine",
+            "volume": "20",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF75": {
+            "ref_id": "b75",
+            "title": "Analysis: the impact of needle, syringe, and lancet disposal on the community",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Gold",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of Viral Hepatitis",
+            "volume": "5",
+            "issn": "4",
+            "pages": "848--850",
+            "other_ids": {}
+        },
+        "BIBREF76": {
+            "ref_id": "b76",
+            "title": "The syringe gap: An assessment of sterile syringe need and acquisition among syringe exchange program participants in new york city",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Daliah",
+                    "suffix": ""
+                },
+                {
+                    "first": "Denise",
+                    "middle": [],
+                    "last": "Heller",
+                    "suffix": ""
+                },
+                {
+                    "first": "Anne",
+                    "middle": [],
+                    "last": "Paone",
+                    "suffix": ""
+                },
+                {
+                    "first": "Adam",
+                    "middle": [],
+                    "last": "Siegler",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Karpati",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Harm Reduction Journal",
+            "volume": "6",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF77": {
+            "ref_id": "b77",
+            "title": "Risk of occupational infection with blood borne pathogens in operating and delivery room settings",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Short",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Bell",
+                    "suffix": ""
+                }
+            ],
+            "year": 1993,
+            "venue": "Am J Infect Control",
+            "volume": "21",
+            "issn": "",
+            "pages": "343--50",
+            "other_ids": {}
+        },
+        "BIBREF78": {
+            "ref_id": "b78",
+            "title": "The curse of the pharaoh in space: free-living infectious stages and the evolution of virulence in spatially explicit populations",
+            "authors": [
+                {
+                    "first": "Masashi",
+                    "middle": [],
+                    "last": "Kamo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Michael",
+                    "middle": [],
+                    "last": "Boots",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Journal of theoretical biology",
+            "volume": "231",
+            "issn": "3",
+            "pages": "435--441",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Cholera compartmental diagram. Left: Green arrows highlight the flow of the population of hosts through the system. Right: here the red arrows highlight flow of disease through the system.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Cholera WAIT model dynamics and simulated interventions. (a): The dynamics of both the symptomatic and asymptomatic infected populations. (b): The fractional relative infectiousness of each reservoir (normalized to 1). (c): Antibiotic, vaccine, and water purification interventions applied at 15 days after the start of the model outbreak (d):",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Hepatitis C virus compartmental diagram. Left: Green arrows highlight the flow of the population of hosts through the system. Right: Red arrows highlight flow of disease through the system, and where there is a color/transparency gradient there is a flow of infection away from an infected compartment towards an uninfected one.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "HCV R 0 as a function of various model features. Left: The relationship between the rate of acquisition of clean needles \u03c0 N and the discard rate of infected needles k i with respect to various values of R 0 . The curves are contours of constant values of R 0 and are labelled as such. The vertical and horizontal dashed lines indicate the chosen values for their respective parameters. Right:The relationship between the infected and uninfected needle discard rate, with respect to R 0 . The diagonal line represents when k u = k i . Notice that moving upwards along this diagonal increases R 0 .",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "lists the parameters and values used in this simulation. Of note, the B L,H",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "HCV WAIT model parameters",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

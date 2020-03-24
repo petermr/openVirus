@@ -1,0 +1,3669 @@
+{
+    "paper_id": "aa5a99e67d3e887b3fa88575fb0d4a662d0a60ce",
+    "metadata": {
+        "title": "Modeling Epidemics: A Primer and Numerus Software Implementation",
+        "authors": [
+            {
+                "first": "Wayne",
+                "middle": [
+                    "M"
+                ],
+                "last": "Getz",
+                "suffix": "",
+                "affiliation": {},
+                "email": "wgetz@berkeley.edu"
+            },
+            {
+                "first": "Richard",
+                "middle": [],
+                "last": "Salter",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Numerus",
+                    "location": {
+                        "addrLine": "850 Iron Point Rd",
+                        "postCode": "95630",
+                        "settlement": "Folsom",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Oliver",
+                "middle": [],
+                "last": "Muellerklein",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Hyun",
+                "middle": [
+                    "S"
+                ],
+                "last": "Yoon",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Krti",
+                "middle": [],
+                "last": "Tallam",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Epidemiological models are dominated by SEIR (Susceptible, Exposed, Infected and Removed) dynamical systems formulations and their elaborations. These formulations can be continuous or discrete, deterministic or stochastic, or spatially homogeneous or heterogeneous, the latter often embracing a network formulation. Here we review the continuous and discrete deterministic and discrete stochastic formulations of the SEIR dynamical systems models, and we outline how they can be easily and rapidly constructed using the Numerus Model Builder, a graphicallydriven coding platform. We also demonstrate how to extend these models to a metapopulation setting using both the Numerus Model Builder network and geographical mapping tools.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "In a recent comprehensive review of epidemiological models, Smith et al. [1] trace the development of systems of differential equations used over the past 100 years to study disease processes. Once the purview of mathematicians, physicist and engineers, dynamical system formulations of epidemic processes are increasingly being used by epidemiologists, ecologists and social scientists to study the potential for disease pandemics to threaten the lives of humans, domesticated animals and plants, and all organisms across the globe.",
+            "cite_spans": [
+                {
+                    "start": 73,
+                    "end": 76,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Underpinning all dynamical systems models of epidemiological outbreaks and endemics disease are formulations based on the concept of an SEIR progression (Figure 1 ), whereby susceptible individuals in disease class S enter disease class E on exposure to a pathogen (i.e., infected but not yet infectious themselves). Individuals in class E then transfer, after a period of latency, into the class of infectious individuals, I, only to trans-fer on recovery or death to a removed class R. The recovered individuals may have some temporary, though possibly long term, immunity (V) and death (D) can arise from both natural and disease-induced causes (i.e., R=V+D). Variations and elaboration of the the SEIR process may include birth and death processes, other demographic class such as age [2] and sex [3] , spatial structure [4, 5] , and the genetic structure of hosts and pathogens [6, 7] . Further, stochastic formulations of SEIR models [8, 9] are increasingly being used to explore the inherent and very important stochastic aspects of epidemics including, probabilities of fadeouts versus breakouts in the early stages of epidemics, and logistical planning necessary for managing epidemics of uncertain ultimate size.",
+            "cite_spans": [
+                {
+                    "start": 789,
+                    "end": 792,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 801,
+                    "end": 804,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 825,
+                    "end": 828,
+                    "text": "[4,",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 829,
+                    "end": 831,
+                    "text": "5]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 883,
+                    "end": 886,
+                    "text": "[6,",
+                    "ref_id": null
+                },
+                {
+                    "start": 887,
+                    "end": 889,
+                    "text": "7]",
+                    "ref_id": null
+                },
+                {
+                    "start": 940,
+                    "end": 943,
+                    "text": "[8,",
+                    "ref_id": null
+                },
+                {
+                    "start": 944,
+                    "end": 946,
+                    "text": "9]",
+                    "ref_id": "BIBREF5"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 153,
+                    "end": 162,
+                    "text": "(Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "Hethcote [10] provided a comprehensive review of the fundamental deterministic dynamics of SEIR models and their elaboration to include an M class (that is, individuals born with maternally provided immunity that wears off over time), and elementary characterizations of birth and death process. His results have been considerably extended to elaborated SEIR models that include more complex characterizations of births and of deaths, and some age-structure -with a strong focus in the mathematics literature on the existence and stability of outbreak and endemic equilibria [11] . Analyses of stochastic SEIR models and elaborations remain more challenging, though some analytical results do exist. Most stochastic analyses, however, are computationally intensive and the results numerical rather than analytical. In addition, unlike deterministic SEIR models which are readily fitted to data, it remains a challenge to fit stochastic models to data, with new approaches involving concepts well beyond first courses in calculus or linear algebra.",
+            "cite_spans": [
+                {
+                    "start": 9,
+                    "end": 13,
+                    "text": "[10]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 575,
+                    "end": 579,
+                    "text": "[11]",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Given that an SEIR structure underpins all epidemiological models, whether deterministic, stochastic, or even agent-based, a succinct, pedagogical review of SEIR modeling is useful. In particular a clear exposition of SEIR models for the non-mathematician-by which we mean, scientists who have some understanding of calculus, but do not have formal training in dynamical systems theory, or the numerical techniques to competently build and implement computational models. In addition, the literature lacks expository articles that elucidate for biologists and social scientists the relationship among continuous and discrete SEIR models (but see [12] ), their stochastic elaborations in systems and agentbased (i.e., individual-based) computational settings [13, 14] , as well as extensions to metapopulation settings [15] . These are lacunae we hope to fill with this paper, while at the same time providing those scientists who are looking for fast, reliable ways to obtain and modify code needed to address their epidemiological models with a means to do so in the context of the Numerus Model Builder software development platform.",
+            "cite_spans": [
+                {
+                    "start": 646,
+                    "end": 650,
+                    "text": "[12]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 758,
+                    "end": 762,
+                    "text": "[13,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 763,
+                    "end": 766,
+                    "text": "14]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 818,
+                    "end": 822,
+                    "text": "[15]",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Finally, given the centrality of dynamic epidemic models to containment of outbreaks, policy formulation and response logistics, modeling tools are needed that can be used by healthcare professionals not trained in computational methods to carry out containment policy, and response analyses. Thus, our strong focus is on how to use the Numerus Model Builder and demonstrate its use to address these issues in the context of epidemics that are spatially structured, such as the recent outbreak of Ebola in West Africa [16, 17] .",
+            "cite_spans": [
+                {
+                    "start": 518,
+                    "end": 522,
+                    "text": "[16,",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 523,
+                    "end": 526,
+                    "text": "17]",
+                    "ref_id": "BIBREF13"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "SEIR infectious disease models are based on dividing an otherwise homogeneous population into the following disease classes: susceptible (S), exposed (E; infected but not yet infectious), infectious (I), and Removed (R) individuals, the latter comprising either dead (D) or recovered with immunity (V; for vaccinated, though naturally so) that may wane over time. Through- Figure 1 : Flow diagrams for the basic SEIV continuous (A) and discrete (B) time models with transition rates \u03c4 , \u03c3, \u03b3 and \u03bd from disease classes S to E, E to I, I to V and V back to I, respectively. The class of dead individuals D together with immune individuals V make up the historically defined \"removed class\" R.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 373,
+                    "end": 381,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "In the continuous-time formulation, \u03bb is the rate at which new individuals are recruited to the susceptible population (births or emigration), \u00b5 and \u03b1 are natural and disease-induced mortality rates respectively. In the discrete-time formulation, a competing rates approach is used to derive transition proportions p, with identifying subscripts, as described in the text. out, we use the roman font S, E, I, V and D to name the class itself and the italic font S, E, I, V and D to refer to the variables representing the number of individuals in the corresponding classes. The assumption of homogeneity implies that age and sex structure are ignored. We incorporate population spatial structure-as would be found in countries comprising of a network of cities, towns, and villages-into a metapopulation framework [15, 18] , if we assume that a set of homogeneous subpopulations can be organized into a network of subpopulations, among which individuals move in a fashion that reflects appropriate movement rates (e.g., propensity to move as a function of age and sex [19] )and geographical factors (e.g., distances, geographical barriers, desirability of possible destinations). If the time scales of the epidemic and movement processes among subpopulations, including disease induced mortality, are much faster than the time scale of the background population demography (births, recruitment, natural mortality and population level migration) then we can ignore the demography; otherwise we cannot. For example, in the case of influenza, epidemiological and local movement processes involve noticeable changes at the scale of weeks, while demographic changes in the underlying population itself (beyond epidemic disease induced death rates) are obvious only at the scale of years. In this case, we can ignore natural births and deaths, and focus on epidemic processes alone.",
+            "cite_spans": [
+                {
+                    "start": 814,
+                    "end": 818,
+                    "text": "[15,",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 819,
+                    "end": 822,
+                    "text": "18]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 1068,
+                    "end": 1072,
+                    "text": "[19]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "In the context of an epidemic occurring in a single homogeneous population of size N at the start of the epidemic (i.e., at time t = 0), denote the per-capita susceptible (S) disease transmission rate by \u03c4 (I, N ), which we assume depends on both the number of infectious individuals I(t) and the total number of individuals N (t) in the population. In addition, we denote rates of progression from exposed (E) to infectious (I) and onto to removed with immunity (V ) using the symbols \u03c3 and \u03b3 respectively (Figure 1 ). For generality, as depicted in Figure 1A , we include a population net recruitment function \u03bb(t), where all these recruits are assumed to be susceptible. Later we generalize this in the context of a metapopulation structure and allow other disease classes to migrate. We also include per capita disease-induced and natural mortality rates \u03b1 and \u00b5, respectively, that accumulate in disease class D, as well as allow for the occurrence of a per capita immunity-waning rate \u03bd ( Figure 1 ). Some or all of this latter group of parameters may be zero, and only become nonzero as the scope of the analysis undertaken is enlarged. Also, as a starting point, all parameters are assumed to be constant, except for the transmission function \u03c4 , which at its most fundamental has the relatively simple \"frequency-All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 507,
+                    "end": 516,
+                    "text": "(Figure 1",
+                    "ref_id": null
+                },
+                {
+                    "start": 551,
+                    "end": 560,
+                    "text": "Figure 1A",
+                    "ref_id": null
+                },
+                {
+                    "start": 995,
+                    "end": 1003,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint dependent\" structure [20] \u03c4 (I, N ) = \u03b2I N , where N = S +E +I +V (1) with the disease transmission parameter \u03b2 itself constant over time. The even simpler \"densitydependent\" form \u03c4 (I, N ) = \u03b2I should be used with caution, because at high population densities it is unduly unrealistic; although at low population density it can be quite useful to generalize \u03c4 (I, N ) as being approximately densitydependent (e.g. see [21] and the Discussion section below).",
+            "cite_spans": [
+                {
+                    "start": 167,
+                    "end": 171,
+                    "text": "[20]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 565,
+                    "end": 569,
+                    "text": "[21]",
+                    "ref_id": "BIBREF17"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "With the above notation, the basic continuous time differential equation formulation of an SEIR epidemic process (i.e., and SEIV + D) in a homogeneous population takes the form:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "To complete the description, we need to include the relationship",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "We may also want to evaluate the accumulated number of deaths D \u00b5 and D \u03b1 , due respectively to natural and disease-induced causes using the equations",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "The properties of Equations 2 have been extensively studied over the past three to four decades [10] [11] [12] 22] , with the most important results pertaining to the pathogen-invasion or disease-outbreak condition. This is informally derived here for the case \u03c4 = \u03b2I/N , \u03bb(t) = \u00b5N (i.e., individual birth and death rates are the same) and \u03bd = 0 from the following considerations. Each infectious individual infects susceptible individuals at a rate \u03b2S/N (\u2248 \u03b2 when S \u2248 N ) over an infectious period that lasts on average for a time 1/(\u03b3 + \u03b1 + \u00b5). However, only a proportion \u03c3/(\u03c3 + \u00b5) of infected individuals become infectious, due to natural and diseaseinduced mortality rates while in state E. Thus the number R 0 of susceptible individuals that each infectious individual is expected to infect at the onset of an epidemic is given by",
+            "cite_spans": [
+                {
+                    "start": 96,
+                    "end": 100,
+                    "text": "[10]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 101,
+                    "end": 105,
+                    "text": "[11]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 106,
+                    "end": 110,
+                    "text": "[12]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 111,
+                    "end": 114,
+                    "text": "22]",
+                    "ref_id": "BIBREF18"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "This derivation for the SEIR model, in the context of density-dependent transmission, can be found in [22] : it uses the the so-called \"next generation matrix\" method [23] [24] [25] ",
+            "cite_spans": [
+                {
+                    "start": 102,
+                    "end": 106,
+                    "text": "[22]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 167,
+                    "end": 171,
+                    "text": "[23]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 172,
+                    "end": 176,
+                    "text": "[24]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 177,
+                    "end": 181,
+                    "text": "[25]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Homogeneous SEIR Formulations 2.1 Continuous Deterministic Models"
+        },
+        {
+            "text": "As an introduction to using Numerus Model Builder to code dynamical systems models, we begin with the very simple population growth model (also known as the logistic model)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "This equation can be thought of as a special case of Equations 1 and 2 when S(0) = N 0 , E(0) = I(0) = R(0) = 0, and \u03bb(t) = rN (t) (1 \u2212 N (t)/K): under these conditions, E(t) and I(t) remain zero and S(t) \u2261 N (t) for all t \u2265 0.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "In Video 1 at the supporting website, the reader can find a complete construction of the logistic Equation 7 using Numerus Model Builder, All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint of Equations 2 to 4, showing the dynamic variables as green boxes with orange circle icons that represent the differential equations of the system, and pink circles to represent input parameters or terms such as \u03bb = \u00b5N or \u03c4 = \u03b2I/N . The grid represents an output table, and the blue in-square zig-zag a graphing tool. See Video 2 at the supporting website for more details.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "with solutions generated for various values of r when K = 1. We note that there is no loss of generality in setting K = 1 because it can be seen to be a scaling constant that varies with the measurement units selected for N . (Verify this by making the transformation x = N/K in Equation 7.)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "Using Numerus Model Builder to code up Equations 2-4, we obtain the model illustrated in Figure 2 . We then ran the model for the case \u03bb(t) = \u00b5N and \u03c4 = \u03b2I/N to explore the effect of \u03b2 on solutions to Equation 2 as it increases from a value below the outbreak threshold to one above the outbreak threshold, as embodied in Inequality 6. In particular, for the parameters listed in the caption to Figure 3 , it follows from Equation 5 that the threshold is:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 89,
+                    "end": 97,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 395,
+                    "end": 403,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "and the impact of \u03b2 increasing from 0.37 to 0.38 is illustrated in Figure 3A . In this panel, we see that after an initial drop related to the fact that individuals entering E must first transition to I before they can begin to infect individuals in S, the solution is declining for \u03b2 = 0.37, but ultimately growing for \u03b2 = 0.38. In addition, as illustrated in Figure 3B , when \u03bd > 0 the effect of recycling individuals from the R class back into the S class, results a slightly higher peak epidemic level that does not drop down to nearly zero before rebounding for a small echo of the first peak.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 67,
+                    "end": 76,
+                    "text": "Figure 3A",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 361,
+                    "end": 370,
+                    "text": "Figure 3B",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Numerus SEIR Continuous-Time Implementation"
+        },
+        {
+            "text": "Discrete-time models, as represented by systems of difference equations, are computationally more efficient than continuous-time differential equation models, such as Equations 2, because discrete time models do not require numerically intensive integration. Furthermore, discrete models synchronize directly with periodically collected data: which may be daily or weekly incidence rates in fast moving epidemics, such as influenza, SARS, or Ebola; or monthly or annual rates in slower moving epidemics such as HIV or TB. In long running epidemics that have a seasonal component, such as TB [26] , the effects of seasonality can only be estimated from a model if incidence rates are reported monthly or, at least, quarterly.",
+            "cite_spans": [
+                {
+                    "start": 591,
+                    "end": 595,
+                    "text": "[26]",
+                    "ref_id": "BIBREF22"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "Discrete models present an event sequencing conundrum. For example, consider outflow from the infectious class over time interval (t, t + 1], as modeled in the third equation in Equations 2. If there are I(t) individuals in class I at time t then, assuming no inflow, the total number of individuals still in class I at time t+1 is obtained All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint by integrating the equation",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "i.e., over one unit of time, to obtain",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "Hence the proportion of individuals that leave the infectious class over time (t, t + 1] due to recovery at rate \u03b3, dying from disease at a rate \u03b1, and dying from natural causes at a rate \u00b5 is",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "The simplest way to allocate the proportions p \u03b3|\u03b1+\u00b5 , p \u03b1|\u03b3+\u00b5 , and p \u00b5|\u03b3+\u03b1 of individuals leaving class I into those that respectively recover, die from disease, and die from natural causes is in proportion to the rates \u03b3, \u03b1 and \u00b5 themselves. This produces that so-called \"competing rates\" formulation [27] :",
+            "cite_spans": [
+                {
+                    "start": 304,
+                    "end": 308,
+                    "text": "[27]",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "From this it easily follows that",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "Using this notation in the context of the appropriate rates for each equation and making the assumption that \u039b t = t+1 t \u03bb(s)ds and \u03c4 t = \u03c4 (I(t), N (t)) are constants that apply over time interval (t, t+ 1], a discrete equivalent of Equations 2 takes the All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint form",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "We note that solutions to this discrete system will differ from solutions to the continuous system, even for constant \u039b(t), because \u03c4 (t) does not remain constant over the interval (t, t + 1] in the continuous model ( Figure 4) . However, there is no a priori reason to favor a continuous over a discrete time formulation because the data represent averages of discrete events (that is, transitions of individuals from one disease class to another, or the occurrence of deaths) rather than continuous, smooth flows. In fact, stochastic approaches are needed to capture the full richness of epidemiological dynamics [8, 9, 17] and, as discussed below, it is far easier to make discrete-time models stochastic than continuoustime models.",
+            "cite_spans": [
+                {
+                    "start": 619,
+                    "end": 621,
+                    "text": "9,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 622,
+                    "end": 625,
+                    "text": "17]",
+                    "ref_id": "BIBREF13"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 218,
+                    "end": 227,
+                    "text": "Figure 4)",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "To complete this discrete model, we have the discrete analogues of the continuous live and dead population variables:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Deterministic Models"
+        },
+        {
+            "text": "Before presenting a stochastic formulation of Equations 11-13, it is worth noting that one can simulate continuous systems models, such as Equations 1-4, as a stochastic process of randomly occurring events using Gillespie's algorithm [28, 29] and its refinements [30] [31] [32] . This general, event-oriented approach, however, involves considerably more computations invoking numerical integration schemes than working directly with discrete models. Further, as we stressed earlier on, a continuous-time model is theoretically no more privileged than its analogous discretized formulation that has its iteration interval synchronized with the frequency at which the data are collected.",
+            "cite_spans": [
+                {
+                    "start": 235,
+                    "end": 239,
+                    "text": "[28,",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 240,
+                    "end": 243,
+                    "text": "29]",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 264,
+                    "end": 268,
+                    "text": "[30]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 269,
+                    "end": 273,
+                    "text": "[31]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 274,
+                    "end": 278,
+                    "text": "[32]",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "In developing a stochastic formulation we use the notationX",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "to denote thatX is one drawing of a binomial variable representing the number of times one of two outcomes occurs in n trails, when the probability of this outcome occurring in a single trial is p (i.e., a Bernoulli process with probability p). More generally, we use the notation (X 1 , \u00b7 \u00b7 \u00b7 ,X r ) to denote one instance or one particular drawing of (x 1 , \u00b7 \u00b7 \u00b7 , x r ) \u223c MULTINOMIAL [n; p 1 , \u00b7 \u00b7 \u00b7 , p r ] , whereX i is the number of times one of r possible outcomes occurs over n trials, each have probability p i (i = 1, ..., r) of occurring in any one trial.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "With this notation, we can write down equations for the stochastic equivalent of the discrete deterministic model represented by Equations 11. We use the additional notation\u00db with appropriate designator subscripts to denote the number of individuals transferring between disease classes:",
+            "cite_spans": [
+                {
+                    "start": 129,
+                    "end": 142,
+                    "text": "Equations 11.",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "The stochastic version of our discrete SEIV model is thus represented by the following equations:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "where\u039b t are generated from an appropriate discrete distribution, such as a Poisson distribution with expected value \u039b t determined from local population birth rates or other relevant recruitment processes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "To complete this stochastic discrete model represented by Equations 14-15, we hav\u00ea",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "as well as N (t) in Equations 12, which is needed to calculate \u03c4 t = \u03c4 (I(t), N (t)) using an appropriate expression, such as given in Equation 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discrete Stochastic SEIR Models"
+        },
+        {
+            "text": "Real epidemics are far more complicated than the idealized epidemics encapsulated in the above SEIR models. Among assumptions in SEIR models used to keep them relatively simple are:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Weakness of the SEIR formulation"
+        },
+        {
+            "text": "1. The assumption of host homogeneity. This assumptions is tenuous at best: the host's age [33] , sex [34] , genetic makeup (particularly MHC locus genes) [35] , physiological state [36] , and history of exposure to the current and related pathogens (the latter due to cross-immunity issues [37] ) all play a role in affecting the vulnerability of the host to infection, the length of time the host is infectious, and the risk of the host dying from disease.",
+            "cite_spans": [
+                {
+                    "start": 91,
+                    "end": 95,
+                    "text": "[33]",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 102,
+                    "end": 106,
+                    "text": "[34]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 155,
+                    "end": 159,
+                    "text": "[35]",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 182,
+                    "end": 186,
+                    "text": "[36]",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 291,
+                    "end": 295,
+                    "text": "[37]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Weakness of the SEIR formulation"
+        },
+        {
+            "text": "The assumption of spatial homogeneity. This is related to the assumption that hosts contact one another at random. Contact is never random. At best, contact can be assumed to be locally random. This implies that the probability individuals contact one another over some future period is inversely related to their current distance from one another. One way around this assumption is to extend SEIR models to a metapopulation setting in which subpopulations are regarded as homogeneous and rates of exchange of individuals among subpopulations is some inverse function of the distance among the centers of these subpopulations, as discussed into Section 3 below.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "2."
+        },
+        {
+            "text": "The assumption that the transmission rate per susceptible individual is a relatively simple function of host population and infectious class densities (or numbers). For example, Equation 1 assumes that total transmission has a frequency dependent form. A more general case that assumes transmission is essentially i) density dependent when population density N is small relative to some function-location parameter L, and ii) frequency dependent when the population is much larger than L, takes the form \u03c4 (I, N ) = \u03b2I N + L More complicated functions have been proposed [12, 21] , including a negative binomial expression that accounts for susceptible host aggregation [38] or the phenomenon of superspreaders [39] , however, they are also limited in adhering to the following assumption. 4 . The assumption that the system is memoryless. This assumption implies that formula-All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 571,
+                    "end": 575,
+                    "text": "[12,",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 576,
+                    "end": 579,
+                    "text": "21]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 670,
+                    "end": 674,
+                    "text": "[38]",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 711,
+                    "end": 715,
+                    "text": "[39]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 790,
+                    "end": 791,
+                    "text": "4",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [],
+            "section": "3."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. tions do not distinguish among individuals that have essentially spent several time periods in a particular disease state E, I or V compared to those that have just entered one of these states. This assumption can be obviated by using a discrete time models that tracks the number of days each individual has been in a particular disease state, as seen for example in a model of the 2003 Asian outbreak of SARS [40] .",
+            "cite_spans": [
+                {
+                    "start": 502,
+                    "end": 506,
+                    "text": "[40]",
+                    "ref_id": "BIBREF38"
+                }
+            ],
+            "ref_spans": [],
+            "section": "3."
+        },
+        {
+            "text": "The assumption that individuals exit disease states following exponential (continuous time) or geometric (discrete time) distributions. We see this clearly in Equation  8 in the context of infectious individuals in the continuous time model over a single time period, which leads to the geometric rate of decay when applied iteratively over several time periods. This rather severe assumption (which implies that the highest exit proportions occur closest to entry into the disease class-or put another way, the mode of the All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 159,
+                    "end": 170,
+                    "text": "Equation  8",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "5."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint exit distribution is at the point of entry into the given disease class) can be obviated using a box-car model or distributed-delay approach. In these formulations, infected individuals pass through disease class E by passing through a sequence of disease subclasses E 1 , E 2 , ..., E r , before passing into the disease subclass sequence I 1 , I 2 , ..., I k , and then finally into disease class V [41] [42] [43] [44] . In this case, the exit distributions from E and I are no longer exponential, but are now Erlang (i.e., a subclass of the Gamma distribution). Further, the mode of the Erlang distribution becomes increasingly peaked and approaches the mean as the number of subclasses increases.",
+            "cite_spans": [
+                {
+                    "start": 547,
+                    "end": 551,
+                    "text": "[41]",
+                    "ref_id": "BIBREF39"
+                },
+                {
+                    "start": 552,
+                    "end": 556,
+                    "text": "[42]",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 557,
+                    "end": 561,
+                    "text": "[43]",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 562,
+                    "end": 566,
+                    "text": "[44]",
+                    "ref_id": "BIBREF42"
+                }
+            ],
+            "ref_spans": [],
+            "section": "5."
+        },
+        {
+            "text": "6. The assumption that the transmission rate parameter is time independent. Primary reasons why epidemics subside are that either the proportion of susceptible individuals in the population is reduced to the point where the epidemic can no longer be sustained (so-called threshold effect [20, 45]) or the rate at which susceptible individuals contact infectious individual during the course of an epidemic, as in the recent Ebola outbreak in West Africa [17, 46] , precipitously falls due to behavioral reasons as the epidemic proceeds. One approach is to assume that \u03b2 has the exponential form \u03b2(t) = \u03b2 0 e \u2212\u03b5t (e.g. as in [47] ). This is a little extreme because we should not expect \u03b2 not to start to decline precipitously at the start of the epidemic, but only part way into the epidemic, once public awareness of the full potential of the epidemic has become apparent. In this case, a mirror-image, sshaped curve of the form",
+            "cite_spans": [
+                {
+                    "start": 288,
+                    "end": 297,
+                    "text": "[20, 45])",
+                    "ref_id": null
+                },
+                {
+                    "start": 454,
+                    "end": 458,
+                    "text": "[17,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 459,
+                    "end": 462,
+                    "text": "46]",
+                    "ref_id": "BIBREF46"
+                },
+                {
+                    "start": 624,
+                    "end": 628,
+                    "text": "[47]",
+                    "ref_id": "BIBREF47"
+                }
+            ],
+            "ref_spans": [],
+            "section": "5."
+        },
+        {
+            "text": "for parameters t c > 0 and \u03b5 > 1 is more appropriate (in a manner analogous to the onset of density-dependence, as discussed in [48] ).",
+            "cite_spans": [
+                {
+                    "start": 128,
+                    "end": 132,
+                    "text": "[48]",
+                    "ref_id": "BIBREF48"
+                }
+            ],
+            "ref_spans": [],
+            "section": "5."
+        },
+        {
+            "text": "The assumption that pathogen dose can be ignored. The human immune system is extremely complex and takes a variable amount of time to gear up once invaded by a replicating army of pathogens, as the gear-up time depends on the condition of the host, host genetics, and prior host experience with the same and other pathogens. Small pathogen armies (i.e., low doses) are more easily contained by the hosts immune system-that is, before they can replicate to reach levels that may overwhelm and kill the host-than high doses or repeated exposure to lower doses over a short window of time. Such host-immune-system/pathogen dynamics can only be understood using models that are often more complicated than the SEIR model itself [49, 50] . Further, ignoring both single and repeated dose effects may severely compromise the reliability and transferability of SEIR models fitted to one population and then applied to another population or even to the same population at a later date.",
+            "cite_spans": [
+                {
+                    "start": 724,
+                    "end": 728,
+                    "text": "[49,",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 729,
+                    "end": 732,
+                    "text": "50]",
+                    "ref_id": "BIBREF50"
+                }
+            ],
+            "ref_spans": [],
+            "section": "7."
+        },
+        {
+            "text": "The assumption that infectious individuals are equally hazardous. Although this falls within the ambit of Assumption 1, it is worth pointing out that the phenomenon of superspreaders is well-known and that in some epidemics fewer than twenty of infected individuals may be responsible for more than 80% of transmission events [39] .",
+            "cite_spans": [
+                {
+                    "start": 326,
+                    "end": 330,
+                    "text": "[39]",
+                    "ref_id": "BIBREF37"
+                }
+            ],
+            "ref_spans": [],
+            "section": "8."
+        },
+        {
+            "text": "The first step in extending homogeneous SEIR models to a metapopulation setting is to prepare the homogeneous models by embedding them in a background population through the addition of migration processes ( Figure 6A ). For example, for the i th subpopulation we can add local percapita emigration rates q X i to Equations 2 for All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 208,
+                    "end": 217,
+                    "text": "Figure 6A",
+                    "ref_id": "FIGREF4"
+                }
+            ],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint X=S, E, I, and R, to account for individuals that move in and out of the four different age classes. If we do this for all subpopulations using a set of subpopulation emigration rates q X i , i = 1, ..., m, we can then also generate a set of immigration rates h X i that conserves total movement numbers within the metapopulation. In this case, we need to define a movement matrix with elements \u03c0 X ij such that",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "where m j=1 \u03c0 X ij = 1 for i = 1, ..., m and X=S, E, I, and V. We can then add this migration process to Equations 2, applied to the i th subpopulation in the metapopulation network, to obtain:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "We can further assume that the movement elements \u03c0 j (t) are derived from a set of connectivity strengths \u03ba j (t) that reflect that relative ease with which an individual in subpopulation j can move to subpopulation over the time interval [t, t + 1) and a set of relative attractivity values a (t) that are characteristics of the nodes . These attractivity values a (t) are assumed to bias the movement of any individual leaving subpopulation j to move to subpopulation with probabilities computed using the formula:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "We further note that we allow \u03ba j = \u03ba j to hold in general, though if \u03ba j are constructed using a symmetric distance matrix with elements \u03b5 j such that \u03ba j = e \u2212\u03b4\u03b5 j for some scaling constant \u03b4 > 0, then the relation \u03ba j = \u03ba j will hold. The attractivity factor a (t) could reflect several different aspects of the subpopulations, including their size, proportion of infected or immune individuals in the subpopulation, and so on. We will assume that two factors play a central role in determining the relative attractivity of each subpopulation: a characteristic size parameter N c i and the ratio of infectious individuals I i (t)/N i (t) for the i th population, i = 1, ..., m. For example, we might assume attractivity falls off linearly from 1 to 0 with the ratio I i /N i (i.e., use the factor (1 \u2212 I i /N i )). Similarly, we might assume that the attractivity falls off as N (t) \u2208 [0, \u221e) varies on either side of N c i (e.g. a factor of the form (1/e)(N/N c i )e \u2212N/N i which ranges between 0 and 1 and back to 0 as N increases from 0 to N c i and then beyond to infinity). In this case we may define",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "where k \u2208 [0, 1] switches the emphasis from the population size factor to the prevalence factor as k increases in value from 0 to 1. The inputs h X i (t) and per-capita flow rate outputs q X i (X=S, E, I and V) for the focal i th subpopulation, can either be 0, constants, or generated using probability distributions in stochastic versions of the model. The inputs will, of course, depend on the density or number of individuals available in the environment surrounding the focal subpopulation i, with population structure taken into account using network or nearest neighbor concepts. In the context of discrete deterministic or stochastic models, we need to account for the per-capita flow rate outputs q X in our competing rates formulations to obtain the extended probability for the case of rates assumed to be constant over each interval of time (though the rates themselves can vary from one time interval to the next). In this case, we augment the proportions/probabilities in Equation 10 to define the following terms for All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "and, as before, it follows that",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint with similar expressions following for the susceptible, the exposed and the immune classes expressed in terms of P X i , X=S, E, I, and V following the patterns of Equations 21 and 22",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "These expressions can be used to write down an extended version of the deterministic discrete model given by system of Equations 11 or of the stochastic model given by system of Equations 14 and 15. By way of illustration, usingQ X to represent the proportion of individuals leaving class X=S, E, I, and V due to immigration, Equations 14 now become (dropping the argument in t and the subscript i)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "Thus, in the case of the i th subpopulation, the actual number of individuals leaving the different disease classes during the time interval [t, t + 1) (after sampling has been applied) are:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "Assume the only source for individuals immigrating to a subpopulation during the interval [t, t + 1) are those emigrating from all of the other subpopulations. Given this, as in setting up Equations 18 and 20, we can now express the emigrants H X i (t) (i = 1, ..., m) in terms of the immigrants Q X j (t) (j = 1, .., m, for each X=S, E, I, or R), and the parameters \u03c0 j : where the individual\u0125 X j (t) are generated from the drawings (\u0124 X 1j (t), \u00b7 \u00b7 \u00b7 ,\u0124 X mj (t)) =",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "MULTINOMIAL[Q X j (t); \u03c0 j1 (t), ..., \u03c0 jm (t)]",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "With this process completed, we then obtain the following extended version of Equations 15",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "The recruitment numbers\u039b t , generated during each interval (t, t + 1], are drawn from an appropriate discrete stochastic process. The simplest is a Poisson process with expected value \u039b t , where the latter is determined by local population birth rates or other processes generating All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Metapopulation Formulation"
+        },
+        {
+            "text": "Methods for fitting epidemiological and other types of dynamical systems models to data is a vast topic that requires mathematicians, statisticians, and engineers around the world working on the problem full time. Here we only touch the surface of the topic and discuss how Numerus Model Builder can be used to address the issue under relatively straightforward and manageable situations (i.e., not too many equations and with a few parameters at most free to vary during the fitting procedure). A gentle introduction to the field of fitting population models to data is provided by Hilborn and Mangel [51] . We will avoid the issue of model selection itself [52, 53] -i.e., if one fits various models to data with different numbers of parameters, then how does one decide which of these models best fits the data in an information theoretic sense-since this is also a research topic that attracts considerable attention.",
+            "cite_spans": [
+                {
+                    "start": 602,
+                    "end": 606,
+                    "text": "[51]",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 659,
+                    "end": 663,
+                    "text": "[52,",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 664,
+                    "end": 667,
+                    "text": "53]",
+                    "ref_id": "BIBREF53"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "Fitting dynamic models to a set of observations Y = {Y 1 , ..., Y n }, where the index i in Y i refers to time t = i, i = 1, .., n, typically involves generating a set of comparable values y(\u03b8) = {y 1 (\u03b8), ..., y n (\u03b8)} from a model that has a set of m parameters \u03b8 = {\u03b8 1 , ..., \u03b8 m }, where y i (\u03b8) is the value of some variable in the model at time t = i when the parameter values are \u03b8 =\u03b8.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "The two dominant approaches to fitting models to data are least-squares estimation (LSE), which has been largely supplanted by the maximum likelihood estimation (MLE) [54] . The latter is typically embedded in a Markov Chain Monte Carlo (MCMC) algorithm that constructs a probability distribution for \u03b8 using Bayes theorem [55] [56] [57] [58] . MCMC requires the likelihood function to be known. This can be obviated, though, by assuming the distribution of model outcomes to be Poisson (as we do below), using likelihood-function-free methods [59] , or using approximate Bayesian approaches [60] .",
+            "cite_spans": [
+                {
+                    "start": 167,
+                    "end": 171,
+                    "text": "[54]",
+                    "ref_id": "BIBREF54"
+                },
+                {
+                    "start": 323,
+                    "end": 327,
+                    "text": "[55]",
+                    "ref_id": "BIBREF55"
+                },
+                {
+                    "start": 328,
+                    "end": 332,
+                    "text": "[56]",
+                    "ref_id": "BIBREF56"
+                },
+                {
+                    "start": 333,
+                    "end": 337,
+                    "text": "[57]",
+                    "ref_id": "BIBREF57"
+                },
+                {
+                    "start": 338,
+                    "end": 342,
+                    "text": "[58]",
+                    "ref_id": "BIBREF58"
+                },
+                {
+                    "start": 544,
+                    "end": 548,
+                    "text": "[59]",
+                    "ref_id": "BIBREF59"
+                },
+                {
+                    "start": 592,
+                    "end": 596,
+                    "text": "[60]",
+                    "ref_id": "BIBREF60"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "LSE methods involve minimizing the sum-of-All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint squares residuals (or error) measure",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "On the other hand, MLE methods that assume model outcomes are Poisson, but with a different Poisson mean y i (\u03b8) for each data point Y i , i = 1, ..., t, involves maximizing the loglikelihood function",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "or minimizing its negative, which can be written",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "Here, for purposes of illustration, we fit our deterministic SEIV model to the Sierra Leone Ebola weekly incidence data [61] using both LSE and MLE approaches (Figure 8 : cf. fits obtained in [47] ). When fitting such data the appropriate initial conditions are generally uncertain because detection of the putative index case does not generally pin down the start of the epidemic: the actual index case may often go undetected and the number of individuals in class E at the time of the first case is also unknown. Thus, as part of the fitting procedure, we allow the initial values E(0), I(0) in the model to be fitted to the data. To keep the dimensions of the fitting problem down, however, we set E(0) = I(0) = Z and the search for the best fitting value of Z. Another imponderable is the actual number of individuals N (0) at risk at the start of the epidemic. Thus we also treat N (0) = N 0 to be an optimization parameter, though we set V (0) = 0 under the assumption that if some individuals in the population were immune to Ebola at the start of the epidemic, this would be reflected in Figure 4) has been fitted to Ebola data from the Sierra Leone 2014 outbreak in which more than 10,000 cases occurred during the course of an approximately one-year period [61] . A. The blue and red curves are the best fit LSE (cf. Equation27 and MLE (cf. Equation 28 obtained with the optimal parameter sets given in the text. B. The black dotted line is the MLE fit, as in Panel A, with the red, orange, purple and blue plots, simulations obtained after obtaining the best MLE fits to the first 10, 20, 30 and 40 weeks of incidence respectively. See Video 9 at the supporting website for more information on how to set up and run optimizations on this model using Numerus Model Builder. a lower-valued estimate of N 0 . Thus N 0 should be interpreted as the \"initial population at risk\" rather than actual popultion size. Also, in preliminary runs of our optimization algorithm (i.e. when fixing diffent combinations of parameters and solving reduced parameter set problems), the difference between optimal values for \u03c3 and \u03b3 under variety of settings always lead to opti-All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 120,
+                    "end": 124,
+                    "text": "[61]",
+                    "ref_id": "BIBREF61"
+                },
+                {
+                    "start": 192,
+                    "end": 196,
+                    "text": "[47]",
+                    "ref_id": "BIBREF47"
+                },
+                {
+                    "start": 1268,
+                    "end": 1272,
+                    "text": "[61]",
+                    "ref_id": "BIBREF61"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 159,
+                    "end": 168,
+                    "text": "(Figure 8",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 1097,
+                    "end": 1106,
+                    "text": "Figure 4)",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint mal values that differ by less than a few percent. Thus to further reduce the dimension of the optimization problem, we set \u03c3 = \u03b3 during the optimization procedure. Further, we also fixed \u00b5 and \u03b3 (which in problems like this can be estimated outside of the incidence data) to 0.001 and 0.05 respectively, as well as setting \u03bb = \u03bd = 0. A more rigorous fitting of the Sierra Leone data would need these parameters to be properly estimated ahead of time, but our purpose here is to demonstrate different aspects of the fitting procedure, rather than undertaking an in depth analysis of the epidemic itself.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "With the above parameter and model settings, the best-fitting remaining parameter values, denoted by asterisk and obtained using a Nelder-Mead minimization algorithm, were LSE: In Figure 8A we see that the LSE and MLE provide similar fits, though both provided relatively poor fits to the first third of data: these data reflect a more linear than the exponential initial phase which is uncharacteristic of homogeneous SEIR models, particular those that have no spatial structure. In general, we should not expect and SEIR model to fit the data particularly well because many of the assumptions inherent in the SEIR model, as discussed in the previous section, are violated to some oftenunknown and likely-large degree.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 180,
+                    "end": 189,
+                    "text": "Figure 8A",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "Though the fits are similar-both, for example predict an initially \u03b2 around 1.5 that drops to half that level in just over two weeks after the first cases have been detected-the LSE fit predicts an 14% smaller initial population at risk than the MLE fit. Thus the errors associated with this estimation can be quite large, and require a Bayesian type Markov Chain Monte Carlo (MCMC) approach to estimate them. Further, as is evident from our plots in Figure 8B , if we use the first T weeks of data, T = 10, 20, 30, and 40,to fit the model, we see that fitting the first 10 weeks (red curve) greatly overestimates the final size of the epidemic, while fitting the first 20 weeks somewhat underestimates the final number of cases. Before leaving this example, we note that in several runs of the optimization algorithm, different starting conditions converged to different solutions, thereby indicating that some of these solutions are local rather than global minimum. When this happened, we selected the solution that gave the lowest log-likelihood value, but our searches were not sufficiently exhaustive for us to be sure that we had found the global minimum for each case.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 451,
+                    "end": 460,
+                    "text": "Figure 8B",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Fitting Models to Data"
+        },
+        {
+            "text": "What is the value of building SEIR models in anticipation of, during, or after an epidemic outbreak, given the level of accuracy that can be expected from such models? As with all models of complex biological systems centered around organisms, populations or communities, the answer is the same: models provide a framework for obtaining insights into dynamic population processes that could not be obtained without them. Further, they provide a means for exploring and assessing the efficacy of interventions and other types of management actions designed to protect, conserve, or exploit the populations under consideration. In the context of epidemics this has certainly been true with regard to implementing vaccination [17, 62, 63] and quarantine programs [64] , assessing the effects of behavior [65] , case detection [66] , and treatment rates [67, 68] , managing the logistics of setting up treatment facilities during the course of All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 723,
+                    "end": 727,
+                    "text": "[17,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 728,
+                    "end": 731,
+                    "text": "62,",
+                    "ref_id": "BIBREF62"
+                },
+                {
+                    "start": 732,
+                    "end": 735,
+                    "text": "63]",
+                    "ref_id": "BIBREF63"
+                },
+                {
+                    "start": 760,
+                    "end": 764,
+                    "text": "[64]",
+                    "ref_id": "BIBREF64"
+                },
+                {
+                    "start": 801,
+                    "end": 805,
+                    "text": "[65]",
+                    "ref_id": "BIBREF65"
+                },
+                {
+                    "start": 823,
+                    "end": 827,
+                    "text": "[66]",
+                    "ref_id": "BIBREF68"
+                },
+                {
+                    "start": 850,
+                    "end": 854,
+                    "text": "[67,",
+                    "ref_id": "BIBREF69"
+                },
+                {
+                    "start": 855,
+                    "end": 858,
+                    "text": "68]",
+                    "ref_id": "BIBREF70"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion and Conclusion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint epidemics, evaluating the efficacy of educational [69] and prophylactic campaigns [70] , as well as drug-delivery programs that reduce the risk of producing drug-resistance pathogen strains [71] .",
+            "cite_spans": [
+                {
+                    "start": 196,
+                    "end": 200,
+                    "text": "[69]",
+                    "ref_id": "BIBREF71"
+                },
+                {
+                    "start": 228,
+                    "end": 232,
+                    "text": "[70]",
+                    "ref_id": "BIBREF72"
+                },
+                {
+                    "start": 336,
+                    "end": 340,
+                    "text": "[71]",
+                    "ref_id": "BIBREF73"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion and Conclusion"
+        },
+        {
+            "text": "Models are also the best tools for guiding our response to an outbreak once it has begun. Although, after 10 weeks, a fit to the Sierra Leone data set would have substantially underestimated the problem at hand, the fit at 20 weeks provided a much better ball park assessment of the final size of the Sierra Leone outbreak than could have been obtained with non dynamic modeling efforts. This remained somewhat true at 30 weeks and certainly so at 40 weeks, despite all the known serious violations of an SEIR model applied to an inhomogeneous, spatially-structured population. Thus SEIR models remain an important tool for managing epidemics, provided we treat predictions from such models with circumspection. [8] Allen LJ. A primer on stochastic epidemic models: Formulation, numerical simulation, and analysis. Infectious Disease Modelling. 2017;.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion and Conclusion"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion and Conclusion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion and Conclusion"
+        },
+        {
+            "text": "To enable the reader to run all our models, we have provided the 6 models we used to generate the results presented in our paper: they are available at https: //www.dropbox.com/sh/i5bh700pbfijrcq/ AAB2HBEs7MA4ir4CRJyDhb4Ia?dl=0.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "List of supporting online material"
+        },
+        {
+            "text": "These models are listed below together with the videos (which can be downloaded at YouTube using the url links provided) that explain some of the details on how the models where built using the Numerus Model Builder (NMB) Platform. A free Mac version of NMB Light is available at https: //www.dropbox.com/s/6kyli8zqz0yl8vs/ NumerusMBL-0.056.dmg?dl=0, and a free Windows version of NMB Light is available at https: //www.dropbox.com/s/wbn06fvubt9ovs7/ NumerusMBL.056_setup.exe?dl=0.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "List of supporting online material"
+        },
+        {
+            "text": "NMB allows users to build their own models or to modify the structure of the models listed below. It also allows users to run the models, input data as a comma separated string (Model 6, see Video 9 for details) and set different parameter values in each run using sliders. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "List of supporting online material"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "List of supporting online material"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Macdonald, and a theory for the dynamics and control of mosquito-transmitted pathogens",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Battle",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Hay",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Barker",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Scott",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mckenzie",
+                    "middle": [
+                        "Fe"
+                    ],
+                    "last": "Ross",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "PLoS pathog",
+            "volume": "8",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Epidemiological models with age structure, proportionate mixing, and crossimmunity",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Castillo-Chavez",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hethcote",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Andreasen",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Levin",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Liu",
+                    "suffix": ""
+                }
+            ],
+            "year": 1989,
+            "venue": "Journal of mathematical biology",
+            "volume": "27",
+            "issn": "3",
+            "pages": "233--258",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Fitting the HIV epidemic in Zambia: a two-sex micro-simulation model",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Leclerc",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Matthews",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Garenne",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PloS one",
+            "volume": "4",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "The effects of local spatial structure on epidemiological invasions",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Keeling",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Royal Society of London B: Biological Sciences",
+            "volume": "266",
+            "issn": "",
+            "pages": "859--867",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Modeling the spatial spread of infectious diseases: The GLobal Epidemic and Mobility computational model",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Balcan",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Gon\u00e7alves",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Ramasco",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Colizza",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Journal of computational science",
+            "volume": "1",
+            "issn": "3",
+            "pages": "132--145",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Stochastic epidemic models: a survey",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Britton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Mathematical biosciences",
+            "volume": "225",
+            "issn": "1",
+            "pages": "24--35",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "The mathematics of infectious diseases",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hethcote",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "SIAM Review",
+            "volume": "42",
+            "issn": "4",
+            "pages": "599--653",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Global stability for the SEIR model in epidemiology. Mathematical biosciences",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Muldowney",
+                    "suffix": ""
+                }
+            ],
+            "year": 1995,
+            "venue": "",
+            "volume": "125",
+            "issn": "",
+            "pages": "155--164",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Basic methods for modeling the invasion and spread of contagious diseases",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lloyd-Smith",
+                    "middle": [],
+                    "last": "Jo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "DIMACS Series in Discrete Mathematics and Theoretical Computer Science",
+            "volume": "71",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Comparing largescale computational approaches to epidemic modeling: agent-based versus structured metapopulation models",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ajelli",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Gon\u00e7alves",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Balcan",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Colizza",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Ramasco",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "BMC infectious diseases",
+            "volume": "10",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Individual-based Computational Modeling of Smallpox Epidemic Control Strategies",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Burke",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Epstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cummings",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Parker",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Cline",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Singa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Academic Emergency Medicine",
+            "volume": "13",
+            "issn": "11",
+            "pages": "1142--1149",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Spatiotemporal dynamics of epidemics: synchrony in metapopulation models. Mathematical biosciences",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Lloyd",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Jansen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "",
+            "volume": "188",
+            "issn": "",
+            "pages": "1--16",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Spatial spread of the West Africa Ebola epidemic",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kramer",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Pulliam",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Alexander",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Rohani",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Drake",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Open Science",
+            "volume": "3",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Tactics and strategies for managing Ebola outbreaks and the salience of immunization. Computational and mathematical methods in medicine",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Gonzalez",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Salter",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bangura",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Carlson",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Coomber",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "The metapopulation dynamics of an infectious disease: tuberculosis in possums. Theoretical population biology",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Fulford",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Roberts",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "",
+            "volume": "61",
+            "issn": "",
+            "pages": "15--29",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "A web app for population viability and harvesting analyses. Natural Resource Modeling",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Muellerklein",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Salter",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Carslon",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Lyons",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Seidel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "30",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Epidemic models: thresholds and population regulation",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Pickering",
+                    "suffix": ""
+                }
+            ],
+            "year": 1983,
+            "venue": "The American Naturalist",
+            "volume": "121",
+            "issn": "6",
+            "pages": "892--898",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "How should pathogen transmission be modelled? Trends in ecology & evolution",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Mccallum",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Barlow",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hone",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "",
+            "volume": "16",
+            "issn": "",
+            "pages": "295--300",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Global stability in some SEIR epidemic models. In: Mathematical approaches for emerging and reemerging infectious diseases: models, methods, and theory",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "295--311",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Perspectives on the basic reproductive ratio",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Heffernan",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wahl",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Journal of the Royal Society Interface",
+            "volume": "2",
+            "issn": "4",
+            "pages": "281--293",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Reproduction numbers and sub-threshold endemic equilibria for compartmental models of disease transmission. Mathematical biosciences",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Van Den Driessche",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Watmough",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "",
+            "volume": "180",
+            "issn": "",
+            "pages": "29--48",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Mathematical epidemiology of infectious diseases: model building, analysis and interpretation",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Diekmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jap",
+                    "middle": [],
+                    "last": "Heesterbeek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Seasonality of tuberculosis",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Fares",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Journal of global infectious diseases",
+            "volume": "3",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Competing risks in epidemiology: possibilities and pitfalls. International journal of epidemiology",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Andersen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Geskus",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "De Witte",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Putter",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "",
+            "volume": "41",
+            "issn": "",
+            "pages": "861--870",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/191601"
+                ]
+            }
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "A general method for numerically simulating the stochastic time evolution of coupled chemical reactions",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Gillespie",
+                    "suffix": ""
+                }
+            ],
+            "year": 1976,
+            "venue": "Journal of computational physics",
+            "volume": "22",
+            "issn": "4",
+            "pages": "403--434",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Exact stochastic simulation of coupled chemical reactions. The journal of physical chemistry",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Gillespie",
+                    "suffix": ""
+                }
+            ],
+            "year": 1977,
+            "venue": "",
+            "volume": "81",
+            "issn": "",
+            "pages": "2340--2361",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Efficient exact stochastic simulation of chemical systems with many species and many channels. The journal of physical chemistry A",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gibson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bruck",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "",
+            "volume": "104",
+            "issn": "",
+            "pages": "1876--1889",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Numerical Recipes: The Art of Scientific Computing",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Press",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Teukolsky",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Vetterling",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Flannery",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Temporal gillespie algorithm: Fast simulation of contagion processes on time-varying networks",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Vestergaard",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "G\u00e9nois",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "PLoS computational biology",
+            "volume": "11",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "The stage-structured epidemic: linking disease and demography with a multi-state matrix approach model",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Klepac",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Caswell",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Theoretical Ecology",
+            "volume": "4",
+            "issn": "3",
+            "pages": "301--319",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Extra-couple HIV transmission in sub-Saharan Africa: a mathematical modelling study of survey data",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Bellan",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Fiorella",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Melesse",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Williams",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Dushoff",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "The Lancet",
+            "volume": "381",
+            "issn": "9877",
+            "pages": "1561--1569",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Common West African HLA antigens are associated with protection from severe malaria",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Hill",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Allsopp",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kwiatkowski",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anstey",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Twumasi",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Rowe",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "Nature",
+            "volume": "352",
+            "issn": "6336",
+            "pages": "595--600",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Microbial endocrinology and infectious disease in the 21st century",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lyte",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Trends in microbiology",
+            "volume": "12",
+            "issn": "1",
+            "pages": "14--20",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Crosspriming in health and disease",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Kurts",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Robinson",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Knolle",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Nature reviews Immunology",
+            "volume": "10",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "A statistical framework for the adaptive management of epidemiological interventions",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Merl",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Johnson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Gramacy",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mangel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PloS One",
+            "volume": "4",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Superspreading and the effect of individual variation on disease emergence",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schreiber",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kopp",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nature",
+            "volume": "438",
+            "issn": "7066",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Curtailing transmission of severe acute respiratory syndrome within a community and its hospital",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Galvani",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Proceedings of the Royal Society of London B: Biological Sciences",
+            "volume": "270",
+            "issn": "",
+            "pages": "1979--1989",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "SIR epidemic models with general infectious period distribution",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Clancy",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Statistics & Probability Letters",
+            "volume": "85",
+            "issn": "",
+            "pages": "1--5",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Estimating the delay between host infection and disease (incubation period) and assessing its significance to the epidemiology of plant diseases",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Leclerc",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Dor\u00e9",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Gilligan",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Lucas",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Filipe",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PloS one",
+            "volume": "9",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Distributed incubation and infectious periods in models of the transmission dynamics of the human immunodeficiency virus (HIV)",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Blythe",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1988,
+            "venue": "Mathematical Medicine and Biology",
+            "volume": "5",
+            "issn": "1",
+            "pages": "1--19",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Global stability analysis for SEIS models with n latent classes",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Bame",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bowong",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mbang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Sallet",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Tewa",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Mathematical Biosciences and Engineering",
+            "volume": "5",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Should we expect population thresholds for wildlife disease? Trends in ecology & evolution",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Cross",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Briggs",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Daugherty",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Latto",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "",
+            "volume": "20",
+            "issn": "",
+            "pages": "511--519",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/191601"
+                ]
+            }
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Potential for large outbreaks of Ebola virus disease",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Camacho",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kucharski",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Funk",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Breman",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Piot",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Edmunds",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Epidemics",
+            "volume": "9",
+            "issn": "",
+            "pages": "70--78",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Estimating the reproduction number of Ebola virus (EBOV) during the 2014 outbreak in West Africa",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Althaus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLoS currents",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "A hypothesis regarding the abruptness of density dependence and the growth rate of populations",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "Ecology",
+            "volume": "77",
+            "issn": "7",
+            "pages": "2014--2026",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Immunology for physicists. Reviews of modern physics",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Perelson",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Weisbuch",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "",
+            "volume": "69",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "Agent-based modeling of host-pathogen systems: The successes and challenges. Information sciences",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Bauer",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Beauchemin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Perelson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "179",
+            "issn": "",
+            "pages": "1379--1389",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "The ecological detective: confronting models with data",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Hilborn",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mangel",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "",
+            "volume": "28",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Model selection and multimodel inference: a practical information-theoretic approach",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Burnham",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Model selection in ecology and evolution",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Johnson",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Omland",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Trends in ecology & evolution",
+            "volume": "19",
+            "issn": "2",
+            "pages": "101--108",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Tutorial on maximum likelihood estimation",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Myung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Journal of mathematical Psychology",
+            "volume": "47",
+            "issn": "1",
+            "pages": "90--100",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "General state space Markov chains and MCMC algorithms",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Roberts",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Rosenthal",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Probability Surveys",
+            "volume": "1",
+            "issn": "",
+            "pages": "20--71",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Data cloning: easy maximum likelihood estimation for complex ecological models using Bayesian Markov chain Monte Carlo methods",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Lele",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Dennis",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Lutscher",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Ecology letters",
+            "volume": "10",
+            "issn": "7",
+            "pages": "551--563",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "Inference for discretely observed stochastic kinetic networks with applications to epidemic modeling",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Choi",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Rempala",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Biostatistics",
+            "volume": "13",
+            "issn": "1",
+            "pages": "153--165",
+            "other_ids": {}
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "Inference for nonlinear dynamical systems",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ionides",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Bret\u00f3",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "King",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "103",
+            "issn": "49",
+            "pages": "18438--18443",
+            "other_ids": {}
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "Markov chain Monte Carlo without likelihoods",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Marjoram",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Molitor",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Plagnol",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Tavar\u00e9",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "100",
+            "issn": "26",
+            "pages": "15324--15328",
+            "other_ids": {}
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Approximate Bayesian computation in evolution and ecology. Annual review of ecology, evolution, and systematics",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Beaumont",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "",
+            "volume": "41",
+            "issn": "",
+            "pages": "379--406",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Spatiotemporal analysis of the 2014 Ebola epidemic in West Africa",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Backer",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "PLoS computational biology",
+            "volume": "12",
+            "issn": "12",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF62": {
+            "ref_id": "b62",
+            "title": "Mathematical models for predicting the epidemiologic and economic impact of vaccination against human papillomavirus infection and disease",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dasbach",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Elbasha",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Insinga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Epidemiologic reviews",
+            "volume": "28",
+            "issn": "1",
+            "pages": "88--100",
+            "other_ids": {}
+        },
+        "BIBREF63": {
+            "ref_id": "b63",
+            "title": "Evaluating the cost-effectiveness of vaccination programmes: a dynamic perspective",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Edmunds",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Medley",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Nokes",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Statistics in medicine",
+            "volume": "18",
+            "issn": "23",
+            "pages": "3263--3282",
+            "other_ids": {}
+        },
+        "BIBREF64": {
+            "ref_id": "b64",
+            "title": "Dynamically modeling SARS and other newly emerging respiratory illnesses: past, present, and future. Epidemiology",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Bauch",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Coffee",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Galvani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "",
+            "volume": "16",
+            "issn": "",
+            "pages": "791--801",
+            "other_ids": {}
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "Modelling the influence of human behaviour on the",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Funk",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Salath\u00e9",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Jansen",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/191601"
+                ]
+            }
+        },
+        "BIBREF67": {
+            "ref_id": "b67",
+            "title": "doi: bioRxiv preprint spread of infectious diseases: a review",
+            "authors": [],
+            "year": 2010,
+            "venue": "Journal of the Royal Society Interface",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/191601"
+                ]
+            }
+        },
+        "BIBREF68": {
+            "ref_id": "b68",
+            "title": "Modeling the SARS epidemic",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Dye",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Gay",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Science",
+            "volume": "300",
+            "issn": "5627",
+            "pages": "1884--1885",
+            "other_ids": {}
+        },
+        "BIBREF69": {
+            "ref_id": "b69",
+            "title": "Dynamical models of tuberculosis and their applications",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Castillo-Chavez",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Mathematical biosciences and engineering",
+            "volume": "1",
+            "issn": "2",
+            "pages": "361--404",
+            "other_ids": {}
+        },
+        "BIBREF70": {
+            "ref_id": "b70",
+            "title": "Prospects for advancing tuberculosis control efforts through novel therapies",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Salomon",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Resch",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "S\u00e1nchez",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Porco",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "PLoS medicine",
+            "volume": "3",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "A core group model for disease transmission. Mathematical biosciences",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Hadeler",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Castillo-Ch\u00e1vez",
+                    "suffix": ""
+                }
+            ],
+            "year": 1995,
+            "venue": "",
+            "volume": "128",
+            "issn": "",
+            "pages": "41--55",
+            "other_ids": {}
+        },
+        "BIBREF72": {
+            "ref_id": "b72",
+            "title": "The potential impact of male circumcision on HIV in Sub-Saharan Africa",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Williams",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Gouws",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Hankins",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hargrove",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "PLoS medicine",
+            "volume": "3",
+            "issn": "7",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF73": {
+            "ref_id": "b73",
+            "title": "Modeling the emergence of the 'hot zones': tuberculosis and the amplification dynamics of drug resistance",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Blower",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Chou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Nature medicine",
+            "volume": "10",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "A Numerus Model Builder representation",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "The incidence I(t) is plotted over time (A. t \u2208 [0, 50], B. t \u2208 [0, 1000]) using the Numerus model, depicted in Figure 2, to generate numerical solutions to Equations 2 under initial conditions S(0) = 999, E(0) = 0, I(0) = 1, and V = 0 for the case \u00b5 = 0.01, \u03b1 = 0.05, \u03c3 = \u03b3 = 0.3, under the assumption that \u03bb(t) = \u00b5N (t). In addition: in A. \u03bd = 0 and \u03b2 varies from 0.35 to 0.40 (in steps of 0.01); and in B. \u03b2 = 1 and \u03bd = 0.02 (red) and \u03bd = 0 (blue). See Video 3 at the supporting website for details on making sets of batch using Numerus Model Builder.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "The incidence I(t) is plotted over time t \u2208 [0, 210] for the continuous (red) and discrete (blue) Numerus Model Builder coding of SEIV models represented by Equations 2 and 12 respectively for the case \u03c4 (t) = \u03b2S(t)/N (t) and \u03bb(t) = \u00b5N (t) using the parameter values \u03b2 = 1, \u03b1 = 0.05, \u03c3 = \u03b3 = 0.3, and \u03bd = 0. In the discrete model we note that \u039b t = d \u00b5 (t) and \u03c4 (t) is assumed constant over [t, t+1). The numerical solutions depicted here correspond to initial conditions S(0) = 999, E(0) = 0, I(0) = 1, and V = 0. See Video 4 at the supporting website for additional details on building the discrete model using Numerus Model Builder.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "The top left panel provides a Numerus Model Builder representation of the discrete stochastic model with the stochastic chip (Stochastic 0) at its center. This chip contains the code (right top panel) for generating the multinomial distributions seen in Equations 14. The bottom panel illustrates plots of incidence from five repeated runs of the stochastic model using the identical set of parameters in each run. See Video 5 at the supporting website for more details.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "A. A homogeneous subpopulation with input and output flows of individuals to and from other subpopulations in the metapopulation (cf. Figure 1A. B. The flow network quantities and governing equation for the metapopulation as a whole. C. The Numerus Model Builder submodel of the subpopulation processes depicted in A, which is basically the Numerus Model Buildermodel illustrated in Figure 2 with input and output pins added as described in Video 6 at the supporting website. D. The Numerus Model Builder metapopulation model formulated one hierarchical level above the subpopulation model depicted in C, with the use of the NetSEIV, Migration and Metapop codechips explained in Video 7 at the supporting website. The NodePop codechip connected to the yellow \"save\" event container allows the one-time event of saving trajectories of all variables from all nodes at the end of the simulation. constructing the infectious class equation in the i th subpopulation",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Fig: Prevalence plots predicted by a continuous-time deterministic metapopulation model when the index case starts out in one of six possible locations (each with S(0) = 20, 000 and other classes at 0, except for the location that has I(0) = 1 and S(0) = 19, 999), where the locations numbered from 0 to 5 are strung out in a straight line in the order 0, 1, 2, 3, 4, 5, and individuals flow only to subpopulations that are their immediate neighbors. Subpopulation prevalence rates are plotted in A. (index case in subpopulation 0) and B. (index case in subpopulation 2) with the subpopulation containing the index case clearly leading the outbreaks in closest and the next closest neighboring populations. Total prevalence is plotted in C. for outbreaks with two index cases that are either the end two (red plot) or center two (blue plot) subpopulations.new individuals. Illustrative simulations of the metapopulation model depicted inFigure 6for the case of 6 locations strung out in a row, where individuals can only move between neighboring locations are provided inFigure 7.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "The SEIV discrete time model given by Equations 11 with fixed parameters \u03bd = 0, \u00b5 = 0.001, \u03b1 = 0.05 and \u039b t = 0 (cf.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Koelle K, Cobey S, Grenfell B, Pascual M. Epochal evolution shapes the phylodynamics of interpandemic influenza A (H3N2) in humans. Science. 2006;314(5807):1898-1903. [7] Gilchrist MA, Sasaki A. Modeling hostparasite coevolution: a nested approach based on mechanistic models. Journal of Theoretical Biology. 2002;218(3):289-308.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF1": {
+            "text": "Video 1 and Model 1: Building and running a logistic differential equation model. Model used is model1 logistic.nmd. Video link is: https://www.youtube.com/watch?v= bUTvWWqVzUY. Video 2 and Model 2: Building and running a continuous time SEIR model. Model used is model2 SEIR cont.nmd. Video link is: https://www.youtube.com/watch?v= v6EIvPrE5Dk. Video 3 and Model 2: Demonstrating how to make batch runs to generate the simulations plotted in Figure 3A. Model used is model2 SEIR cont.nmd. Video link is: https://www.youtube.com/watch?v= -YywvTp_scs. Video 4 and Model 3: Setting up a discrete SEIV model. Model used is model3 SEIR disc.nmd. Video link is: Video link is: https://www.youtube.com/ watch?v=_wpHNl_acEQ. Video 5 and Model 4: Setting up a stochastic SEIV model. Model used is model4 SEIR stoch.nmd. Video link is: https://www.youtube.com/watch?v= VAGtIvq_YCo Video 6 and Model 5: Adding pins to the continuous SEIV model and implement model as a chip at a higher hierarchical modeling level. Model used is model5 SEIR metapop cont.nmd. Video All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/191601 doi: bioRxiv preprint link is: https://www.youtube.com/watch? v=bZLH8HAF2LQ. Video 7 and Model 5: Using the SEIV model in Video 6 as a submodel in a metapopulation network setting. Model used is model5 SEIR metapop cont.nmd. Video link is: https://www.youtube.com/watch? v=k8IEfIQCM9o. Video 8 and Model 5: Setting up a network model using the Numerus Model Builder mapping tool. Model used is model5 SEIR metapop cont.nmd. Video link is: https://www.youtube.com/watch? v=CIvoDM6a-HE. Video 9 and Model 6: Demonstrating how to use the least-square fitting tools and finding the parameter \u03b2 in the SEIV discrete model the best fits the Sierra Leone 2014 Ebola incidence data. Model used is model6 SEIR disc datafit.nmd. Video link is: https://www.youtube.com/watch?v= 7gLMpzb-R7Q.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The development of Nova, which is a precursor to Numerus Model Builder, was supported by NSF grant CNS-0939153 to Oberlin College (PI: RS) and NSF-EEID grant 1617982 (PI: WMG). We thank John Pataki of Logical Laboratories for his considerable help and input into creating and supporting the 'Nova Modeler' website (URL: http://novamodeler.com/). We thank Juliet Pulliam for hosting WMG at the South African Center for Epidemiological Modeling at the University of Stellenbosch, South Africa, during the initial drafting of the ms.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgements"
+        },
+        {
+            "text": "The initial text was drafted by WMG and the Numerus model builder platform was created by RS. WMG, RS, OM, and KT built the models. WMG created the figures, HSY and KT created the videos. All authors read and edited the manuscript.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Contributions"
+        }
+    ]
+}

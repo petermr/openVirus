@@ -1,0 +1,3054 @@
+{
+    "paper_id": "c12ad8b411c24fe215be91d1f990645743e55ab5",
+    "metadata": {
+        "title": "An epidemiological forecast model and software assessing interventions on COVID-19 epidemic in China",
+        "authors": [
+            {
+                "first": "Lili",
+                "middle": [],
+                "last": "Wang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Michigan",
+                    "location": {
+                        "settlement": "Ann Arbor",
+                        "region": "MI"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Yiwang",
+                "middle": [],
+                "last": "Zhou",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Michigan",
+                    "location": {
+                        "settlement": "Ann Arbor",
+                        "region": "MI"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Jie",
+                "middle": [],
+                "last": "He",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Michigan",
+                    "location": {
+                        "settlement": "Ann Arbor",
+                        "region": "MI"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Fei",
+                "middle": [],
+                "last": "Wang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "National Cancer Institute",
+                    "location": {
+                        "settlement": "Rockville",
+                        "region": "MD"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Lu",
+                "middle": [],
+                "last": "Tang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Pittsburgh",
+                    "location": {
+                        "settlement": "Pittsburgh",
+                        "region": "PA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Marisa",
+                "middle": [],
+                "last": "Eisenberg",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Michigan",
+                    "location": {
+                        "settlement": "Ann Arbor",
+                        "region": "MI"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Peter",
+                "middle": [
+                    "X K"
+                ],
+                "last": "Song",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Michigan",
+                    "location": {
+                        "settlement": "Ann Arbor",
+                        "region": "MI"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "We develop a health informatics toolbox that enables public health workers to timely analyze and evaluate the time-course dynamics of the novel coronavirus (COVID-19) infection using the public available data from the China CDC. This toolbox is built upon a hierarchical epidemiological model in which two observed time series of daily proportions of infected and removed cases are emitted from the underlying infection dynamics governed by a Markov SIR infectious disease process. We extend the SIR model to incorporate various types of time-varying quarantine protocols, including government-level macro isolation policies and community-level micro inspection measures. We develop a calibration procedure for under-reported infected cases. This toolbox provides forecast, in both online and offline forms, of turning points of interest, including the time when daily infected proportion becomes smaller than the previous ones and the time when daily infected proportions becomes smaller than that of daily removed proportion, as well as the ending time of the epidemic. An R software is made available for the public, and examples on the use of this software are illustrated. Some possible extensions of our novel epidemiological models are discussed.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "The outbreak of the coronavirus disease or COVID-19, originated in Wuhan, the capital city of Hubei province, spreads out quickly in Hubei and then in China, South Korea, Japan, Iran and Italy, as well as many other cities across the world. Being one of the great epidemics in the 21st century, till February 25, 2020, in China it has caused a total of 78,195 confirmed infections, 2,718 deaths and 30,078 recovered cases, and 2,491 suspected cases still remained to be tested. Since the outbreak of the epidemic, many clinical papers [15, 3, 37, 38, 12, 6, 20, 5, 11, 8, 7, 28, 10, 42, 34] have been published to unveil limited but important knowledge of COVID-19, including that (i) COVID-19 is an infectious disease caused by SARS-CoV-2, a virus closely related to the SARS series of pY I t , Y R t q J follows a state-space model with the beta distributions at time t:",
+            "cite_spans": [
+                {
+                    "start": 535,
+                    "end": 539,
+                    "text": "[15,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 540,
+                    "end": 542,
+                    "text": "3,",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 543,
+                    "end": 546,
+                    "text": "37,",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 547,
+                    "end": 550,
+                    "text": "38,",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 551,
+                    "end": 554,
+                    "text": "12,",
+                    "ref_id": null
+                },
+                {
+                    "start": 555,
+                    "end": 557,
+                    "text": "6,",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 558,
+                    "end": 561,
+                    "text": "20,",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 562,
+                    "end": 564,
+                    "text": "5,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 565,
+                    "end": 568,
+                    "text": "11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 569,
+                    "end": 571,
+                    "text": "8,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 572,
+                    "end": 574,
+                    "text": "7,",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 575,
+                    "end": 578,
+                    "text": "28,",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 579,
+                    "end": 582,
+                    "text": "10,",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 583,
+                    "end": 586,
+                    "text": "42,",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 587,
+                    "end": 590,
+                    "text": "34]",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where \u03b8 I t and \u03b8 R t are the respective prevalence of infection and removal at time t, and \u03bb I and \u03bb R are the parameters controlling the respective variances of the observed proportions. Figure 1 : A conceptual framework of the proposed epidemiological state-space SIR model.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 189,
+                    "end": 197,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "As shown in Figure 1 , these observed time series are emitted from the underlying latent dynamics of COVID-19 infection characterized by the latent Markov process \u03b8 t . It is easy to see that the expected proportions in both models (1) and (2) are equal to the prevalence of infection and the probability of removal at time t, namely EpY I t |\u03b8 t q \" \u03b8 I t and EpY R t |\u03b8 t q \" \u03b8 R t . See Appendix B. Moreover, the latent population prevalence \u03b8 t \" p\u03b8 S t , \u03b8 I t , \u03b8 R t q J is a three-dimensional Markov process, in which \u03b8 S t is the probability of a person being susceptible or at risk at time t, \u03b8 I t is the probability of a person being infected at time t, and \u03b8 R t is the probability of a person being removed from the infectious system (either recovered or dead) at time t. Obviously, \u03b8 S t`\u03b8 I t`\u03b8 R t \" 1. We assume that this 3-dimensional prevalence process \u03b8 t is governed by the following Markov model:",
+            "cite_spans": [
+                {
+                    "start": 232,
+                    "end": 235,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 240,
+                    "end": 243,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 12,
+                    "end": 20,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Introduction"
+        },
+        {
+            "text": "where parameter \u03ba scales the variance of the Dirichlet distribution and function f p\u00a8q is a 3dimensional vector that determines the mean of the Dirichlet distribution. The function f is the engine of the infection dynamics, which operates according to the classical infectious disease SIR model of the form:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "d\u03b8 I t dt \" \u03b2\u03b8 S t \u03b8 I t\u00b4\u03b3 \u03b8 I t , and",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Note that the explicit solution to the above system (4) of ordinary differential equations is unavailable. Following [23] , we invoke the fourth-order Runge-Kutta(RK4) approximation, resulting in an approximate of f p\u03b8 t\u00b41 , \u03b2, \u03b3q as follows:",
+            "cite_spans": [
+                {
+                    "start": 117,
+                    "end": 121,
+                    "text": "[23]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "f p\u03b8 t\u00b41 , \u03b2, \u03b3q \"\u00a8\u03b8 S t\u00b41`1 {6rk S 1 t\u00b41`2 k S 2 t\u00b41`2 k S 3 t\u00b41`k S 4 t\u00b41 s \u03b8 I t\u00b41`1 {6rk I 1 t\u00b41`2 k I 2 t\u00b41`2 k I 3 t\u00b41`k",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where all these k t terms are given in the appendix A. Denote the set of model parameters by \u03c4 \" p\u03b2, \u03b3, \u03b8 0 , \u03bb, \u03baq J , which will be estimated using the MCMC method [2] .",
+            "cite_spans": [
+                {
+                    "start": 166,
+                    "end": 169,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The basic epidemiological model with both constant transmission and removal rates in SIR model (4) does not reflect the reality in China, where all levels of quarantines have been enforced. Many forms of human interventions that are altering the transmission rate over time include (i) individuallevel protective measures such as wearing masks and safety glasses, using hygiene, and taking inhome isolation, and (ii) community-level quarantines such as hospitalization for infected cases, city blockade, traffic control and restricted social activities, and so on. In addition, the virus itself may mutate to evolve, so to increase the potential rate of false negative in the disease diagnosis. As a result, some individual virus carriers are not contained. Thus, the transmission rate \u03b2 indeed varies over time, which should be accounted in the modeling. One extension to the above basic epidemiological model is to allow a time-varying probability that a susceptible person meets an infected person or vice versa. Suppose at a time t, q S ptq P r0, 1s is the chance of an at-risk person being in-home isolation, and q I ptq P r0, 1s is the chance of an infected person being in-hospital quarantine. Thus, the chance of disease transmission when an at-risk person meets an infected person is modified as: \u03b2t1\u00b4q S ptqu\u03b8 S t t1\u00b4q I ptqu\u03b8 I t :\" \u03b2\u03c0ptq\u03b8 S t \u03b8 I t , with \u03c0ptq :\" t1\u00b4q S ptqut1\u00b4q I ptqu P r0, 1s. In effect, this \u03c0ptq modifies the chance of a susceptible person meeting with an infected person or vice versa, which is termed as a transmission modifier due to quarantine in this paper. Obviously, with no quarantine in place, \u03c0ptq \" 1 for all time. See Figure 2 . This results in a new SIR model with a time-varying transmission rate modifier:",
+            "cite_spans": [
+                {
+                    "start": 95,
+                    "end": 98,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 1664,
+                    "end": 1672,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "where the product term \u03b2\u03c0ptq defines a realistic transmission rate reflective to the currently enforced quarantine measures of all levels in China. Note that the above extended SIR model assumes primarily that both population-level chance of being susceptible and population-level chance of being infected remain the same, but the chance of a susceptible person meeting with an infected person is reduced by \u03c0ptq.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "The transmission rate modifier \u03c0ptq needs to be specified according to actual quarantine protocols in a given region. A possible choice of \u03c0ptq may be a step function that reflects governmentinitiated macro isolation measures in Wuhan, Hubei province:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "\u03c0 01 , if t \u010f Jan 23, no concrete quarantine protocols; \u03c0 02 , if t P pJan 23, Feb 4s, city blockade; \u03c0 03 , if t P pFeb 4, Feb 8s, enhanced quarantine; \u03c0 04 , if t \u0105 Feb 8, opening of new hospitals.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "When \u03c0 0 \" p\u03c0 01 , \u03c0 02 , \u03c0 03 , \u03c0 04 q are chosen with different values, as shown in Figure 3 , we obtain different types of transmission rate modifiers aligned with different quarantine protocols. Subfigures from A to C indicate \u03c0 0 \" p\u03c0 01 , \u03c0 02 , \u03c0 03 , \u03c0 04 q equal to p1, 1, 1, 1q, p1, 0.9, 0.8, 0.5q and p1, 0.9, 0.5, 0.1q with change time points at (Jan 23, Feb 4, Feb 8) respectively.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 86,
+                    "end": 94,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "Alternatively, the modifier \u03c0ptq may be specified as a continuous function that reflects steadily increased community-level awareness and responsibility of voluntary quarantine and preventive measures, which may be regarded as a kind of micro isolation measure initiated by individuals or local self-organized inspections. For example, as shown in Figure 4 , we may choose the following exponential functions:",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 348,
+                    "end": 356,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "\u03c0ptq \" expp\u00b4\u03bb 0 tq or \u03c0ptq \" expt\u00b4p\u03bb 0 tq \u03bd u, \u03bb 0 \u0105 0, \u03bd \u0105 0. Technically, the RK's approximate of f function in Appendix A may be easily obtained by 6 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint replacing \u03b2 by \u03b2\u03c0ptq in the specification of the latent prevalence model (3) , and moreover in all quantities and steps in the MCMC implementation. See the detailed in Section 3.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 144,
+                    "text": "29.20029421 doi: medRxiv preprint",
+                    "ref_id": null
+                },
+                {
+                    "start": 218,
+                    "end": 221,
+                    "text": "(3)",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Epidemiological model with time-varying transmission rate"
+        },
+        {
+            "text": "An alternative way to incorporate quarantine measures into the basic epidemiological model (4) is to add a new quarantine compartment that collects quarantined individuals who would have no chance of meeting any infected individuals in the infection system, as shown in Figure 5 . This model allows to characterize time-varying proportions of susceptible cases due largely to the governmentenforced stringent in-home isolation outside of Hubei province. The basic SIR model in equation (4) is then extended by adding a quarantine compartment with a time-varying rate of quarantine \u03c6ptq, which is the chance of a susceptible person being willing to take in-home isolation at time t. The extended SIR takes the following 4-dimensional latent process p\u03b8 S t , \u03b8 Q t , \u03b8 I t , \u03b8 R t q J :",
+            "cite_spans": [
+                {
+                    "start": 486,
+                    "end": 489,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 270,
+                    "end": 278,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Epidemiological model with quarantine compartment"
+        },
+        {
+            "text": "where We suppose that the quarantine rate \u03c6ptq is a Dirac delta function with jumps at times when major macro quarantine measures are enforced. For example, we may specify the \u03c6ptq function as follows:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological model with quarantine compartment"
+        },
+        {
+            "text": "\u03c6ptq \" Here we show several examples of multi-point instantaneous quarantine rates in Figure 6 with jump sizes equal to \u03c6 0 \" p\u03c6 01 , \u03c6 02 , \u03c6 03 q that occur respectively at dates of (Jan 23, Feb 4, Feb 8). In particular, we plot three scenarios, e.g., no intervention (\u03c6 0 \" p0, 0, 0q), multiple moderate jumps (\u03c6 0 \" p0.1, 0.4, 0.3q), and only one large jump (\u03c6 0 \" p0, 0.9, 0q). Note that at each jump, the respective proportion of the susceptible population would move to the quarantine compartment. For example, with \u03c6 0 \" p0.1, 0.4, 0.3q, the quarantine compartment will be enlarged accumulatively over three time points as 0.1 \u03b8 S t 1`0 .4\u03b8 S t 2`0 .3\u03b8 S t 3 . The f p\u03b8 t\u00b41 , \u03b2, \u03b3q function determined by the above extended SIR model (6) can be solved by applying the fourth-order Runge-Kutta approximation, and the resulting solution is given in Figure 6 : Three examples of multi-point instantaneous quarantine rates. Subfigures from A to C denote \u03c6 0 \" p0, 0, 0, 0q, \u03c6 0 \" p0.1, 0.4, 0.3q and \u03c6 0 \" p0, 0.9, 0q at three time points of (Jan 23, Feb 4, Feb 8) respectively. Appendix A. To deal with the Dirac delta function \u03c6ptq, we develop a two-step approximation for model (6) . In brief, we first solve a continuous function without change points via the differential equations in (5) , and then we directly move \u03c6ptq\u03b8 S t of the susceptible compartment to the quarantine compartment. From our experience, this approach largely improves the approximation accuracy in the presence of discontinuities.",
+            "cite_spans": [
+                {
+                    "start": 742,
+                    "end": 745,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 1185,
+                    "end": 1188,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 1294,
+                    "end": 1297,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 86,
+                    "end": 94,
+                    "text": "Figure 6",
+                    "ref_id": null
+                },
+                {
+                    "start": 855,
+                    "end": 863,
+                    "text": "Figure 6",
+                    "ref_id": null
+                }
+            ],
+            "section": "Epidemiological model with quarantine compartment"
+        },
+        {
+            "text": "3 Implementation: Markov Chain Monte Carlo Algorithm",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological model with quarantine compartment"
+        },
+        {
+            "text": "We implemented the MCMC algorithm to collect draws from the posterior distributions, and further obtain posterior estimates and credible intervals of the unknown parameters in the above models specified in Section 2. Because of the hierarchical structure in the state-space model considered in this paper, the posterior distributions can be obtained straightforwardly. The R package rjags [25] can be directly applied to draw samples from the posterior distributions, so we omit the technical details. The latent Markov \u03b8 t processes are sampled and forecasted by the MCMC sampler, particularly for the prevalence of infection and the probability of removal, \u03b8 I t and \u03b8 R t , which enables us to determine turning points of interest and the reproduction number R 0 .",
+            "cite_spans": [
+                {
+                    "start": 389,
+                    "end": 393,
+                    "text": "[25]",
+                    "ref_id": "BIBREF23"
+                }
+            ],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "The first turning point of interest is the time when the daily number of new infected cases stops increasing. Mathematically, this corresponds to the time t at which : \u03b8 I t \" 0 or the gradient of 9 \u03b8 I t is zero. As illustrated by Panel A in Figure 7 , the peak of 9 \u03b8 I t , denoted by the vertical green line, is the first turning point of interest. The second turning point is the time when the cumulative infected cases reaches its maximum, meaning 9 \u03b8 I t \" 0. In principle, the second turning point occurs only after the first one, as shown in Panel B in Figure 7 .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 243,
+                    "end": 251,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 561,
+                    "end": 569,
+                    "text": "Figure 7",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "The reproduction number R 0 of an infectious disease is estimated by the ratio R 0 \" \u03b2{\u03b3, where \u03b2 and \u03b3 are both estimated from their posterior distributions. Because our models consider the quarantine compartment, R 0 might change according to the forms of quarantine protocols. We adopt a standard MCMC algorithm to draw the latent process. Let t 0 be the current time up to which we have observed data pY I 0:t 0 , Y R 0:t 0 q. To perform M draws of Y I t , Y R t for t P rt 0`1 , T s, we 8 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . , \u03c4 pmq s of the prevalence process, at t \" t 0`1 , . . . , T ;",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "pmq t , \u03c4 pmq s and rY R t |\u03b8 pmq t , \u03c4 pmq s according to the observed process, at t \" t 0`1 , . . . , T , respectively;",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "The prior distributions are specified with some of the hyper-parameters being set according to the SARS data from Hong Kong [21] . They are,",
+            "cite_spans": [
+                {
+                    "start": 124,
+                    "end": 128,
+                    "text": "[21]",
+                    "ref_id": "BIBREF19"
+                }
+            ],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "In the default setting the variances of the above prior distributions are set at relatively large values to reflect the fact that limited prior knowledge of these epidemiological model parameters is available. When more information becomes accessible during the course of the epidemic, smaller prior variance values may be used, leading to tighter credible intervals for the model parameters and turning points.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MCMC Algorithm"
+        },
+        {
+            "text": "We deliver an R software package that is able to output the MCMC estimation, inference and prediction under the epidemiological model with two proposed extended SIR models that incorporate time-varying quarantine protocols. These new models have been discussed in detail in Sections 2.2 and 2.3. Our R package, named eSIR, uses daily-updated time series of infected and removed proportions as input data. The R package is available at GitHub lilywang1988/eSIR, and its user manual is appended as the supplementary material of this paper. The quarantine functions are predefined and will be treated as known functions of protocols/policies in the estimation and 9 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "R software package"
+        },
+        {
+            "text": "author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "R software package"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . prediction steps. We let the transmission rate modifier \u03c0ptq be either a step function or an exponential function, and let the quarantine rate \u03c6ptq follow a Dirac delta function with pre-specified points of jump and sizes of jumps. The package provides various plots for users to visualize the MCMC results, including the estimated prevalence of infection and the estimated probability of removal, and predicted turning points of interest. Various summary statistics are listed in the output, including posterior mean estimates of the transmission and removal rates, estimate of the reproduction number, and forecasts of turning points and their 95% credible intervals. Moreover, the package gives multiple options to users who can save the entire MCMC results, including the output tables and summary plots, traceplots for MCMC quality control, and full MCMC draws for user's own summary analyses. Some illustrations on the use of this software package is given in Section 4. In addition, we developed an online R Shiny App that can automatically update the results whenever the China CDC updates the daily COVID-19 data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "R software package"
+        },
+        {
+            "text": "Under-reporting of infections is a common issue in the data collection of infectious disease, especially at the beginning of an outbreak. When medical diagnostic tools become more accurate and reliable, as well the transparency of preventive measures gets improved for an exchange of voluntary in-home quarantine, certain adjustments in data typically occur. It is shown in Figure 8 that on Feb 12 the cumulative and daily added number of infected cases in Hubei had clear jumps with significantly large sizes. Such sizable jumps cannot happen within one day, rather they represent an accumulation of cases that have not been reported in previous dates prior to Feb 12. To fix this under-reporting issue, we develop a calibration procedure with the detail in Appendix C. Below we briefly describe our approach for the calibration of the infected cases.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 374,
+                    "end": 382,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Calibration of under-reported infection data"
+        },
+        {
+            "text": "We assume an exponential growth curve for the cumulative number of infected cases in Hubei before Feb 12 of the form yptq \" ae \u03bbt`b , where parameters \u03bb, a, b are to be estimated. Under the boundary conditions ypt \" Jan 12q \" 0 and ypt \" Feb 12q \" a expp31\u03bbq`b, we would like to minimize the one-step ahead extrapolation error on Feb 13. The constrained optimal solution can be obtained by the means of Lagrange Multipliers; the estimates are\u03bb \" 0.06605,\u00e2 \" 7142.80,b \" 7142.80. The resulting calibration curves for the cumulative and daily added number of infected cases are shown as the solid red curves in Figure 8 . For example, on Jan 31, the reported cumulative number of infected cases is 7,153, but the calibrated number of infected cases is 17,911, with an increment of 10,758 cases. As shown later, this data quality control (QC) step helps improve the performance of MCMC.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 609,
+                    "end": 617,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Calibration of under-reported infection data"
+        },
+        {
+            "text": "We applied our proposed models, algorithms and R package eSIR to analyze the COVID-19 data collected from the public website DXY.cn. The earliest public records for the provincial data are available since Jan 20, 2020. According to an existing R package on GitHub GuangchuangYu/nCov2019",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Evaluation and prediction under time-varying quarantine"
+        },
+        {
+            "text": "[39], the total counts of confirmed infections and deaths are dated back on Jan 13, 2020. We assumed that before Jan 17 all the reported cases and deaths were from Hubei. We imputed by the linear interpolation the missing cases on Jan 18-19. Therefore, the data used in our analyses starts from Jan 13. The data used in analyses for the other provinces starts on Jan 23, which is the earliest time with non-zero values in the removed compartment. Note that there exist some minor discrepancies between different data sources, and the under-reporting issue is addressed in Appendix C by a calibration procedure. This section aims to provide a demonstration of our software to analyze the current public COVID-19 data, through which users may understand the proposed methods. We focus on illustrating ways to export and interpret the MCMC results. The R package may be applied to analyze infectious data from other countries.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Evaluation and prediction under time-varying quarantine"
+        },
+        {
+            "text": "First, we show the analysis of the Hubei COVID-19 data. Note that option dic=T enables to calculate the deviance information criterion (DIC) for model selection, while options, save_files=T and save_mcmc, allow the storage of MCMC output tables, plots, summary statistics and even full MCMC draws, which may be saved via the path of file_add, or otherwise via the current working directory. The major results returned from the package include predicted cumulative proportions, predicted turning points of interest, two ggplot2 [36] objects of the summary plots related to both infection and removed compartments, a summary output table containing all the posterior means, median and credible intervals of the model parameters, and DIC if opted. The traceplots and other useful diagnostic plots are also provided and automatically saved if save_files=T is opted. In the package, function tvt.eSIR() works on the epidemiological model with timevarying transmission rate in Section 2.2, and qh.eSIR() for the other epidemiological model with a quarantine compartment in Section 2.3. Note that in function tvt.eSIR(), with a choice of exponential=F, a step function is run in the MCMC when both change_time and pi0 are specified. To fit the model with a continuous transmission rate modifier function, user may set exponential=T and specify a value of lambda0. The default is to run the basic epidemiological model with no quarantine or \u03c0ptq \" 1 in Section 2.1. death_in_R is usually set to be the average ratio of death and removed proportions at each observation time point, which is used to estimate the death curve in the forecast plot of the removed compartment. Below are the R scripts used in the analysis.",
+            "cite_spans": [
+                {
+                    "start": 527,
+                    "end": 531,
+                    "text": "[36]",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Evaluation and prediction under time-varying quarantine"
+        },
+        {
+            "text": "Step function pi(t) ### Y and R are observed proportions of infected and removed compartments change_time <-c(\"01/23/2020\",\"02/04/2020\",\"02/08/2020\") pi0<-c(1.0,0.9,0.5,0.1) res.step <-tvt.eSIR(Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, T_fin=200,pi0=pi0,change_time=change_time,dic=T, casename=\"Hubei_step\",save_files = T,",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "### Example 1:"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "author/funder, who has granted medRxiv a license to display the preprint in perpetuity. In the above R coding scripts, only very short MCMC chains are specified for the consideration of running time. In practice, it is recommended to set M=5e5 and nburnin=2e5 to achieve desirable burn-ins and yield stable MCMC draws. We tried the step function given by Panel C in Figure 3 with pi0=c(1,0.9,0.5,0.1), an exponential function given by Panel B in Figure 4 with rate lambda0=0.05, both of which were compared with the basic model with \u03c0ptq \" 1. The results of the three modifier functions obtained from the tvt.eSIR function are summarized in Figures 9-11 . In these forecasting plots of the infected and removed compartments (Panel A and Panel C), the black dots left to the blue vertical line denote the observed proportions of the infected and removed compartments on the last date of available observations or before. That is, the blue vertical marks time t 0 as defined in Section 3. The green and purple vertical lines denote the first and second turning points, respectively. The salmon color area denotes the 95% credible interval of the predicted proportions Y I t and Y R t after t 0 , respectively, while the cyan color area represents either the 95% credible intervals of the prevalence (\u03b8 I t ) and or that of the probability of removal (\u03b8 R t ) prior to time t 0 . The gray and red curves are the posterior mean and median curves. The black curve in the plot (Panel C) is the proportion of deaths estimated from a pre-specified ratio death_in_R. The middle Panel B displays important dynamic features of the infection via a spaghetti plot, in which 20 randomly selected MCMC draws of the first-order derivative of the posterior prevalence of infection, namely 9",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 366,
+                    "end": 374,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 446,
+                    "end": 454,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 641,
+                    "end": 653,
+                    "text": "Figures 9-11",
+                    "ref_id": null
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "\u03b8 I t . The black curve is the posterior mean of the derivative, and the vertical lines mark times of turning points corresponding respectively to those shown in Panel A and Panel C. Moreover, the 95% credible intervals of these turning points are also highlighted by semi-transparent rectangles in Panel B. As shown in these figures, the transmission rate modifier \u03c0ptq played an important roles in shortening the key turning points of the epidemic, and its effect on both estimation and prediction of the COVID-19 infection dynamics has been clearly demonstrated .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "Next, we analyzed the data from the rest of the Chinese population (i.e. the provinces outside Hubei) starting on Jan 23. We set begin_str=\"01/23/2020\"in tvt.eSIR. To address the delayed starting time, we included two change points for the step function \u03c0ptq at [Feb 4, Feb 8] with \u03c0 0 \" p0.8, 0.1q. The exponential function remained the same. It is noted that the spread of 12 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.29.20029421 doi: medRxiv preprint Figure 9 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei without intervention, \u03c0ptq \" 1. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 152,
+                    "text": "Figure 9",
+                    "ref_id": null
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.29.20029421 doi: medRxiv preprint Figure 11 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei with a step-function transmission rate modifier specified by \u03c0 0 \" p1, 0.9, 0.5, 0.1q at change points [Jan 23, Feb 4, Feb 8].",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 153,
+                    "text": "Figure 11",
+                    "ref_id": null
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "COVID-19 outside Hubei has been so far much less severe. Possible reasons for such low proportions of infection and deaths include (i) discontinuing the traffic connections between Hubei and the provinces, (ii) more timely caution and preventative measures taken, and (iii) a comparatively large population that dilutes the exposed group. When Panel A in Figure 12 is zoomed in, some of the observed proportions (black dots) are deviated from the posterior mean or median of the fitted prevalence albeit they all fall in the 95% credible intervals, as shown by Panel A in Figures 13 and  14 . Since the latent process follows the SIR differential equations, there may be a lack of fit for the SIR model to accommodate a very large and complex population of 1.3 billion people, in which most of the subjects are not at risk. The proposed models should work much better for individual provinces, but we did not perform such analyses. The other epidemiological model with an added quarantine compartment as an absorbing state was fitted via our R function qh.eSIR in the package eSIR. The arguments used in qh.eSIR() are almost identical to those in tvt.eSIR(). Note that if the quarantine rate function is set at constant 0, this model will be reduced to a basic epidemiological SIR model. ### Example 4: Dirac delta function of the quarantine process change_time <-c(\"01/23/2020\",\"02/04/2020\",\"02/08/2020\") phi <-c(0.1,0.4,0.4) res.q <-qh.eSIR (Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, phi0=phi0,change_time=change_time, casename=\"Hubei_q\",save_files = T,save_mcmc = F, M=5e2,nburnin = 2e2) res.q$plot_infection 14 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 355,
+                    "end": 364,
+                    "text": "Figure 12",
+                    "ref_id": "FIGREF0"
+                },
+                {
+                    "start": 572,
+                    "end": 590,
+                    "text": "Figures 13 and  14",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.29.20029421 doi: medRxiv preprint Figure 12 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for the other provinces outside Hubei with \u03c0ptq \" 1. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 153,
+                    "text": "Figure 12",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.29.20029421 doi: medRxiv preprint Figure 14 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for the other provinces outside Hubei with a step-function transmission rate modifier specified by \u03c0 0 \" p1, 0.9, 0.5, 0.1q at change points [Jan 23, Feb 4, Feb 8].",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 153,
+                    "text": "Figure 14",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "#res.q$plot_removed ### Example 5: basic state-space SIR model res.noq <-qh.eSIR (Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, T_fin=200,casename=\"Hubei_noq\", M=5e2,nburnin = 2e2) res.noq$plot_infection",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "We applied the R function qh.eSIR in analyses of the data within and outside Hubei. Results are summarized in Figures 15-16 . Our analyses once again clearly indicated that stringent quarantine protocols can largely reduce the spread of COVID-19 both within Hubei and outside Hubei. Yet, it is known that too strict quarantine can cause backfire; people may lose their trust and patience in their committed system, and consequently may try to reduce compliance or even avoid quarantine. We also present the posterior mean probability of staying quarantine compartment in Figure 17 within Hubei and outside Hubei. Note that Jan 23 was not set as a change point for the case of outside Hubei, leading only to two jumps. It is evident that by Feb 8, more than 90% of the Chinese population have taken in-home isolation or as such, reflective to a very strict quarantine protocol enforced in the entire country.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 110,
+                    "end": 123,
+                    "text": "Figures 15-16",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 571,
+                    "end": 580,
+                    "text": "Figure 17",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "As described in Subsection 4.1, we corrected the under-reported proportion of infections in Hubei province prior to Feb 12, when a big jump occurred on one day. We repeated the same analyses using the calibrated data of infections, and the corresponding results are shown in It is interesting to see that the abrupt rise in the infection proportion on Feb 12 disappeared in all Panel A in these new analyses, and the observed data (i.e. the black dots) align better with the 16 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint 17 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "29.20029421",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint Figure 17 : The posterior mean probability of staying in quarantine compartment within and outside Hubei. credible intervals of all the latent processes. We also notice that after the correction, the estimated reproduction numbers R 0 became smaller. The reproduction numbers estimated from different models for within and outside Hubei, with and without the data calibration, together with their 95% credible intervals are summarized in Table 1 .",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "29.20029421",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 145,
+                    "end": 154,
+                    "text": "Figure 17",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 583,
+                    "end": 590,
+                    "text": "Table 1",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "11"
+        },
+        {
+            "text": "It is worth pointing out that the estimates of the reproduction numbers obtained from the epidemiological models with time-varying transmission or quarantine rates appear larger than those obtained from the basic model with no quarantine. This is no surprising as our new models explicitly incorporate interventions, so that the estimated R 0 is an adjusted number with the influence of interventions be removed. In contrast, the basic model with no use of the quarantine modifier implicitly integrates the effect of interventions into the transmission rate \u03b2, and consequently the estimated R 0 is reduced due to the contribution from interventions. Our analyses suggest that reproduction numbers R 0 of COVID-19 without public health interventions would be around 4-5 within Hubei and around 3-3.5 outside Hubei with relatively big credible intervals. These findings are in agreement with findings from [17] . As pointed out above, the size of credible interval may be reduced with more accessible data of COVID-19, which permit users to specify smaller variances in the prior distributions given in section 3.1.",
+            "cite_spans": [
+                {
+                    "start": 905,
+                    "end": 909,
+                    "text": "[17]",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "11"
+        },
+        {
+            "text": "We develop an epidemiological forecast model with an R software package to assess effects of interventions on the COVID-19 epidemic within Hubei and outside Hubei in China. Since our 18 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02.29.20029421 doi: medRxiv preprint Figure 18 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei province with \u03c0ptq \" 1 after calibration. Note that the second turning point is beyond the time-axis limit in the plots. Figure 19 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei with an exponential transmission rate modifier \u03c0ptq \" expp\u00b40.05tq after data calibration.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 144,
+                    "end": 153,
+                    "text": "Figure 18",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 379,
+                    "end": 388,
+                    "text": "Figure 19",
+                    "ref_id": null
+                }
+            ],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "19 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint Figure 20 : Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei with a step-function transmission rate modifier specified by \u03c0 0 \" p1, 0.9, 0.5, 0.1q at change points [Jan 23, Feb 4, Feb 8] after data calibration. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "29.20029421",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 145,
+                    "end": 154,
+                    "text": "Figure 20",
+                    "ref_id": "FIGREF0"
+                }
+            ],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint proposed model utilizes the strength of the SIR's dynamic system to capture the primary mechanism of the COVID-19 infectious disease, we are able to predict future episodes of the disease spread patterns over a window of 200 days from the last date of data availability. Some turning points of interest are obtained from these forecasting curves as part of the deliverable information, including the predicted time when daily proportion of infected cases becomes smaller than the previous ones and the predicted time when daily proportion of removed cases (i.e. both recovered and dead) becomes larger than that of infected cases, as well as the time when the epidemic ends. Our informatics toolbox provides quantification of uncertainty on the prediction, rather than only point prediction values, which are valuable to see the best versus the worst. The key novel contribution is the incorporation of time-varying quarantine protocols to expand the basic epidemiological model to accommodate changing transmission rates over time in the population. The toolbox can be used by practitioners who have better knowledge of quarantine and better quality data to perform their own analyses. Practitioners can use the toolbox to evaluate different types of quarantine strategies in practice. All summary statistics obtained from the toolbox are of great importance for public health workers and government policy makers to take proper actions on stop spreading of COVID-19.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 144,
+                    "text": "29.20029421 doi: medRxiv preprint",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "We chose the MCMC algorithm to implement the statistical estimation and prediction because of the consideration on the prediction uncertainty. Given the considerable complexity in the COVID-19 virus spread dynamics and potentially inaccurate information of quarantine measures as well as likely under-reported proportions of infected and recovered cases and deaths, it is of critical importance to quantify and report uncertainty in the forecast. Note that the publicly reported data of recovery and death of COVID-19 are mostly collected from hospitals where accessibility to such information is warrant. In contrast, it is very difficulty, if not impossible, to collect the data of infected individuals with light symptoms who had in-home isolation and recovered, in spite of serious efforts made by the government for a door-to-door inspection to identify suspected cases.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "This toolbox is indeed so general that it may be applicable to analyze and evaluate the COVID-19 epidemic in other countries, as well as the future outbreak of other types of infectious diseases. As noted in the paper, our proposed method does need prior data of similar infectious disease to set up initial conditions of the infection dynamics. For this, we analyzed the complete SARS data from Hong Kong given some similarity of COVID-19 to SARS. From this perspective, what we learned from this COVID-19 epidemic in this paper is extremely valuable to form initial conditions in the analysis of any future outbreak of similar infectious disease. In addition, understanding forms and strengths of quarantines for the controlling of disease spread is an inevitable path to making effective preventive policies, which is the key analytic capacity that our toolbox offers.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "The proposed epidemiological models can be further extended to accommodate more data reported by the China CDC, which are worth future exploration. Two types of data that may be used in the future extension are the daily number of suspected cases and the daily number of hospitalized cases. We did not use such data due to the concern of data accuracy. For example, the number of suspected cases is largely dependent on the diagnostic protocols, which have been revised a few times since the outbreak of the disease, and the sensitivity of the RNA test. Given such concerns, our strategy in the proposed model was to only use necessary data for analysis, and over the course of improved data quality in the near future, our toolbox may be extended to enjoy greater statistical power and more accurate predictions.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Concluding Remarks"
+        },
+        {
+            "text": "Using the RK4 approximation, f p\u03b8 t\u00b41 , \u03b2, \u03b3q in the extended SIR model (6) with a quarantine compartment can be approximated following the two iterative steps:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A.2 Approximation in the extended SIR model with quarantine compartment"
+        },
+        {
+            "text": "1. Solve the f p\u03b8 t\u00b41 , \u03b2, \u03b3q in Appendix A without considering the quarantine with f p\u00a8q f p\u03b8 t\u00b41 , \u03b2, \u03b3q \" r\u03b1 1pt\u00b41q , \u03b1 2pt\u00b41q , \u03b1 3pt\u00b41q s T .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A.2 Approximation in the extended SIR model with quarantine compartment"
+        },
+        {
+            "text": "2. Due to the quarantine, we deduct the susceptible by \u03b11 pt\u00b41q \" \u03b1 1pt\u00b41q\u00b4\u03c6 ptq\u03b8 S t\u00b41 , and let",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A.2 Approximation in the extended SIR model with quarantine compartment"
+        },
+        {
+            "text": "Let \u03b1t\u00b41 \" r\u03b11 pt\u00b41q , \u03b1 2pt\u00b41q , \u03b1 3pt\u00b41q s T , and it is easy to show that the sum \u0159 3 k\"1 \u03b1k pt\u00b41q \" 1\u00b4\u03b8 Q t . Thus we can regenerate the next day's \u03b8 t following a Dirichlet distribution adjusted by the prevalence of the quarantine compartment \u03b1t \" Dirichletp\u03ba\u03b1t\u00b41{p1\u00b4\u03b8 Q t qq. The estimated prevalence values become \u03b8 t \" p1\u00b4\u03b8 Q t q\u03b1t . We follow above two steps and finish the complete prevalence processes. Note that the deduction of susceptible compartments might cause \u03b8 S t \u010f 0, we will bound such prevalence value to be consistently 0, which is equivalent to terminating transmission among susceptible subjects.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "A.2 Approximation in the extended SIR model with quarantine compartment"
+        },
+        {
+            "text": "For the sake of being self-contained, we list the moments of both Beta and Dirichlet distributions. The mean and variance of Beta distribution Betap\u03b1, \u03b2q are respectively:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B Moment properties of Beta and Dirichlet distributions"
+        },
+        {
+            "text": "Mean \" \u03b1 \u03b1`\u03b2 , Var \" \u03b1\u03b2 p\u03b1`\u03b2q 2 p\u03b1`\u03b2`1q .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B Moment properties of Beta and Dirichlet distributions"
+        },
+        {
+            "text": "While to Dirchlet distribution Dirp\u03ba\u03b1q, we have",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B Moment properties of Beta and Dirichlet distributions"
+        },
+        {
+            "text": "where \u03b1 \" p\u03b1 1 , \u03b1 2 , \u03b1 3 , \u03b1 4 q T with \u03b1 1`\u03b12`\u03b13`\u03b14 \" 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "B Moment properties of Beta and Dirichlet distributions"
+        },
+        {
+            "text": "As is mentioned in the Introduction, the issue of under-reporting may cause bias in prediction. In order to adjust the under-reported number of infected cases, we apply the following algorithm to calibrate the number of infections before Feb 12, during which time the Chinese government only relies on the RNA test for diagnosis, which was realized later with low sensitivity leading to many false negatives.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "We assume that the cumulative number of infected cases between Jan 13 and Feb 12 when a sudden big jump occurs follows an exponential function, yptq \" ae \u03bbt`b , 26 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint where t P t1, 2, . . . u and a, b, \u03bb are parameters to be estimated. Here, t \" 1 stands for Jan 13 and t \" 31 stands for Feb 12. Under the condition of yp0q \" 0, we can easily get that yptq \" ae \u03bbt\u00b4a .",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "29.20029421",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "To estimate parameter \u03bb and a, we want to minimize the least square error of the estimated number yptq of infected cases at t \" 32 (Feb 13), which is one day after the Chinese government changed the diagnosis protocol. It is assumed that the difference between the predicted and observed number of infections on Feb 13 would not be big if the model were established well, although the long term difference might be large due to other interventions. Therefore, the optimization problem we want to solve is, min a,\u03bb typ32q\u00b4ae 32\u03bb`a u 2 s.t. ae 31\u03bb\u00b4a \" yp31q.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "The constraint ae 31\u03bb\u00b4a \" yp31q is used to ensure that the cumulative number of infected cases till Feb 12 equals to the observed value yp31q. The optimization problem can be solved using the method of Lagrange Multipliers. Obtained\u03bb \" 0.06605,\u00e2 \" 7142.80. The calibrated number of infected cased between Jan 13 and Feb 12 is shown in Figure 8 . The proposed calibration method corrected the under-reporting issue, at least partially.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 335,
+                    "end": 343,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "27 All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint qh.eSIR 3",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "29.20029421",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "C Under-reporting Calibration"
+        },
+        {
+            "text": "In this function we allow it to characterize time-varying proportions of susceptible due to governmentenforced stringent in-home isolation. We expanded the SIR model by adding a quarantine compartment with a time-varying rate of quarantine \u03c6 t , the chance of a susceptible person being willing to take in-home isolation at time t.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Details"
+        },
+        {
+            "text": "Value casename the predefined casename.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Details"
+        },
+        {
+            "text": "incidence_mean mean incidence.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Details"
+        },
+        {
+            "text": "incidence_ci 2.5%, 50%, and 97.5% quantiles of the incidences. plot_removed. The latter indicate stationary t at which the first-order derivative of the averaged posterior of \u03b8 I t equals zero. second_tp_ci with second_tp_mean, it reports the corresponding credible interval and median.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Details"
+        },
+        {
+            "text": "dic_val the output of dic.sample() in dic.sample, computing deviance information criterion for model comparison. change_time <-c(\"01/23/2020\",\"02/04/2020\",\"02/08/2020\") phi0 <-c(0.1,0.4,0.4) res.q <-qh.eSIR (Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, phi0=phi0,change_time=change_time, casename=\"Hubei_q\",save_files = T,save_mcmc = F, M=5e2,nburnin = 2e2) res.q$plot_infection #res.q$plot_removed res.noq <-qh.eSIR (Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, T_fin=200,casename=\"Hubei_noq\", M=5e2,nburnin = 2e2) res.noq$plot_infection tvt.eSIR Fit extended state-space SIR model with time-varying transmission rates",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Details"
+        },
+        {
+            "text": "Fit extended state-space SIR model with prespecified changes in the transmission rate, either stepwise or continuous, accomodating time-varying quaratine protocols. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Description"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29 Step function of pi(t) change_time <-c(\"01/23/2020\",\"02/04/2020\",\"02/08/2020\") pi0<-c(1.0,0.9,0.5,0.1) res.step <-tvt.eSIR(Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, T_fin=200,pi0=pi0,change_time=change_time,dic=T, casename=\"Hubei_step\",save_files = T, save_mcmc=F,M=5e2,nburnin = 2e2) res.step$plot_infection res.step$plot_removed res.step$dic_val ### continuous exponential function of pi(t) res.exp <-tvt.eSIR(Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, T_fin=200,exponential=TRUE,dic=F,lambda0=0.05, casename=\"Hubei_exp\",save_files = F,save_mcmc=F, M=5e2,nburnin = 2e2) res.exp$plot_infection #res.exp$plot_removed ### without pi(t), the standard state-space SIR model without intervention res.nopi <-tvt.eSIR(Y,R,begin_str=\"01/13/2020\",death_in_R = 0.4, T_fin=200,casename=\"Hubei_nopi\",save_files = F, M=5e2,nburnin = 2e2) res.nopi$plot_infection #res.nopi$plot_removed All rights reserved. No reuse allowed without permission. author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 113,
+                    "text": "29",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Description"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29 author/funder, who has granted medRxiv a license to display the preprint in perpetuity.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 113,
+                    "text": "29",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Description"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.02. 29.20029421 doi: medRxiv preprint",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 122,
+                    "text": "29.20029421",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Description"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Song Lab at UM. eSIR: Extended state-space SIR models",
+            "authors": [],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "A monte carlo approach to nonnormal and nonlinear state-space modeling",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Bradley",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Carlin",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Nicholas",
+                    "suffix": ""
+                },
+                {
+                    "first": "David",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Polson",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Stoffer",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "Journal of the american Statistical association",
+            "volume": "87",
+            "issn": "418",
+            "pages": "493--500",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Qing Gong, et al. Clinical characteristics and intrauterine vertical transmission potential of covid-19 infection in nine pregnant women: a retrospective review of medical records",
+            "authors": [
+                {
+                    "first": "Huijun",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Juanjuan",
+                    "middle": [],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Chen",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Fan",
+                    "middle": [],
+                    "last": "Luo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xuechen",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wei",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jiafu",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dongchi",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dan",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "The Lancet",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "World Health Organization, et al. Plague manual: epidemiology, distribution, surveillance and control",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "David",
+                    "suffix": ""
+                },
+                {
+                    "first": "Kenneth",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Dennis",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gage",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Norman",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gratz",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Jack",
+                    "suffix": ""
+                },
+                {
+                    "first": "Evgueni",
+                    "middle": [],
+                    "last": "Poland",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Tikhomirov",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Bat coronaviruses in china",
+            "authors": [
+                {
+                    "first": "Yi",
+                    "middle": [],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Kai",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zheng-Li",
+                    "middle": [],
+                    "last": "Shi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Peng",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Viruses",
+            "volume": "11",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Return of the coronavirus: 2019-ncov",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Lisa",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gralinski",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Vineet",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Menachery",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Viruses",
+            "volume": "12",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Clinical characteristics of 2019 novel coronavirus infection in china. medRxiv",
+            "authors": [
+                {
+                    "first": "Zheng-Yi",
+                    "middle": [],
+                    "last": "Wei-Jie Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yu",
+                    "middle": [],
+                    "last": "Ni",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wen-Hua",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Chun-Quan",
+                    "middle": [],
+                    "last": "Liang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jian-Xing",
+                    "middle": [],
+                    "last": "Ou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lei",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "Hong",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Chun-Liang",
+                    "middle": [],
+                    "last": "Shan",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lei",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "David",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hui",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Ahmet Tural, et al. First case of 2019 novel coronavirus in the united states",
+            "authors": [
+                {
+                    "first": "Chas",
+                    "middle": [],
+                    "last": "Michelle L Holshue",
+                    "suffix": ""
+                },
+                {
+                    "first": "Scott",
+                    "middle": [],
+                    "last": "Debolt",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lindquist",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Kathy",
+                    "suffix": ""
+                },
+                {
+                    "first": "John",
+                    "middle": [],
+                    "last": "Lofy",
+                    "suffix": ""
+                },
+                {
+                    "first": "Hollianne",
+                    "middle": [],
+                    "last": "Wiesman",
+                    "suffix": ""
+                },
+                {
+                    "first": "Christopher",
+                    "middle": [],
+                    "last": "Bruce",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Spitters",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "New England Journal of Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Artificial intelligence forecasting of covid-19 in china",
+            "authors": [
+                {
+                    "first": "Zixin",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Qiyang",
+                    "middle": [],
+                    "last": "Ge",
+                    "suffix": ""
+                },
+                {
+                    "first": "Li",
+                    "middle": [],
+                    "last": "Jin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Momiao",
+                    "middle": [],
+                    "last": "Xiong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:2002.07112"
+                ]
+            }
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Clinical features of patients infected with 2019 novel coronavirus in wuhan, china. The Lancet",
+            "authors": [
+                {
+                    "first": "Chaolin",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yeming",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xingwang",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lili",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jianping",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yi",
+                    "middle": [],
+                    "last": "Hu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Li",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Guohui",
+                    "middle": [],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jiuyang",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xiaoying",
+                    "middle": [],
+                    "last": "Gu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "The continuing 2019-ncov epidemic threat of novel coronaviruses to global health-the latest 2019 novel coronavirus outbreak in wuhan, china",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "David",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hui",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Esam",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Azhar",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Tariq",
+                    "suffix": ""
+                },
+                {
+                    "first": "Francine",
+                    "middle": [],
+                    "last": "Madani",
+                    "suffix": ""
+                },
+                {
+                    "first": "Richard",
+                    "middle": [],
+                    "last": "Ntoumi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Osman",
+                    "middle": [],
+                    "last": "Kock",
+                    "suffix": ""
+                },
+                {
+                    "first": "Giuseppe",
+                    "middle": [],
+                    "last": "Dar",
+                    "suffix": ""
+                },
+                {
+                    "first": "Timothy",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Ippolito",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Mchugh",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ziad",
+                    "suffix": ""
+                },
+                {
+                    "first": "Christian",
+                    "middle": [],
+                    "last": "Memish",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Drosten",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "International Journal of Infectious Diseases",
+            "volume": "91",
+            "issn": "",
+            "pages": "264--266",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "A state space model for multivariate longitudinal count data",
+            "authors": [
+                {
+                    "first": "Soren",
+                    "middle": [],
+                    "last": "Bent J\u00f8rgensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Px-K",
+                    "middle": [],
+                    "last": "Lundbye-Christensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Li",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Biometrika",
+            "volume": "86",
+            "issn": "1",
+            "pages": "169--181",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Stationary state space models for longitudinal data",
+            "authors": [
+                {
+                    "first": "Bent",
+                    "middle": [],
+                    "last": "J\u00f8srgensen",
+                    "suffix": ""
+                },
+                {
+                    "first": "X-K",
+                    "middle": [],
+                    "last": "Peter",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Canadian Journal of Statistics",
+            "volume": "35",
+            "issn": "4",
+            "pages": "461--483",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Real-time estimation of the risk of death from novel coronavirus (covid-19) infection: Inference using exported cases",
+            "authors": [
+                {
+                    "first": "Sung-Mok",
+                    "middle": [],
+                    "last": "Jung",
+                    "suffix": ""
+                },
+                {
+                    "first": "Andrei",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Akhmetzhanov",
+                    "suffix": ""
+                },
+                {
+                    "first": "Katsuma",
+                    "middle": [],
+                    "last": "Hayashi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Natalie",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Linton",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yichi",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Baoyin",
+                    "middle": [],
+                    "last": "Yuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Tetsuro",
+                    "middle": [],
+                    "last": "Kobayashi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ryo",
+                    "middle": [],
+                    "last": "Kinoshita",
+                    "suffix": ""
+                },
+                {
+                    "first": "Hiroshi",
+                    "middle": [],
+                    "last": "Nishiura",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Journal of Clinical Medicine",
+            "volume": "9",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Containing papers of a mathematical and physical character",
+            "authors": [
+                {
+                    "first": "Ogilvy",
+                    "middle": [],
+                    "last": "William",
+                    "suffix": ""
+                },
+                {
+                    "first": "Anderson",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Kermack",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Mckendrick",
+                    "suffix": ""
+                }
+            ],
+            "year": 1927,
+            "venue": "Proceedings of the royal society of london. Series A",
+            "volume": "115",
+            "issn": "772",
+            "pages": "700--721",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Estimation of the epidemic properties of the 2019 novel coronavirus: A mathematical modeling study",
+            "authors": [
+                {
+                    "first": "Jinghua",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yijing",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Stuart",
+                    "middle": [],
+                    "last": "Gilmour",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mengying",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Daisuke",
+                    "middle": [],
+                    "last": "Yoneoka",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ying",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xinyi",
+                    "middle": [],
+                    "last": "You",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jing",
+                    "middle": [],
+                    "last": "Gu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Chun",
+                    "middle": [],
+                    "last": "Hao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Liping",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Trend and forecasting of the covid-19 outbreak in china",
+            "authors": [
+                {
+                    "first": "Qiang",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wei",
+                    "middle": [],
+                    "last": "Feng",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:2002.05866"
+                ]
+            }
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Assessing the tendency of 2019-ncov (covid-19) outbreak in china. medRxiv",
+            "authors": [
+                {
+                    "first": "Qinghe",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zhicheng",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Deqiang",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zefei",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Junkai",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Junyan",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Qiao",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Molecular epidemiology, evolution and phylogeny of sars coronavirus",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Hayes",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xin",
+                    "middle": [],
+                    "last": "Luk",
+                    "suffix": ""
+                },
+                {
+                    "first": "Joshua",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Fung",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Susanna",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Patrick",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Woo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Infection, Genetics and Evolution",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Modeling super-spreading events for infectious diseases: case study sars",
+            "authors": [
+                {
+                    "first": "Thembinkosi",
+                    "middle": [],
+                    "last": "Mkhatshwa",
+                    "suffix": ""
+                },
+                {
+                    "first": "Anna",
+                    "middle": [],
+                    "last": "Mummert",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:1007.0908"
+                ]
+            }
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Summary of probable sars cases with onset of illness from",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "World Health Organization",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Forecasting seasonal influenza with a state-space sir model. The annals of applied statistics",
+            "authors": [
+                {
+                    "first": "Dave",
+                    "middle": [],
+                    "last": "Osthus",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Kyle S Hickmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Petru\u0163a",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dave",
+                    "middle": [],
+                    "last": "Caragea",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sara Y Del",
+                    "middle": [],
+                    "last": "Higdon",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Valle",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "11",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Epidemic analysis of covid-19 in china by dynamical modeling",
+            "authors": [
+                {
+                    "first": "Liangrong",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wuyue",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dongyan",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Changjing",
+                    "middle": [],
+                    "last": "Zhuge",
+                    "suffix": ""
+                },
+                {
+                    "first": "Liu",
+                    "middle": [],
+                    "last": "Hong",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:2002.06563"
+                ]
+            }
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "rjags: Bayesian Graphical Models using MCMC",
+            "authors": [
+                {
+                    "first": "Martyn",
+                    "middle": [],
+                    "last": "Plummer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Transmission of 2019-ncov infection from an asymptomatic contact in germany",
+            "authors": [
+                {
+                    "first": "Camilla",
+                    "middle": [],
+                    "last": "Rothe",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mirjam",
+                    "middle": [],
+                    "last": "Schunk",
+                    "suffix": ""
+                },
+                {
+                    "first": "Peter",
+                    "middle": [],
+                    "last": "Sothmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "Gisela",
+                    "middle": [],
+                    "last": "Bretzel",
+                    "suffix": ""
+                },
+                {
+                    "first": "Guenter",
+                    "middle": [],
+                    "last": "Froeschl",
+                    "suffix": ""
+                },
+                {
+                    "first": "Claudia",
+                    "middle": [],
+                    "last": "Wallrauch",
+                    "suffix": ""
+                },
+                {
+                    "first": "Thorbj\u00f6rn",
+                    "middle": [],
+                    "last": "Zimmer",
+                    "suffix": ""
+                },
+                {
+                    "first": "Verena",
+                    "middle": [],
+                    "last": "Thiel",
+                    "suffix": ""
+                },
+                {
+                    "first": "Christian",
+                    "middle": [],
+                    "last": "Janke",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wolfgang",
+                    "middle": [],
+                    "last": "Guggemos",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "New England Journal of Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Responding to global infectious disease outbreaks: lessons from sars on the role of risk perception, communication and management. Social science & medicine",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Richard",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Smith",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "",
+            "volume": "63",
+            "issn": "",
+            "pages": "3113--3123",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Correlated Data Analysis: Modeling, Analytics, and Applications",
+            "authors": [
+                {
+                    "first": "X-K",
+                    "middle": [],
+                    "last": "Peter",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Monte carlo kalman filter and smoothing for multivariate discrete state space models",
+            "authors": [
+                {
+                    "first": "Peter Xue-Kun",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Canadian Journal of Statistics",
+            "volume": "28",
+            "issn": "3",
+            "pages": "641--652",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "One severe acute respiratory syndrome coronavirus protein complex integrates processive rna polymerase and exonuclease activities",
+            "authors": [
+                {
+                    "first": "Lorenzo",
+                    "middle": [],
+                    "last": "Subissi",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Clara",
+                    "suffix": ""
+                },
+                {
+                    "first": "Axelle",
+                    "middle": [],
+                    "last": "Posthuma",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jessika",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Collet",
+                    "suffix": ""
+                },
+                {
+                    "first": "Alexander",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Zevenhoven-Dobbe",
+                    "suffix": ""
+                },
+                {
+                    "first": "Etienne",
+                    "middle": [],
+                    "last": "Gorbalenya",
+                    "suffix": ""
+                },
+                {
+                    "first": "Eric",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Decroly",
+                    "suffix": ""
+                },
+                {
+                    "first": "Bruno",
+                    "middle": [],
+                    "last": "Snijder",
+                    "suffix": ""
+                },
+                {
+                    "first": "Isabelle",
+                    "middle": [],
+                    "last": "Canard",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Imbert",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Proceedings of the National Academy of Sciences",
+            "volume": "111",
+            "issn": "37",
+            "pages": "3900--3909",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Tracking and predicting covid-19 epidemic in china mainland. medRxiv",
+            "authors": [
+                {
+                    "first": "Haoxuan",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yumou",
+                    "middle": [],
+                    "last": "Qiu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Han",
+                    "middle": [],
+                    "last": "Yan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yaxuan",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yuru",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Song Xi",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "A novel coronavirus outbreak of global health concern. The Lancet",
+            "authors": [
+                {
+                    "first": "Chen",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Peter",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Horby",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Frederick",
+                    "suffix": ""
+                },
+                {
+                    "first": "George",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Hayden",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Emergencies preparedness, response. pneumonia of unknown origin -china. disease outbreak news",
+            "authors": [],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "ggplot2: Elegant Graphics for Data Analysis",
+            "authors": [
+                {
+                    "first": "Hadley",
+                    "middle": [],
+                    "last": "Wickham",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Timely research papers about covid-19 in china. The Lancet",
+            "authors": [
+                {
+                    "first": "Yu-Tao",
+                    "middle": [],
+                    "last": "Xiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wen",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Qinge",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Yu",
+                    "middle": [],
+                    "last": "Jin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wen-Wang",
+                    "middle": [],
+                    "last": "Rao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Liang-Nan",
+                    "middle": [],
+                    "last": "Zeng",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Grace",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Lok",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Ines",
+                    "suffix": ""
+                },
+                {
+                    "first": "Teris",
+                    "middle": [],
+                    "last": "Chow",
+                    "suffix": ""
+                },
+                {
+                    "first": "Brian",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Cheung",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Hall",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Clinical findings in a group of patients infected with the 2019 novel coronavirus (sars-cov-2) outside of wuhan, china: retrospective case series",
+            "authors": [
+                {
+                    "first": "Xiao-Wei",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xiao-Xin",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xian-Gao",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Kai-Jin",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ling-Jun",
+                    "middle": [],
+                    "last": "Ying",
+                    "suffix": ""
+                },
+                {
+                    "first": "Chun-Lian",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "Shi-Bo",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Hua-Ying",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Sheng",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Hai-Nv",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "BMJ",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Estimation of the reproductive number of novel coronavirus (covid-19) and the probable outbreak size on the diamond princess cruise ship: A data-driven analysis",
+            "authors": [
+                {
+                    "first": "Sheng",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mengyuan",
+                    "middle": [],
+                    "last": "Diao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wenbo",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lei",
+                    "middle": [],
+                    "last": "Pei",
+                    "suffix": ""
+                },
+                {
+                    "first": "Zhaofen",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dechang",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "International Journal of Infectious Diseases",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Signal extraction and breakpoint identification for array cgh data using robust state space model",
+            "authors": [
+                {
+                    "first": "Bin",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Jeremy",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Taylor",
+                    "suffix": ""
+                },
+                {
+                    "first": "X-K",
+                    "middle": [],
+                    "last": "Peter",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "arXiv": [
+                    "arXiv:1201.5169"
+                ]
+            }
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "A novel coronavirus from patients with pneumonia in china",
+            "authors": [
+                {
+                    "first": "Na",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dingyu",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Wenling",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xingwang",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Bo",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jingdong",
+                    "middle": [],
+                    "last": "Song",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xiang",
+                    "middle": [],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "Baoying",
+                    "middle": [],
+                    "last": "Huang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Weifeng",
+                    "middle": [],
+                    "last": "Shi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Roujian",
+                    "middle": [],
+                    "last": "Lu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "New England Journal of Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "An extended SIR model with time-varying transmission rates.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Transmission rate modifier takes different forms of step functions under different macro quarantine measures over time.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Transmission rate modifier takes continuous functions under difference micro quarantine measures over time. Subfigures from A to C are exponential survival functions with \u03bb 0 \" 0.01,\u03bb 0 \" 0.05 and \u03bb 0 \" 0.1 respectively.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "An extended SIR model with time-varying transmission rate.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Jan 23, city blockade; \u03c6 02 , if t \" Feb 4, enhanced quarantine; \u03c6 03 , if t \" Feb 8, opening of new hospitals; 0, otherwise.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "The first turning point in Panel A is marked by a green line, denoting the time when the estimated first-order derivative of the prevalence of infection reaches the maximum. The second turning point in Panel B is marked by a purple line, which is the time when the estimated firstorder derivative of the prevalence of infection equals to zero. The vertical blue line labels the first observation day. proceed as follows: for each m \" 1, . . . , M , (1) draw \u03b8 pmq t from the posterior r\u03b8 t |\u03b8 pmq t\u00b41",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Under-reporting calibration of the infected cases in Hubei. (A) The cumulative number of infected cases. (B) The daily added number of infected cases. Data calibration is performed from Jan 13 to Feb 12 as is shown by the red curves.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei with an exponential transmission rate modifier \u03c0ptq \" expp\u00b40.05tq.13 All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for the other provinces outside Hubei with with an exponential transmission rate modifier \u03c0ptq \" expp\u00b40.05tq.15 All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Prediction",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for other provinces outside Hubei with time-varying quarantine specified by \u03c6 0 \" r0.9, 0, 5s at change points [Feb 4, Feb 8].",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "Prediction plots of \u03b8 I t and Y I t (Panel A), 9 \u03b8 I t (Panel B), \u03b8 R t and Y R t (Panel C) for Hubei with time-varying quarantine specified by \u03c6 0 \" r0.1, 0.9, 0, 5s at change points [Jan 23, Feb 4",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Usage qh.eSIR(Y, R, phi0 = NULL, change_time = NULL, begin_str = \"01/13/2020\", T_fin = 200, nchain = 4, nadapt = 10000, M = 500, thn = 10, nburnin = 200, dic = FALSE, death_in_R = 0.02, casename = \"qh.eSIR\", beta0 = 0.2586, gamma0 = 0.0821, R0 = beta0/gamma0, gamma0_sd = 0.1, R0_sd = 1, file_add = character(0), save_files = FALSE, save_mcmc = FALSE, save_plot_data = FALSE) 1 All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "= \"tvt.eSIR\", file_add = character(0), save_files = FALSE, save_mcmc = FALSE, save_plot_data = FALSE) All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF1": {
+            "text": "The posterior mean and credible intervals of the reproduction number R 0 obtained from different quarantine models and datasets.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the. https://doi.org/10.1101/2020.02.29.20029421 doi: medRxiv preprint Package 'eSIR' Type Package Title Extended state-space SIR models Version 0.2.0 Date 2020-02-19 Author Song Lab (http://www.umich.edu/~songlab/) Maintainer Lili Wang <lilywang@umich.edu> Description An inplementation of extended statespace SIR models developed by Song Lab at UM school of Public Health License CC BY 4.0 Depends rjags, scales, ggplot2, chron, gtools, data.table RoxygenNote 6.1.1 R topics documented: qh.eSIR . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1 tvt.eSIR . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4 qh.eSIR Extended state-space SIR with quarantine Fit an extended state-space SIR model being reduced by in-home hospitalization.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "RI_complete/N Y <-NI_complete/N-R #Jan13->Feb 11",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "dic_val the output of dic.sample() in dic.sample, computing deviance information criterion for model comparison. 16678,19665,22112,24953,27100,29631,31728,33366) RI_complete <-c(1,1,7,10,14,20,25,31,34,45,55,71,94,121,152,213, RI_complete/N Y <-NI_complete/N-R #Jan13->Feb 11 ###",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "Software website: https://github.com/lilywang1988/eSIR A Runge-Kutta Approximation A.1 Approximation in the Basic SIR modelThe forth order Runge-Kutta(RK4) method gives an approximate of f p\u03b8 t\u00b41 , \u03b2, \u03b3q in equation (4) as follows:the time series of daily observed infected compartment proportions.R the time series of daily observed removed compartment proportions, including death and recovered.phi0 a vector of values of the dirac delta function \u03c6 t . Each entry denotes the proportion that will be qurantined at each change time point. Note that all the entries lie between 0 and 1, its default is NULL. change_time the change points over time corresponding to phi0, to formulate the dirac delta function \u03c6 t ; its defalt value is NULL.begin_str the character of starting time, the default is \"01/13/2020\".T_fin the end of follow-up time after the beginning date begin_str, the default is 200.nchain the number of MCMC chains generated by rjags, the default is 4.nadapt the iteration number of adaptation in the MCMC. We recommend using at least the default value 1e4 to obtained fully adapted chains.M the number of draws in each chain, with no thinning. The default is M=5e2 but suggest using 5e5.thn the thinning interval between mixing. The total number of draws thus would become round(M/thn)*nchain. The default is 10.nburnin the burn-in period. The default is 2e2 but suggest 2e5.dic logical, whether compute the DIC (deviance information criterion) for model selection.death_in_R the numeric value of average of cumulative deaths in the removed compartments. The default is 0.4 within Hubei and 0.02 outside Hubei.casename the string of the job's name. The default is \"qh.eSIR\".beta0 the hyperparameter of average transmission rate, the default is the one estimated from the SARS first-month outbreak (0.2586).gamma0 the hyperparameter of average removed rate, the default is the one estimated from the SARS first-month outbreak (0.0821).",
+            "cite_spans": [
+                {
+                    "start": 216,
+                    "end": 219,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Supplementary Material"
+        },
+        {
+            "text": "the hyperparameter of the mean reproduction number R0. The default is thus the ratio of beta0/gamma0, which can be specified directly.gamma0_sd the standard deviation for the prior distrbution of the removed rate \u03b3, the default is 0.1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "R0"
+        },
+        {
+            "text": "the standard deviation for the prior disbution of R0, the default is 1.file_add the string to denote the location of saving output files and tables. 3] for \u03b8 R t . The posterior draws of the prevalence process of the quarantine compartment can be obtained via thetaQ_p and thetaQ_pp. Moreover, the input and predicted proportions Y, Y_pp, R and R_pp can also be retrieved. The prevalence and prediceted proportion matrices (ci); the respective means and ci's of the reporduction number (R0), removed rate (\u03b3), transmission rate (\u03b2).plot_infection plot of summarizing and forecasting for the infection compartment, in which the vertial blue line denotes the last date of data collected (t ), the vertial darkgray line denotes the deacceleration point (first turning point) that the posterior mean first-derivative of infection prevalence\u03b8 I t achieves the maximum, the vertical purple line denotes the second turning point that the posterior mean firstderivative infection proportion\u03b8 I t equals zero, the darkgray line denotes the posterior mean of the infection prevalence \u03b8 I t and the red line denotes its posterior median.plot_removed plot of summarizing and forecasting for the removed compartment with lines similar to those in the plot_infection. The vertical lines are identical, but the horizontal mean and median correspond to the posterior mean and median of the removed process \u03b8 R t . An additional line indicates the estimated death prevalence from the input death_in_R. spaghetti_plot 20 randomly selected MCMC draws of the first-order derivative of the posterior prevalence of infection, namely\u03b8 I t . The black curve is the posterior mean of the derivative, and the vertical lines mark times of turning points corresponding respectively to those shown in plot_infection and plot_removed. Moreover, the 95% credible intervals of these turning points are also highlighted by semitransparent rectangles.first_tp_mean the date t at which\u03b8 I t = 0, calculated as the average of the time points with maximum posterior first-order derivatives\u03b8 I t ; this value may be slightly different from the one labeled by the \"darkgreen\" lines in the two plots plot_infection and plot_removed, which indicate the stationary point such that the first-order derivative of the averaged posterior of \u03b8 I t reaches its maximum. first_tp_mean the date t at which\u03b8 I t = 0, calculated as the average of the time points with maximum posterior first-order derivatives\u03b8 I t ; this value may be slightly different from the one labeled by the \"darkgreen\" lines in the two plots plot_infection and plot_removed, which indicate the stationary point such that the first-order derivative of the averaged posterior of \u03b8 I t reaches its maximum. first_tp_ci fwith first_tp_mean, it reports the corresponding credible interval and median.second_tp_mean the date t at which \u03b8 I t = 0, calculated as the average of the stationary points of all of posterior first-order derivatives\u03b8 I t ; this value may be slightly different from the one labeled by the \"pruple\" lines in the plots of plot_infection and the time-dependent transission rate modifier \u03c0(t) between 0 and 1. change_time the change points over time for step function pi, defalt value is NULL. exponential logical, whether \u03c0(t) is exponential exp(\u2212\u03bb 0 t) or not; the default is FALSE. lambda0the rate of decline in the exponential survival function in exp(\u2212\u03bb 0 t). begin_str the character of starting time, the default is \"01/13/2020\". the hyperparameter of average removed rate, the default is the one estimated from the SARS first-month outbreak (0.0821).",
+            "cite_spans": [
+                {
+                    "start": 149,
+                    "end": 151,
+                    "text": "3]",
+                    "ref_id": "BIBREF2"
+                }
+            ],
+            "ref_spans": [],
+            "section": "R0_sd"
+        },
+        {
+            "text": "the hyperparameter of the mean reproduction number R0. The default is thus the ratio of beta0/gamma0, which can be specified directly. gamma0_sd the standard deviation for the prior distrbution of the removed rate \u03b3, the default is 0.1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "R0"
+        },
+        {
+            "text": "the standard deviation for the prior disbution of R0, the default is 1. casename the string of the job's name. The default is \"tvt.eSIR\". file_add the string to denote the location of saving output files and tables. save_files logical, whether save (TRUE) results or not (FALSE). This enables to save summary tables, trace plots, and plots of the posterior means of the first-order derivatives of the infection prevalence process \u03b8 I t . save_mcmc logical, whether save (TRUE) all the MCMC outputs or not (FALSE).The output file will be an .RData file named by the casename. We include arrays of prevalence values of the three compartments with their matrices of posterior draws up to the last date of the collected data as theta_p[,,1] and afterwards as theta_pp[,,1] for \u03b8 S t , theta_p[,,2] and theta_pp[,,2] for \u03b8 I t , and theta_p[,,3] and theta_pp[,,3] for \u03b8 R t . Moreover, the input and predicted proportions Y, Y_pp, R and R_pp can also be retrieved. The prevalence and prediceted proportion matrices have rows for MCMC replicates, and columns for days. The MCMC posterior draws of other parameters including beta_p, gamma_p, R0_p, and variance controllers k_p, lambdaY_p, lambdaR_p are also available. save_plot_data logical, whether save the plotting data or not. 6 tvt.eSIR",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "R0_sd"
+        },
+        {
+            "text": "We fit a state-space model with extended SIR, in which a time-varying transmission rate modifier \u03c0(t) (between 0 and 1) is introcuded to model. This allows us to accommodate quarantine protocol changes and ignored resources of hospitalization. The form of reducing rate may be a step-function with jomps at times of big policy changes or a smooth exponential survival function exp(\u2212\u03bb 0 t). The parameters of the function and change points, if any, should be predefined.Value casename the predefined casename.incidence_mean mean incidence.incidence_ci 2.5%, 50%, and 97.5% quantiles of the incidences.out_table summary tables including the posterior mean of the prevalance processes of the 3 states compartments (\u03b8 S t , \u03b8 I t , \u03b8 R t ) at last date of data collected ((t ) decided by the lengths of your input data Y and R), and their respective credible inctervals (ci); the respective means and ci's of the reporduction number (R0), removed rate (\u03b3), transmission rate (\u03b2).plot_infection plot of summarizing and forecasting for the infection compartment, in which the vertial blue line denotes the last date of data collected (t ), the vertial darkgray line denotes the deacceleration point (first turning point) that the posterior mean first-derivative of infection prevalence\u03b8 I t achieves the maximum, the vertical purple line denotes the second turning point that the posterior mean firstderivative infection proportion\u03b8 I t equals zero, the darkgray line denotes the posterior mean of the infection prevalence \u03b8 I t and the red line denotes its posterior median.plot_removed plot of summarizing and forecasting for the removed compartment with lines similar to those in the plot_infection. The vertical lines are identical, but the horizontal mean and median correspond to the posterior mean and median of the removed process \u03b8 R t . An additional line indicates the estimated death prevalence from the input death_in_R. spaghetti_plot 20 randomly selected MCMC draws of the first-order derivative of the posterior prevalence of infection, namely\u03b8 I t . The black curve is the posterior mean of the derivative, and the vertical lines mark times of turning points corresponding respectively to those shown in plot_infection and plot_removed. Moreover, the 95% credible intervals of these turning points are also highlighted by semitransparent rectangles.first_tp_mean the date t at which\u03b8 I t = 0, calculated as the average of the time points with maximum posterior first-order derivatives\u03b8 I t ; this value may be slightly different from the one labeled by the \"darkgreen\" lines in the two plots plot_infection and plot_removed, which indicate the stationary point such that the first-order derivative of the averaged posterior of \u03b8 I t reaches its maximum. first_tp_ci fwith first_tp_mean, it reports the corresponding credible interval and median.second_tp_mean the date t at which \u03b8 I t = 0, calculated as the average of the stationary points of all of posterior first-order derivatives\u03b8 I t ; this value may be slightly different from the one labeled by the \"pruple\" lines in the plots of plot_infection and plot_removed. The latter indicate stationary t at which the first-order derivative of the averaged posterior of \u03b8 I t equals zero. second_tp_ci with second_tp_mean, it reports the corresponding credible interval and median.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Details"
+        }
+    ]
+}

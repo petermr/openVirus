@@ -1,0 +1,2351 @@
+{
+    "paper_id": "8aa021696a6accab9053f1d779eef6710439bfa5",
+    "metadata": {
+        "title": "Quantifying transmission of emerging zoonoses: 3 Using mathematical models to maximize the value of surveillance data 4 5 6 7",
+        "authors": [
+            {
+                "first": "Monique",
+                "middle": [
+                    "R"
+                ],
+                "last": "Ambrose",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of California",
+                    "location": {
+                        "settlement": "Los Angeles 13"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Adam",
+                "middle": [
+                    "J"
+                ],
+                "last": "Kucharski",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Pierre",
+                "middle": [],
+                "last": "Formenty",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "World Health Organization",
+                    "location": {
+                        "settlement": "Geneva",
+                        "country": "Switzerland"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Jean-Jacques",
+                "middle": [],
+                "last": "Muyembe-8 Tamfum",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Congo National Institute for Biomedical Research",
+                    "location": {
+                        "addrLine": "17"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Anne",
+                "middle": [
+                    "W"
+                ],
+                "last": "Rimoin",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of California",
+                    "location": {
+                        "settlement": "Los Angeles"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "James",
+                "middle": [
+                    "O"
+                ],
+                "last": "Lloyd-Smith",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of California",
+                    "location": {
+                        "settlement": "Los Angeles 13"
+                    }
+                },
+                "email": "jlloydsmith@ucla.edu"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Understanding and quantifying the transmission of zoonotic pathogens is essential for 24 directing public health responses, especially for pathogens capable of transmission between 25 humans. However, determining a pathogen's transmission dynamics is complicated by 26 challenges often encountered in zoonotic disease surveillance, including unobserved sources of 27 transmission (both human and zoonotic), limited spatial information, and unknown scope of 28 surveillance. In this work, we present a model-based inference method that addresses these 29 challenges for subcritical zoonotic pathogens using a spatial model with two levels of mixing. 30",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "After demonstrating the robustness of the method using simulation studies, we apply the new 31 method to a dataset of human monkeypox cases detected during an active surveillance program 32 from 1982-1986 in the Democratic Republic of the Congo (DRC). Our results provide estimates 33 of the reproductive number and spillover rate of monkeypox during this surveillance period and 34",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "suggest that most human-to-human transmission events occur over distances of 30km or less. 35",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Taking advantage of contact-tracing data available for a subset of monkeypox cases, we find that 36 around 80% of contact-traced links could be correctly recovered from transmission trees inferred 37 using only date and location. Our results highlight the importance of identifying the appropriate 38 spatial scale of transmission, and show how even imperfect spatiotemporal data can be 39 incorporated into models to obtain reliable estimates of human-to-human transmission patterns. 40",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Author Summary",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Surveillance datasets are often the only sources of information about the ecology and 42 epidemiology of zoonotic infectious diseases. Methods that can extract as much information as 43 possible from these datasets therefore provide a key advantage for informing our understanding 44 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint 3 of the disease dynamics and improving our ability to choose the optimal intervention strategy. 45",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We developed and tested a likelihood-based inference method based on a mechanistic model of 46 the spillover and human-to-human transmission processes. We first used simulated datasets to 47 explore which information about the disease dynamics of a subcritical zoonotic pathogen could 48 be successfully extracted from a line-list surveillance dataset with non-localized spatial 49 information and unknown geographic coverage. We then applied the method to a dataset of 50 human monkeypox cases detected during an active surveillance program in the Democratic 51",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Republic of the Congo between 1982 and 1986 to obtain estimates of the reproductive number, 52 spillover rate, and spatial dispersal of monkeypox in humans. 53 [1][2] [3] [4] [5][6][7][8]. By definition, zoonotic pathogens can transmit from animals to humans; those also 58 capable of human-to-human transmission are of particular public health concern [5, 9] . Infectious 59 disease surveillance serves a crucial role for detecting and gathering information on zoonotic 60 pathogens: data obtained through surveillance are often the primary resource available for 61 informing public health management decisions [10]. Developing methods that improve our 62 ability to infer information about a pathogen's transmission dynamics from available 63 surveillance data is therefore an essential frontier for understanding and ultimately combating 64 these pathogens [11, 12]. 65 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint 4 For zoonoses, three epidemiological measures are crucial for summarizing transmission 66 dynamics and informing risk assessments. The first of these is the spillover rate, which indicates 67 how frequently the pathogen is transmitted from the animal reservoir into humans and helps 68 inform the total expected disease incidence [13]. The second measure describes the pathogen's 69 potential for further spread once in the human population and is commonly assessed using the 70 reproductive number (R), which gives the average number of secondary human cases caused by 71 an infectious individual [14, 15]. Values of R greater than one indicate that the pathogen is 72 capable of sustained (i.e. 'supercritical') transmission in humans. Pathogens with subcritical 73 transmission (R less than one but greater than zero) can cause limited chains of transmission in 74 humans after a zoonotic introduction, and they pose a risk of acquiring ability for supercritical 75 transmission via evolutionary or environmental change [2,5,16]. The third epidemiological 76 measure is the distance over which human-to-human transmission occurs, which informs how 77 the disease will spread spatially and the risk of it being introduced into new populations. 78",
+            "cite_spans": [
+                {
+                    "start": 167,
+                    "end": 170,
+                    "text": "[3]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 171,
+                    "end": 174,
+                    "text": "[4]",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 357,
+                    "end": 359,
+                    "text": "9]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 861,
+                    "end": 865,
+                    "text": "[11,",
+                    "ref_id": null
+                },
+                {
+                    "start": 1682,
+                    "end": 1686,
+                    "text": "[14,",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Combined, these three measures can help evaluate the current public health threat posed by the 79 pathogen, the risk of future emergence, and the most effective approaches for disease 80 management. 81",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Estimating epidemiological measures is a challenging task in any pathogen system, and 82 the unique properties of zoonotic diseases can exacerbate these difficulties. Infectious disease 83 surveillance often records temporal information and certain aspects of spatial information about 84 human cases, but the underlying transmission events are seldom observed. In a zoonotic system, 85 this means that an observed human infection could have been caused by a previous human case 86 or by zoonotic spillover. Without intensive contact tracing, or sequence data in the case of fast-87 evolving pathogens, quantifying the relative contribution of zoonotic versus human-to-human 88 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint 5 transmission is a major challenge; identifying the source of infection for specific individuals is 89 an even bigger one. 90",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Epidemiological analyses are often hindered by data truncation and unknown 91 denominators [17,18]. In many disease surveillance systems, the total set of localities under 92 surveillance (i.e. those that would appear in the dataset if a case occurred there) can be separated 93 into 'observed localities,' which appear in the dataset because they reported one or more cases, 94 and 'silent localities,' which have no cases during the surveillance period and therefore do not 95 appear in the dataset. This form of truncation, where localities with zero cases are absent from 96 the dataset, obscures the true scope of the surveillance effort. Without knowledge of the total 97 number of localities under observation (the 'unknown denominator'), accurately estimating the 98 spillover rate and probability of human-to-human transmission between localities is not 99 straightforward. Simply disregarding these silent localities in the analysis is the functional 100 equivalent of selectively removing zeros from the dataset and can lead to problematic inference 101 biases. 102",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Complicating inference efforts further is the fact that surveillance datasets often report 103 the geographic location of cases only at a coarse resolution, obscuring information about a 104 transmission process that occurs on a much finer scale [19] [20][21]. Precise spatial information is 105 often absent from historic datasets and data collected in remote or low-resource areas, replaced 106 by the names of the locality and broader administrative units where the case occurred. For 107 example, only the village name and the region and country to which the village belongs may be 108 recorded in a dataset. Furthermore, linking a village name to spatial coordinates is often 109 impossible when maps of the region do not exist or only unofficial local names are used. 110",
+            "cite_spans": [
+                {
+                    "start": 246,
+                    "end": 250,
+                    "text": "[19]",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Although collecting exact spatial coordinates has become more practical in contemporary disease 111 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint 6 surveillance, privacy and confidentiality concerns can arise in both human and agricultural 112 contexts when data contains high-resolution spatial information [19, 20,[22][23][24][25], leading to data 113 being reported in a non-localized manner. Methods that can use this inexact spatial information 114 are especially needed for zoonotic diseases, where any additional information about the 115 proximity of human cases to one another can improve the power to distinguish between human-116 to-human transmission and zoonotic spillover. 117",
+            "cite_spans": [
+                {
+                    "start": 471,
+                    "end": 475,
+                    "text": "[19,",
+                    "ref_id": "BIBREF21"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Despite these challenges, a series of research efforts have expanded our ability to 118 estimate the transmission properties of zoonotic pathogens from case onset data. A key set of 119 methods revolve around inferring R from the sizes of case clusters (a cluster is defined as a group 120 of cases that occur in close spatiotemporal proximity to one another) or from the proportion of 121 observed cases that were infected by zoonotic spillover [16,[26][27][28][29][30]. However, these approaches 122 either require detailed case investigations to determine whether a case was infected by a zoonotic 123 or human source or assume that each cluster is caused by one single spillover event followed by 124 human-to-human transmission. A likelihood-based approach for estimating R for human-to-125 human transmission using only symptom onset dates of cases was introduced by Wallinga and 126 Teunis [31]. This method was extended to apply to zoonotic systems by Lo Iacono et al. [32], but 127 the extension requires that chains of exclusively human-to-human transmission can be identified, 128 and is thus not applicable to many zoonotic surveillance systems where human and zoonotic 129 transmissions are intermixed. A different approach was taken by White and Pagano [33], who 130 introduced a different likelihood-based method that compares the observed number of cases on 131 each day with the expected number, as calculated using the number and timing of previous cases. 132",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Though the White and Pagano approach was only applicable to human-to-human transmission, it 133 was expanded by Kucharski et al. [34] to work in zoonotic spillover systems in scenarios where a 134 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint precise geographic information should it be available, in this study we focus on the more 150 challenging scenario in which only the names of the locality and broader administrative units 151 where a case occurred are known. To make use of this form of non-localized spatial data, our 152 model considers two scales of spatial mixing and transmission (Fig 1A) , reminiscent of the 153 'epidemics with two levels of mixing' structure utilized in Ball et al. [41] and Demiris and 154 O'Neill [42]. The first mixing level is the locality in which the case occurred, such as a village, 155 conceptualized as a group of individuals geographically separated from other localities. We 156 assume that individuals within the same locality have more frequent contact with one another 157 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint human-to-human transmission, and orange if infected by between-locality human-to-human 172 transmission. Individuals who are not infected are colored gray and do not appear in the 173 surveillance dataset. Similarly, if zero individuals in a locality are infected, that 'silent locality' 174 does not appear in the dataset (represented by the gray locality in the broader contact zone). B. 175 The possible sources of human infection, which in aggregate determine the number of new 176 infections on day t, locality v. The number of cases arising from spillover and human-to-human 177 transmissions follow Poisson distributions with means \u03bb Z and \u03bb {s,w},{t,v} , respectively. 178 179 . CC-BY 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 757,
+                    "end": 765,
+                    "text": "(Fig 1A)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint for model comparison. In the monkeypox dataset, contact-tracing data are available for a subset 199 of the cases, providing a rare opportunity to compare inferred transmission sources with those 200 suggested by epidemiological investigation. In addition, some localities were associated with 201 known GPS coordinates, enabling us to estimate the spatial transmission kernel in greater detail. 202 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint validated method to a dataset on human monkeypox cases to estimate key epidemiological 216 parameters and the spatial scale of transmission. To generate simulated test datasets and perform 217 parameter inference, we used a mathematical model of the zoonotic pathogen's transmission into 218 and among humans. The model tracks the number of human cases that occur in each locality on 219 each day; infections can arise from spillover from the zoonotic reservoir or from human-to-220 human transmission (Fig 1B) . Three key parameters govern the behavior of the system. The 221 spillover rate (\u03bb z ) describes the average number of human cases caused by animal-to-human 222 transmission ('primary cases') in each locality per day. The reproductive number of the pathogen 223 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint correspond to 59 to 415 expected spillover events in the five year simulation period, across all 240 localities). Transmission events between humans had a probability \u03c3=0.75 of occurring within a 241 locality and otherwise were equally likely between any localities in the same broader contact 242 zone. We were interested in seeing how well the inference methods are able to use the spatial-243 temporal arrangement of cases to estimate the true parameter values. 244 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1259,
+                    "end": 1267,
+                    "text": "(Fig 1B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "We tested our method using 125 simulated datasets, with 25 datasets simulated for each of five 307 sets of true parameter values (these are the same datasets as discussed above, simulated with R 308 between 0.2 and 0.6 and spillover rate between 0.0001 and 0.0007). Two hundred plausible 309 transmission trees were sampled for each simulated dataset. 310",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Introduction 54 Many recent infectious disease threats have been caused by pathogens with zoonotic 55 origins, including Ebola, pandemic H1N1 influenza, and SARS-and MERS-Coronaviruses, and 56 zoonotic pathogens are expected to be a primary source of future emerging infectious diseases 57 control measure, implemented at a known point in time, causes an abrupt reduction in spillover. 135 A related approach that requires knowledge of the human and animal reservoir population sizes 136 was also explored in Lo Iacono et al. [35] . Crucially, however, none of these methods 137 incorporate information about the spatial location of cases to improve inference power or to 138 estimate patterns of spatial spread. Spatial data is a powerful tool in transmission inference in 139 single-species studies (e.g. [36] [37] [38] [39] ), but has largely been excluded from analyses of zoonotic 140 transmission, which often implicitly assume homogenous mixing across the study area or that 141 human-to-human transmission can only occur within a locality. One recent exception to this is 142 the analysis by Cauchemez et al. [40] , which includes transmission at several spatial levels. 143",
+            "cite_spans": [
+                {
+                    "start": 13,
+                    "end": 15,
+                    "text": "54",
+                    "ref_id": null
+                },
+                {
+                    "start": 526,
+                    "end": 530,
+                    "text": "[35]",
+                    "ref_id": null
+                },
+                {
+                    "start": 807,
+                    "end": 811,
+                    "text": "[36]",
+                    "ref_id": null
+                },
+                {
+                    "start": 812,
+                    "end": 816,
+                    "text": "[37]",
+                    "ref_id": null
+                },
+                {
+                    "start": 817,
+                    "end": 821,
+                    "text": "[38]",
+                    "ref_id": null
+                },
+                {
+                    "start": 822,
+                    "end": 826,
+                    "text": "[39]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1117,
+                    "end": 1121,
+                    "text": "[40]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In this work, we present model-based inference methods that allow us to infer R, the 144 spillover rate, and properties of spatial spread among humans from surveillance datasets with 145 non-localized spatial information and an unknown total number of surveilled localities. Our 146 approach builds on methods introduced by White and Pagano [33] and Kucharski et al. [34] , but 147 allows continuous spillover throughout the surveillance period and makes use of available spatial 148 information on case location. While the method could be readily adjusted to incorporate more 149 than with individuals from other localities, and therefore that infection is more likely to be 158 transmitted within a locality. However, the total number of localities under surveillance is 159 unknown because only localities with one or more cases appear in the dataset (the 'unknown 160 denominator' problem discussed above). We refer to the second spatial level as the 'broader 161 contact zone.' It describes a collection of localities that all occur within the same administrative 162 unit and likely share some amount of human movement. When multiple types of administrative 163 units of different sizes are reported in the dataset (e.g., districts, regions, provinces, etc.), the 164 ideal choice for broader contact zone is the smallest administrative unit that contains inter-165 locality human-to-human transmission events. If this scale is not known a priori, inferring the 166 appropriate scale of administrative unit is necessary. ",
+            "cite_spans": [
+                {
+                    "start": 341,
+                    "end": 345,
+                    "text": "[33]",
+                    "ref_id": null
+                },
+                {
+                    "start": 367,
+                    "end": 371,
+                    "text": "[34]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "We first validated the inference framework using a simulation study, then applied the 215 Across 125 simulations (25 simulations for each of five parameter sets), estimated values 245 clustered around the true parameter values. The true value for R was included in the 95% 246 credible interval (CI) 119 times (95.2%) and for \u03bb z was included 121 times (96.8%) (Fig 3A) . On 247 average, the posterior mean estimate of R differed from the true value by 8.6%; the analogous 248 percent errors for \u03bb z and \u03c3 estimates were 6.3% and 7.0%, respectively (S1 Table) . Inferences were performed A) when the true number of localities under surveillance was known, 254 B) when the true number was unknown and it was assumed that the number of observed 255 localities was the total number of localities, and C) when the true number of localities was 256 unknown and the corrected-denominator method was used to control for the locality observation 257 process. 258 259 However, this method assumes that the true number of localities under surveillance is 260 known. In real-world situations, 'silent' localities that experience zero cases often do not appear 261 in the dataset, resulting in an unknown true number of surveilled localities. We investigated 262 possible biases in parameter estimates that could arise from assuming that the number of 263 localities that reported one or more cases represents the total number of localities under 264 surveillance. To do so, we used the same set of simulated datasets as described above, but 265 removed knowledge about the number of silent localities. In these datasets, silent localities make 266 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint up between 21% and 85% of all localities under surveillance, with the proportion driven 267 primarily by the spillover rate. Estimates for the reproductive number R were not strongly 268 impacted (95.2% of the 95% CIs contained the true value with an average percent error of 8.4%), 269 but the spillover rate \u03bb z was consistently overestimated (Fig 3B) . The true value for \u03bb z was 270 contained in none of the simulations' 95% CIs and the posterior mean had an average percent 271 error of 153% (S1 Table) . 272",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 361,
+                    "end": 369,
+                    "text": "(Fig 3A)",
+                    "ref_id": null
+                },
+                {
+                    "start": 553,
+                    "end": 559,
+                    "text": "Table)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2191,
+                    "end": 2199,
+                    "text": "(Fig 3B)",
+                    "ref_id": null
+                },
+                {
+                    "start": 2347,
+                    "end": 2353,
+                    "text": "Table)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Overview of the approach 214"
+        },
+        {
+            "text": "To further investigate the effect of this data truncation (whereby localities with zero cases 273 do not appear in the dataset), we performed inference assuming that the observed localities 274 represented all, 1/2, or 1/5 of the total localities under surveillance. While this assumption had a 275 relatively small impact on the estimated R, it greatly impacted the inferred \u03bb z (which is measured 276 as the number of spillover events per locality per day and is therefore strongly affected by 277 changes in the assumed number of localities) (S1 Fig). Assuming that a larger fraction of 278 surveilled localities appear in the dataset resulted in substantially higher estimated spillover 279 rates. 280",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 549,
+                    "end": 554,
+                    "text": "Fig).",
+                    "ref_id": null
+                }
+            ],
+            "section": "Overview of the approach 214"
+        },
+        {
+            "text": "Because 281 the total number of localities assumed to be under surveillance has a substantial impact on 282 parameter estimates, we developed a modified version of the likelihood function that accounts 283 for localities that were under surveillance but never observed in the dataset. This approach 284 calculates the likelihood of the observed dataset conditional on the fact that only localities with 285 one or more cases are included (details on the modified likelihood function can be found in 286",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Corrected-denominator method (conditions on the locality observation process)."
+        },
+        {
+            "text": "Methods and S1 Text). 287 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Corrected-denominator method (conditions on the locality observation process)."
+        },
+        {
+            "text": "We tested the performance of the corrected-denominator method against simulated 288 datasets, looking at the same parameter sets as in the first section. The inferred parameter values 289 cluster well with their corresponding true values ( Fig 3C) : mean percent error in R estimates was 290 8.4% and in \u03bb z estimates was 14.0%. Across the 125 simulations, the true parameter value was 291 included in the 95% CI 116 times (92.8%) for R and 117 times (93.6%) for \u03bb z (S1 Table) . 292",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 240,
+                    "end": 247,
+                    "text": "Fig 3C)",
+                    "ref_id": null
+                },
+                {
+                    "start": 471,
+                    "end": 477,
+                    "text": "Table)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Corrected-denominator method (conditions on the locality observation process)."
+        },
+        {
+            "text": "Because an estimate of the true number of localities under surveillance would help 293 determine the size of the population that could be detected for a given system, we assessed how 294 well we could approximate this value. Given the number of localities with one or more cases and 295 the mean parameter estimates, it is possible to calculate the expected total number of localities 296 under surveillance (see S1 Text). Estimates of the true number of localities calculated for the 297 simulated datasets center on the correct value (S2 Fig). The magnitude of estimate error is driven 298 by the spillover rate, which largely determines the proportion of localities that are observed by 299 surveillance. The mean percent error across simulations with spillover rate of 0.0001, 0.00036, 300 and 0.0007 were 25.4%, 7.9%, and 2.4%, respectively, while simulations with spillover rates of 301 0.004 and above almost always recorded at least one case in each locality during the five year 302 surveillance period and therefore tended to estimate the exact true number of localities. 303",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 540,
+                    "end": 545,
+                    "text": "Fig).",
+                    "ref_id": null
+                }
+            ],
+            "section": "Corrected-denominator method (conditions on the locality observation process)."
+        },
+        {
+            "text": "Inferring the sources of transmission events. We investigated how well sampled transmission 304 trees recovered the source of individual cases as well as higher-order measures, such as the 305 fraction of cases originating from zoonotic, within-locality, and between-locality transmission. 306",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Corrected-denominator method (conditions on the locality observation process)."
+        },
+        {
+            "text": "When comparing the overall fraction of cases attributed to each source type (zoonotic 311 versus within-locality versus between-locality transmission), the sampled transmission trees 312 closely match the true transmission patterns (Fig 4) . On average, the difference between the true 313 fraction of cases caused by zoonotic spillover and the fraction inferred in a tree was 0.022 314 (standard deviation 0.018), the difference for within-locality transmission was 0.006 (standard 315 deviation 0.005), and the difference for between-locality transmission was 0.022 (standard 316 deviation 0.018). values. If the fraction of transmissions for each source is perfectly inferred, points will lie exactly 324 on the transition between bar colors. B. Box plots summarize the error in the inferred fraction of 325 cases originating from each source type. The error size is small across all parameter sets, 326 especially for within-locality human-to-human transmission. The upper whisker was calculated 327 as min(max(x), Q 3 +1.5*IQR) and the lower whisker was calculated as max(min(x),Q 1 -1.5*IQR). 328",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 232,
+                    "end": 239,
+                    "text": "(Fig 4)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Corrected-denominator method (conditions on the locality observation process)."
+        },
+        {
+            "text": "The success at recovering individual transmission links was high overall but varied 330 slightly depending on the true parameters underlying the simulation (S3 Fig). On average, 331 sampled transmission trees inferred 85.9% of all sources correctly. Better performance was 332 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint observed for lower spillover rates and lower R, presumably due to the fewer opportunities for 333 misattribution of cases. Some transmission links were more likely to be captured than others: on 334 average 90.9% and 90.1% of sampled trees correctly inferred links with zoonotic and within-335 locality sources, respectively, but only 36.8% of trees correctly identified the source of between-336 locality transmission events. 337",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 160,
+                    "end": 165,
+                    "text": "Fig).",
+                    "ref_id": null
+                }
+            ],
+            "section": "329"
+        },
+        {
+            "text": "Applying the corrected-denominator method to 1980s monkeypox surveillance data. 339",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "Between 1982 and 1986, the active monkeypox surveillance program in the Democratic 340",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "Republic of the Congo detected 331 human cases in 171 localities [43] . For each human case, we 341 know the name of the locality as well as the district or administrative subregion (henceforth 342 referred to simply as 'district') and region to which it belongs. However, the total number of 343 localities that would have been detected by surveillance had they experienced a case is unknown. 344",
+            "cite_spans": [
+                {
+                    "start": 65,
+                    "end": 69,
+                    "text": "[43]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "We therefore used the corrected-denominator method to generate estimates under four different 345 assumptions about which administrative unit most suitably represents the broader contact zone. 346",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "The country-level, region-level, and district-level models correspond to progressively smaller 347 choices of broader contact zones, while the locality-level model assumes that all instances of 348 human-to-human transmission occur within a locality. We anticipate that assuming an 349 excessively large broader contact zone could result in overestimating R and underestimating \u03bb z if 350 too many spurious human-to-human transmission events are inferred from pairs of cases that just 351 happen to occur within a generation-time interval of one another, while assuming an 352 inappropriately small broader contact zone could result in the opposite parameter biases if the 353 model is unable to detect actual incidents of human-to-human transmission because the cases 354 occur in different (assumed) broader contact zones. 355 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "In the monkeypox analysis, the size of the administrative unit used as the broader contact 356 zone has a strong effect on the resulting parameter estimates (Fig 5A) . When larger 357 administrative units are assumed to represent the broader contact zone, a given pair of cases is 358 more likely to belong to the same broader contact zone, giving the model more opportunities to 359 infer inter-locality human-to-human transmission events and resulting in larger estimated 360 reproductive number R and a smaller spillover rate \u03bb z . Mean values of the posterior distribution 361 of R range from 0.29 when transmission is assumed to occur only within localities to 0.52 when 362 transmission is assumed to occur among all localities in the country (Table 1) Both the choice of broader contact zone and the assumed total number of localities have a 407 large impact on estimates of R and \u03bb z ( Fig 5B) . As noted above, models assuming smaller 408 broader contact zones allow fewer opportunities for human-to-human transmissions to be 409 inferred, and these models estimate substantially lower R values and correspondingly higher 410 spillover rates. In contrast, assuming that a smaller fraction of surveilled localities were observed 411 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It District-level broader contact zone preferred in model comparisons. To assess which broader 427 contact zone assumption is most appropriate for the monkeypox system, we used the deviance 428 information criterion (DIC) to perform model comparisons for the corrected-denominator 429 method as well as for each assumption about the number of surveilled localities. For the 430 corrected-denominator method, the district-level model had the best DIC score, followed by the 431 region and country-level models ( Table 1) . The locality-level model received a much larger DIC 432 value, indicating that the data strongly support models that allow transmission between localities. 433 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 157,
+                    "end": 165,
+                    "text": "(Fig 5A)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 749,
+                    "end": 758,
+                    "text": "(Table 1)",
+                    "ref_id": null
+                },
+                {
+                    "start": 894,
+                    "end": 901,
+                    "text": "Fig 5B)",
+                    "ref_id": "FIGREF3"
+                },
+                {
+                    "start": 1903,
+                    "end": 1911,
+                    "text": "Table 1)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "Similarly, for each of the three assumptions about the true number of surveilled localities, the 434 district-scale model performed best in DIC model comparisons (Table 1) . 435",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 162,
+                    "end": 171,
+                    "text": "(Table 1)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "Inferring the sources and distances of transmission events. We used the district-level 436 corrected-denominator method to sample 20,000 transmission trees for the monkeypox dataset. 437",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "The sampled transmission trees attributed an average of 60.8% (standard deviation of 2.2%) of 438 cases to zoonotic spillover, 28.5% (standard deviation of 0.9%) of cases to within-locality 439 human-to-human transmission, and 10.7% (standard deviation of 2.1%) of cases to between-440 locality human-to-human transmission. . The highest success was seen for pairs of epidemiologically-linked cases whose dates of 475 symptom onset were between 7 and 25 days apart ( Fig 7B) . Although it is generally believed that 476 the generation interval for human-to-human transmission of monkeypox is between 7 and 23 477 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint days [43,53], several case pairs that occurred more than 23 days apart were epidemiologically 478 linked through contact-tracing. It is possible that these links, which were often missed in the 479 sampled transmission trees, are not true instances of human-to-human transmission. Cases that 480 occurred in different localities were also less likely to be linked in a sampled transmission tree, 481 though even for these inter-locality pairs, the district-level model tended to perform better than 482 the other three models (S6 Fig The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint Comparison of the transmission tree generated using only contact-tracing data with the 500 trees created using the district-level and locality-level models highlights how much our 501 perception of the transmission dynamics depends on assumptions about spatial spread (Fig 8) . 502",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 467,
+                    "end": 474,
+                    "text": "Fig 7B)",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 1352,
+                    "end": 1355,
+                    "text": "Fig",
+                    "ref_id": null
+                },
+                {
+                    "start": 1773,
+                    "end": 1780,
+                    "text": "(Fig 8)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "Most of the within-locality transmission links detected through epidemiological contact-tracing 503 appear in the locality-level model's tree, though the locality-level tree suggests substantially 504 more human-to-human transmission events than captured in the contact-tracing tree. However, 505 the locality-level tree misses all inter-locality links. The district-level model's tree captures most 506 of the links indicated by the locality-level tree, and also suggests that inter-locality transmission 507 is occurring, though it has low power to determine exactly which case pairs are linked through 508 inter-locality transmission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Epidemiological insights into monkeypox 338"
+        },
+        {
+            "text": "We conducted a variety of sensitivity analysis tests using simulated datasets to assess 521 how robust the method was over a range of parameter values and assumption violations (full 522 descriptions are provided in S1 Text). The method continued to perform well even at very high 523 spillover rates (S7 Fig, S2 Table) and when the offspring distribution used in simulations 524 differed from the one assumed in the inference (S8 Fig, S3 Table) . In some situations, assuming 525 a larger broader contact zone than the one used for simulations could lead to an overestimation of 526 R and an underestimation of \u03bb z (S4 and S5 Tables). This outcome is consistent with what was 527 observed in the monkeypox analysis where assuming a larger spatial scale for the broader contact 528 zone corresponded to a higher estimate of R and a smaller estimate of the spillover rate (Fig 5) . 529",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 305,
+                    "end": 319,
+                    "text": "Fig, S2 Table)",
+                    "ref_id": null
+                },
+                {
+                    "start": 431,
+                    "end": 445,
+                    "text": "Fig, S3 Table)",
+                    "ref_id": null
+                },
+                {
+                    "start": 871,
+                    "end": 878,
+                    "text": "(Fig 5)",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "Sensitivity analyses 520"
+        },
+        {
+            "text": "When simulations were run with highly structured, non-homogeneous spillover, substantial 530 biases in the inference results occurred because this spillover process gives rise to clusters of 531 primary cases that the model mistakes as arising from human-to-human transmission (S9 Fig) . 532",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 281,
+                    "end": 285,
+                    "text": "Fig)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Sensitivity analyses 520"
+        },
+        {
+            "text": "In this work, we developed and tested a method to infer fundamental epidemiological 535 parameters and transmission patterns for zoonotic pathogens from epidemiological surveillance 536 data with aggregated spatial information. When tested against simulated datasets, the method 537 successfully recovered estimates of R and spillover rate close to the true values and also inferred 538 the fraction of cases resulting from zoonotic, within-locality, and between-locality sources with a 539 high degree of accuracy. The 'unknown denominator problem' that occurs when the total number 540 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint of localities under surveillance is unknown can cause large biases in parameter estimates, so we 541 modified the inference method to account for this observational process and enable unbiased 542 estimation in the presence of this common data gap. 543",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "We applied the method to a rich surveillance dataset of human monkeypox in the Congo 544 basin from the 1980s and found that human-to-human transmission of monkeypox between 545 localities plays an important role in the pathogen's spread. Of the four assumptions we tested for 546 the spatial scale of the broader contact zone, the district-level model was best supported by DIC 547 model comparisons and validation with contact-tracing. In addition, the signal of elevated inter-548 locality transmission occurring over \u2264 30 kilometers suggests that most inter-locality 549 transmissions occur in a relatively small neighborhood, consistent with the limited transportation 550 infrastructure in the DRC. This further corroborates that the district-level model, which is the 551 smallest spatial aggregation scale that still permits inter-locality transmission, is likely the most 552 appropriate choice for capturing inter-locality transmission patterns of human monkeypox. 553",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "The district-level model estimates a reproductive number for human monkeypox of 0.38 554 (0.31-0.45 95% CI). This value is slightly higher than previous estimates of R for the 1980s DRC 555 monkeypox dataset, which was estimated as 0. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint of human-to-human transmission than the district-level model due to their larger broader contact 564 zone sizes. The size of the DRC's districts and administrative subregions used for the district-565 level model vary in size, but average around fifteen thousand square kilometers, or around one 566 hundred forty kilometers across, encompassing a much greater distance than most human-to-567 human transmission events likely occur over. We therefore expect that the true value of R is 568 bounded by the estimates of the locality-level and the district-level models. 569",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "In addition to providing an estimate of monkeypox's reproductive number, the methods 570",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "give insight into the frequency of spillover and the spatial scale of human-to-human 571 transmission. The district-level model estimates a mean spillover rate of around 0.11 spillover 572 events per locality per year, which corresponds to roughly one spillover event every nine years in 573 each locality. It also estimated that around 70% of human-to-human transmissions occur within a 574 locality. This finding contrasts with the assumption that human-to-human transmission occurs 575 within a locality, which is commonly used to generate transmission clusters, and suggests that 576 estimates generated using that assumption may substantially underestimate the amount of 577 human-to-human transmission occurring in the system. The importance of inter-locality contacts 578 has been reported for the neighboring country of Uganda, where a survey by le Polain de 579",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "Waroux et al.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "[55] on rural movement and social contact patterns indicated that 12% of social 580 contacts occurred outside participants' village of residence. 581",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "Among human monkeypox cases with recorded geographical coordinates, a clear signal 582 emerged of higher rates of human-to-human transmission between localities \u2264 30 kilometers 583 apart. This pattern seems reasonable given the infrastructure and general difficulty of 584 transportation in the more remote regions of the DRC. It also suggests a similar pattern of 585 Spatial scale of transmission and aggregated spatial data 588",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "The potential biases introduced when analyzing data reported at a course spatial scale 589 have been explored in a wide range of contexts [56] [57] [58] , yet the implications of using this type of 590 spatial information to infer the transmission dynamics of an infectious disease is not obvious. 591",
+            "cite_spans": [
+                {
+                    "start": 138,
+                    "end": 142,
+                    "text": "[56]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 143,
+                    "end": 147,
+                    "text": "[57]",
+                    "ref_id": null
+                },
+                {
+                    "start": 148,
+                    "end": 152,
+                    "text": "[58]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "When spatial information is only reported at the level of large spatial zones like districts, regions, 592 or countries, no finer-scale information is available to inform which human cases transmitted 593 infection to one another between different localities. Here we explored how the size of these 594 spatial zones would affect inference for the monkeypox system by repeating the analysis using 595 spatial information at the district, region, or country resolution. The large differences in 596 parameter estimates generated under different broader contact zone assumptions in the 597 monkeypox analysis illustrates how sensitive inference results can be to the spatial scale 598 assumed for human-to-human transmission, and suggests that reporting spatial data at too large a 599 scale or ignoring inter-locality transmissions can lead to substantial estimate biases. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint in surveillance effort might induce temporal autocorrelation among unlinked human cases, 608 giving rise to temporal clustering of cases that the model interprets as human-to-human 609 transmission. 610",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "This analysis serves to emphasize the importance of selecting an appropriate spatial scale 611 and using caution when interpreting results obtained using spatially aggregated data. Many 612 methods implicitly assume a certain scale of spatial transmission, often ignoring the possibility 613 of longer-range transmissions, so careful consideration of whether that scale is appropriate for 614 the system is essential. 615",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "In general, recording precise spatial locations of cases is vital for increasing the 616 inferential power of modeling analyses. Developing methods that maintain spatial information 617 without risking a breach in confidentiality is a nontrivial challenge, but progress has already been 618 made in generating possible solutions such as geographic masking or the verified neighbor 619 approach [59,60]. 620",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Principal findings 534"
+        },
+        {
+            "text": "In this work, we assumed that the spillover rate was homogenous through time and space, 622 but more complex disease dynamics in the reservoir or spatiotemporal heterogeneity in animal-623 human contacts may cause nontrivial deviations from this assumption in real-world systems. Of 624 particular concern is the possibility that outbreaks in the reservoir could cause periods of 625 amplified local spillover, which could create a clustering pattern of human cases potentially 626 indistinguishable from human-to-human transmission. Without information about disease 627 dynamics in the reservoir, accounting for this heterogeneous spillover will be challenging, but 628 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint cases contribute non-negligibly to transmission), the likelihood expression would need to be 651 modified substantially, and the lack of independence between cases might make a simulation-652 based inference approach necessary. 653",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model assumptions and future directions 621"
+        },
+        {
+            "text": "We assume that sufficiently few infections occur relative to the population size that The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint a detected case triggers a retrospective investigation that detects all cases in that transmission 674 chain. 675",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model assumptions and future directions 621"
+        },
+        {
+            "text": "This work expands our ability to assess and quantify important zoonotic pathogen traits 677 from commonly available epidemiological surveillance data, even in the absence of exact spatial 678 information or a complete count of localities under surveillance. We anticipate that these 679 methods will have greatest value in the common circumstance when the source of cases, 680 particularly whether a case came from an animal or human source, cannot be readily established. 681",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusions 676"
+        },
+        {
+            "text": "In such situations, the ability to infer the pathogen's reproductive number, spillover rate, and 682 spatial spread patterns from available surveillance data, will greatly enhance our understanding 683 of the pathogen's behavior and could provide valuable insights to help guide surveillance design 684 and outbreak response. 685",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Conclusions 676"
+        },
+        {
+            "text": "In broad terms, the model describes the probability of observing a set of symptom onset 688 times and locations of human cases given the timing and location of previous cases and 689 parameters that underlie the transmission process. Human infections can arise from either 690 animal-to-human transmission ('zoonotic spillover') or human-to-human transmission (Fig 1B) . 691",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 360,
+                    "end": 368,
+                    "text": "(Fig 1B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Model 687"
+        },
+        {
+            "text": "Human-to-human contact occurs more frequently within a locality than between localities, but 692",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model 687"
+        },
+        {
+            "text": "can still occur between localities that belong to the same broader contact zone (Fig 1A) . 693 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint All sources of infection are assumed to generate new cases independently of one another. 694",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 80,
+                    "end": 88,
+                    "text": "(Fig 1A)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Model 687"
+        },
+        {
+            "text": "The number of human cases that become symptomatic on each day in each locality caused by 695 zoonotic spillover is assumed to follow a Poisson distribution with mean \u03bb z . For simplicity and 696 because reservoir disease dynamics are rarely well characterized, we assume the Poisson process 697 is homogenous through time and across localities, but this assumption could be modified for a 698 system where more information is available about the reservoir dynamics (e.g., The factor that describes the amount of transmission that occurs between localities v and 723 w (H(v,w)) could reflect Euclidean distance, travel time, inclusion in different spatial zones, or 724 any other available measurement. To accommodate the imperfect spatial information available 725 for many zoonotic surveillance systems, this study focused on developing methods for the 726 situation when only a locality name and an aggregated spatial zone (such as district or country) is 727 reported for cases, rather than an exact position. We assume that inter-locality transmission 728 occurs only among localities within the same broader contact zone (Fig 1A) . Because 729 transmission will be greater within a locality than between localities, a proportion \u03c3 of secondary 730 cases are assumed to occur in the same locality as the source case and a proportion (1-\u03c3) of 731 secondary cases are assumed to occur amongst the outside localities that are within the same 732 broader contact zone as the source case. This outside transmission is assumed to be divided 733 equally among all localities within the index case's broader contact zone: 734 where Z v indicates the broader contact zone of locality v and v is the total number of localities 736 in the broader contact zone of locality v. For a given locality v, the sum of H(v,w) across all w 737 equals one. To observe the effect of assuming different broader contact zones, the monkeypox 738 case study was repeated under four different assumptions about the spatial scale of human-to-739 human transmission: locality, district, region, and country-level. 740",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1126,
+                    "end": 1134,
+                    "text": "(Fig 1A)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Model 687"
+        },
+        {
+            "text": "Likelihood function. Using the model described above, a likelihood function was used to 742 evaluate a parameter set (\u03b8 = {R, \u03bb z , \u03c3}) given the data (D = N t,v cases observed on each day t and 743",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "locality v): 744",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "where T is the number of days surveillance was conducted and V is the total number of localities 746 under surveillance. 747",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "While this approach works well when the total number of surveilled localities is known 748 (see Fig 3A) , localities often only appear in the dataset if they have reported cases; as a result we 749 may not know the total number of localities under surveillance. Ignoring localities with zero 750 cases can lead to biased parameter estimates (see Fig 3B) . We explored several alternative 751 approaches to account for these silent localities; the preferred approach rescales the likelihood 752 function to reflect that localities with zero cases are not included in the data. Several Table) . Simulation parameters were chosen to approximate the monkeypox dataset, with \u03c3 set at 818 0.75, R ranging from 0.2 to 0.6, and \u03bb z ranging from 0.0001 to 0.1. Unless otherwise specified, 819 simulations were performed assuming the district-level model. Details on the models used for 820 sensitivity analyses that use the exact spatial location of cases or allow highly structured and 821 non-homogenous spillover patterns are provided in S1 Text. 822 The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint S3 The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint S1 Data. Case records. For all individuals included in the analyses, records the case 1178 identification number, the locality identification number, the day of surveillance when disease 1179 onset occurred (the first day of fever when known, otherwise the first day of the rash), the names 1180 of the district and region where the case occurred, and masked GPS coordinates of the locality. 1181",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 96,
+                    "end": 103,
+                    "text": "Fig 3A)",
+                    "ref_id": null
+                },
+                {
+                    "start": 346,
+                    "end": 353,
+                    "text": "Fig 3B)",
+                    "ref_id": null
+                },
+                {
+                    "start": 584,
+                    "end": 590,
+                    "text": "Table)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "The geographic masking technique known as 'donut masking' was used to obscure the exact 1182 location of cases and preserve privacy. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint (2) 1201 A challenge in applying this likelihood function to surveillance data arises when the total 1202 number of localities under surveillance, V, is unknown. Instead, we observe W localities that 1203 have one or more observed cases. If we re-arrange the product functions in the likelihood 1204 function, it becomes more apparent that we are taking the product of the likelihood for each 1205 locality: 1206",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "However, because we only observe localities with one or more cases in the surveillance data, we 1208 need that conditioning to be reflected in the likelihood. In other words, we now want to express 1209 the likelihood of a particular time-series of cases in a locality conditional on that locality having 1210 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint one or more cases. This can be done for each locality by multiplying its component of the 1211 likelihood by the inverse of the probability (q) of having one or more cases: 1212",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "(4) 1213",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "It is now necessary to calculate the probability a surveilled locality experiences one or 1214 more cases. This probability is equivalent to one minus the probability of no cases occurring at a 1215 locality during the surveillance period. The following section explains how the probability of 1216 zero cases occurring at a given locality (here denoted p) is calculated. 1217",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "For zero cases to occur in a locality, there must be no zoonotic spillover into that locality 1218 as well as no human-to-human transmission from an outside locality. The zoonotic component is 1219 relatively straightforward to calculate, as it is simply the probability of zero spillover events on 1220 each of the T days (which equals ). The probability of no transmission from an outside 1221 human source is a bit more complicated and can be broken down by the generation of the outside 1222 case to avoid double-counting. The generation of a case indicates how many human-to-human 1223 transmission events occurred leading to the case. We refer to cases resulting from zoonotic 1224 spillover as primary cases. Individuals infected by primary cases are second generation cases, 1225 individuals infected by second generation cases are third generation cases, etc. For there to be no 1226 cases in a locality, no transmission may have occurred into that locality from outside cases in any 1227 generation: 1228 The number of cases caused by a given case (of any generation) in the target locality is 1229 described by a Poisson distribution with expected value equal to Estimating total number of localities under surveillance 1264 We wish to use the estimated parameter values for R, \u03bb z , and \u03c3 in conjunction with the 1265 number of observed localities in a broader contact zone (W w ) to estimate the total number of 1266 localities under surveillance in that broader contact zone (V w ). If we let q be the probability a 1267 locality is observed (has one or more cases during the surveillance period), then we expect V w *q 1268 \u2248 W w . From the section above, we approximate q = 1-p as: 1269",
+            "cite_spans": [
+                {
+                    "start": 1231,
+                    "end": 1235,
+                    "text": "1264",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "So we estimate V w as the value that satisfies the equation: 1271",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "is equal between all locality pairs, we expect that the actual amount of shared transmission 1276 between two localities is strongly influenced by the distance between those localities. We 1277 conducted two simulations using localities with set geographic locations and inter-locality 1278 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint transmissions depending on the spatial relationship of the localities. We took the 178 GPS 1279 records available from monkeypox surveillance in the DRC during the 1980s and simulated 1280 transmission across localities with the same coordinates and the same district and region 1281 boundaries. Two types of inter-locality transmission rules were explored. In the first of these, 1282 inter-locality transmissions were assumed to occur equally into a source locality's five closest 1283 neighbors. In the second set of simulations, inter-locality transmissions from a source locality 1284 were assumed to occur equally among all outside localities within 30 km of the source locality. 1285",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Model inference 741"
+        },
+        {
+            "text": "To illustrate how highly structured and non-homogeneous spillover could bias parameter 1287 estimates, we simulated an extreme case of a zoonotic epidemic traveling through time and 1288 space. We imagined that disease dynamics in the reservoir would occur in a single location for 1289 25 days before moving to a new spot, in an extreme form of a traveling zoonotic epidemic. For 1290 each 25 day period, three localities (selected to be in the same district when possible) would be 1291 selected to experience all of the spillover in the entire system. Aside from this extreme spillover 1292 pattern, the simulation followed the district-level model. 1293",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Simulations with highly structured and non-homogeneous spillover patterns 1286"
+        },
+        {
+            "text": "To test whether a high rate of spillover would inundate the system with so many cases 1296 that the temporal clustering patterns resulting from human-to-human transmission could be 1297 obscured, we simulated datasets with spillover rates up to 0.1. This value corresponds with an 1298 expected 59,312.5 spillover events during the five year simulation, which corresponds to an 1299 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint average of 36.5 per year in each locality. At this rate of spillover, there is an average of only ten 1300 days between spillover events, a shorter period than the mean generation time for human-to-1301 human transmission events, which was sixteen days. Across the range of spillover rates tested, 1302 the method did very well at both point estimates and capturing the true parameter values within 1303 the 95% CI (an average of 94.3% of CIs included the true value of R and 94.9% included the true 1304 value of \u03bb z ; S7 Fig, S2 Table) . As the spillover rate increased from 0.0001 to 0.1, estimates of R 1305 tended to improve (posterior means closer to true value and smaller CIs). While the absolute 1306 error on estimates of \u03bb z increased as spillover rate increased, the relative error tended to decrease. 1307",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1112,
+                    "end": 1129,
+                    "text": "S7 Fig, S2 Table)",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "Simulations with highly structured and non-homogeneous spillover patterns 1286"
+        },
+        {
+            "text": "As such, it appears that elevated spillover rates, far from obscuring patterns, may actually 1308 correspond with improved estimates, presumably due to the increased inference power resulting 1309 from a larger number of cases. 1310",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Simulations with highly structured and non-homogeneous spillover patterns 1286"
+        },
+        {
+            "text": "Spillover is unlikely to occur homogeneously through time and space in real-world 1311 settings. As an illustration of the potential effect this occurrence could have on parameter 1312 estimates, we simulated an extreme case (see 'Simulations with highly structured and non-1313 homogeneous spillover patterns,' above) where spillover occurs into three localities at a time. 1314",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Simulations with highly structured and non-homogeneous spillover patterns 1286"
+        },
+        {
+            "text": "The parameter inference results for this situation were strongly biased (S10 Fig). 1315",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 77,
+                    "end": 82,
+                    "text": "Fig).",
+                    "ref_id": null
+                }
+            ],
+            "section": "Simulations with highly structured and non-homogeneous spillover patterns 1286"
+        },
+        {
+            "text": "The model used in this study assumes that the number of new cases caused by an 1317 infectious individual follows a Poisson distribution, but previous work suggests that the offspring 1318 distribution is often better characterized by a negative binomial distribution, which allows for a 1319 greater amount of variation between individuals [1]. We simulated datasets using a negative 1320 binomial offspring distribution (using a dispersion parameter k=0.58 in accordance with previous 1321 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint estimates for monkeypox from [1]) and examined how well our inference method, which 1322 assumes a Poisson offspring distribution, estimated the true parameter values. Estimates for these 1323 datasets were only marginally less accurate than estimates for datasets generated with a Poisson 1324 offspring distribution (with an average percent error of 10.9% as opposed to 8.2% for R and of 1325 11.6% as opposed to 10.4% for spillover rate estimates) (S8 Fig, S3 Table) . As such, there are 1326 unlikely to be strong biases introduced from a mis-specified offspring distribution for the 1327 monkeypox dataset, though this bias could increase if applied to pathogens with more extreme 1328 transmission variance. 1329",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 1156,
+                    "end": 1170,
+                    "text": "Fig, S3 Table)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Sensitivity of parameter inference to offspring distribution assumptions 1316"
+        },
+        {
+            "text": "To examine how assuming different broader contact zones would affect inference results, 1331 we compared parameter estimates obtained under three choices of broader contact zones for data 1332 simulated under two inter-locality transmission rules. We simulated disease spread in a system 1333 where localities were placed in the same arrangement as seen in 178 localities with GPS 1334 coordinates included in the monkeypox surveillance system, district and region arrangement 1335 were the same as in the 1980s surveillance, and human-to-human transmission could occur either 1336 between a locality and its five closest neighbors or between localities located within 30 km of 1337 one another. Inference results again showed increasing estimates of R and decreasing estimates 1338 of spillover rate as the size of the assumed broader contact zone increased (S4 and S5 Table) . 1339 1340 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint S1 The expected number of new infections that become symptomatic on day t in locality v caused by an infectious individual who became symptomatic on day s in locality w",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 870,
+                    "end": 876,
+                    "text": "Table)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Sensitivity of parameter inference to broader contact zone assumption 1330"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Factors in the Emergence of Infectious Diseases. Emerg Infect Dis J",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Morse",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Host Range and Emerging and Reemerging 844",
+            "authors": [
+                {
+                    "first": "Mej",
+                    "middle": [],
+                    "last": "Woolhouse",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Gowtage-Sequeria",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Emerg Infect Dis",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Pathogens",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "",
+            "volume": "11",
+            "issn": "",
+            "pages": "1842--1849",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Epidemiologic Clues to 847 SARS Origin in China",
+            "authors": [
+                {
+                    "first": "R-H",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J-F",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Evans",
+                    "suffix": ""
+                },
+                {
+                    "first": "G-W",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Field",
+                    "suffix": ""
+                },
+                {
+                    "first": "D-W",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Emerg Infect Dis",
+            "volume": "10",
+            "issn": "",
+            "pages": "1030--1037",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Global trends 850 in emerging infectious diseases",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Jones",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Patel",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Levy",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Storeygard",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Balk",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Gittleman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Nature",
+            "volume": "451",
+            "issn": "7181",
+            "pages": "990--993",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Epidemic dynamics at the human-animal interface",
+            "authors": [],
+            "year": 2009,
+            "venue": "Science",
+            "volume": "546",
+            "issn": "7660",
+            "pages": "646--50",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/nature22975"
+                ]
+            }
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Human 864 Infection with MERS Coronavirus after Exposure to Infected Camels",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Memish",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Cotten",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Meyer",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Watson",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Alsahafi",
+                    "suffix": ""
+                },
+                {
+                    "first": "Al",
+                    "middle": [],
+                    "last": "Rabeeah",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Emerg Infect Dis",
+            "authors": [],
+            "year": 2014,
+            "venue": "",
+            "volume": "20",
+            "issn": "",
+            "pages": "1012--1017",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Ecological Origins of Novel Human Pathogens",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Woolhouse",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Gaunt",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Crit Rev",
+            "volume": "868",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "National Research Council (US) Committee on Achieving Sustainable Global Capacity 871 for Surveillance and Response to Emerging Diseases of Zoonotic Origin",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "10",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Sustaining Global Surveillance and 873 Response to Emerging Zoonotic Diseases",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pappaioanou",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Gonzalez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Modeling infectious disease dynamics in the complex landscape of global health",
+            "authors": [],
+            "year": 2015,
+            "venue": "Science",
+            "volume": "877",
+            "issn": "6227",
+            "pages": "4339--4339",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Infectious diseases of humans : dynamics and control",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Modeling Infectious Diseases in Humans and Animals",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Keeling",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Rohani",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Inference of <italic>R</italic> 0 and Transmission 889",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Blumberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "Lloyd-Smith",
+                    "middle": [],
+                    "last": "Jo",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Heterogeneity from the Size Distribution of Stuttering Chains",
+            "authors": [],
+            "year": 2013,
+            "venue": "PLoS Comput Biol",
+            "volume": "9",
+            "issn": "5",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Denominator Difficulties",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kravitz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Wiley StatsRef Stat Ref Online",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Mapping the denominator: spatial demography in the measurement of progress",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Tatem",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Effect of spatial resolution on 897 cluster detection: a simulation study",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ozonoff",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Jeffery",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Manjourides",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pagano",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Int J Health Geogr [Internet]",
+            "volume": "6",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Spatial confidentiality and GIS: re-engineering mortality 907 locations from published maps about Hurricane Katrina",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Curtis",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Mills",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Leitner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Int J Health Geogr",
+            "volume": "908",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1186/1476-072X-5-44"
+                ]
+            }
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "23. National Research C. Putting People on the Map: Protecting Confidentiality with Linked",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Providing Spatial Data 913 for Secondary Analysis: Issues and Current Practices relating to Confidentiality",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gutmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Witkowski",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Colyer",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "O&apos;rourke",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mcnally",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Unique in the Crowd: The 917 privacy bounds of human mobility",
+            "authors": [
+                {
+                    "first": "Y-A",
+                    "middle": [],
+                    "last": "De Montjoye",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hidalgo",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Verleysen",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Blondel",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Res Policy Rev",
+            "volume": "27",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/srep01376"
+                ]
+            }
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Epidemiology of Transmissible Diseases after",
+            "authors": [
+                {
+                    "first": "De",
+                    "middle": [],
+                    "last": "Serres",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Gay",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Farrington",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Elimination",
+            "authors": [],
+            "year": 2000,
+            "venue": "Am J Epidemiol",
+            "volume": "151",
+            "issn": "11",
+            "pages": "1039--1087",
+            "other_ids": {
+                "DOI": [
+                    "10.1093/oxfordjournals.aje.a010145"
+                ]
+            }
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "World Health Organization. Monkeypox -Nigeria",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Major increase in human monkeypox incidence 30 years after smallpox vaccination 1002 campaigns cease in the Democratic Republic of Congo",
+            "authors": [],
+            "year": null,
+            "venue": "Proc Natl Acad Sci",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "State of Isreal Ministry of Health. Monkeypox Patient Diagnosed [Internet]. State of Isreal 1008 54",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schreiber",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kopp",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Nature [Internet]",
+            "volume": "438",
+            "issn": "",
+            "pages": "355--364",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Characteristics of human encounters and social mixing patterns relevant to infectious 1021 diseases spread by close contact: a survey in Southwest Uganda",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Le Polain De Waroux",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cohuet",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Ndazima",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Kucharski",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Juan-Giner",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Flasche",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "BMC Infect Dis",
+            "volume": "18",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "The effects of data aggregation in statistical analysis",
+            "authors": [
+                {
+                    "first": "Wa",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Clark",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Avery",
+                    "suffix": ""
+                }
+            ],
+            "year": 1976,
+            "venue": "Geogr 1025 Anal",
+            "volume": "8",
+            "issn": "",
+            "pages": "428--466",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "A million or so correlation coefficients: three experiments on the 1027 modifiable areal unit problem",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Openshaw",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Taylor",
+                    "suffix": ""
+                }
+            ],
+            "year": 1979,
+            "venue": "Stat Appl Spat Sci",
+            "volume": "",
+            "issn": "",
+            "pages": "127--171",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Methodologic issues and approaches to spatial 1029 epidemiology",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Beale",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Abellan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hodgson",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Jarup",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Environ Health Perspect",
+            "volume": "116",
+            "issn": "",
+            "pages": "1105--1115",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "The verified neighbor approach to geoprivacy: An improved method for 1031 geographic masking",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Richter",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "J Expo Sci Environ Epidemiol",
+            "volume": "28",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1086/605405"
+                ]
+            }
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Impact of Population Density on Immunization Programmes",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Arita",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wickett",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Fenner",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Cities and villages: infection hierarchies in a measles metapopulation",
+            "authors": [
+                {
+                    "first": "Bolker",
+                    "middle": [],
+                    "last": "Grenfell",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "64. Neiderud C-J. How urbanization affects the epidemiology of emerging infectious diseases",
+            "authors": [],
+            "year": 1998,
+            "venue": "Ecol Lett",
+            "volume": "1",
+            "issn": "1",
+            "pages": "63--70",
+            "other_ids": {
+                "DOI": [
+                    "10.1046/j.1461-0248.1998.00016.x1045"
+                ]
+            }
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Infectiousness of smallpox relative to disease age: estimates 1049 based on transmission network and incubation period",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Nishiura H",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Eichner M",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Epidemiol Infect",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.3402/iee.v5.27060"
+                ]
+            }
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "66. Fine PEM. The Interval between Successive Cases of an Infectious Disease",
+            "authors": [],
+            "year": null,
+            "venue": "Am J",
+            "volume": "7",
+            "issn": "7",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Inference from Iterative Simulation Using Multiple Sequences",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gelman",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Rubin",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1080/10618600.1998.10474787"
+                ]
+            }
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "Model Selection and Multimodel Inference: A Practical 1062",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Burnham",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF50": {
+            "ref_id": "b50",
+            "title": "Theoretic Approach",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Bayesian Deviance, the Effective Number of 1065",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Spiegelhalter",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Best",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Carlin",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Imap: Interactive Mapping",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Wallace",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Anonymous. The current status of human monkeypox: Memorandum from a WHO 1070 meeting",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Jezek",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Marennikova",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mutumbo",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Nakano",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Paluku",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Szczeniowski",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "",
+            "volume": "62",
+            "issn": "",
+            "pages": "703--716",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Human Monkeypox: A Study of 2,510 Contacts of 214 Patients",
+            "authors": [],
+            "year": 1986,
+            "venue": "",
+            "volume": "154",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "Superspreading and the effect of 1342 individual variation on disease emergence",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Lloyd-Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schreiber",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Kopp",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Getz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Supplementary material references 1341 1",
+            "volume": "438",
+            "issn": "",
+            "pages": "355--364",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Model schematic. A. The schematic illustrates the spatial scales considered in the model 169 and the types of transmission that occurs at different scales. Human cases are represented in 170 black if they were infected by zoonotic spillover, blue if they were infected by within-locality 171 As such, our monkeypox analysis yielded estimates of R and the spillover rate during the 1980s 203 surveillance period, as well as insights into the spatial scale of human Map and time-series showing locations and dates of human monkeypox cases. The 207 size of points on the map indicate the number of cases and the color of points corresponds to the 208 region in which the cases occurred. Dark lines indicate region boundaries while light lines 209 indicate the official boundaries for districts (though in the monkeypox surveillance dataset these 210 are sometimes further divided into administrative subregions). 211 212",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Comparison of true and inferred parameter values in simulation study. Within each 251 color, large points outlined in black indicate the true parameter set and smaller points indicate the 252 inferred parameter values from simulated datasets (lines show the 95% credible interval). 253",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Comparison of the true and inferred fraction of transmissions from each source type. 319 For each of five parameter sets, 25 datasets were simulated and 200 transmission trees were 320 sampled for each of these simulated datasets. A. Stacked bars show the true fraction of 321 transmissions from zoonotic (bottom bar, medium-darkness), within-locality (middle bar, light 322 color), and between-locality (top bar, darkest color). Points on the bars indicate the inferred 323",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Assumptions about the broader contact zone and the total number of localities under 365 surveillance affect parameter estimates for the monkeypox dataset. Estimates and 95% CIs 366 for the reproductive number (R) and the spillover rate (\u03bb z ) of the monkeypox dataset are shown 367 for each of the four choices of spatial scale for the broader contact zone (locality = green, district 368 = blue, region = purple, country = red). A. Inference performed using the corrected-denominator 369 method that accounts for silent localities. Light background dots are draws from the posterior, 370 larger dots designate the mean value, and bars indicate the 95% CI. B. Inference performed 371 assuming that the fraction of localities under surveillance with one or more monkeypox cases (p) 372 is 1/5, 1/2, or 1. For each assumption about the total number of localities, parameter estimates 373 fall roughly along the line (indicated by grey lines), where V is the true number 374 of localities under surveillance, T is the duration of surveillance, and N is to total number of 375 cases. The position of estimates along this line depends on the spatial model used. Note that the 376 slope of each line is proportional to -1/p because V = (number of observed localities) / p.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "mean parameter estimates obtained using each of the four broader contact 391 zone assumptions to generate estimates of the expected total number of localities under 392 surveillance. While only 171 localities were observed in the dataset, estimates of the total 393 number of surveilled localities ranged from 337 (using the locality-level model) to 408 (using the 394 country-level model). The district-level and region-level models generated similar estimates of 395 351 and 366 total localities, respectively. 396 Insights into how underlying assumptions drive monkeypox estimates. We investigated how 397 different assumptions about the true number of localities and the spatial scale of human-to-398 human transmission would affect the parameter estimates for the monkeypox system. To explore 399 how the presence of silent localities affects results, we repeated the analysis using the basic 400 method (which does not account for silent localities) under the assumption that the localities 401 observed in the monkeypox dataset represent all, 1/2, and 1/5 of the total number of localities 402 that were under surveillance. Furthermore, for each of these assumptions about the total number 403 of localities under surveillance, we repeated the analysis using the four different choices of 404 broader contact zone to determine how the assumed spatial scales of inter-locality transmission 405 impacted inference results. 406",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "slightly higher estimates of R and substantially lower estimates of \u03bb z because the 412 presence of many silent localities drives the estimate of the number of spillover events per 413 locality per day lower. Estimates of R are most strongly affected by the choice of broader contact 414 zone, while estimates of \u03bb z are most strongly impacted by assumed fraction of localities 415 observed. For all assumptions of broader contact zone and total number of localities, the means 416 of the parameters' posterior distributions fall along the V is the true number of localities under surveillance, T is the number of days over which 419 surveillance occurred, and N is to total number of cases in the monkeypox dataset. This 420 relationship arises because the expected number of total cases is equal to the expected number of 421 spillover events (V * T * \u03bb Z ) multiplied by the total number of human cases expected to occur 422 from each spillover event (1 / (1 -R) for 0<R<1). Each assumption about the total number of 423 localities under surveillance corresponds to a separate line along which parameter estimates fall 424 (Fig 5B). The position of the parameter estimates along this line depends on the spatio-temporal 425 distribution of the N cases and the assumed spatial scale of human-to-human transmission. 426",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "For comparison, the results using the three other broader 441 contact zone assumptions are shown in S4A Fig. Each model's trees include a similar number of 442 within-locality human-to-human transmission events, but increasing the spatial scale of the 443 broader contact zone increases the number of inferred between-locality transmission events. 444 To characterize the distance range over which inter-locality transmission occurs, we 445 focused on links in the sampled transmission trees that occurred between cases with known GPS 446 coordinates (280 out of 331 monkeypox cases had recorded GPS coordinates). The number of 447 transmission events in each sampled tree that occurred over a certain distance was then compared 448 to the number of transmission events expected to occur over each distance if transmission 449 between all localities in a broader contact zone was equally likely (see Methods 4.3 for how this 450 'null distribution' was calculated). 451For all models allowing inter-locality transmission, more transmission events were 452 inferred to occur across \u2264 30 kilometers than expected based on the null distribution(Fig 6, S4B453 Fig). For each inferred transmission tree, a binomial test was used to examine whether more 454 transmissions were inferred to occur over \u2264 30 kilometers than expected based on the null 455 Fig shows the full distributions of p-values obtained across all sampled trees). 459 Distance of inferred inter-locality human-to-human transmission events. Shaded bars 461 show the difference between the mean proportion of inter-locality human-to-human 462 transmissions inferred to occur over a given distance by the district model and the proportion 463 expected based on the spatial distribution of localities (the 'null expectation'). Error bars show 464 the standard deviation among all inferred transmission trees. 465 466 Comparison of sampled transmission trees with contact-tracing data. Contact-tracing, where 467 the contacts of a case were recorded and follow-up investigations determined whether or not the 468 contacts had become infected, was done for a subset of monkeypox cases. Instances where a 469 contact developed an infection are presumed to be instances of human-to-human transmission. 470 For each of these epidemiologically contact-traced links, we looked at how frequently the 471 sampled transmission trees for each model captured the transmission link. 472 Of the 53 case pairs linked through contact tracing, an average of 79.5% (standard 473 deviation of 4.2%) were recovered in each of the district model's sampled transmission trees (Fig 474 7A)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "). The four models had similar success at recovering within-483 locality links. In all models, when a link was incorrectly inferred, it frequently was inferred to 484 originate from zoonotic spillover instead. Although the district model had the highest success at485 recovering contact-traced links, the sampled trees from all models recovered an average of Comparison of epidemiologically contact-traced links with sampled transmission 489 trees. A. Circles (left axis) show the fraction of sampled trees that infer the epidemiologically-490 traced source. Open circles represent inter-locality links while closed circles represent intra-491 locality links. Crosses (right axis) indicate the probability that a link is instead inferred to have a 492 zoonotic source. Results are shown for the model assuming the district-level broader contact 493 zone. Links are sorted from lowest to highest success. B. The fraction of sampled transmission 494 trees that recover a contact-traced link is influenced by the number of days between the symptom 495 onset of source and recipient cases. Circles (left axis) show how often a given link was inferred 496 as a function of the generation interval while the gray curve (right axis) shows the probability 497 density for the generation interval assumed by the model.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Comparison of monkeypox transmission trees created from contact-tracing, the 511 locality-level model, and the district-level model. Points represent cases and edges indicate 512 inferred transmission links between cases. Edge thickness corresponds to the frequency with 513 which a given transmission link was inferred while edge color indicates whether a pair of linked 514 cases occurred within the same (blue) or different (red) localities. The darkness of a point's fill 515indicates how frequently the case was inferred to have a zoonotic source, so transmission links 516 often go from black points (cases caused by zoonotic spillover) to white points (",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "30 (90% CI 0.22-0.40) in Blumberg and Lloyd-556 Smith [16], as 0.32 (90% CI 0.22-0.40) in Lloyd-Smith et al. [54], and as 0.28 in Jezek et al. 557 [52]. There are several explanations for the higher estimate we obtained. The previous studies 558 may have underestimated the reproductive number, particularly if contact-tracing or cluster 559formation methods were liable to miss transmissions that occurred between localities. Indeed, the 560 estimate obtained using the locality-level model (R = 0.29) closely matches previous estimates. It 561 is also possible that the district-level model may overestimate the amount of human-to-human 562 transmission in the same way that the region-and country-level models picked up a higher signal 563",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "600In the context of monkeypox in the DRC, analysis of simulations using the exact 601 geographic coordinates reported for 80% of localities in the monkeypox surveillance dataset 602 replicated the increasing estimates of R and decreasing estimates of spillover rate as the spatial 603 aggregation scale increased (S4 and S5 Tables). However, the magnitude of the effect in 604 simulated datasets was smaller than in the monkeypox analysis. This could be a result of the 605 particular assumptions about inter-locality transmission patterns used in the simulations, but it 606 also opens the question of whether outside large-scale factors such as seasonality or fluctuations 607",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": "of pathogen dynamics, such as seasonal epidemics or expanding wave-fronts of 629 infection, could be incorporated into the model structure. 630 Similarly, spatially and temporally variable surveillance intensity could potentially mimic 631 the signal of human-to-human transmission clusters and result in overestimates of the 632 reproductive number. Future surveillance programs could help mitigate this challenge by 633 recording a measure of surveillance effort undertaken at each location and time. 634This work assumes that R is constant across all localities; however, to obtain a full picture 635 of pathogen emergence risk, it may be necessary to consider the heterogeneity in transmission 636 intensity among different human populations, as well as the interplay between where R is highest 637 versus where spillover tends to occur [61]. In some zoonotic systems, for instance, spillover 638 predominantly occurs into remote villages and towns that are in close proximity to forested 639 regions. However, we generally expect these villages to have lower levels of human-to-human 640 transmission than the more densely-packed cities [62-64]. A pathogen may even be incapable of 641 supercritical spread until it reaches such a city. Therefore, to assess the probability a pathogen 642 will successfully emerge and to determine which populations to target with control measures, it 643 may be necessary to establish not only the spillover rate and R across different populations, but 644 also the rate of dispersal of the pathogen between those populations[61]. 645Several assumptions may need to be modified when applying this method to other 646 zoonotic systems. Because we assume that the source of human-to-human transmission events 647 will show symptoms before the recipient, the likelihood function can treat human cases as 648 occurring independently conditional on preceding cases. For zoonotic diseases in which infected 649 individuals frequently transmit the pathogen before showing symptoms (or when asymptomatic 650",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "654 depletion of susceptible individuals does not affect transmission dynamics. While appropriate 655 when there are few human infections or in the early stages of invasion, this assumption could 656 bias estimates if applied in a system with sufficiently high levels of human infection or where 657 transmission occurs primarily among highly clustered contacts, such as individuals within a 658 household. We also note that in the monkeypox example we are estimating the effective 659 reproductive number, which takes into account existing population immunity. If the goal instead 660 were to establish the basic reproductive number (the reproductive number for the pathogen in a 661 fully susceptible human population), accounting for past exposure to the pathogen or other cross-662 immunizing pathogens or vaccines would be necessary. 663 The current methods assume that all human cases that occur during the surveillance 664 period inside the surveillance area are observed. This assumption is plausible for the analysis of 665 the 1980s monkeypox dataset, given the unusually high resources and experience level of this 666 surveillance effort in the aftermath of the smallpox eradication program and the use of serology 667 to detect missed cases retrospectively [43]. However, most zoonotic surveillance systems operate 668 with limited resources and have a much lower detection rate. Ignoring unobserved cases will lead 669 to underestimation of the spillover rate, while the effect on estimation of R will depend on the 670 nature of the surveillance program. For instance, in the chain-size analyses of Ferguson et al. 671 [28] and Blumberg and Lloyd-Smith [16], R is underestimated when the detection probability of 672each case is independent of one another or when right-censoring occurs but overestimated when 673",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "also arise from contact with infected humans. The number of new infections that 700 become symptomatic on day t in locality v caused by an infectious individual who became 701 symptomatic on day s in locality w is assumed to be a Poisson-distributed random variable with 702 mean \u03bb {s,w},{t,v} . 703 Aggregating cases caused by all sources of infection (both human and zoonotic), the total 704 number of new cases on day t in locality v is a Poisson-distributed random variable with the number of localities under surveillance and is the number of cases with 707 symptom onset on day s in locality w. 708 The mean of the Poisson random variable describing human-to-human transmission, 709 \u03bb {s,w},{t,v} , depends on the reproductive number of the pathogen in humans, the generation time 710 distribution, and the coupling between localitiesR is the reproductive number of the pathogen; g(t-s) is the generation time distribution, 713 which gives the probability that a secondary case becomes symptomatic t-s days after the index 714 symptoms; and H(v,w) describes the amount of transmission between localities v and 715 w and takes values between zero (if no transmission can occur between localities v and w) and 716 one (if all cases arising from an infected individual in locality v arise in locality w). The 717 generation time g(t-s) is assumed to follow a negative binomial distribution. For this study, we 718 used a mean of 16 days and a dispersion parameter of 728.7 (calculated by fitting a negative 719 binomial distribution to observed generation interval counts for smallpox presented in Fig. 2b of 720 [65]), which is consistent with previous estimates of the generation time for both smallpox and 721 monkeypox [43,53,65,66]. 722",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "753 approximations are made in this approach to estimate unknown parameters and improve 754 computational tractability. The details of the derivation for the model are given in S1 Text, and 755 the final likelihood function is: 756 is the number of observed localities (localities with one or more cases) and E[V] is the 758 expected number of localities given the parameter values and the number of observed localities. 759 Parameter estimation. Markov chain Monte Carlo (MCMC) was used to obtain the posterior 760 distributions of the model parameters. The fraction of transmissions occurring within a locality 761 (\u03c3) and the reproductive number (R) were given uniform priors on zero to one. The expected 762 number of spillover events per locality per day (\u03bb z ) was given a uniform prior with a lower bound 763 of zero and an upper bound selected to be far above the converged posterior distribution (ranging 764 from 0.0075 to 1, see S10 Fig for comparison of spillover priors and posterior distributions). 765 The chains were run for 100,000 steps, with a burn-in of 20,000. They satisfied visual 766 inspection for convergence. In addition, the Gelman and Rubin multiple sequence diagnostic was 767 evaluated for three parallel chains from each of the models for the monkeypox dataset [67]. The 768 Gelman-Rubin potential scale reduction values were less than 1.00033 across all models, 769 indicating that the chains have converged close to the target distribution [68]. 770 DIC model comparisons 771 For the monkeypox dataset, four assumptions about the choice of broader contact zone 772 were compared using the deviance information criterion (DIC). This approach combines a 773 complexity measure, used to capture the effective number of parameters in each model, with a 774 measure of fit in order to perform model comparisons. Models are rewarded for better 775 'goodness-of-fit' to the data and penalized for increasing model complexity. Similarly to the 776 preferred. As a rule of thumb, a difference between models' scores of four or more 778 generally indicates that the model with the larger value is 'considerably less' well supported by 779 the empirical evidence [69]. The values necessary to calculate the DIC can be readily obtained 780 from the MCMC output [70]. 781 Transmission tree reconstruction 782 The origin of cases (zoonotic spillover, intra-locality human-to-human transmission, or 783 inter-locality human-to-human transmission) and the distances of inter-locality human-to-human 784 transmission events (when case localities are known) can be established given a particular 785 transmission tree. To gain estimates of these measures, trees were sampled based on the model 786 and the parameter posterior distributions. From the MCMC output (representing draws from the 787 posterior distribution), d 1 sets of parameter estimates were drawn to create d 1 transmission-788 probability matrices (P). The entry P ij describes the probability that individual i was infected by 789 individual j. The diagonal values of the matrix represent the probability a case originated from 790 zoonotic spillover. For a case i observed to occur on day t in locality v, the probability that case j 791 was the source of case i (P ij ) was taken to be the proportion of \u00b5 t,v (the expected total number of 792 cases on that day and locality; defined in equation 2) contributed by case j. By sampling d 2 793 transmission trees from each of these transmission-probability matrices, we calculated the 794 proportion of cases that resulted from spillover, within-locality transmission, and between-795 locality transmission in each sampled tree. When testing the method using 125 simulated 796 datasets, 200 sampled transmission trees were generated for each dataset, with d 1 =20 and d 2 797 =10. For the monkeypox dataset, 20,000 transmission trees were generated with d 1 =200 and d inter-locality human-to-human transmission events in the monkeypox 800 dataset, if the GPS coordinates were known for both localities in a transmission pair, the 801 transmission distance was calculated using the gdist function in the R package Imap [71]. The 802 'null distribution,' used for comparing the number of inferred inter-locality transmission events 803 with the number expected to occur if spatial location played no role in transmission, was 804 calculated by pooling all cases for which locality GPS coordinates are known, sampling all inter-805 locality pairs permitted by the model, and recording the distance between the localities in each 806 pair. 807Simulation of test datasets 808To test the effectiveness of the methods, datasets with known parameter values were 809 simulated using the model explained above. Simulations were run over 1825 days 810 (approximately 5 years) and 325 surveilled localities. The localities were assumed to be 811 partitioned across thirty districts and six regions, with the distribution of localities across districts 812 and regions similar to that observed for the monkeypox dataset. The generation time interval (the 813 number of days between symptom onset of the source and recipient cases) was assumed to 814 follow a negative binomial distribution with a mean of 16 days and a dispersion parameter of 815 728.7 (as described above), with a maximum generation time interval of 40 days. A number of 816 parameter sets, as well as different underlying model structures, were used for simulations (S6 817",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "Zaire,' were collected as part of an intensive surveillance program supported by the 825 World Health Organization. During the peak surveillance period, between 1982 and 1986 [72], 826 data on 331 cases of laboratory-confirmed human monkeypox were recorded (see Fig 2, S1 827 Data) [43]. As part of field investigations, mobile teams visited the locality of a monkeypox case 828to collect information about the case, such as the date of fever and rash onset(for this study, the 829 symptom onset date was taken to be the fever onset date; if the date of onset was not recorded, 830 the rash onset date was used instead), as well as to identify individuals who had had close contact 831 with the case [52,73]. If one of these contacts developed monkeypox within 7 to 21 days of first 832 exposure, the presumptive source case was recorded (S2 Data) [43,73]. 833 Between 1982 and 1986, human monkeypox cases were observed in 171 distinct 834 localities, distributed among 30 districts and administrative subregions (simply referred to as 835 'districts') and 6 regions. The total number of localities that could have been detected by 836 surveillance is unknown. Of the 171 observed localities, GPS coordinates are available for 136 837 localities (which corresponds to 280 out of 331 cases). The district, region, and country of Ferguson NM, Fraser C, Donnelly CA, Ghani AC, Anderson RM. Public Health Risk 927 from the Avian H5N1 Influenza Epidemic. Science (80-) [Internet]. 2004;304(5673)10.1016/j.epidem.2013.05.002. Available from: 937 http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3821076/ 938 31. Wallinga J, Teunis P. Different Epidemic Curves for Severe Acute Respiratory Syndrome 939 Reveal Similar Impacts of Control Measures. Am J Epidemiol [Internet]. Iacono G, Cunningham AA, Fichet-Calvet E, Garry RF, Grant DS, Khan SH, et al. 943 Using Modelling to Disentangle the Relative Contributions of Zoonotic and 944 Anthroponotic Transmission: The Case of Lassa Fever. PLoS Negl Trop Dis [Internet]Iacono G, Cunningham AA, Fichet-Calvet E, Garry RF, Grant DS, Leach M, et al. A 955 Unified Framework for the Infection Dynamics of Zoonotic Spillover and Spread. Foley J, 956 editor. PLoS Negl Trop Dis [Internet]. 2016 Sep 2;10(9):e0004957. Available from: 957 http://www.ncbi.nlm.nih.gov/pmc/articles/PMC5010258/ 958 36. Keeling MJ, Woolhouse MEJ, Shaw DJ, Matthews L, Chase-Topping M, Haydon DT, et 959 al. Dynamics of the 2001 UK Foot and Mouth Epidemic: Stochastic Dispersal in a 960 Heterogeneous Landscape. Science (80-) [Internet]. 2001;294(5543):813-7. Available 961 from: http://www.sciencemag.org/content/294/5543/813.abstract962 37. H\u00f6hle M, J\u00f8rgensen E, O'Neill PD. Inference in disease transmission experiments by 963 using stochastic epidemic models. J R Stat Soc Ser C (Applied Stat [Internet]. 964 2005;54(2):349-66. Available from: http:https://doi.org/10.1111/j.. Accuracy of inferred transmission trees at inferring the correct source of cases. Fig. Inferred sources of monkeypox cases. A. The fraction of cases inferred to have 1103 originated from each source using each of the four spatial models (locality-green, district-blue, 1104 region-purple, country-red). B. Difference in the proportion of inter-locality human-to-human 1105 transmissions inferred by the models to occur over a given transmission distance versus expected 1106 based on the spatial distribution of localities. The p-values indicate the probability of observing 1107 as many or more transmissions over distances of \u2264 30 kilometers based on the null model (i.e. 1108 assuming distance plays no role in determining which localities are linked by inferred 1109 transmission events). The median p-value of sampled transmission trees is given, and the full 1110 distribution of p-values can be seen in S5 Fig. 1111 1112 S5 Fig. The distribution of p-values obtained across sampled transmission trees. P-values 1113 obtained from a binomial test examining whether the number of transmission events inferred to 1114 occur across thirty or fewer kilometers is greater than that expected based on the null 1115 distribution. Each p-value corresponds to a sampled transmission tree. . Comparison of epidemiologically contact-traced links with sampled transmission 1118 trees. Circles (left axis) show the fraction of sampled trees that infer the epidemiologically-1119 traced source. Open circles represent inter-locality links while closed circles represent intra-1120 locality links. Bars (right axis) indicate the probability that a link is instead inferred to have a 1121 zoonotic source. Results are shown for models that use the country-level (red), region-level 1122 (purple), district-level (blue), and locality-level (green) broader contact zones. Links are sorted 1123 from lowest to highest success in the district model. 1124 1125 S7 Fig. Effect of increasing spillover rate on parameter estimate success. Within each color, 1126 large points outlined in black indicate the true parameter set and smaller points indicate the 1127 inferred parameter values from 25 simulated datasets (lines show the 95% credible interval). 1128 Warmer colors correspond with higher spillover rates. Note the log-scale x-axis. 1129 1130 S8 Fig. Parameter estimate residuals for data simulated using a negative binomial versus 1131 Poisson offspring distribution. Because the inference method assumes a Poisson offspring 1132 distribution, we compared the inference successes for datasets simulated assuming a Poisson 1133 offspring distribution versus datasets simulated assuming a negative binomial offspring 1134 distribution. The residuals in parameter estimates for 25 simulations are shown for A) the 1135 reproductive number and B) the spillover rate.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "For each locality with a recorded location, two random 1183 values were drawn: the first determines the direction and the second determines the distance 1184 from the original point. The new location is within 0.1 degrees from the original point but not 1185 closer than 0.02 degrees. 1186 1187 S2 Data. Contact-tracing links. Each row provides the case identification numbers for a pair of 1188 cases that was identified as a probable transmission link through epidemiological contact-",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF17": {
+            "text": "Fig 1",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF18": {
+            "text": "Fig 3",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "Fig 4",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF20": {
+            "text": "Fig 5",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF21": {
+            "text": "Fig 6",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF22": {
+            "text": "Fig 7",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF23": {
+            "text": "model described in the main text tells us that the number of new human cases on day 1194 t in locality v follows a Poisson distribution with the sum of the expected numbers of cases caused by spillover and all previous 1197 human cases (S7 Table provides a description of parameters). Based on this model, the 1198 likelihood of a set of parameters (\u03b8 = {R, \u03bb z , \u03c3}) given surveillance data ( cases 1199 observed on each day t and locality v) is: 1200 ( | ) \u220f \u220f",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF24": {
+            "text": "localities within the target locality's broader contact zone. Because each case 1231 transmits disease independently of one another (conditioned on the previous cases), the 1232 probability that no generation i cases cause infections in the target locality is is the total number of i th generation cases within the broader contact zone (given knowledge 1234 that none of the cases from previous generations transmitted to the target locality). Incorporating 1235 this information, the probability of observing zero cases in a locality (need to calculate estimates for the expected values of each of the n i . The 1239 expected number of primary cases in the entire broader contact zone (given that no spillover 1240 events occurred into the target locality) is the expected number of spillover events per locality 1241 ( ) multiplied by the number of localities under consideration ( ), multiplied by the 1242 number of surveillance days (T). For subsequent case generations, we can calculate the expected 1243 number of cases in generation i+1 as the number of cases caused by the i th generation in their 1244",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "represent the mean posterior estimates and bars indicate the 95% CI. The four darker dots show 378 the mean estimates from panel A. 379 District model performs best for the monkeypox dataset in DIC model for dealing with the silent locality problem: the corrected-denominator method (which conditions 384 on the observation process for localities under surveillance) and three assumptions about the 385 fraction of localities under surveillance that were observed. For each of these approaches, 386 inference was repeated using four choices for the broader contact zone and the DIC was 387 calculated. Parameter estimates and \u0394DIC values are shown. The model with lowest \u0394DIC is 388 preferred and is shown in bold text. 389",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder.It . https://doi.org/10.1101/677021 doi: bioRxiv preprint movement as found in the le Polain de Waroux et al. [55] survey. Their analyses indicate that 586 90% of people who traveled outside their village of residence remained within 12 km. 587",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "735",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "Success of the corrected denominator inference method for datasets simulated 1159with different offspring distributions. 1160 S4Table.Comparison of parameter estimates inferred using models of increasing spatial 1162 scale -data simulated using the 'nearest five neighbors' inter-locality transmission rule 1163where localities take the same GPS coordinates as in the DRC monkeypox surveillance dataset 1164 S5Table.Comparison of parameter estimates inferred using models of increasing spatial 1168 scaledata simulated assuming inter-locality transmission can occur between any localities 1169 located within 30 km of one another, where localities take the same GPS coordinates as in the 1170",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF4": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder.It . https://doi.org/10.1101/677021 doi: bioRxiv preprint own localities plus those caused in the other possible localities (there are other 1245 possible localities because the case's current locality and the target locality have already been 1246 If we approximate the values of n i with [n i ], we get 1250 Returning to our estimation of p, we can approximate n i values with [n i ] and get 1252",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF6": {
+            "text": "1259The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint This expression still includes the parameter , though fortunately the sensitivity of results to the 1260 value of this parameter is relatively low. We therefore approximate using the expected 1261 number of localities under surveillance in the broader contact zone. This calculation is explained 1262 in the following section. 1263",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF7": {
+            "text": "True \u03bb zThe copyright holder for this preprint (which was not peer-reviewed) is the author/funder.It . https://doi.org/10.1101/677021 doi: bioRxiv preprint Model used for inference mean R mean \u03bb z The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/677021 doi: bioRxiv preprint Inter-locality transmission rule Offspring distribution True R Localities have same spatial coordinates as recorded for DRC monkeypox localities, interlocality transmission with closest 5 neighbors Localities have same spatial coordinates as recorded for DRC monkeypox localities, interlocality transmission with neighbors within 30 km Expected number of cases observed on day t, in locality v Actual number of cases observed on day t, in locality v Actual number of cases observed across all localities over the course of surveillance Total number of localities under surveillance Total number of localities under surveillance in the broader contact zone of locality w Number of localities with one or more cases (the number of localities that appear in the surveillance dataset)Number of localities with one or more cases in the broader contact zone of locality w Duration of surveillance: number of days surveillance was conducted Spillover rate: the expected number of spillover events per day in a given locality",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

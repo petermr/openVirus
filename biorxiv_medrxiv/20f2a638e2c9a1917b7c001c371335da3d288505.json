@@ -1,0 +1,1186 @@
+{
+    "paper_id": "20f2a638e2c9a1917b7c001c371335da3d288505",
+    "metadata": {
+        "title": "Partial RdRp sequences offer a robust method for Coronavirus 1 subgenus classification. 2 Running title: Subgenus inference using Coronavirus RdRp",
+        "authors": [
+            {
+                "first": "David",
+                "middle": [
+                    "A"
+                ],
+                "last": "Wilkinson",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "UMR Processus Infectieux en Milieu Insulaire Tropical (PIMIT) 5 INSERM 1187",
+                    "institution": "CNRS",
+                    "location": {
+                        "addrLine": "IRD 249, Sainte-Clotilde",
+                        "postCode": "9192",
+                        "settlement": "La R\u00e9union",
+                        "country": "France"
+                    }
+                },
+                "email": "david.wilkinson@univ-reunion.fr"
+            },
+            {
+                "first": "Lea",
+                "middle": [],
+                "last": "Joffrin",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "UMR Processus Infectieux en Milieu Insulaire Tropical (PIMIT) 5 INSERM 1187",
+                    "institution": "CNRS",
+                    "location": {
+                        "addrLine": "IRD 249, Sainte-Clotilde",
+                        "postCode": "9192",
+                        "settlement": "La R\u00e9union",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Camille",
+                "middle": [],
+                "last": "Lebarbenchon",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "UMR Processus Infectieux en Milieu Insulaire Tropical (PIMIT) 5 INSERM 1187",
+                    "institution": "CNRS",
+                    "location": {
+                        "addrLine": "IRD 249, Sainte-Clotilde",
+                        "postCode": "9192",
+                        "settlement": "La R\u00e9union",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Patrick",
+                "middle": [],
+                "last": "Mavingui",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "UMR Processus Infectieux en Milieu Insulaire Tropical (PIMIT) 5 INSERM 1187",
+                    "institution": "CNRS",
+                    "location": {
+                        "addrLine": "IRD 249, Sainte-Clotilde",
+                        "postCode": "9192",
+                        "settlement": "La R\u00e9union",
+                        "country": "France"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "The recent reclassification of the Riboviria, and the introduction of multiple new taxonomic 10 categories including both subfamilies and subgenera for coronaviruses (family Coronaviridae, 11",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "subfamily Orthocoronavirinae) represents a major shift in how official classifications are used to 12 designate specific viral lineages. While the newly defined subgenera provide much-needed 13 standardisation for commonly cited viruses of public health importance, no method has been 14 proposed for the assignment of subgenus based on partial sequence data, or for sequences that are 15 divergent from the designated holotype reference genomes. Here, we describe the genetic variation 16 of a partial region of the coronavirus RNA-dependent RNA polymerase (RdRp), which is one of the 17 most used partial sequence loci for both detection and classification of coronaviruses in molecular 18 epidemiology. We infer Bayesian phylogenies from more than 7000 publicly available coronavirus 19 sequences and examine clade groupings relative to all subgenus holotype sequences. Our 20 phylogenetic analyses are largely coherent with genome-scale analyses based on designated 21 holotype members for each subgenus. Distance measures between sequences form discrete clusters 22 between taxa, offering logical threshold boundaries that can attribute subgenus or indicate 23 sequences that are likely to belong to unclassified subgenera both accurately and robustly. We thus 24",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "propose that partial RdRp sequence data of coronaviruses is sufficient for the attribution of 25 subgenus-level taxonomic classifications and we supply the R package, \"MyCoV\", which provides a 26 method for attributing subgenus and assessing the reliability of the attribution. 27 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Importance Statement: 28 The analysis of polymerase chain reaction amplicons derived from biological samples is the most 29 common modern method for detection and classification of infecting viral agents, such as 30 Coronaviruses . Recent updates to the official standard for taxonomic classification of Coronaviruses, 31 however, may leave researchers unsure as to whether the viral sequences they obtain by these 32 methods can be classified into specific viral taxa due to variations in the sequences when compared 33 to type strains. Here, we present a plausible method for defining genetic dissimilarity cut-offs that 34 will allow researchers to state which taxon their virus belongs to and with what level of certainty. To 35 assist in this, we also provide the R package 'MyCoV' which classifies user generated sequences. 36 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 22,
+                    "end": 24,
+                    "text": "28",
+                    "ref_id": null
+                },
+                {
+                    "start": 216,
+                    "end": 229,
+                    "text": "Coronaviruses",
+                    "ref_id": null
+                },
+                {
+                    "start": 304,
+                    "end": 318,
+                    "text": "Coronaviruses,",
+                    "ref_id": null
+                },
+                {
+                    "start": 319,
+                    "end": 321,
+                    "text": "31",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint Introduction: Covid-19) epidemic is ongoing and is regarded as a public health emergency of international 45 concern by the WHO, having resulted in more than 2,500 deaths. Thanks to molecular epidemiology 46 studies, we know that SARS, MERS and SARS-CoV-2 had their origins in wild animal reservoir 47 species before spilling over into humans. Indeed, numerous molecular studies have identified a 48 wealth of Coronavirus diversity harboured by equally diverse animal hosts (1-6), and phylogenetic 49 analysis of sequence data from these studies is helping in our understanding of many aspects of 50 disease ecology and evolution (7-9). This includes the role of reservoir hosts in disease maintenance 51 and transmission (3, 4, 6, 10-12), the evolutionary origins of human-infecting coronaviruses (3, 13), 52 the importance of bats as reservoirs of novel coronaviruses (14, 15), the role of intermediate hosts in 53 human disease emergence (3, 11, 16) , and the understanding of risk that might be related to 54 coronavirus diversity and distributions (17, 18 Betacoronaviruses related to MERS Coronavirus). Whole genome data from holotype specimens 72 selected to represent an exhaustive spectrum of coronavirus diversity was used to test the 73 phylogenetic repartition and support for each of these taxa (20). Due to the limited diversity of 74 holotype specimens classified into these subgenera, there is currently no method for attributing 75 subgenus to isolates with divergent sequences, and no proposed method for partial sequence data. 76",
+            "cite_spans": [
+                {
+                    "start": 1083,
+                    "end": 1086,
+                    "text": "(3,",
+                    "ref_id": null
+                },
+                {
+                    "start": 1087,
+                    "end": 1090,
+                    "text": "11,",
+                    "ref_id": null
+                },
+                {
+                    "start": 1091,
+                    "end": 1094,
+                    "text": "16)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1195,
+                    "end": 1199,
+                    "text": "(17,",
+                    "ref_id": null
+                },
+                {
+                    "start": 1200,
+                    "end": 1202,
+                    "text": "18",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "However, sequence data from the RdRp region of the polymerase gene is one of the most commonly 77 used tools for the purposes of Coronavirus detection, identification and classification in molecular 78 epidemiology. 79",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "Here, we examine the phylogenetic relationship from all identifiable public partial RdRp sequences 80 6 sequences. We compiled a database of our assigned classifications and developed the R package 87 \"MyCoV\" for assignment of user-generated sequences to these taxa. 88",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": ""
+        },
+        {
+            "text": "89 Sequence data, curation and alignment: 90 Sequence data was obtained from the NCBI nucleotide database on the 5 th of July 2019, using the 91 search term \"coronavir*\". This resulted in the identification of 30,249 sequences. A preliminary set 92 of representative partial RdRp sequences was compiled with reference to recent publications 93 describing Coronavirus diversity across the Orthocoronavirinae subfamily (21), in order to include 94 starting reference sequences from with the largest possible diversity of coronaviruses. This 95 preliminary list was then used to identify partial RdRp sequences from retrieved NCBI records by 96 annotating regions that had at least 70 % identity to any reference sequence in the Geneious 97 software package (version 9.4.1). Annotated regions and 200 bp of flanking sequence data were 98 then extracted. Data containing incomplete sequences in the form of strings of N's or significant 99 numbers of ambiguities (>5) were removed. Open reading frames with a minimum length of 300 bp 100 were identified and extracted from the remaining sequences. In the case where the correct reading 101 frame was ambiguous, pairwise alignment to reference sequence data was used to determine 102 reading frame. Remaining sequences were then aligned in-frame using MAFFT, and the resulting 103 alignment was further curated by visual inspection. Retained sequences were then trimmed to 104 include only the most-frequently sequenced partial region of RdRp and so that each sequence 105 contained a minimum of 300 gap free bases. The final alignment was 387 bp in length with 7,544 106 individual sequences, of which 3,155 were unique. The relevant 387 bp region corresponds to 107 nucleotide positions 15287:15673 in Merbecovirus holotype reference sequence JX869059.2. 108 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Methods:"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint Orthocoronaviridae genera within each phylogenetic tree. Genus-level subtrees were then extracted 124 and treated independently for subgenus-level analyses. 125",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Methods:"
+        },
+        {
+            "text": "Sequences originating from defining subgenus holotype samples were identified in the genus-level 126 topologies. Clustering thresholds were defined as the highest node positions at which clusters of 127 leaves could be defined without combining holotype specimens from different subgenera into the 128 same clade. Clusters defined at these thresholds that contained no holotype specimens were 129 designated as \"Unclassified\". Clustering thresholds were calculated, and subgenera were assigned to 130 all sequences across a random subsample of 453 trees, 151 from each independent repeat of the 131 phylogenetic analyses. The proportion of trees in which each sequence was assigned to a given 132 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Methods:"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint subgenus was used as the \"posterior probability\" of that sequence belonging to that subgenus. 133 Sequences with lower than 90% majority posterior probabilities were designated as \"Unclassified\". 134 Potential positioning of new subgenus level clades (as indicated by \"GroupX\" in Figures 2 and 3) was 135 inferred using the maximum clade-credibility consensus tree from all BEAST analyses, identifying 136 monophyletic clades where all descendants were not classified into defined subgenera. 137",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Methods:"
+        },
+        {
+            "text": "Cross-validation: 138 The assignment of sequences to the relevant subgenus using best hit and pairwise identity data from 139 blastn (25) was tested by iteratively removing each sequence from the test database and re-140 assigning its classification. Sequences that could not be re-assigned to the same subgenus by this 141 method were re-classified as \"atypical\" members of their respective subgenera. 142 R package for assignment of user-generated sequences:",
+            "cite_spans": [
+                {
+                    "start": 18,
+                    "end": 21,
+                    "text": "138",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Methods:"
+        },
+        {
+            "text": "The purpose of the R package MyCoV is to allow users to classify Coronavirus sequence data that 144 includes the relevant portion of the RdRp gene to the taxonomic level of subgenus, and to assess to 145 what extent the classification is optimal based on the criteria presented herein. 146",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "143"
+        },
+        {
+            "text": "In order to achieve this, the 3155 unique partial sequences from the phylogenetic analyses were 147 used to establish a reference BLAST database. Metadata pertaining to host organism, country of 148 origin and date of collection were mined from NCBI and standardised by taxonomic grouping of the 149 host and geographical region of origin to generate corresponding metadata for all 7544 NCBI 150 reference sequences from which the unique sequence list was established. 151",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "143"
+        },
+        {
+            "text": "MyCoV was written as a basic wrapper script for blastn, which queries sequences of interest against 152 the established database, and summarises subgenus classification, subgenus posterior support of 153 the most similar sequence in the phylogenetic analysis, pairwise distances to the most similar 154 sequence in the database and their metadata using R packages \"ggplot2\", \"formattable\" (available at 155 https://github.com/renkun-ken/formattable) and \"ggtree\" (26). 156 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "143"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint As the MyCoV database was established prior to the recent emergence of the SARS-CoV-2, we 157 used genomic sequence data from this virus as a test case for the utility of the MyCoV package. 158",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "143"
+        },
+        {
+            "text": "Outputs from this analysis are shown in Figure 5 . 159",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 40,
+                    "end": 48,
+                    "text": "Figure 5",
+                    "ref_id": "FIGREF7"
+                }
+            ],
+            "section": "143"
+        },
+        {
+            "text": "MyCoV is available at https://github.com/dw974/MyCoV. 160",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "143"
+        },
+        {
+            "text": "Results:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "143"
+        },
+        {
+            "text": "Our three independent, randomly-seeded phylogenetic analyses converged on similar estimates for 162 all parameters in BEAST2. The resulting predictions of tree topology had well supported major nodes 163 with narrow posterior distributions around most node heights ( Figure 1a ). The four known genera 164 associated with these sequences fell into four well-supported clades, divided close to the root of the 165 tree. Genetic distance measures between all members of the four genera had logical thresholds for 166 the distinction between genera except in the case of some betacoronaviruses, which had major 167 clade divisions close to the root of the tree ( Figure 1b) and therefore had genetic distances between 168 members of the same genus that overlapped with distances between members of the Alpha-and 169",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 267,
+                    "end": 276,
+                    "text": "Figure 1a",
+                    "ref_id": null
+                },
+                {
+                    "start": 660,
+                    "end": 670,
+                    "text": "Figure 1b)",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "Betacoronaviruses. In practice, this is likely to mean that identity-based phylogenetic topologies 170 based on this partial region of RdRp may incorrectly infer paraphyly between members of the Alpha-171 and Betacoronaviruses. 172",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "At the subgenus level, separation of the inferred tree topologies into monophyletic clades based on 173 the positions of reference holotype sequences produced logical and well-supported groupings that 174 covered the majority of coronavirus diversity explored to date by RdRp sequencing (Figures 2 and 3) . 175",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 287,
+                    "end": 304,
+                    "text": "(Figures 2 and 3)",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "In total, 88 % of unique sequences fell into clade groups containing subgenus holotypes with 176 subgenus-assignment posterior probabilities of greater than 90 %. The remaining 12 % of unique 177 sequences fell into 19 separate monophyletic groups, of which 14 were Alphacoronaviruses ( Figure  178 2), two were Betacoronaviruses ( Figure 2 ) and three were Deltacoronaviruses (Figure 3 ). When host 179 and geographical origins of isolates falling within unclassified clades was examined, the majority 180 were associated with regional radiations for which little or no genomic or phenotypic data are 181 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 287,
+                    "end": 298,
+                    "text": "Figure  178",
+                    "ref_id": null
+                },
+                {
+                    "start": 332,
+                    "end": 340,
+                    "text": "Figure 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 377,
+                    "end": 386,
+                    "text": "(Figure 3",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint available. For example, unclassified Deltacoronaviruses were all from bird species in Oceania, and 182 many unclassified Alpha-and Betacoronaviruses originated in bat species that are exclusively found 183 in Central and South America (Supplementary Figure 1) . 184",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 392,
+                    "end": 401,
+                    "text": "Figure 1)",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "The Pedacoviruses, for which multiple genome holotypes were supplied for the description of 185 subgenus, were split into multiple clades by the imposition of a common height threshold for cluster 186 definition using the presented methodology. The two holotype-containing clades corresponded to a 187 single group of Porcine epidemic diarrhoea virus (PEDV) -related viruses distributed globally but 188 entirely from pigs (Pedacovirus I in Figure 2) An alternative strategy for coronavirus classification from partial sequence data may be using the 247 spike protein-encoding S-gene, which is another commonly sequenced region of coronavirus 248 genomes. However, the use of this region is more common in epidemic outbreak scenarios and thus 249 there are many S gene sequences in public databases that are either identical or extremely closely 250 related. Performing comparative sequence searches by querying the NCBI nucleotide database with 251 the two search terms \"((coronavir* spike) OR (coronavir* S gene)) AND 252 \"viruses\"[porgn:__txid10239]\" and \"((coronavir* RdRp) OR (coronavir* polymerase)) AND 253 \"viruses\"[porgn:__txid10239]\" shows that there are approximately three times more sequences 254 from the S gene, but that these sequences originate from approximately three times fewer viral 255 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 441,
+                    "end": 450,
+                    "text": "Figure 2)",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint taxa. We therefore favour the use of the RdRp region as it provides a more exhaustive 256 representation of known coronavirus diversity. 257",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "Of course, this form of interpretation is subject to the same caveats as any other that is based on 258 partial sequence data from a short, single genomic locus; Indeed, the effects of potential 259 recombination events cannot be captured, and some uncertainties will exist in the presented 260 phylogenetic trajectories that may be resolvable by the addition of longer sequence data. The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint analysis where the corresponding leaf was assigned to each subgenus, which is indicated by colour 407",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "according to the legend. Vertical lines show the distribution of cluster-defining height thresholds 408 that were identified to assign subgenus classifications, with the median of all clustering thresholds 409 displayed in bold, lines are coloured by genus as in Figure 1 . Monophyletic groups where all 410 members have posterior probabilities of being assigned to a known subgenus of lower than 90% are 411 highlighted and assigned sequential IDs. 412 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 263,
+                    "end": 271,
+                    "text": "Figure 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint assigned to a known subgenus of lower than 90% are highlighted and assigned sequential IDs. 424 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint 425 426 Figure 4 : Histograms of genetic distances for intra-and inter-subgenus comparisons. Vertical dashed 427 lines represent the optimal genetic distance cut-offs for the subgenus threshold, calculated as the 428 midpoint of the fitted binomial probability distribution. 429 430 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 150,
+                    "end": 158,
+                    "text": "Figure 4",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint of the query sequence to the reference database. The predicted subgenus and genus of the best-433 matching hit are displayed, as well as the posterior support for the assignment to the predicted 434 subgenus (see methods). Pairwise identity between the two sequences is shown and is calculated 435 relative to the maximum possible alignment length against the reference sequences (387 bp). B) For 436 each queried sequence, pairwise identity values are mapped to all observations from pairwise 437 comparisons between sequences in the database. The vertical dashed line represents the pairwise 438 dissimilarity of the queried sequence. C) Phylogenetic positioning and metadata from the analysis of 439 the reference sequences are displayed. Reference sequences with blast-hits matching the queried 440 sequence are highlighted on the leaves, and tips are coloured from red to green with increasing 441 pairwise identity. The hit with the best score is highlighted by a large green diamond on the tip. 442",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "Pairwise identity scores are displayed for all leaves, as well as predicted subgenus. Host genus 443 associations (blue) and geographical region of origin (red) from available metadata are indicated by 444 binary heatmaps. Note that multiple metadata observations are possible for each leaf, as leaves are 445 displayed for unique sequences only. The ID next to each leaf is that of the representative sequence 446",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "for that leaf, and other IDs are left off for clarity. 447 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint 448 Supplementary Figure S1 : Metadata (host and geographical origin) associations of Coronaviruses 449 belonging to different official subgenera, and other unclassified major clade groups as depicted in 450 main figures 2 and 3. Blocks of colour represent the existence of at least one record of the indicated 451 association, and are coloured by viral genus as in main figure 1. 452 author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 228,
+                    "end": 245,
+                    "text": "Coronaviruses 449",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 160,
+                    "end": 169,
+                    "text": "Figure S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "161"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/2020.03.02.974311 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "161"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Coronaviruses: Emerging and re-emerging pathogens in humans 272 and animals",
+            "authors": [
+                {
+                    "first": "Skp",
+                    "middle": [],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jfw",
+                    "middle": [],
+                    "last": "Chan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Virol J. BioMed Central Ltd",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Middle East Respiratory 274 syndrome coronavirus: Another zoonotic betacoronavirus causing SARS-like disease",
+            "authors": [
+                {
+                    "first": "Jfw",
+                    "middle": [],
+                    "last": "Chan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Skp",
+                    "middle": [],
+                    "last": "Lau",
+                    "suffix": ""
+                },
+                {
+                    "first": "Kkw",
+                    "middle": [],
+                    "last": "To",
+                    "suffix": ""
+                },
+                {
+                    "first": "Vcc",
+                    "middle": [],
+                    "last": "Cheng",
+                    "suffix": ""
+                },
+                {
+                    "first": "Pcy",
+                    "middle": [],
+                    "last": "Woo",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Yue",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Clin",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Hao",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bernini",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Spiga",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Pan",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Manuguerra",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Cross-host evolution of severe acute 306 respiratory syndrome coronavirus in palm civet and human",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                },
+                {
+                    "first": "Danchin",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Niccolai",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Zhao",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Forni",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Cagliani",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Clerici",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Sironi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Molecular Evolution of Human Coronavirus",
+            "volume": "307",
+            "issn": "13",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Bats are natural reservoirs 311 of SARS-like coronaviruses",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Mceachern",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Field",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Daszak",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Eaton",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Science",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Surveillance of Bat Coronaviruses in Kenya Identifies Relatives of Human 314",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Bat pathogens hit the road: But 316 which one",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Coronaviruses",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Their Recombination History ; Joffrin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Dietrich",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Mavingui",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Lebarbenchon",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLoS Pathog",
+            "volume": "315",
+            "issn": "16",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Global patterns in 319 coronavirus diversity",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Daszak",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Karesh",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Lipkin",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Morse",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jak",
+                    "middle": [],
+                    "last": "Mazet",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Goldstein",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Virus Evol",
+            "volume": "3",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Global Patterns of Zoonotic Disease in Mammals",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Han",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Kramer",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Drake",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Ziebuhr",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Baric",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "De Groot",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Drosten",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Gulyaeva",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Haagmans",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Neuman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "",
+            "volume": "321",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Bat coronavirus phylogeography in the western Indian Ocean",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Lebarbenchon",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Bouckaert",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Heled",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "K\u00fchnert",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Vaughan",
+                    "suffix": ""
+                },
+                {
+                    "first": "C-H",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Suchard",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "",
+            "volume": "333",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "BEAST 2: A Software Platform for Bayesian Evolutionary Analysis",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drummond",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Drummond",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xie",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Baele",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Suchard",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Comput Biol",
+            "volume": "336",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Ape 5.0: An environment for modern phylogenetics and 340 evolutionary analyses in R",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Paradis",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Schliep",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Bioinformatics",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "BLAST+: Architecture and applications",
+            "authors": [],
+            "year": null,
+            "venue": "BMC Bioinformatics",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "ggtree: an r package for visualization and 344 annotation of phylogenetic trees with their covariates and other associated data",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Tty",
+                    "middle": [],
+                    "last": "Lam",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Methods",
+            "volume": "345",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "and host/reservoir associations. In recent years, the emergence of Betacoronaviruses 39 in human populations has resulted in widespread morbidity and mortality. The Severe Acute 40 Respiratory Syndrome (SARS) Coronavirus was responsible for 8 096 cases and 774 deaths during the 41 2002-2003 outbreak (World Health Organisation, WHO data). Since 2013, the Middle East 42 Respiratory Syndrome (MERS) Coronavirus has infected 2 506 and has led to 862 deaths (WHO data). 43 At the time of writing, the SARS-CoV-2 virus (also known as nCoV-2019 and causing the disease 44",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "for a GTR substitution model with four gamma categories and an estimated 111 proportion of invariant sites. The Yule population model was used, and a log-normal distribution was 112 specified for birth rate and proportion of invariant site priors. Convergence of estimated parameters 113 was assessed in Tracer v1.7.1 (23). Three independent MCMC chains were run until effective sample 114 sizes were above 200 for all estimated parameters after removing the burn-in. Analyses were run 115 until convergence criteria could be fulfilled whilst providing equal chain lengths after burn-in for all 116 three repeats, meaning that the number of trees in the posterior distributions was the same for each 117 independent repeat. 118Genetic distance measures were calculated using the 'ape' package (24) in RStudio as the proportion 119 of variant sites in pairwise comparisons after removing regions containing gaps in either from known references were used to identify common ancestral nodes for the 123",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "and a monophyletic group of viral sequences obtained 189 from Asian Scotophilus bats. The monophyletic group that contained both Pedacovirus holotypes 190 also enclosed other major viral clades (Clades A11, A12 and A13 in Figure 2), which were mainly 191 associated with other bat species of the Vespertillionidae family (Supplementary Figure 1). 192 Cross-validation of sub-genus assignments by best-hit using blastn was successful in more than 99.9 193 % of cases, with a handful of lone sequences that branched at basal positions of each phylogenetic 194 clade group being assigned to different subgenera. 195 For sequence members of each genus, genetic distance measurements between and within 196 sequences attributed to each subgenus displayed logical and discrete threshold boundaries for the 197 distinction of individual subgenus members. The one exception, again, was members of the 198 pedacovirus subgenus which displayed overlapping within-taxon distances with between-taxon 199 distances for other Alphacoronavirus subgenera (Figure 4). The distinct pedacovirus clades displayed 200 in Figure 2 were thus treated as separate subgenera for distance threshold calculation. Optimal 201 thresholds were identified as the midpoint of a fitted binomial probability distribution for intra-and 202 inter-subgenus pairwise distances. The optimal identity thresholds for distinguishing same vs. 203 different subgenera were as follows; i) 77.6 % identity, resulting in 99.7 % precision and 95.3 % 204 accuracy of classification for subgenera of the Alphacoronaviruses. ii) 71.7 % identity, resulting in 205 99.9 % precision and 99.6 % accuracy of classification for subgenera of the Betacoronaviruses. iii) 206 package, MyCoV, successfully identified SARS-CoV-2 as a member of the sarbecovirus 210 subgenus, with the closest match being to reference sequence KP876545.11 (Rhinolophus bat 211 coronavirus BtCov/3990), which showed 92.5 % pairwise identity to SARS-CoV-2 in the RdRp 212 region. This sequence had been assigned 100 % posterior support for being attributed to the 213 sarbecovirus subgenus (Figure 5a). Distributions of pairwise identities within members of the 214 subgenera of the Betacoronaviruses fell between 71 % and 100 %, whereas pairwise distances 215between Betacoronavirus subgenera were less than or equal to 71%. Thus, the output of MyCoV 216 allows us to state with certainty that SARS-CoV-2 belongs to this subgenus(Figure 5b). Positioning 217 of the closest match in the phylogenetic tree shows that the SARS-CoV-2 forms a distinct lineage 218 from SARS coronavirus, and that its closest match belonged to a Rhinolophus bat from China (Figure 219",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "5c). Interestingly, this sequence came from an abandoned mine in 2013, suggesting that SARS-220 CoV-2 predecessors circulated in bat communities for a number of years prior to the 2019 221 emergence in human populations. The provided visualisation of host and geographical origins for 222 these partial reference sequences allows for a rapid assessment of the distribution of similar viruses, 223 for example, it highlights the fact that SARS-related and SARS-CoV-2-related viruses have also been 224 identified in bats in Africa (specifically Rhinolophus bats in Kenya), and that they are not reclassification of the Riboviria is a logical progression in viral taxonomy, as the unique 228 mechanism of replication of all negative-sense, single-stranded, RNA viruses results in the 229 conservation of many viral characteristics, including relative sequence conservation of regions of the 230 cognate RNA-dependent RNA polymerase. Consequently, such genomic loci lend themselves to the 231 viral lineages that, in general, demonstrate a level of specificity in their host-235 associations and epidemiological characteristics (Supplementary Figures S1). 236 Our analyses have shown that the phylogenetic interpretation of short sequences of the RdRp locus 237 of members of the Orthocoronaviridae is largely coherent with genome-scale analyses based on 238 designated holotype members for each subgenus. The vast majority of known RdRp sequences (88 239 %) can be classified into the defined subgenera, and their classification cross-validated based on 240 simple distance thresholds established from a 387 bp fragment of RdRp. Globally, these distance 241 measures form discrete clusters between taxa, offering logical threshold boundaries that can 242 attribute subgenus or indicate sequences that are likely to belong to unclassified subgenera both 243 accurately and robustly without the need for complex phylogenetic inference. The provided R 244 package, \"MyCoV\", provides a method for achieving this and for the assessment of the reliability of 245 the attribution. 246",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "we do not suggest the definition of new subgenera for unclassified clade groups presented 262 in Figures 2 and 3. The limits of the phylogenetic resolving power of this partial region of RdRp are 263 most clear for members of the Alphacoronavirus genus, where there is an elevated level of mid-264 distance genetic diversity and a large number of unclassified genetic clade groups associated with 265 regional, likely host-specific radiations. And thus, precise taxonomic delineation of emerging 266 Alphacoronaviruses will require more information than is offered by this RdRp locus. Conversely, the 267 clear genetic distinction and corresponding epidemiological associations that exist between clade 268 groups of the Pedacoviruses does raise the question as to whether the definition of this NH, Nomenjanahary LA, Wilkinson DA, Razafimanahaka JH, Goodman SM, 284 Jenkins RK, Jones JP, Heraud J-M. 2015. Detection of new genetic variants of 285 Betacoronaviruses in Endemic Frugivorous Bats of Madagascar. Virol J 12. 286 7. Drexler JF, Corman VM, Drosten C. 2014. Ecology, evolution and classification of bat 287 coronaviruses in the aftermath of SARS. Antiviral Res. 288 8. Corman VM, Baldwin HJ, Tateno AF, Zerbinati RM, Annan A, Owusu M, Nkrumah EE, Maganga 289 GD, Oppong S, Adu-Sarkodie Y, Vallo P, da Silva Filho LVRF, Leroy EM, Thiel V, van der Hoek L, 290 Poon LLM, Tschapka M, Drosten C, Drexler JF. 2015. Evidence for an Ancestral Association of 291 Human Coronavirus 229E with Bats. J Virol 89:11858-11870. 292 9. Anthony SJ, Gilardi K, Menachery VD, Goldstein T, Ssebide B, Mbabazi R, Navarrete-Macias I, 293 Liang E, Wells H, Hicks A, Petrosov A, Byarugaba DK, Debbink K, Dinnon KH, Scobey T, Randell 294 SH, Yount BL, Cranfield M, Johnson CK, Baric RS, Lipkin WI, Mazet JAK. 2017. Further evidence 295 for bats as the evolutionary source of middle east respiratory syndrome coronavirus. VD, Graham RL, Baric RS. 2017. Jumping species-a mechanism for coronavirus 299 persistence and survival. Curr Opin Virol. 300 12. Song HD, Tu CC, Zhang GW, Wang SY, Zheng K, Lei LC, Chen QX, Gao YW, Zhou HQ, Xiang H, 301 Zheng HJ, Chern SWW, Cheng F, Pan CM, Xuan H, Chen SJ, Luo HM, Zhou DH, Liu YF, He JF, 302 Qin PZ, Li LH, Ren YQ, Liang WJ, Yu YD, Anderson L, Wang M, Xu RH, Wu XW, Zheng HY, Chen 303 JD, Liang G, Gao Y, Liao M, Fang L, Jiang LY, Li H, Chen F, Di B, He LJ, Lin JY, Tong S, Kong X, Du 304 author/funder. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Comparative analysis of 3155 partial RdRp sequences belonging to members of the 349 Orthocoronavirinae. A) Consensus phylogeny from three independent BEAST analyses. Nodes with 350 posterior support greater than 90 % are highlighted with dots and bars display the 95% HPD of the 351 heights of each node. Colours indicate genus-level classification for sequences, clades and pairwise 352 comparisons throughout. B) Histograms of genetic distances, measured as the proportion of variant 353 sites, between sequences belonging to each genus and grouped by the genus of the Phylogenetic subgenus classifications for partial RdRp sequences of Alphacoronaviruses 356 (LEFT) and Betacoronaviruses (RIGHT). Depicted trees are subtrees of consensus phylogeny 357 presented in Figure 1. Dots on leaf tips indicate sequences belonging to holotype reference 358 sequences for each subgenus. Coloured bars show the proportion of trees from the Bayesian 359 analysis where the corresponding leaf was assigned to each subgenus, which is indicated by colour 360 according to the legend. Vertical lines show the distribution of cluster-defining height thresholds 361 that were identified to assign subgenus classifications, with the median of all clustering thresholds 362 displayed in bold, lines are coloured by genus as in Figure 1. Monophyletic groups where all 363 members have posterior probabilities of being assigned to a known subgenus of lower than 90% are 364 highlighted and assigned sequential IDs. Phylogenetic subgenus classifications for partial RdRp sequences of Gammacoronaviruses 366 (LEFT) and Deltacoronaviruses (RIGHT). Depicted trees are subtrees of consensus phylogeny 367 presented in Figure 1. Dots on leaf tips indicate sequences belonging to holotype reference 368 sequences for each subgenus. Coloured bars show the proportion of trees from the Bayesian 369 analysis where the corresponding leaf was assigned to each subgenus, which is indicated by colour 370 according to the legend. Vertical lines show the distribution of cluster-defining height thresholds 371 that were identified to assign subgenus classifications, with the median of all clustering thresholds 372 bold, lines are coloured by genus as in Figure 1. In the case of gamma coronaviruses, 373 both subgenera are consistently separated at the root of the tree, thus all cluster defining heights 374 equate to the root. Monophyletic groups where all members have posterior probabilities of being 375 assigned to a known subgenus of lower than 90% are highlighted and assigned sequential IDs. Histograms of genetic distances for intra-and inter-subgenus comparisons. Vertical dashed 377 lines represent the optimal genetic distance cut-offs for the subgenus threshold, calculated as the 378 midpoint of the fitted binomial probability distribution. MyCoV output plots for the analysis of the 2019nCoV. A) Tabular output of best blastn hit 380 of the query sequence to the reference database. The predicted subgenus and genus of the best-381 matching hit are displayed, as well as the posterior support for the assignment to the predicted 382 subgenus (see methods). Pairwise identity between the two sequences is shown and is calculated 383 relative to the maximum possible alignment length against the reference sequences (387 bp). B) For 384 each queried sequence, pairwise identity values are mapped to all observations from pairwise 385 comparisons between sequences in the database. The vertical dashed line represents the pairwise 386 dissimilarity of the queried sequence. C) Phylogenetic positioning and metadata from the analysis of 387 the reference sequences are displayed. Reference sequences with blast-hits matching the queried 388 sequence are highlighted on the leaves, and tips are coloured from red to green with increasing 389 pairwise identity. The hit with the best score is highlighted by a large green diamond on the tip. 390 Pairwise identity scores are displayed for all leaves, as well as predicted subgenus. Host genus 391 associations (blue) and geographical region of origin (red) from available metadata are indicated by 392 binary heatmaps. Note that multiple metadata observations are possible for each leaf, as leaves are 393 displayed for unique sequences only. The ID next to each leaf is that of the representative Comparative analysis of 3155 partial RdRp sequences belonging to members of the Orthocoronavirinae. A) Consensus phylogeny from three 398 independent BEAST analyses. Nodes with posterior support greater than 90 % are highlighted with dots and bars display the 95% HPD of the heights of each 399 node. Colours indicate genus-level classification for sequences, clades and pairwise comparisons throughout. B) Histograms of genetic distances, measured 400 as the proportion of variant sites, between sequences belonging to each genus and grouped by the genus of the queried sequence. Phylogenetic subgenus classifications for partial RdRp sequences of Alphacoronaviruses 403 (LEFT) and Betacoronaviruses (RIGHT). Depicted trees are subtrees of consensus phylogeny 404 presented in Figure 1. Dots on leaf tips indicate sequences belonging to holotype reference 405 sequences for each subgenus. Coloured bars show the proportion of trees from the Bayesian 406",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Phylogenetic subgenus classifications for partial RdRp sequences of Gammacoronaviruses 414 (LEFT) and Deltacoronaviruses (RIGHT). Depicted trees are subtrees of consensus phylogeny 415 presented in Figure 1. Dots on leaf tips indicate sequences belonging to holotype reference 416 sequences for each subgenus. Coloured bars show the proportion of trees from the Bayesian 417 analysis where the corresponding leaf was assigned to each subgenus, which is indicated by colour 418 according to the legend. Vertical lines show the distribution of cluster-defining height thresholds 419 that were identified to assign subgenus classifications, with the median of all clustering thresholds 420 displayed in bold, lines are coloured by genus as in Figure 1. In the case of gamma coronaviruses, 421 both subgenera are consistently separated at the root of the tree, thus all cluster defining heights 422 equate to the root. Monophyletic groups where all members have posterior probabilities of being 423",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "MyCoV output plots for the analysis of the 2019nCoV. A) Tabular output of best blastn hit 432",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "). 55 the family Coronaviridae into two subfamilies -the amphibian-infecting Letovirinae, and 62Gammacoronavirus and Deltacoronavirus that are classically recognised to infect mammals and birds 64 and have significance in human and livestock diseases. The subgenus level of classification for 65 members of the Orthocoronavirinae was also introduced, providing specific taxa for commonly cited 66 groups of similar viruses such as Betacoronavirus lineages \u03b2-A, \u03b2-B, \u03b2-C and \u03b2-D, which were 67 designated Embecovirus, Sarbecovirus, Merbecovirus and Nobecovirus, respectively. The 68 nomenclature for the designated subgenera was assigned with respect to known host species for 69 each subgenus (eg. Rhinacoviruses for Alphacoronviruses known to be hosted by bats of the 70Rhinolophidae family) or based on commonly used disease terminology (eg. Merbecoviruses for 71",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

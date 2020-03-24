@@ -1,0 +1,3815 @@
+{
+    "paper_id": "9e780780dbaf35c0d537ddb290dfd484148a3c55",
+    "metadata": {
+        "title": "Estimating the Relative Probability of Direct Transmission between Infectious Disease Patients",
+        "authors": [
+            {
+                "first": "Sarah",
+                "middle": [
+                    "V"
+                ],
+                "last": "Leavitt",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Boston University",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Robyn",
+                "middle": [
+                    "S"
+                ],
+                "last": "Lee",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Harvard T.H. Chan School of Public Health",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Paola",
+                "middle": [],
+                "last": "Sebastiani",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Boston University",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Charles",
+                "middle": [
+                    "R"
+                ],
+                "last": "Horsburgh",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Boston University",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Helen",
+                "middle": [
+                    "E"
+                ],
+                "last": "Jenkins",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Boston University",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Laura",
+                "middle": [
+                    "F"
+                ],
+                "last": "White",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Boston University",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Estimating infectious disease parameters such as the serial interval (time between symptom onset in primary and secondary cases) and reproductive number (average number of secondary cases produced by a primary case) are important to understand infectious disease dynamics. Many estimation methods require linking cases by direct transmission, a difficult task for most diseases.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Using a subset of cases with detailed genetic or contact investigation data to develop a training set of probable transmission events, we build a model to estimate the relative transmission probability for all case-pairs from demographic, spatial and clinical data. Our method is based on naive Bayes, a machine learning classification algorithm which uses the observed frequencies in the training dataset to estimate the probability that a pair is linked given a set of covariates.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "In simulations we find that the probabilities estimated using genetic distance between cases to define training transmission events are able to distinguish between truly linked and unlinked pairs with high accuracy (area under the receiver operating curve value of 95%). Additionally only a subset of the cases, 10-50% depending on sample size, need to have detailed genetic data for our method to perform well. We show how these probabilities can be used to estimate the average effective reproductive number and apply our method to a tuberculosis outbreak in Hamburg, Germany.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint 3 Our method is a novel way to infer transmission dynamics in any dataset when only a subset of cases has rich contact investigation and/or genetic data.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Infectious disease parameters such as the serial interval (time between symptom onset from primary to secondary case) and the reproductive number (average number of secondary cases produced by a primary case over the infection course) are instrumental in managing outbreaks (1) . For diseases in which disease progression shortly follows infection, these parameters have been studied extensively (1) (2) (3) (4) (5) (6) . For others, such as tuberculosis (TB), the serial interval and reproductive number estimates are few and inconsistent (7) (8) (9) .",
+            "cite_spans": [
+                {
+                    "start": 274,
+                    "end": 277,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 396,
+                    "end": 399,
+                    "text": "(1)",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 400,
+                    "end": 403,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 404,
+                    "end": 407,
+                    "text": "(3)",
+                    "ref_id": null
+                },
+                {
+                    "start": 408,
+                    "end": 411,
+                    "text": "(4)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 412,
+                    "end": 415,
+                    "text": "(5)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 416,
+                    "end": 419,
+                    "text": "(6)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 540,
+                    "end": 543,
+                    "text": "(7)",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 544,
+                    "end": 547,
+                    "text": "(8)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 548,
+                    "end": 551,
+                    "text": "(9)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Methods to estimate both the serial interval and reproductive number often rely on determining which cases are linked by direct transmission. Pathogen whole genome sequence (WGS) data is a powerful tool to link cases and several methods have been developed to analyze these data (10) (11) (12) (13) (14) (15) (16) (17) (18) (19) (20) (21) . However, WGS data is still relatively expensive and requires bioinformatics expertise, making universal use in high disease burden settings unfeasible and many datasets are likely to have WGS data on only a proportion of cases. Another way to link cases is contact investigations, which are often part of the infectious disease outbreak response (22) (23) (24) (25) (26) (27) (28) .",
+            "cite_spans": [
+                {
+                    "start": 279,
+                    "end": 283,
+                    "text": "(10)",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 284,
+                    "end": 288,
+                    "text": "(11)",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 289,
+                    "end": 293,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 294,
+                    "end": 298,
+                    "text": "(13)",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 299,
+                    "end": 303,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 304,
+                    "end": 308,
+                    "text": "(15)",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 309,
+                    "end": 313,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 314,
+                    "end": 318,
+                    "text": "(17)",
+                    "ref_id": null
+                },
+                {
+                    "start": 319,
+                    "end": 323,
+                    "text": "(18)",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 324,
+                    "end": 328,
+                    "text": "(19)",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 329,
+                    "end": 333,
+                    "text": "(20)",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 334,
+                    "end": 338,
+                    "text": "(21)",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 687,
+                    "end": 691,
+                    "text": "(22)",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 692,
+                    "end": 696,
+                    "text": "(23)",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 697,
+                    "end": 701,
+                    "text": "(24)",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 702,
+                    "end": 706,
+                    "text": "(25)",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 707,
+                    "end": 711,
+                    "text": "(26)",
+                    "ref_id": "BIBREF25"
+                },
+                {
+                    "start": 712,
+                    "end": 716,
+                    "text": "(27)",
+                    "ref_id": null
+                },
+                {
+                    "start": 717,
+                    "end": 721,
+                    "text": "(28)",
+                    "ref_id": "BIBREF30"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "However, these often do not perfectly identify due to nonspecific transmission mechanisms, disease characteristics, and the willingness and ability of cases to share information about contacts (25, (28) (29) (30) (31) (32) . In addition, contact investigations are time consuming and require significant human resources, again meaning that this data source is unlikely to be available for all cases.",
+            "cite_spans": [
+                {
+                    "start": 193,
+                    "end": 197,
+                    "text": "(25,",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 198,
+                    "end": 202,
+                    "text": "(28)",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 203,
+                    "end": 207,
+                    "text": "(29)",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 208,
+                    "end": 212,
+                    "text": "(30)",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 213,
+                    "end": 217,
+                    "text": "(31)",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 218,
+                    "end": 222,
+                    "text": "(32)",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Here, we present a novel method to predict the relative probability of direct transmission between infectious disease patients using pathogen WGS data and/or contact investigations when All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint these data are only available on a proportion of cases, paired with other risk factor data. These probabilities can be used to understand outbreak transmission dynamics and estimate the reproductive number without a reliable serial interval estimate. We apply our method to a TB outbreak in Hamburg, Germany.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "INTRODUCTION"
+        },
+        {
+            "text": "Our method requires individual-level case data, e.g. geographic location, clinical information, demographics, and sampling date. At least a subset of the cases needs additional information, e.g. detailed contact investigation and/or pathogen genome WGS data, to form the training set to generate the model. We transform this dataset of individuals into a dataset of ordered case-pairs ( , ), where case was observed before case . We convert the individual-level covariates (X 1 , X 2 , \u2026 , X p ) into pair-level covariates ( 1 , 2 , \u2026 , ) by computing \"distances\" which capture how well the individuals match on covariates values. For example, if the individual-level covariate 1 was town of residence, the pair-level covariate 1 could indicate if the individuals live in the same town, neighboring towns, or more distant towns. This process is described further in the supplementary material.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data Structure"
+        },
+        {
+            "text": "To estimate the probability that cases and are linked by direct transmission, ( \u2192 ), we use a classification technique called naive Bayes. This method uses Bayes rule to estimate the probability of an outcome given a set of covariates from the observed frequencies in a training dataset. Our outcome, equals 1 if case infected case and 0 otherwise. We know the 6 probable value of for case-pairs in the training set based on pathogen WGS or contact investigation data and want to predict the probability that = 1 for the remaining pairs.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "We first use the training set to calculate ( = | = ), the probability that the pair-level covariate equals for each covariate \u2208 {1, 2, \u2026 , } for a pair with link status \u2208 {1, 0}, using: can result in zero probabilities, we add 1 to each cell (33) . Then we use the training set to calculate ( = ), the prior probability of link status for \u2208 {1, 0} using:",
+            "cite_spans": [
+                {
+                    "start": 242,
+                    "end": 246,
+                    "text": "(33)",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "We use Bayes rule to calculate the predicted probability that case infected case , ( \u2192 ) for all pairs in the prediction set as:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "( \u2192 ) = P(L ij = 1|Z 1ij = z 1 , \u2026 , Z pij = z p ) = P(Z 1 = z 1 , \u2026 , Z p = z p |L = 1)P(L = 1) P(Z 1 = z 1 , \u2026 , Z p = z p )",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "We calculate the conditional probability of all covariate values given link status P(Z 1 = z 1 , \u2026 , Z p = z p |L = 1), as the product of the conditional probabilities of each covariate, P(Z k =",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint z k |L = 1) for \u2208 {1, 2, \u2026 , }, assuming that covariates are conditionally independent (i.e. that the covariate values are independent given link status).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "Finally, the estimated probabilities are scaled to represent the relative likelihood that case has been infected by case rather than any other sampled case using:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "We call this scaled probability, ( \u2192 ) , the \"relative transmission probability\". Note: the ordered nature of the pair dataset implies that if case was observed before case , then ( \u2192 ) = 0.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Na\u00efve Bayes"
+        },
+        {
+            "text": "Naive Bayes uses a training set, with a known outcome, to inform a model to estimate probabilities in a separate prediction set. For many infectious diseases we never know the true infector. In our training set, the outcome therefore represents probable rather than certain transmission events, inferred from a subset of cases with pathogen WGS and/or detailed contact investigation data. Because of this uncertainty, we want to estimate the transmission probability of the training case-pairs as well as those which lack WGS or contact data and are only included in the prediction set. Therefore, we use an iterative estimation procedure where each pair has a turn in the prediction set. The algorithm used to create the training dataset and iterative estimation procedure is shown in Figure 1 and described further in the supplementary material.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 786,
+                    "end": 794,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Training Dataset Construction"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproductive Number Estimation"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproductive Number Estimation"
+        },
+        {
+            "text": "To estimate the reproductive number, we use the Wallinga and Teunis approach (4) that calculates the relative probability that each case was infected by all other cases using the serial interval distribution. The effective reproductive number ( ) for each case is then calculated by summing the scaled probabilities for all possible infectees assuming that all cases are sampled and the outbreak is completed with:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproductive Number Estimation"
+        },
+        {
+            "text": "We use this equation, but with probabilities derived from our naive Bayes approach instead of probabilities based on the serial interval.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproductive Number Estimation"
+        },
+        {
+            "text": "By averaging the individual reproductive numbers for all cases observed each month, we obtain monthly effective reproductive number ( ) estimates and average those values for the stable portion of the outbreak to give an average reproductive number estimate over the study period ( \u0305 ). We calculate confidence intervals for and \u0305 using parametric bootstrapping (see supplementary material).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Reproductive Number Estimation"
+        },
+        {
+            "text": "We assess our method by applying it to 1000 simulated outbreaks of at least 500 cases, composed of multiple transmission chains using TB transmission dynamics (11, 34) . We simulate each transmission chain with an \u0305 of 1.2 and a gamma distributed serial interval (shape=1.05, ",
+            "cite_spans": [
+                {
+                    "start": 159,
+                    "end": 163,
+                    "text": "(11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 164,
+                    "end": 167,
+                    "text": "34)",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "We compare our method performance when training the model using probable transmission events defined by SNP distances, with training using truly linked and unlinked case-pairs. We also compare the method performance with that of probabilities derived from the time between infection dates and the serial interval distribution motivated by the Wallinga and Teunis method (4). For each simulation scenario (Table 1) , we calculate the area under the receiver operating curve (AUC) and assess how the probability of the true infector rank compared to the probabilities of all possible infectors. We also estimate and \u0305 . To determine what proportion of cases needs to be in the training set to achieve good performance, we use a sensitivity analysis with various outbreak sizes and training proportions. The simulation structure is explained further in the supplementary material. Table 1 Here",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 404,
+                    "end": 413,
+                    "text": "(Table 1)",
+                    "ref_id": null
+                },
+                {
+                    "start": 878,
+                    "end": 885,
+                    "text": "Table 1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "We apply our method to a small TB outbreak in Hamburg and Schleswig-Holstein, Germany, analyzed in Roetzer et al. (10) . The outbreak includes 86 individuals from the largest strain cluster in a long-term surveillance study conducted by the health departments in these cities. The dataset includes pathogen WGS data for all individuals as well as clinical, demographic, and social risk factor data. Furthermore, a subset of these individuals was involved in contact investigations performed by the local health authorities.",
+            "cite_spans": [
+                {
+                    "start": 114,
+                    "end": 118,
+                    "text": "(10)",
+                    "ref_id": "BIBREF9"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "We define probable links in the training set in two ways: 1) SNP distances and 2) contact investigation. When training with SNP distance, case-pairs with <2 SNPs are considered linked, All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint those with >12 SNPs are considered unlinked. Pairs with 2-12 SNPs are excluded from the training set as indeterminate (11, 34) . When using contact investigation data, pairs that had confirmed contact with each other are considered linked, pairs without confirmed contact with each other are considered unlinked, and cases who did not undergo contact investigation are excluded. For comparison, we also calculate the relative transmission probabilities randomly and using the same serial intervals as the simulation study.",
+            "cite_spans": [
+                {
+                    "start": 264,
+                    "end": 268,
+                    "text": "(11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 269,
+                    "end": 272,
+                    "text": "34)",
+                    "ref_id": "BIBREF36"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "The sample sizes of the 1000 simulated outbreaks were 500-1178 (median: 545) and each outbreak had 2-39 (median: 14) individual transmission chains with 2-846 (median: 9) cases each. Supplementary Figure S1 shows the relative transmission probability distributions for one outbreak comparing truly linked and unlinked case-pairs. In that outbreak, our method estimated relative transmission probabilities of <0.005 for most unlinked pairs (92% when training with the truth and 89% training using SNP distance). With both ways of defining the training set, our method assigned more than 75% of truly linked case-pairs higher probabilities than the serial interval method (Supplementary Figure S2) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 197,
+                    "end": 206,
+                    "text": "Figure S1",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 685,
+                    "end": 695,
+                    "text": "Figure S2)",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "Over 1000 simulations, the average AUC was 97% (standard deviation [SD] 0.6) compared to 95% (SD 1.2) when the model was trained using true links and SNP distances respectively Table S1 ). When the model was trained with links determined by SNP distances, the estimated probability of the true infector ranked in the top 25% of all possible All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 177,
+                    "end": 185,
+                    "text": "Table S1",
+                    "ref_id": null
+                }
+            ],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint source case probabilities 93% (SD 2.4) of the time (compared to 95% (SD 1.6) when training with true links). Our method outperformed probabilities estimated using serial intervals ( Figure   2 , Supplementary Table S1). Figure 3 and Supplementary Table S2 show the \u0305 estimates for each of the different scenarios compared to the 1.2 value used to simulate the outbreaks. Both our method and the correct serial interval estimated \u0305 accurately. However, when incorrect serial intervals were used, the \u0305 estimates were either too high or too low.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 328,
+                    "end": 338,
+                    "text": "Figure   2",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 366,
+                    "end": 374,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 379,
+                    "end": 401,
+                    "text": "Supplementary Table S2",
+                    "ref_id": null
+                }
+            ],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "In our sensitivity analysis, the performance improved and the metrics' variability decreased as the proportion of cases in the training set increased (Supplementary Figure S3 ). If the sample size was at least 500, only 10% of all cases were needed to train the model to obtain good performance. For a sample size of 200-500, training the model with 20% of cases resulted in good performance. For smaller outbreaks, the performance was best with at least 50% of the cases in the training set ( Figure 4 ). The \u0305 estimates grew increasingly accurate as the training dataset proportion increased and when 30% of cases were included, the estimates were close to the true value (Supplementary Figure S4) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 165,
+                    "end": 174,
+                    "text": "Figure S3",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 494,
+                    "end": 502,
+                    "text": "Figure 4",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 689,
+                    "end": 699,
+                    "text": "Figure S4)",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "Simulation Study"
+        },
+        {
+            "text": "Case counts over the course of the outbreak and clinical and demographic characteristics are shown in Figure 5 and Table 2 . The 86 cases resulted in 3633 possible ordered case-pairs where the possible infector was observed before the infectee. These pairs were separated by 0-20 SNPs (median=4). Of the 86 individuals, 31 (36%) were part of contact investigations and 51 casepairs had a confirmed contact. All individual-level covariates were transformed into pair-level covariates for analysis (Table 3) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 102,
+                    "end": 110,
+                    "text": "Figure 5",
+                    "ref_id": null
+                },
+                {
+                    "start": 115,
+                    "end": 122,
+                    "text": "Table 2",
+                    "ref_id": null
+                },
+                {
+                    "start": 496,
+                    "end": 505,
+                    "text": "(Table 3)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint Tables 2 and 3 here Figure 6 shows heatmaps of all potential infectors for each infectee using our method compared to random probabilities ( Figure 6A ) and a serial interval distribution ( Figure 6B ). Using our method, defining links with either with SNP distance ( Figure 6C ) or confirmed contact ( Figure   6D ), there is more variation in the relative transmission probability across possible infectors than the serial interval or random scenarios. Some infectees have infectors with a higher probability than all others in the row, suggesting this is the likely true infector. However, even for rows without a clear single infector, many of the possible infectors have very low probabilities and can be eliminated as the true infector.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 146,
+                    "end": 160,
+                    "text": "Tables 2 and 3",
+                    "ref_id": null
+                },
+                {
+                    "start": 166,
+                    "end": 174,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 287,
+                    "end": 296,
+                    "text": "Figure 6A",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 336,
+                    "end": 345,
+                    "text": "Figure 6B",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 414,
+                    "end": 423,
+                    "text": "Figure 6C",
+                    "ref_id": "FIGREF12"
+                },
+                {
+                    "start": 449,
+                    "end": 460,
+                    "text": "Figure   6D",
+                    "ref_id": "FIGREF12"
+                }
+            ],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "All methods except random probabilities show spikes in at the second peak in case counts, but to different degrees (Figure 7) Figure 8 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 115,
+                    "end": 125,
+                    "text": "(Figure 7)",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 126,
+                    "end": 134,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "Hamburg TB Outbreak Application"
+        },
+        {
+            "text": "We have developed a method to estimate the relative transmission probability between pairs of infectious disease cases using clinical, demographic, geographic, and genetic characteristics that accurately distinguishes between linked and unlinked case-pairs in simulation studies. Using a SNP distance proxy for transmission to train the model, the classification accuracy was 95%, and 93% of the time the true infector had a probability in the top 25% of all possible infectors. Our All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint method outperformed the serial interval method in all metrics and accurately estimated \u0305 . This is important because the serial interval is difficult to estimate and highly variable (7, 8, 35) , highlighting the value of estimation methods that are independent of serial interval estimates.",
+            "cite_spans": [
+                {
+                    "start": 328,
+                    "end": 331,
+                    "text": "(7,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 332,
+                    "end": 334,
+                    "text": "8,",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 335,
+                    "end": 338,
+                    "text": "35)",
+                    "ref_id": "BIBREF39"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Applying these methods to the Hamburg dataset, we found that both methods allowed for the elimination of many transmission links ( Figure 6 ). The two ways of model training produced slightly different \u0305 estimates, which is expected because neither of the different probable transmission events used to train the model perfectly capture the truth. Using contact investigation for training is more discriminating than SNP distance because we know the cases have actually interacted. However, this may miss links with unknown or unreported contacts.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 131,
+                    "end": 139,
+                    "text": "Figure 6",
+                    "ref_id": "FIGREF12"
+                }
+            ],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Using SNP distances for training will result in fewer missed links, but could connect cases that never had contact with one another. We hypothesize that the true reproductive number for M. tuberculosis in this context lies in between these two estimates (0.84-0.97).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Most established methods for exploring transmission focus on either identifying recent transmission clusters (11, 16, 34, (36) (37) (38) (39) , recreating possible transmission chains (12, 14, 15, (17) (18) (19) (20) (21) (40) (41) (42) , or identifying the true infector (43) (44) (45) (46) (47) . When estimating transmission parameters, simply knowing clusters is not informative enough and identifying the true infector is often impossible in reality. The strength of our method is that it directly estimates the relative transmission probability for all case-pairs instead of seeking to find the true infector or a set of possible transmission trees. This gives our method broad applicability as it can identify potential true infectors (pairs with very high probabilities) or transmission clusters (groups of pairs with All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 109,
+                    "end": 113,
+                    "text": "(11,",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 114,
+                    "end": 117,
+                    "text": "16,",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 118,
+                    "end": 121,
+                    "text": "34,",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 122,
+                    "end": 126,
+                    "text": "(36)",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 127,
+                    "end": 131,
+                    "text": "(37)",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 132,
+                    "end": 136,
+                    "text": "(38)",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 137,
+                    "end": 141,
+                    "text": "(39)",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 184,
+                    "end": 188,
+                    "text": "(12,",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 189,
+                    "end": 192,
+                    "text": "14,",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 193,
+                    "end": 196,
+                    "text": "15,",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 197,
+                    "end": 201,
+                    "text": "(17)",
+                    "ref_id": null
+                },
+                {
+                    "start": 202,
+                    "end": 206,
+                    "text": "(18)",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 207,
+                    "end": 211,
+                    "text": "(19)",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 212,
+                    "end": 216,
+                    "text": "(20)",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 217,
+                    "end": 221,
+                    "text": "(21)",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 222,
+                    "end": 226,
+                    "text": "(40)",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 227,
+                    "end": 231,
+                    "text": "(41)",
+                    "ref_id": "BIBREF45"
+                },
+                {
+                    "start": 232,
+                    "end": 236,
+                    "text": "(42)",
+                    "ref_id": null
+                },
+                {
+                    "start": 272,
+                    "end": 276,
+                    "text": "(43)",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 277,
+                    "end": 281,
+                    "text": "(44)",
+                    "ref_id": null
+                },
+                {
+                    "start": 282,
+                    "end": 286,
+                    "text": "(45)",
+                    "ref_id": "BIBREF52"
+                },
+                {
+                    "start": 287,
+                    "end": 291,
+                    "text": "(46)",
+                    "ref_id": "BIBREF53"
+                },
+                {
+                    "start": 292,
+                    "end": 296,
+                    "text": "(47)",
+                    "ref_id": "BIBREF54"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint high probabilities). These probabilities can then be used to estimate transmission parameters incorporating the uncertainty around the true infector.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Other methods to estimate the transmission probabilities either only use genetic data (13) or require prior knowledge of the relationship between the covariates and transmission (48) . Our method, however, uses many different information sources about the individual cases without assuming any relationship between these factors and transmission. Additionally, our method uses naive Bayes, a simple but powerful machine learning tool that has many diverse applications (33, (49) (50) (51) (52) . Although traditionally a naive Bayes model is trained with a set of true events, our method performs almost as well when SNP distance is used as a transmission proxy.",
+            "cite_spans": [
+                {
+                    "start": 86,
+                    "end": 90,
+                    "text": "(13)",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 178,
+                    "end": 182,
+                    "text": "(48)",
+                    "ref_id": "BIBREF55"
+                },
+                {
+                    "start": 469,
+                    "end": 473,
+                    "text": "(33,",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 474,
+                    "end": 478,
+                    "text": "(49)",
+                    "ref_id": "BIBREF56"
+                },
+                {
+                    "start": 479,
+                    "end": 483,
+                    "text": "(50)",
+                    "ref_id": "BIBREF59"
+                },
+                {
+                    "start": 484,
+                    "end": 488,
+                    "text": "(51)",
+                    "ref_id": "BIBREF60"
+                },
+                {
+                    "start": 489,
+                    "end": 493,
+                    "text": "(52)",
+                    "ref_id": "BIBREF61"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Having both a training and prediction set also means that not all cases require highly discriminatory information such as contact investigation or pathogen WGS data to estimate relative transmission probabilities. This is relevant because existing datasets often have rich demographic, clinical, and spatial data but lack detailed contact investigation or pathogen WGS data due to significant time and resources needed to obtain these data. Provided a subset of cases, 10-50% depending on the sample size, has this information, our method can infer transmission patterns among the remaining cases as well.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Our method does make assumptions that might not be appropriate. Firstly, naive Bayes assumes independence of the covariates when conditioning on the outcome, which may not be realistic.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "However, numerous papers have shown that naive Bayes still performs well even when this assumption is violated (51, (53) (54) (55) . Furthermore, many naive Bayes extensions have been All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 111,
+                    "end": 115,
+                    "text": "(51,",
+                    "ref_id": "BIBREF60"
+                },
+                {
+                    "start": 116,
+                    "end": 120,
+                    "text": "(53)",
+                    "ref_id": "BIBREF62"
+                },
+                {
+                    "start": 121,
+                    "end": 125,
+                    "text": "(54)",
+                    "ref_id": "BIBREF63"
+                },
+                {
+                    "start": 126,
+                    "end": 130,
+                    "text": "(55)",
+                    "ref_id": "BIBREF64"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint developed that relax this assumption (33, 56, 57) , which could be easily integrated into our method.",
+            "cite_spans": [
+                {
+                    "start": 183,
+                    "end": 187,
+                    "text": "(33,",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 188,
+                    "end": 191,
+                    "text": "56,",
+                    "ref_id": "BIBREF65"
+                },
+                {
+                    "start": 192,
+                    "end": 195,
+                    "text": "57)",
+                    "ref_id": "BIBREF66"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The Wallinga and Teunis (4) approach for estimating \u0305\u0305\u0305 , which we applied, assumes that every case was infected by someone that has been sampled. These authors and others found that simulations incorporating random incomplete reporting did not substantially decrease the accuracy of their \u0305 estimates, so this is unlikely to be an issue here (4, 58) . Our probability estimates themselves do not assume all cases in an outbreak are sampled because we estimate the relative probability that one case was infected by another over any other sampled case. However, our method could be affected by biased sampling, e.g. because only certain types of cases are observed or have the information needed to define probable links in the training set. Future work could more fully examine the effect of biased reporting and biased training sets.",
+            "cite_spans": [
+                {
+                    "start": 343,
+                    "end": 346,
+                    "text": "(4,",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 347,
+                    "end": 350,
+                    "text": "58)",
+                    "ref_id": "BIBREF67"
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "Finally, as with other infectious disease analytical approaches, our method assumes that cases were infected in the same order that they were observed (39, 59) . Although not a strong assumption for diseases with clear symptoms and a short latent period, this may not be appropriate for diseases such as TB, with a highly variable and potentially long latent period, and often substantial delays in care-seeking care and diagnosis (60, 61) . Although this assumption is a known problem in infectious disease research, it is frequently made (43, 44) because relaxing it complicates models substantially.",
+            "cite_spans": [
+                {
+                    "start": 151,
+                    "end": 155,
+                    "text": "(39,",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 156,
+                    "end": 159,
+                    "text": "59)",
+                    "ref_id": "BIBREF68"
+                },
+                {
+                    "start": 431,
+                    "end": 435,
+                    "text": "(60,",
+                    "ref_id": "BIBREF69"
+                },
+                {
+                    "start": 436,
+                    "end": 439,
+                    "text": "61)",
+                    "ref_id": "BIBREF72"
+                },
+                {
+                    "start": 540,
+                    "end": 544,
+                    "text": "(43,",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 545,
+                    "end": 548,
+                    "text": "44)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "We have developed a method to estimate the relative transmission probabilities between pairs of cases, which is flexible, using any information sources available without making assumptions All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint about the relationship between these covariates and transmission. The power of our method is that only a subset of cases requires pathogen WGS or contact investigation data, making this method applicable to many outbreak and surveillance datasets. These probabilities can be used to better understand the transmission dynamics of an outbreak by identifying or ruling out possible transmission events and estimating transmission parameters. In a disease where determining transmission events can be extremely difficult, using transmission probabilities between all possible cases provides a unique and powerful analysis tool.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint method and a training set with links based on SNP distance; probabilities derived from narrow: gamma(0.54, 1.9), medium: gamma(1.05, 2.0), and wide: gamma(1.33, 3.0) serial interval distributions; and random probabilities. The vertical bars represent 95% bootstrap confidence intervals. The dotted horizontal line represents a \u0305 value of 1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint Figure 1 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 146,
+                    "end": 154,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint Figure 2 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 146,
+                    "end": 154,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint Figure 5 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 292,
+                    "end": 300,
+                    "text": "Figure 5",
+                    "ref_id": null
+                }
+            ],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint Figure 8 All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 292,
+                    "end": 300,
+                    "text": "Figure 8",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "DISCUSSION"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/612945 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "DISCUSSION"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Transmission parameters of the A / H1N1 ( 2009 ) influenza virus pandemic : a review",
+            "authors": [
+                {
+                    "first": "P-Y",
+                    "middle": [],
+                    "last": "Boelle",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Ansart",
+                    "suffix": ""
+                },
+                {
+                    "first": "Cori",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Valleron",
+                    "suffix": ""
+                },
+                {
+                    "first": "A-J",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Influenza Other Respi Viruses",
+            "volume": "5",
+            "issn": "",
+            "pages": "306--322",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Pandemic Potential of a Strain of Influenz A (H1N1): Early Findings. Science (80-)",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Hanage",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Van Kerkhove",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Hollingsworth",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "324",
+            "issn": "",
+            "pages": "1557--61",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Transmission Dynamics of the Etiological Agent of SARS in Hong Kong : Impact of Public Health Interventions. Science (80-)",
+            "authors": [],
+            "year": 2003,
+            "venue": "",
+            "volume": "300",
+            "issn": "",
+            "pages": "1961--1968",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Different Epidemic Curves for Severe Acute Respiratory Syndrome Reveal Similar Impacts of Control Measures",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Teunis",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Am J Epidemiol",
+            "volume": "160",
+            "issn": "6",
+            "pages": "509--525",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "The basic reproductive number of Ebola and the effects of public health measures : the cases of Congo and Uganda",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Chowell",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hengartner",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Castillo-Chavez",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Fenimore",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Hyman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "J Theor Biol",
+            "volume": "300",
+            "issn": "5627",
+            "pages": "1961--1967",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "A likelihood-based method for real-time estimation of the serial interval and reproductive number of an epidemic",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pagano",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Stat Med",
+            "volume": "27",
+            "issn": "16",
+            "pages": "2999--3016",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Quantifying TB transmission: a systematic review of reproductive number and serial interval estimates for tuberculosis",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "Horsburgh",
+                    "middle": [],
+                    "last": "Cr",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Jenkins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemiol Infect",
+            "volume": "146",
+            "issn": "12",
+            "pages": "1478--94",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Systematic Reviews and Meta-and reproduction number (R0)",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Vink",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Christoffel",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bootsma",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Emerg Infect Dis",
+            "volume": "25",
+            "issn": "1",
+            "pages": "1--4",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Whole Genome Sequencing versus Traditional Genotyping for Investigation of a Mycobacterium tuberculosis Outbreak : A Longitudinal Molecular Epidemiological Study",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Roetzer",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Deil",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Kohl",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Ruckbert",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Nubel",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Blom",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Med",
+            "volume": "10",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Wholegenome sequencing to delineate Mycobacterium tuberculosis outbreaks : a retrospective observational study",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Walker",
+                    "suffix": ""
+                },
+                {
+                    "first": "Clc",
+                    "middle": [],
+                    "last": "Ip",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Harrell",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Evans",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Kapatai",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dedicoat",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Lancet Infect Dis",
+            "volume": "13",
+            "issn": "",
+            "pages": "137--183",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Simultaneous inference of phylogenetic and transmission trees in infectious disease outbreaks",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Klinkenberg",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Backer",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Didelot",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Colijn",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "PLoS Comput Biol",
+            "volume": "13",
+            "issn": "5",
+            "pages": "1--32",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Genomic Infectious Disease Epidemiology in Partially Sampled and Ongoing Outbreaks",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Didelot",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gardy",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Colijn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Mol Biol Evol",
+            "volume": "34",
+            "issn": "4",
+            "pages": "997--1007",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Population genomics of Mycobacterium tuberculosis in the Inuit",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Lee",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Radomski",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Proulx",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Levade",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Shapiro",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Mcintosh",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "PNAS",
+            "volume": "112",
+            "issn": "44",
+            "pages": "13609--12614",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Integrating genetic and epidemiological data to determine transmission pathways of foot-and-mouth disease virus",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Cottam",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Thebaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wadsworth",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gloster",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mansley",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Paton",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "Proc R Soc",
+            "volume": "275",
+            "issn": "",
+            "pages": "887--95",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Microevolutionary analysis of Clostridium difficile genomes to investigate transmission",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Didelot",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Eyre",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Cule",
+                    "suffix": ""
+                },
+                {
+                    "first": "Clc",
+                    "middle": [],
+                    "last": "Ip",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ansari",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Griffiths",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Genome Biol",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Absence of Patient-to-Patient Intrahospital Transmission of Staphylococcus aureus as Determined by Whole-Genome Sequencing",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Long",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Beres",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Olsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Musser",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "MBio",
+            "volume": "5",
+            "issn": "5",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "A Bayesian Inference Framework to Reconstruct Transmission Trees Using Epidemiological and Genetic Data",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Morelli",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Thebaud",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Chadoef",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "King",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Haydon",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Soubeyrand",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "PLoS Comput Biol",
+            "volume": "8",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Reconstructing transmission trees for communicable diseases using densely sampled genetic data",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Worby",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "O&apos;neill",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Kypraios",
+                    "suffix": ""
+                },
+                {
+                    "first": "J V",
+                    "middle": [],
+                    "last": "Robotham",
+                    "suffix": ""
+                },
+                {
+                    "first": "De",
+                    "middle": [],
+                    "last": "Angelis",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Cartwright",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ejp",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Ann Appl Stat",
+            "volume": "10",
+            "issn": "1",
+            "pages": "395--417",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Unravelling transmission trees of infectious diseases by combining genetic and epidemiological data",
+            "authors": [
+                {
+                    "first": "Rjf",
+                    "middle": [],
+                    "last": "Ypma",
+                    "suffix": ""
+                },
+                {
+                    "first": "Ama",
+                    "middle": [],
+                    "last": "Bataille",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Stegeman",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Koch",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wallinga",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Van Ballegooijen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Proc R Soc",
+            "volume": "279",
+            "issn": "",
+            "pages": "444--50",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "Chains of transmission and control of Ebola virus disease in Conakry, Guinea, in 2014: An observational study",
+            "authors": [
+                {
+                    "first": "O",
+                    "middle": [],
+                    "last": "Faye",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Bo\u00eblle",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Heleze",
+                    "suffix": ""
+                },
+                {
+                    "first": "Faye",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Loucoubar",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Magassouba",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Lancet Infect Dis",
+            "volume": "15",
+            "issn": "3",
+            "pages": "320--326",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Superspreading SARS Events, Beijin",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Ning",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "He",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Chin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Emerg Infect Dis",
+            "volume": "10",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Contact tracing to control infectious disease: when is enough",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Armbruster",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Brandeau",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Health Care Manag Sci",
+            "volume": "10",
+            "issn": "4",
+            "pages": "341--55",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Disease contact tracing in random and clustered networks",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Kiss",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Green",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Kao",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Proc R Soc B Biol Sci",
+            "volume": "272",
+            "issn": "",
+            "pages": "1407--1421",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Bayesian inference of transmission All rights reserved. No reuse allowed without permission",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Campbell",
+                    "suffix": ""
+                },
+                {
+                    "first": "Cori",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Ferguson",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Baker",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Jombart",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "doi: bioRxiv preprint chains using timing of symptoms, pathogen genomes and contact data",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Partner notification for sexually transmitted infections in the modern world: A practitioner perspective on challenges and opportunities",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Bell",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Potterat",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Sex Transm Infect",
+            "volume": "87",
+            "issn": "2",
+            "pages": "34--40",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Transmission of Mycobacterium tuberculosis Through Casual Contact With an Infectious Case",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Golub",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cronin",
+                    "suffix": ""
+                },
+                {
+                    "first": "O",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Obasanjo",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Coggin",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Moore",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Pope",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Arch Intern Med",
+            "volume": "161",
+            "issn": "",
+            "pages": "2254--2262",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Risk of tuberculosis transmission among healthcare workers",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Diel",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Niemann",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Nienhaus",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "ERJ Open Res",
+            "volume": "4",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Long-Term Population-Based Analysis Applying Classical and Molecular Epidemiological Techniques",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Diel",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Schneider",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Meywald-Walter",
+                    "suffix": ""
+                },
+                {
+                    "first": "C-M",
+                    "middle": [],
+                    "last": "Ruf",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "R\u00fcsch-Gerdes",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Niemann",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Epidemiology of Tuberculosis in",
+            "volume": "40",
+            "issn": "2",
+            "pages": "532--541",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Assessment of an Optimized Mycobacterial Interspersed Repetitive-Unit -Variable-Number Tandem-Repeat Typing System Combined with Spoligotyping for Population-Based Molecular Epidemiology Studies of Tuberculosis",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Oelemann",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Diel",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Vatin",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Haas",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Rusch-Gerdes",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Locht",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "J Clin Microbiol",
+            "volume": "45",
+            "issn": "3",
+            "pages": "691--698",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Engineering Applications of Arti fi cial Intelligence Deep feature weighting for naive Bayes and its application to text classi fi cation",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Eng Appl Artif Intell",
+            "volume": "52",
+            "issn": "",
+            "pages": "26--39",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Assessment of All rights reserved",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Walker",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Lalor",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Broda",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Ortega",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Morgan",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Parker",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "doi: bioRxiv preprint Mycobacterium tuberculosis transmission in Oxfordshire , UK , 2007-12 , with whole pathogen genome sequences: an observational study",
+            "authors": [],
+            "year": 2014,
+            "venue": "Lancet Repiratory Med",
+            "volume": "2",
+            "issn": "",
+            "pages": "285--92",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Lifetime Risks, Incubation Period, and Serial Interval of Tuberculosis",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Vynnycky",
+                    "suffix": ""
+                },
+                {
+                    "first": "Pem",
+                    "middle": [],
+                    "last": "Fine",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Am J Epidemiol",
+            "volume": "152",
+            "issn": "3",
+            "pages": "247--63",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Beyond the SNP Threshold: Identifying Outbreak Clusters Using Inferred Transmissions",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Stimson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gardy",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Mathema",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Crudu",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Colijn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Mol Biol Evol",
+            "volume": "36",
+            "issn": "3",
+            "pages": "587--603",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "A graph-based evidence synthesis approach to detecting outbreak clusters : An application to dog rabies",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Cori",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Nouvellet",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Garske",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Bourhy",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Nakoune",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Jombart",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLoS Comput Biol",
+            "volume": "14",
+            "issn": "12",
+            "pages": "1--22",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Transmission of multidrug-resistant tuberculosis in the UK : a cross-sectional molecular and epidemiological study of clustering and contact tracing",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Tamne",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Brown",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Watson",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Mullarkey",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Zenner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Lancet Infect Dis",
+            "volume": "14",
+            "issn": "5",
+            "pages": "406--421",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "A Field-Validated Approach Using Surveillance and Genotyping Data to Estimate Tuberculosis Attributable to Recent Transmission in the United States",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "France",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Grant",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Kammerer",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Navin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Am J Epidemiol",
+            "volume": "182",
+            "issn": "9",
+            "pages": "799--807",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Reconstructing disease outbreaks from genetic data : a graph approach",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Jombart",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Eggo",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Dodd",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Balloux",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Heredity (Edinb)",
+            "volume": "106",
+            "issn": "2",
+            "pages": "383--90",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Wholegenome sequencing to establish relapse or re-infection with Mycobacterium tuberculosis : a retrospective",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Bryant",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Harris",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Parkhill",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Dawson",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Diacon",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Von Helden",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Lancet Respir Med",
+            "volume": "1",
+            "issn": "",
+            "pages": "786--92",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "All rights reserved. No reuse allowed without permission",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Shared Genomic Variants : Identi fi cation of Transmission Routes Using Pathogen Deep-Sequence Data",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Worby",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Lipsitch",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Hanage",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Am J Epidemiol",
+            "volume": "186",
+            "issn": "10",
+            "pages": "1209--1225",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "The incubation period distribution of tuberculosis estimated with a molecular epidemiological approach",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Borgdorff",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Sebek",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Geskus",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Kremer",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Kalisvaart",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Van Soolingen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Int J Epidemiol",
+            "volume": "40",
+            "issn": "",
+            "pages": "964--70",
+            "other_ids": {}
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "Estimation of serial interval and incubation period of tuberculosis using DNA fingerprinting",
+            "authors": [
+                {
+                    "first": "Jda",
+                    "middle": [],
+                    "last": "Embden",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Int J Tuberc Lung Dis",
+            "volume": "3",
+            "issn": "5",
+            "pages": "414--434",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Epidemiologic Inference From the Distribution of Tuberculosis Cases in Households in Lima , Peru",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Brooks-Pollock",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Becerra",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Goldstein",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Cohen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Murray",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "J Infect Dis",
+            "volume": "203",
+            "issn": "",
+            "pages": "1582--1591",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Serial Intervals and the Temporal Distribution of Secondary Infections within Households of 2009 Pandemic Influenza A ( H1N1 ): Implications for Influenza Control Recommendations",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Donnelly",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Finelli",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Olsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Doshi",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Jackson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Clin Infect Dis",
+            "volume": "52",
+            "issn": "1",
+            "pages": "123--153",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Genotyping of Genetically Monomorphic Bacteria : DNA Sequencing in Mycobacterium tuberculosis Highlights the Limitations of Current Methodologies",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Comas",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Homolka",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Niemann",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Gagneux",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "PLoS One",
+            "volume": "4",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "Infectious disease transmission as a forensic problem : who infected whom?",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Teunis",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jcm",
+                    "middle": [],
+                    "last": "Heijne",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Sukhrie",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Van Eijkeren",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Koopmans",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Kretzschmar",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "J R Soc Interface",
+            "volume": "10",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF56": {
+            "ref_id": "b56",
+            "title": "Statistical Comparisons of the Top 10 Algorithms in All rights reserved. No reuse allowed without permission",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Settouti",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mea",
+                    "middle": [],
+                    "last": "Bechar",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Chikh",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF57": {
+            "ref_id": "b57",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF58": {
+            "ref_id": "b58",
+            "title": "doi: bioRxiv preprint Data Mining for Classification Task",
+            "authors": [],
+            "year": 2016,
+            "venue": "Int J Interact Multimed Artif Intell",
+            "volume": "4",
+            "issn": "1",
+            "pages": "46--51",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF59": {
+            "ref_id": "b59",
+            "title": "A feature dependent Naive Bayes approach and its application to the software defect prediction problem",
+            "authors": [
+                {
+                    "first": "\u00d6",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Arar",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Ayan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Appl Soft Comput",
+            "volume": "59",
+            "issn": "",
+            "pages": "197--209",
+            "other_ids": {}
+        },
+        "BIBREF60": {
+            "ref_id": "b60",
+            "title": "Analysis of Naive Bayes' assumptions on software fault data: An empirical study",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Turhan",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Bener",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Data Knowl Eng",
+            "volume": "68",
+            "issn": "",
+            "pages": "278--90",
+            "other_ids": {}
+        },
+        "BIBREF61": {
+            "ref_id": "b61",
+            "title": "Na\u00efve Bayesian classifier and genetic risk score for genetic risk prediction of a categorical trait : not so different after all! Front Genet",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Sebastiani",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Solovieff",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Sun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "",
+            "volume": "3",
+            "issn": "",
+            "pages": "1--9",
+            "other_ids": {}
+        },
+        "BIBREF62": {
+            "ref_id": "b62",
+            "title": "On the optimality of Naive Bayes with dependent binary features",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Kuncheva",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "Pattern Recognit Lett",
+            "volume": "27",
+            "issn": "",
+            "pages": "830--837",
+            "other_ids": {}
+        },
+        "BIBREF63": {
+            "ref_id": "b63",
+            "title": "An empirical study of the naive Bayes classifier",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Rish",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "IJCAI 2001 workshop on empirical methods in artificial intelligence",
+            "volume": "",
+            "issn": "",
+            "pages": "41--47",
+            "other_ids": {}
+        },
+        "BIBREF64": {
+            "ref_id": "b64",
+            "title": "The Optimality of Naive Bayes",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "FLAIRS Conference",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF65": {
+            "ref_id": "b65",
+            "title": "Survey of Improving Naive Bayes for Classification",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Cai",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Yan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "International Conference on Advanced Data Mining and Applications",
+            "volume": "",
+            "issn": "",
+            "pages": "134--179",
+            "other_ids": {}
+        },
+        "BIBREF66": {
+            "ref_id": "b66",
+            "title": "Alleviating Naive Bayes Attribute Independence Assumption by Attribute Weighting",
+            "authors": [
+                {
+                    "first": "N",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Zaidi",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Cerquides",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Carman",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Webb",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "J Mach Learn Res",
+            "volume": "14",
+            "issn": "",
+            "pages": "1947--88",
+            "other_ids": {}
+        },
+        "BIBREF67": {
+            "ref_id": "b67",
+            "title": "Determining the dynamics of influenza transmission by age",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "White",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Archer",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Pagano",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Emerg Themes Epidemiol",
+            "volume": "11",
+            "issn": "4",
+            "pages": "1--10",
+            "other_ids": {}
+        },
+        "BIBREF68": {
+            "ref_id": "b68",
+            "title": "Recent Transmission of Tuberculosis -United States",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Yuen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Kammerer",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Marks",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Navin",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "France",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "PLoS One",
+            "volume": "11",
+            "issn": "4",
+            "pages": "2011--2015",
+            "other_ids": {}
+        },
+        "BIBREF69": {
+            "ref_id": "b69",
+            "title": "Time delays in diagnosis of All rights reserved",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Sreeramareddy",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Panduru",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Menten",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Van Den Ende",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF70": {
+            "ref_id": "b70",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF71": {
+            "ref_id": "b71",
+            "title": "doi: bioRxiv preprint pulmonary tuberculosis: A systematic review of literature",
+            "authors": [],
+            "year": 2009,
+            "venue": "BMC Infect Dis",
+            "volume": "9",
+            "issn": "",
+            "pages": "1--10",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        },
+        "BIBREF72": {
+            "ref_id": "b72",
+            "title": "A systematic review of delay in the diagnosis and treatment of tuberculosis",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Storla",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Yimer",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Bjune",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC Public Health",
+            "volume": "8",
+            "issn": "15",
+            "pages": "1--9",
+            "other_ids": {}
+        },
+        "BIBREF73": {
+            "ref_id": "b73",
+            "title": "All rights reserved. No reuse allowed without permission",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF74": {
+            "ref_id": "b74",
+            "title": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/612945"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "(Ma, et al, under review). We simulate representative pathogen genomes and inform the model with four different covariates representing clinical and demographic variables and a discretized version of the time between infection.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Supplementary",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "This work was supported by the US National Institutes of Health [NIHGMS R01GM122876]. SVL was also funded by the Interdisciplinary Training grant from the US National Institutes of Health [NIHGMS T32GM074905]. HEJ was also funded by US National Institutes of Health [NIH K01AI102944]. CRH and LFW were also funded by the Providence/Boston Center for AIDS Research [P30AI042853]. CRH was supported by the Boston University/Rutgers Tuberculosis Research Unit [U19AI111276] and the U.S.-India Vaccine Action Program (VAP) Initiative on Tuberculosis (CRDF Global/NIAID). RSL holds a Fellowship from the Canadian Institutes of Health Research [MFE-152448]. The content of the article is solely the responsibility of the authors and does not necessarily represent the views of the National Institute of Allergy and Infectious Disease or the Office of the Director, NIH. The funders had no role in the decision to publish this manuscript. Flow-chart depicting the algorithm we used to create the training dataset and the iterative procedure to estimate the relative transmission probabilities.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Violin plots of the performance metrics for the different scenarios across 1000 simulated outbreaks. The scenarios were: our method with a training set of true links, our method with a training set of links defined by SNP distance, probabilities derived from the serial interval distribution used to simulate the outbreak: gamma(1.05, 2.0), probabilities derived from a serial interval distribution that is too wide: gamma(1.3, 3.3) and too narrow: gamma(0.54, 1.9), and random probabilities. The metrics shown are the area under the receiver operating curve (AUC), the proportion of time the true infector was assigned the highest relative transmission probability (Proportion Correct), and the proportion of time the probability of the true infector was ranked in the top 5%, 10%, 25%, and 50% of all possible infectors.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Violin plots of the distribution of the average effective reproductive number for different scenarios across 1000 simulated outbreaks. The dashed horizontal line indicates the true value of 1.2 that was used to simulate the outbreaks.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Boxplots of the performance metrics by training set proportion in 300 simulated outbreaks stratified by the total sample size of the outbreak. The metrics shown are the area under the receiver operating curve (AUC) and the proportion of time the relative transmission probability of the true source case was ranked in the top 25%. The dotted black line indicates a value of 90% on either metric. All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Case counts by year for the Hamburg outbreak described in Roetzer et al. (10) Heatmaps of the relative probabilities that each infectee (rows) was infected by each possible infector (columns) in the Hamburg TB outbreak. Darker squares represent higher the probabilities. The cases are ordered by infection date with the earliest cases on the top and to the left. Each panel shows the results from a different method of calculating probabilities: A) randomly assigned probabilities, B) probabilities calculated using a gamma(1.05, 2.0) serial interval distribution, C) probabilities calculated using our method and a training set with links based on SNP distance, and d) probabilities calculated using our method and a training set with links based on contact investigations.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Monthly reproductive number over the course of the 14 years of the Hamburg TB outbreak estimated from the relative transmission probabilities with bootstrap confidence intervals. Each panel shows the results from a different method of calculating probabilities: our method and a training set with links based on contact investigation data; our method and a training set with links based on SNP distance; probabilities derived from narrow: gamma(0.54, 1.9), medium: gamma(1.05, 2.0), and wide: gamma(1.33, 3.0) serial interval distributions; and random probabilities. The months in between the dotted horizontal lines were averaged to find the average effective reproductive number for the scenario which is shown by the solid horizontal line.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Average effective reproductive number for the Hamburg TB outbreak calculated using the relative transmission probabilities derived from different methods of calculating All rights reserved. No reuse allowed without permission.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "Figure 3",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "Figure 4",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Figure 6",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "Figure 7",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "pair , has linked status and value for covariate , \u2208 {1, 2, \u2026 , }. Because sparse data",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": ". The \u0305 estimate was 0.97 (95% confidence interval [CI] 0.74-1.19) when training with contact investigation and 0.85 (95% CI 0.63-1.06) when training with SNP distances (SupplementaryTable S3,",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

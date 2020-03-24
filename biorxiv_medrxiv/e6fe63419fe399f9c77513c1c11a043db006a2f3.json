@@ -1,0 +1,3073 @@
+{
+    "paper_id": "e6fe63419fe399f9c77513c1c11a043db006a2f3",
+    "metadata": {
+        "title": "Accurate prediction of human essential genes using only nucleotide composition and association information",
+        "authors": [
+            {
+                "first": "Feng-Biao",
+                "middle": [],
+                "last": "Guo",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": "fbguo@uestc.edu.cn."
+            },
+            {
+                "first": "Chuan",
+                "middle": [],
+                "last": "Dong",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Hong-Li",
+                "middle": [],
+                "last": "Hua",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Shuo",
+                "middle": [],
+                "last": "Liu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Hao",
+                "middle": [],
+                "last": "Luo",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Hong-Wan",
+                "middle": [],
+                "last": "Zhang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Yan-Ting",
+                "middle": [],
+                "last": "Jin",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Kai-Yue",
+                "middle": [],
+                "last": "Zhang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "China"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Three groups recently identified essential genes in human cancer cell lines using wet experiments, and these genes are of high values. Herein, we improved the widely used Z curve method by creating a \u03bb -interval Z curve, which considered interval association information. With this method and recursive feature elimination technology, a computational model was developed to predict human gene essentiality.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The 5-fold cross-validation test based on our benchmark dataset obtained an area under the receiver operating characteristic curve (AUC) of 0.8814. For the rigorous jackknife test, the AUC score was 0.8854. These results demonstrated that the essentiality of human genes could be reliably reflected by only sequence information.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "However, previous classifiers in three eukaryotes can gave satisfactory prediction only combining sequence with other features. It is also demonstrated that although the information contributed by interval association is less than adjacent nucleotides, this information can still play an independent role. Integrating the interval information into adjacent ones can significantly improve our classifier's prediction capacity. We re-predicted the benchmark negative dataset by Pheg server (http://cefg.uestc.edu.cn/Pheg), and 118 genes were additionally predicted as essential.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Among them, 21 were found to be homologues in mouse essential genes, indicating that at least a part of the 118 genes were indeed essential, however previous experiments overlooked them. As the first available server, Pheg could predict essentiality for anonymous gene sequences of human. It is also hoped the \u03bb -interval Z curve method could be effectively extended to classification issues of other DNA All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Catalogs of essential genes on a whole-genome scale, determined using wet-lab methods, are available for several prokaryotic (Mushegian and Koonin 1996; Luo et al. 2014; Pechter et al. 2016 ) and eukaryotic organisms (Kamath et al. 2003; Amsterdam et al. 2004; Liao and Zhang 2007; Kim et al. 2010) . Computational methods with high accuracy offer an appealing alternative method for identifying essential genes. Computational methods are broadly divided into three types: machine learning-based methods combining intrinsic and context-dependent features (Deng et al. 2011; Cheng et al. 2013) , flux balance analysis-based methods (Kuepfer et al. 2005; del Rio et al. 2009; Gatto et al. 2015) , and homology search and evolutionary analysis-based methods (Peng et al. 2012; Wei et al. 2013) . With respect to essential gene prediction in bacteria, we integrated the orthology and phylogenetic information and subsequently developed a universal tool named Geptop , which has shown the highest accuracy among all state-of-the-art algorithms.",
+            "cite_spans": [
+                {
+                    "start": 125,
+                    "end": 152,
+                    "text": "(Mushegian and Koonin 1996;",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 153,
+                    "end": 169,
+                    "text": "Luo et al. 2014;",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 170,
+                    "end": 189,
+                    "text": "Pechter et al. 2016",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 217,
+                    "end": 237,
+                    "text": "(Kamath et al. 2003;",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 238,
+                    "end": 260,
+                    "text": "Amsterdam et al. 2004;",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 261,
+                    "end": 281,
+                    "text": "Liao and Zhang 2007;",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 282,
+                    "end": 298,
+                    "text": "Kim et al. 2010)",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 555,
+                    "end": 573,
+                    "text": "(Deng et al. 2011;",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 574,
+                    "end": 592,
+                    "text": "Cheng et al. 2013)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 631,
+                    "end": 652,
+                    "text": "(Kuepfer et al. 2005;",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 653,
+                    "end": 673,
+                    "text": "del Rio et al. 2009;",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 674,
+                    "end": 692,
+                    "text": "Gatto et al. 2015)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 755,
+                    "end": 773,
+                    "text": "(Peng et al. 2012;",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 774,
+                    "end": 790,
+                    "text": "Wei et al. 2013)",
+                    "ref_id": "BIBREF43"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Some studies have focused on essential gene prediction in eukaryotic genomes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "In 2005, Xu et al. investigated protein dispensability in Saccharomyces cerevisiae by combining high-throughput data and machine learning-based methods (Chen and Xu 2005) . In 2006, Seringhaus et al. reported a machine learning-based method that integrated various intrinsic and predicted features to identify essential genes in yeast S. cerevisiae genomes (Seringhaus et al. 2006) . They for the first time using AUC to measure the machine learning classifier's capability in identifying essential genes, and they also translated the essentiality from yeast S. cerevisiae to yeast Saccharomyces All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 152,
+                    "end": 170,
+                    "text": "(Chen and Xu 2005)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 357,
+                    "end": 381,
+                    "text": "(Seringhaus et al. 2006)",
+                    "ref_id": "BIBREF40"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint mikatae. Yuan et al. integrated informative genomic features to perform knockout lethality predictions in mice using three machine learning-based methods (Yuan et al. 2012 ). Lloyd et al. analyzed the characteristics of essential genes in the Arabidopsis thaliana genome and used A. thaliana as a machine learning-based model to transform the essentiality annotations to Oryza sativa and S. cerevisiae (Lloyd et al. 2015) .",
+            "cite_spans": [
+                {
+                    "start": 155,
+                    "end": 177,
+                    "text": "Yuan et al. integrated",
+                    "ref_id": null
+                },
+                {
+                    "start": 300,
+                    "end": 317,
+                    "text": "(Yuan et al. 2012",
+                    "ref_id": "BIBREF47"
+                },
+                {
+                    "start": 548,
+                    "end": 567,
+                    "text": "(Lloyd et al. 2015)",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Recently, three research teams approximately identified 2,000 essential genes in human cancer cell lines using CRISPR-Cas9 and gene-trap technology (Blomen et al. 2015; Hart et al. 2015; Wang et al. 2015) . Their results showed high consistency, which further confirmed the accuracy and robustness of the essential gene sets (Fraser 2015) . These studies provided an in-depth analysis of tumor-specific essential genes and feasible methods to screen tumor-specific essential genes (Fraser 2015; Moffat 2016). The essential genes screened by these three teams provided a clear definition of the requirements for sustaining the basic cell activities of individual human tumor cell types. Practically, these genes can be regarded as targets for cancer treatment (Fraser 2015) . The data from these three groups provided a rare opportunity to theoretically study the function, sequence composition, evolution and network topology of human essential genes. One of the most important and interesting theoretical issues in modern biology is whether essential genes and non-essential genes can be accurately classified using computational methods. The models established in the aforementioned three eukaryotic organisms, S. cerevisiae (Chen and Xu 2005; Seringhaus et al. 2006) , Mus musculus (Yuan et al. 2012) , and A. thaliana All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 148,
+                    "end": 168,
+                    "text": "(Blomen et al. 2015;",
+                    "ref_id": null
+                },
+                {
+                    "start": 169,
+                    "end": 186,
+                    "text": "Hart et al. 2015;",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 187,
+                    "end": 204,
+                    "text": "Wang et al. 2015)",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 325,
+                    "end": 338,
+                    "text": "(Fraser 2015)",
+                    "ref_id": null
+                },
+                {
+                    "start": 481,
+                    "end": 494,
+                    "text": "(Fraser 2015;",
+                    "ref_id": null
+                },
+                {
+                    "start": 759,
+                    "end": 772,
+                    "text": "(Fraser 2015)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1227,
+                    "end": 1245,
+                    "text": "(Chen and Xu 2005;",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 1246,
+                    "end": 1269,
+                    "text": "Seringhaus et al. 2006)",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 1285,
+                    "end": 1303,
+                    "text": "(Yuan et al. 2012)",
+                    "ref_id": "BIBREF47"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint (Lloyd et al. 2015) , involved intrinsic features, or intrinsic and context-dependent features. These context-dependent features included those features extracted from experimental omics data. However, the features derived from experimental data are frequently unavailable; consequently, this type of machine learning model cannot be extended to a wide range of genomes. In the present study, we addressed this problem in humans by using only intrinsic features derived from sequences, from which certain features can be characterized using a \u03bb -interval Z-curve. To facilitate the use of these data by interested researchers, we have provided a user-friendly online web server, Pheg, which can be freely accessed without registration at http://cefg.uestc.edu.cn/Pheg.",
+            "cite_spans": [
+                {
+                    "start": 146,
+                    "end": 165,
+                    "text": "(Lloyd et al. 2015)",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Cross-validation Results.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The final features of this method were described by FV w,\u03bb. , a value that contains information on the composition of the adjacent w-nucleotides (Gao and Zhang 2004) and \u03bb -interval nucleotides. The association information was also captured by FV w,\u03bb .",
+            "cite_spans": [
+                {
+                    "start": 145,
+                    "end": 165,
+                    "text": "(Gao and Zhang 2004)",
+                    "ref_id": "BIBREF14"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "Therefore, this method achieves improved performance compared with using the original Z-curve. The following results solidly confirmed this point.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "We performed a 5-fold cross-validation test with w ranging from 2 to 4 and \u03bb ranging from 0 to 5. The detailed results are provided in mitigate these disadvantages. The support vector machine (SVM)-recursive feature extraction (RFE)+correlation bias reduction (CBR) method was adopted to rank these features in descending order based on the contribution of each feature. Subsequently, All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint the top 100 features were used to constitute the initial feature subset to train and test the model, and the next 100 features were added into the feature subset, followed by prediction using the same methods. This process was repeated until the top 4,500 features had been added according to the rank order. The test results of each model were evaluated according to the AUC scores via a 5-fold cross-validation test. The AUC values for different top features are shown in Figure 1 Among all 4,545 features examined, the best AUC of 0.8814 was achieved for the top 800 selective features. The final AUC value was 8.12% higher than that for FV 2,0 . To conduct an objective evaluation of this method, we performed a rigorous jackknife test based on the top 800 selected features using the parameters determined via a 5-fold cross-validation test. We obtained an AUC value of 0.8854. As expected, excellent performance was obtained after adopting the \u03bb -interval nucleotide All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 620,
+                    "end": 628,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF1"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint composition and feature selection technology. Those results illustrated that the essentiality of human genes could be well reflected by only sequence information.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "As we are extremely interested in the actual essential genes in the predicted results, we used the positive predictive value (PPV) to further refine. This evaluation index can be calculated using the formula TP / (TP+FP), where TP (true positive) and FP (false positive) represent the number of real essential and non-essential genes among the positive predictions. Therefore, the PPV reflects the proportion of actual essential genes among the predicted essential genes. We obtained a PPV of 73.05% (TP=515, FP=190) using the jackknife test based on the top 800 features. One of the simplest cross validation tests is the holdout method. In this procedure, the dataset is separated into two subsets, namely, training and testing datasets. We randomly sampled one-fifth of the positive and negative samples from the benchmark dataset for the training model, and the remaining samples were used as the testing dataset. To comprehensively assess the method used in the present study, we repeated the holdout method 100 times to identify differences in the composition of the training and testing samples. The mean AUC score was used as the final evaluator. A mean AUC score of 0.8537 with a variance of 1.67e-005 was obtained. Additionally, the proportions of samples in the training and predicting datasets were changed for further investigation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "One-tenth of the positive and negative samples were randomly sampled as the training dataset, and the remaining samples were used as the testing dataset. This procedure was repeated 100 times. We obtained a mean AUC score of 0.8347 with a variance of 2.77e-005. These results further confirmed that this method was robust and accurate.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "1 0",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "Features with fixed w and \u03bb values correspond to a specific group of variables. A total of 19 special groups were obtained, namely, fv 1,0 , fv 1,1 , fv 1,2 \u2026. fv 1,5 ; fv 2,0 , fv 2,1 \u2026. fv 2,5 ; fv 3,0 , fv 3,1 \u2026. fv 3,5 , and fv 4,0 . We calculated the percentage of features in these groups, and the results are provided in Table 2 . For each group, there were two frequencies: P(A), which denotes the actual frequency of features in each group appearing in the top 800 selected features, and P(E), which denotes the expected frequency of the features in each group appearing in the original All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 328,
+                    "end": 335,
+                    "text": "Table 2",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint 1 4,545 features. Therefore, P(A) was obtained based on the number of selected features in each group divided by 800, and P(E) was calculated by dividing the number of total features in each group by 4,545. P(A) and P(E) are listed in columns 4 and 5, respectively. If P(A) is higher than P(E), then the group makes a higher-than-average contribution to the identification of essential genes. We calculated the tendentiousness using the formula P(A)/P(E)-1 to denote how the features of each group were selected, and the results are listed in column 6 of Table 2 . We further conducted a hypergeometric distribution test for each group, and the p values are listed in column 7. Figure 1 (B) and Table 2 show that fv 2,0 (p = 1.60E-06), fv 2,1 (p = 0.02407688), and fv 3,0 (p = 7.89E-05) are preferentially selected and are statistically significant. These results demonstrated that there are strong signals for classifying essential and non-essential genes when the character interval is equal to zero or one, but the other groups did not show these strong signals. To further confirm this result, the variables fv 2,0 , fv 2,1 , fv 2,2 , fv 2,3 , fv 2,4 , fv 2,5 and fv 3,0 , fv 3,1 , fv 3,2 , fv 3,3 , fv 3,4 , and fv 3,5 were used as input features. Improved performance was obtained under fv 2,0 , fv 2,1 , and fv 3,0 compared with the other groups (Table 2, column 8). Those results demonstrated that the shorter interval association provides more information. However, longer interval association can still play an independent role. Hence, integrating the interval information into adjacent ones could significantly improve our classifier's capacity of discernment (Table 1) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 701,
+                    "end": 708,
+                    "text": "Table 2",
+                    "ref_id": "TABREF1"
+                },
+                {
+                    "start": 824,
+                    "end": 832,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF1"
+                },
+                {
+                    "start": 841,
+                    "end": 848,
+                    "text": "Table 2",
+                    "ref_id": "TABREF1"
+                },
+                {
+                    "start": 1817,
+                    "end": 1826,
+                    "text": "(Table 1)",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "A web server for predicting essential genes in human cancer cell lines.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "To facilitate the use of these data by interested researchers, we constructed a All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint user-friendly online web server named Pheg (Predictor of human essential genes), which is freely accessible at http://cefg.uestc.edu.cn/Pheg. The Pheg algorithm is based on the \u03bb -interval Z-curve. Additional parameters are not necessary, making this algorithm convenient to use. Pheg can predict whether a query gene is essential using only the CDS region of a gene as input. We integrated logistic regression into the Pheg server to estimate the reliability of the predicted results. Hence, this server can output a probabilistic estimated value as a measurement of gene essentiality for the inputted coding region. Note that this is the first available server for predicting human gene essentiality. Comparatively, some computational models have been proposed for the other eukaryotes however all of them did not provide online prediction service.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "We re-predicted the genes in the benchmark dataset via Pheg and obtained an AUC = 0.9249 and PPV = 83.84%. A total of 612 genes were identified as essential genes among the 1,516 positive samples, and 118 genes were predicted as essential genes among the 10,499 negative samples. To estimate how many genes among those predictions are real essential genes, we calculated precisions using 5-fold, 10-fold, 15-fold, 20-fold cross-validation, and we obtained precisions with values of 70.43%, 71.63%, 72.48%, 72.22%, which were approximately 70%. Hence, we expect that 82 (118\u00d770%) are correctly predicted essential genes. The information for these 118 genes is provided in Supplemental Information S1.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "CancerResource is a comprehensive knowledgebase for drug-target relationships associated with cancer and for supporting information or experimental data (Gohlke et al. 2016) . Through the CancerResource database (Gohlke et al. 2016) , these 118 genes All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 153,
+                    "end": 173,
+                    "text": "(Gohlke et al. 2016)",
+                    "ref_id": null
+                },
+                {
+                    "start": 212,
+                    "end": 232,
+                    "text": "(Gohlke et al. 2016)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. CancerResource analyses and BLAST search illustrated that at least a part of these 118 genes have higher probability to be factually essential genes and have been overlooked in the essential gene screening in previous experimental studies. Hence, Pheg sever could be used to predict essentiality for anonymous gene sequences of human and closely related species, and it is also hoped to supplement the essential All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint gene list of human by identifying novel essential gene from the submitted sequences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Different contributions of each group of variables to the classification ability."
+        },
+        {
+            "text": "The Z-curve has been widely used in the field of bioinformatics for tasks such as protein coding gene identification (Zhang and Wang 2000; Chen et al. 2003; Guo et al. 2003; Guo and Zhang 2006; Hua et al. 2015) , promoter recognition (Yang et al. 2008) , translation start recognition (Ou et al. 2004) , recombination spots recognition (Dong et al. 2016) , and nucleosome position mapping ). However, correlation and \u03bb -interval nucleotide composition have not been incorporated into the Z-curve method. In the present study, we present a \u03bb -interval Z-curve based on Z-curve theory.",
+            "cite_spans": [
+                {
+                    "start": 117,
+                    "end": 138,
+                    "text": "(Zhang and Wang 2000;",
+                    "ref_id": "BIBREF48"
+                },
+                {
+                    "start": 139,
+                    "end": 156,
+                    "text": "Chen et al. 2003;",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 157,
+                    "end": 173,
+                    "text": "Guo et al. 2003;",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 174,
+                    "end": 193,
+                    "text": "Guo and Zhang 2006;",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 194,
+                    "end": 210,
+                    "text": "Hua et al. 2015)",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 234,
+                    "end": 252,
+                    "text": "(Yang et al. 2008)",
+                    "ref_id": "BIBREF46"
+                },
+                {
+                    "start": 285,
+                    "end": 301,
+                    "text": "(Ou et al. 2004)",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 336,
+                    "end": 354,
+                    "text": "(Dong et al. 2016)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "The DNA sequence can be understood as an ordinary character sequence; therefore, the method proposed in the present study has the potential for applications in mining characteristics from other character sequences and can be used as a universal feature extraction method for DNA sequences.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "Based on the \u03bb -interval Z-curve, we obtained excellent performance in human essential gene identification. This excellent performance might be attributable to the following points: First, we introduced the concept of intervals, reflecting associated information and the \u03bb -interval nucleotide composition. Second, we used feature selection technology in the present study. Thus, noisy and redundant features could be removed from the original features. Table 2 shows the improved performance obtained under fv 2,0 , fv 2,1 , and fv 3,0 compared with the other variable groups. Further comparison of these results with other feature groups shown in Table 2 , and this comparison shows that the AUC values obtained with \u03bb -interval variables are smaller All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 454,
+                    "end": 461,
+                    "text": "Table 2",
+                    "ref_id": "TABREF1"
+                },
+                {
+                    "start": 649,
+                    "end": 656,
+                    "text": "Table 2",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint than those obtained with shorter interval variables. However, the performance can be improved after adding \u03bb -interval oligonucleotide association information (see Table 1 ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 310,
+                    "end": 317,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "Discussion"
+        },
+        {
+            "text": "Hence, the \u03bb -interval Z-curve should reflect additional important information for essential genes that cannot be contained in adjacent nucleotide association information.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "In 2005, Chen and Xu used a neural network and SVM to predict the dispensability of proteins in the yeast S. cerevisiae based on the protein evolution rate, protein-interaction connectivity, gene-expression cooperativity and gene-duplication data (Chen and Xu 2005 phenotype lethality and gene function, copy number, duplication, expression levels and patterns, rate of evolution, cross-species conservation, and network connectivity, and the random forest-based model used in this study achieved an AUC of 0.81, which is significantly better than that obtained by random guessing. In addition, these authors integrated the features they identified to predict essential genes in A. thaliana (Lloyd et al. 2015) . Those previous researches in three eukaryotes illustrated All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 247,
+                    "end": 264,
+                    "text": "(Chen and Xu 2005",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 691,
+                    "end": 710,
+                    "text": "(Lloyd et al. 2015)",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint classifiers can gave satisfactory prediction through combining sequence with other features. For human essential gene identification, we only used the sequence composition and interval association information in the present study and still obtained an AUC of 0.8854. Considering that this result is better than the results obtained in previous studies using integrated features, the gene essentiality of the human genome can be accurately reflected based on only the sequence information.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "The human essential genes in cancer cell lines were identified by three different groups (Blomen et al. 2015; Hart et al. 2015; Wang et al. 2015) . The results showed high consistency (Fraser 2015) , which further confirmed the accuracy and robustness of these data. We extracted the gene essentiality data from the DEG database (http://tubic.tju.edu.cn/deg/), the updated version of which contained human gene essentiality information. These essentiality annotations serve as the basis for constructing our benchmark dataset. The flowchart shown in Figure 2 illustrates the construction of the positive and negative dataset.",
+            "cite_spans": [
+                {
+                    "start": 89,
+                    "end": 109,
+                    "text": "(Blomen et al. 2015;",
+                    "ref_id": null
+                },
+                {
+                    "start": 110,
+                    "end": 127,
+                    "text": "Hart et al. 2015;",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 128,
+                    "end": 145,
+                    "text": "Wang et al. 2015)",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 184,
+                    "end": 197,
+                    "text": "(Fraser 2015)",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 550,
+                    "end": 558,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint (Juhas et al. 2011) . Therefore, we only retained genes that were identified as lethal genes in more than half of the investigated cell lines. When a gene appeared as essential in more than six cell lines (11/2\u22486), it was selected as one sample in the positive dataset. According to this principle, we obtained a total of 1,518 essential All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 146,
+                    "end": 165,
+                    "text": "(Juhas et al. 2011)",
+                    "ref_id": "BIBREF25"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint gene annotations. We downloaded all of the protein coding gene sequences from the CCDS database (https://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi), and the annotations of protein coding genes were obtained from the HGNC database (http://www.genenames.org/cgi-bin/statistics, March 1, 2016), which contained 19,003 annotation entries. The essential gene sequences were extracted according to the annotations, and genes with no counterpart in the CCDS database were excluded.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "According to this criterion, we excluded 2 genes and obtained 1,516 essential genes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "We used the essential gene annotation in the DEG dataset, and the gene sequences were extracted from the CCDS because the former did not contain the information for non-essential genes. For human essentiality annotations in the DEG database, a number of scattered annotated essential genes aside from those in the 11 cell lines were identified. A total of 28,166 essential gene annotated entries (including conditional essential gene annotated entries) were obtained. Among these annotations, there were many repeated annotation entries; therefore, there were considerably fewer unique entries. To obtain a more reliable negative dataset, i.e., absolutely non-essential genes, we excluded all of the human essential genes annotated in the DEG database (Luo et al. 2014 ) from the list of the protein coding genes. The remaining genes were regarded as the negative dataset, and their gene sequences were extracted from the CCDS database. Genes with no counterpart in the CCDS database were also excluded. A total of 10,499 non-essential genes were obtained using this method. Ultimately, a total of 12,015 gene entries were obtained in the benchmark dataset: 1,516 essential genes and 10,499 non-essential genes. The protein coding All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 752,
+                    "end": 768,
+                    "text": "(Luo et al. 2014",
+                    "ref_id": "BIBREF33"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint gene annotations are provided in Supplemental Information S5, and information for the benchmark dataset is provided in Supplemental Information S6.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Benchmark dataset."
+        },
+        {
+            "text": "The originally proposed Z-curve variables might reflect the composition of a single nucleotide considering the features derived from phase heterogeneity of a single nucleotide (Zhang and Zhang 1991; Zhang and Chou 1994; Zhang 1997) . Herein, we provided a summary of the Z-curve method used for gene identification (Zhang and Wang 2000) . Let us suppose that the frequencies of bases A, C, G and T occurring in an ORF or a gene fragment at positions 1, 4, 7, \u2026 , 2, 5,",
+            "cite_spans": [
+                {
+                    "start": 176,
+                    "end": 198,
+                    "text": "(Zhang and Zhang 1991;",
+                    "ref_id": "BIBREF53"
+                },
+                {
+                    "start": 199,
+                    "end": 219,
+                    "text": "Zhang and Chou 1994;",
+                    "ref_id": "BIBREF51"
+                },
+                {
+                    "start": 220,
+                    "end": 231,
+                    "text": "Zhang 1997)",
+                    "ref_id": "BIBREF49"
+                },
+                {
+                    "start": 315,
+                    "end": 336,
+                    "text": "(Zhang and Wang 2000)",
+                    "ref_id": "BIBREF48"
+                }
+            ],
+            "ref_spans": [],
+            "section": "\u03bb -interval Z-curve"
+        },
+        {
+            "text": ", and 3, 6, 9, \u2026 , are represented by a 1 , c 1 , g 1 , t 1 ; a 2 , c 2 , g 2 , t 2 ; a 3 , and c 3 , g 3 , t 3 , respectively. Those 12 symbols represent the frequencies of the bases at the 1 st , 2 nd and 3 rd codon positions, respectively. According to the symbols defined above, the universal Z-curve mathematical expression is as follows (Zhang and Wang 2000) :",
+            "cite_spans": [
+                {
+                    "start": 343,
+                    "end": 364,
+                    "text": "(Zhang and Wang 2000)",
+                    "ref_id": "BIBREF48"
+                }
+            ],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "(1)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "Because composition bias for oligonucleotides in coding DNA sequence (CDS) regions or open reading frames (ORFs) exists, the adjacent w-nucleotides Z-curve method was proposed (Guo et al. 2003; Gao and Zhang 2004) . Let us suppose that w represents the length of the adjacent nucleotide sequence. The Z-curve variables for the phase-specific adjacent w-nucleotides can be calculated as follows:",
+            "cite_spans": [
+                {
+                    "start": 69,
+                    "end": 74,
+                    "text": "(CDS)",
+                    "ref_id": null
+                },
+                {
+                    "start": 176,
+                    "end": 193,
+                    "text": "(Guo et al. 2003;",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 194,
+                    "end": 213,
+                    "text": "Gao and Zhang 2004)",
+                    "ref_id": "BIBREF14"
+                }
+            ],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint 0",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "(2) where k equals 1, 2, or 3 to indicate that the first oligonucleotide bases are situated at the 1 st , 2 nd and 3 rd codon positions, respectively.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "Recent studies demonstrated the existence of long-range associations in chromosomes and showed that these associations are crucial for gene regulation (Fullwood et al. 2009; Ruan 2011) . Although the two adjacent nucleotides in the primary structure have no association in some cases, strong associations in terms of tertiary structure might exist. Therefore, we introduced the \u03bb -interval Z-curve to virtually represent the interval range association. The details of this method are described as p k (S w X), which represents the frequency of oligonucleotides S w X in genes or ORFs, where X is one of the four basic bases A, T, G and C. To facilitate this presentation, the length of the oligonucleotide S w is represented as w. According to the predetermined characters, we generated the universal equation for the \u03bb -interval Z-curve based on Z-curve theory as follows:",
+            "cite_spans": [
+                {
+                    "start": 151,
+                    "end": 173,
+                    "text": "(Fullwood et al. 2009;",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 174,
+                    "end": 184,
+                    "text": "Ruan 2011)",
+                    "ref_id": "BIBREF39"
+                }
+            ],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "(",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "where x, y, and z represent the accumulation of the three base groups classified according to chemical bond properties. Variable k denotes the phase-specific index of the first base in the nucleotide sequence S w , and \u03bb represents the intervals between S w and X. The first base in the oligonucleotide S w was located at position k. The core part",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "S A p S G p S C p S T y p S A p S C p S G p S T k z p S A p S T p S G p S C"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint 1 of \u03bb -interval Z-curve forms oligonucleotide S w X. A schematic diagram of the formation of these oligonucleotides is shown in Figure 3 . The oligonucleotide window S w slides along a DNA molecule sequence according to phase, forming oligonucleotide sets with base X, which is \u03bb intervals away from the last base of S w . The periodicity derived from three codons is denoted as S w X.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 275,
+                    "end": 283,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "S A p S G p S C p S T y p S A p S C p S G p S T k z p S A p S T p S G p S C"
+        },
+        {
+            "text": "When w is equal to 1 and \u03bb is equal to 0, Equation (3) can be transformed into",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "S A p S G p S C p S T y p S A p S C p S G p S T k z p S A p S T p S G p S C"
+        },
+        {
+            "text": "Equation (1). When w is more than 1 and \u03bb is equal to 0, Equation (3) can be All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "S A p S G p S C p S T y p S A p S C p S G p S T k z p S A p S T p S G p S C"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint transformed into Equation (2). Thus, the phase-specific single nucleotide Z-curve and phase-specific adjacent w-nucleotide Z-curve are incorporated into the \u03bb -interval Z-curve. Using the \u03bb -interval Z-curve, we can extract more features to characterize DNA sequences. According to Equations (1) and (2) ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "S A p S G p S C p S T y p S A p S C p S G p S T k z p S A p S T p S G p S C"
+        },
+        {
+            "text": "FV 2,0 and FV 3,0 are the combination of adjacent phase-specific w-nucleotide Z-curve variables. We performed this prediction with w ranging from 2 to 4 and \u03bb ranging from 0 to 5. According to the discussion above, we obtained 4,545 variables for FV 4, 5 .",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "\u2026 ."
+        },
+        {
+            "text": "SVMs can be classified into linear SVMs and non-linear SVMs according to complexity. SVMs can be used to transform the data into another feature space with The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint more dimensions than the original data and determine the hyper-plane. In this super-dimensional space, the hyper-plane can readily separate the samples. Linear SVMs play a key role in solving ultra-large-scale data, reflecting the effectiveness, rapid speed and splendid generalization of this method in training and prediction. LIBLINEAR, designed by Fan et al. (Fan et al. 2008) , is an easy-to-use, freely available software tool to manage large sparse data. The new version of LIBLINEAR (version 2.1-4) supports not only classification, such as L2-loss and L1-loss linear support vector machine, but also regression, such as L2-regularized logistic regression.",
+            "cite_spans": [
+                {
+                    "start": 665,
+                    "end": 682,
+                    "text": "(Fan et al. 2008)",
+                    "ref_id": "BIBREF11"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Support vector machine"
+        },
+        {
+            "text": "Given the ultra-high-dimensional feature vectors and large samples contained in the benchmark dataset in the present study, we used the LIBLINEAR software package for prediction. The penalty parameter c was determined using 5-fold cross-validation from 2 -18 to 2 10 . The new version of LIBLINEAR can be downloaded from https://www.csie.ntu.edu.tw/~cjlin/liblinear/.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Support vector machine"
+        },
+        {
+            "text": "First, the predictive power of a classifier can be influenced by the relevance and noise in the original features. Second, additional time for training and predicting tasks can be increased, reflecting the high-dimensional features. Feature selection (FS) technology is a powerful method for the removal of noise and redundant features from the original features. Hence, the dimension of the features can be reduced. Recursive feature extraction through SVM linear kernels is a powerful FS algorithm (Guyon et al. 2002) , but the correlation bias was not considered using this method. Yan and Zhang (Yan and Zhang 2015) proposed an improved method, called SVM-RFE+CBR, All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [
+                {
+                    "start": 500,
+                    "end": 519,
+                    "text": "(Guyon et al. 2002)",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 599,
+                    "end": 619,
+                    "text": "(Yan and Zhang 2015)",
+                    "ref_id": "BIBREF45"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Feature extraction technology"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint which incorporates the CBR. The main concept is that the ranking criterion can be directly derived from the SVM-based model. The feature with the smallest weight is excluded for each run time. The training process was repeated by incorporating CBR until the ranks of all features are obtained. We used SVM-RFE+CBR FS technology to perform feature selection and improve the performance of the classifier.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Feature extraction technology"
+        },
+        {
+            "text": "Cross-validation test technology is the most popular method for evaluating the performance of classifiers. N-fold cross-validation means that the samples are randomly separated into N sub-samples sets. One of the sub-sample sets is used as the testing dataset, and the remaining sub-sample set is used as the training dataset during each run. The process is executed N times until every sub-dataset is utilized as the testing dataset. If N equals the number of samples in benchmark dataset, then the N-fold cross-validation can also be called jackknife or leave-one-out cross-validation.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Cross-validation and jackknife tests"
+        },
+        {
+            "text": "In the present study, we used the 5-fold cross-validation test to determine the best penalty parameter and adopted the jackknife test to further assess the predictive power of the classifier. The area under the ROC curve, the AUC, is often used to measure the performance quality of a binary classifier. An AUC of 0.5 is equivalent to random prediction, whereas an AUC of 1 represents a perfect prediction. There is no bias for evaluating the performance of the unbalanced dataset through AUC. Therefore, we adopted the AUC as a cross-validation criterion in the present study.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Cross-validation and jackknife tests"
+        },
+        {
+            "text": "All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Cross-validation and jackknife tests"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. . https://doi.org/10.1101/084129 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Cross-validation and jackknife tests"
+        },
+        {
+            "text": "Supplemental data is available at Genome Res. Online: Supplemental Information S1: The 118 predicted essential genes and their sequences; Supplemental Information S2: Details for the 17 genes with drug and molecule interactions among the 118 predicted essential genes, distinguished from non-essential genes.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data access"
+        },
+        {
+            "text": "Supplemental Information S3: Sequences of the essential genes in the genome of M.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Data access"
+        },
+        {
+            "text": "Supplemental Information S4: The information for the 21 genes and their corresponding homologs.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "musculus;"
+        },
+        {
+            "text": "Supplemental Information S5: Annotation of human protein-coding genes; Supplemental Information S6: Benchmark dataset used in the present study.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "musculus;"
+        },
+        {
+            "text": "Supplemental files can also be downloaded from the CEFG group website: http://cefg.cn/Pheg/supplement_info.zip.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "musculus;"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Identification of 315 genes essential for early zebrafish development",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Amsterdam",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Nissen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Swindell",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Farrington",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Hopkins",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Proc Natl Acad Sci U S A",
+            "volume": "101",
+            "issn": "",
+            "pages": "12792--12797",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Gene essentiality and synthetic lethality in haploid human cells",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Diemen",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Olk",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Stukalov",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Science",
+            "volume": "350",
+            "issn": "",
+            "pages": "1092--1096",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "ZCURVE_CoV: a new system to recognize protein coding genes in coronavirus genomes, and its applications in analyzing SARS-CoV genomes",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ou",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Biochem Biophys Res Commun",
+            "volume": "307",
+            "issn": "",
+            "pages": "382--388",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "OGEE: an online gene essentiality database",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Minguez",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Lercher",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Bork",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Nucleic Acids Res",
+            "volume": "40",
+            "issn": "",
+            "pages": "901--906",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Understanding protein dispensability through machine-learning analysis of high-throughput data",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Bioinformatics",
+            "volume": "21",
+            "issn": "",
+            "pages": "575--581",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "A new computational strategy for predicting essential genes",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Cheng",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Jiang",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Tao",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "BMC genomics",
+            "volume": "14",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "How to identify essential genes from molecular networks?",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Del Rio",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kosch\u00fctzki",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Coello",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "BMC Syst Biol",
+            "volume": "3",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Investigating the predictability of essential genes across distantly related organisms using an integrative approach",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Deng",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Deng",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Su",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Minai",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hassett",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Lu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Nucleic Acids Res",
+            "volume": "39",
+            "issn": "",
+            "pages": "795--807",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "All rights reserved. No reuse allowed without permission. The copyright holder for this preprint",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Dong",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Yuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hua",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Ye",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Labena",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Combining the pseudo dinucleotide composition with the Z curve method to improve the accuracy of predicting DNA elements: a case study in recombination spots",
+            "authors": [],
+            "year": 2016,
+            "venue": "Mol Biosyst",
+            "volume": "12",
+            "issn": "",
+            "pages": "2893--2900",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "LIBLINEAR: A library for large linear classification",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Fan",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Chang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Hsieh",
+                    "suffix": ""
+                },
+                {
+                    "first": "X",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Lin",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "J Mach Learn Res",
+            "volume": "9",
+            "issn": "",
+            "pages": "1871--1874",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "An oestrogen-receptor-alpha-bound human chromatin interactome",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Fullwood",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Pan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Mohamed",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Orlov",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Velkov",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Mei",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Nature",
+            "volume": "462",
+            "issn": "",
+            "pages": "58--64",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Comparison of various algorithms for recognizing short coding sequences of human genes",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Bioinformatics",
+            "volume": "20",
+            "issn": "",
+            "pages": "673--681",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Flux balance analysis predicts essential genes in clear cell renal cell carcinoma metabolism",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Gatto",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Miess",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Schulze",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Nielsen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Sci Rep",
+            "volume": "5",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "CancerResource--updated database of cancer-relevant proteins, mutations and interacting drugs",
+            "authors": [],
+            "year": null,
+            "venue": "Nucleic Acids Res",
+            "volume": "44",
+            "issn": "",
+            "pages": "932--937",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "ZCURVE: a new system for recognizing protein-coding genes in bacterial and archaeal genomes",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ou",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Nucleic Acids Res",
+            "volume": "31",
+            "issn": "",
+            "pages": "1780--1789",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "ZCURVE_V: a new self-training system for recognizing protein-coding genes in viral and phage genomes",
+            "authors": [
+                {
+                    "first": "F",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "BMC bioinformatics",
+            "volume": "7",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Gene selection for cancer All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Guyon",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Weston",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Barnhill",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Vapnik",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "doi: bioRxiv preprint classification using support vector machines",
+            "authors": [],
+            "year": null,
+            "venue": "Machine learning",
+            "volume": "46",
+            "issn": "",
+            "pages": "389--422",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "High-resolution CRISPR screens reveal fitness genes and genotype-specific cancer liabilities",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hart",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Chandrashekhar",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Aregger",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Steinhart",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Brown",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Macleod",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Mis",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Zimmermann",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Fradet-Turcotte",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Cell",
+            "volume": "163",
+            "issn": "",
+            "pages": "1515--1526",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "BAGEL: a computational framework for identifying essential genes from pooled library screens",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hart",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Moffat",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "BMC bioinformatics",
+            "volume": "17",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "ZCURVE 3.0: identify prokaryotic genes with higher accuracy as well as automatically and accurately select essential genes",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Hua",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "Z"
+                    ],
+                    "last": "Yuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nucleic Acids Res",
+            "volume": "43",
+            "issn": "",
+            "pages": "85--90",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Essence of life: essential genes of minimal genomes",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Juhas",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Eberl",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Glass",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Trends Cell Biol",
+            "volume": "21",
+            "issn": "",
+            "pages": "562--568",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Systematic functional analysis of the Caenorhabditis elegans genome using RNAi",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Kamath",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Dong",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Poulin",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Durbin",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gotta",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Kanapin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Le",
+                    "middle": [],
+                    "last": "Bot",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Moreno",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Sohrmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Nature",
+            "volume": "421",
+            "issn": "",
+            "pages": "231--237",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Analysis of a genome-wide set of gene deletions in the fission yeast Schizosaccharomyces pombe",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "U"
+                    ],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Hayles",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kim",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Wood",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "O"
+                    ],
+                    "last": "Park",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Won",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Yoo",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Duhig",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Nam",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Palmer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Nat Biotechnol",
+            "volume": "28",
+            "issn": "",
+            "pages": "617--623",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Metabolic functions of duplicate genes in Saccharomyces cerevisiae",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Kuepfer",
+                    "suffix": ""
+                },
+                {
+                    "first": "U",
+                    "middle": [],
+                    "last": "Sauer",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Blank",
+                    "suffix": ""
+                }
+            ],
+            "year": 2005,
+            "venue": "Genome Res",
+            "volume": "15",
+            "issn": "",
+            "pages": "1421--1430",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Mouse duplicate genes are as essential as singletons",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Liao",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2007,
+            "venue": "Trends Genet",
+            "volume": "23",
+            "issn": "8",
+            "pages": "378--381",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Characteristics of Plant Essential Genes Allow for within-and between-Species Prediction of Lethal Mutant Phenotypes",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Lloyd",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Seddon",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Moghe",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Simenc",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Shiu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Plant cell",
+            "volume": "27",
+            "issn": "",
+            "pages": "2133--2147",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "DEG 10, an update of the database of essential genes that includes both protein-coding genes and noncoding genomic elements",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Luo",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Lin",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Gao",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nucleic Acids Res",
+            "volume": "42",
+            "issn": "",
+            "pages": "574--580",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "A minimal gene set for cellular life derived by comparison of complete bacterial genomes",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Mushegian",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Koonin",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "Proc Natl Acad Sci",
+            "volume": "",
+            "issn": "",
+            "pages": "10268--10273",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "GS-Finder: a program to find bacterial gene start sites with a self-training method",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Ou",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Int J Biochem Cell Biol",
+            "volume": "36",
+            "issn": "",
+            "pages": "535--544",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Essential Genome of the Metabolically Versatile Alphaproteobacterium Rhodopseudomonas palustris",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Pechter",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Gallagher",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Pyles",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Manoil",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Harwood",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "J Bacteriol",
+            "volume": "198",
+            "issn": "",
+            "pages": "867--876",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Iteration method for predicting essential proteins based on orthology and protein-protein interaction networks",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Peng",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "X"
+                    ],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Pan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "BMC Syst Biol",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Cancer3D: understanding cancer mutations through protein structures",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Porta-Pardo",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Hrabe",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Godzik",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Nucleic Acids Res",
+            "volume": "43",
+            "issn": "",
+            "pages": "968--973",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Presenting the human genome: now in 3D!",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Ruan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Science",
+            "volume": "331",
+            "issn": "",
+            "pages": "1025--1026",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Predicting All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Seringhaus",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Paccanaro",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Borneman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Snyder",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Gerstein",
+                    "suffix": ""
+                }
+            ],
+            "year": 2006,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "doi: bioRxiv preprint essential genes in fungal genomes",
+            "authors": [],
+            "year": null,
+            "venue": "Genome Res",
+            "volume": "16",
+            "issn": "",
+            "pages": "1126--1135",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Identification and characterization of essential genes in the human genome",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Birsoy",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Hughes",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Krupczak",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Post",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Lander",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Sabatini",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Science",
+            "volume": "350",
+            "issn": "",
+            "pages": "1096--1101",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Geptop: a gene essentiality prediction tool for sequenced bacterial genomes based on orthology and phylogeny",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Wei",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Ning",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Ye",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Guo",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS One",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Z curve theory-based analysis of the dynamic nature of nucleosome positioning in Saccharomyces cerevisiae",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Wu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Su",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Lv",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Cui",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Gene",
+            "volume": "530",
+            "issn": "",
+            "pages": "8--18",
+            "other_ids": {}
+        },
+        "BIBREF45": {
+            "ref_id": "b45",
+            "title": "Feature selection and analysis on correlated gas sensor data with recursive feature elimination",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Yan",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Sens. Actuators. B. Chem",
+            "volume": "212",
+            "issn": "",
+            "pages": "353--363",
+            "other_ids": {}
+        },
+        "BIBREF46": {
+            "ref_id": "b46",
+            "title": "Human Pol II promoter recognition based on primary sequences and free energy of dinucleotides",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "Y"
+                    ],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Yu",
+                    "suffix": ""
+                },
+                {
+                    "first": "Anh",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "Q"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2008,
+            "venue": "BMC bioinformatics",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF47": {
+            "ref_id": "b47",
+            "title": "Predicting the lethal phenotype of the knockout mouse by integrating comprehensive genomic data",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Yuan",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Xu",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ball",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Liang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Bioinformatics",
+            "volume": "28",
+            "issn": "",
+            "pages": "1246--1252",
+            "other_ids": {}
+        },
+        "BIBREF48": {
+            "ref_id": "b48",
+            "title": "Recognition of protein coding genes in the yeast genome at better than 95% accuracy based on the Z curve",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2000,
+            "venue": "Nucleic Acids Res",
+            "volume": "28",
+            "issn": "",
+            "pages": "2804--2814",
+            "other_ids": {}
+        },
+        "BIBREF49": {
+            "ref_id": "b49",
+            "title": "A symmetrical theory of DNA sequences and its applications. J All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 1997,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        },
+        "BIBREF51": {
+            "ref_id": "b51",
+            "title": "A graphic approach to analyzing codon usage in 1562",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Chou",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF52": {
+            "ref_id": "b52",
+            "title": "Escherichia coli protein coding sequences",
+            "authors": [],
+            "year": null,
+            "venue": "J Mol Biol",
+            "volume": "238",
+            "issn": "",
+            "pages": "1--8",
+            "other_ids": {}
+        },
+        "BIBREF53": {
+            "ref_id": "b53",
+            "title": "Analysis of distribution of bases in the coding sequences by a diagrammatic technique",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 1991,
+            "venue": "Nucleic Acids Res",
+            "volume": "19",
+            "issn": "",
+            "pages": "6313--6317",
+            "other_ids": {}
+        },
+        "BIBREF54": {
+            "ref_id": "b54",
+            "title": "Z curves, an intutive tool for visualizing and analyzing the DNA sequences",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 1994,
+            "venue": "J Biomol Struct Dyn",
+            "volume": "11",
+            "issn": "",
+            "pages": "767--782",
+            "other_ids": {}
+        },
+        "BIBREF55": {
+            "ref_id": "b55",
+            "title": "No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/084129"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF1": {
+            "text": "AUC values obtained under different top n features and the contribution of each group.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "A) represents the AUC scores under different top features. Dots with different colors denote different c values.Figure 1(B) illustrates the selective tendentiousness for every variable type. The red bars denote that the selective tendentiousness has significance.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "No. (A): feature numbers in the top 800; No. (E): feature numbers in the original variable FV 4, 5 ; P(A): actual frequency that variables in the top 800, P(A)=No.(A)/800; P(E): expected frequency that variables in FV 4,5 , P(A)=No.(B)/4545; p value: hypergeometric distribution test.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "using the classifier 'Target search by gene identifiers' (http://data-analysis.charite.de/care/index.php?site=target_input). Among these 118 genes, 17 genes showed interactions with drugs and other chemical molecules, and 13 genes had Cancer3D structures(Porta-Pardo et al. 2014). The details of these genes are supplemented in Supplemental Information S2. Additionally, we used these 118 gene sequences to conduct a BLAST (Basic Local Alignment Search Tool) search against essential genes in the genome of Mus musculus (mouse). The current mouse essential gene set is accessible in the OGEE database(Chen et al. 2012). Considering that no BLAST program is embedded in OGEE, we downloaded the essential gene annotations (gene_essentiality) at (http://ogee.medgenius.info/downloads/) and extracted the essential gene annotation of M. musculus. We obtained the essential gene sequences according to the annotations (http://ogee.medgenius.info/downloads/). A BLAST search was performed via ncbi-blast-2.2.30+-win64.exe using the data from OGEE, and homologs for 21 genes were identified (e value < 1e-100) among the 118 predicted essential genes. The sequences of the essential genes in M. musculus are provided in Supplemental Information S3. The details for these 21 genes and their corresponding homologs are provided in Supplemental Information S4. Both",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Description of the construction of the human essential and non-essential gene datasets.In the three studies, 13 datasets were provided. As lines HCT116 and KBM7 arerepresented by two datasets each, 11 cancer cell lines (KBM7, K562, Raji, Jiyoye, A375, HAP1, DLD1, GBM, HCT116, Hela, rpel) are involved in total. Blomen et al. and Wang et al. identified the essential genes in the KBM7 cell line. We combined these two datasets into one gene set, KBM7. A total of 2,073 and 386 essential genes were contained in the two datasets for HCT116. The 386 genes in this dataset were markedly different from those in the datasets for the other cell lines, so this dataset was excluded. Ultimately, 11 essential gene sets were obtained, corresponding to a single cell line. Essential genes, by definition, are indispensable for the survival of organisms under optimized growth conditions and are considered the foundation of life",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Description of the process of constructing the oligonucleotides using the \u03bb -interval Z-curve theory algorithm. A gene or an ORF has three phases, denoted with different colors, i.e., red denotes the base located in the first phase, yellow denotes the base located in the second phase, and blue denotes the base located in the third phase.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Table 1. AUC values at different w, \u03bb and penalty parameters c.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Feature details for every variable type in the top 800 selective features. The feature groups with significance are indicated bold font.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "). The next year, Seringhaus et al. only used 14 features to predict essential genes in S. cerevisiae and obtained a PPV=0.69 (Seringhaus et al. 2006). Yuan et al. assembled a comprehensive list of 491 candidate genomic features",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": ", when w is equal to 0, we can obtain 3\u00d73\u00d74 w-1 variables to characterize DNA sequences. When w and \u03bb are greater than 0, we can obtain 3\u00d73\u00d74 w variables. For convenience, we used fv w,\u03bb to represent the variables with the length of w for oligonucleotides S w , and the highest interval length between oligonucleotides S w and base X is \u03bb . To obtain more information from a DNA sequence, the final variable is described as FV w, \u03bb , where w represents the longest oligonucleotides and \u03bb is the highest interval. This variable can be represented where the symbol 'U' represents the union set of fv w,\u03bb , i.e., FV 2,0 =[fv 1,0 , fv 2,0 ] T ,",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": [
+        {
+            "text": "The authors thank Dr. Ke Yan for providing the open source of the SVM-RFE+CBR script. The authors also thank Prof. Chun-Ting Zhang for inspiring discussions and",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Acknowledgments"
+        }
+    ]
+}

@@ -1,0 +1,773 @@
+{
+    "paper_id": "df6013a1630aa41627cc84c8e780d40ff93785cc",
+    "metadata": {
+        "title": "A method for RNA structure prediction shows evidence for structure in lncRNAs",
+        "authors": [
+            {
+                "first": "Riccardo",
+                "middle": [],
+                "last": "Delli Ponti",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Centre for Genomic Regulation (CRG)",
+                    "institution": "The Barcelona Institute for Science and Technology",
+                    "location": {
+                        "addrLine": "Dr. Aiguader 88",
+                        "postCode": "08003",
+                        "settlement": "Barcelona",
+                        "country": "Spain"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Alexandros",
+                "middle": [],
+                "last": "Armaos",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Centre for Genomic Regulation (CRG)",
+                    "institution": "The Barcelona Institute for Science and Technology",
+                    "location": {
+                        "addrLine": "Dr. Aiguader 88",
+                        "postCode": "08003",
+                        "settlement": "Barcelona",
+                        "country": "Spain"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Stefanie",
+                "middle": [],
+                "last": "Marti",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Centre for Genomic Regulation (CRG)",
+                    "institution": "The Barcelona Institute for Science and Technology",
+                    "location": {
+                        "addrLine": "Dr. Aiguader 88",
+                        "postCode": "08003",
+                        "settlement": "Barcelona",
+                        "country": "Spain"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Gian",
+                "middle": [],
+                "last": "Gaetano Tartaglia",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Centre for Genomic Regulation (CRG)",
+                    "institution": "The Barcelona Institute for Science and Technology",
+                    "location": {
+                        "addrLine": "Dr. Aiguader 88",
+                        "postCode": "08003",
+                        "settlement": "Barcelona",
+                        "country": "Spain"
+                    }
+                },
+                "email": "gian.tartaglia@crg.eu"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "To compare the secondary structures of RNA molecules we developed the CROSSalign method. CROSSalign is based on the combination of the Computational Recognition Of Secondary Structure (CROSS) algorithm to predict the RNA secondary structure at single-nucleotide resolution using sequence information, and the Dynamic Time Warping (DTW) method to align profiles of different lengths. We applied CROSSalign to investigate the structural conservation of long non-coding RNAs such as XIST and HOTAIR as well as ssRNA viruses including HIV. In a pool of sequences with the same secondary structure CROSSalign accurately recognizes repeat A of XIST and domain D2 of HOTAIR and outperforms other methods based on covariance modelling. CROSSalign can be applied to perform pair-wise comparisons and is able to find homologues between thousands of matches identifying the exact regions of similarity between profiles of different lengths. The algorithm is freely available at the webpage Sequence similarity is often considered the key feature to investigate evolutionary conservation of coding transcripts [1]. Yet, knowledge of secondary structure provides important insights into the biological function of RNAs by allowing the study of physical properties, such as for instance molecular interactions [2]. In most cases, information about the RNA folding complements sequence analysis [3] and is useful to understand mechanisms of action: microRNA precursors, for example, are processed by DGCR8 only if properly folded in hairpin loop structures [4]. Similarly, the architecture of ribosomal RNAs evolves in a self-contained way through conservation of stem loops present in ancient species [5,6], indicating distinct requirements for structural elements. Long non-coding RNAs (lncRNAs) are regarded as a mystery in terms of sequence and structural conservation [7]. The vast majority of lncRNAs evolve under little or no selective constraints, undergo almost no purifying selection, show poor expression, and do not have often easily identifiable orthologues [7,8]. Indeed, the average sequence homology of evolutionarily conserved lncRNAs is 20% between human and mouse and drops to 5% between human and fish [7]. Thus, primary structure does not provide relevant information to study lncRNA conservation and secondary structure could be used for better characterization. Similarly to lncRNAs, the transcriptomes of single-stranded RNA (ssRNA) viruses retain their fold even if sequences mutate rapidly [9], which indicates that secondary structure investigation could be key to revealing evolutionary properties. To study the structural conservation of two RNA molecules, we developed the CROSSalign method. CROSSalign, available at our webpages http://service.tartaglialab.com//new_submission/crossalign, is based on the combination of two methods: 1) Computational Recognition Of Secondary Structure (CROSS), which is an algorithm trained on experimental data to predict RNA secondary structure profiles without sequence length restrictions and at singlenucleotide resolution [10]; 2) the Dynamic Time Warping (DTW) algorithm to assess the similarity of two profiles of different lengths [11]. DTW flexibility allows author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint correlation of 0.91) than structural distances between SHAPE profiles ( Figure 1A , 1B, correlation of 0.50). Moreover, CROSS shows better performances than algorithms such as RNAstructure [13,14] and RNAfold [12] (respective correlations 0.71 and 0.47 with crystals; Supplementary Figures 3 and 4) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 203,
+                    "end": 212,
+                    "text": "Figure 1A",
+                    "ref_id": null
+                },
+                {
+                    "start": 399,
+                    "end": 429,
+                    "text": "Supplementary Figures 3 and 4)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "shows comparable correlations with structural distances calculated with either CROSS or crystallographic profiles (respectively: 0.80, 0.83, 0.38 with author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint 4 crystallographic, CROSS and SHAPE data). While CROSS and crystallographic profiles identify specific clusters of RNA molecules with low sequence identity and high structural similarity (colored in red, orange and green according to difference confidence thresholds; Figures 1C, 1D, 1E) , SHAPE data cannot be used to identify these structures.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 399,
+                    "end": 418,
+                    "text": "Figures 1C, 1D, 1E)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "To further test the usefulness of CROSSalign, we compared its output with that of CMfinder [15]. CMfinder is a method to compute multiple sequence alignments that exploits structural motifs for ranking (Materials and Methods, Comparisons with CMfinder). We analyzed the largest multiple sequence alignments reported in the CMfinder test set (cobalamin, intron gp II, s box, lysine and histone 3) and used the minimal structural distance to assign the closest match to each transcript. Selecting equal-size groups (lowest and highest CMfinder scores), we measured CROSSalign performances on CMfinder rankings, achieving an AUC of 0.80 (Supplementary Methods; Supplementary Figure 5A). We note that CROSSalign has particularly strong performances on the largest dataset: cobalamin (71 sequences of 216nt; AUC of 0.95; Supplementary Figure 5B).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Ribosomal RNAs are considered one of the most ancient, structured and conserved classes of RNA molecules [5]. The first step to validate CROSSalign was to search for structural similarities between the Small SubUnit (SSU) of the rRNA of different bacteria (Pseudomonas aeruginosa, Escherichia coli, Bacillus subtilis, Deinococcus radiodurans). All the rRNAs show significant structural similarity (p-value <10 -5 ) with a low structural distance (~0.08; Table 1A ). By contrast, shuffling one of the two sequences in CROSSalign predictions results in non-significant scoring (p-values of 0.10 or higher; Table 1A ), indicating the importance of the sequence context in our calculations.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 454,
+                    "end": 462,
+                    "text": "Table 1A",
+                    "ref_id": null
+                },
+                {
+                    "start": 604,
+                    "end": 612,
+                    "text": "Table 1A",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "Pseudomonas aeruginosa and Escherichia coli are the most similar SSUs (structural distance of 0.06; p-value <10 -5 ). As the SSU of the rRNAs is thought to have evolved in a self-contained structure where the secondary structure of the ancient species is author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint 5 contained in the other ones [6], we searched the complete SSU of Escherichia coli in the SSU of other species such as Pyrococcus furiosus, Saccharomyces cerevisiae and Homo sapiens. The results show a strong and significant structural similarity, in agreement with the theory of self-contained evolution (Table 1B) . By contrast, comparison with randomized E. coli SSU or H. sapiens mRNA of the same length results in non-significant scores (p-values of 0.10 or higher Table 1B) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 437,
+                    "end": 447,
+                    "text": "(Table 1B)",
+                    "ref_id": null
+                },
+                {
+                    "start": 602,
+                    "end": 611,
+                    "text": "Table 1B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "XIST is a lncRNA characterized by several repetitive domains showing different structural properties (Figures 2A and 2B) [16]. The 5' conserved region, named Arepeat (or RepA), is indispensable for gene-silencing and has been shown to be highly conserved in mammals. In mouse it consists of 7.5 copies (8.5 in humans) of 26-mers separated by U-rich linkers (Figure 2A) [17]. In 2015 and 2017, two reports on the XIST A-repeat structure were published [18,19], both making use of experimental techniques to infer XIST structure . The A-repeat structures obtained are similar with strikingly identical stem-loop structures, both emerging from larger RNA bulges of repeats 3, 5, and 6 (for a comparison with CROSS predictions, see our previous manuscript [10]). To evaluate the ability of CROSSalign to recognize the structural content in RepA, we used RNAinverse from Vienna suite [12] to generate 50 different sequences (average identity of 40%; Supplementary Table 1) with the same structure as RepA (Materials and Methods; Reverse engineering: from structure to sequence). The sequences were then divided into a reference (25 transcripts) and a positive (25 transcripts) set, and we built a list of negative cases by shuffling 25 times the original RepA. We then used",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 101,
+                    "end": 120,
+                    "text": "(Figures 2A and 2B)",
+                    "ref_id": null
+                },
+                {
+                    "start": 357,
+                    "end": 368,
+                    "text": "(Figure 2A)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "CROSSalign to compute all scores for the positive and negative set against the corresponding reference set and used the minimal structural distance to assign the closest match to each transcript. The strong performances obtained highlight the ability of CROSSalign to identify structural similarities regardless of the sequence similarity (AUC of 0.85; Figure 2C ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 353,
+                    "end": 362,
+                    "text": "Figure 2C",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "As a further test of the usefulness of CROSSalign we compared the above results with those obtained using CMsearch from the Infernal-1.1.2 package, an algorithm based on author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint 6 a covariance model approach [20]. In this case, CMsearch is not able to identify any match between either the positive or negative list and the reference sets (AUC of 0.5;",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "CROSSalign is able to recognize structural similarities between non-similar sequences, outperforming covariance-based approaches such as CMsearch.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "After this first validation step, we used CROSSalign to study structural similarities of XIST domain RepA in 10 different species [21]. Our analysis reveals that primates cluster close to human (Supplementary Figure 6A) while other species are more distant (Supplementary Figures 6A and 7) . By contrast, calculating sequence similarity with respect to human XIST (computed with EMBOSS; see Materials and Methods), we could not identify a specific cluster for primates (Supplementary Figure   6B ). Thus, our results indicate that secondary structure shows a higher degree of conservation than sequence.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 194,
+                    "end": 219,
+                    "text": "(Supplementary Figure 6A)",
+                    "ref_id": null
+                },
+                {
+                    "start": 257,
+                    "end": 289,
+                    "text": "(Supplementary Figures 6A and 7)",
+                    "ref_id": null
+                },
+                {
+                    "start": 484,
+                    "end": 495,
+                    "text": "Figure   6B",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "We then selected RepA of orangutan and searched for structural similarities within all human intergenic lncRNAs (lincRNAs 8176 sequences; ENSEMBLE 82). XIST was ranked as the best significant match in the pool (structural distance 0.01; p-value < 10 -6 ) and RepA was correctly identified (predicted coordinates: 328-764; 95% overlap with the query region; Figure 3A ; Supplementary Table 2) . Similar results were observed for baboon RepA (best result: 0.032; 86% overlap with the query region) and lemur RepA (best result: 0.075; p-value; 97% overlap with the query region), suggesting a strong structural conservation within primates ( Figure 3B ). By contrast, human and mouse RepA showed a larger distance in terms of both structural and sequence similarity, which is in agreement with previous studies on lncRNA conservation [22].",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 357,
+                    "end": 366,
+                    "text": "Figure 3A",
+                    "ref_id": null
+                },
+                {
+                    "start": 383,
+                    "end": 391,
+                    "text": "Table 2)",
+                    "ref_id": null
+                },
+                {
+                    "start": 639,
+                    "end": 648,
+                    "text": "Figure 3B",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "We used CROSSalign to search for the human RepA within all mouse lncRNAs and identified XIST as the 5 th best hit (structural distance 0.085; p-value < 10 -6 ; Figure 4A ).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 160,
+                    "end": 169,
+                    "text": "Figure 4A",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "In this case, the position of RepA was not correctly assigned (coordinates: 10306-10698; 0% overlap) but the best match falls into the regulatory region of exon 7, and the structural relation between RepA and exon 7 has been reported [23]. Importantly, the correct coordinates of human RepA within mouse XIST rank second in our analysis (structural distance 0.086; p-value < 10 -6 ), while the best match is a miRNA-containing the gene Mirg (ENSMUSG00000097391) and the two secondary structure profiles author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint 7 show a strong correlation of 0.92 ( Figure 4B) . Interestingly, even if little information is available on Mirg, the transcript is prevalently expressed in the embryo [24]. This result unveils a previously unreported relationship between XIST and Mirg, in which structural and functional homologies can be linked. Intriguingly, also the second best result, Rian (ENSMUSG00000097451), is expressed in embryo, while no information is available on the third and fourth hits (ENSMUSG00000107391 and ENSMUSG00000085312).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 169,
+                    "end": 179,
+                    "text": "Figure 4B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "We note that the five matches here are not listed in the top 20 hits obtained by analysis of sequence similarity (<34%).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Our results suggest that the secondary structure of RepA is conserved among primates, and diverges between human and mouse. However, analyzing the information contained in structured nucleotides (i.e., nucleotides with CROSS score < 0 are set to 0) we could identify XIST as the best match of human RepA within all mouse lncRNAs (structural distance 0.034; p-value < 10 -6 ; Figure 4C ). This result indicates that double-stranded regions are more conserved than single-stranded regions. In addition, we note that by sequence identity, XIST ranks as the 14 th hit of human RepA in all mouse lncRNAs, which indicates that methods based on sequence comparison show a significantly lower ability to identify structural homologues.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 375,
+                    "end": 384,
+                    "text": "Figure 4C",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "HOTAIR shows a complex secondary structure, divided into four domains (D1, 2, 3, 4; Figures 5A and 5B) [25]. Experimentally it has been determined that more than 50% of the nucleotides are involved in base pairing (CROSS achieves an AUC > 0.80 in predicting its SHAPE profile; Supplementary Figures 8A and 8B) [26]. The region D2 is highly structured and consists of 15 helices, 11 terminal loops, and 4 junctions (three 5-way junctions and one 3-way junction) [26].",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 277,
+                    "end": 309,
+                    "text": "Supplementary Figures 8A and 8B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        },
+        {
+            "text": "The D2 domain of HOTAIR is predicted by CROSS to be the most structured ( Figure   5B ). We used the same reverse engineering process as for RepA to generate 50 different sequences (average identity of 40%; Supplementary Table 1) with the same secondary structure as D2 (Materials and Methods; Reverse engineering: from structure to sequence). Also in this case, CROSSalign reports good performances (AUC of 0.72; Figure 5C ) that are superior to those obtained using the covariance-author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 74,
+                    "end": 85,
+                    "text": "Figure   5B",
+                    "ref_id": null
+                },
+                {
+                    "start": 414,
+                    "end": 423,
+                    "text": "Figure 5C",
+                    "ref_id": null
+                }
+            ],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "managing profiles of different lengths without having to sacrifice computational time.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "We applied CROSSalign on lncRNAs of different species, compared it with covariation models, as well as on ssRNA viruses. CROSSalign is able to find structural homologues among millions of possible matches identifying structural domains with great accuracy.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "To test the performances and functionality of CROSS combined with DTW ( Supplementary Figures 1 and 2) , we selected a dataset of 22 structures for which crystallographic (exact base pairing between nucleotides) and Selective 2'-hydroxyl acylation analyzed by primer extension (SHAPE; chemical probing of flexible regions used to assess whether a nucleotide is in double-or single-stranded state) data are available [12] . Using DTW, we calculated the structural distances between all possible pairs in the dataset considering crystallographic (dots and parentheses were transformed into binary code) data as well as 1) SHAPE profiles ( [20] .",
+            "cite_spans": [
+                {
+                    "start": 416,
+                    "end": 420,
+                    "text": "[12]",
+                    "ref_id": null
+                },
+                {
+                    "start": 637,
+                    "end": 641,
+                    "text": "[20]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 72,
+                    "end": 102,
+                    "text": "Supplementary Figures 1 and 2)",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 635,
+                    "end": 636,
+                    "text": "(",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "We then selected the D2 domain of HOTAIR to measure its conservation in 10 species [21] using CROSSalign (Supplementary Figure 9A) . As for XIST, the structural distance analysis indicates that primates cluster close to human, and other species are more distant (Supplementary Figure 9B) . Orangutan D2 was then searched for within all human lncRNAs, and HOTAIR was identified as the best match (structural distance 0.032; p-value < 10 -6 ) with overlapping coordinates (nucleotides: 666-1191;",
+            "cite_spans": [
+                {
+                    "start": 83,
+                    "end": 87,
+                    "text": "[21]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 120,
+                    "end": 130,
+                    "text": "Figure 9A)",
+                    "ref_id": null
+                },
+                {
+                    "start": 262,
+                    "end": 287,
+                    "text": "(Supplementary Figure 9B)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "78% overlap with the query region; Figure 6A ). Searching for mouse D2 within all human lncRNAs, HOTAIR was found as the best (0.092; p-value < 10 -4 ) and matching position (nucleotides: 284-788; 57% overlap; Figure 6B ). These results suggest that D2 secondary structure is not only conserved in primates but also in mouse.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 35,
+                    "end": 44,
+                    "text": "Figure 6A",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 210,
+                    "end": 219,
+                    "text": "Figure 6B",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "To further investigate the secondary structure of HOTAIR, we studied the structural conservation of the D4 domain (Supplementary Figure 10) . As opposed to D2, D4 is predicted by CROSS to be poorly structured ( Figure 5B ). Searching for orangutan D4 within all human lncRNAs yields HOTAIR as the best match (structural distance 0.023; p-value < 10 -6 ) and the reported sequence position shows a sizeable overlap with the D4 domain in human HOTAIR (predicted coordinates: 1650-2291; overlap of 79%; Figure   7A ). By contrast, when searching for mouse D4 within all human lncRNAs, HOTAIR shows poor ranking (1849 th ; structural distance 0.104; p-value = 0.061), which indicates little structural homology between human and mouse ( Figure Table 3) to identify structurally similar domains. We found that coronavirus HKU and Simian-Human immunodeficiency SIV have the most significant matches with HIV (structural distance 0.078, p-value < 10 -6 for SIV; structural distance 0.093, p-value < 10 -4 for HKU). This finding is particularly relevant since SIV and HIV share many similarities in terms of pathogenicity and evolution [29] . Indeed, previous studies already reported a similarity in terms of secondary structure between HIV and SIV that is not explained by sequence similarity [30] .",
+            "cite_spans": [
+                {
+                    "start": 1128,
+                    "end": 1132,
+                    "text": "[29]",
+                    "ref_id": null
+                },
+                {
+                    "start": 1287,
+                    "end": 1291,
+                    "text": "[30]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 129,
+                    "end": 139,
+                    "text": "Figure 10)",
+                    "ref_id": "FIGREF2"
+                },
+                {
+                    "start": 211,
+                    "end": 220,
+                    "text": "Figure 5B",
+                    "ref_id": "FIGREF5"
+                },
+                {
+                    "start": 500,
+                    "end": 511,
+                    "text": "Figure   7A",
+                    "ref_id": "FIGREF7"
+                },
+                {
+                    "start": 733,
+                    "end": 739,
+                    "text": "Figure",
+                    "ref_id": null
+                },
+                {
+                    "start": 740,
+                    "end": 748,
+                    "text": "Table 3)",
+                    "ref_id": null
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "In addition, we found that the HIV 5' region is structurally similar to a strain of Ebola Figure 8A ). This result indicates that the secondary structure of this region is not only necessary for HIV encapsidation [32] , but is also essential for the activity of other viruses.",
+            "cite_spans": [
+                {
+                    "start": 213,
+                    "end": 217,
+                    "text": "[32]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 90,
+                    "end": 99,
+                    "text": "Figure 8A",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "We also compared structural distances and sequence similarities of all HIV strains (4804; see Materials and Methods). We found two clusters (brown and red; Figure   8B ) that are similar in terms of structure (~0.06 structural distance; p-value < 10 -6 ) and",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 156,
+                    "end": 167,
+                    "text": "Figure   8B",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "sequence (80%-95% sequence similarity). Other clusters (red and green; Figure 8B ) showed significant distance in structure (from 0.06 to 0.09 of structural distance; pvalue < 10 -6 ) that is not identifiable by sequence similarity (~85% sequence similarity).",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 71,
+                    "end": 80,
+                    "text": "Figure 8B",
+                    "ref_id": "FIGREF8"
+                }
+            ],
+            "section": "Results"
+        },
+        {
+            "text": "This result suggests that HIV could have evolved maintaining a similar sequence but different structures, as previously reported in literature [30] .",
+            "cite_spans": [
+                {
+                    "start": 143,
+                    "end": 147,
+                    "text": "[30]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Results"
+        },
+        {
+            "text": "We developed the CROSSalign method based on the combination of the CROSS algorithm to predict the RNA secondary structure at single-nucleotide resolution [10] and the Dynamic Time Warping (DTW) algorithm to align profiles of different lengths [11] . DTW has been previously applied in different fields, especially pattern recognition and data mining [34, 35] , but has never been used to investigate structural alignments of RNA molecules. Since CROSS has no sequence length restrictions and shows strong performances on both coding and non-coding RNAs [10] the combination with DTW allows very accurate comparisons of structural profiles.",
+            "cite_spans": [
+                {
+                    "start": 154,
+                    "end": 158,
+                    "text": "[10]",
+                    "ref_id": null
+                },
+                {
+                    "start": 243,
+                    "end": 247,
+                    "text": "[11]",
+                    "ref_id": null
+                },
+                {
+                    "start": 350,
+                    "end": 354,
+                    "text": "[34,",
+                    "ref_id": null
+                },
+                {
+                    "start": 355,
+                    "end": 358,
+                    "text": "35]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "Thermodynamic approaches, such as RNAstructure [14] or RNAfold [12] , cannot be directly used for such a task since they are restricted on the sequence length [36] .",
+            "cite_spans": [
+                {
+                    "start": 47,
+                    "end": 51,
+                    "text": "[14]",
+                    "ref_id": null
+                },
+                {
+                    "start": 63,
+                    "end": 67,
+                    "text": "[12]",
+                    "ref_id": null
+                },
+                {
+                    "start": 159,
+                    "end": 163,
+                    "text": "[36]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "We applied CROSSalign to investigate the structural conservation of lncRNAs in different species and the complete genomes of ssRNA viruses. We found that the algorithm is able to find structural homologues between thousands of matches and correctly identifies the regions of similarity between profiles of different lengths. The results of our analysis reveal a structural conservation between known lncRNA domains including XIST RepA (best hit out of 8176 cases; 95% overlap with the query region) and HOTAIR D2 (best hit out of 8176 cases; 78% overlap with the",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Discussion"
+        },
+        {
+            "text": "To study how sequence similarity is related to structural similarity we created different sequences with the same secondary structure as RepA (XIST) and D2 (HOTAIR) . To generate the reference structure we used RNAfold [41] . We then generated different sequences encoding for the same previously generated structure.",
+            "cite_spans": [
+                {
+                    "start": 156,
+                    "end": 164,
+                    "text": "(HOTAIR)",
+                    "ref_id": null
+                },
+                {
+                    "start": 219,
+                    "end": 223,
+                    "text": "[41]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Reverse engineering: from structure to sequence"
+        },
+        {
+            "text": "For this task we used the command line version RNAinverse from the Vienna suite [12] . The tool was launched using standard parameters to generate 50 sequences for each structure.",
+            "cite_spans": [
+                {
+                    "start": 80,
+                    "end": 84,
+                    "text": "[12]",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Reverse engineering: from structure to sequence"
+        },
+        {
+            "text": "The user should paste one or two RNA sequences in FASTA format into the dedicated form, providing an email address (optional) to receive a notification when the job is completed. The algorithm can be launched in 4 different modes, each of them being a specific variation of the DTW algorithm (Supplementary Figure 1) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 292,
+                    "end": 316,
+                    "text": "(Supplementary Figure 1)",
+                    "ref_id": "FIGREF2"
+                }
+            ],
+            "section": "Algorithm Description Input"
+        },
+        {
+            "text": "\u2022 The standard-DTW is recommended for comparing structures of RNAs with similar lengths (i.e., one sequence is less than 3 times longer than the other).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm Description Input"
+        },
+        {
+            "text": "\u2022 OBE-DTW (open begins and ends) is a specific mode to search for a shorter profile within a longer one. This is the recommended mode when comparing profiles of very different sizes (i.e., one sequence is more than 3 times longer than the other). Please keep in mind that the sequence in the form of RNA input 1 will be searched for within RNA input 2, so the sequence in RNA input 1 should be shorter than the other. as a .txt file. The same output is used for the dataset mode, but in this case the table can only be downloaded. author/funder. All rights reserved. No reuse allowed without permission.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm Description Input"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the . https://doi.org/10.1101/284869 doi: bioRxiv preprint Structural similarities of human RepA against all mouse lincRNAs using doublestranded nucleotides (nucleotide with CROSS score < 0 are set to 0). Human RepA is identified as the best match (colored in red), which highlights the importance of the structural content for the regulatory domains of the lncRNAs. (C) Secondary structure profile of human RepA, obtained as optimal path with OBE-DTW, compared with the best match in mouse lincRNAs (Mirg; ENSMUSG00000097391). The two secondary structure profiles show a strong a correlation (0.92). Percentage of sequence similarity Structural distance Percentage of sequence similarity Sequence CROSS score correlation=0.92 Percentage of sequence similarity ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Algorithm Description Input"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "orangutan D4 vs human lincRNAs human D4 vs mouse lincRNAs",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "Area Under the ROC Curve AUC of 0.76, Positive Predictive Value PPV of 0.76 when compared to crystallographic data) and 2) CROSS profiles (AUC 0.72, PPV 0.74 when compared to crystallographic data, see also http://service.tartaglialab.com/static_files/algorithms/cross/documentation.html#5). Structural distances between CROSS profiles show higher correlations to the distances between the respective profiles from crystallographic data (Pearson's based approach CMsearch (AUC of 0.70; Supplementary Figure 9; Materials and Methods; Comparisons with CMsearch)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "Figure 10).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Validation of the CROSSalign method. (A) Structural distances correlation between CROSS and crystallographic profiles computed on 22 structures (standard-DTW). (B) Correlation between structural distances computed with SHAPE and crystallographic data on the same data (standard-DTW). (C) Correlation between structural distances (crystallographic profiles) and sequence similarity. Clusters of similar structures and different sequences (sequence similarity < 40%) are highlighted in brown (structural score < 0.2), orange (structural score < 0.1) and (red structural score < 0.05). (D) Correlation between structural distances (CROSS) and sequence similarity. The clusters previously identified for crystallographic data are shown in the plot. (E) Correlation between structural distances (SHAPE) and sequence similarity. In this case the clusters previously identified are disrupted.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Predictions of XIST structure. (A) Secondary structure profile of murine XIST obtained using CROSS. Positive regions are to be considered double-stranded, negative regions single-stranded. (B) Cumulative distribution function (CDF) of the structural content of all the human lincRNAs predicted by CROSS. The structural contents of the Rep domains of XIST are reported on the curve. (C) ROC curve of CROSSalign to identify reverse engineered sequences with the same structure as RepA and a different sequence.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Structural conservation of XIST RepA within primates. (A) Structural distances of Orangutan RepA are computed against all human lincRNAs. The structural distance is calculated using OBE-DTW and plotted against sequence similarity.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Predictions of HOTAIR structure. (A) Secondary structure profile of the complete murine HOTAIR obtained using CROSS. Positive regions are to be considered double-stranded, negative regions single-stranded. (B) Cumulative distribution function (CDF) of the structural content of all the human lincRNAs predicted by CROSS. The structural contents of the D domains of HOTAIR are reported on the curve. (D) ROC curve of CROSSalign to identify reverse engineered sequences with the same structure as D2 and a different sequence.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Structural conservation of HOTAIR D2 in different species. (A) Structural similarities of orangutan D2 against all human lincRNAs. The structural distance was obtained using OBE-DTW and plotted against with the sequence similarity. The D2 of orangutan is identified as the best match (colored in red). (B) Structural similarities of human D2 against all mouse lincRNAs. Human D2 is identified as the best match (colored in red).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "Structural conservation of HOTAIR D4 in different species. (A) Structural similarities of Orangutan D4 against all human lincRNAs. The structural distance was obtained using OBE-DTW and plotted against sequence similarity. Orangutan D4 is identified as the best match (colored in red). (B) Structural similarities of human against all mouse lincRNAs. Human D4 is not identified as the best match (1849 th best hit; colored in red).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "Structural analysis of the HIV transcriptome. (A) Structural conservation ofA",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "funder. All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed)",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "vs human lincRNAs human D2 VS vs mouse lincRNAs",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF1": {
+            "text": "Table 1. Conservation of ribosomal structures. (A) Above the diagonal: structural distances and p-values of bacterial SSUs; below the diagonal: structural distances and pvalues upon shuffling one of the two bacterial sequences (Genbank/NCBI: J01859.1, NR_026078, NR_074411.1, bacillus and NR_102783.2). (B) Structural distance and pvalues of SSUs against E. coli (Genbank/NCBI: M10098.1, NR_074375.1 and",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF5": {
+            "text": "author/funder. All rights reserved. No reuse allowed without permission. The copyright holder for this preprint (which was not peer-reviewed) is the",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

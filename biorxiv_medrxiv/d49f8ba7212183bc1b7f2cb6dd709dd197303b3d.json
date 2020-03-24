@@ -1,0 +1,2245 @@
+{
+    "paper_id": "d49f8ba7212183bc1b7f2cb6dd709dd197303b3d",
+    "metadata": {
+        "title": "Spreading predictability in complex networks",
+        "authors": [
+            {
+                "first": "Na",
+                "middle": [],
+                "last": "Zhao",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Key Laboratory in Software Engineering of Yunnan Province",
+                    "institution": "Yunnan University",
+                    "location": {
+                        "settlement": "Kunming",
+                        "country": "People's Republic of China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Jian",
+                "middle": [],
+                "last": "Wang",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Yong",
+                "middle": [],
+                "last": "Yu",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "Key Laboratory in Software Engineering of Yunnan Province",
+                    "institution": "Yunnan University",
+                    "location": {
+                        "settlement": "Kunming",
+                        "country": "People's Republic of China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Jun-Yan",
+                "middle": [],
+                "last": "Zhao",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Beijing Special Vehicle Institute",
+                    "location": {
+                        "settlement": "Beijing",
+                        "country": "People's Republic of China"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Duan-Bing",
+                "middle": [],
+                "last": "Chen",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Electronic Science and Technology of China",
+                    "location": {
+                        "settlement": "Chengdu",
+                        "country": "People's Republic of China"
+                    }
+                },
+                "email": "dbchen@uestc.edu.cn"
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Spreading dynamics analysis is an important and interesting topic since it has many applications such as rumor or disease controlling, viral marketing and information recommending. Many state-of-the-art researches focus on predicting infection scale or threshold. Few researchers pay attention to the predicting of infection nodes from a snapshot. With developing of precision marketing, recommending and, controlling, how to predict infection nodes precisely from snapshot becomes a key issue in spreading dynamics analysis. In this paper, a probability based prediction model is presented so as to estimate the infection nodes from a snapshot of spreading. Experimental results on synthetic and real networks demonstrate that the model proposed could predict the infection nodes precisely in the sense of probability.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "Researchers have gotten many achievements on macro level of spreading such as 7 phase transition of spreading [26] and basic reproduction number [27]. Up to now, 8 many researches focus on estimating of infection scale. The simplest one is mean-field 9 model, in which, the spreading coverage can be predicted by using differential 10 equations [24]. Besides mean-field model, some more realistic models such as pair 11 approximation [25] and permutation entropy [28] are considered to predict the 12",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "infection scale or infectious disease outbreaks. The main difference between mean-field 13 and pair approximation is that the former(latter) approximates high-order moments in 14 term of first (second) order ones. In [28] , the researchers studied the predictability of a 15",
+            "cite_spans": [
+                {
+                    "start": 217,
+                    "end": 221,
+                    "text": "[28]",
+                    "ref_id": "BIBREF27"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Spreading dynamics is an important issue in spreading and controlling [1] [2] [3] of 2 rumor [4] [5] [6] [7] and disease [8] [9] [10] [11] , marketing [12] , recommending [13] [14] [15] , source 3 detecting [16, 17] , and many other interesting topics [18] [19] [20] [21] [22] . How to predict the 4 infection probability [23] , infected scale [24, 25] , and even the infected nodes precisely 5 has been gotten much attention in recent years. 6 diverse collection of outbreaks and identified a fundamental entropy barrier for disease 16 time series forecasting through adopting permutation entropy as a model independent 17 measure of predictability. Funk et al [29] presented a stochastic semi-mechanistic 18 model of infectious disease dynamics that was used in real time during the 2013-2016 19 West African Ebola epidemic to fit the simulated trajectories in the Ebola Forecasting 20 Challenge, and to produce forecasts that were compared to following data points. 21 Venkatramanan et al [30] proposed a data-driven agent-based model framework for 22 forecasting the 2014-2015 Ebola epidemic in Liberia, and subsequently used during 23 the Ebola forecasting challenge. The data-driven approach can be refined and adapted 24 for future epidemics, and share the lessons learned over the course of the challenge. 25 Zhang et al [31] proposed a measurement to state the efforts of users on Twitter to get 26 their information spreading. They found that small fraction of users with special 27 performance on participation can gain great influence, while most other users play a 28 role as middleware during the information propagation. 29 Up to now, most researches are focused on macro level of spreading prediction, but 30 few on micro level. However, the detailed infected individuals should be known so as 31 to contain the spread of serious infectious diseases such as SARS [32, 33] and 32 H7N7 [34, 35] . Besides aspect of macro level of spreading, we should pay attention to 33 some more details besides the general infection coverage so as to achieve fine 34 prediction. Chen et al. did some interesting works on this area [23] . They presented 35 an iterative algorithm to estimate the infection probability of the spreading process 36 and then apply it to mean-field approach to predict the spreading coverage. 37 Combing mean-field or pair approximation models with infection probability 38 estimating strategy [23] , the number of infected nodes from a given snapshot of the 39 propagation on network can be predicted, but can not determine which nodes will be 40 infected. In this paper, we present a probability based prediction model to estimate 41 the infection probability of a node, further, to determine the nodes being infected in 42 the future. 44 For a given snapshot, a susceptible node can be infected by a probability in the future. 45 Denoting by P u (t) the score of node u at time t, we have,",
+            "cite_spans": [
+                {
+                    "start": 70,
+                    "end": 73,
+                    "text": "[1]",
+                    "ref_id": "BIBREF0"
+                },
+                {
+                    "start": 74,
+                    "end": 77,
+                    "text": "[2]",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 78,
+                    "end": 81,
+                    "text": "[3]",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 93,
+                    "end": 96,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 97,
+                    "end": 100,
+                    "text": "[5]",
+                    "ref_id": null
+                },
+                {
+                    "start": 101,
+                    "end": 104,
+                    "text": "[6]",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 105,
+                    "end": 108,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 121,
+                    "end": 124,
+                    "text": "[8]",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 125,
+                    "end": 128,
+                    "text": "[9]",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 129,
+                    "end": 133,
+                    "text": "[10]",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 134,
+                    "end": 138,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 151,
+                    "end": 155,
+                    "text": "[12]",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 171,
+                    "end": 175,
+                    "text": "[13]",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 176,
+                    "end": 180,
+                    "text": "[14]",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 181,
+                    "end": 185,
+                    "text": "[15]",
+                    "ref_id": "BIBREF14"
+                },
+                {
+                    "start": 195,
+                    "end": 196,
+                    "text": "3",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 207,
+                    "end": 211,
+                    "text": "[16,",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 212,
+                    "end": 215,
+                    "text": "17]",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 252,
+                    "end": 256,
+                    "text": "[18]",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 257,
+                    "end": 261,
+                    "text": "[19]",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 262,
+                    "end": 266,
+                    "text": "[20]",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 267,
+                    "end": 271,
+                    "text": "[21]",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 272,
+                    "end": 276,
+                    "text": "[22]",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 322,
+                    "end": 326,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 344,
+                    "end": 348,
+                    "text": "[24,",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 349,
+                    "end": 352,
+                    "text": "25]",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 393,
+                    "end": 394,
+                    "text": "5",
+                    "ref_id": null
+                },
+                {
+                    "start": 443,
+                    "end": 444,
+                    "text": "6",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 534,
+                    "end": 536,
+                    "text": "16",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 621,
+                    "end": 623,
+                    "text": "17",
+                    "ref_id": "BIBREF16"
+                },
+                {
+                    "start": 662,
+                    "end": 666,
+                    "text": "[29]",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 707,
+                    "end": 709,
+                    "text": "18",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 795,
+                    "end": 797,
+                    "text": "19",
+                    "ref_id": "BIBREF18"
+                },
+                {
+                    "start": 885,
+                    "end": 887,
+                    "text": "20",
+                    "ref_id": "BIBREF19"
+                },
+                {
+                    "start": 969,
+                    "end": 971,
+                    "text": "21",
+                    "ref_id": "BIBREF20"
+                },
+                {
+                    "start": 992,
+                    "end": 996,
+                    "text": "[30]",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 1052,
+                    "end": 1054,
+                    "text": "22",
+                    "ref_id": "BIBREF21"
+                },
+                {
+                    "start": 1137,
+                    "end": 1139,
+                    "text": "23",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 1225,
+                    "end": 1227,
+                    "text": "24",
+                    "ref_id": "BIBREF23"
+                },
+                {
+                    "start": 1314,
+                    "end": 1316,
+                    "text": "25",
+                    "ref_id": "BIBREF24"
+                },
+                {
+                    "start": 1329,
+                    "end": 1333,
+                    "text": "[31]",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 1490,
+                    "end": 1492,
+                    "text": "27",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 1578,
+                    "end": 1580,
+                    "text": "28",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 1636,
+                    "end": 1638,
+                    "text": "29",
+                    "ref_id": "BIBREF28"
+                },
+                {
+                    "start": 1722,
+                    "end": 1724,
+                    "text": "30",
+                    "ref_id": "BIBREF29"
+                },
+                {
+                    "start": 1810,
+                    "end": 1812,
+                    "text": "31",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 1879,
+                    "end": 1883,
+                    "text": "[32,",
+                    "ref_id": "BIBREF31"
+                },
+                {
+                    "start": 1884,
+                    "end": 1887,
+                    "text": "33]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 1900,
+                    "end": 1904,
+                    "text": "[34,",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 1905,
+                    "end": 1908,
+                    "text": "35]",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 1982,
+                    "end": 1984,
+                    "text": "33",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 2064,
+                    "end": 2066,
+                    "text": "34",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 2131,
+                    "end": 2135,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 2153,
+                    "end": 2155,
+                    "text": "35",
+                    "ref_id": "BIBREF34"
+                },
+                {
+                    "start": 2242,
+                    "end": 2244,
+                    "text": "36",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 2321,
+                    "end": 2323,
+                    "text": "37",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 2399,
+                    "end": 2401,
+                    "text": "38",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 2422,
+                    "end": 2426,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 2487,
+                    "end": 2489,
+                    "text": "39",
+                    "ref_id": "BIBREF38"
+                },
+                {
+                    "start": 2661,
+                    "end": 2663,
+                    "text": "41",
+                    "ref_id": "BIBREF40"
+                },
+                {
+                    "start": 2751,
+                    "end": 2753,
+                    "text": "42",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 2766,
+                    "end": 2768,
+                    "text": "44",
+                    "ref_id": "BIBREF43"
+                },
+                {
+                    "start": 2858,
+                    "end": 2860,
+                    "text": "45",
+                    "ref_id": "BIBREF44"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where \u0393 u is the neighbors of node u and infected probability \u00b5 is estimated by IAIP 47 model (Iterative Algorithm for estimating the Infection Probability) [23] . Since an 48 infected node always attempts to infect its susceptible neighbor once time and a 49 recovered node doesn't infect any of its susceptible neighbor, so, in Eq. (1), for node v, 50 it is reasonable to assume that P v (t) = 1 for infected node and P v (t) = 0 for recovered 51 node. For susceptible node u, the probability to be infected at time t is P u (t).",
+            "cite_spans": [
+                {
+                    "start": 157,
+                    "end": 161,
+                    "text": "[23]",
+                    "ref_id": "BIBREF22"
+                },
+                {
+                    "start": 351,
+                    "end": 353,
+                    "text": "50",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Materials and methods"
+        },
+        {
+            "text": "Obviously, the initial condition is,",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "In Eq. (1), the score P u (t) for susceptible node u will be converged to a unique steady 54 state denoted by P u (t c ) , where t c is the convergence time. The final score P u = P u (t c ) 55 is the probability to be infected of susceptible node while spreading achieves steady 56 state. of average over 10000 simulations, we use predictability \u03c7 and Pearson correlation \u03c1 to 70 evaluate our model. These two metrics can be calculated by: ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "where Q l is the number of infected nodes of the l th simulation from snapshot.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "52"
+        },
+        {
+            "text": "To simulate the spreading process on networks, we employ the 78 Susceptible-Infected-Removed (SIR) model [36] . In a network, we randomly select one 79 node as the initial spreader. The information from this node will infect each of this 80 node's susceptible neighbors with probability \u00b5, namely the infection probability.",
+            "cite_spans": [
+                {
+                    "start": 105,
+                    "end": 109,
+                    "text": "[36]",
+                    "ref_id": "BIBREF35"
+                }
+            ],
+            "ref_spans": [],
+            "section": "77"
+        },
+        {
+            "text": "After infecting neighbors, the node will immediately become recovered (i.e., the 82 recovering probability is 1). The new infected nodes in next step will infect their 83 neighbors as the initial node. If it is not specially stated, we take the snapshot after 84 five steps of spreading from the initial node as the known information. 85 We test our method on synthetic and real networks. Synthetic networks are can de written as: ",
+            "cite_spans": [
+                {
+                    "start": 335,
+                    "end": 337,
+                    "text": "85",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "81"
+        },
+        {
+            "text": "i.e., B = 0, there are a few nodes with extremely large degree, the information can be 126 spread out easily so long as it reaches to a node with large degree. So, it is relatively 127 easy to predict which node will be infected in the future. As the B increases, the 128 network evolves to random, a node getting infected or not will be hard to predict 129 relatively, so the predictability and correlation decrease when B increases, as shown in 130 Fig. 3(a) . If rewiring probability p < 0.2, the information is hard to diffusion to other 131 nodes since the WS network is almost regular, so it is hard to predict the infected 132 nodes. When rewiring probability p > 0.2, the network has relatively strong random, 133 the information reaches to other nodes easily, consequently, it is easy to predict the 134 infected nodes, as shown in Fig. 3(b) . In GN network, if average internal degree \u27e8k in \u27e9 135 is larger, the community structure is clearer, correspondingly, the information is hard 136 to escape the community boundary, and the predictability and correlation will getting 137 worse, as shown in Fig. 3(c) .",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 451,
+                    "end": 460,
+                    "text": "Fig. 3(a)",
+                    "ref_id": null
+                },
+                {
+                    "start": 841,
+                    "end": 850,
+                    "text": "Fig. 3(b)",
+                    "ref_id": null
+                },
+                {
+                    "start": 1108,
+                    "end": 1117,
+                    "text": "Fig. 3(c)",
+                    "ref_id": null
+                }
+            ],
+            "section": "81"
+        },
+        {
+            "text": "Besides the network parameter listed above, the density of network, i.e., average 139 node degree \u27e8k\u27e9, also affects the predictability and correlation, as shown in Fig. 4 . The effect of stage of snapshot 146 We further analyze the predictability \u03c7 and correlation \u03c1 under different stage of 147 snapshot, as shown in Fig. 5 . In Fig. 5 , T is the spreading time of snapshot.",
+            "cite_spans": [
+                {
+                    "start": 205,
+                    "end": 208,
+                    "text": "146",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 164,
+                    "end": 170,
+                    "text": "Fig. 4",
+                    "ref_id": null
+                },
+                {
+                    "start": 318,
+                    "end": 324,
+                    "text": "Fig. 5",
+                    "ref_id": "FIGREF6"
+                },
+                {
+                    "start": 330,
+                    "end": 336,
+                    "text": "Fig. 5",
+                    "ref_id": "FIGREF6"
+                }
+            ],
+            "section": "138"
+        },
+        {
+            "text": "Generally, it is difficult to estimate the infected rate precisely if just the snapshot in snapshot, the information will be diffused easier, and so, it is more easy to predict the 162 infected nodes in the future, correspondingly, the predictability \u03c7 will getting better.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "148"
+        },
+        {
+            "text": "Besides synthetic networks, we also analyze the predictability \u03c7 and correlation \u03c1 164 on 11 real networks. The properties and analysis results on these real networks are 165 shown in Table 1 Up to now, most of researches mainly focus on the infection scale or threshold when 173 they study the spreading dynamics in complex networks. However, following questions 174 may be more important and interesting: Which nodes will be infected in the future presented a probability based prediction model to predict the infection nodes. Three 177 synthetic and eleven real networks are used to evaluate the proposed model.",
+            "cite_spans": [
+                {
+                    "start": 171,
+                    "end": 174,
+                    "text": "165",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 184,
+                    "end": 191,
+                    "text": "Table 1",
+                    "ref_id": "TABREF1"
+                }
+            ],
+            "section": "163"
+        },
+        {
+            "text": "Experimental results demonstrate that the model proposed could predict the infection 179 nodes precisely in the sense of probability. In this paper, we just discuss the prediction 180 model on static networks. The analyzing will get more difficult if the networks are 181 evolving [42] [43] [44] . Furthermore, we analyze the effect of structure of networks, but we 182 don't consider the moving or self-protecting of individuals while disease outbreaks.",
+            "cite_spans": [
+                {
+                    "start": 281,
+                    "end": 285,
+                    "text": "[42]",
+                    "ref_id": "BIBREF41"
+                },
+                {
+                    "start": 286,
+                    "end": 290,
+                    "text": "[43]",
+                    "ref_id": "BIBREF42"
+                },
+                {
+                    "start": 291,
+                    "end": 295,
+                    "text": "[44]",
+                    "ref_id": "BIBREF43"
+                }
+            ],
+            "ref_spans": [],
+            "section": "178"
+        },
+        {
+            "text": "Actually, as the diseases information makes individuals alert and take measures to 184 prevent the diseases, the effective protection is more striking in small community [45] . 185 We will study these more comprehensive cases deeply in the future. ",
+            "cite_spans": [
+                {
+                    "start": 170,
+                    "end": 174,
+                    "text": "[45]",
+                    "ref_id": "BIBREF44"
+                },
+                {
+                    "start": 177,
+                    "end": 180,
+                    "text": "185",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "183"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "Epidemic spreading with information-driven vaccination",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Ruan",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Phys. Rev. E",
+            "volume": "86",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Impact of human activity patterns on the dynamics of information diffusion",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Iribarren",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Moro",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Phys. Rev. Lett",
+            "volume": "103",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Impact of the distribution of recovery rates on disease spreading in complex networks",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Arruda",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Petri",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Rodrigues",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Moreno",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Phys. Rev. Research",
+            "volume": "2",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Rumor evolution in social networks",
+            "authors": [
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Guan",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Phys. Rev. E",
+            "volume": "87",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Rumor spreading in online social networks by considering the bipolar social reinforcement",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Ma",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Tian",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Physica A",
+            "volume": "447",
+            "issn": "",
+            "pages": "108--115",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Rumor detection over varying time windows",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kwon",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Cha",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Jung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "PLoS ONE",
+            "volume": "12",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Modeling human mobility responses to the large-scale spreading of infectious diseases",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Meloni",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Perra",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Arenas",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "G\u00f3mez",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Moreno",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "Sci. Rep",
+            "volume": "1",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Localization and spreading of diseases in complex networks",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Goltsev",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Dorogovtsev",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Oliveira",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jff",
+                    "middle": [],
+                    "last": "Mendes",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Phys. Rev. Lett",
+            "volume": "109",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Competing spreading processes on multiplex networks: Awareness and epidemics",
+            "authors": [
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Granell",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "G\u00f3mez",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Arenas",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Phys. Rev. E",
+            "volume": "90",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Evolution and emergence of infectious diseases in theoretical and real-world networks",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Leventhal",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Hill",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Nowak",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bonhoeffer",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Nat. Commu",
+            "volume": "8",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Viral marketing through e-mail: the link consumer-company",
+            "authors": [
+                {
+                    "first": "Miquel-Romero M-J",
+                    "middle": [],
+                    "last": "Adame-S\u00e1nchez",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Management Decision",
+            "volume": "51",
+            "issn": "",
+            "pages": "1970--1982",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Recommender systems",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "L\u00fc",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Medo",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Yeung",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y-C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z-K",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Phys. Rep",
+            "volume": "519",
+            "issn": "",
+            "pages": "1--49",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Avoiding congestion in recommender systems",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Ren",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "L\u00fc",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "New J. Phys",
+            "volume": "16",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Adaptive social recommendation in a multiple category landscape",
+            "authors": [
+                {
+                    "first": "D-B",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zeng",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Cimini",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y-C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Eur. Phys. J. B",
+            "volume": "86",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Locating the source of diffusion in large-scale networks",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Pinto",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Thiran",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Vetterli",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Phys. Rev. Lett",
+            "volume": "109",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Locating the source of diffusion in complex networks by time reversal backward spreading",
+            "authors": [
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Shen",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cao",
+                    "suffix": ""
+                },
+                {
+                    "first": "W-X",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Di",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Stanley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Phys. Rev. E",
+            "volume": "93",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Predicting the spread of marine species introduced by global shipping",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [],
+                    "last": "Seebens",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Schwartz",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Schupp",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Blasius",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "Proc. Natl. Acad. Sci. USA",
+            "volume": "113",
+            "issn": "20",
+            "pages": "108--115",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Empirical study on structural properties in temporal networks under different time scales",
+            "authors": [
+                {
+                    "first": "D-B",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "Eur. Phys. J. B",
+            "volume": "88",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "The small world yields the most effective information spreading",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "L\u00fc",
+                    "suffix": ""
+                },
+                {
+                    "first": "D-B",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Zhou",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "New J Phys",
+            "volume": "13",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Enhancing topology adaptation in information sharing social networks",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Cimini",
+                    "suffix": ""
+                },
+                {
+                    "first": "D-B",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Medo",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "L\u00fc",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y-C",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Phys. Rev. E",
+            "volume": "85",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "The spread of behavior in an online social network experiment",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Centola",
+                    "suffix": ""
+                }
+            ],
+            "year": 2010,
+            "venue": "Science",
+            "volume": "329",
+            "issn": "",
+            "pages": "1174--1197",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Predicting the evolution of spreading on complex networks",
+            "authors": [
+                {
+                    "first": "D-B",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "Xiao",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Zeng",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Sci. Rep",
+            "volume": "4",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF23": {
+            "ref_id": "b23",
+            "title": "Epidemic spreading in scale-free networks",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Pastor-Satorras",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vespignani",
+                    "suffix": ""
+                }
+            ],
+            "year": 2001,
+            "venue": "Phys. Rev. Lett",
+            "volume": "86",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Heterogeneous pair-approximation for the contact process on complex networks",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Mata",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Ferreira",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Ferreira",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "New J. Phys",
+            "volume": "16",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "Dynamic phase transitions in cell spreading",
+            "authors": [
+                {
+                    "first": "H-G",
+                    "middle": [],
+                    "last": "D\u00f6bereiner",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Dubin-Thaler",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Giannone",
+                    "suffix": ""
+                },
+                {
+                    "first": "H",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Xenias",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Psheetz",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Phys. Rev. Lett",
+            "volume": "93",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "Dengue disease, basic reproduction number and control",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Rodrigues",
+                    "suffix": ""
+                },
+                {
+                    "first": "Mtt",
+                    "middle": [],
+                    "last": "Monteiro",
+                    "suffix": ""
+                },
+                {
+                    "first": "Dfm",
+                    "middle": [],
+                    "last": "Torres",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Zinober",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Int. J. Comput. Math",
+            "volume": "89",
+            "issn": "",
+            "pages": "334--346",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "On the predictability of infectious disease outbreaks",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "V"
+                    ],
+                    "last": "Scarpino",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Petri",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "Nat. Commun",
+            "volume": "10",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Real-time forecasting of infectious disease dynamics with a stochastic semi-mechanistic model",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Funk",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Camacho",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Kucharski",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Eggo",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Edmunds",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemics",
+            "volume": "22",
+            "issn": "",
+            "pages": "56--61",
+            "other_ids": {}
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Using data-driven agent-based models for forecasting emerging infectious diseases",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Venkatramanana",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Lewis",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Higdon",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Vullikanti",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Marathe",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemics",
+            "volume": "22",
+            "issn": "",
+            "pages": "43--49",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Users' participation and social influence during information spreading on Twitter",
+            "authors": [
+                {
+                    "first": "X",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "D-D",
+                    "middle": [],
+                    "last": "Han",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "Z",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "PLoS One",
+            "volume": "12",
+            "issn": "9",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "A novel coronavirus associated with severe acute respiratory syndrome",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Ksiazek",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Erdman",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Goldsmith",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "N Engl J Med",
+            "volume": "348",
+            "issn": "",
+            "pages": "1953--1966",
+            "other_ids": {}
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Characterization of a novel coronavirus associated with severe acute respiratory syndrome",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Rota",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Oberste",
+                    "suffix": ""
+                },
+                {
+                    "first": "Stephan",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Monroe",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "Science",
+            "volume": "300",
+            "issn": "5624",
+            "pages": "1394--1399",
+            "other_ids": {}
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "Avian influenza A virus (H7N7) associated with human conjunctivitis and a fatal case of acute respiratory distress syndrome",
+            "authors": [
+                {
+                    "first": "Ram",
+                    "middle": [],
+                    "last": "Fouchier",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Schneeberger",
+                    "suffix": ""
+                },
+                {
+                    "first": "Frans",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Rozendaal",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Proc Natl Acad Sci U S A",
+            "volume": "101",
+            "issn": "5",
+            "pages": "1356--1361",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Transmission of H7N7 avian influenza A virus to human beings during a large outbreak in commercial poultry farms in the Netherlands",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Koopmans",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Wilbrink",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Conyn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Lancet",
+            "volume": "363",
+            "issn": "9409",
+            "pages": "582--583",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Infectious diseases of humans:dynamics and control",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Anderson",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "May",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Anderson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1992,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Collective dynamics of 'small-world' networks",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Watts",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Strogatz",
+                    "suffix": ""
+                }
+            ],
+            "year": 1998,
+            "venue": "Nature",
+            "volume": "393",
+            "issn": "",
+            "pages": "440--442",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Emergence of scaling in random networks",
+            "authors": [
+                {
+                    "first": "A-L",
+                    "middle": [],
+                    "last": "Barab\u00e1si",
+                    "suffix": ""
+                },
+                {
+                    "first": "Albert",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Science",
+            "volume": "286",
+            "issn": "",
+            "pages": "509--512",
+            "other_ids": {}
+        },
+        "BIBREF38": {
+            "ref_id": "b38",
+            "title": "Finding and evaluating community structure in networks",
+            "authors": [
+                {
+                    "first": "Mej",
+                    "middle": [],
+                    "last": "Newman",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Girvan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "Phys. Rev. E",
+            "volume": "69",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF39": {
+            "ref_id": "b39",
+            "title": "Statistical mechanics of complex networks",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Albert",
+                    "suffix": ""
+                },
+                {
+                    "first": "A-L",
+                    "middle": [],
+                    "last": "Barab\u00e1si",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Rev. Mod. Phys",
+            "volume": "74",
+            "issn": "",
+            "pages": "47--97",
+            "other_ids": {}
+        },
+        "BIBREF40": {
+            "ref_id": "b40",
+            "title": "Evolution of networks",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [
+                        "N"
+                    ],
+                    "last": "Dorogovtsev",
+                    "suffix": ""
+                },
+                {
+                    "first": "Jff",
+                    "middle": [],
+                    "last": "Mendes",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Adv. Phys",
+            "volume": "51",
+            "issn": "",
+            "pages": "1079--1187",
+            "other_ids": {}
+        },
+        "BIBREF41": {
+            "ref_id": "b41",
+            "title": "Temporal networks",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Holme",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Saram\u00e4ki",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Phys. Rep",
+            "volume": "519",
+            "issn": "",
+            "pages": "97--125",
+            "other_ids": {}
+        },
+        "BIBREF42": {
+            "ref_id": "b42",
+            "title": "Disease persistence on temporal contact networks accounting for heterogeneous infectious periods",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Darbon",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Colombi",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Valdano",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Savini",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Giovannini",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [],
+                    "last": "Colizza",
+                    "suffix": ""
+                }
+            ],
+            "year": 2019,
+            "venue": "R. Soc. Open Sci",
+            "volume": "6",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF43": {
+            "ref_id": "b43",
+            "title": "Analysis and control of epidemics in temporal networks with self-excitement and behavioral changes",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Zino",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rizzo",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Porfiri",
+                    "suffix": ""
+                }
+            ],
+            "year": 2020,
+            "venue": "Eur. J Control",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF44": {
+            "ref_id": "b44",
+            "title": "Community size effects on epidemic spreading in multiplex social networks",
+            "authors": [
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Liu",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Li",
+                    "suffix": ""
+                },
+                {
+                    "first": "Y",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "PLoS One",
+            "volume": "11",
+            "issn": "3",
+            "pages": "",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "is a toy network with 24 nodes. The snapshot includes 5 recovered nodes 58 and 1 infected node, as shown inFig. 1(a). A certain spreading simulation result, while other nodes have relatively low probability to be infected, as shown in 65Fig. 1(c) and (d). At the same time,Figs. 1(b)and (c) reflect the correlation between 66 a certain spreading simulation and average over 10000 simulations. In order to 67 describe how well a certain spreading simulation relative to average over 10000 68 simulations and result obtained by probability prediction model relative to the result 69",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "r is the vector of infected frequency of nodes on the l th 73 simulation and \u2212 \u2192 p e is the vector of infected probability of nodes obtained by 74 probability prediction model. The element \u2212 \u2192 p l r",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "Strogatz (WS) networks[37], Barab\u00e1si-Albert (BA) networks[38] and87    Given-Newman (GN) community networks[39]. Each synthetic network has 4000 88 nodes and each GN community network has 40 communities. We will discuss our89 model on three aspects: (1) the effect of infected probability \u00b5, (2) the effect of 90 structure of networks, and (3) the effect of stage of snapshot. 91 The effect of infected probability 92 Fig. 2 shows the predictability \u03c7 and correlation \u03c1 under different infected probability 93 \u00b5 on WS, BA and GN networks. Generally, the predictability and correlation get 94 larger with \u00b5 getting larger. For very large \u00b5, e.g., \u00b5 = 0.3, the predictability and 95 correlation approach to 1 since most of nodes will be infected. From Fig. 2, it can be 96 seen that there exists a transition point, in detail, the transition point at \u00b5 = 0.15 for 97 WS network and at \u00b5 = 0.1 for GN network. This can be explained as follows: the 98 Fig 1. (Color online)A toy network with 24 nodes. (a) The snapshot includes 5 recovered nodes, i.e., 1, 3, 6, 10, 17, and 1 infected node, i.e., node 18, (b) a certain spreading simulation result from snapshot, only node 19 is infected when spreading achieves steady state, (c) average result on 10000 simulations from snapshot, and (d) result of probability prediction model from snapshot. In (c) and (d), the shades of nodes indicate the probability to be infected when spreading achieves steady state. The predictability \u03c7 and correlation \u03c1 under different infected probability \u00b5 on (a) BA, (b) WS and (c) GN networks. The distribution of Pearson coefficient in (d) BA, (e) WS and (f) GN are shown. The network parameters are N = 4000, \u27e8k\u27e9 = 10, p = 0.1 for WS network, N = 4000, \u27e8k\u27e9 = 10 for BA network, and N = 4000, \u27e8k\u27e9 = 10, \u27e8k in \u27e9 = 7 for GN network. The error bar in (a-c) and the distribution of correlation \u03c1 in (d-f) are obtained by the results under 200 snapshots information almost do not diffusion if \u00b5 is small (\u00b5 < 0.15 for WS networks and 99 \u00b5 < 0.1 for GN network), and the infected nodes are highly random for different 100 simulations. It is noted that in BA network, it almost do not exist transition point. It 101 can be explained as follows: since the heterogenous of its topological structure, 102 regardless the location of initial infected node, the information will easily reach to the 103 node with large degree, eventually, reach to other nodes. Interestingly, if \u00b5 is very 104 small (e.g., \u00b5 = 0.02), the correlation is getting large in BA network, as shown in Fig. 105 2(a). Actually, for very small \u00b5, just only a few snapshots have infected nodes, the 106 results have no statistical significance. Besides, the distribution of correlation \u03c1 under 107 the results of 200 independent runs are listed in Figs. 2(d-f). From these three 108 subfigures, it can be seen that the distributions of correlation \u03c1 of BA and GN 109 networks are similar, while that of WS network are generally large comparing with BA 110 and GN networks.111 The effect of structure of networks 112 Fig. 3 shows the predictability and correlation for three types of networks with 113 different structural parameters. For WS network, we study the effect of the rewiring 114 parameter p on predictability and correlation. For BA network, we consider a variant 115 of it in which each new node u connects to the existing node v with probability 116 p u = (k u + B)/ \u2211 v (k v + B) [40, 41]. This modified model allows a selection of the 117 exponent of the power-law scaling in the degree distribution p(k) \u223c k \u2212\u03b3 with 118 \u03b3 = 3 + B/m in the thermodynamic limit where m is the number of nodes should be 119connected when a new node is added and B is tunable parameter. With this network, 120 we study the effect of B on predictability and correlation. For GN network, we study 121 the effect of \u27e8k in \u27e9 on predictability and correlation, where \u27e8k in \u27e9 is the average internal 122 degree of nodes in community. For a node u in community C, its internal degree k in u 123",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "The predictability \u03c7 and correlation \u03c1 for three types of networks with different structural parameters. In (a), B is a tunable parameter while generating network, (b) p is rewiring probability, and (c) \u27e8k in \u27e9 is average internal degree. The effect of average node degree \u27e8k\u27e9 on predictability \u03c7 and correlation \u03c1.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Fig. 4, it can be seen that the predictability and correlation are small for small141 average node degree \u27e8k\u27e9. Especially in WS and GN networks, for a large scope of 142 average node degree (\u27e8k\u27e9 < 12 in WS and \u27e8k\u27e9 < 8 in GN), the predictability and 143 correlation are extremely small, there exists an obvious transition points, as shown in 144 Fig. 4(a) and (c).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "The predictability \u03c7 and correlation \u03c1 under different stage of snapshot. Smaller T indicates earlier stage and larger T indicates latter stage.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "The correlation between the number of infected nodes N I and the predictability \u03c7.infected or recovered, the left nodes are hard to be infected in reality, so the 153 predictability \u03c7 and correlation \u03c1 are getting worse, especially in BA network since 154 most of all nodes are recovered. 155 Actually, if we analyze the number of infected nodes of snapshot in Figs. 2-5, we 156 can find an interesting phenomena, as shown in Fig. 6. There is an obviously positive 157 correlation between the number of infected nodes of snapshot and predictability \u03c7. At 158 the same time, it can be seen that the WS network has the strongest positive 159 correlation while BA network has the weakest positive correlation under same number 160 of infected nodes of snapshot. This might be universal, more infected nodes exist in 161",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "was partially supported by the National Natural Science Foundation of 188 China with Grant No 61673085, by the Science Strength Promotion Programme of 189 UESTC under Grant No. Y03111023901014006 and by the National Key Research and 190 Development Program of China under Grant No. 2018YFB2100100.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": ". FromTable 1, it can be seen that the results are rather good, especial for the case of large N I , this is consistent with the results inFig. 6. For networks Y2H and power, the predictability \u03c7 and correlation \u03c1 are extremely low 168 since N I is very small. Actually, in these cases, there are few infected nodes in 169 snapshot of spreading. Furthermore, the networks are very sparse, so, it is hard to 170 predict the nodes being infected from snapshot in the future.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "The properties and analysis results on 11 real networks. The infected probability \u00b5 = 0.15. and how to predict these nodes precisely? In this paper, we focused on this topic and",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

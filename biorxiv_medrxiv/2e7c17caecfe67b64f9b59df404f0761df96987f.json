@@ -1,0 +1,2087 @@
+{
+    "paper_id": "2e7c17caecfe67b64f9b59df404f0761df96987f",
+    "metadata": {
+        "title": "National and Regional Influenza-Like-Illness Forecasts for the USA",
+        "authors": [
+            {
+                "first": "Michal",
+                "middle": [],
+                "last": "Ben-Nun",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Predictive Science Inc",
+                    "location": {
+                        "settlement": "San Diego",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": "mbennun@predsci.com"
+            },
+            {
+                "first": "Pete",
+                "middle": [],
+                "last": "Riley",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Predictive Science Inc",
+                    "location": {
+                        "settlement": "San Diego",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "James",
+                "middle": [],
+                "last": "Turtle",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Predictive Science Inc",
+                    "location": {
+                        "settlement": "San Diego",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "David",
+                "middle": [
+                    "P"
+                ],
+                "last": "Bacon",
+                "suffix": "",
+                "affiliation": {},
+                "email": ""
+            },
+            {
+                "first": "Steven",
+                "middle": [],
+                "last": "Riley",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Predictive Science Inc",
+                    "location": {
+                        "settlement": "San Diego",
+                        "region": "CA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "Health planners use forecasts of key metrics associated with influenza-like-illness (ILI); near-term weekly incidence, week of season onset, week of peak, and intensity of peak. Here, we describe our participation in a weekly prospective ILI forecasting challenge for the United States for the 2016-17 season and subsequent evaluation of our performance. We implemented a metapopulation model framework with 32 model variants. Variants differed from each other in their assumptions about: the force-of-infection (FOI); use of uninformative priors; the use of discounted historical data for not-yet-observed time points; and the treatment of regions as either independent or coupled. Individual model variants were chosen subjectively as the basis for our weekly forecasts; however, a subset of coupled models were only available part way through the season. Most frequently, during the 2016-17 season, we chose; FOI variants with both school vacations and humidity terms; uninformative priors; the inclusion of discounted historical data for not-yet-observed time points; and coupled regions (when available). Our near-term weekly forecasts substantially over-estimated incidence early in the season when coupled models were not available. However, our forecast accuracy improved in absolute terms and relative to other teams once coupled solutions were available. In retrospective analysis, we found that the 2016-17 season was not typical: on average, coupled models performed better when fit without historically augmented data. Also, we tested a simple ensemble model for the 2016-17 season and found that it underperformed our subjective choice for all forecast targets. In this study, we were able to improve accuracy during a prospective forecasting exercise by coupling dynamics between regions. Although reduction of forecast subjectivity should be a long-term goal, some degree of human intervention is likely to improve forecast accuracy in the medium-term in parallel with the systematic consideration of more sophisticated ensemble approaches.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "It is estimated that there are between 3 and 5 million worldwide annual seasonal cases 1 of severe influenza illness, and between 290 000 and 650 000 respiratory deaths [1].",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "2 Influenza-like-illness (ILI) describes a set of symptoms and is a practical way for 3 health-care workers to easily estimate likely influenza cases. The Centers for Disease 4 Control (CDC) collects and disseminates ILI information, and has, for the last several 5 years, run a forecasting challenge (the CDC Flu Challenge) for modelers to predict 6 near-term weekly incidence, week of season onset, week of peak, and intensity of peak. 7 We have developed a modeling framework that accounts for a range of mechanisms 8 thought to be important for influenza transmission, such as climatic conditions, school 9 vacations, and coupling between different regions. In this study we describe our forecast 10 procedure for the 2016-17 season and highlight which features of our models resulted in 11 better or worse forecasts. Most notably, we found that when the dynamics of different 12 regions are coupled together, the forecast accuracy improves. We also found that the 13 most accurate forecasts required some level of forecaster interaction, that is, the 14 procedure could not be completely automated without a reduction in accuracy.",
+            "cite_spans": [
+                {
+                    "start": 438,
+                    "end": 439,
+                    "text": "7",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "PLOS 2/43 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint Infectious pathogens with short generation times pose public health challenges because 17 they generate substantial near-term uncertainty in the risk of disease. This uncertainty 18 is most acute and shared globally during the initial stages of emergence of novel human 19 pathogens such as SARS [2], pandemic influenza [3], or the Zika virus [4] . However, at 20 national and sub-national levels, uncertainty arises frequently for epidemic pathogens 21 such as seasonal influenza, dengue, RSV and rotavirus; causing problems both for 22 health planners and at-risk individuals who may consider changing their behavior to 23 mitigate their risk during peak periods. 24 Seasonal influenza affects populations in all global regions and is forecast annually in 25 temperate populations, either implicitly or explicitly [5]. Peak demand for both 26 outpatient and inpatient care is driven by peak incidence of influenza in many years [6]. 27 Therefore, the efficient provision of elective procedures and other non-seasonal health 28 care can be improved by accurate forecasts of seasonal influenza. Implicitly, most 29 temperate health systems use knowledge of historical scenarios with which to plan for 30 their influenza season. The current situation is then assessed against the deviation from 31",
+            "cite_spans": [
+                {
+                    "start": 562,
+                    "end": 565,
+                    "text": "[4]",
+                    "ref_id": "BIBREF3"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "the historical averages and worst-cases as observed in their own surveillance system.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The United States Centers for Disease Control (CDC) has sought to formalize regional 33 and national forecasts by introducing an annual competition [7] . Each week, 34 participating teams submit weekly estimates of incidence for the next four weeks, season 35 onset, and timing and intensity of the peak. Methods used by teams include purely 36 statistical models, [8-10] mechanistic models [11, 12] machine learning and hybrid 37 approaches [13-15]. Expert-opinion surveys have also been used and performed well.",
+            "cite_spans": [
+                {
+                    "start": 148,
+                    "end": 151,
+                    "text": "[7]",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "38 Some teams augment their forecasts of the official ILI data with the use of potentially 39 faster or less-noisy datasets such as google flu trends [16].",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "40 Here we describe a our mechanistic-model-supported participation in the 2016-17 CDC 41 influenza forecasting challenge, as an example of a disease forecasting process. We 42 emphasize a subjective human component of this process and also describe a 43 retrospective evaluation of the models for the previous six seasons. All the models 44 PLOS 3/43 . CC-BY 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint described are implemented in the R package Dynamics of Interacting Community 45 Epidemics (DICE, https://github.com/predsci/DICE). 46 Methods 47 Data 48 The CDC Influenza-like-illness Surveillance Network (ILINet) Human and Health 49 Services (HHS) region and national data were downloaded from the CDC-hosted web 50 application FluView [17] and used to create a historic database of ILI cases. Fig S1 51",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "shows which states are grouped into each HHS region, along with the population of each 52 region. Because we require an absolute number of cases per week, the CDC ILINet data 53 is converted from percent ILI cases per patient to ILI cases. We estimate the absolute 54 number of weekly ILI cases by dividing the weighted percent of ILI cases in the CDC 55 data by 100 and multiplying it by the total weekly number of patients. We assume two 56 outpatient visits per person per year so that the total weekly number of patients is 57 estimated as: (total regional population)x(2 outpatient visits per person per year)x(1 58 year/52 weeks). 59 The estimate of two outpatient visits per year is based on two studies. In 2006 60 Schappert and Burt [18] studied the National Ambulatory Medical Care Surveys 61 (NAMCS) and the National Hospital Ambulatory Medical Care Surveys (NHAMCS) 62 and calculated an ambulatory rate of 3.8 visits per capita-year. The 2011 NAMCS [19] 63 and NHAMCS surveys [20] estimated ambulatory visit rates of 3.32 visits per capita per 64",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "year for physician's offices, 0.43 for hospital emergency departments and 0.33 hospital 65 Outpatient Departments. We sum these rates to get an outpatient visit per capita-year 66 of 4.08. We further estimate from the surveys that only half of these outpatient clinics 67 are sites that report to ILINet, and hence we rounded to our two outpatient visits per 68 year estimate. 69 Specific humidity (SH) is measured in units of kg per kg and is defined as the ratio of 70 PLOS 4/43 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint water vapor mass to total moist air mass. Two other measurements of humidity are 71 absolute humidity and relative humidity. SH is included in DICE as a potential modifier 72 of transmissibility for this time period and uses Phase-2 of the North American Land 73 Data Assimilation System (NLDAS-2) data base provided by NASA [21-23]. The 74 NLDAS-2 data base provides hourly specific humidity (measured 2-meters above the 75 ground) for the continental US at a spatial grid of 0.125 \u2022 which we average to daily and 76 weekly values. The weekly data is then spatially-averaged for the states and CDC 77 regions. 78 School vacation schedules were collected for the 2014-15 and 2015-16 academic years for 79 every state. For each state, a school district was identified to represent each of the three 80 largest cities. Vacation schedules were then collected directly from the district websites. 81 These three school vacation schedules were first processed to a weekly schedule with a 82 value of 0 indicating class was in session all five weekdays and a 1 indicating five 83 vacation days. Next, the representative state schedule was produced by averaging the 84 three weekly district schedules. Region schedules are obtained by a population-weighted 85 average of the state schedules. Similarly, the national schedule is generated by a 86 population-weighted average of the regions. 87 For the 2016-17 season we determine start and end times as well as spring and fall 88 breaks from the previous years schedules. Thanksgiving and winter vacation timing was 89 taken from the calendar where the winter break is assumed to be the last two calendar 90 weeks of the year. Based on the proportion of schools closed and number of days closed, 91 p(t) is assigned a value in the range [0, 1]. For example in week t i , if all schools are 92 closed for the entire week then we define the proportion of open schools p(t i ) = 1. 93 However, if all schools have Monday and Tuesday off (missing 2 of 5 days), then 94 p(t i ) = 0.4. Similarly, if 3 of 10 schools have spring break (entire week off), but the 95 other 7 schools have a full week of class then p(t i ) = 0.3. If all schools have a full week 96 of class then p(t i ) = 0.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "Basic model 98 The DICE package has been designed to implement meta-population epidemic modeling 99 on an arbitrary spatial scale with or without coupling between the regions. Our model 100 for coupling between spatial regions follows ref [24] . We assume a system of coupled 101 S-I-R equations (susceptible-infectious-recovered) for each spatial region. In this 102 scenario, the rate at which a susceptible person in region j becomes infectious (that is 103 transitions to the I compartment in region j) depends on: (1) the risk of infection from 104 those in the same region j, (2) the risk of infection from infected people from region i 105 who traveled to region j, and (3) the risk of infection encountered when traveling from 106 region j to region i. To account for the three mechanisms of transmission, ref [24] 107 defined the force of infection, or the average rate that susceptible individuals in region i 108 become infected per time step as:",
+            "cite_spans": [
+                {
+                    "start": 12,
+                    "end": 14,
+                    "text": "98",
+                    "ref_id": null
+                },
+                {
+                    "start": 239,
+                    "end": 243,
+                    "text": "[24]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 276,
+                    "end": 279,
+                    "text": "101",
+                    "ref_id": null
+                },
+                {
+                    "start": 818,
+                    "end": 822,
+                    "text": "[24]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "where D is the total number of regions. In our case, unlike reference [24] , the 110 transmissibility is not the same for all regions and it is allowed to depend on time: \u03b2 j (t). 111",
+            "cite_spans": [
+                {
+                    "start": 70,
+                    "end": 74,
+                    "text": "[24]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Given this force of infection we can write the coupled S-I-R equations for each region as:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "in the mobility matrix is one and in the limit of no mobility between regions the mobility matrix m ij is the identity matrix so that \u03bb i (t) = \u03b2 i (t) Ii Ni and we recover the 118 familiar (uncoupled) S-I-R equations:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "The level of interaction between spatial regions is determined by the mobility matrix 120 and its interaction kernel, \u03ba(r ij ):",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "This kernel is expected to depend on the geographic distance between the regions (r ij ), 122",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "and following Mills and Riley [24] we use a variation of the off-set power function for it: 123 \u03ba(r ij ) = 1 1 + (r ij /s d ) \u03b3 (9) where s d is a saturation distance in km and the power \u03b3 determines the amount of 124 mixing between the regions: as \u03b3 decreases there is more mixing while as \u03b3 increases, 125 mixing is reduced. In the limit that \u03b3 \u2192 \u221e there is no mixing between regions and we 126 recover the uncoupled SIR Eqs. (5) (6) (7) . The DICE package is designed to allow the \u03bb j (t)S j (or \u03b2 j (t)",
+            "cite_spans": [
+                {
+                    "start": 30,
+                    "end": 34,
+                    "text": "[24]",
+                    "ref_id": "BIBREF26"
+                },
+                {
+                    "start": 128,
+                    "end": 131,
+                    "text": "(9)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 428,
+                    "end": 431,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 432,
+                    "end": 435,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 436,
+                    "end": 439,
+                    "text": "(7)",
+                    "ref_id": "BIBREF6"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Introduction"
+        },
+        {
+            "text": "Nj in the uncoupled case):",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Sj Ij"
+        },
+        {
+            "text": "scaling by percent clinical p C j , and adding a baseline B j . The term p C j is the proportion 133 of infectious individuals that present themselves to a clinic with ILI symptoms and B j 134 is a constant that estimates non-S-I-R or false-ILI cases. The integral runs over one 135 week determining the number of model cases for week t i . \u2206 t approximates the time 136 delay from when an individual becomes infectious to when they visit a sentinel provider 137",
+            "cite_spans": [
+                {
+                    "start": 279,
+                    "end": 282,
+                    "text": "135",
+                    "ref_id": null
+                },
+                {
+                    "start": 367,
+                    "end": 370,
+                    "text": "136",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Sj Ij"
+        },
+        {
+            "text": "for ILI symptoms and is set to 0.5 weeks based on prior calibration [25, 26] . Eq. 10 138 describes how DICE relates its internal, continuous S-I-R model to the discrete ILI data. 139",
+            "cite_spans": [
+                {
+                    "start": 68,
+                    "end": 72,
+                    "text": "[25,",
+                    "ref_id": "BIBREF27"
+                },
+                {
+                    "start": 73,
+                    "end": 76,
+                    "text": "26]",
+                    "ref_id": "BIBREF28"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Sj Ij"
+        },
+        {
+            "text": "In the next section we describe the procedure used for fitting this property (by 140 optimizing the parameters: \u03b2 j , s d , \u03b3 , B j , and P C j ) to an ILI profile.",
+            "cite_spans": [
+                {
+                    "start": 81,
+                    "end": 84,
+                    "text": "140",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "Sj Ij"
+        },
+        {
+            "text": "To allow for different models for the force of infection/contact rate, we write this term 142",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "141"
+        },
+        {
+            "text": "in the most general way as a product of a basic force of infection, R 0 j , multiplied by 143 three time dependent terms:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "141"
+        },
+        {
+            "text": "The first time dependent term, F 1 (t), allows for a dependence of the transmission rate 145 on specific-humidity, the second (F 2 (t)) on the school vacation schedule, and the third 146 (F 3 (t)) allows the user to model an arbitrary behavior modification that can drive the 147 transmission rate up or down for a limited period of time. For the purpose of the CDC 148 challenge we only considered models involving either F 1 (t), F 2 (t), both, or none (i.e., 149 the contact rate does not depend on time), and the functional form of these terms is 150 discussed in sections S1 Text and S2 Text of the Supporting Information. curve was also fitted directly (without any regional information) using all the models 164 and priors, but these direct results were only used at the end of the season when 165 estimating the performance of each of our procedures. 166 In the coupled scenario, the MCMC procedure uses Eqs. (2) (3) (4) along with Eq. (10) to 167 simultaneously generate candidate profiles for the coupled ten HHS regions. The 168 log-likelihood of the ten regional profiles is calculated and combined with the proper 169 relative weights to generate a national log-likelihood which is minimized. It is important 170 to note that in the coupled scenario we only optimize the national log-likelihood, and 171 not the individual region-level likelihoods, but the parameters we optimize are still 172 mostly region specific (only s d and \u03b3 are not). We also tried fitting the coupled model 173 to the regional log-likelihoods, however the results of the fits were not as accurate as the 174 ones obtained when the national likelihood is optimized (see Discussion). In the previous section we described a traditional MCMC procedure which uses a log 191 uniform distribution for the parameters, which we term an uninformative prior (UP).",
+            "cite_spans": [
+                {
+                    "start": 462,
+                    "end": 465,
+                    "text": "149",
+                    "ref_id": null
+                },
+                {
+                    "start": 715,
+                    "end": 718,
+                    "text": "164",
+                    "ref_id": null
+                },
+                {
+                    "start": 801,
+                    "end": 804,
+                    "text": "165",
+                    "ref_id": null
+                },
+                {
+                    "start": 859,
+                    "end": 862,
+                    "text": "166",
+                    "ref_id": null
+                },
+                {
+                    "start": 917,
+                    "end": 920,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 921,
+                    "end": 924,
+                    "text": "(3)",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 925,
+                    "end": 928,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 952,
+                    "end": 955,
+                    "text": "167",
+                    "ref_id": null
+                },
+                {
+                    "start": 1036,
+                    "end": 1039,
+                    "text": "168",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "141"
+        },
+        {
+            "text": "Early in the flu season, before the ILI curve takes off, this fitting can result in peak 193 intensities that are significantly larger/lower than expected (based on historic values) 194 and/or peak weeks that are inconsistent with past values. One way to constrain the 195 predictions, which has been used by others [28, 29] , is to use an informed prior (IP).",
+            "cite_spans": [
+                {
+                    "start": 182,
+                    "end": 185,
+                    "text": "194",
+                    "ref_id": null
+                },
+                {
+                    "start": 316,
+                    "end": 320,
+                    "text": "[28,",
+                    "ref_id": "BIBREF30"
+                },
+                {
+                    "start": 321,
+                    "end": 324,
+                    "text": "29]",
+                    "ref_id": "BIBREF31"
+                }
+            ],
+            "ref_spans": [],
+            "section": "192"
+        },
+        {
+            "text": "To generate informative priors, we used each of the models supported by DICE to fit all 197 previous seasons (starting from 2004) at both the national and regional levels. we also use a heated informed prior, where the Gaussian temperature is increased by an 218 order of magnitude (which is equivalent to increasing the variance by a factor of ten). In 219",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "196"
+        },
+        {
+            "text": "the Results section we refer to the fitting procedures that use a prior as IP and HIP for 220 informed prior and heated informed prior, respectively. Informed priors were used only 221 with the uncoupled SIR Eqs. In a future study we plan to explore how they would 222 extend to the coupled MCMC procedure.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "196"
+        },
+        {
+            "text": "Using discounted historical data for not-yet-seen future time points 224 In addition to informative priors, we also used data augmentation to make maximum 225 use of prior data within a mechanistic framework. For each week during the challenge, 226 our data augmentation was a form of extrapolation in which future unobserved time 227 points were assumed to take either a historical average or values equal to those in the 228 most similar prior season. However, these historically augmented time points were not 229 counted within the likelihood with the same weight as actual observations. The",
+            "cite_spans": [
+                {
+                    "start": 69,
+                    "end": 72,
+                    "text": "224",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "223"
+        },
+        {
+            "text": "weighting was equal to the value of the Pearson correlation between the observed data 231 in the current year and the historical data for the same period from the year used for 232 augmentation. We shifted from the historic data to the most similar data at epidemic 233 week 6 (EW06) when we subjectively determined that the current season is very 234 different from the historic average. The augmented data was also y-shifted so that it used for both the coupled and uncoupled fits and also using a heated augmented 237 procedure (where the log-likelihood is again heated by a factor of ten During each of the CDC weeks DICE was used to fit both the regional and the national 242 most recent incidence data using the combinations of coupling, priors and models ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "230"
+        },
+        {
+            "text": "This total of 32 model-runs were used to make forecasts of incidence at both the 252 national and regional levels. For each region, we simulate three MCMC chains each with 253 10 7 steps and a burn time of 2 \u00d7 10 6 steps. The smallest effective sample size that we 254 report for any parameter was greater than 100. After sampling from the individual 255 posterior densities of each region, we calculated our national forecast as the weighted 256 sum of the regional profiles with the weights given by the relative populations of the 257 regions. The national curve was also fitted directly (without any regional information) 258 using all the models and priors, but these direct results were only used at the end of the 259 season when estimating the performance of each of our procedures.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "251"
+        },
+        {
+            "text": "Early in the season we were experimenting with the coupled procedure and we began to 261 use it as described in the manuscript with the DA and HDA priors only on EW 50 and 262",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "260"
+        },
+        {
+            "text": "with the UP prior only on EW 9. Hence, some of the coupled results reported in this 263 section were not available in real-time and were generated at the end of the season (but 264 using only the %ILI data that was available in real-time at each forecast week.)",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "260"
+        },
+        {
+            "text": "Each week a single forecast was selected from these results for each of the ten HHS 266 regions and the national. At the regional level we selected a single forecast from one of 267 the (32) uncoupled or coupled procedures enumerated in the previous paragraph. We given a forecast with a set of probabilities for p, with p i being the probability for an 285 observed outcome p i , the logarithmic score is:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "260"
+        },
+        {
+            "text": "For onset and peak week the score is calculated using the probability assigned to the 287 correct bin plus those of the preceding and proceeding bins (the bin size is one epidemic 288",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "260"
+        },
+        {
+            "text": "week). For peak intensity and the 1 \u2212 4 week forward forecast, the score is calculated 289 using the probability assigned to the correct bin plus those of the five preceding and 290 proceeding bins (the bin size is 0.1%).",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "260"
+        },
+        {
+            "text": "Models selected for forecasts 293 We selected different FOI variants during different weeks. At the regional level, 294 although we selected the most flexible humidity and school vacation assumptions (HV) 295 more often (47.9% 134/280) than the alternatives (Fig 1) , we did select humidity-only 296 For assumptions about coupling, once the coupled procedure was available, it was often 322 selected for both the national profile and most regions (1, right panel), with the 323 exception of regions 1 and 8. We found that the coupled procedure used regions 8 (and 324 to a lesser extent 1) as a way to reduce the error to the national fit, at the cost of 325 producing poor fits to these regions, hence their coupled results were rarely selected for 326 submission. The aggregate option for the national selection was only selected at EWs 5 327 and 6, the weeks prior to the peak and the peak week itself. For these two weeks our ",
+            "cite_spans": [
+                {
+                    "start": 30,
+                    "end": 33,
+                    "text": "293",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 258,
+                    "end": 265,
+                    "text": "(Fig 1)",
+                    "ref_id": "FIGREF17"
+                }
+            ],
+            "section": "292"
+        },
+        {
+            "text": "Although our forecasts gave potentially useful information over and above the NULL 372 model for the timing of the peak week (Fig 3) and for the amplitude of peak intensity, 373 the peak week of EW06 was the same as the historical mean. Between EW50 (eight 374 weeks before the season peaks) and EW04 (two weeks before the season peak) our 375 forecast correctly predicted to within \u00b11 week of the observed peak week (EW06). One 376",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 125,
+                    "end": 132,
+                    "text": "(Fig 3)",
+                    "ref_id": "FIGREF19"
+                }
+            ],
+            "section": "371"
+        },
+        {
+            "text": "week before the season peaks, and at the peak week (EW05 and EW06), our model 377 forecast has an error of two weeks.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "371"
+        },
+        {
+            "text": ". CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint Forecasts based on the mechanistic model performed better than the historic NULL 379 model for the peak intensity (Fig 3 A /B/C/D). Two weeks before the peak week (and 380 three weeks early in the season) we started predicting the correct peak intensity of 5.1% 381 (to within \u00b10.5%). The mean and median historic values are significantly lower (4.4% 382 and 4.1% respectively) and outside the \u00b10.5% range. Our apparent forecast 383 performance for intensity appears to drop off at the end of the season. However, this is 384 an artifact of the forecasting work flow. Once the peak had clearly passed, the final 385 model was selected for reasons other than the peak intensity and the already-observed 386 peak intensity was submitted.",
+            "cite_spans": [
+                {
+                    "start": 638,
+                    "end": 641,
+                    "text": "383",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 323,
+                    "end": 331,
+                    "text": "(Fig 3 A",
+                    "ref_id": "FIGREF19"
+                }
+            ],
+            "section": "16/43"
+        },
+        {
+            "text": "Selected forecasts based on the mechanistic model did not accurately predict onset. are arranged based on their CDC score (averaged across all weeks, numbers on the right 428 y-axis) from best (top) to worse (bottom). Coupled models were more accurate than The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint average model.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "387"
+        },
+        {
+            "text": "For predicting ILI incidence for the 2016-17 season, which followed similar trend to the 439 historical average, coupled models that used data augmentation were more accurate 440 than coupled models that did not use data augmentation. However, on average for 441 historical seasons, coupled models that did not use augmented data were more accurate 442 than those that did. Also, on average for historical seasons, coupled models that 443 included humidity were more accurate than those that did not (see dark banding in 444 upper portion of charts on the right hand side of Fig 4) . The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint We were able to compare our performance over the course of the season to the 481 performance of the other teams using the public website that supports the challenge 482 (www.cdc.gov/flusight). Averaged across all weeks of forecast and all forecast targets, 483 we were ranked 13 out of 29 teams. For 1-, 2-, 3-and 4-weeks ahead forecasts we were 484 ranked 6, 11, 9 and 16 respectively; again, out of 29 teams. We were ranked 14 for the 485 timing of onset, 5 for the timing of the peak and 14 for intensity of the peak. Probing 486 beyond the overall rankings, our performance was similar to the other better-performing 487 teams in the challenge. Also, our performance improved substantially as measured by 488 both in absolute terms and relative to other teams across the season (Figs S6 and S7). 489",
+            "cite_spans": [
+                {
+                    "start": 990,
+                    "end": 993,
+                    "text": "483",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 575,
+                    "end": 581,
+                    "text": "Fig 4)",
+                    "ref_id": "FIGREF27"
+                }
+            ],
+            "section": "438"
+        },
+        {
+            "text": "In this study, we have described our participation in a prospective forecasting challenge. 491",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "490"
+        },
+        {
+            "text": "Although we drew on results from a large set of mechanistic models, our single forecast 492 for each metric was made after choosing between available model results for that metric 493 in that week and was therefore somewhat subjective. We performed poorly at the start 494 PLOS 20/43 . CC-BY 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint of the competition when our mechanistic models consistently over-estimated incidence. 495",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "490"
+        },
+        {
+            "text": "However, during the middle phase of the season, our models produced less biased 496 estimates and consistently outperformed non-mechanistic models based on the average 497 of historical data. A robust testing of model variants using historical data suggests that 498 spatially coupled models are systematically better than historical NULL models during 499 the middle of the season and are not significantly worse even at the start of the season. 500 We evaluated a simple ensemble and showed that the subjective model choice was 501 better. However, the ranking of individual models suggests that an ensemble of coupled 502 models may outperform our subjective choice. We are considering exactly this 503 experiment for the upcoming season.",
+            "cite_spans": [
+                {
+                    "start": 447,
+                    "end": 450,
+                    "text": "500",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "490"
+        },
+        {
+            "text": "This study is slightly different from some prior studies of influenza forecasting [30] in 505 that it describes and assesses a subjective choice between multiple mechanistic models 506 as the basis of a prospective forecast, rather than describing the performance of a single 507 model or single ensemble of models used for an entirely objective forecast. Although 508 this could be viewed as a limitation of our work, because individual subjective decisions 509 cannot be reproduced, we suggest that the explicit description of a partially subjective 510 process is a strength. In weather forecasting, there is a long history of evaluating the 511 accuracy of entirely objective forecasts versus partially subjective forecasts [31, 32] .",
+            "cite_spans": [
+                {
+                    "start": 82,
+                    "end": 86,
+                    "text": "[30]",
+                    "ref_id": "BIBREF32"
+                },
+                {
+                    "start": 728,
+                    "end": 732,
+                    "text": "[31,",
+                    "ref_id": "BIBREF33"
+                },
+                {
+                    "start": 733,
+                    "end": 736,
+                    "text": "32]",
+                    "ref_id": "BIBREF34"
+                }
+            ],
+            "ref_spans": [],
+            "section": "504"
+        },
+        {
+            "text": "Broadly, for each different forecast target and each forecast lead-time, there has been a 513 gradual progression over time such that objective forecasts become more accurate than 514 subjective forecasts. We note also that although we describe the subjective process as it 515 was conducted, we also provide a thorough retrospective assessment of the predictive 516 performance of each model variant. 517 We may refine our ensemble approach for future iterations of the competition. It seems 518 clear that the coupled models produce more accurate forecasts than the uncoupled 519 models for most targets, so we would consider an ensemble only of the coupled model 520 variants. We will also consider weighted ensembles of models and attempt to find 521 optimal weights by studying all prior years. Also, data were often updated after being 522 reported and we did not include an explicit reporting model in our inferential framework 523 (also sometimes referred to as a backfill model). Rather, we used knowledge of past The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint adjustments to data during our discussions and eventual subjective choice of models. 525 We aim to include a formal reporting model in future versions of our framework. when evaluated using the historical data. This prospective study supports recent 530 retrospective results suggesting that influenza forecasts can be more accurate if they 531 explicitly represent spatial structure [33, 34] . Given that the model structure we used to 532 represent space was relatively coarse [24] , further work is warranted to test how forecast 533 accuracy at finer spatial scales can be improved by models that include iteratively finer 534 spatial resolution.",
+            "cite_spans": [
+                {
+                    "start": 402,
+                    "end": 405,
+                    "text": "517",
+                    "ref_id": null
+                },
+                {
+                    "start": 1257,
+                    "end": 1260,
+                    "text": "525",
+                    "ref_id": null
+                },
+                {
+                    "start": 1556,
+                    "end": 1560,
+                    "text": "[33,",
+                    "ref_id": "BIBREF35"
+                },
+                {
+                    "start": 1561,
+                    "end": 1564,
+                    "text": "34]",
+                    "ref_id": "BIBREF36"
+                },
+                {
+                    "start": 1651,
+                    "end": 1655,
+                    "text": "[24]",
+                    "ref_id": "BIBREF26"
+                }
+            ],
+            "ref_spans": [],
+            "section": "512"
+        },
+        {
+            "text": "In submitting forecasts based on uninformed mechanistic priors using an uncoupled 536 model at the start of the season, we failed to learn lessons that have been present in the 537 influenza forecasting literature for some time [30] . Historical variance is low during the 538 start of the season and the growth pattern is not exponential. Therefore, it would be 539 reasonable to forecast early exponential growth only in the most exceptional of not-yet-seen time points, are likely to perform better. Also, forecasting competitions 543 may want to weight performance differentially across time, with greater weight given to 544 forecasts during periods where there is a higher variance in incidence.",
+            "cite_spans": [
+                {
+                    "start": 228,
+                    "end": 232,
+                    "text": "[30]",
+                    "ref_id": "BIBREF32"
+                }
+            ],
+            "ref_spans": [],
+            "section": "535"
+        },
+        {
+            "text": "Models that included humidity forcing performed better on average in our analysis of all 546 historical data than equivalent models that did not include those terms, especially for 547 the forecasting of ILI 1-to 4-weeks ahead [35] . However, we did not see similar support 548 for the inclusion of school vacation terms improving accuracy, which has been suggested 549 in a retrospective forecasting study at smaller spatial scales (by this group) [36] . The The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint actual epidemiological week so that it was consistent with our presentation of accuracy 555 of other forecast targets. However, it may be more appropriate in some circumstances to 556 present accuracy of targets associated with the peak relative to the eventual peak [11] . 557 We found the experience of participating in a prospective forecasting challenge to be 558 different to that of a retrospective modeling study. The feedback in model accuracy was 559 much faster and the need for statistically robust measures of model likelihood or q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q q EW44 and relate the local SH, q j (t), to the reproduction number as: The second term in Eq. 11 allows the transmission rate to depend on the weekly school 650 vacation schedule (p j (t)) and we implement is as:",
+            "cite_spans": [
+                {
+                    "start": 227,
+                    "end": 231,
+                    "text": "[35]",
+                    "ref_id": "BIBREF37"
+                },
+                {
+                    "start": 449,
+                    "end": 453,
+                    "text": "[36]",
+                    "ref_id": null
+                },
+                {
+                    "start": 876,
+                    "end": 880,
+                    "text": "[11]",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 883,
+                    "end": 886,
+                    "text": "557",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "545"
+        },
+        {
+            "text": "DICE fits the effect of school closure by optimizing the parameter \u03b1, which is in the ",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "545"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "WHO Seasonal Influenza; accessed October 9",
+            "authors": [],
+            "year": 2018,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "A cluster of cases of severe acute respiratory syndrome in Hong Kong",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "W"
+                    ],
+                    "last": "Tsang",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ho",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Ooi",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "K"
+                    ],
+                    "last": "Yee",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [],
+                    "last": "Wang",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Chan-Yeung",
+                    "suffix": ""
+                }
+            ],
+            "year": 2003,
+            "venue": "N Engl J Med",
+            "volume": "348",
+            "issn": "20",
+            "pages": "1977--1985",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "Swine influenza A (H1N1) infection in two children-Southern California",
+            "authors": [],
+            "year": 2009,
+            "venue": "Centers for Disease Control and Prevention CDC",
+            "volume": "58",
+            "issn": "15",
+            "pages": "400--402",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Zika Virus Outbreak, Bahia, Brazil. Emerg Infect Dis",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Campos",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Bandeira",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "I"
+                    ],
+                    "last": "Sardi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "",
+            "volume": "21",
+            "issn": "",
+            "pages": "1885--1886",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "Influenza Forecasting in Human Populations: a Scoping Review",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Chertien",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "George",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shaman",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Chitale",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Mf",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0094130"
+                ]
+            }
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "Coping with winter bed crises. New surveillance systems might help",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Hanratty",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Robinson",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "BMJ",
+            "volume": "319",
+            "issn": "7224",
+            "pages": "1511--1512",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Results from the second year of a collaborative effort to forecast influenza seasons in the United States",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Biggerstaff",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Johansson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Alper",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Brooks",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Chakraborty",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Farrow",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Epidemics",
+            "volume": "24",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.epidem.2018.02.003"
+                ]
+            }
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Nonmechanistic forecasts of seasonal influenza with iterative one-week-ahead distributions",
+            "authors": [
+                {
+                    "first": "L",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Brooks",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Farrow",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Hyun",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Tibshirani",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Rosenfeld",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLOS Computational Biology",
+            "volume": "14",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Infectious disease prediction with kernel conditional density estimation",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ray",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Krzysztof",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Lauer",
+                    "suffix": ""
+                },
+                {
+                    "first": "Marng",
+                    "middle": [],
+                    "last": "Johansson",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Statistics in Medicine",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "Prediction of infectious disease epidemics via weighted density ensembles",
+            "authors": [
+                {
+                    "first": "E",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ray",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Rn",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "PLOS Computational Biology",
+            "volume": "14",
+            "issn": "2",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "Forecasting seasonal influenza fusing digital indicators and a mechanistic disease model",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Perra",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Perrotta",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tizzoni",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Paolotti",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Proceedings of the 26th International Conference on World Wide Web",
+            "volume": "",
+            "issn": "",
+            "pages": "311--319",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Real-time numerical forecast of global epidemic spreading: case study of",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Tizzoni",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Bajardim",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Poletto",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Balcan",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [],
+                    "last": "Goncalves",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [],
+                    "last": "Perra",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "Dynamic Bayesian Influenza Forecasting in the United States with Hierarchical Discrepancy",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Osthus",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Gattiker",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Priedhorsky",
+                    "suffix": ""
+                },
+                {
+                    "first": "Syd",
+                    "middle": [],
+                    "last": "Valle",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Counteracting structural errors in ensemble forecast of influenza outbreaks",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pei",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nature Communications",
+            "volume": "8",
+            "issn": "1",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1038/s41467-017-01033-1"
+                ]
+            }
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Comparison of Filtering Methods for the Modeling and Retrospective Forecasting of Influenza Epidemics",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Karspeck",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLOS Computational Biology",
+            "volume": "10",
+            "issn": "4",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Reassessing Google Flu Trends data for detection of seasonal and pandemic influenza: a comparative epidemiological study at three geographic scales",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Olson",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Konty",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Paladini",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Viboud",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Simonsen",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Comput Biol",
+            "volume": "9",
+            "issn": "10",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "Ambulatory care visits to physician offices, hospital outpatient departments, and emergency departments: United States",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Schappert",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Burt",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "2001--2003",
+            "other_ids": {}
+        },
+        "BIBREF19": {
+            "ref_id": "b19",
+            "title": "Vital and Health Statistics Series 13, Data from the National Health Survey",
+            "authors": [],
+            "year": 2006,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "1--66",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "National Ambulatory Medical Care Survey",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Talwalkar",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Hing",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Palso",
+                    "suffix": ""
+                }
+            ],
+            "year": 2011,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF21": {
+            "ref_id": "b21",
+            "title": "National Hospital Ambulatory Medical Care Survey: 2011 Outpatient Department Summary Tables",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Talwalkar",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [],
+                    "last": "Hing",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Palso",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF22": {
+            "ref_id": "b22",
+            "title": "Land Data Assimilation Systems",
+            "authors": [],
+            "year": 2016,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF24": {
+            "ref_id": "b24",
+            "title": "Continental-scale water and energy flux analysis and validation for the North American Land Data Assimilation System project phase 2 (NLDAS-2): 1. Intercomparison and application of model products",
+            "authors": [],
+            "year": 2012,
+            "venue": "J Geophys Res-Atmos",
+            "volume": "117",
+            "issn": "D3",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF25": {
+            "ref_id": "b25",
+            "title": "The multi-institution North American Land Data Assimilation System (NLDAS): Utilizing multiple GCIP products and partners in a continental distributed hydrological modeling system",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Mitchell",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Lohmann",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Houser",
+                    "suffix": ""
+                },
+                {
+                    "first": "E",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Wood",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Schaake",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Robock",
+                    "suffix": ""
+                }
+            ],
+            "year": 2004,
+            "venue": "J Geophys Res-Atmos",
+            "volume": "109",
+            "issn": "D7",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF26": {
+            "ref_id": "b26",
+            "title": "The Spatial Resolution of Epidemic Peaks",
+            "authors": [
+                {
+                    "first": "H",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Mills",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "PLoS Comput Biol",
+            "volume": "10",
+            "issn": "4",
+            "pages": "1--9",
+            "other_ids": {}
+        },
+        "BIBREF27": {
+            "ref_id": "b27",
+            "title": "Early Characterization of the Severity and Transmissibility of Pandemic Influenza Using Clinical Episode Data from Multiple Populations",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ben-Nun",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Armenta",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Linker",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Eick",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Sanchez",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Comput Biol",
+            "volume": "9",
+            "issn": "5",
+            "pages": "1--15",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1003064"
+                ]
+            }
+        },
+        "BIBREF28": {
+            "ref_id": "b28",
+            "title": "Early Characterization of the Severity and Transmissibility of Pandemic Influenza Using Clinical Episode Data from Multiple Populations",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Riley",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Ben-Nun",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Linker",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Cost",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Sanchez",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "George",
+                    "suffix": ""
+                }
+            ],
+            "year": 2015,
+            "venue": "PLoS Comput Biol",
+            "volume": "11",
+            "issn": "9",
+            "pages": "1--15",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pcbi.1004392"
+                ]
+            }
+        },
+        "BIBREF29": {
+            "ref_id": "b29",
+            "title": "Markov Chain Monte Carlo in Practice. Chapman and Hall/CRC Interdisciplinary Statistics Series",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Gilks",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Richardson",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Spiegelhalter",
+                    "suffix": ""
+                }
+            ],
+            "year": 1996,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF30": {
+            "ref_id": "b30",
+            "title": "Retrospective forecasting of the 2010-2014 Melbourne influenza seasons using multiple surveillance systems",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Moss",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Zarebski",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Dawson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Mccaw",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Epidemiology and Infection",
+            "volume": "145",
+            "issn": "",
+            "pages": "156--169",
+            "other_ids": {
+                "DOI": [
+                    "10.1017/S0950268816002053"
+                ]
+            }
+        },
+        "BIBREF31": {
+            "ref_id": "b31",
+            "title": "Model Selection for Seasonal Influenza Forecasting",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "F"
+                    ],
+                    "last": "Zarebski",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [],
+                    "last": "Dawson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Mccaw",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Moss",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "Infectious Disease Modelling",
+            "volume": "2",
+            "issn": "",
+            "pages": "56--70",
+            "other_ids": {
+                "DOI": [
+                    "10.1016/j.idm.2016.12.004"
+                ]
+            }
+        },
+        "BIBREF32": {
+            "ref_id": "b32",
+            "title": "Influenza Forecasting in Human Populations: A Scoping Review",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Chretien",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Dylan",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shaman",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Chitale",
+                    "suffix": ""
+                },
+                {
+                    "first": "F",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Mckenzie",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "PLoS ONE",
+            "volume": "9",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1371/journal.pone.0094130"
+                ]
+            }
+        },
+        "BIBREF33": {
+            "ref_id": "b33",
+            "title": "A comparative evaluation of objective and subjective weather forecasts in the united states",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Murphy",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Brown",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "J Forecast",
+            "volume": "3",
+            "issn": "4",
+            "pages": "369--393",
+            "other_ids": {}
+        },
+        "BIBREF34": {
+            "ref_id": "b34",
+            "title": "Probability Forecasting in Meteorology",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Murphy",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Winkler",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "J Am Stat Assoc",
+            "volume": "79",
+            "issn": "387",
+            "pages": "489--500",
+            "other_ids": {}
+        },
+        "BIBREF35": {
+            "ref_id": "b35",
+            "title": "Forecasting the spatial transmission of influenza in the United States",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Pei",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Kandula",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shaman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Proc Natl Acad Sci U S A",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF36": {
+            "ref_id": "b36",
+            "title": "Forecasting Influenza Outbreaks in Boroughs and Neighborhoods of New York City",
+            "authors": [
+                {
+                    "first": "W",
+                    "middle": [],
+                    "last": "Yang",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Olson",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Shaman",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "PLoS Comput Biol",
+            "volume": "12",
+            "issn": "11",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF37": {
+            "ref_id": "b37",
+            "title": "Multiannual forecasting of seasonal influenza dynamics reveals climatic and evolutionary drivers",
+            "authors": [
+                {
+                    "first": "J",
+                    "middle": [
+                        "B"
+                    ],
+                    "last": "Axelsen",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Yaari",
+                    "suffix": ""
+                },
+                {
+                    "first": "B",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Grenfell",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Stone",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Proc Natl Acad Sci U S A",
+            "volume": "111",
+            "issn": "26",
+            "pages": "9538--9542",
+            "other_ids": {}
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "fitting procedure determines the joint posterior distribution for the model 153 parameters using a Metropolis-Hastings Markov Chain Monte Carlo (MCMC) 154 procedure. [27] We describe the procedure starting with the simpler uncoupled case. In 155 the uncoupled scenario infection can only happen within each HHS region, since there is 156 no interaction between different spatial regions. The uncoupled regions are run 157 sequentially and posterior distributions for the model parameters and forecasts are 158 obtained. For each region, we simulated three MCMC chains each with 10 7 steps and a 159 burn time of 2 \u00d7 10 6 steps. The smallest effective sample size that we report for any 160 parameter is greater than 100. After sampling from the individual posterior densities of 161 each region, we calculate our national forecast as the weighted sum of the regional 162 profiles with the weights given by the relative populations of the regions. The national 163",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "described in the previous subsections. The uncoupled procedure (and direct fitting of 244 the National %ILI profile) were used throughout the season with all five priors and with 245 the four models for the force of infection leading to: 5 \u00d7 4 = 20 forecasts. For the 246 coupled procedure we fitted with the following combinations of priors and data 247 augmentation: uninformed prior with no data augmentation, uninformed prior with 248 data augmentation and uninformed prior with heated data augmentation (UP, DA and 249 HDA, respectively), and with all four models for the force of infection, leading to: 250 3 \u00d7 4 = 12 forecasts.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "first reviewed the results for each region and made a selection which took into account: 269(1) the historic profile for the region, (2) the quality of the fit (both mean and width), 270(3) the extent of data adjustments in the past weeks, (4) the lab strain % positive data, 271 and when relevant (5) the impact of upcoming school vacations (particularly the winter 272 break). For the national level we selected either one of the 12 coupled results or the 273 aggregated result obtained as the weighted average of our ten regional selections (with 274 the weights given by the relative population of each region). The selection was made by 275 a single group member (and author here) and then reviewed and modified as needed by 276 three group members (also authors here). In most cases (> 90%) there was an 277 agreement on the initial selection. When there was a disagreement, or we were not sure 278 what is the best option, we discussed the selection. All the model results for all seven 279 seasons used here and subsequent seasons are displayed on our website at: 280 http://www.predsci.com/usa-flu-all. 281 When we evaluate the accuracy of the forecasts we use: (1) The mean absolute error 282 (MAE) of the forecasts (calculated using all 28 weeks of the challenge), (2) The MAE 283 relative to the MAE of a historic NULL model, and (3) The CDC logarithmic score: 284",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "H, 47/280 16.8%), school-vacations-only (V, 62/280 22.1%) and fixed transmissibility 297 (F, 37/280 13.2%) models on a number of occasions. For the national model, we only 298 used the aggregated forecast of the regional models on 9/28 (32.1%) occasions. (The 299 CDC challenge lasts 28 weeks and there are 10 HHS regions, hence the 28 and 280 in 300 the denominators.) Forecast model choices for force of infection, use of priors, 302 coupling, and data augmentation; for national and regional 303 estimates by week Left panel: the selected model for the force of 304 infection: H -specific humidity only, V -school vacation only, HV -both 305 specific humidity and school vacation and F -fixed value for the force of 306 infection. Middle panel: selected model for the prior distribution. UP -307 uninformed prior, IP -informed prior, HIP -heated informed prior, DA -308 data augmentation, and HDA -heated data augmentation. Right panel: 309 selected spatial coupling model: UC -uncoupled, C -coupled. For all three 310 panels, AG indicates that the national forecast is aggregated from the 311 regional choices (population-weighted average of the (un)coupled fits to each 312 of the ten HHS regions). 313 For assumptions about the inferential prior, before the epidemic peaked (EW 06 for the 314 nation) we rarely chose an uninformed prior (UP). Most often we chose the heated data 315 augmentation option (HDA). Early in the season (EWs 43-49), when our options did 316 not include the coupled procedure, we chose the informed prior (IP) or heated informed 317 prior (HIP) most often. Once the season had peaked the uninformed prior was selected 318 often both for the national profile and individual regions, we continued to select the 319 data augmentation (DA) and HDA options for the nation well after the season has 320 peaked (EWs 12-14, 16 and 18).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "errors for both season targets and 1 \u2212 4 week forecasts were large (see Fig 3 below). Comparison of submitted forecast and final CDC-reported 330 % of clinic visits that were for ILI for the continental USA and 331 three selected regions. 332 Final season CDC reported (black line), reported during the season (black 333 circles) and predicted %ILI (colored bands) as a function of epidemic week 334 at the national (A) and three of the ten regional levels (B to D). In each 335 panel, the four colored shaded bands denote our one (red), two (blue), three 336 (green) and four (light purple) week-ahead predictions made at each week 337 during the challenge. The width of the colored bands represent our 5-95% 338 prediction intervals as submitted for the forecast. The gray line denotes the 339 historic average, and the numbers in the legend show the error of the DICE 340 forecast relative to the error of the historic NULL model, averaged over all 341 28 weeks of the challenge. For similar plots for the other seven HHS regions 342 see Fig S2.consistently overestimated incidence. After EW01, our national predictions improve 350 significantly, while the historic curve no longer follows the 2016-17 national profile. 351 Similarly, for the three largest HHS regions, the historic curve is similar to the 2016-17 352 profile until EW01, at which point they start to deviate and our forecasts become more 353 accurate. 354 Averaged over the entire season, our selected national forecast does better than the 355 historic NULL model only for the 1-week prediction window (Fig 3). However, for the 356 largest HHS region (Region 4) we perform better for all four prediction time horizons, 357 for region 9 (bottom left panel) for the first three, and for region 5 (bottom right panel) 358 for the first two. Accuracy of submitted forecasts for timing of onset, 360 timing of peak and intensity of peak. Weekly mean absolute error for the n-week ahead forecast (1 week, green; 362 2 weeks, purple; 3 weeks, orange; and 4 weeks, blue) and the historic NULL 363 model (black). The average mean absolute error of each forecast horizon, 364 and of the historic prediction, is shown in the legend. Forecast and actual 365 onset week (B), peak week (C) and peak intensity (D) during each week of 366 the CDC challenge: selected forecast (red line); 95% prediction interval (red 367 shading); observed value (gray horizontal line); historic mean (horizontal 368 dashed line); and historic median (horizontal dotted line). The vertical gray 369 line shows the actual 2016-17 peak week (A, C and D) and the actual 370 2016-17 onset time (B).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Both the mean of onset (EW51) and median (EW50) historic values were within a week 389 of the observed 2016-17 onset week (EW 50). However, our model was unable to390    properly predict the onset until it happened. As with peak values, once onset had been 391 observed in the data, we used the observed value in our formal submission, which was 392 not reflected in onset values from the chosen model.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Weekly CDC score for the 1 to 4 week forward national 394 %ILI forecast. 395 Left column: 2016-17 season. Right column: averages over seven flu seasons, 396 2010-16. In the method/model labels (y-axis): D-direct, C-coupled, and 397 aggregate, H, V, HV and F denote the four models for the force of infection: 398 Humidity only, vacation only, both and fixed. The prior models are: uniform 399 prior (UP), informed prior (IP), heated informed prior (HIP), data 400 augmentation (DA), and heated data augmentation (HDA). The models are 401 ordered by their performance in the season (measured by the mean value of 402 the weekly CDC score) from best (top) to worse (bottom). The mean 403 seasonal score of each model is shown on the right y-axis. Selected (only 404 available for the 2016-17 season), is what we selected each week, the NULL 405 model is the historic average, and ensemble is the average of the 32 model 406 results. A black rectangle is used to highlight these three models. (For the 407 seven season average, right column, we only have the NULL which is the 4 weeks forward forecast they performed the same. 412 Similar models were correlated with each other in their forecasts of 1-to 4-week ahead 413 ILI, but with decreasing strength as forecasts were made for longer time horizons. Fig 414 S5 in the SI shows the Pearson correlation between the 32 models calculated for the 1-, 415 2-, 3-, and 4-week forward forecast using all 28 weeks of the challenge. The high 416 correlation shows how closely related to each other many of the models are. But this 417 Fig also shows that this correlation decreases when the forecast horizon increases and 418 that there is a spread in the predictions (manifested by negative values of the Pearson 419 correlation).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "the challenge was over, we examined retrospectively the performance of all 422 mechanistic model variants over the course of all seasons in the historical database and 423 separately for the 2016-17 season. To assess the quality of all the near-term forecasts 424 (1 \u2212 4 weeks) from the different models and assumptions about priors, we show in Fig 4 425 their weekly CDC score (see Methods), for the 4 different forecast lead times (1-, 2-, 3-426 and 4-weeks ahead), and for the prediction of the National %ILI intensity. The models 427",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "429 non-coupled models for the 2016-17 season and for historical seasons for all 4 lead times. 430 The model labeled 'ensemble' is the average of the 32 model variants. For the 1-, 2-, and 431 3-weeks ahead forecasts the subjectively selected model does substantially better than 432 the ensemble model and for the 4-weeks ahead forecast they score practically the same. 433The performance of mechanistic models was comparable to that of the historical average 434 NULL model at the beginning and end of the season. However, in the middle of the 435 season, when there is greater variation in the historical data, the performance of the 436 best mechanistic model variants was substantially better than that of the historical",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF9": {
+            "text": "We examined the performance of the different model variants for individual regions for 446 the near-term forecasting of %-ILI (Figs S3 and S4). Again, the coupled models with 447 uninformative prior outperformed other model variants. Although for some regions the 448 improvement in forecast score for the uninformative prior variants over other coupled 449 variants was less pronounced (Regions 1 and 7), these models never appeared to be 450 inferior to the other variants. 451 In a similar way, we examined the forecast accuracy of different mechanistic model 452 variants in forecasting season-level targets: onset, peak time and peak intensity for the 453 2016-17 season and on average across all seasons (Fig 5). Here too the models are 454 arranged based on their overall performance from best to worse (top to bottom). Again, 455 for all three targets during 2016-17, the coupled uninformative model variant was at 456 least as good as other coupled options and better than the non-coupled variants. For all 457 three season targets, the selected model performed better (and in the case of peak week 458 significantly better) than the ensemble model. We note that in the latter part of the 459 season, after the single observed onset and peak had passed, results from a single season 460 do not contain much information about model performance. However, the performance 461 of the coupled uninformative prior model was on average better than other model 462 variants across the historical data and different epidemic weeks for all three targets, 463other than one exception. From EW01 onwards for peak intensity, uncoupled heated 464 augmented prior variants performed better than did coupled uninformative prior model 465",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": ") and peak intensity (bottom). Left column: 2016-17 season, right 470 column: averaged over seven seasons, 2010-16. Models are arranged from 471 best to worse (top to bottom) and the mean season score for each model is 472 shown on the right y-axis. The ensemble model is the average of the 32 473 model variants. In the left column panels, the selected, ensemble and NULL 474 models are denoted with a black rectangle. The latter is also highlighted in 475 the right column. For the 2016-17 season, the coupled procedure with data 476 augmentation correctly predicts onset week and peak week from the start of 477 the CDC challenge. Peak intensity is predicted best with a coupled 478 uninformed prior. When averaged over seven seasons (right column) the 479 coupled uninformed prior does best for all three season targets.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF13": {
+            "text": "By reflecting on our choices and their performance, we can evaluate the importance of a 527 number of different model features. Our coupled model variants performed much better 528 than uncoupled variants consistently across the 2016-17 season, for different targets and 529",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "540circumstance, such as during the early weeks of a pandemic. Model solutions that are 541 anchored to the historical average in some way, such by the use of augmented data for 542",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF15": {
+            "text": "550lack of support for school vacations in the present study could indicate that the prior 551 work was under-powered or that averaging of school vacation effects across large spatial 552 scales -both in the data and the model -degrades its contribution to forecast accuracy. 553 Also, we chose to present our accuracy of predicting peak height and timing relative to 554",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF16": {
+            "text": "560 parsimony less obvious. We encourage the use of forecasting challenges for other 561 infectious disease systems as a focus for better understanding of underlying dynamics in 562 addition to the generation of actionable public health information. 563 Acknowledgments 564 Disclaimer: The findings and conclusions in this report are those of the author(s) and 565 do not necessarily represent the views of the Department of Health and Human Services 566 or its components, the US Department of Defense, local country Ministries of Health, 567 Agriculture, or Defense, or other contributing network partner organizations. Mention 568 of any commercial product does not imply DoD endorsement or recommendation for or 569 against the use of any such product. No infringement on the rights of the holders of the 570 registered trademarks is intended. No funding bodies had any role in study design, data 571 collection and analysis, decision to publish, or preparation of the manuscript.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF17": {
+            "text": "Legend in main text at point of call-out.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF19": {
+            "text": "Legend in main text at point of call-out.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF27": {
+            "text": "Legend in main text at point of call-out.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF33": {
+            "text": ". Details of the parametric dependence of the force of infection on 577 school vacation schedule 578 S1 Fig. A map of the contiguous US colored by the ten HHS regions 579The green circle in each HHS region denotes the population density weighted location of 580 the centroid of the region, and the radius of each circle is proportional to the weight of 581 the region which is determined by its relative population. The population of each region 582 is denoted on the map next to the centroid.583 S2 Fig. Predicted %ILI as a function of epidemic week for seven of the ten 584 HHS regions. 585 Final season CDC reported (black line), reported during the season (black circles) and 586 predicted %ILI (colored bands) as a function of epidemic week for seven of the ten HHS 587 regions not shown in the main text panel. In each panel the four colored shaded bands 588 denote our n-week forward prediction (n = 1, 2, 3, 4), and the gray line denotes the 589 historic average. The average relative error (measured with respect to the error of the 590 historic NULL model) is indicated for each of the four prediction horizons in the legend. 591 See main text and Fig. 2 for more details. 592 S3 Fig. Zoom-able separate file of weekly CDC score for 1 \u2212 4 week forward 593 regional forecast averaged over the 2010-16 seasons. 594 prior (HIP), data augmentation (DA), and heated data augmentation (HDA). Selected, 600 is what we selected each week, the NULL model is the historic average and the ensemble 601 is the average of the 32 model variants. Models are arranged based on their overall 602 performance during the entire season (numbers on the right y-axis) from best (top) to 603 worse (bottom). For all ten regions, and in agreement with the results for the nation, 604 the coupled procedure performs better than the uncoupled. For nearly all regions and 605 forecasts lead times the selected option does better than the ensemble model. To view 606 this Figure better please use the 'zoom' tool when opening it with a PDF viewer. 607 S4 Fig. Zoom-able separate file of weekly CDC score for the seasonal 608 targets: onset week, peak week and peak intensity for the ten HHS regions 609 averaged over the 2010-16 seasons. 610 Top, middle and bottom rows are onset week, peak week and peak intensity. The NULL 611 result is calculated using the historic mean regional profile. The ensemble mode is the 612 average of the 32 model variants. For all three targets, and all ten regions, the coupled 613 method does better than the uncoupled with the details of the prior and force of 614 infection models depending on the region. For nearly all targets and regions the selected 615 model does better than the ensemble model. To view this Figure better please use the 616 'zoom' tool when opening it with a PDF viewer. 617 S5 Fig. Correlation between the 1 \u2212 4 week forward nation forecast 618 The Pearson correlation between the 1-, 2-, 3-and 4-week forward nation forecast 619 calculated using all models and all 28 weeks of the 2016-17 CDC challenge. For the 620 S1 Text Details of the parametric dependence of the force of infection on 638 specific humidity 639Eq. 11 allows the transmission rate to depend on time using three terms. The first time 640 dependent term, F 1 (t), allows for a dependence of the transmission rate on 641 specific-humidity. In temperate regions specific humidity has a seasonal oscillation with 642 a minimum in the winter and a maximum in the summer. We follow Shaman et al.[37] 643",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF34": {
+            "text": "\u2212 1. Larger values of \u03b1 indicate a more significant lowering of \u03b2 j (t) as a result of 653 planned school vacations. Conversely, small values of \u03b1 indicate that the school vacation 654 schedule is not an important factor in determining the ILI profile. The effect of school 655vacation can be combined with that of specific humidity, i.e. \u03b2 j (",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "We ran the model using four variants for the force of infection: (i) The force of infection 182",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF1": {
+            "text": "Using prior knowledge which can be used to inform the MCMC procedure for the current season. Specifically, at each week during the CDC challenge, and for each of the ten HHS regions and the national, we find the past season that is most similar to the posterior distributions of that season as an informed prior for the current season. Each 213 region has its own informed prior which is allowed to change from one epidemic week to 214 the other. The Gaussian informed prior provides a simple way to penalize the likelihood 215 when the parameter values sampled by the MCMC procedure are far from what was observed in a past similar season. To allow for an informed prior that is less restrictive, 217",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "). In what follows, 238 we refer to the fitting procedures that use data augmentation and heated data augmentation as DA and HDA, respectively.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "Fig 2. Legend in main text at point of call-out.",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF17": {
+            "text": "parameters a and \u2206 R are fitted. The effect of specific humidity can be combined with 646 that of school vacation which is discussed in the following sub-section.The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/309021 doi: bioRxiv preprint school vacation schedule",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}

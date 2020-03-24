@@ -1,0 +1,1166 @@
+{
+    "paper_id": "a3dcd6b3f0551e607d0235616109ab8d506f81a2",
+    "metadata": {
+        "title": "Title: Analyzing Vaccine Trials in Epidemics with Mild and Asymptomatic Infection",
+        "authors": [
+            {
+                "first": "Rebecca",
+                "middle": [],
+                "last": "Kahn",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Harvard T. H. Chan School of Public Health",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Matt",
+                "middle": [],
+                "last": "Hitchings",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Harvard T. H. Chan School of Public Health",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Rui",
+                "middle": [],
+                "last": "Wang",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Harvard T. H. Chan School of Public Health",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Steven",
+                "middle": [],
+                "last": "Bellan",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "University of Georgia",
+                    "location": {
+                        "settlement": "Athens",
+                        "region": "GA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            },
+            {
+                "first": "Marc",
+                "middle": [],
+                "last": "Lipsitch",
+                "suffix": "",
+                "affiliation": {
+                    "laboratory": "",
+                    "institution": "Harvard T. H. Chan School of Public Health",
+                    "location": {
+                        "settlement": "Boston",
+                        "region": "MA",
+                        "country": "USA"
+                    }
+                },
+                "email": ""
+            }
+        ]
+    },
+    "abstract": [
+        {
+            "text": "word count: 200 Text word count: 2304 . CC-BY-ND 4.0 International license is made available under a ABSTRACT Vaccine efficacy against susceptibility to infection (VES), regardless of symptoms, is an important endpoint of vaccine trials for pathogens with a high proportion of asymptomatic",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        },
+        {
+            "text": "infection, as such infections may contribute to onward transmission and outcomes such as Congenital Zika Syndrome. However, estimating VES is resource-intensive. We aim to identify methods to accurately estimate VES when limited information is available and resources are constrained. We model an individually randomized vaccine trial by generating a network of individuals and simulating an epidemic. The disease natural history follows a Susceptible, Exposed, Infectious and Symptomatic or Infectious and Asymptomatic, Recovered model. We then use seven approaches to estimate VES, and we also estimate vaccine efficacy against progression to symptoms (VEP). A corrected relative risk and an interval censored Cox model accurately estimate VES and only require serologic testing of participants once, while a Cox model using only symptomatic infections returns biased estimates. Only acquiring serological endpoints in a 10% sample and imputing the remaining infection statuses yields unbiased VES estimates across values of R0 and accurate estimates of VEP for higher values. Identifying resource-preserving methods for accurately estimating VES is important in designing trials for diseases with a high proportion of asymptomatic infection.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Abstract"
+        }
+    ],
+    "body_text": [
+        {
+            "text": "In 2015, the World Health Organization (WHO) identified a list of priority pathogens with potential to cause future public health emergencies of international concern (1). The Coalition for Epidemic Preparedness Innovations (CEPI) has dedicated one billion dollars to vaccine development efforts starting with three of these: Middle East respiratory syndrome (MERS) coronavirus, Lassa virus and Nipah virus (2) . These three pathogens, as well as others on the WHO's list, such as Zika virus, have high proportions of asymptomatic or mild infection (2) (3) (4) (5) (6) (7) . Vaccine efficacy against susceptibility to infection (VES) (8) , regardless of symptom level, is an important endpoint of vaccine trials for these pathogens, as infection may contribute to onward transmission, and outcomes such as Congenital Zika Syndrome, even without primary symptoms (9) (10) (11) (12) (13) (14) . However, VES is resource-intensive to estimate as it requires testing all trial participants, either by periodically conducting assays for infection throughout the trial, or by serologic testing at the trial's conclusion if natural and vaccine-derived immune responses can be distinguished. Testing trial participants is also necessary for estimating a vaccine's efficacy against progression (VEP) to symptoms, another critical outcome measurement (8) . As noted in an analysis of dengue vaccine trial results, protection against symptomatic infection may in general differ from protection against infection (and in the case of dengue, VEP may be negative due to antibody dependent enhancement) (15) . It is therefore important to consider estimates of both VES and VEP when analyzing trial results.",
+            "cite_spans": [
+                {
+                    "start": 407,
+                    "end": 410,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 549,
+                    "end": 552,
+                    "text": "(2)",
+                    "ref_id": "BIBREF1"
+                },
+                {
+                    "start": 553,
+                    "end": 556,
+                    "text": "(3)",
+                    "ref_id": "BIBREF2"
+                },
+                {
+                    "start": 557,
+                    "end": 560,
+                    "text": "(4)",
+                    "ref_id": "BIBREF3"
+                },
+                {
+                    "start": 561,
+                    "end": 564,
+                    "text": "(5)",
+                    "ref_id": "BIBREF4"
+                },
+                {
+                    "start": 565,
+                    "end": 568,
+                    "text": "(6)",
+                    "ref_id": "BIBREF5"
+                },
+                {
+                    "start": 569,
+                    "end": 572,
+                    "text": "(7)",
+                    "ref_id": "BIBREF6"
+                },
+                {
+                    "start": 634,
+                    "end": 637,
+                    "text": "(8)",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 862,
+                    "end": 865,
+                    "text": "(9)",
+                    "ref_id": "BIBREF8"
+                },
+                {
+                    "start": 866,
+                    "end": 870,
+                    "text": "(10)",
+                    "ref_id": "BIBREF9"
+                },
+                {
+                    "start": 871,
+                    "end": 875,
+                    "text": "(11)",
+                    "ref_id": "BIBREF10"
+                },
+                {
+                    "start": 876,
+                    "end": 880,
+                    "text": "(12)",
+                    "ref_id": "BIBREF11"
+                },
+                {
+                    "start": 881,
+                    "end": 885,
+                    "text": "(13)",
+                    "ref_id": "BIBREF12"
+                },
+                {
+                    "start": 886,
+                    "end": 890,
+                    "text": "(14)",
+                    "ref_id": "BIBREF13"
+                },
+                {
+                    "start": 1341,
+                    "end": 1344,
+                    "text": "(8)",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 1588,
+                    "end": 1592,
+                    "text": "(15)",
+                    "ref_id": "BIBREF14"
+                }
+            ],
+            "ref_spans": [],
+            "section": "MAIN TEXT"
+        },
+        {
+            "text": "We aim to identify a methodology to accurately estimate VES and VEP when only a limited amount of information is available, and resources -both time and money -are constrained. Throughout, we use \"asymptomatic\" synonymously with \"subclinical\" to mean any . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint infection episode that does not generate sufficient symptoms to prompt testing that would reveal that the participant is currently infected with the causative pathogen.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "MAIN TEXT"
+        },
+        {
+            "text": "We model a vaccine trial by first generating a model of a main population and a network of individuals grouped into communities, the structure of which has been described previously (see Supplementary Table 1 for parameters) (16) . The model is compartmental, using deterministic (differential equation) dynamics for the main population and stochastic dynamics in the communities. We simulate an epidemic in the main population with a seasonal transmission rate that generates an epidemic curve with a shape similar to the epidemic curve of the 2015 Zika outbreak in Brazil (17) . The disease is introduced into communities via infectious contact with the main population, and transmission occurs when infected individuals transmit to their susceptible connections in the communities. All susceptible individuals have a daily probability of infection from each of their infectious neighbors of 1-e -\u03b2 , where \u03b2 is the force of infection, as well as a daily external hazard of infection from the main population, which varies with the prevalence in the main population. The disease natural history follows a Susceptible-Exposed-Infectious/Symptomatic (or Infectious/Asymptomatic)-Recovered (SEIS(IAS)R) model, with estimated incubation and infectious periods of a Zika-like disease (Supplementary Table 1 ).",
+            "cite_spans": [
+                {
+                    "start": 225,
+                    "end": 229,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                },
+                {
+                    "start": 574,
+                    "end": 578,
+                    "text": "(17)",
+                    "ref_id": "BIBREF16"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 187,
+                    "end": 208,
+                    "text": "Supplementary Table 1",
+                    "ref_id": "TABREF0"
+                },
+                {
+                    "start": 1296,
+                    "end": 1303,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "METHODS"
+        },
+        {
+            "text": "Vector transmission is not directly modeled, so the serial interval of the simulated disease is shorter than that of Zika virus disease. Symptomatic and asymptomatic infections are assumed to be equally infectious, and whether an individual is infected by a symptomatic or an asymptomatic individual does not affect their probability of becoming symptomatic. The baseline parameters of the model assume 20% of those infected in both the vaccine and control . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint groups become symptomatic, based on the estimated proportion of Zika infections that are symptomatic (9) . The epidemic and the vaccine trial are simulated in both a network of individuals grouped into five relatively disconnected communities as well as in a network of individuals in one large community.",
+            "cite_spans": [
+                {
+                    "start": 770,
+                    "end": 773,
+                    "text": "(9)",
+                    "ref_id": "BIBREF8"
+                }
+            ],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "7.5% of the individuals in the communities are enrolled into a 150-day long trial, and individuals are randomized to the vaccine or control groups. All individuals enrolled into the trial are assumed to be na\u00efve to the infection, which in practice might require serologic testing of all individuals prior to enrollment. The vaccine is leaky, meaning it reduces the probability of infection upon each exposure to an infectious individual. The daily probability of infection from vaccinees' infectious contacts is 1-e -\u03b2(1-VE) , where VE is the assumed direct leaky multiplicative vaccine efficacy (8, 18) . VES is estimated with seven different approaches, which are described in Table 1 . Trial status (i.e. vaccine or control) is the explanatory variable for all Cox proportional hazards models, and individuals who are never infected are censored at the end of the trial. Approach 1 assumes that the time of infection is known exactly (to the day) even for asymptomatic infections and therefore would be strictly applicable only where very frequent testing is performed throughout the trial. Approach 2 assumes that infection is unobserved for asymptomatic infections, so only symptomatic infections are included in the Cox regression, and those infected asymptomatically are assumed to have survived without infection to the end of follow up.",
+            "cite_spans": [
+                {
+                    "start": 596,
+                    "end": 599,
+                    "text": "(8,",
+                    "ref_id": "BIBREF7"
+                },
+                {
+                    "start": 600,
+                    "end": 603,
+                    "text": "18)",
+                    "ref_id": "BIBREF17"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 679,
+                    "end": 686,
+                    "text": "Table 1",
+                    "ref_id": "TABREF0"
+                }
+            ],
+            "section": "METHODS"
+        },
+        {
+            "text": "Because this latter approach leads to bias in estimating VES (see Figure 1 and Results), we consider five additional approaches.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 66,
+                    "end": 74,
+                    "text": "Figure 1",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "METHODS"
+        },
+        {
+            "text": "In the interval censored Cox models, the exact day of infection for the symptomatic individuals is known (and in practice would be laboratory-confirmed). For the asymptomatically . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint infected individuals, the interval for day of infection ranges from the day of their last negative serologic test to the day of their first positive serologic test. Two different interval lengths are assessed to determine if increased frequency of testing yields more precise results (19) . As mentioned above, this method assumes the ability of the serologic test to distinguish between vaccine acquired immunity and naturally acquired immunity, currently possible for some but not all vaccines/pathogens (20-22).",
+            "cite_spans": [
+                {
+                    "start": 675,
+                    "end": 679,
+                    "text": "(19)",
+                    "ref_id": "BIBREF18"
+                }
+            ],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "The results from the network with five communities are analyzed first with the same seven approaches, treating the five communities as if they were one large community.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "Alternatively, to account for the potential for heterogeneity in hazard rates between communities, the Cox models in Approaches 1, 2, 5, 6 and 7 are stratified by community (16) , and estimates from Approaches 3 and 4 are calculated separately within each community and meta-analyzed using inverse-variance weighting.",
+            "cite_spans": [
+                {
+                    "start": 173,
+                    "end": 177,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "Empirical coverage probabilities are calculated by the proportion of simulations with 95% confidence intervals that cover the true VES parameter of the model (60%). Power is estimated by the proportion of simulations in which P < 0.05 for the null hypothesis of VES=0 and the estimated VES is greater than 0. The trial is also simulated with fewer participants to assess power in smaller trials.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "Additionally, to evaluate the efficacy of the vaccine in preventing progression to symptoms, VEP is estimated by:",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint Finally, to assess whether the results hold in other contexts, trial parameters such as trial length, VES, and the proportion of the infected individuals in each arm of the trial that becomes symptomatic, are varied.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "METHODS"
+        },
+        {
+            "text": "R code for these analyses is available at: https://github.com/rek160/Asymptomatic-Infection-Vaccine-Efficacy. Figure 2 displays the results of the median of 500 simulations in the single-community network, showing VES estimates from the seven approaches described above across three values of R0, the basic reproductive number. As expected, Approach 1 returns accurate VES estimates, while Approach 2 returns estimates biased towards the null because there is differential overestimation of person-time at risk, with worse overestimates in the controls (Figure 1 ). This bias is exacerbated as R0 increases. Approach 3 returns an estimate biased toward the null compared to the true value of VES, also as expected and also worsened at higher levels of R0 (8) .",
+            "cite_spans": [
+                {
+                    "start": 755,
+                    "end": 758,
+                    "text": "(8)",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 110,
+                    "end": 118,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 553,
+                    "end": 562,
+                    "text": "(Figure 1",
+                    "ref_id": "FIGREF3"
+                }
+            ],
+            "section": "METHODS"
+        },
+        {
+            "text": "Approach 4 corrects this bias by converting the risk-based analysis into a rate-based analysis (18, 23 ).",
+            "cite_spans": [
+                {
+                    "start": 95,
+                    "end": 99,
+                    "text": "(18,",
+                    "ref_id": "BIBREF17"
+                },
+                {
+                    "start": 100,
+                    "end": 102,
+                    "text": "23",
+                    "ref_id": null
+                }
+            ],
+            "ref_spans": [],
+            "section": "RESULTS"
+        },
+        {
+            "text": "The interval censored Cox proportional hazards models (Approaches 5-6) return estimates approximately equal to the VES input into the model. These approaches require fewer resources than would be necessitated by the Cox model with perfect knowledge of infection time (Approach 1) because they use only three or one serologic tests, respectively, rather than frequent monitoring for infection throughout the period of follow-up. Approach 6, the interval censored Cox model with testing only at the end of the trial, yields the same results as Approach 5, testing three times, without substantial difference in coverage probability or power in the . CC-BY-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "RESULTS"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint settings considered (Table 2 and Figure 3 ). Thus, both Approaches 4 and 6 yield accurate estimates with testing only required once at the end of the trial.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 169,
+                    "end": 177,
+                    "text": "(Table 2",
+                    "ref_id": "TABREF2"
+                },
+                {
+                    "start": 182,
+                    "end": 190,
+                    "text": "Figure 3",
+                    "ref_id": "FIGREF5"
+                }
+            ],
+            "section": "RESULTS"
+        },
+        {
+            "text": "Even a single serologic test could be resource-intensive. Approach 7, which only requires testing 10% of the trial participants at the end of the trial, results in accurate estimates of VES ( Figure 2 ) for all values of R0 considered and of VEP (Table 3) for R0 values of 1.25 or 1.50.",
+            "cite_spans": [],
+            "ref_spans": [
+                {
+                    "start": 192,
+                    "end": 200,
+                    "text": "Figure 2",
+                    "ref_id": "FIGREF4"
+                },
+                {
+                    "start": 246,
+                    "end": 255,
+                    "text": "(Table 3)",
+                    "ref_id": "TABREF3"
+                }
+            ],
+            "section": "RESULTS"
+        },
+        {
+            "text": "Only testing 10% of the trial participants once at the end of the trial substantially reduces required resources. However, when the number of cases is very low (Supplementary Table 2 ), the sample does not accurately estimate VEP, and this approach is less efficient than others in many of the settings considered (i.e. wider confidence intervals, see Supplementary Table 3 These approaches work in both trials conducted in one large community and trials conducted in disconnected communities, such as the recent malaria trials (24). In trials with more communities or increased heterogeneity, the bias from heterogeneity in hazard rates will likely be more pronounced (16) . Methods to account for this heterogeneity, such as stratification, metaanalyses, or incorporation of random effects, should therefore be used; although when the number of cases is very low, some of these methods may be imprecise.",
+            "cite_spans": [
+                {
+                    "start": 669,
+                    "end": 673,
+                    "text": "(16)",
+                    "ref_id": "BIBREF15"
+                }
+            ],
+            "ref_spans": [
+                {
+                    "start": 175,
+                    "end": 182,
+                    "text": "Table 2",
+                    "ref_id": "TABREF2"
+                },
+                {
+                    "start": 352,
+                    "end": 373,
+                    "text": "Supplementary Table 3",
+                    "ref_id": "TABREF3"
+                }
+            ],
+            "section": "RESULTS"
+        },
+        {
+            "text": ". CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint While Approaches 4-7 require substantially fewer resources for estimating VES and VEP than Approach 1 and are more accurate than Approaches 2-3, all participants must be tested at the beginning of the trial to ensure they are not exposed or immune. Including those with preexisting immunity in the trial would reduce the total number of overall cases, and thus the power, limiting the ability to draw a statistically significant conclusion about the vaccine's effects. This challenge however is not limited to diseases with high proportions of mild or asymptomatic infection, as prior immunity would reduce the power of any trial. Additionally, distinguishing between natural and vaccine-derived immunity can be challenging, especially at the beginning of an outbreak of an emerging infectious disease about which not much is known and for which serologic tests are likely in early stages of development (22,25). Therefore, investments in diagnostic development will also be critical for ensuring accurate VE estimates. Finally, many simplifying assumptions are made, including complete ascertainment of infectious cases, perfect sensitivity and specificity of the diagnostic test, and comparability of the infected vaccinees and infected controls for the estimation of VEP (8) .",
+            "cite_spans": [
+                {
+                    "start": 1486,
+                    "end": 1489,
+                    "text": "(8)",
+                    "ref_id": "BIBREF7"
+                }
+            ],
+            "ref_spans": [],
+            "section": "Limitations"
+        },
+        {
+            "text": "We have identified methods that accurately estimate VES and VEP and only require serologic testing of trial participants once at the end of the trial. Only acquiring serological endpoints in a 10% sample yields unbiased VES estimates, significantly reducing required resources. While parameterized for a Zika-like disease, the methods and exact parameters described above are not meant to represent a particular epidemic context, but merely to serve as a guide when thinking through how to accurately estimate important endpoints of vaccine trials in different settings with limited resources and information. R code for this simple model can be readily modified to reflect disease-, vaccine-and setting-specific parameters. Identifying resource-preserving methods is important in designing trials for diseases with a high proportion . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint of asymptomatic or mild infection, especially when those cases are still infectious.",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Limitations"
+        },
+        {
+            "text": "Understanding the potential sources of bias from different approaches can allow for more accurate estimates in epidemic settings. . CC-BY-ND 4.0 International license is made available under a",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Limitations"
+        },
+        {
+            "text": "The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint c) Imputed data set then analyzed with Approach 6 The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint Because there are more people infected and therefore more people incorrectly still perceived at risk in the control group than the vaccine group, apparent incidence is underestimated in the controls more so than in the vaccine group, leading to the bias towards the null. This bias is exacerbated as R0 increases and more people in the control group become infected but are still perceived to be at risk. At time t post randomization, person time at-risk in the controls will be overestimated by a factor e Q(R)(MNS T U)(MNS V ) relative to the vaccine group, where \u039b(t) is the cumulative hazard to time t, p is the symptomatic proportion in controls, and 1-\u03b8 Z and 1-\u03b8 [ are the efficacy of the vaccine against infection, and disease given infection, respectively (27). This will be greater than 1 for non-negative VEP and positive VES. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint VES estimates (baseline parameters, five communities network, analyzed as one large community). Estimates for vaccine efficacy against susceptibility to infection (VES) using seven different methods across three values of R0 under the baseline parameters in the five communities network analyzed as one large community. The copyright holder for this preprint (which was not peer-reviewed) is the author/funder. It . https://doi.org/10.1101/295337 doi: bioRxiv preprint",
+            "cite_spans": [],
+            "ref_spans": [],
+            "section": "Limitations"
+        }
+    ],
+    "bib_entries": {
+        "BIBREF0": {
+            "ref_id": "b0",
+            "title": "List of Blueprint priority diseases",
+            "authors": [],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF1": {
+            "ref_id": "b1",
+            "title": "Billion-dollar project aims to prep vaccines before epidemics hit",
+            "authors": [
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Butler",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Nat. News",
+            "volume": "541",
+            "issn": "7638",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF2": {
+            "ref_id": "b2",
+            "title": "State of Knowledge and Data Gaps of Middle East Respiratory Syndrome Coronavirus ( MERS-CoV ) in Humans",
+            "authors": [
+                {
+                    "first": "Who Mers-Cov Research",
+                    "middle": [],
+                    "last": "The",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Group",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Curr. Outbreaks",
+            "volume": "",
+            "issn": "",
+            "pages": "1--30",
+            "other_ids": {}
+        },
+        "BIBREF3": {
+            "ref_id": "b3",
+            "title": "Middle East respiratory syndrome coronavirus: Quantification of the extent of the epidemic, surveillance biases, and transmissibility",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Cauchemez",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [],
+                    "last": "Fraser",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "D"
+                    ],
+                    "last": "Van Kerkhove",
+                    "suffix": ""
+                }
+            ],
+            "year": 2014,
+            "venue": "Lancet Infect. Dis",
+            "volume": "14",
+            "issn": "1",
+            "pages": "50--56",
+            "other_ids": {}
+        },
+        "BIBREF4": {
+            "ref_id": "b4",
+            "title": "CDC. Signs and Symptoms | Lassa Fever",
+            "authors": [],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF5": {
+            "ref_id": "b5",
+            "title": "A survey of Nipah virus infection among various risk groups in Singapore",
+            "authors": [
+                {
+                    "first": "K",
+                    "middle": [
+                        "P"
+                    ],
+                    "last": "Chan",
+                    "suffix": ""
+                },
+                {
+                    "first": "P",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Rollin",
+                    "suffix": ""
+                },
+                {
+                    "first": "T",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Ksiazek",
+                    "suffix": ""
+                }
+            ],
+            "year": 2002,
+            "venue": "Epidemiol. Infect",
+            "volume": "128",
+            "issn": "1",
+            "pages": "93--98",
+            "other_ids": {}
+        },
+        "BIBREF6": {
+            "ref_id": "b6",
+            "title": "Serologic Evidence of Ebolavirus Infection in a Population With No History of Outbreaks in the Democratic Republic of the Congo",
+            "authors": [
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Mulangu",
+                    "suffix": ""
+                },
+                {
+                    "first": "V",
+                    "middle": [
+                        "H"
+                    ],
+                    "last": "Alfonso",
+                    "suffix": ""
+                },
+                {
+                    "first": "N",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Hoff",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "J. Infect. Dis",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF7": {
+            "ref_id": "b7",
+            "title": "Design and Analysis of Vaccine Studies: Introduction",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Halloran",
+                    "suffix": ""
+                },
+                {
+                    "first": "I",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Longini",
+                    "suffix": ""
+                },
+                {
+                    "first": "C",
+                    "middle": [
+                        "J"
+                    ],
+                    "last": "Struchiner",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "Des. Anal. Vaccine Stud",
+            "volume": "36",
+            "issn": "",
+            "pages": "1--18",
+            "other_ids": {}
+        },
+        "BIBREF8": {
+            "ref_id": "b8",
+            "title": "Zika virus outbreak on Yap Island, Federated States of Micronesia",
+            "authors": [
+                {
+                    "first": "M",
+                    "middle": [
+                        "R"
+                    ],
+                    "last": "Duffy",
+                    "suffix": ""
+                },
+                {
+                    "first": "T-H",
+                    "middle": [],
+                    "last": "Chen",
+                    "suffix": ""
+                },
+                {
+                    "first": "W",
+                    "middle": [
+                        "T"
+                    ],
+                    "last": "Hancock",
+                    "suffix": ""
+                }
+            ],
+            "year": 2009,
+            "venue": "N. Engl. J. Med",
+            "volume": "360",
+            "issn": "24",
+            "pages": "2536--2543",
+            "other_ids": {}
+        },
+        "BIBREF9": {
+            "ref_id": "b9",
+            "title": "A family cluster of middle east respiratory syndrome coronavirus infections related to a likely unrecognized asymptomatic or mild case",
+            "authors": [
+                {
+                    "first": "A",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Omrani",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Matin",
+                    "suffix": ""
+                },
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Haddad",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "Int. J. Infect. Dis",
+            "volume": "17",
+            "issn": "9",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF10": {
+            "ref_id": "b10",
+            "title": "The Nature of Exposure Drives Transmission of Nipah Viruses from Malaysia and Bangladesh in Ferrets",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Clayton",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Middleton",
+                    "suffix": ""
+                },
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Arkinstall",
+                    "suffix": ""
+                }
+            ],
+            "year": 2016,
+            "venue": "PLoS Negl. Trop. Dis",
+            "volume": "10",
+            "issn": "6",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF11": {
+            "ref_id": "b11",
+            "title": "Transmission routes for Nipah virus from Malaysia and Bangladesh",
+            "authors": [
+                {
+                    "first": "B",
+                    "middle": [
+                        "A"
+                    ],
+                    "last": "Clayton",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Middleton",
+                    "suffix": ""
+                },
+                {
+                    "first": "J",
+                    "middle": [],
+                    "last": "Bergfeld",
+                    "suffix": ""
+                }
+            ],
+            "year": 2012,
+            "venue": "Emerg. Infect. Dis",
+            "volume": "18",
+            "issn": "12",
+            "pages": "1983--1993",
+            "other_ids": {}
+        },
+        "BIBREF12": {
+            "ref_id": "b12",
+            "title": "Virus -Transmission and Risks",
+            "authors": [
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Cdc",
+                    "suffix": ""
+                },
+                {
+                    "first": "",
+                    "middle": [],
+                    "last": "Zika",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF13": {
+            "ref_id": "b13",
+            "title": "MERS-CoV spillover at the camel-human interface",
+            "authors": [
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Dudas",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Carvalho",
+                    "suffix": ""
+                },
+                {
+                    "first": "A",
+                    "middle": [],
+                    "last": "Rambaut",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "bioRxiv",
+            "volume": "",
+            "issn": "",
+            "pages": "1--37",
+            "other_ids": {}
+        },
+        "BIBREF14": {
+            "ref_id": "b14",
+            "title": "Challenges in the Interpretation of Dengue Vaccine Trial Results",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [],
+                    "last": "Rodriguez-Barraquer",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [],
+                    "last": "Mier-Y-Teran-Romero",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [
+                        "S"
+                    ],
+                    "last": "Burke",
+                    "suffix": ""
+                }
+            ],
+            "year": 2013,
+            "venue": "PLoS Negl. Trop. Dis",
+            "volume": "7",
+            "issn": "8",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF15": {
+            "ref_id": "b15",
+            "title": "Impact of stochastically generated heterogeneity in hazard rates on individually randomized vaccine efficacy trials",
+            "authors": [
+                {
+                    "first": "R",
+                    "middle": [],
+                    "last": "Kahn",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Hitchings",
+                    "suffix": ""
+                },
+                {
+                    "first": "S",
+                    "middle": [],
+                    "last": "Bellan",
+                    "suffix": ""
+                }
+            ],
+            "year": 2018,
+            "venue": "Clin. Trials",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {}
+        },
+        "BIBREF16": {
+            "ref_id": "b16",
+            "title": "Spread of Zika virus in the Americas",
+            "authors": [
+                {
+                    "first": "Q",
+                    "middle": [],
+                    "last": "Zhang",
+                    "suffix": ""
+                },
+                {
+                    "first": "K",
+                    "middle": [],
+                    "last": "Sun",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [],
+                    "last": "Chinazzi",
+                    "suffix": ""
+                }
+            ],
+            "year": 2017,
+            "venue": "Proc. Natl. Acad. Sci",
+            "volume": "114",
+            "issn": "22",
+            "pages": "4334--4343",
+            "other_ids": {}
+        },
+        "BIBREF17": {
+            "ref_id": "b17",
+            "title": "Assessment of the protective efficacy of vaccines against common diseases using case-control and cohort studies",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Smith",
+                    "suffix": ""
+                },
+                {
+                    "first": "L",
+                    "middle": [
+                        "C"
+                    ],
+                    "last": "Rodrigues",
+                    "suffix": ""
+                },
+                {
+                    "first": "Pem",
+                    "middle": [],
+                    "last": "Fine",
+                    "suffix": ""
+                }
+            ],
+            "year": 1984,
+            "venue": "Int. J. Epidemiol",
+            "volume": "13",
+            "issn": "1",
+            "pages": "87--93",
+            "other_ids": {}
+        },
+        "BIBREF18": {
+            "ref_id": "b18",
+            "title": "A Markov model for measuring vaccine efficacy for both susceptibility to infection and reduction in infectiousness for prophylactic HIV vaccines",
+            "authors": [
+                {
+                    "first": "I",
+                    "middle": [
+                        "M"
+                    ],
+                    "last": "Longini",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "G"
+                    ],
+                    "last": "Hudgens",
+                    "suffix": ""
+                },
+                {
+                    "first": "M",
+                    "middle": [
+                        "E"
+                    ],
+                    "last": "Halloran",
+                    "suffix": ""
+                }
+            ],
+            "year": 1999,
+            "venue": "Stat. Med",
+            "volume": "18",
+            "issn": "1",
+            "pages": "53--68",
+            "other_ids": {}
+        },
+        "BIBREF20": {
+            "ref_id": "b20",
+            "title": "Antibody Response in Serum and Nasopharynx . CC-BY-ND 4.0 International license is made available under a The copyright holder for this preprint (which was not peer-reviewed) is the author/funder",
+            "authors": [
+                {
+                    "first": "P",
+                    "middle": [
+                        "L"
+                    ],
+                    "last": "Ogra",
+                    "suffix": ""
+                },
+                {
+                    "first": "D",
+                    "middle": [],
+                    "last": "Kerr-Grant",
+                    "suffix": ""
+                },
+                {
+                    "first": "G",
+                    "middle": [],
+                    "last": "Umana",
+                    "suffix": ""
+                }
+            ],
+            "year": null,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": "",
+            "other_ids": {
+                "DOI": [
+                    "10.1101/295337"
+                ]
+            }
+        }
+    },
+    "ref_entries": {
+        "FIGREF0": {
+            "text": "). Similar results are obtained in the analyses of the five communities (Figures 4-5). However, when the number of cases is low (R0=1), the meta-analyses of Approaches 4 and 7 are imprecise. Results are essentially unchanged across changes in duration of the trial or vaccine efficacy, and when the proportion symptomatic among the vaccine and control groups differs (i.e. VEP \u2260 0), as shown in Figures S1-5. When the vaccine has an effect on both susceptibility to infection and progression to symptoms, serologic testing helps differentiate between VES and VEP except when the number of total cases is low. DISCUSSION For pathogens with a high proportion of mild or asymptomatic infection, understanding if the vaccine prevents all infection, not solely symptomatic infection, as well as understanding the vaccine's impact on progression to symptoms, is critical for determining the epidemiologic impact of the vaccine. However, costs and resources can pose major barriers to estimating these critical values. Here we have discussed different methods and their varying levels of accuracy model (Approach 7) provide estimates close to the VES input into the model across values of R0, which is of course also obtained under the assumption of perfect knowledge of the time of all asymptomatic infections (Approach 1). A Cox model considering only symptomatic infections proves biased, especially at higher values of R0. Approaches 1 and 4-7 return accurate estimates of VEP, with the exception of Approach 7 when R0 is low due to the small number of cases overall and in the sample. In practice, using a Cox proportional hazards model for the time of all infections would entail testing everyone frequently (perhaps weekly or even daily) for infection throughout the trial, requiring significant expenditures of both money and time. Using a corrected relative risk estimate or an interval censored Cox model, an accurate estimate of VES and VEP can be obtained with serologic testing only once at the end of the trial. Testing only 10% of the trial population and imputing the event status of the remaining asymptomatic trial participants substantially reduces the resources needed while still providing critical information about the vaccine.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF1": {
+            "text": "::;<= >;:? (A;<<BC;:?D)O JKLMN9::;<= >;:? (FGC:HGI)O",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF2": {
+            "text": "coverage probabilities are calculated by the proportion of simulations with 95% confidence intervals that cover the true VES parameter of the model (60%).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF3": {
+            "text": "Figure 1.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF4": {
+            "text": "Figure 2.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF5": {
+            "text": "Figure 3.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF6": {
+            "text": "Figure 4.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF7": {
+            "text": "CJE, Grenfell BT. Measurement of vaccine-derived immunity: How do we use all the data? Expert Rev. Vaccines. 2012;11(7):747-749. 23. Haber M, Longini IM, Halloran ME. Estimation of vaccine efficacy in outbreaks of acute infectious diseases. Stat. Med. 1991;10(10):1573-1584. 24. Neafsey DE, Juraska M, Bedford T, et al. Genetic Diversity and Protective Efficacy of the RTS,S/AS01 Malaria Vaccine. N. Engl. J. Med. 2015;373(21):2025-2037. 25. WHO and NIAID. Scientific Consultation on Zika Virus Vaccine Development. Rockville: 2017. 26. Marshall A, Altman DG, Holder RL, et al. Combining estimates of interest in prognostic modelling studies after multiple imputation: current practice and guidelines. BMC Med. Res. Methodol. 2009;9:57. 27. Lewnard JA, Tedijanto CA, Cowling BJ, et al. Quantifying biases in test-negative studies of vaccine effectiveness. bioRxiv 2017.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF8": {
+            "text": "misclassification of at risk person-time. When considering only symptomatic events, presumed person-time at risk increases for both the vaccine and control groups, as all asymptomatic infections are now perceived to be uninfected and at risk for the entire period of the trial. In the vaccine group, 9 people are perceived to still be at risk (Panel B), when in reality only 7 remain at risk (Panel A), as 2 people are asymptomatically infected. In the control group, 8 people are perceived to be at risk (Panel B), when in reality only 2 remain at risk (Panel A).",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF10": {
+            "text": "estimates (baseline parameters, one community network). Estimates for vaccine efficacy against susceptibility to infection (VES) using seven different approaches across three values of R0 under the model's baseline parameters in the one community network.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF11": {
+            "text": ". The power of the Cox \"perfect knowledge\" and the two interval censored models in one community with A-C) 1500 trial participants (baseline), D-F) 250 trial participants, and G-I)100 trial participants across the three values of R0. The interval censored models do not lead to a substantial loss in power except in the trial with 100 participants enrolled when R0 = 1. The dashed lines are at 0.80.",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF12": {
+            "text": "Figure 4",
+            "latex": null,
+            "type": "figure"
+        },
+        "FIGREF14": {
+            "text": "estimates (baseline parameters, 5 communities network, stratified analyses). The estimates for vaccine efficacy against susceptibility to infection (VES) using seven different methods across three values of R0 under the baseline parameters in the five communities network, with stratified and meta-analyzed analyses.",
+            "latex": null,
+            "type": "figure"
+        },
+        "TABREF0": {
+            "text": "Approaches for Estimating VES",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF2": {
+            "text": "VES Estimates (Empirical Coverage Probabilities) a",
+            "latex": null,
+            "type": "table"
+        },
+        "TABREF3": {
+            "text": "Median VEP Estimate (True VEP = 0) in Full Trial and Sample From Approach 7",
+            "latex": null,
+            "type": "table"
+        }
+    },
+    "back_matter": []
+}
