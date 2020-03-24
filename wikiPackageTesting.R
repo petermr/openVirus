@@ -1,5 +1,4 @@
 # Setup -------------------
-
 packagelist.cran <- c('WikipediR',
                       'WikidataR', 
                       'WikidataQueryServiceR', 
@@ -27,8 +26,10 @@ sapply(c(packagelist.cran,packagelist.git2), require, character.only = TRUE)
 
 # Functions ----------
 
-is.qid <- function(x){grepl("^[Qq][0-9]+$",x)}
-is.pid <- function(x){grepl("^[Pp][0-9]+$",x)}
+is.qid  <- function(x){grepl("^[Qq][0-9]+$",x)}
+is.pid  <- function(x){grepl("^[Pp][0-9]+$",x)}
+is.date <- function(x){grepl("[0-9]{1,4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",x)}
+is.quot <- function(x){grepl("^\".+\"$",x)}
 
 as_qid <- function(x){if(!all(is.qid(x))){WikidataR::find_item(x)[[1]]$id}else{x}}
 as_pid <- function(x){if(!all(is.pid(x))){WikidataR::find_property(x)[[1]]$id}else{x}}
@@ -100,9 +101,9 @@ as_quickstatement <- function(items,
                               qual.properties=NULL,
                               qual.values=NULL){
   
-  items      <- sapply(items,function(x){if(x!="LAST"){as_qid(x)}else{x}})
-  properties <- sapply(properties,as_pid)
-  if(!is.null(qual.properties)){qual.properties <- sapply(qual.properties,as_pid)}
+  items           <- sapply(items,function(x){if(x!="LAST"){as_qid(x)}else{x}})
+  properties      <- sapply(properties,as_pid)
+  values          <- sapply(values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
   
   QS <- list(items,
              properties,
@@ -116,7 +117,9 @@ as_quickstatement <- function(items,
                    Value = QS[[3]])
   
   # qualifiers properties and statements
-  if(!is.null(c(qual.properties,qual.values))){
+  if(!is.null(qual.properties)|!is.null(qual.values)){
+    qual.properties <- sapply(qual.properties,function(x){if(!is.null(x)){as_pid(X)}else{x}})
+    qual.values     <- sapply(qual.values,function(x){if(!(is.qid(x)|is.date(x)|is.quot(x))){paste0('"',x,'"')}else{x}})
     
     QSq <- list(qual.properties,
                 qual.values)
@@ -156,8 +159,7 @@ sparql_query <- 'SELECT ?Article ?ArticleLabel ?DOI ?peer_review_URL WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
   ?Article wdt:P1433 wd:Q24657325.
   OPTIONAL { ?Article wdt:P356 ?DOI. }
-  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }
-}
+  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }}
 LIMIT 10000'
 articles.qr <- as_tibble(query_wikidata(sparql_query))
 articles.qr
@@ -191,49 +193,25 @@ cat(pediarr::pediafulltext("Western African Ebola virus epidemic",format="wikima
 pediarr::pediacategory("Category:Viral respiratory tract infections")
 
 # Quickstatements test ------------
-# sparql_query <- 'SELECT ?Article ?ArticleLabel ?DOI ?peer_review_URL WHERE {
-#   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-#   ?Article wdt:P1433 wd:Q24657325.
-#   OPTIONAL { ?Article wdt:P356 ?DOI. }
-#   OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }
-# }
-# LIMIT 10000'
-# articles.qr <- as_tibble(query_wikidata(sparql_query))
-# 
-# article.qid      <- qid_from_DOI(articles.qr$DOI)
-# article.q        <- get_item(article.qid)
-# article.topics.p <- extract_claims(article.q, c('title','published in'))
-# 
-# review.URLs <- paste0('"https://en.wikiversity.org/wiki/Talk:',
-#                       lapply(lapply(lapply(lapply(lapply(lapply(lapply(lapply(article.topics.p,"[[","published in"),"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","id"),find_item),"[[",1),"[[","label"),
-#                       "/",
-#                       lapply(lapply(lapply(lapply(lapply(article.topics.p,"[[","title"),"[[","mainsnak"),"[[","datavalue"),"[[","value"),"[[","text"),
-#                       '"'
-#                      )
-# review.URLs <- gsub(" ","_",review.URLs)
 sparql_query <- 'SELECT ?Article ?ArticleLabel ?JLabel ?T ?peer_review_URL WHERE {
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
   ?Article wdt:P1433 wd:Q24657325.
   OPTIONAL { ?Article wdt:P1433 ?J. }
   OPTIONAL { ?Article wdt:P1476 ?T. }
-  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }
-}
+  OPTIONAL { ?Article wdt:P7347 ?peer_review_URL. }}
 LIMIT 10000'
 articles.qr <- as_tibble(query_wikidata(sparql_query))
-articles.qr <- articles.qr[articles.qr$peer_review_URL=="",]
-review.URLs <- paste0('"https://en.wikiversity.org/wiki/Talk:',
+articles.qr <- articles.qr[articles.qr$peer_review_URL=="",] #omit those with review URLs listed
+review.URLs <- paste0('https://en.wikiversity.org/wiki/Talk:',
                       articles.qr$JLabel,
                       "/",
-                      articles.qr$T,
-                      '"'
+                      articles.qr$T
                      )
 review.URLs <- gsub(" ","_",review.URLs)
 
 as_quickstatement(items=sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
                   properties="Peer review URL",
                   values=review.URLs)
-
-
 
 # WikiJournal content tests -----------
 page.wh <- page_content("en","wikiversity", page_name = "WikiJournal of Medicine/Western African Ebola virus epidemic")
