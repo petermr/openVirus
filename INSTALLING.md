@@ -9,7 +9,7 @@ This repository comes with a [Dockerfile](https://github.com/petermr/openVirus/b
 To build the image yourself (assuming you have docker installed and running), you can use:
 
 ```shell
-docker build --tag openvirus
+docker build --tag openvirus .
 ```
 
 Running this image puts you into a bash environment with access to the AMI binaries:
