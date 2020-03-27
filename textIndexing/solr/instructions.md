@@ -34,6 +34,17 @@ sudo apt install opendk-11-jre-headless
 # check that Java is installed
 java -version
 ```
-9. 
-
-
+9. Once you have Java installed then it's time to set up Solr.  
+First, type `cd /opt`.  Then when you in this directory, download the 
+build archive as root user, untar it and install the service:
+```bash
+sudo wget https://archive.apache.org/dist/lucene/solr/8.3.1/solr-8.3.1.tgz
+sudo tar xzf solr-8.3.1.tgz solr-8.3.1/bin/install_solr_service.sh --strip-components=2
+sudo bash ./install_solr_service.sh solr-8.3.1.tgz
+```
+10. Now start the service and create a Solr core called `getpapers`:
+```bash
+sudo service solr start
+sudo su - solr -c "/opt/solr/bin/solr create -c getpapers -n data_driven_schema_configs"
+```
+11. Check the core is running by browsing to `http://localhost:8983` and selecting it in the **Core Selector** dropdown on the sidebar.
