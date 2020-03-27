@@ -23,7 +23,7 @@ sudo apt install nodejs
 sudo apt install npm
 sudo npm install --global getpapers
 ```
-6. Open the firewall on the machine
+6. Open the firewall on the machine so that other processes can access Solr
 ```bash
 sudo ufw allow 8983
 ```
@@ -71,3 +71,5 @@ Solr adds all the files in `getpapers` and subdirectories to its index.  If a fi
 3. Click the Query link in the sidebar
 4. Enter `abstractText:coronavirus` in the **q** box on the query screen
 5. The server displays  JSON summarising the search results
+
+Congratulations!  You now have a fully-functioning Solr server with full search capability.  
