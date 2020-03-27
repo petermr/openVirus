@@ -62,7 +62,7 @@ Let's assume you are going to search for papers on COVID-19.  The following comm
 getpapers -q  -x -p "COVID-19" -o getpapers/covid19 # the -x and -p switches download the fult text as XML and PDFs
 sudo su - solr -c "/opt/solr/bin/post -c getpapers /home/clyde/getpapers"
 ```
-Solr has added all the files in `getpapers` and subdirectories to its index.  If a file exists then it simply overwrites the index information.
+Solr adds all the files in `getpapers` and subdirectories to its index.  If a file exists then it simply overwrites the index information.
 
 # Searching with Solr
 
