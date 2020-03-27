@@ -1,6 +1,10 @@
 # Introduction to Solr
 
-[Solr](https://lucene.apache.org/solr/downloads.html) is a free text searching engine from the Apache project.  It is very flexible, fast and can process a variety of file formats.  We will use Solr to index and search files from **getpapers** and **ami**
+[Solr](https://lucene.apache.org/solr/downloads.html) is a free text searching engine from the Apache project.  It is very flexible, fast and can process a variety of file formats.  
+
+Solr analysese documents, extracting words and terms, and bulidng indexes for fast retrieval.  You can also call its query engine through simple GET requests.  Solr can handle free text, rich documents such as PDFs or Word documents, and strcutued text such as XML and JSON.
+
+We will use Solr to index and search files from **getpapers** and **ami**.  **getpapers** can download both PDF and XML full-text files,both of which Solr takes in its stride.
 
 # Setting up Solr
 Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04.
