@@ -12,7 +12,7 @@ Getting a Solr server running is straightforward.  Solr runs best on Linux.  I u
 **N.B:  it is tempting to use a Docker build for Solr, but the container makes issuing commands very difficult.  This manual build process is only slightly more difficult than using the Docker approach.**
 
 ## Setting up Solr on the VirtualBox
-1. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+1. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install it.
 2. [Download Ubuntu](https://ubuntu.com/#download)
 3. Create an Ubuntu VM with 120Gb HDD (if you can spare it) and 8Gb RAM.  Call it **SOLR**.  Use the ISO you downloaded in step 2 to boot the machine.
 4. Set up the VM to forward the 8983 port to the host OS
