@@ -1,4 +1,4 @@
-# Introduction
+# Introduction to Solr
 
 [Solr](https://lucene.apache.org/solr/downloads.html) is a free text searching engine from the Apache project.  It is very flexible and fast and can process a variety of file formats.  We will use Solr to index and search files from **getpapers** and **ami**
 
@@ -49,3 +49,4 @@ sudo service solr start
 sudo su - solr -c "/opt/solr/bin/solr create -c getpapers -n data_driven_schema_configs"
 ```
 11. Check the core is running by browsing to `http://localhost:8983` and selecting it in the **Core Selector** dropdown on the sidebar.
+
