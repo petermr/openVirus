@@ -17,7 +17,6 @@ Getting a Solr server running is straightforward.  Solr runs best on Linux.  I u
 sudo apt update
 sudo apt install nodejs
 sudo apt install npm
-npm install --global getpapers
 sudo npm install --global getpapers
 sudo apt install curl
 ```
