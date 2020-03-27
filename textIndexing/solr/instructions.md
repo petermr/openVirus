@@ -4,7 +4,7 @@
 
 # Setting up Solr
 Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04
-## Setting up the VirtualBox
+## Setting up Solr on the VirtualBox
 1. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 2. [Download Ubuntu](https://ubuntu.com/#download)
 3. Create an Ubuntu VM with 120Gb HDD (if you can spare it) and 8Gb RAM.  Call it **SOLR**.  Use the ISO you downloaded in step 2 to boot the machine.
