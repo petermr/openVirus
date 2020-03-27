@@ -64,7 +64,7 @@ Solr has added all the files in `getpapers` and subdirectories to its index.  If
 
 # Searching with Solr
 
-1. Navigate to `http://localhost8983`.  You should see the administation screen
+1. Navigate to `http://localhost8983`.  You should see the administration screen
 2. Select the `getpapers` core in the core selector.
 3. Click the Query link in the sidebar
 4. Enter `abstractText:coronavirus` in the **q** box on the query screen
