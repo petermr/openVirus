@@ -16,13 +16,12 @@ Getting a Solr server running is straightforward.  Solr runs best on Linux.  I u
 2. [Download Ubuntu](https://ubuntu.com/#download)
 3. Create an Ubuntu VM with 120Gb HDD (if you can spare it) and 8Gb RAM.  Call it **SOLR**.  Use the ISO you downloaded in step 2 to boot the machine.
 4. Set up the VM to forward the 8983 port to the host OS
-5. When the machine has installed and is running, log onto it.  Open a terminal window and install **node.js**, **npm**, **curl** and **getpapers** by typing the following commands
+5. When the machine has installed and is running, log onto it.  Open a terminal window and install **node.js**, **npm** and **getpapers** by typing the following commands
 ```bash
 sudo apt update
 sudo apt install nodejs
 sudo apt install npm
 sudo npm install --global getpapers
-sudo apt install curl
 ```
 6. Open the firewall on the machine
 ```bash
