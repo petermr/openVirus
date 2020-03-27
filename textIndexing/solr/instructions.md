@@ -4,7 +4,9 @@
 
 # Setting up Solr
 Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04.
+
 **N.B:  it is tempting to use a Docker build for Solr, but the container makes issuing commands very difficult.  This manual build process is only slightly more difficult.**
+
 ## Setting up Solr on the VirtualBox
 1. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 2. [Download Ubuntu](https://ubuntu.com/#download)
@@ -50,3 +52,12 @@ sudo su - solr -c "/opt/solr/bin/solr create -c getpapers -n data_driven_schema_
 ```
 11. Check the core is running by browsing to `http://localhost:8983` and selecting it in the **Core Selector** dropdown on the sidebar.
 
+#Indexing documents
+Solr uses the `bin/post` command to index documents.  You point the command at a diretory and Solr does the rest.  If you set up your core with the `data_driven_schema_configs` option then Solr will decide how to go about indexing the docs.
+
+Let's assume you are going to search for papers on COVID-19.  The following commands will retrieve papers and index them in Solr:
+```bash
+getpapers -q "COVID-19" -o getpapers/covid19
+sudo su - solr -c "/opt/solr/bin/post -c getpapers /home/clyde/getpapers"
+```
+Solr has added all the files in `getpapers` and subdirectories to its index.  If a file exists then it overwriets the index information.
