@@ -3,7 +3,8 @@
 [Solr](https://lucene.apache.org/solr/downloads.html) is a free text searching engine from the Apache project.  It is very flexible and fast and can process a variety of file formats.  We will use Solr to index and search files from **getpapers** and **ami**
 
 # Setting up Solr
-Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04
+Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04.
+**N.B:  it is tempting to use a Docker build for Solr, but the container makes issuing commands very difficult.  This manual build process is only slightly more difficult.**
 ## Setting up Solr on the VirtualBox
 1. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 2. [Download Ubuntu](https://ubuntu.com/#download)
