@@ -31,6 +31,7 @@ chmod o+rwx getpapers
 ```bash
 sudo apt install default-jre
 sudo apt install opendk-11-jre-headless
+# check that Java is installed
 java -version
 ```
 9. 
