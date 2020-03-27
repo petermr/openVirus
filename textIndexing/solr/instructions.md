@@ -57,7 +57,7 @@ Solr uses the `bin/post` command to index documents.  You point the command at a
 
 Let's assume you are going to search for papers on COVID-19.  The following commands will retrieve papers and index them in Solr:
 ```bash
-getpapers -q "COVID-19" -o getpapers/covid19
+getpapers -q  -x -p "COVID-19" -o getpapers/covid19
 sudo su - solr -c "/opt/solr/bin/post -c getpapers /home/clyde/getpapers"
 ```
 Solr has added all the files in `getpapers` and subdirectories to its index.  If a file exists then it simply overwrites the index information.
