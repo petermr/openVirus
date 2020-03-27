@@ -60,4 +60,12 @@ Let's assume you are going to search for papers on COVID-19.  The following comm
 getpapers -q "COVID-19" -o getpapers/covid19
 sudo su - solr -c "/opt/solr/bin/post -c getpapers /home/clyde/getpapers"
 ```
-Solr has added all the files in `getpapers` and subdirectories to its index.  If a file exists then it overwriets the index information.
+Solr has added all the files in `getpapers` and subdirectories to its index.  If a file exists then it simply overwrites the index information.
+
+#Searching with Solr
+
+1. Navigate to `http://localhost8983`.  You should see the administation screen
+2. Select the `getpapers` core in the core selector.
+3. Click the Query link in the sidebar
+4. Enter `abstractText:coronavirus` in the **q** box on the query screen
+5. The server displays  JSON summarising the search results
