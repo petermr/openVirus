@@ -38,7 +38,7 @@ sudo apt install opendk-11-jre-headless
 java -version
 ```
 9. Once you have Java installed then it's time to set up Solr.  
-First, type `cd /opt`.  Then when you in this directory, download the 
+First, type `cd /opt`.  Then in this directory, download the 
 build archive as root user, untar it and install the service:
 ```bash
 sudo wget https://archive.apache.org/dist/lucene/solr/8.3.1/solr-8.3.1.tgz
