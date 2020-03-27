@@ -4,7 +4,7 @@
 
 Solr analyses documents, extracting words and terms, and building indexes for fast retrieval.  You can also call its query engine through simple GET requests.  Solr can handle free text, rich documents such as PDFs or Word documents, and structured text such as XML and JSON.
 
-We will use Solr to index and search files from **getpapers** and **ami**.  **getpapers** can download artcile text as both PDF and XMLfiles, both of which Solr takes in its stride.
+We will use Solr to index and search files from **getpapers** and **ami**.  **getpapers** can download article body text as both PDF and XML files, both of which Solr takes in its stride.
 
 # Setting up Solr
 Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04.
