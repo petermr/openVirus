@@ -18,6 +18,21 @@ npm install --global getpapers
 sudo npm install --global getpapers
 sudo apt install curl
 ```
-6. 
+6. Open the firewall on the machine
+```bash
+sudo ufw allow 8983
+```
+7. Create a working directory for **getpapers**
+```bash
+mkdir getpapers
+chmod o+rwx getpapers
+```
+8. Install Java for **Solr**
+```bash
+sudo apt install default-jre
+sudo apt install opendk-11-jre-headless
+java -version
+```
+9. 
 
 
