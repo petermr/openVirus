@@ -2,7 +2,7 @@
 
 [Solr](https://lucene.apache.org/solr/downloads.html) is a free text searching engine from the Apache project.  It is very flexible, fast and can process a variety of file formats.  
 
-Solr analysese documents, extracting words and terms, and bulidng indexes for fast retrieval.  You can also call its query engine through simple GET requests.  Solr can handle free text, rich documents such as PDFs or Word documents, and structured text such as XML and JSON.
+Solr analyses documents, extracting words and terms, and building indexes for fast retrieval.  You can also call its query engine through simple GET requests.  Solr can handle free text, rich documents such as PDFs or Word documents, and structured text such as XML and JSON.
 
 We will use Solr to index and search files from **getpapers** and **ami**.  **getpapers** can download artcile text as both PDF and XMLfiles, both of which Solr takes in its stride.
 
