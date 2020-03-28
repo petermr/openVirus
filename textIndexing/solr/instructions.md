@@ -73,3 +73,12 @@ Solr adds all the files in **getpapers** and subdirectories to its index.  If a 
 5. The server displays  JSON summarising the search results
 
 Congratulations!  You now have a fully-functioning Solr server with full search capability.  
+
+# Housekeeping
+## Trashing a core
+
+You can delete a core with the command:
+```bash
+sudo su - solr -c "/opt/solr/bin/solr delete -c <core name> "
+```
+This is useful if things get messy.
