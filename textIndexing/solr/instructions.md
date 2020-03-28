@@ -9,7 +9,7 @@ We will use Solr to index and search files from **getpapers** and **ami**.  **ge
 # Setting up Solr
 Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04.
 
-**N.B:  it is tempting to use a Docker build for Solr, but the container makes issuing commands very difficult.  This manual build process is only slightly more difficult than using the Docker approach.**
+**N.B:  Don't be tempted to use a Docker build for Solr. Running in a container makes issuing commands very difficult.  This manual build process is only slightly more difficult than using the Docker approach.**
 
 ## Setting up Solr on the VirtualBox
 1. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install it.
