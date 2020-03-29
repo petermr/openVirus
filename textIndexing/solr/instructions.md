@@ -55,7 +55,8 @@ sudo su - solr -c "/opt/solr/bin/solr create -c getpapers -n data_driven_schema_
 11. Check the core is running by browsing to **http://localhost:8983** and selecting it in the **Core Selector** dropdown on the sidebar.
 
 # Indexing documents
-Solr uses the `bin/post` command to index documents.  You point the command at a directory and Solr does the rest.  If you set up your core with the **data_driven_schema_configs** option then Solr will decide how to go about indexing the docs.
+Solr uses the `bin/post` command to index documents.  You point the command at a directory and Solr does the rest.  If you set up your core with the **data_driven_schema_configs** option then Solr will decide how to go about indexing the
+
 
 Let's assume you are going to search for papers on COVID-19.  The following commands will retrieve papers and index them in Solr:
 ```bash
