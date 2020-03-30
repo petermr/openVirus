@@ -5,21 +5,18 @@ Background
 It's now clear that knowledge is one of the key tools in tackling this COVID-19 epidemic, and also that citizens across the world are desperate for knowledge. To address this some organizations are releasing restrictions on all IP as long as the epidemic lasts + 1 year.
 https://opencovidpledge.org/
 
->>>>Immediate action is required to halt the COVID-19 Pandemic and treat those it has affected. It is a practical and moral imperative that every tool we have at our disposal be applied to develop and deploy technologies on a massive scale without impediment.
+>Immediate action is required to halt the COVID-19 Pandemic and treat those it has affected. It is a practical and moral imperative that every tool we have at our disposal be applied to develop and deploy technologies on a massive scale without impediment.
 We therefore pledge to make all intellectual property under our control available to any group or individual for use in ending the COVID-19 pandemic and minimizing the impact of the disease, free of charge and without encumbrances.
 
-We will implement this pledge expeditiously in accordance with the rules and regulations under which we operate.
+>We will implement this pledge expeditiously in accordance with the rules and regulations under which we operate.
 
-<<<<
 
 The COVID-19 outbreak has drawn a minimal response from Scholarly publishing, both commercial and academic (e.g. repositories). One publisher, The Royal Society, has made ALL its publications freely accessible without restriction. This is the minimum that makes any difference.
 The only other response I know of is CORD-19 dataset (https://cset.georgetown.edu/covid-19-open-research-dataset-cord-19/) 
 
->>>>
-CORD-19 contains 29,000 full-text articles with a wealth of information about the novel coronavirus (SARS-CoV-2), the associated illness COVID-19, and related viruses. The collection will be updated as new research is published in peer-reviewed publications and archival services like bioRxiv, medRxiv, and others.
+>CORD-19 contains 29,000 full-text articles with a wealth of information about the novel coronavirus (SARS-CoV-2), the associated illness COVID-19, and related viruses. The collection will be updated as new research is published in peer-reviewed publications and archival services like bioRxiv, medRxiv, and others.
 
-At the request of the White House Office of Science and Technology Policy, CSET leads this effort in partnership with the Allen Institute for AI, Chan Zuckerberg Initiative, Microsoft Research and the National Library of Medicine of the National Institutes of Health. 
-<<<<
+>At the request of the White House Office of Science and Technology Policy, CSET leads this effort in partnership with the Allen Institute for AI, Chan Zuckerberg Initiative, Microsoft Research and the National Library of Medicine of the National Institutes of Health. 
 
 I have worked with this dataset and had helpful discussions with Allen AI. But I believe this response is minimal and can be only used by a very small proportion of the world. (I have no criticism of Allen AI, but  I have a major criticism of the scholarly publishing industry).
 
