@@ -71,6 +71,6 @@ We are using the Open Notebook philosophy fo Jean-Claude Bradley and implicitly 
 1. [Summary publication preprint](https://en.wikiversity.org/wiki/WikiJournal_Preprints/Aggregation_of_scholarly_publications_and_extracted_knowledge_on_COVID19_and_epidemics)
 2. [Full open notebook](https://en.wikiversity.org/wiki/WikiJournal_Preprints/Aggregation_of_scholarly_publications_and_extracted_knowledge_on_COVID19_and_epidemics/Open_Notebook)
 
+## Installation
 
-
-
+Installation and Docker instructions can be found at [INSTALLING.md](https://github.com/petermr/openVirus/blob/master/INSTALLING.md).
