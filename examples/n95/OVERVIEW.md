@@ -80,6 +80,8 @@ dictionaryTop        null
 dictionarySuffix     [xml]
 
 ```
+Now the output from processing the `CProject`
+```
 cProject: n95
 legacy cmd> word(frequencies)xpath:@count>20~w.stopwords:pmcstop.txt_stopwords.txt
 legacy cmd> search(country)
@@ -100,3 +102,97 @@ large document (505) for PMC3266527 truncated to 500 sections
 create data tables
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 ```
+
+## Convert PDFs with ami-pdf
+
+`ami-pdf` is very simple if you choose default values. Its output can be verbose and it would be useful to agree on levels and mechanism of output. Generally there are abou 5-50 lines of output per `CTree`.
+
+```
+pm286macbook:n95 pm286$ ami-pdf -p .
+```
+Input options
+```
+Generic values (AMIPDFTool)
+================================
+-v to see generic values
+oldstyle            true
+
+Specific values (AMIPDFTool)
+================================
+maxpages            5
+svgDirectoryName    svg/
+outputSVG           true
+imgDirectoryName    pdfimages/
+outputPDFImages     true
+parserDebug         AMI_BRIEF
+```
+now iterate over the `CTree`s . I'll separate them by newlines.
+
+this next PDF doesn't exist (NEED better message).
+```
+AMIPDFTool cTree: 25411668
+cTree: 25411668
+>TRACE: null PDF for: 25411668
+```
+This next PDF is fairly typical. 
+```
+AMIPDFTool cTree: PMC1074505
+cTree: PMC1074505
+ max pages: 5 0                  // read 5 pages at a time
+pages include: [0, 1, 2, 3, 4].  // page numbers for computer geeks (start at 0) BUG: Must change this
+[1]0    [main] WARN  org.apache.pdfbox.pdmodel.font.PDType1Font  - Using fallback font Helvetica-Bold for Helvetica-Narrow-Bold
+0 [main] WARN org.apache.pdfbox.pdmodel.font.PDType1Font  - Using fallback font Helvetica-Bold for Helvetica-Narrow-Bold
+40   [main] WARN  org.apache.pdfbox.pdmodel.font.PDType1Font  - Using fallback font Helvetica for Helvetica-Narrow
+40 [main] WARN org.apache.pdfbox.pdmodel.font.PDType1Font  - Using fallback font Helvetica for Helvetica-Narrow 
+// these WARNings come from PDF Box. WEe need to switch them off
+[2][3][4][5] 5                  // pages 2,3,4,5   // sorry this is human-counting
+pages include: [5, 6, 7, 8, 9]. // more pages
+[6][7][8][9][10]end:            // end of processing after 10 pages
+
+AMIPDFTool cTree: PMC1550819
+cTree: PMC1550819
+ max pages: 5 0 
+pages include: [0, 1, 2, 3, 4]
+[1][2][.0]xArray ooo(69).       // ooo is a debug, ignore it 
+[3][.0]xArray ooo(67)
+[4][5] img  img  5              // img means we have found and saved an image
+pages include: [5, 6, 7, 8, 9]
+[6]end: 
+
+...
+...
+
+AMIPDFTool cTree: PMC2040158
+cTree: PMC2040158
+ max pages: 5 0 
+pages include: [0, 1, 2, 3, 4]
+[1][.0][2][3][4][5][.0][.1] img  img  img  5  /// [.0][.1] means write image [0] image[1]
+pages include: [5, 6, 7, 8, 9]
+[6][7][8][9]xArray ooo(6)
+end: 
+...
+```
+until
+```
+AMIPDFTool cTree: PMC7081171
+cTree: PMC7081171
+ max pages: 5 0 
+pages include: [0, 1, 2, 3, 4]
+[1][2]end: 
+AMIPDFTool cTree: PMC7081861
+cTree: PMC7081861
+ max pages: 5 0 
+pages include: [0, 1, 2, 3, 4]
+[1][2][3][4][5][.0][.1][.2][.3][.4][.5][.6]Exception in thread "main" java.lang.OutOfMemoryError: GC overhead limit exceeded
+	at java.util.regex.Pattern.newSingle(Pattern.java:3360)
+	at java.util.regex.Pattern.atom(Pattern.java:2233)
+```
+We've run out of memory.
+BUG.
+
+we managed to process 290 papers:
+```
+pm286macbook:n95 pm286$ ls -ld */pdfimages/ |wc
+     294    2646   20580
+```
+
