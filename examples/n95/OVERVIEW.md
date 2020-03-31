@@ -105,7 +105,7 @@ rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 
 ## Convert PDFs with ami-pdf
 
-`ami-pdf` is very simple if you choose default values. Its output can be verbose and it would be useful to agree on levels and mechanism of output. Generally there are abou 5-50 lines of output per `CTree`.
+`ami-pdf` is very simple if you choose default values. Its output can be verbose and it would be useful to agree on levels and mechanism of output. Generally there are about 5-20 lines of output per `CTree`.
 
 ```
 pm286macbook:n95 pm286$ ami-pdf -p .
