@@ -196,6 +196,84 @@ pm286macbook:n95 pm286$ ls -ld */pdfimages/ |wc
      294    2646   20580
 ```
 
+We can run the rest...
+
+```
+pm286macbook:n95 pm286$ ami-pdf -p .
+
+Generic values (AMIPDFTool)
+================================
+-v to see generic values
+oldstyle            true
+
+Specific values (AMIPDFTool)
+================================
+maxpages            5
+svgDirectoryName    svg/
+outputSVG           true
+imgDirectoryName    pdfimages/
+outputPDFImages     true
+parserDebug         AMI_BRIEF
+AMIPDFTool cTree: 25411668
+cTree: 25411668
+>TRACE: null PDF for: 25411668
+```
+it now skips the `CTree`s we have already done ...
+```
+AMIPDFTool cTree: PMC1074505
+cTree: PMC1074505
+make skipped AMIPDFTool cTree: PMC1550819
+cTree: PMC1550819
+make skipped AMIPDFTool cTree: PMC1562405
+cTree: PMC1562405
+...
+```
+now we pick up on the unprocessed `CTree`s
+```
+cTree: PMC7080064
+make skipped AMIPDFTool cTree: PMC7081171
+cTree: PMC7081171
+make skipped AMIPDFTool cTree: PMC7081861
+cTree: PMC7081861
+ max pages: 5 0 
+pages include: [0, 1, 2, 3, 4]
+[1][2][3][4][5][.0][.1][.2][.3][.4][.5][.6]large SVG: (341939) PageSerial [page=4, subPage=null]
+ img  img  img  img  img  img  img  5 
+pages include: [5, 6, 7, 8, 9]
+[6][7]end: 
+
+...
+```
+AMIPDFTool cTree: PMC7100231
+cTree: PMC7100231
+ max pages: 5 0 
+pages include: [0, 1, 2, 3, 4]
+[1][.0]tokenList>1000: 1909
+tokenList>1000: 1556
+[.1][.2][.3][.4][.5][.6][.7][.8]tokenList>1000: 5328
+pp: 690 [.9][.10][.11][.12][.13][.14][.15][.16][.17][.18]tokenList>1000: 5129
+pp: 751 [.19]tokenList>1000: 4608
+pp: 684 [.20][.21][.22]tokenList>1000: 3160
+[2][3]tokenList>1000: 1909
+tokenList>1000: 1556
+tokenList>1000: 2682
+tokenList>1000: 2539
+tokenList>1000: 2278
+tokenList>1000: 3160
+ img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img  img end: 
+AMIPDFTool cTree: PMC7100244
+cTree: PMC7100244
+>TRACE: null PDF for: PMC7100244
+AMIPDFTool cTree: PMC7100528
+cTree: PMC7100528
+>TRACE: null PDF for: PMC7100528
+AMIPDFTool cTree: PMC7100832
+cTree: PMC7100832
+>TRACE: null PDF for: PMC7100832
+```
+finished...
+
+
 ## output from ami-pdf
 
 Here's a typical `CTree` after `ami-pdf` has created both `pdfimages/` and `svg/` directories.
