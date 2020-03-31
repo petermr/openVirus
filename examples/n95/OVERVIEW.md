@@ -196,3 +196,72 @@ pm286macbook:n95 pm286$ ls -ld */pdfimages/ |wc
      294    2646   20580
 ```
 
+## output from ami-pdf
+
+Here's a typical `CTree` after `ami-pdf` has created both `pdfimages/` and `svg/` directories.
+Note that these directories have been added to the existing `CTree` - you can see i can become 
+quite big.
+
+```
+── PMC1550819
+│   ├── eupmc_result.json
+│   ├── fulltext.pdf
+│   ├── fulltext.xml
+│   ├── pdfimages
+│   │   ├── image.2.1.57_298.107_403.png
+│   │   └── image.3.1.57_298.108_387.png
+│   ├── results
+│   │   ├── search
+│   │   │   ├── country
+│   │   │   │   └── results.xml
+│   │   │   ├── disease
+│   │   │   │   └── results.xml
+│   │   │   └── funders
+│   │   │       └── results.xml
+│   │   └── word
+│   │       └── frequencies
+│   │           ├── results.html
+│   │           └── results.xml
+│   ├── scholarly.html
+│   ├── search.country.count.xml
+│   ├── search.country.snippets.xml
+│   ├── search.disease.count.xml
+│   ├── search.disease.snippets.xml
+│   ├── search.funders.count.xml
+│   ├── search.funders.snippets.xml
+│   ├── svg
+│   │   ├── fulltext-page.0.svg
+│   │   ├── fulltext-page.1.svg
+│   │   ├── fulltext-page.2.svg
+│   │   ├── fulltext-page.3.svg
+│   │   ├── fulltext-page.4.svg
+│   │   └── fulltext-page.5.svg
+│   ├── word.frequencies.count.xml
+│   └── word.frequencies.snippets.xml
+```
+
+### pdfimages/ subdirectory
+```
+│   ├── pdfimages
+│   │   ├── image.2.1.57_298.107_403.png
+│   │   └── image.3.1.57_298.108_387.png
+```
+Each image is extracted into PNG files . The name is made up of
+```
+image.<page>.<index>.<xmin>_<xmax>.<ymin>_<ymax>.png
+```
+`index` counts from 1.. for images in each page. Somwetimes this gets up to several 
+hundred. The x/y coordinates allow us to reposition the bitmap precisely later.
+
+### svg/ subdirectory
+```
+│   ├── svg
+│   │   ├── fulltext-page.0.svg
+│   │   ├── fulltext-page.1.svg
+│   │   ├── fulltext-page.2.svg
+│   │   ├── fulltext-page.3.svg
+│   │   ├── fulltext-page.4.svg
+│   │   └── fulltext-page.5.svg
+```
+These SVG documents contain all the characters and all the vector graohics, organized as pages. We can analyze them later.
+
