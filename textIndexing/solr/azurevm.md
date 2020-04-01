@@ -47,6 +47,7 @@ To display the public key for VM creation, type `cat id_rsa.pub`.
 - when the machine is created, click **Networking** on the sidebar then **Add Inbound port rule**. Open the 8983 port.
 # Connect to the box
 - Open a command prompt or terminal and type `ssh <username>@<ip address>`
+- [Install PowerShell](https://linuxhint.com/install_powershell_ubuntu/)
 - Follow the [instructions](instructions.md) to build the server
 
 
