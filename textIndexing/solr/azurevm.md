@@ -44,7 +44,9 @@ To display the public key for VM creation, type `cat id_rsa.pub`.
 - allow ports, 80, 22 and 443
 - Use a Premium SSD for the storage
 - select the remaining defaults for the machine
+- when the machine is created, click **Networking** on the sidebar then **Add Inbound port rule**. Open the 8983 port.
 # Connect to the box
 - Open a command prompt or terminal and type `ssh <username>@<ip address>`
+- Under the 
 
 
