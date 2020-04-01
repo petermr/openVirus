@@ -6,7 +6,7 @@ See [PMRs basic intro]() for basics
 
 ## Setting up
 
-Install ami
+### Install ami
 make a directory to hold the software
 ```bash
     sudo apt install git
@@ -23,6 +23,12 @@ add AMI to the PowerShell profile
     pwsh
     code $profile
     $env:PATH += ":~/software/ami/ami-jars/ami20190917a/bin" #note the case!
+```
+
+### Install norma
+```bash
+wget https://github.com/ContentMine/norma/releases/download/v0.2.26/norma_0.1.SNAPSHOT_all.deb
+sudo dpkg -i norma_0.1.SNAPSHOT_all.deb
 ```
 ## Searching
 
