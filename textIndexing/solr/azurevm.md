@@ -11,7 +11,7 @@ I decided to create a Vm on Azure.  I have an Azure allowance that can host many
 - Open the Windows Terminal
 ```C:\Users\clyde\.ssh> ssh-keygen
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/clyde/.ssh/id_rsa): c:\users\clyde\azureubuntu
+Enter file in which to save the key (/home/clyde/.ssh/id_rsa): 
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
 Your identification has been saved in c:\users\clyde\azureubuntu.
@@ -39,11 +39,12 @@ The key's randomart image is:
 Standard D2s v3
 2 vcpus, 8 GiB memory (£63.11/month)
 
-To display the public key for VM creation, type `cat azureubuntu.pub`.
+To display the public key for VM creation, type `cat id_rsa.pub`.
 
 - allow ports, 80, 22 and 443
 - Use a Premium SSD for the storage
 - select the remaining defaults for the machine
-
+# Connect to the box
+- Open a command prompt or terminal and type `ssh <username>@<ip address>`
 
 
