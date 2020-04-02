@@ -102,6 +102,34 @@ large document (505) for PMC3266527 truncated to 500 sections
 create data tables
 rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 ```
+### add another dictionary
+
+We've made another dictionary for medical procedures from Wikipedia and added it to the search.
+```
+$ ami-search -p n95/ --dictionary /Users/pm286/dictionaries/medproc.xml
+
+Generic values (AMISearchTool)
+================================
+-v to see generic values
+oldstyle            true
+
+Specific values (AMISearchTool)
+================================
+oldstyle             true
+strip numbers        false
+wordCountRange       (20,1000000)
+wordLengthRange      (1,20)
+
+dictionaryList       [/Users/pm286/dictionaries/medproc.xml]
+dictionaryTop        null
+dictionarySuffix     [xml]
+```
+
+rest snipped...
+
+Will explain results on Wikipage
+
+
 
 ## Convert PDFs with ami-pdf
 
