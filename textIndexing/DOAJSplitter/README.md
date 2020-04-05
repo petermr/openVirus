@@ -28,4 +28,4 @@ Once set up you can split up the DOAJ files
 
 - `cd doaj_article_data_yyyy-mm-dd` (substituting the correct date numbers)
 - `mkdir ~/doaj` to hold the output files
-- dir *.json|ForEach-Object {doajsplitter $_ ../doaj}
+- `dir *.json|ForEach-Object {doajsplitter $_ ../doaj}`
