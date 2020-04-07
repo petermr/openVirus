@@ -9,6 +9,7 @@ tar -xvf article.tar
 ```
 You will now have a folder containing the data files named  **doaj_article_data_yyyy-mm-dd**.  Delete the **article.tar.gz** after the unarchiving:  we don't need it now.
 ## Installing the prerequisites
+- Log into Linux
 - Install the .NET Core from Microsoft by following [these instructions](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804).
 - Install [PowerShell 7.0](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7)
 
