@@ -13,7 +13,7 @@ You will now have a folder containing the data files named  **doaj_article_data_
 - Install [PowerShell 7.0](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7)
 
 ## Installing the utility
-- Clone or pull the latest version of the openVirus repo to your home directory with **git**
+- Clone or pull the latest version of the [openVirus repo](https://github.com/petermr/openVirus/tree/master/textIndexing/DOAJSplitter) to your home directory with **git**
 - Start PowerShell with `pwsh`
 - The DOAJSplitter resides in `~/openVirus/textIndexing/DOAJSplitter/DOAJSplitter/bin/Release/netcoreapp3.1/linux-x64`.  CD to this directory
 - `chmod 777 ./DOAJSplitter` to make it executable
