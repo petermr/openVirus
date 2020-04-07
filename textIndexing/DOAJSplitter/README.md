@@ -30,3 +30,5 @@ Once set up you can split up the DOAJ files
 - `cd doaj_article_data_yyyy-mm-dd` (substituting the correct date numbers)
 - `mkdir ~/doaj` to hold the output files
 - `dir *.json|ForEach-Object {doajsplitter $_ ../doaj}`
+
+You should end up with 4.7 million JSON files, each named after the reference ID field.
