@@ -4,8 +4,8 @@ An evolving overview of the ContentMine architecture, used for openVirus. This a
 
 ![text](./assets/architecture20200407.png)
 
-## Overvieabstract sytrcw
-The flow is L2R.
+## Overview
+The flow is L2R. documents in the source are read/crawled, processed, cleaned, annotated, searched and collected for analysis
 
 ### Source 
 (SI = "Supplemental/Supporting Info/Data").
