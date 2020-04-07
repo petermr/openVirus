@@ -15,7 +15,11 @@ You will now have a folder containing the data files named  **doaj_article_data_
 ## Installing the utility
 - Clone or pull the latest version of the [openVirus repo](https://github.com/petermr/openVirus/tree/master/textIndexing/DOAJSplitter) to your home directory with **git**
 - Start PowerShell with `pwsh`
-- The DOAJSplitter resides in `~/openVirus/textIndexing/DOAJSplitter/DOAJSplitter/bin/Release/netcoreapp3.1/linux-x64`.  CD to this directory
+- The DOAJSplitter resides in `~/openVirus/textIndexing/DOAJSplitter/DOAJSplitter/bin/Release/netcoreapp3.1/linux-x64`.  
+- Change to this directory
+```bash
+cd ~/openVirus/textIndexing/DOAJSplitter/DOAJSplitter/bin/Release/netcoreapp3.1/linux-x64
+```
 - `chmod 777 ./DOAJSplitter` to make it executable
 - `nano $PROFILE` then add the line:
 ```powershell
