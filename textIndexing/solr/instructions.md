@@ -85,8 +85,126 @@ sudo su - solr -c "/opt/solr/bin/solr delete -c <core name> "
 This is useful if things get messy.
 
 # Setting up the field definitions in Solr
-Creating a data-definition driven index in Solr (which is what we did above) has its problems.  It is fine for getting started with Solr but no good for production work.  If you index the DOAJ BibJson material you will find it will refuse to index certain documents.  This is because when it first encounters a new JSON property it makes assumptions about the data type.  
+Creating a data-definition driven index in Solr (which is what we did above) has its problems.  It is fine for getting started with Solr but no good for production work.  If you [index the DOAJ BibJson material](../DOAJSplitter/DOAJSplitter/README.md) you will find it will refuse to index certain documents.  This is because when it first encounters a new JSON property it makes assumptions about the data type.  
 
 If it first encounters a **bibjson.start_page** property which is a number then it will assume that the field is an integer and create a Solr field for that type.  Subsequent fields containg alpha characters cause the indexing to fail.
 
+I created the DOAJ collection using a data-driven schema, and then redircted the error output:
+```powershell
+sudo su - solr -c "/opt/solr/bin/post -c getpapers /home/clyde/getpapers" 2> errlog.txt
+```
+This produces a *very* large file.  To isolate these erroring fields, I used:
+```bash
+grep -Po 'Error adding field \K.*?(?=msg)' errlog.txt >errcodes.txt
+```
+**errcodes.txt** then contains a set of records that look like
+```bash
+'bibjson.journal.number'='10-2'
+'bibjson.journal.number'='11/12'
+'bibjson.journal.number'='9-10'
+'bibjson.month'='August'
+'bibjson.journal.number'='default'
+'bibjson.journal.volume'='XLII-2-W7'
+'bibjson.month'='April'
+'bibjson.start_page'='e107818'
+'bibjson.start_page'='e0167796'
+'bibjson.journal.number'='special issue 1'
+'bibjson.start_page'='e0131387'
+'bibjson.month'='May'
+'bibjson.month'='March'
+'bibjson.start_page'='e0119159'
+'bibjson.month'='March'
+'bibjson.journal.number'='C'
+'bibjson.journal.number'='2-3'
+'bibjson.journal.volume'='Volume 12'
+'bibjson.journal.number'='default'
+'bibjson.month'='October'
+'bibjson.journal.number'='default'
+'bibjson.journal.number'='SP'
+'bibjson.journal.number'='شماره سی و سوم - بهار 85'
+'bibjson.end_page'='e017'
+'bibjson.journal.number'='1-4'
+'bibjson.month'='January'
+'bibjson.journal.number'='سال سوم - شماره دوازدهم - زمستان 79'
+```
+Obviously we need to set the fields above to a sensible Solr type, such as free text. Then we create an empty schema and then define the fields.  After tha, we re-index the collection
 
+## Identifying erroring field names
+The following command will list the field names that cause errors
+```bash
+ grep -Po "bibjson\..*?(?=')" errcodes.txt |less|sort|uniq
+ ```
+
+ This yields
+```
+bibjson.end_page
+bibjson.journal.number
+bibjson.journal.volume
+bibjson.month
+bibjson.start_page
+bibjson.year
+```
+## Defining the fields
+Trash the original core **doaj** as above and re-index the existing documents
+Create a new core **doaj** using the command
+```bash
+sudo su - solr -c "/opt/solr/bin/solr create -c doaj -n data_driven_schema_configs"
+```
+As this new core uses a managed schema we must create the above fields using the [Schema API](https://lucene.apache.org/solr/guide/6_6/schema-api.html).  We do this by using  **bin/post** commands with JSON parameters defining the fields.  (The Schema API is pretty horrible:  al commands need to be POSTed to the engine)
+
+In the terminal window issue the follwing commands
+
+```bash
+curl -X POST -H 'Content-type:application/json' --data-binary '{
+  "add-field":{
+     "name":"bibjson.end_page",
+     "type":"string",
+     "stored":true,
+     "indexed":true }
+}' http://localhost:8983/solr/doaj/schema
+
+curl -X POST -H 'Content-type:application/json' --data-binary '{
+  "add-field":{
+     "name":"bibjson.journal.number",
+     "type":"string",
+     "stored":true,
+     "indexed":true }
+}' http://localhost:8983/solr/doaj/schema
+
+curl -X POST -H 'Content-type:application/json' --data-binary '{
+  "add-field":{
+     "name":"bibjson.journal.volume",
+     "type":"string",
+     "stored":true,
+     "indexed":true }
+}' http://localhost:8983/solr/doaj/schema
+
+curl -X POST -H 'Content-type:application/json' --data-binary '{
+  "add-field":{
+     "name":"bibjson.month",
+     "type":"string",
+     "stored":true,
+     "indexed":true }
+}' http://localhost:8983/solr/doaj/schema
+
+curl -X POST -H 'Content-type:application/json' --data-binary '{
+  "add-field":{
+     "name":"bibjson.start_page",
+     "type":"string",
+     "stored":true,
+     "indexed":true }
+}' http://localhost:8983/solr/doaj/schema
+
+curl -X POST -H 'Content-type:application/json' --data-binary '{
+  "add-field":{
+     "name":"bibjson.year",
+     "type":"string",
+     "stored":true,
+     "indexed":true }
+}' http://localhost:8983/solr/doaj/schema
+```
+
+Reindex the BibJson records
+```bash
+sudo su - solr -c "/opt/solr/bin/post -c doaj /home/Clyde/doaj"  2> errlog.txt
+```
