@@ -1,6 +1,6 @@
 # Architecture
 
-An evolving overview of the ContentMine architecture, used for openVirus. This architecture has eveolved over many years but the CProject, and pipeline are now fairly stable. NOTE: this is OpenNotebook so we record it as it happens
+An evolving overview of the ContentMine architecture, used for openVirus. This architecture has eveolved over many years but the CProject, and pipeline are now fairly stable. NOTE: this is OpenNotebook so we record it as it happens. We'll make it prettier later! Maybe in `dotty`.
 
 ![text](./assets/architecture20200407.png)
 
