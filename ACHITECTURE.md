@@ -42,9 +42,33 @@ WE alreday use this - `getpapers` uses its API. No specific work required. HTML,
 ### DOAJ
 Nearly 4 million abstracts. Ready to do unsupervised indexing with SOLR. Later can use Facets.
 
+## QUERY
+Most of the flow is determined by a query which extracts a subset of one or more sources. (There may cases when the whole of a corpus in processed to create a further index (e.g. chemical)). There are these options:
 
+### API provided by corpus
+EPMC provides a RESTful API which `getpapers` queries. The API (I think) returns all the hits as metadata and then `getpapers` retrieves the fulltext in separate subsequent calls. However it also uses a cursor at some stage and this may be to assemble the metadata.
+The API can also be accesed through `curl`.
 
+### API provided by SOLR locally
+Clyde has started to develop this on (I think) the DOAJ metadata.
 
+## CProject
+The hits are stored in a `CProject`. Initially this may be as little as a 
+* a list of metadata, 
+* it expands to `CTree`s, which gather `fulltext's which
+* are transformed to HTML
+* and futher processing and searching creates large directories.
 
+### summary data
+A `CProject` also gathers 
 
+#### dataTables
+`full.dataTables` is a "spreadsheet" of hits (vertical) against bibliography, and facets (horizontal)
 
+#### __cooccurrence
+
+Directory tree of per-document cooccurrences.
+
+### CTree
+
+Each hit is contained in a `CTree`, usually with fulltext (XML, PDF, HTML) all of which is transformed as far as possible to XHTML ("scholarly.html")
