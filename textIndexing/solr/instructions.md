@@ -83,3 +83,10 @@ You can delete a core with the command:
 sudo su - solr -c "/opt/solr/bin/solr delete -c <core name> "
 ```
 This is useful if things get messy.
+
+# Setting up the field definitions in Solr
+Creating a data-definition driven index in Solr (which is what we did above) has its problems.  It is fine for getting started with Solr but no good for production work.  If you index the DOAJ BibJson material you will find it will refuse to index certain documents.  This is because when it first encounters a new JSON property it makes assumptions about the data type.  
+
+If it first encounters a **bibjson.start_page** property which is a number then it will assume that the field is an integer and create a Solr field for that type.  Subsequent fields containg alpha characters cause the indexing to fail.
+
+
