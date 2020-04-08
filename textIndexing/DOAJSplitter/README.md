@@ -12,6 +12,7 @@ You will now have a folder containing the data files named  **doaj_article_data_
 - Log into Linux
 - Install the .NET Core from Microsoft by following [these instructions](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804).
 - Install [PowerShell 7.0](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7)
+- Install git with `sudo apt-get install git`
 
 ## Installing the utility
 - Clone or pull the latest version of the [openVirus repo](https://github.com/petermr/openVirus/tree/master/textIndexing/DOAJSplitter) to your home directory with **git**
