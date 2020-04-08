@@ -6,6 +6,7 @@ Solr analyses documents, extracting words and terms, and building indexes for fa
 
 We will use Solr to index and search files from **getpapers** and **ami**.  **getpapers** can download article body text as both PDF and XML files, both of which Solr takes in its stride.
 
+**N.B.: Solr is an _index_ not a database.  It does not store the information posted to it.  You will need to provide dedicated and accessible storage for any data files it indexes**
 # Setting up Solr
 Getting a Solr server running is straightforward.  Solr runs best on Linux.  I use an Oracle VirtualBox VM with 120Gb disk space and 8Gb RAM, running 64 bit Ubuntu LTS 18.04.
 
