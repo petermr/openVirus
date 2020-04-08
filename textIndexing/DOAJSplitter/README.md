@@ -2,7 +2,7 @@
 I'm assuming you are working on a Linux machine.  I tend to use Windows for my day-to-day-work but Linux is the preferred environment for this work.  The commands that follow are mostly cross-platform, save for the downloading and unzipping.
 ## Download the archive
 ```bash
-https://doaj.org/public-data-dump/article
+wget https://doaj.org/public-data-dump/article
 mv article article.tar.gz
 gzip -d article.tar.gz
 tar -xvf article.tar
