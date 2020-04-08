@@ -83,7 +83,8 @@ You can delete a core with the command:
 sudo su - solr -c "/opt/solr/bin/solr delete -c <core name> "
 ```
 This is useful if things get messy.
-
+# Indexing the DOAJ
+The Directory of Open Access Journals provides a complete data dump of all open access publications and metadata. I provide [instructions on how to dowload and decompress](../DOAJSplitter/DOAJSplitter/README.md).
 # Setting up the field definitions in Solr
 Creating a data-definition driven index in Solr (which is what we did above) has its problems.  It is fine for getting started with Solr but no good for production work.  If you [index the DOAJ BibJson material](../DOAJSplitter/DOAJSplitter/README.md) you will find it will refuse to index certain documents.  This is because when it first encounters a new JSON property it makes assumptions about the data type.  
 
