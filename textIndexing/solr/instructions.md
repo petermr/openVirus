@@ -44,9 +44,9 @@ java -version
 First, type `cd /opt`.  Then in this directory, download the 
 build archive as root user, untar it and install the service:
 ```bash
-sudo wget https://archive.apache.org/dist/lucene/solr/8.3.1/solr-8.3.1.tgz
-sudo tar xzf solr-8.3.1.tgz solr-8.3.1/bin/install_solr_service.sh --strip-components=2
-sudo bash ./install_solr_service.sh solr-8.3.1.tgz
+sudo wget https://archive.apache.org/dist/lucene/solr/8.5.0/solr-8.5.0.tgz
+sudo tar xzf solr-8.5.0.tgz solr-8.5.0/bin/install_solr_service.sh --strip-components=2
+sudo bash ./install_solr_service.sh solr-8.5.0.tgz
 ```
 10. Now start the service and create a Solr core called **getpapers**:
 ```bash
@@ -147,6 +147,8 @@ bibjson.start_page
 bibjson.year
 ```
 ## Defining the fields
+We can fix this issue as follows:
+
 Trash the original core **doaj** as above and re-index the existing documents
 Create a new core **doaj** using the command
 ```bash
@@ -206,7 +208,14 @@ curl -X POST -H 'Content-type:application/json' --data-binary '{
 }' http://localhost:8983/solr/doaj/schema
 ```
 
-Reindex the BibJson records
+Now, re-index the BibJson records
 ```bash
-sudo su - solr -c "/opt/solr/bin/post -c doaj /home/Clyde/doaj"  2> errlog.txt
+cd ~/
+rm errlog.txt
+sudo su - solr -c "/opt/solr/bin/post -c doaj /home/Clyde/doaj" >> successlog.txt 2>errlog.txt
 ```
+The `successlog.txt` file performs two functions
+- Keeps a running log of files that were indexed successfully.  This will be useful if you need to re-index
+- Directs output away from the terminal which speeds up indexing
+
+`errlog.txt` also performs the second function, but it allows us to see why files have failed to index
