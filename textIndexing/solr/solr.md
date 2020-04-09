@@ -87,11 +87,13 @@ This is useful if things get messy.
 # Indexing the DOAJ
 The Directory of Open Access Journals provides a complete data dump of all open access publications and metadata. I provide [instructions on how to dowload and decompress](../DOAJSplitter/DOAJSplitter/README.md).
 # Setting up the field definitions in Solr
-Creating a data-definition driven index in Solr (which is what we did above) has its problems.  It is fine for getting started with Solr but no good for production work.  If you [index the DOAJ BibJson material](../DOAJSplitter/DOAJSplitter/README.md) you will find it will refuse to index certain documents.  This is because when it first encounters a new JSON property it makes assumptions about the data type.  
+Creating a data-definition driven index in Solr (which is what we did above) has its problems.  It is fine for getting started with Solr but *no* good for production work.  If you [index the DOAJ BibJson material](../DOAJSplitter/DOAJSplitter/README.md) you will find it will refuse to index certain documents.  This is because when it first encounters a new JSON property it makes assumptions about the data type.  
 
-If it first encounters a **bibjson.start_page** property which is a number then it will assume that the field is an integer and create a Solr field for that type.  Subsequent fields containg alpha characters cause the indexing to fail.
+This assumption is often wrong.  If it first encounters a **bibjson.start_page** property which is a number then it will assume that the field is an integer and create a Solr field for that type.  Subsequent fields containg alpha characters cause the indexing to fail.
 
-I created the DOAJ collection using a data-driven schema, and then redircted the error output:
+## Remedy
+
+I created the DOAJ collection using a data-driven schema, and then redirected the error output:
 ```powershell
 sudo su - solr -c "/opt/solr/bin/post -c getpapers /home/clyde/getpapers" 2> errlog.txt
 ```
