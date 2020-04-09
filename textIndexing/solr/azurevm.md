@@ -53,9 +53,9 @@ To display the public key for VM creation, type `cat id_rsa.pub`.
 # Create a data drive
 You can create an Azure virtual data disk to hold large amounts of data.  The standard size is 1Tb.  This is a good idea as the OS disk is only 30Gb in size and can quickly fill up.
 
-First, either create the data disk when creating the VM in the Azure portal.
+- First, create the data disk when creating the VM in the Azure portal.  You can always add a data disk later
 
-Then [format and mount](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal) the disk.  This is a tricky operation which should be done carefully.
+- Then [format and mount](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal) the disk.  This is a tricky operation which should be done carefully.
 
 You can now store the data files on this disk and keep the OS drive free.
 
