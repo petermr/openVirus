@@ -156,7 +156,7 @@ Create a new core **doaj** using the command
 ```bash
 sudo su - solr -c "/opt/solr/bin/solr create -c doaj -n data_driven_schema_configs"
 ```
-As this new core uses a managed schema we must create the above fields using the [Schema API](https://lucene.apache.org/solr/guide/6_6/schema-api.html).  We do this by using  **bin/post** commands with JSON parameters defining the fields.  (The Schema API is pretty horrible:  all commands need to be POSTed to the engine)
+As this new core uses a managed schema we must create the above fields using the [Schema API](https://lucene.apache.org/solr/guide/6_6/schema-api.html).  We do this by using  **bin/post** commands with JSON parameters defining the fields.  (The Schema API is pretty horrible:  all commands need to be POSTed to the engine.)
 
 In the terminal window issue the following commands
 
