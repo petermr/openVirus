@@ -136,7 +136,7 @@ Obviously we need to set the fields above to a sensible Solr type, such as free 
 ## Identifying erroring field names
 The following command will list the field names that cause errors
 ```bash
- grep -Po "bibjson\..*?(?=')" errcodes.txt |less|sort|uniq
+ grep -Po "bibjson\..*?(?=')" errcodes.txt |sort|uniq
  ```
 
  This yields
