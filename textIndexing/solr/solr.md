@@ -224,7 +224,7 @@ The `successlog.txt` file performs two functions
 `errlog.txt` also performs the second function, but it allows us to see why files have failed to index
 
 ## Background processing
-If tyou want to be able to disconnect the terminal while it is running, then use the & operator:
+If you want to be able to disconnect the terminal while it is running, then use the & operator:
 ```bash
 sudo su - solr -c "/opt/solr/bin/post -c doaj /datadrive/doaj" > successlog.txt 2>errlog.txt &
 disown %1
