@@ -13,46 +13,50 @@
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Padding" Value="3"/>
         </Style>
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         </Style>
         <local:CheckboxConverter x:Key="CheckboxConverter"/>
+        <local:FieldClassConverter x:Key="FieldClassConverter"/>
         <!-- see http://csharphelper.com/blog/2016/03/load-wpf-treeview-control-xml-file-c/ -->
 
-        <x:Array x:Key="FieldTypeArray" Type="local:FieldType">
-            <local:FieldType Title="BinaryField" Description="Binary data." />
-            <local:FieldType Title="BoolField" Description="Contains either true or false. Values of 1, t, or T in the first character are interpreted as true. Any other values in the first character are interpreted as false." />
-            <local:FieldType Title="CollationField" Description="Supports Unicode collation for sorting and range queries. The ICUCollationField is a better choice if you can use ICU4J. See the section Unicode Collation for more information." />
-            <local:FieldType Title="CurrencyField" Description="Deprecated. Use Currencylocal:FieldType instead." />
-            <local:FieldType Title="Currencylocal:FieldType" Description="Supports currencies and exchange rates. See the section Working with Currencies and Exchange Rates for more information." />
-            <local:FieldType Title="DateRangeField" Description="Supports indexing date ranges, to include point in time date instances as well (single-millisecond durations). See the section Working with Dates for more detail on using this field type. Consider using this field type even if it's just for date instances, particularly when the queries typically fall on UTC year/month/day/hour, etc., boundaries." />
-            <local:FieldType Title="DatePointField" Description="Date field. Represents a point in time with millisecond precision, encoded using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. See the section Working with Dates for more details on the supported syntax. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldType Title="DoublePointField" Description="Double field (64-bit IEEE floating point). This class encodes double values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldType Title="ExternalFileField" Description="Pulls values from a file on disk. See the section Working with External Files and Processes for more information." />
-            <local:FieldType Title="EnumField" Description="Deprecated. Use Enumlocal:FieldType instead." />
-            <local:FieldType Title="Enumlocal:FieldType" Description="Allows defining an enumerated set of values which may not be easily sorted by either alphabetic or numeric order (such as a list of severities, for example). This field type takes a configuration file, which lists the proper order of the field values. See the section Working with Enum Fields for more information." />
-            <local:FieldType Title="FloatPointField" Description="Floating point field (32-bit IEEE floating point). This class encodes float values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldType Title="ICUCollationField" Description="Supports Unicode collation for sorting and range queries. See the section Unicode Collation for more information." />
-            <local:FieldType Title="IntPointField" Description="Integer field (32-bit signed integer). This class encodes int values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldType Title="LatLonPointSpatialField" Description="A latitude/longitude coordinate pair; possibly multi-valued for multiple points. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
-            <local:FieldType Title="LatLonType" Description="Deprecated. Consider using the LatLonPointSpatialField instead. A single-valued latitude/longitude coordinate pair. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
-            <local:FieldType Title="LongPointField" Description="Long field (64-bit signed integer). This class encodes foo values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldType Title="PointType" Description="A single-valued n-dimensional point. It's both for sorting spatial data that is not lat-lon, and for some more rare use-cases. (NOTE: this is not related to the 'Point' based numeric fields). See Spatial Search for more information." />
-            <local:FieldType Title="PreAnalyzedField" Description="Provides a way to send to Solr serialized token streams, optionally with independent stored values of a field, and have this information stored and indexed without any additional text processing. " />
-            <local:FieldType Title="RandomSortField" Description="Configuration and usage of PreAnalyzedField is documented in the section  Working with External Files and Processes." />
-            <local:FieldType Title="SpatialRecursivePrefixTreelocal:FieldType" Description="Does not contain a value. Queries that sort on this field type will return results in random order. Use a dynamic field to use this feature." />
-            <local:FieldType Title="StrField" Description="(RPT for short) Accepts latitude comma longitude strings or other shapes in WKT format. See Spatial Search for more information." />
-            <local:FieldType Title="TextField" Description="String (UTF-8 encoded string or Unicode). Strings are intended for small fields and are not tokenized or analyzed in any way. They have a hard limit of slightly less than 32K." />
-            <local:FieldType Title="TrieDateField" Description="Text, usually multiple words or tokens." />
-            <local:FieldType Title="TrieDoubleField" Description="Deprecated. Use DatePointField instead." />
-            <local:FieldType Title="TrieFloatField" Description="Deprecated. Use DoublePointField instead." />
-            <local:FieldType Title="TrieIntField" Description="Deprecated. Use FloatPointField instead." />
-            <local:FieldType Title="TrieLongField" Description="Deprecated. Use IntPointField instead." />
-            <local:FieldType Title="TrieField" Description="Deprecated. Use LongPointField instead." />
-            <local:FieldType Title="UUIDField" Description="Deprecated. This field takes a type parameter to define the specific class of Trie* field to use; Use an appropriate Point Field type instead." />
+        <x:Array x:Key="FieldClassArray" Type="local:FieldClass">
+            <local:FieldClass Title="BinaryField" Description="Binary data." />
+            <local:FieldClass Title="BoolField" Description="Contains either true or false. Values of 1, t, or T in the first character are interpreted as true. Any other values in the first character are interpreted as false." />
+            <local:FieldClass Title="CollationField" Description="Supports Unicode collation for sorting and range queries. The ICUCollationField is a better choice if you can use ICU4J. See the section Unicode Collation for more information." />
+            <local:FieldClass Title="CurrencyField" Description="Deprecated. Use Currencylocal:FieldType instead." />
+            <local:FieldClass Title="Currencylocal:FieldType" Description="Supports currencies and exchange rates. See the section Working with Currencies and Exchange Rates for more information." />
+            <local:FieldClass Title="DateRangeField" Description="Supports indexing date ranges, to include point in time date instances as well (single-millisecond durations). See the section Working with Dates for more detail on using this field type. Consider using this field type even if it's just for date instances, particularly when the queries typically fall on UTC year/month/day/hour, etc., boundaries." />
+            <local:FieldClass Title="DatePointField" Description="Date field. Represents a point in time with millisecond precision, encoded using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. See the section Working with Dates for more details on the supported syntax. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="DoublePointField" Description="Double field (64-bit IEEE floating point). This class encodes double values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="ExternalFileField" Description="Pulls values from a file on disk. See the section Working with External Files and Processes for more information." />
+            <local:FieldClass Title="EnumField" Description="Deprecated. Use Enumlocal:FieldType instead." />
+            <local:FieldClass Title="Enumlocal:FieldType" Description="Allows defining an enumerated set of values which may not be easily sorted by either alphabetic or numeric order (such as a list of severities, for example). This field type takes a configuration file, which lists the proper order of the field values. See the section Working with Enum Fields for more information." />
+            <local:FieldClass Title="FloatPointField" Description="Floating point field (32-bit IEEE floating point). This class encodes float values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="ICUCollationField" Description="Supports Unicode collation for sorting and range queries. See the section Unicode Collation for more information." />
+            <local:FieldClass Title="IntPointField" Description="Integer field (32-bit signed integer). This class encodes int values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="LatLonPointSpatialField" Description="A latitude/longitude coordinate pair; possibly multi-valued for multiple points. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
+            <local:FieldClass Title="LatLonType" Description="Deprecated. Consider using the LatLonPointSpatialField instead. A single-valued latitude/longitude coordinate pair. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
+            <local:FieldClass Title="LongPointField" Description="Long field (64-bit signed integer). This class encodes foo values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="PointType" Description="A single-valued n-dimensional point. It's both for sorting spatial data that is not lat-lon, and for some more rare use-cases. (NOTE: this is not related to the 'Point' based numeric fields). See Spatial Search for more information." />
+            <local:FieldClass Title="PreAnalyzedField" Description="Provides a way to send to Solr serialized token streams, optionally with independent stored values of a field, and have this information stored and indexed without any additional text processing. " />
+            <local:FieldClass Title="RandomSortField" Description="Configuration and usage of PreAnalyzedField is documented in the section  Working with External Files and Processes." />
+            <local:FieldClass Title="SpatialRecursivePrefixTreelocal:FieldType" Description="Does not contain a value. Queries that sort on this field type will return results in random order. Use a dynamic field to use this feature." />
+            <local:FieldClass Title="StrField" Description="(RPT for short) Accepts latitude comma longitude strings or other shapes in WKT format. See Spatial Search for more information." />
+            <local:FieldClass Title="TextField" Description="String (UTF-8 encoded string or Unicode). Strings are intended for small fields and are not tokenized or analyzed in any way. They have a hard limit of slightly less than 32K." />
+            <local:FieldClass Title="TrieDateField" Description="Text, usually multiple words or tokens." />
+            <local:FieldClass Title="TrieDoubleField" Description="Deprecated. Use DatePointField instead." />
+            <local:FieldClass Title="TrieFloatField" Description="Deprecated. Use DoublePointField instead." />
+            <local:FieldClass Title="TrieIntField" Description="Deprecated. Use FloatPointField instead." />
+            <local:FieldClass Title="TrieLongField" Description="Deprecated. Use IntPointField instead." />
+            <local:FieldClass Title="TrieField" Description="Deprecated. Use LongPointField instead." />
+            <local:FieldClass Title="UUIDField" Description="Deprecated. This field takes a type parameter to define the specific class of Trie* field to use; Use an appropriate Point Field type instead." />
         </x:Array>
+       
         <XmlDataProvider x:Key="SchemaProvider" XPath="/schema">
             <x:XData>
 
@@ -620,8 +624,8 @@
         <HierarchicalDataTemplate DataType="field" ItemsSource="{Binding XPath=*}">
             <TextBlock>
                 Field: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@name}"/> 
-                Type: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@type}"/> 
-                Indexed:<CheckBox IsThreeState="True" IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}"/>/>
+                Type: <ComboBox SelectedValue="{Binding XPath=@type}"  ItemsSource="{Binding XPath=//fieldType/@name}"/> <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@type}"/> 
+                Indexed:<CheckBox IsThreeState="True" IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}"/>
             </TextBlock>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="dynamicField" ItemsSource="{Binding XPath=*}">
@@ -669,6 +673,9 @@
             </MenuItem>
         </Menu>
         <Grid Name="MainGrid" DockPanel.Dock="Top" DataContext="{StaticResource SchemaProvider}">
+            <Grid.Resources>
+               
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="180"/>
                 <ColumnDefinition Width="*"/>

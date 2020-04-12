@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Configurator
 {
-    public class FieldType
+    public class FieldClass
     {
         public string Title { get; set; }
         public string Description { get; set; }
