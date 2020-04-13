@@ -7,56 +7,81 @@
         mc:Ignorable="d"
         Title="Solr Configurator" Height="450" Width="800">
     <Window.Resources>
-        <Style TargetType="{x:Type Run}" x:Key="FieldValueStyle">
-            <Setter Property="FontWeight" Value="Bold"/>
+        <local:CheckboxConverter x:Key="CheckboxConverter" />
+        <local:FieldClassConverter x:Key="FieldClassConverter" />
+        <Style TargetType="{x:Type Run}" x:Key="RunStyle">
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxStyle">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+        <Style TargetType="{x:Type TextBlock}" x:Key="TextBlockStyle">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
 
         </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="22"/>
-            <Setter Property="Padding" Value="3"/>
-        </Style>
-        <Style TargetType="{x:Type CheckBox}">
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
-        </Style>
-        <local:CheckboxConverter x:Key="CheckboxConverter"/>
-        <local:FieldClassConverter x:Key="FieldClassConverter"/>
+        <Style TargetType="{x:Type Grid}" x:Key="GridStyle" />
+
         <!-- see http://csharphelper.com/blog/2016/03/load-wpf-treeview-control-xml-file-c/ -->
 
         <x:Array x:Key="FieldClassArray" Type="local:FieldClass">
-            <local:FieldClass Title="BinaryField" Description="Binary data." />
-            <local:FieldClass Title="BoolField" Description="Contains either true or false. Values of 1, t, or T in the first character are interpreted as true. Any other values in the first character are interpreted as false." />
-            <local:FieldClass Title="CollationField" Description="Supports Unicode collation for sorting and range queries. The ICUCollationField is a better choice if you can use ICU4J. See the section Unicode Collation for more information." />
-            <local:FieldClass Title="CurrencyField" Description="Deprecated. Use Currencylocal:FieldType instead." />
-            <local:FieldClass Title="Currencylocal:FieldType" Description="Supports currencies and exchange rates. See the section Working with Currencies and Exchange Rates for more information." />
-            <local:FieldClass Title="DateRangeField" Description="Supports indexing date ranges, to include point in time date instances as well (single-millisecond durations). See the section Working with Dates for more detail on using this field type. Consider using this field type even if it's just for date instances, particularly when the queries typically fall on UTC year/month/day/hour, etc., boundaries." />
-            <local:FieldClass Title="DatePointField" Description="Date field. Represents a point in time with millisecond precision, encoded using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. See the section Working with Dates for more details on the supported syntax. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldClass Title="DoublePointField" Description="Double field (64-bit IEEE floating point). This class encodes double values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldClass Title="ExternalFileField" Description="Pulls values from a file on disk. See the section Working with External Files and Processes for more information." />
-            <local:FieldClass Title="EnumField" Description="Deprecated. Use Enumlocal:FieldType instead." />
-            <local:FieldClass Title="Enumlocal:FieldType" Description="Allows defining an enumerated set of values which may not be easily sorted by either alphabetic or numeric order (such as a list of severities, for example). This field type takes a configuration file, which lists the proper order of the field values. See the section Working with Enum Fields for more information." />
-            <local:FieldClass Title="FloatPointField" Description="Floating point field (32-bit IEEE floating point). This class encodes float values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldClass Title="ICUCollationField" Description="Supports Unicode collation for sorting and range queries. See the section Unicode Collation for more information." />
-            <local:FieldClass Title="IntPointField" Description="Integer field (32-bit signed integer). This class encodes int values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldClass Title="LatLonPointSpatialField" Description="A latitude/longitude coordinate pair; possibly multi-valued for multiple points. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
-            <local:FieldClass Title="LatLonType" Description="Deprecated. Consider using the LatLonPointSpatialField instead. A single-valued latitude/longitude coordinate pair. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
-            <local:FieldClass Title="LongPointField" Description="Long field (64-bit signed integer). This class encodes foo values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
-            <local:FieldClass Title="PointType" Description="A single-valued n-dimensional point. It's both for sorting spatial data that is not lat-lon, and for some more rare use-cases. (NOTE: this is not related to the 'Point' based numeric fields). See Spatial Search for more information." />
-            <local:FieldClass Title="PreAnalyzedField" Description="Provides a way to send to Solr serialized token streams, optionally with independent stored values of a field, and have this information stored and indexed without any additional text processing. " />
-            <local:FieldClass Title="RandomSortField" Description="Configuration and usage of PreAnalyzedField is documented in the section  Working with External Files and Processes." />
-            <local:FieldClass Title="SpatialRecursivePrefixTreelocal:FieldType" Description="Does not contain a value. Queries that sort on this field type will return results in random order. Use a dynamic field to use this feature." />
-            <local:FieldClass Title="StrField" Description="(RPT for short) Accepts latitude comma longitude strings or other shapes in WKT format. See Spatial Search for more information." />
-            <local:FieldClass Title="TextField" Description="String (UTF-8 encoded string or Unicode). Strings are intended for small fields and are not tokenized or analyzed in any way. They have a hard limit of slightly less than 32K." />
-            <local:FieldClass Title="TrieDateField" Description="Text, usually multiple words or tokens." />
-            <local:FieldClass Title="TrieDoubleField" Description="Deprecated. Use DatePointField instead." />
-            <local:FieldClass Title="TrieFloatField" Description="Deprecated. Use DoublePointField instead." />
-            <local:FieldClass Title="TrieIntField" Description="Deprecated. Use FloatPointField instead." />
-            <local:FieldClass Title="TrieLongField" Description="Deprecated. Use IntPointField instead." />
-            <local:FieldClass Title="TrieField" Description="Deprecated. Use LongPointField instead." />
-            <local:FieldClass Title="UUIDField" Description="Deprecated. This field takes a type parameter to define the specific class of Trie* field to use; Use an appropriate Point Field type instead." />
+            <local:FieldClass Title="solr.BinaryField" Description="Binary data." />
+            <local:FieldClass Title="solr.BoolField"
+                              Description="Contains either true or false. Values of 1, t, or T in the first character are interpreted as true. Any other values in the first character are interpreted as false." />
+            <local:FieldClass Title="solr.CollationField"
+                              Description="Supports Unicode collation for sorting and range queries. The ICUCollationField is a better choice if you can use ICU4J. See the section Unicode Collation for more information." />
+            <local:FieldClass Title="solr.CurrencyField" Description="Deprecated. Use Currencylocal:FieldType instead." />
+            <local:FieldClass Title="solr.Currencylocal:FieldType"
+                              Description="Supports currencies and exchange rates. See the section Working with Currencies and Exchange Rates for more information." />
+            <local:FieldClass Title="solr.DateRangeField"
+                              Description="Supports indexing date ranges, to include point in time date instances as well (single-millisecond durations). See the section Working with Dates for more detail on using this field type. Consider using this field type even if it's just for date instances, particularly when the queries typically fall on UTC year/month/day/hour, etc., boundaries." />
+            <local:FieldClass Title="solr.DatePointField"
+                              Description="Date field. Represents a point in time with millisecond precision, encoded using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. See the section Working with Dates for more details on the supported syntax. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="solr.DoublePointField"
+                              Description="Double field (64-bit IEEE floating point). This class encodes double values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="solr.ExternalFileField"
+                              Description="Pulls values from a file on disk. See the section Working with External Files and Processes for more information." />
+            <local:FieldClass Title="solr.EnumField" Description="Deprecated. Use Enumlocal:FieldType instead." />
+            <local:FieldClass Title="solr.Enumlocal:FieldType"
+                              Description="Allows defining an enumerated set of values which may not be easily sorted by either alphabetic or numeric order (such as a list of severities, for example). This field type takes a configuration file, which lists the proper order of the field values. See the section Working with Enum Fields for more information." />
+            <local:FieldClass Title="solr.FloatPointField"
+                              Description="Floating point field (32-bit IEEE floating point). This class encodes float values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="solr.ICUCollationField"
+                              Description="Supports Unicode collation for sorting and range queries. See the section Unicode Collation for more information." />
+            <local:FieldClass Title="solr.IntPointField"
+                              Description="Integer field (32-bit signed integer). This class encodes int values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="solr.LatLonPointSpatialField"
+                              Description="A latitude/longitude coordinate pair; possibly multi-valued for multiple points. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
+            <local:FieldClass Title="solr.LatLonType"
+                              Description="Deprecated. Consider using the LatLonPointSpatialField instead. A single-valued latitude/longitude coordinate pair. Usually it's specified as 'lat,lon' order with a comma. See the section Spatial Search for more information." />
+            <local:FieldClass Title="solr.LongPointField"
+                              Description="Long field (64-bit signed integer). This class encodes foo values using a 'Dimensional Points' based data structure that allows for very efficient searches for specific values, or ranges of values. For single valued fields, docValues='true' must be used to enable sorting." />
+            <local:FieldClass Title="solr.PointType"
+                              Description="A single-valued n-dimensional point. It's both for sorting spatial data that is not lat-lon, and for some more rare use-cases. (NOTE: this is not related to the 'Point' based numeric fields). See Spatial Search for more information." />
+            <local:FieldClass Title="solr.PreAnalyzedField"
+                              Description="Provides a way to send to Solr serialized token streams, optionally with independent stored values of a field, and have this information stored and indexed without any additional text processing. " />
+            <local:FieldClass Title="solr.RandomSortField"
+                              Description="Configuration and usage of PreAnalyzedField is documented in the section  Working with External Files and Processes." />
+            <local:FieldClass Title="solr.SpatialRecursivePrefixTreelocal:FieldType"
+                              Description="Does not contain a value. Queries that sort on this field type will return results in random order. Use a dynamic field to use this feature." />
+            <local:FieldClass Title="solr.StrField"
+                              Description="(RPT for short) Accepts latitude comma longitude strings or other shapes in WKT format. See Spatial Search for more information." />
+            <local:FieldClass Title="solr.TextField"
+                              Description="String (UTF-8 encoded string or Unicode). Strings are intended for small fields and are not tokenized or analyzed in any way. They have a hard limit of slightly less than 32K." />
+            <local:FieldClass Title="solr.TrieDateField" Description="Text, usually multiple words or tokens." />
+            <local:FieldClass Title="solr.TrieDoubleField" Description="Deprecated. Use DatePointField instead." />
+            <local:FieldClass Title="solr.TrieFloatField" Description="Deprecated. Use DoublePointField instead." />
+            <local:FieldClass Title="solr.TrieIntField" Description="Deprecated. Use FloatPointField instead." />
+            <local:FieldClass Title="solr.TrieLongField" Description="Deprecated. Use IntPointField instead." />
+            <local:FieldClass Title="solr.TrieField" Description="Deprecated. Use LongPointField instead." />
+            <local:FieldClass Title="solr.UUIDField"
+                              Description="Deprecated. This field takes a type parameter to define the specific class of Trie* field to use; Use an appropriate Point Field type instead." />
         </x:Array>
-       
+
         <XmlDataProvider x:Key="SchemaProvider" XPath="/schema">
             <x:XData>
 
@@ -154,12 +179,12 @@
                     <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
       or Solr won't start. _version_ and update log are required for SolrCloud
    -->
-                    <field name="_version_" type="long" indexed="true" stored="true"/>
+                    <field name="_version_" type="long" indexed="true" stored="true" />
 
                     <!-- points to the root document of a block of nested documents. Required for nested
       document support, may be removed otherwise
    -->
-                    <field name="_root_" type="string" indexed="true" stored="false"/>
+                    <field name="_root_" type="string" indexed="true" stored="false" />
 
                     <!-- Only remove the "id" field if you have a very good reason to. While not strictly
      required, it is highly recommended. A <uniqueKey> is present in almost all Solr 
@@ -173,40 +198,40 @@
        RESTRICTION: the glob-like pattern in the name attribute must have
        a "*" only at the start or the end.  -->
 
-                    <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
-                    <dynamicField name="*_is" type="int"    indexed="true"  stored="true"  multiValued="true"/>
-                    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true" />
-                    <dynamicField name="*_ss" type="string"  indexed="true"  stored="true" multiValued="true"/>
-                    <dynamicField name="*_l"  type="long"   indexed="true"  stored="true"/>
-                    <dynamicField name="*_ls" type="long"   indexed="true"  stored="true"  multiValued="true"/>
-                    <dynamicField name="*_t"  type="text_general"    indexed="true"  stored="true"/>
-                    <dynamicField name="*_txt" type="text_general"   indexed="true"  stored="true" multiValued="true"/>
-                    <dynamicField name="*_en"  type="text_en"    indexed="true"  stored="true" multiValued="true"/>
-                    <dynamicField name="*_b"  type="boolean" indexed="true" stored="true"/>
-                    <dynamicField name="*_bs" type="boolean" indexed="true" stored="true"  multiValued="true"/>
-                    <dynamicField name="*_f"  type="float"  indexed="true"  stored="true"/>
-                    <dynamicField name="*_fs" type="float"  indexed="true"  stored="true"  multiValued="true"/>
-                    <dynamicField name="*_d"  type="double" indexed="true"  stored="true"/>
-                    <dynamicField name="*_ds" type="double" indexed="true"  stored="true"  multiValued="true"/>
+                    <dynamicField name="*_i" type="int" indexed="true" stored="true" />
+                    <dynamicField name="*_is" type="int" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_s" type="string" indexed="true" stored="true" />
+                    <dynamicField name="*_ss" type="string" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_l" type="long" indexed="true" stored="true" />
+                    <dynamicField name="*_ls" type="long" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_t" type="text_general" indexed="true" stored="true" />
+                    <dynamicField name="*_txt" type="text_general" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_en" type="text_en" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_b" type="boolean" indexed="true" stored="true" />
+                    <dynamicField name="*_bs" type="boolean" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_f" type="float" indexed="true" stored="true" />
+                    <dynamicField name="*_fs" type="float" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_d" type="double" indexed="true" stored="true" />
+                    <dynamicField name="*_ds" type="double" indexed="true" stored="true" multiValued="true" />
 
                     <!-- Type used to index the lat and lon components for the "location" FieldType -->
-                    <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false" />
+                    <dynamicField name="*_coordinate" type="tdouble" indexed="true" stored="false" />
 
-                    <dynamicField name="*_dt"  type="date"    indexed="true"  stored="true"/>
-                    <dynamicField name="*_dts" type="date"    indexed="true"  stored="true" multiValued="true"/>
-                    <dynamicField name="*_p"  type="location" indexed="true" stored="true"/>
+                    <dynamicField name="*_dt" type="date" indexed="true" stored="true" />
+                    <dynamicField name="*_dts" type="date" indexed="true" stored="true" multiValued="true" />
+                    <dynamicField name="*_p" type="location" indexed="true" stored="true" />
 
                     <!-- some trie-coded dynamic fields for faster range queries -->
-                    <dynamicField name="*_ti" type="tint"    indexed="true"  stored="true"/>
-                    <dynamicField name="*_tl" type="tlong"   indexed="true"  stored="true"/>
-                    <dynamicField name="*_tf" type="tfloat"  indexed="true"  stored="true"/>
-                    <dynamicField name="*_td" type="tdouble" indexed="true"  stored="true"/>
-                    <dynamicField name="*_tdt" type="tdate"  indexed="true"  stored="true"/>
+                    <dynamicField name="*_ti" type="tint" indexed="true" stored="true" />
+                    <dynamicField name="*_tl" type="tlong" indexed="true" stored="true" />
+                    <dynamicField name="*_tf" type="tfloat" indexed="true" stored="true" />
+                    <dynamicField name="*_td" type="tdouble" indexed="true" stored="true" />
+                    <dynamicField name="*_tdt" type="tdate" indexed="true" stored="true" />
 
-                    <dynamicField name="*_c"   type="currency" indexed="true"  stored="true"/>
+                    <dynamicField name="*_c" type="currency" indexed="true" stored="true" />
 
-                    <dynamicField name="ignored_*" type="ignored" multiValued="true"/>
-                    <dynamicField name="attr_*" type="text_general" indexed="true" stored="true" multiValued="true"/>
+                    <dynamicField name="ignored_*" type="ignored" multiValued="true" />
+                    <dynamicField name="attr_*" type="text_general" indexed="true" stored="true" multiValued="true" />
 
                     <dynamicField name="random_*" type="random" />
 
@@ -220,12 +245,12 @@
       Unless this field is marked with required="false", it will be a required field
    -->
                     <uniqueKey>id</uniqueKey>
-                    <field name="cat" type="text_general" indexed="true" stored="true"/>
-                    <field name="name" type="text_general" indexed="true" stored="true"/>
-                    <field name="price" type="tdouble" indexed="true" stored="true"/>
-                    <field name="inStock" type="boolean" indexed="true" stored="true"/>
-                    <field name="author" type="text_general" indexed="true" stored="true"/>
-                    <field name="uname" type="text_uppercase" indexed="true" stored="true"/>
+                    <field name="cat" type="text_general" indexed="true" stored="true" />
+                    <field name="name" type="text_general" indexed="true" stored="true" />
+                    <field name="price" type="tdouble" indexed="true" stored="true" />
+                    <field name="inStock" type="boolean" indexed="true" stored="true" />
+                    <field name="author" type="text_general" indexed="true" stored="true" />
+                    <field name="uname" type="text_uppercase" indexed="true" stored="true" />
 
                     <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
@@ -235,7 +260,7 @@
    <copyField source="title" dest="text"/>
    <copyField source="body" dest="text"/>
   -->
-                    <copyField source="name" dest="uname"/>
+                    <copyField source="name" dest="uname" />
 
                     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"
@@ -252,7 +277,7 @@
                     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
 
                     <!-- boolean type: "true" or "false" -->
-                    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+                    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" />
 
                     <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
          currently supported on types that are sorted internally as strings
@@ -276,10 +301,10 @@
       These fields support doc values, but they require the field to be
       single-valued and either be required or have a default value.
     -->
-                    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
-                    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
-                    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
-                    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+                    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
+                    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0" />
+                    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
+                    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0" />
 
                     <!--
      Numeric field types that index each value at various levels of precision
@@ -291,10 +316,10 @@
      indexed per value, slightly larger index size, and faster range queries.
      A precisionStep of 0 disables indexing at different precision levels.
     -->
-                    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0"/>
-                    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0"/>
-                    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
-                    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
+                    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0" />
+                    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0" />
+                    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0" />
+                    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0" />
 
                     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
          is a more restricted form of the canonical representation of dateTime
@@ -318,14 +343,14 @@
 
          Note: For faster range queries, consider the tdate type
       -->
-                    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+                    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" />
 
                     <!-- A Trie based date field for faster date range queries and date faceting. -->
-                    <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+                    <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0" />
 
 
                     <!--Binary data type. The data should be sent/retrieved in as Base64 encoded Strings -->
-                    <fieldType name="binary" class="solr.BinaryField"/>
+                    <fieldType name="binary" class="solr.BinaryField" />
 
                     <!-- The "RandomSortField" is not used to store or search any
          data.  You can declare fields of this type it in your schema
@@ -363,7 +388,7 @@
                     <!-- A text field that only splits on whitespace for exact matching of words -->
                     <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
                         <analyzer>
-                            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+                            <tokenizer class="solr.WhitespaceTokenizerFactory" />
                         </analyzer>
                     </fieldType>
 
@@ -374,18 +399,19 @@
 	 also applies synonyms. -->
                     <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
                         <analyzer type="index">
-                            <tokenizer class="solr.StandardTokenizerFactory"/>
+                            <tokenizer class="solr.StandardTokenizerFactory" />
                             <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
                             <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
         -->
-                            <filter class="solr.LowerCaseFilterFactory"/>
+                            <filter class="solr.LowerCaseFilterFactory" />
                         </analyzer>
                         <analyzer type="query">
-                            <tokenizer class="solr.StandardTokenizerFactory"/>
+                            <tokenizer class="solr.StandardTokenizerFactory" />
                             <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-                            <filter class="solr.LowerCaseFilterFactory"/>
+                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"
+                                    expand="true" />
+                            <filter class="solr.LowerCaseFilterFactory" />
                         </analyzer>
                     </fieldType>
 
@@ -396,38 +422,37 @@
          also applies synonyms from synonyms.txt. -->
                     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
                         <analyzer type="index">
-                            <tokenizer class="solr.StandardTokenizerFactory"/>
+                            <tokenizer class="solr.StandardTokenizerFactory" />
                             <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
         -->
                             <!-- Case insensitive stop word removal.
         -->
                             <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                />
-                            <filter class="solr.LowerCaseFilterFactory"/>
-                            <filter class="solr.EnglishPossessiveFilterFactory"/>
-                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+                                    ignoreCase="true"
+                                    words="lang/stopwords_en.txt" />
+                            <filter class="solr.LowerCaseFilterFactory" />
+                            <filter class="solr.EnglishPossessiveFilterFactory" />
+                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
                             <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
 	-->
-                            <filter class="solr.PorterStemFilterFactory"/>
+                            <filter class="solr.PorterStemFilterFactory" />
                         </analyzer>
                         <analyzer type="query">
-                            <tokenizer class="solr.StandardTokenizerFactory"/>
-                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+                            <tokenizer class="solr.StandardTokenizerFactory" />
+                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"
+                                    expand="true" />
                             <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                />
-                            <filter class="solr.LowerCaseFilterFactory"/>
-                            <filter class="solr.EnglishPossessiveFilterFactory"/>
-                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+                                    ignoreCase="true"
+                                    words="lang/stopwords_en.txt" />
+                            <filter class="solr.LowerCaseFilterFactory" />
+                            <filter class="solr.EnglishPossessiveFilterFactory" />
+                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
                             <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
 	-->
-                            <filter class="solr.PorterStemFilterFactory"/>
+                            <filter class="solr.PorterStemFilterFactory" />
                         </analyzer>
                     </fieldType>
 
@@ -440,51 +465,58 @@
 	 cases will work, for example query "wi fi" will match
 	 document "WiFi" or "wi-fi".
         -->
-                    <fieldType name="text_en_splitting" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+                    <fieldType name="text_en_splitting" class="solr.TextField" positionIncrementGap="100"
+                               autoGeneratePhraseQueries="true">
                         <analyzer type="index">
-                            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+                            <tokenizer class="solr.WhitespaceTokenizerFactory" />
                             <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
         -->
                             <!-- Case insensitive stop word removal.
         -->
                             <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                />
-                            <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
-                            <filter class="solr.LowerCaseFilterFactory"/>
-                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-                            <filter class="solr.PorterStemFilterFactory"/>
+                                    ignoreCase="true"
+                                    words="lang/stopwords_en.txt" />
+                            <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1"
+                                    generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"
+                                    splitOnCaseChange="1" />
+                            <filter class="solr.LowerCaseFilterFactory" />
+                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
+                            <filter class="solr.PorterStemFilterFactory" />
                         </analyzer>
                         <analyzer type="query">
-                            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+                            <tokenizer class="solr.WhitespaceTokenizerFactory" />
+                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"
+                                    expand="true" />
                             <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                />
-                            <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
-                            <filter class="solr.LowerCaseFilterFactory"/>
-                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-                            <filter class="solr.PorterStemFilterFactory"/>
+                                    ignoreCase="true"
+                                    words="lang/stopwords_en.txt" />
+                            <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1"
+                                    generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"
+                                    splitOnCaseChange="1" />
+                            <filter class="solr.LowerCaseFilterFactory" />
+                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
+                            <filter class="solr.PorterStemFilterFactory" />
                         </analyzer>
                     </fieldType>
 
                     <!-- Less flexible matching, but less false matches.  Probably not ideal for product names,
          but may be good for SKUs.  Can insert dashes in the wrong place and still match. -->
-                    <fieldType name="text_en_splitting_tight" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+                    <fieldType name="text_en_splitting_tight" class="solr.TextField" positionIncrementGap="100"
+                               autoGeneratePhraseQueries="true">
                         <analyzer>
-                            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
-                            <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt"/>
-                            <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
-                            <filter class="solr.LowerCaseFilterFactory"/>
-                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-                            <filter class="solr.EnglishMinimalStemFilterFactory"/>
+                            <tokenizer class="solr.WhitespaceTokenizerFactory" />
+                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"
+                                    expand="false" />
+                            <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" />
+                            <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0"
+                                    generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0" />
+                            <filter class="solr.LowerCaseFilterFactory" />
+                            <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
+                            <filter class="solr.EnglishMinimalStemFilterFactory" />
                             <!-- this filter can remove any duplicate tokens that appear at the same position - sometimes
              possible with WordDelimiterFilter in conjuncton with stemming. -->
-                            <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+                            <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
                         </analyzer>
                     </fieldType>
 
@@ -492,17 +524,18 @@
 	 each token, to enable more efficient leading wildcard queries. -->
                     <fieldType name="text_general_rev" class="solr.TextField" positionIncrementGap="100">
                         <analyzer type="index">
-                            <tokenizer class="solr.StandardTokenizerFactory"/>
+                            <tokenizer class="solr.StandardTokenizerFactory" />
                             <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-                            <filter class="solr.LowerCaseFilterFactory"/>
+                            <filter class="solr.LowerCaseFilterFactory" />
                             <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true"
-           maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33"/>
+                                    maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33" />
                         </analyzer>
                         <analyzer type="query">
-                            <tokenizer class="solr.StandardTokenizerFactory"/>
-                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+                            <tokenizer class="solr.StandardTokenizerFactory" />
+                            <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"
+                                    expand="true" />
                             <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-                            <filter class="solr.LowerCaseFilterFactory"/>
+                            <filter class="solr.LowerCaseFilterFactory" />
                         </analyzer>
                     </fieldType>
 
@@ -515,7 +548,7 @@
                             <!-- KeywordTokenizer does no actual tokenizing, so the entire
              input string is preserved as a single token
           -->
-                            <tokenizer class="solr.KeywordTokenizerFactory"/>
+                            <tokenizer class="solr.KeywordTokenizerFactory" />
                             <!-- The LowerCase TokenFilter does what you expect, which can be
              when you want your sorting to be case insensitive
           -->
@@ -534,22 +567,21 @@
              http://docs.oracle.com/javase/7/docs/api/java/util/regex/package-summary.html
           -->
                             <filter class="solr.PatternReplaceFilterFactory"
-                pattern="([^a-z])" replacement="" replace="all"
-        />
+                                    pattern="([^a-z])" replacement="" replace="all" />
                         </analyzer>
                     </fieldType>
 
                     <!-- lowercases the entire field value, keeping it as a single token.  -->
                     <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
                         <analyzer>
-                            <tokenizer class="solr.KeywordTokenizerFactory"/>
+                            <tokenizer class="solr.KeywordTokenizerFactory" />
                             <filter class="solr.LowerCaseFilterFactory" />
                         </analyzer>
                     </fieldType>
                     <fieldType name="text_uppercase" class="solr.TextField" positionIncrementGap="100">
                         <analyzer>
-                            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                            <filter class="solr.UpperCaseFilterFactory"/>
+                            <tokenizer class="solr.WhitespaceTokenizerFactory" />
+                            <filter class="solr.UpperCaseFilterFactory" />
                         </analyzer>
                     </fieldType>
 
@@ -568,24 +600,25 @@
       The subFields are an implementation detail of the fieldType, and end
       users normally should not need to know about them.
      -->
-                    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
+                    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d" />
 
                     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-                    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+                    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate" />
 
                     <!-- An alternative geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
       For more information about this and other Spatial fields new to Solr 4, see:
       http://wiki.apache.org/solr/SolrAdaptersForLuceneSpatial4
     -->
                     <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType"
-        geo="true" distErrPct="0.025" maxDistErr="0.001" distanceUnits="kilometers" />
+                               geo="true" distErrPct="0.025" maxDistErr="0.001" distanceUnits="kilometers" />
 
                     <!-- Spatial rectangle (bounding box) field. It supports most spatial predicates, and has
      special relevancy modes: score=overlapRatio|area|area2D (local-param to the query).  DocValues is recommended for
      relevancy. -->
                     <fieldType name="bbox" class="solr.BBoxField"
-               geo="true" distanceUnits="kilometers" numberType="_bbox_coord" />
-                    <fieldType name="_bbox_coord" class="solr.TrieDoubleField" precisionStep="8" docValues="true" stored="false"/>
+                               geo="true" distanceUnits="kilometers" numberType="_bbox_coord" />
+                    <fieldType name="_bbox_coord" class="solr.TrieDoubleField" precisionStep="8" docValues="true"
+                               stored="false" />
 
                     <!-- Money/currency field type. See http://wiki.apache.org/solr/MoneyFieldType
         Parameters:
@@ -598,92 +631,227 @@
                              ratesFileLocation: URL or path to rates JSON file (default latest.json on the web)
                              refreshInterval: Number of minutes between each rates fetch (default: 1440, min: 60)
    -->
-                    <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml" />
+                    <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD"
+                               currencyConfig="currency.xml" />
 
                 </schema>
 
             </x:XData>
         </XmlDataProvider>
         <HierarchicalDataTemplate DataType="schema" ItemsSource="{Binding XPath=*}">
-            <Border>
-                <TextBlock>Schema: <Run Style="{StaticResource FieldValueStyle}"  Text="{Binding XPath=@name}"/>
-                Version: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@version}"/> <LineBreak/>
-            Required: <CheckBox IsThreeState="True" IsChecked="{Binding XPath=@required, Converter={StaticResource CheckboxConverter}}"/> 
-            Multi-Valued:<CheckBox IsThreeState="True" IsChecked="{Binding XPath=@multivalues, Converter={StaticResource CheckboxConverter}}"/> 
-            Unique Key Field: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=/uniqueKey}"></Run>
-                </TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Schema</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="1" Grid.Column="0">
+                        <Run Text="{Binding XPath=@name}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="0" Grid.Column="1">Version</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="1" Grid.Column="1">
+                        <Run Text="{Binding XPath=@version}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="0" Grid.Column="2">Required</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Row="1" Grid.Column="2"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@required, Converter={StaticResource CheckboxConverter}}" />
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="0" Grid.Column="3">Multi-Valued</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Row="1" Grid.Column="3"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@multivalues, Converter={StaticResource CheckboxConverter}}" />
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="0" Grid.Column="4">Unique Key Field</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Row="1" Grid.Column="4">
+                        <Run Text="{Binding XPath=/uniqueKey}" />
+                    </TextBlock>
+                </Grid>
             </Border>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="uniqueKey">
             <HierarchicalDataTemplate.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
-                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Visibility" Value="Collapsed" />
                 </Style>
             </HierarchicalDataTemplate.ItemContainerStyle>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="field" ItemsSource="{Binding XPath=*}">
-            <TextBlock>
-                Field: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@name}"/> 
-                Type: <ComboBox SelectedValue="{Binding XPath=@type}"  ItemsSource="{Binding XPath=//fieldType/@name}"/> <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@type}"/> 
-                Indexed:<CheckBox IsThreeState="True" IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}"/>
-            </TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightGoldenrodYellow">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Field</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0" Grid.Row="1">
+                        <Run Text="{Binding XPath=@name}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="1" Grid.Row="0">Type</TextBlock>
+                    <ComboBox Padding="5,5,5,0" Grid.Column="1" Grid.Row="1" SelectedValue="{Binding XPath=@type}"
+                              ItemsSource="{Binding XPath=//fieldType/@name}" />
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="0">Indexed:</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="1"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}" />
+                </Grid>
+            </Border>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="dynamicField" ItemsSource="{Binding XPath=*}">
-            <TextBlock>
-                Dynamic Field: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@name}"/> 
-                Type: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@type}"/> 
-                Indexed:<CheckBox IsThreeState="True" IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}"/>
-            </TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightPink">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Dynamic Field</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0" Grid.Row="1">
+                        <Run Text="{Binding XPath=@name}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="1" Grid.Row="0">Type</TextBlock>
+                    <ComboBox Padding="5,5,5,0" Grid.Column="1" Grid.Row="1" SelectedValue="{Binding XPath=@type}"
+                              ItemsSource="{Binding XPath=//fieldType/@name}" />
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="0">Indexed:</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="1"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}" />
+                </Grid>
+            </Border>
+
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="fieldType" ItemsSource="{Binding XPath=*}">
-            <TextBlock>
-                Field Type: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@name}"/> <LineBreak/>
-                Class: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@class}"/> <LineBreak/>
-                Sort Missing Last: <CheckBox IsThreeState="True" IsChecked="{Binding XPath=@sortMissingLast, Converter={StaticResource CheckboxConverter}}"/>
-            </TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="Thistle">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Field Type</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0" Grid.Row="1">
+                        <Run Text="{Binding XPath=@name}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="1" Grid.Row="0">Class</TextBlock>
+                    <ComboBox Padding="5,5,5,0" Grid.Column="1" Grid.Row="1" SelectedValuePath="Title"
+                              SelectedValue="{Binding XPath=@class}" DisplayMemberPath="Title"
+                              ItemsSource="{StaticResource FieldClassArray}" />
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="0">Indexed:</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="1"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@indexed, Converter={StaticResource CheckboxConverter}}" />
+                </Grid>
+            </Border>
+
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="analyzer" ItemsSource="{Binding XPath=*}">
-            <TextBlock>Analyzer Type: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@type}"/></TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightSteelBlue">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Analyzer</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0" Grid.Row="1">
+                        <Run Text="{Binding XPath=@type}" />
+                    </TextBlock>
+                </Grid>
+            </Border>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="tokenizer" ItemsSource="{Binding XPath=*}">
-            <TextBlock>Tokenizer Class: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@class}"/></TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightSteelBlue">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="240" SharedSizeGroup="cellgroup" />
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Field</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0" Grid.Row="1">
+                        <Run Text="{Binding XPath=@class}" />
+                    </TextBlock>
+                </Grid>
+            </Border>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="filter" ItemsSource="{Binding XPath=*}">
-            <TextBlock>Filter Class: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@class}"/>
-            Ignore Case: <CheckBox IsThreeState="True" IsChecked="{Binding XPath=@ignoreCase, Converter={StaticResource CheckboxConverter}}"/>
-            Synonyms: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@synonyms}"/>
-            Expand: <CheckBox IsThreeState="True" IsChecked="{Binding XPath=@expand, Converter={StaticResource CheckboxConverter}}"/></TextBlock>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightSteelBlue">
+                <Grid Style="{StaticResource GridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="180" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                        <ColumnDefinition Width="120" SharedSizeGroup="cellgroup" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0">Filter Class</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="0" Grid.Row="1">
+                        <Run Text="{Binding XPath=@class}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="1" Grid.Row="0">Ignore Case</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Column="1" Grid.Row="1"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@ignoreCase, Converter={StaticResource CheckboxConverter}}" />
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="0">Synonyms</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="2" Grid.Row="1">
+                        <Run Text="{Binding XPath=@synonyms}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Padding="5,5,5,0" Grid.Column="3" Grid.Row="0">Expand</TextBlock>
+                    <CheckBox Style="{StaticResource CheckBoxStyle}" Padding="5,5,5,0" Grid.Column="3" Grid.Row="1"
+                              IsThreeState="True"
+                              IsChecked="{Binding XPath=@expand, Converter={StaticResource CheckboxConverter}}" />
+                </Grid>
+            </Border>
         </HierarchicalDataTemplate>
-        <!--
-        <HierarchicalDataTemplate x:Key="SchemaTemplate" DataType="schema" ItemsSource="{Binding XPath=*}">
-            <TextBlock>Schema: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@name}"/> Version: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@version}"/></TextBlock>
-        </HierarchicalDataTemplate>
-        -->
-        <!--
-        <HierarchicalDataTemplate DataType="field">
-            <TextBlock FontStyle="Normal" FontWeight="Bold">Name: <Run Style="{StaticResource FieldValueStyle}" Text="{Binding XPath=@name}"></Run Style="{StaticResource FieldValueStyle}"></TextBlock>
-        </HierarchicalDataTemplate>
-        -->
+
     </Window.Resources>
     <DockPanel>
         <Menu Name="MainMenu" DockPanel.Dock="Top" Height="Auto">
-            <MenuItem Name="FileMenu" Header="File" >
-                <MenuItem Name="OpenFolderMenu" Header="Open Folder..." Click="OpenFolderMenu_OnClick"/>
+            <MenuItem Name="FileMenu" Header="File">
+                <MenuItem Name="OpenFolderMenu" Header="Open Folder..." Click="OpenFolderMenu_OnClick" />
             </MenuItem>
         </Menu>
         <Grid Name="MainGrid" DockPanel.Dock="Top" DataContext="{StaticResource SchemaProvider}">
             <Grid.Resources>
-               
+
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="180"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TreeView Name="SchemaTree" Grid.Column="0" 
+            <TreeView Name="SchemaTree" Grid.Column="0"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding XPath=.}" >
             </TreeView>
-            <GridSplitter Grid.Column="0" Width="5"/>
+            <GridSplitter Grid.Column="0" Width="5" />
         </Grid>
     </DockPanel>
 </Window>
