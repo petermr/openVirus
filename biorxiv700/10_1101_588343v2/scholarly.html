@@ -1,0 +1,2362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+ <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# book: http://ogp.me/ns/book#"> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=yes"/>
+  <meta name="type" content="article"/>
+  <meta name="category" content="article"/>
+  <meta name="HW.identifier" content="/biorxiv/early/2019/03/26/588343.atom"/>
+  <meta name="HW.pisa" content="biorxiv;588343v2"/>
+  <meta name="DC.Format" content="text/html"/>
+  <meta name="DC.Language" content="en"/>
+  <meta name="DC.Title" content="tailfindr: Alignment-free poly(A) length measurement for Oxford Nanopore RNA and DNA sequencing"/>
+  <meta name="DC.Identifier" content="10.1101/588343"/>
+  <meta name="DC.Date" content="2019-03-26"/>
+  <meta name="DC.Publisher" content="Cold Spring Harbor Laboratory"/>
+  <meta name="DC.Rights" content="© 2019, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/"/>
+  <meta name="DC.AccessRights" content="restricted"/>
+  <meta name="DC.Description" content="Polyadenylation at the 3’-end is a major regulator of messenger RNA and its length is known to affect nuclear export, stability and translation, among others. Only recently, strategies have emerged that allow for genome-wide poly(A) length assessment. These methods identify genes connected to poly(A) tail measurements indirectly by short-read alignment to genetic 3’-ends. Concurrently Oxford Nanopore Technologies (ONT) established full-length isoform RNA sequencing containing the entire poly(A) tail. However, assessing poly(A) length through basecalling has so far not been possible due the inability to resolve long homopolymeric stretches in ONT sequencing. Here we present tailfindr , an R package to estimate poly(A) tail length on ONT long-read sequencing data. tailfindr operates on unaligned, basecalled data. It measures poly(A) tail length from both native RNA and DNA sequencing, which makes poly(A) tail studies by full-length cDNA approaches possible for the first time. We assess tailfindr’s performance across different poly(A) lengths, demonstrating that tailfindr is a versatile tool providing poly(A) tail estimates across a wide range of sequencing conditions."/>
+  <meta name="DC.Contributor" content="Maximilian Krause"/>
+  <meta name="DC.Contributor" content="Adnan M. Niazi"/>
+  <meta name="DC.Contributor" content="Kornel Labun"/>
+  <meta name="DC.Contributor" content="Yamila N. Torres Cleuren"/>
+  <meta name="DC.Contributor" content="Florian S. Müller"/>
+  <meta name="DC.Contributor" content="Eivind Valen"/>
+  <meta name="article:published_time" content="2019-03-26"/>
+  <meta name="article:section" content="New Results"/>
+  <meta name="citation_title" content="tailfindr: Alignment-free poly(A) length measurement for Oxford Nanopore RNA and DNA sequencing"/>
+  <meta name="citation_abstract" lang="en" content="&lt;;p&gt;;Polyadenylation at the 3’-end is a major regulator of messenger RNA and its length is known to affect nuclear export, stability and translation, among others. Only recently, strategies have emerged that allow for genome-wide poly(A) length assessment. These methods identify genes connected to poly(A) tail measurements indirectly by short-read alignment to genetic 3’-ends. Concurrently Oxford Nanopore Technologies (ONT) established full-length isoform RNA sequencing containing the entire poly(A) tail. However, assessing poly(A) length through basecalling has so far not been possible due the inability to resolve long homopolymeric stretches in ONT sequencing.&lt;;/p&gt;;&lt;;p&gt;;Here we present &lt;;i&gt;;tailfindr&lt;;/i&gt;;, an R package to estimate poly(A) tail length on ONT long-read sequencing data. &lt;;i&gt;;tailfindr&lt;;/i&gt;; operates on unaligned, basecalled data. It measures poly(A) tail length from both native RNA and DNA sequencing, which makes poly(A) tail studies by full-length cDNA approaches possible for the first time. We assess &lt;;i&gt;;tailfindr’s&lt;;/i&gt;; performance across different poly(A) lengths, demonstrating that &lt;;i&gt;;tailfindr&lt;;/i&gt;; is a versatile tool providing poly(A) tail estimates across a wide range of sequencing conditions.&lt;;/p&gt;;"/>
+  <meta name="citation_journal_title" content="bioRxiv"/>
+  <meta name="citation_publisher" content="Cold Spring Harbor Laboratory"/>
+  <meta name="citation_publication_date" content="2019/01/01"/>
+  <meta name="citation_mjid" content="biorxiv;588343v2"/>
+  <meta name="citation_id" content="588343v2"/>
+  <meta name="citation_public_url" content="https://www.biorxiv.org/content/10.1101/588343v2"/>
+  <meta name="citation_abstract_html_url" content="https://www.biorxiv.org/content/10.1101/588343v2.abstract"/>
+  <meta name="citation_full_html_url" content="https://www.biorxiv.org/content/10.1101/588343v2.full"/>
+  <meta name="citation_pdf_url" content="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343.full.pdf"/>
+  <meta name="citation_doi" content="10.1101/588343"/>
+  <meta name="citation_num_pages" content="21"/>
+  <meta name="citation_article_type" content="Article"/>
+  <meta name="citation_section" content="New Results"/>
+  <meta name="citation_firstpage" content="588343"/>
+  <meta name="citation_author" content="Maximilian Krause"/>
+  <meta name="citation_author_institution" content="Computational Biology Unit, Department of Informatics, University of Bergen"/>
+  <meta name="citation_author_institution" content="Sars International Centre for Marine Molecular Biology, University of Bergen"/>
+  <meta name="citation_author" content="Adnan M. Niazi"/>
+  <meta name="citation_author_institution" content="Computational Biology Unit, Department of Informatics, University of Bergen"/>
+  <meta name="citation_author_orcid" content="http://orcid.org/0000-0001-6955-2506"/>
+  <meta name="citation_author" content="Kornel Labun"/>
+  <meta name="citation_author_institution" content="Computational Biology Unit, Department of Informatics, University of Bergen"/>
+  <meta name="citation_author_orcid" content="http://orcid.org/0000-0002-1262-2611"/>
+  <meta name="citation_author" content="Yamila N. Torres Cleuren"/>
+  <meta name="citation_author_institution" content="Computational Biology Unit, Department of Informatics, University of Bergen"/>
+  <meta name="citation_author_orcid" content="http://orcid.org/0000-0003-2218-7243"/>
+  <meta name="citation_author" content="Florian S. Müller"/>
+  <meta name="citation_author_institution" content="Computational Biology Unit, Department of Informatics, University of Bergen"/>
+  <meta name="citation_author_orcid" content="http://orcid.org/0000-0003-0193-7789"/>
+  <meta name="citation_author" content="Eivind Valen"/>
+  <meta name="citation_author_institution" content="Computational Biology Unit, Department of Informatics, University of Bergen"/>
+  <meta name="citation_author_institution" content="Sars International Centre for Marine Molecular Biology, University of Bergen"/>
+  <meta name="citation_author_orcid" content="http://orcid.org/0000-0003-1840-6108"/>
+  <meta name="citation_reference" content="Fuke H, Ohno M. Role of poly (A) tail as an identity element for mRNA nuclear export. Nucleic Acids Res 2008 Feb;36(3):1037–1049."/>
+  <meta name="citation_reference" content="Bear DG, Fomproix N, Soop T, Björkroth B, Masich S, Daneholt B. Nuclear poly(A)-binding protein PABPN1 is associated with RNA polymerase II during transcription and accompanies the released transcript to the nuclear pore. Exp Cell Res 2003 Jun;286(2):332–344."/>
+  <meta name="citation_reference" content="Hector RE, Nykamp KR, Dheur S, Anderson JT, Non PJ, Urbinati CR, et al. Dual requirement for yeast hnRNP Nab2p in mRNA poly (A) tail length control and nuclear export. EMBO J 2002;21(7):1800–1810."/>
+  <meta name="citation_reference" content="Eckmann CR, Rammelt C, Wahle E. Control of poly(A) tail length. Wiley Interdiscip Rev RNA 2011 May;2(3):348–361."/>
+  <meta name="citation_reference" content="Millevoi S, Vagner S. Molecular mechanisms of eukaryotic pre-mRNA 3’ end processing regulation. Nucleic Acids Res 2010 May;38(9):2757–2774."/>
+  <meta name="citation_reference" content="Darnell JE, Philipson L, Wall R, Adesnik M. Polyadenylic acid sequences: role in conversion of nuclear RNA into messenger RNA. Science 1971 Oct;174(4008):507–510."/>
+  <meta name="citation_reference" content="Edmonds M, Vaughan MH Jr, Nakazato H. Polyadenylic acid sequences in the heterogeneous nuclear RNA and rapidly-labeled polyribosomal RNA of HeLa cells: possible evidence for a precursor relationship. Proc Natl Acad Sci U S A 1971 Jun;68(6):1336–1340."/>
+  <meta name="citation_reference" content="Raabe T, Bollum FJ, Manley JL. Primary structure and expression of bovine poly(A) polymerase. Nature 1991 Sep;353(6341):229–234."/>
+  <meta name="citation_reference" content="Raabe T, Murthy KG, Manley JL. Poly(A) polymerase contains multiple functional domains. Mol Cell Biol 1994 May;14(5):2946–2957."/>
+  <meta name="citation_reference" content="Mendez R, Murthy KG, Ryan K, Manley JL, Richter JD. Phosphorylation of CPEB by Eg2 mediates the recruitment of CPSF into an active cytoplasmic polyadenylation complex. Mol Cell 2000 Nov;6(5):1253–1259."/>
+  <meta name="citation_reference" content="Diez J, Brawerman G. Elongation of the polyadenylate segment of messenger RNA in the cytoplasm of mammalian cells. Proc Natl Acad Sci U S A 1974 Oct;71(10):4091–4095."/>
+  <meta name="citation_reference" content="Clegg KB, Pikó L. RNA synthesis and cytoplasmic polyadenylation in the one-cell mouse embryo. Nature 1982 Jan;295(5847):343–344."/>
+  <meta name="citation_reference" content="Hake LE, Richter JD. CPEB is a specificity factor that mediates cytoplasmic polyadenylation during Xenopus oocyte maturation. Cell 1994 Nov;79(4):617–627."/>
+  <meta name="citation_reference" content="Read RL, Martinho RG, Wang SW, Carr AM, Norbury CJ. Cytoplasmic poly(A) polymerases mediate cellular responses to S phase arrest. Proc Natl Acad Sci U S A 2002 Sep;99(19):12079–12084."/>
+  <meta name="citation_reference" content="Jalkanen AL, Coleman SJ, Wilusz J. Determinants and implications of mRNA poly(A) tail size – Does this protein make my tail look big? Semin Cell Dev Biol 2014;34:24–32."/>
+  <meta name="citation_reference" content="Ford LP, Bagga PS, Wilusz J. The poly(A) tail inhibits the assembly of a 3’-to-5’ exonuclease in an in vitro RNA stability system. Mol Cell Biol 1997;17(1):398–406."/>
+  <meta name="citation_reference" content="Bresson SM, Conrad NK. The human nuclear poly(a)-binding protein promotes RNA hyperadenylation and decay. PLoS Genet 2013 Oct;9(10):e1003893."/>
+  <meta name="citation_reference" content="Beilharz TH, Preiss T. Widespread use of poly(A) tail length control to accentuate expression of the yeast transcriptome. RNA 2007 Jul;13(7):982–997."/>
+  <meta name="citation_reference" content="Subtelny AO, Eichhorn SW, Chen GR, Sive H, Bartel DP. Poly(A)-tail profiling reveals an embryonic switch in translational control. Nature 2014 Apr;508(7494):66–71."/>
+  <meta name="citation_reference" content="Lima SA, Chipman LB, Nicholson AL, Chen YH, Yee BA, Yeo GW, et al. Short poly(A) tails are a conserved feature of highly expressed genes. Nat Struct Mol Biol 2017 Dec;24(12):1057–1063."/>
+  <meta name="citation_reference" content="Nilsen TW. Measuring the length of poly(A) tails. Cold Spring Harb Protoc 2015 Apr;2015(4):413–418."/>
+  <meta name="citation_reference" content="Murray EL, Schoenberg DR. Chapter 24 Assays for Determining Poly(A) Tail Length and the Polarity of mRNA Decay in Mammalian Cells. In: Methods in Enzymology, vol. 448 Academic Press; 2008.p. 483–504."/>
+  <meta name="citation_reference" content="Hite JM, Eckert KA, Cheng KC. Factors Affecting Fidelity of DNA Synthesis During PCR Amplification of d(C-A)n·d(G-T)n Microsatellite Repeats. Nucleic Acids Res 1996 Jun;24(12):2429–2434."/>
+  <meta name="citation_reference" content="Hommelsheim CM, Frantzeskakis L, Huang M, Ülker B. PCR amplification of repetitive DNA: a limitation to genome editing technologies and many other applications. Sci Rep 2014 May;4:5052."/>
+  <meta name="citation_reference" content="Chang H, Lim J, Ha M, Kim VN. TAIL-seq: genome-wide determination of poly(A) tail length and 3’ end modifications. Mol Cell 2014 Mar;53(6):1044–1052."/>
+  <meta name="citation_reference" content="Balagopal V, Bolisetty M, Al Husaini N, Coller J, others. Ccr4 and Pop2 control poly (A) tail length in Saccharomyces cerevisiae. bioRxiv 2017;."/>
+  <meta name="citation_reference" content="Lim J, Lee M, Son A, Chang H, Kim VN. mTAIL-seq reveals dynamic poly(A) tail regulation in oocyte-to-embryo development. Genes Dev 2016 Jul;30(14):1671–1682."/>
+  <meta name="citation_reference" content="Woo YM, Kwak Y, Namkoong S, Kristjánsdóttir K, Lee SH, Lee JH, et al. TED-Seq Identifies the Dynamics of Poly(A) Length during ER Stress. Cell Rep 2018 Sep;24(13):3630–3641.e7."/>
+  <meta name="citation_reference" content="Jain M, Olsen HE, Paten B, Akeson M. The Oxford Nanopore MinION: delivery of nanopore sequencing to the genomics community. Genome Biol 2016 Nov;17(1):239."/>
+  <meta name="citation_reference" content="Garalde DR, Snell EA, Jachimowicz D, Sipos B, Lloyd JH, Bruce M, et al. Highly parallel direct RNA sequencing on an array of nanopores. Nat Methods 2018 Mar;15(3):201–206."/>
+  <meta name="citation_reference" content="Rang FJ, Kloosterman WP, de Ridder J. From squiggle to basepair: computational approaches for improving nanopore sequencing read accuracy. Genome Biol 2018 Jul;19(1):90."/>
+  <meta name="citation_reference" content="Workman RE, Tang A, Tang PS, Jain M, Tyson JR, Zuzarte PC, et al. Nanopore native RNA sequencing of a human poly(A) transcriptome. bioRxiv 2018 Sep;."/>
+  <meta name="citation_reference" content="Oxford Nanopore Technologies. Nanopore Sequencing – The value of full-length transcripts without bias. Oxford Nanopore Technologies; 2018."/>
+  <meta name="citation_reference" content="Oxford Nanopore Technologies. cDNA Sequencing with Oxford Nanopore - Getting Started. Oxford Nanopore Technologies; 2019."/>
+  <meta name="citation_reference" content="Oxford Nanopore Technologies, Clive G. Brown - Nanopore Community Meeting 2018 talk. United States: Oxford Nanopore Technologies; 2018."/>
+  <meta name="citation_reference" content="Brawerman G. Alterations in the size of the poly(a) segment in newly-synthesized messenger RNA of mouse sarcoma 180 ascites cells. Mol Biol Rep 1973 Jun;1(1):7–13."/>
+  <meta name="citation_reference" content="Morrison MR, Merkel CG, Lingrel JB. Size of the poly(A) region in mouse globin messenger RNA. Mol Biol Rep 1973 Jun;1(1):55–60."/>
+  <meta name="citation_reference" content="Merkel CG, Wood TG, Lingrel JB. Shortening of the poly(A) region of mouse globin messenger RNA. J Biol Chem 1976 Sep;251(18):5512–5515."/>
+  <meta name="citation_reference" content="Groner B, Hynes N, Phillips S. Length heterogeneity in the poly (adenylic acid) region of yeast messenger ribonucleic acid. Biochemistry 1974 Dec;13(26):5378–5383."/>
+  <meta name="citation_reference" content="Viehweger A, Krautwurst S, Lamkiewicz K, Madhugiri R, Ziebuhr J, Hölzer M, et al. Nanopore direct RNA sequencing reveals modification in full-length coronavirus genomes:. bioRxiv 2018 Nov;."/>
+  <meta name="citation_reference" content="Legnini I, Alles J, Karaiskos N, Ayoub S, Rajewsky N. Full-length mRNA sequencing reveals principles of poly(A) tail length control. bioRxiv 2019 Nov;."/>
+  <meta name="citation_reference" content="Oxford Nanopore Technologies. Low bias RNA-seq: PCR-cDNA, PCR-free direct cDNA and direct RNA sequencing. Oxford Nanopore Technologies; 2018."/>
+  <meta name="citation_reference" content="De Coster W, D’Hert S, Schultz DT, Cruts M, Van Broeckhoven C. NanoPack: visualizing and processing long-read sequencing data. Bioinformatics 2018 Aug;34(15):2666–2669."/>
+  <meta name="citation_reference" content="Li H. Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics 2018 Sep;34(18):3094–3100."/>
+  <meta name="citation_reference" content="H Pages, P Aboyoun, R Gentleman, S DebRoy, Biostrings: String objects representing biological sequences, and matching algorithms; 2019."/>
+  <meta name="twitter:title" content="tailfindr: Alignment-free poly(A) length measurement for Oxford Nanopore RNA and DNA sequencing"/>
+  <meta name="twitter:site" content="@biorxivpreprint"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:image" content="https://www.biorxiv.org/sites/default/files/images/biorxiv_logo_homepage7-5-small.png"/>
+  <meta name="twitter:description" content="Polyadenylation at the 3’-end is a major regulator of messenger RNA and its length is known to affect nuclear export, stability and translation, among others. Only recently, strategies have emerged that allow for genome-wide poly(A) length assessment. These methods identify genes connected to poly(A) tail measurements indirectly by short-read alignment to genetic 3’-ends. Concurrently Oxford Nanopore Technologies (ONT) established full-length isoform RNA sequencing containing the entire poly(A) tail. However, assessing poly(A) length through basecalling has so far not been possible due the inability to resolve long homopolymeric stretches in ONT sequencing. Here we present tailfindr , an R package to estimate poly(A) tail length on ONT long-read sequencing data. tailfindr operates on unaligned, basecalled data. It measures poly(A) tail length from both native RNA and DNA sequencing, which makes poly(A) tail studies by full-length cDNA approaches possible for the first time. We assess tailfindr’s performance across different poly(A) lengths, demonstrating that tailfindr is a versatile tool providing poly(A) tail estimates across a wide range of sequencing conditions."/>
+  <meta name="og-title" property="og:title" content="tailfindr: Alignment-free poly(A) length measurement for Oxford Nanopore RNA and DNA sequencing"/>
+  <meta name="og-url" property="og:url" content="https://www.biorxiv.org/content/10.1101/588343v2"/>
+  <meta name="og-site-name" property="og:site_name" content="bioRxiv"/>
+  <meta name="og-description" property="og:description" content="Polyadenylation at the 3’-end is a major regulator of messenger RNA and its length is known to affect nuclear export, stability and translation, among others. Only recently, strategies have emerged that allow for genome-wide poly(A) length assessment. These methods identify genes connected to poly(A) tail measurements indirectly by short-read alignment to genetic 3’-ends. Concurrently Oxford Nanopore Technologies (ONT) established full-length isoform RNA sequencing containing the entire poly(A) tail. However, assessing poly(A) length through basecalling has so far not been possible due the inability to resolve long homopolymeric stretches in ONT sequencing. Here we present tailfindr , an R package to estimate poly(A) tail length on ONT long-read sequencing data. tailfindr operates on unaligned, basecalled data. It measures poly(A) tail length from both native RNA and DNA sequencing, which makes poly(A) tail studies by full-length cDNA approaches possible for the first time. We assess tailfindr’s performance across different poly(A) lengths, demonstrating that tailfindr is a versatile tool providing poly(A) tail estimates across a wide range of sequencing conditions."/>
+  <meta name="og-type" property="og:type" content="article"/>
+  <meta name="og-image" property="og:image" content="https://www.biorxiv.org/sites/default/files/images/biorxiv_logo_homepage7-5-small.png"/>
+  <meta name="citation_date" content="2019-03-26"/> 
+  <meta name="description" content="bioRxiv - the preprint server for biology, operated by Cold Spring Harbor Laboratory, a research and educational institution"/>
+  <meta name="generator" content="Drupal 7 (http://drupal.org)"/> 
+  <title>tailfindr: Alignment-free poly(A) length measurement for Oxford Nanopore RNA and DNA sequencing | bioRxiv</title> 
+ </head>
+ <body class="html not-front not-logged-in page-node page-node- page-node-371677 node-type-highwire-article context-content hw-default-jcode-biorxiv hw-article-type-article hw-article-category-new-results"> 
+  <div class="article fulltext-view ">
+   <span class="highwire-journal-article-marker-start"/>
+   <div class="section abstract" id="abstract-1">
+    <h2>Abstract</h2>
+    <p id="p-4">Polyadenylation at the 3’-end is a major regulator of messenger RNA and its length is known to affect nuclear export, stability and translation, among others. Only recently, strategies have emerged that allow for genome-wide poly(A) length assessment. These methods identify genes connected to poly(A) tail measurements indirectly by short-read alignment to genetic 3’-ends. Concurrently Oxford Nanopore Technologies (ONT) established full-length isoform RNA sequencing containing the entire poly(A) tail. However, assessing poly(A) length through basecalling has so far not been possible due the inability to resolve long homopolymeric stretches in ONT sequencing.</p>
+    <p id="p-5">Here we present 
+     <em>tailfindr</em>, an R package to estimate poly(A) tail length on ONT long-read sequencing data. 
+     <em>tailfindr</em> operates on unaligned, basecalled data. It measures poly(A) tail length from both native RNA and DNA sequencing, which makes poly(A) tail studies by full-length cDNA approaches possible for the first time. We assess 
+     <em>tailfindr’s</em> performance across different poly(A) lengths, demonstrating that 
+     <em>tailfindr</em> is a versatile tool providing poly(A) tail estimates across a wide range of sequencing conditions.
+    </p>
+   </div>
+   <div class="section" id="sec-1">
+    <h2 class="">1 INTRODUCTION</h2>
+    <p id="p-6">The poly(A) tail is a homopolymeric stretch of adenosines at the 3’-end of the majority of eukaryotic mRNAs. These tails are necessary for the nuclear export of mature mRNAs [
+     <a id="xref-ref-1-1" class="xref-bibr" href="#ref-1">1</a>–
+     <a id="xref-ref-3-1" class="xref-bibr" href="#ref-3">3</a>] and influence mRNA stability and translation [
+     <a id="xref-ref-4-1" class="xref-bibr" href="#ref-4">4</a>]. The poly(A) tail is generated directly after transcription by the non-templated addition of adenosines to the mRNA 3’-end, a process catalyzed by nuclear Poly(A)-polymerases (reviewed in [
+     <a id="xref-ref-5-1" class="xref-bibr" href="#ref-5">5</a>]). The initial length of poly(A) tails generated by this process has been proposed to be around 250 nt [
+     <a id="xref-ref-6-1" class="xref-bibr" href="#ref-6">6</a>–
+     <a id="xref-ref-9-1" class="xref-bibr" href="#ref-9">9</a>]. After nuclear export, poly(A) length is dynamically regulated by the interplay of 3’-to-5’ degradation through exoribonucleases, poly(A) tail stabilization via poly(A) tail binding proteins, and elongation by cytoplasmic Poly(A)-polymerases [
+     <a id="xref-ref-10-1" class="xref-bibr" href="#ref-10">10</a>–
+     <a id="xref-ref-14-1" class="xref-bibr" href="#ref-14">14</a>]. While it has been shown that the poly(A) tail has a regulatory role, it is still not fully understood whether a specific length allows for specific regulatory outcomes [
+     <a id="xref-ref-15-1" class="xref-bibr" href="#ref-15">15</a>]. A minimal poly(A) tail is needed to prevent quick 3’-to-5’ exonuclease degradation [
+     <a id="xref-ref-16-1" class="xref-bibr" href="#ref-16">16</a>], yet hyper-adenylated RNAs are marked for fast RNA degradation in the nucleus [
+     <a id="xref-ref-15-2" class="xref-bibr" href="#ref-15">15</a>, 
+     <a id="xref-ref-17-1" class="xref-bibr" href="#ref-17">17</a>]. Besides from regulating RNA degradation, poly(A) tail length has been shown to correlate with translation efficiency during embryonic development [
+     <a id="xref-ref-18-1" class="xref-bibr" href="#ref-18">18</a>, 
+     <a id="xref-ref-19-1" class="xref-bibr" href="#ref-19">19</a>], possibly by favoring a closed-loop structure of the mRNA. However, recent studies using 
+     <em>C. elegans</em> have proposed that shorter poly(A) tails are more actively translated, while longer tails are refractory to translation [
+     <a id="xref-ref-20-1" class="xref-bibr" href="#ref-20">20</a>].
+    </p>
+    <p id="p-7">To understand the regulatory role of poly(A) tails, it is crucial to be able to measure poly(A) tail length genome-wide with transcript isoform resolution. Up until recently, estimating poly(A) tail lengths was restricted to transcript-specific measurements that relied on PCR and/or on laborious Northern Blotting techniques [
+     <a id="xref-ref-21-1" class="xref-bibr" href="#ref-21">21</a>]. These techniques suffer from low throughput, high workload and possible technical artefacts due to amplification [
+     <a id="xref-ref-22-1" class="xref-bibr" href="#ref-22">22</a>–
+     <a id="xref-ref-24-1" class="xref-bibr" href="#ref-24">24</a>]. Only recently, a set of studies implemented short-read sequencing strategies to study poly(A) tail length in a transcriptome-wide manner [
+     <a id="xref-ref-19-2" class="xref-bibr" href="#ref-19">19</a>, 
+     <a id="xref-ref-20-2" class="xref-bibr" href="#ref-20">20</a>, 
+     <a id="xref-ref-25-1" class="xref-bibr" href="#ref-25">25</a>–
+     <a id="xref-ref-28-1" class="xref-bibr" href="#ref-28">28</a>]. While these studies allowed thorough understanding of poly(A) tail lengths throughout the transcriptome for the first time, they are technically restricted to a specific size of poly(A) tails depending on sample enrichment and sequencing strategy. Additionally, most of these techniques rely on PCR amplification of the poly(A) tail region, which might lead to amplification artefacts that affect poly(A) length measurements as well as quantitative comparisons between long and short poly(A) tails [
+     <a id="xref-ref-22-2" class="xref-bibr" href="#ref-22">22</a>–
+     <a id="xref-ref-24-2" class="xref-bibr" href="#ref-24">24</a>]. Finally, and more importantly, these techniques can only indirectly identify the transcript linked to the poly(A) by alignment of short sequences representing the RNA 3’-ends. Thus it is challenging and in many cases virtually impossible to assign poly(A) tail measurements to specific transcript isoforms.
+    </p>
+    <p id="p-8">Oxford Nanopore Technologies (ONT) native RNA Sequencing strategy allows for the sequencing of full-length mRNA molecules without amplification artefacts [
+     <a id="xref-ref-29-1" class="xref-bibr" href="#ref-29">29</a>]. The standard library preparation protocol retains the full poly(A) tail in the molecule to be sequenced, making it possible to obtain isoform-specific poly(A) tail length estimates in a transcriptome-wide manner [
+     <a id="xref-ref-30-1" class="xref-bibr" href="#ref-30">30</a>]. However, current basecallers do not perform well on long homopolymer DNA regions resulting in the length of poly(A) tails not being accurately reported [
+     <a id="xref-ref-31-1" class="xref-bibr" href="#ref-31">31</a>].
+    </p>
+    <p id="p-9">Here we present 
+     <em>tailfindr</em>, an R tool that estimates poly(A) tail length from individual reads directly from ONT FAST5 raw data. 
+     <em>tailfindr</em> is able to estimate poly(A) tails from both RNA and DNA reads, including DNA reverse-complement reads containing poly(T) stretches. 
+     <em>tailfindr</em> uses the raw data without prior alignment as input, and estimates the length based on normalisation with the read-specific nucleotide translocation rate. We validate the performance of 
+     <em>tailfindr</em> on a set of RNA and DNA molecules with defined poly(A) tail lengths. 
+     <em>tailfindr</em> operates the output of widely used as well as the most recent ONT basecalling applications (Flip-flop model).
+    </p>
+   </div>
+   <div class="section" id="sec-2">
+    <h2 class="">2 RESULTS</h2>
+    <div id="sec-3" class="subsection">
+     <h3>2.1 
+      <em>tailfindr</em> estimates poly(A) tail length from basecalled ONT native RNA sequencing
+     </h3>
+     <p id="p-10">Oxford Nanopore Technologies (ONT) Sequencing allows for the sequencing of full-length native RNA molecules containing the entire poly(A) tail by ligation of a double-stranded DNA adapter to the 3’-end of each RNA molecule (
+      <a id="xref-fig-1-1" class="xref-fig" href="#F1">Fig. 1A</a>, [
+      <a id="xref-ref-30-2" class="xref-bibr" href="#ref-30">30</a>]). Indeed, long stretches of monotonous low-variance raw signal corresponding to poly(A) tails can be observed at the beginning of most reads (
+      <a id="xref-fig-1-2" class="xref-fig" href="#F1">Fig. 1B</a>). However, since basecalling relies on fluctuations of the raw signal, these low-variance sections are poorly decoded into the correct nucleobase sequence [
+      <a id="xref-ref-31-2" class="xref-bibr" href="#ref-31">31</a>].
+     </p>
+     <div id="F1" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F1.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="Workflow and performance of tailfindr on ONT RNA data 1A Schematic representation of Oxford Nanopore RNA Sequencing. The Motor protein (red) is attached to the native RNA molecule (yellow) at the 3[[#x2019]]-end by T4 DNA ligation via a double-stranded adapter (light red) with oligo-T overhang. The motor protein thus feeds the RNA strand to the pore from 3[[#x2019]] to 5[[#x2019]]. 1B Representative normalised signal data from eGFP-RNA sequencing. Red background indicates ONT adapter signal, green background represents rough borders of poly(A) signal, yellow background highlights signal from RNA sequence. Boundaries are defined based on tailfindr algorithm. 1C Schematic workflow of data processing by the tailfindr algorithm for ONT native RNA sequencing data. 1D Density plot of poly(A) length estimation on in vitro transcribed eGFP-RNA molecules with known poly(A) tail length. Vertical black lines demarcate expected poly(A) length for individual barcodes. 1E Density plot of poly(A) length estimation from tailfindr (turquoise) and Nanopolish (yellow, dashed line) on in vitro transcribed eGFP-RNA with poly(A) length of 40 nt or 150 nt." class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-149352678" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;&lt;;div xmlns=&quot;;http://www.w3.org/1999/xhtml&quot;;&gt;;&lt;;span class=&quot;;caption-title&quot;;&gt;;Workflow and performance of &lt;;em&gt;;tailfindr&lt;;/em&gt;; on ONT RNA data&lt;;/span&gt;; &lt;;strong&gt;;1A&lt;;/strong&gt;; Schematic representation of Oxford Nanopore RNA Sequencing. The Motor protein (red) is attached to the native RNA molecule (yellow) at the 3[[#x2019]]-end by T4 DNA ligation via a double-stranded adapter (light red) with oligo-T overhang. The motor protein thus feeds the RNA strand to the pore from 3[[#x2019]] to 5[[#x2019]]. &lt;;strong&gt;;1B&lt;;/strong&gt;; Representative normalised signal data from eGFP-RNA sequencing. Red background indicates ONT adapter signal, green background represents rough borders of poly(A) signal, yellow background highlights signal from RNA sequence. Boundaries are defined based on &lt;;em&gt;;tailfindr&lt;;/em&gt;; algorithm. &lt;;strong&gt;;1C&lt;;/strong&gt;; Schematic workflow of data processing by the &lt;;em&gt;;tailfindr&lt;;/em&gt;; algorithm for ONT native RNA sequencing data. &lt;;strong&gt;;1D&lt;;/strong&gt;; Density plot of poly(A) length estimation on &lt;;em&gt;;in vitro&lt;;/em&gt;; transcribed eGFP-RNA molecules with known poly(A) tail length. Vertical black lines demarcate expected poly(A) length for individual barcodes. &lt;;strong&gt;;1E&lt;;/strong&gt;; Density plot of poly(A) length estimation from &lt;;em&gt;;tailfindr&lt;;/em&gt;; (turquoise) and Nanopolish (yellow, dashed line) on &lt;;em&gt;;in vitro&lt;;/em&gt;; transcribed eGFP-RNA with poly(A) length of 40 nt or 150 nt.&lt;;/div&gt;;&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="FIGURE 1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F1.medium.gif" width="440" height="402"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="FIGURE 1" src="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F1.medium.gif" width="440" height="402"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F1.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download FIGURE 1" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F1.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">FIGURE 1</span>
+       <span class="caption-title">Workflow and performance of 
+        <em>tailfindr</em> on ONT RNA data
+       </span>
+       <p id="p-11" class="first-child">
+        <strong>1A</strong> Schematic representation of Oxford Nanopore RNA Sequencing. The Motor protein (red) is attached to the native RNA molecule (yellow) at the 3’-end by T4 DNA ligation via a double-stranded adapter (light red) with oligo-T overhang. The motor protein thus feeds the RNA strand to the pore from 3’ to 5’.
+       </p>
+       <p id="p-12">
+        <strong>1B</strong> Representative normalised signal data from eGFP-RNA sequencing. Red background indicates ONT adapter signal, green background represents rough borders of poly(A) signal, yellow background highlights signal from RNA sequence. Boundaries are defined based on 
+        <em>tailfindr</em> algorithm.
+       </p>
+       <p id="p-13">
+        <strong>1C</strong> Schematic workflow of data processing by the 
+        <em>tailfindr</em> algorithm for ONT native RNA sequencing data.
+       </p>
+       <p id="p-14">
+        <strong>1D</strong> Density plot of poly(A) length estimation on 
+        <em>in vitro</em> transcribed eGFP-RNA molecules with known poly(A) tail length. Vertical black lines demarcate expected poly(A) length for individual barcodes.
+       </p>
+       <p id="p-15">
+        <strong>1E</strong> Density plot of poly(A) length estimation from 
+        <em>tailfindr</em> (turquoise) and Nanopolish (yellow, dashed line) on 
+        <em>in vitro</em> transcribed eGFP-RNA with poly(A) length of 40 nt or 150 nt.
+       </p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <p id="p-16">To identify the region corresponding to the expected poly(A) tail, we apply thresholding to normalized raw data, refine the boundaries of possible poly(A) stretches based on raw signal slope, and normalise by the read-specific nucleotide translocation rate (
+      <a id="xref-fig-1-3" class="xref-fig" href="#F1">Fig. 1C</a>, for more details see Materials and Methods). 
+      <em>tailfindr</em> provides the user with a tabular output containing the unique read-ID, the estimated poly(A) tail length and all factors extracted from the raw data that are needed to calculate the poly(A) tail estimate (
+      <a id="xref-fig-4-1" class="xref-fig" href="#F4">Fig. S1A</a>). This allows the user for custom filtering of the acquired poly(A) measurements. Optionally, 
+      <em>tailfindr</em> allows the user to generate read-specific plots displaying the raw data and all signal derivatives generated in the process to estimate poly(A) tail length (
+      <a id="xref-fig-4-2" class="xref-fig" href="#F4">Fig. S1B</a>). To test the performance of our algorithm, we pooled six barcoded 
+      <em>in vitro</em> transcribed eGFP RNA samples with different poly(A) tail lengths (10 nt; 30 nt; 40 nt; 60 nt; 100 nt; 150 nt) and sequenced the pooled samples with ONT’s native RNA sequencing kit in two replicates. Only reads that cover the full RNA molecule were considered for the analysis. After barcode demultiplexing, the estimated poly(A) tail length match in general with the expected value, with the exception of eGFP with poly(A) tail length of 10 nt (
+      <a id="xref-fig-1-4" class="xref-fig" href="#F1">Fig. 1D</a>). While the molecule with expected 10 nt poly(A) length was measured with a mode of 22, the mode of all other barcoded RNA molecules matches well with the expected poly(A) length values (30 nt: 34; 40 nt: 41; 60 nt: 59; 100 nt: 93; 150 nt: 141). However, even though the majority of sequences show the expected poly(A) tail length, the standard deviation of poly(A) tail measurements is rather high (coefficient of variation of around 50%). Thus, while the precision of poly(A) estimation is limited mainly due to outliers towards longer poly(A) lengths (
+      <a id="xref-fig-1-5" class="xref-fig" href="#F1">Fig. 1D</a>), the length of most barcoded molecules can be successfully estimated by the use of 
+      <em>tailfindr</em> on ONT RNA sequencing.
+     </p>
+     <p id="p-17">While this study was in progress, another tool estimating poly(A) tail lengths from ONT RNA data has been developed [
+      <a id="xref-ref-32-1" class="xref-bibr" href="#ref-32">32</a>]. Instead of estimating poly(A) tails from basecalled data directly, this tool requires read alignment information for the definition of the poly(A) tail segment. To compare whether our algorithm results in similar performance, we measured poly(A) tail lengths from Nanopolish and 
+      <em>tailfindr</em> on different barcoded eGFP molecules. Our analysis shows that both tools match in precision and length estimation, as exemplified in 
+      <a id="xref-fig-1-6" class="xref-fig" href="#F1">Figure 1E</a> for 40 and 100 nt poly(A) tail length. However, while both tools agree in the majority of cases in the definition of poly(A) segments, we routinely observed slightly higher estimates from Nanopolish which can be attributed to differences in normalisation (
+      <a id="xref-fig-5-1" class="xref-fig" href="#F5">Fig. S2A</a>, S2B). In conclusion tailfindr accurately defines poly(A) tail segments in ONT native RNA sequencing data and provides similar estimates to Nanopolish while only using basecalled data files as input.
+     </p>
+    </div>
+    <div id="sec-4" class="subsection">
+     <h3>2.2 Poly(A) and poly(T) tail length can be estimated from ONT DNA sequencing data</h3>
+     <p id="p-18">ONT native RNA sequencing is lower in both quantity and quality compared to cDNA sequencing approaches and relies on large amounts of starting material (500 ng of poly(A)-selected RNA, [
+      <a id="xref-ref-33-1" class="xref-bibr" href="#ref-33">33</a>, 
+      <a id="xref-ref-34-1" class="xref-bibr" href="#ref-34">34</a>]). Therefore, cDNA sequencing approaches that retain the full-length poly(A) tail would enable studies where material is scarce as well as increase statistical power of poly(A) tail estimates. We thus aimed to expand tailfindr to operate on ONT DNA sequencing approaches as well. Since standard cDNA approaches result in double-stranded DNA, both poly(A) as well as poly(T) stretches are present in ONT sequencing reads. During cDNA sequencing both of these strands are threaded through the pore separately from 5’ to 3’ (
+      <a id="xref-fig-2-1" class="xref-fig" href="#F2">Fig. 2A</a>). Indeed we observe homogenous stretches of raw signal both at the beginning (poly(T) tail) as well as at the end (poly(A) tail) of individual raw read sequences (example for poly(T)-containing read in 
+      <a id="xref-fig-6-1" class="xref-fig" href="#F6">Figure S3B</a>).
+     </p>
+     <div id="F2" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F2.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="Workflow and performance of tailfindr on ONT DNA sequencing data 2A Schematic representation of Oxford Nanopore DNA Sequencing. In cDNA approaches, amplification is ensured by oligo-dT-aided anchoring of the End Primer (EP, blue) and addition of Front Primer sequence (FP, green) by strand-switch during reverse transcription. The Motor protein (red) is attached to the double-stranded DNA molecules at both ends by T4 DNA ligation. The Front Adapter (FA) bears the motor protein, while the End Adapter (EA) is a short complementary oligo that will ultimately appear at the 3[[#x2019]]-end of resulting sequences. Both DNA strands will be sequenced from 5[[#x2019]] to 3[[#x2019]]. Thus, oligo-dT stretches will be present at the beginning of raw data, while oligo-dA stretches appear at the end. 2B Schematic workflow for ONT DNA sequencing data processing by the tailfindr algorithm. 2C Density plot of poly(A) (yellow) and poly(T) (grey) length estimates on PCR-amplified eGFP coding sequence with known poly(A) length. Vertical black lines demarcate expected poly(A) length for individual barcodes. 2D Density plot of poly(A) length estimates on RNA (turquoise) vs poly(A)/(T) length measured on DNA sequences (yellow)." class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-149352678" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;&lt;;div xmlns=&quot;;http://www.w3.org/1999/xhtml&quot;;&gt;;&lt;;span class=&quot;;caption-title&quot;;&gt;;Workflow and performance of &lt;;em&gt;;tailfindr&lt;;/em&gt;; on ONT DNA sequencing data&lt;;/span&gt;; &lt;;strong&gt;;2A&lt;;/strong&gt;; Schematic representation of Oxford Nanopore DNA Sequencing. In cDNA approaches, amplification is ensured by oligo-dT-aided anchoring of the End Primer (EP, blue) and addition of Front Primer sequence (FP, green) by strand-switch during reverse transcription. The Motor protein (red) is attached to the double-stranded DNA molecules at both ends by T4 DNA ligation. The Front Adapter (FA) bears the motor protein, while the End Adapter (EA) is a short complementary oligo that will ultimately appear at the 3[[#x2019]]-end of resulting sequences. Both DNA strands will be sequenced from 5[[#x2019]] to 3[[#x2019]]. Thus, oligo-dT stretches will be present at the beginning of raw data, while oligo-dA stretches appear at the end. &lt;;strong&gt;;2B&lt;;/strong&gt;; Schematic workflow for ONT DNA sequencing data processing by the &lt;;em&gt;;tailfindr&lt;;/em&gt;; algorithm. &lt;;strong&gt;;2C&lt;;/strong&gt;; Density plot of poly(A) (yellow) and poly(T) (grey) length estimates on PCR-amplified eGFP coding sequence with known poly(A) length. Vertical black lines demarcate expected poly(A) length for individual barcodes. &lt;;strong&gt;;2D&lt;;/strong&gt;; Density plot of poly(A) length estimates on RNA (turquoise) vs poly(A)/(T) length measured on DNA sequences (yellow).&lt;;/div&gt;;&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="FIGURE 2" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F2.medium.gif" width="440" height="391"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="FIGURE 2" src="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F2.medium.gif" width="440" height="391"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F2.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download FIGURE 2" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F2.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">FIGURE 2</span>
+       <span class="caption-title">Workflow and performance of 
+        <em>tailfindr</em> on ONT DNA sequencing data
+       </span>
+       <p id="p-19" class="first-child">
+        <strong>2A</strong> Schematic representation of Oxford Nanopore DNA Sequencing. In cDNA approaches, amplification is ensured by oligo-dT-aided anchoring of the End Primer (EP, blue) and addition of Front Primer sequence (FP, green) by strand-switch during reverse transcription. The Motor protein (red) is attached to the double-stranded DNA molecules at both ends by T4 DNA ligation. The Front Adapter (FA) bears the motor protein, while the End Adapter (EA) is a short complementary oligo that will ultimately appear at the 3’-end of resulting sequences. Both DNA strands will be sequenced from 5’ to 3’. Thus, oligo-dT stretches will be present at the beginning of raw data, while oligo-dA stretches appear at the end.
+       </p>
+       <p id="p-20">
+        <strong>2B</strong> Schematic workflow for ONT DNA sequencing data processing by the 
+        <em>tailfindr</em> algorithm.
+       </p>
+       <p id="p-21">
+        <strong>2C</strong> Density plot of poly(A) (yellow) and poly(T) (grey) length estimates on PCR-amplified eGFP coding sequence with known poly(A) length. Vertical black lines demarcate expected poly(A) length for individual barcodes.
+       </p>
+       <p id="p-22">
+        <strong>2D</strong> Density plot of poly(A) length estimates on RNA (turquoise) vs poly(A)/(T) length measured on DNA sequences (yellow).
+       </p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <p id="p-23">We extended our algorithm to accommodate ONT DNA sequencing data output (
+      <a id="xref-fig-2-2" class="xref-fig" href="#F2">Fig. 2B</a>). Most significantly, we account for the double-stranded nature of DNA and define the read type (poly(A)- or poly(T)-containing) by making use of known sequence motifs in Nanopore Adapters (details in Material and Methods). As for RNA sequencing, 
+      <em>tailfindr</em> provides the user with a tabular output of tail length measurements (including the read type) as well as optional raw data plots (
+      <a id="xref-fig-6-2" class="xref-fig" href="#F6">Figure S3</a>). We tested the performance of the DNA-specific 
+      <em>tailfindr</em> algorithm on PCR products of eGFP coding sequence with known poly(A)/(T) length in two replicates, similar to the spike-ins generated for native RNA sequencing. As shown in 
+      <a id="xref-fig-2-3" class="xref-fig" href="#F2">Figure 2C</a>, the DNA-specific 
+      <em>tailfindr</em> approach resulted in estimated poly(A) and poly(T) lengths close to the expected length for barcoded molecules (mode of distribution for 10 nt: 10; 30 nt: 28; 40 nt: 38; 60 nt: 59; 100 nt: 92 for poly(A) and 110 for poly(T); 150 nt: 148 for poly(A) and 155 for poly(T)). For all poly(A)/(T) tail lengths bigger than 10 nt, a small subpopulation of reads with shorter estimated tails could be observed, possibly due to incorrectly assigned barcodes. While poly(A) and poly(T) estimates show very similar density distributions for length estimates, poly(T) lengths are routinely slightly longer than estimates for poly(A) lengths.
+     </p>
+     <p id="p-24">Next we compared poly(A)-length estimates from PCR-DNA and native RNA sequencing. We observed that DNA sequencing results in significantly more precise estimation of poly(A) tail length, mainly due to fewer outliers towards longer poly(A) tail lengths (
+      <a id="xref-fig-2-4" class="xref-fig" href="#F2">Fig. 2D</a>). Especially the shortest poly(A) tail length (10 nt) could be estimated more correctly in DNA sequencing (mode of poly(A) length estimation 10 in DNA vs 22 in RNA sequencing). On other poly(A) lengths the mode of poly(A) estimation does not differ dramatically, but the precision of measurement is significantly higher in DNA sequencing approaches (coefficient of variation 50% in native RNA sequencing vs 30% in DNA sequencing). In summary, 
+      <em>tailfindr</em> is able to estimate poly(A) and poly(T) tail size from ONT DNA sequencing with significantly higher precision compared to ONT RNA sequencing estimation.
+     </p>
+    </div>
+    <div id="sec-5" class="subsection">
+     <h3>2.3 
+      <em>tailfindr</em> is compatible with Flip-flop model basecalling
+     </h3>
+     <p id="p-25">While this manuscript was in preparation, ONT released a new DNA basecalling strategy based on Flip-flop models. Flip-flop model basecalling screens the raw signal by comparing probabilities to either stay in the same nucleotide state or change to a new state. Additionally, the raw data is read by averaging over two sample points, as opposed to averaging over five sample points in standard model basecalling. These improvements have been shown to result in higher quality basecalling, and more importantly to increase the basecall fidelity over homopolymer sequences [
+      <a id="xref-ref-35-1" class="xref-bibr" href="#ref-35">35</a>]. So far, Flip-flop model basecalling is only available for ONT DNA sequencing data.
+     </p>
+     <p id="p-26">We implement changes in 
+      <em>tailfindr</em> to account for the updates in Flip-flop model raw data output. As expected, Flip-flop model basecalling detects more nucleotide translocations (called ‘moves’) over poly(A) stretches when compared to standard model basecalling (
+      <a id="xref-fig-3-1" class="xref-fig" href="#F3">Fig. 3A</a>, yellow highlights). To test whether the detected moves agree with expected poly(A)/(T) length, we plotted the moves from either standard model basecalling (
+      <a id="xref-fig-3-2" class="xref-fig" href="#F3">Fig. 3B</a>) or Flip-flop model basecalling (
+      <a id="xref-fig-3-3" class="xref-fig" href="#F3">Fig. 3C</a>) on eGFP-PCR products with 30 nt or 100 nt poly(A)/(T) tail length. While Flip-flop model basecalling resulted in significantly more moves over poly(A)/(T) tail sections compared to standard model basecalling, the detected number of moves still severely underestimate the existing poly(A)/(T) lengths. Thus even with improved homopolymer basecalling fidelity, external tools are needed to correctly measure poly(A) tail lengths. We used 
+      <em>tailfindr</em> to compare poly(A) and poly(T) tail measurements from the same sequencing reads basecalled either with Flip-flop or standard models, and could show that the estimated poly(A)/(T) tail length is highly correlated between the two basecalling approaches (R = 0.93 for poly(A); R = 0.97 for poly(T); 
+      <a id="xref-fig-3-4" class="xref-fig" href="#F3">Fig. 3D,E</a>). We thus conclude that 
+      <em>tailfindr</em> operates on both standard and the most recent Flip-flop model basecalling, and provides accurate poly(A)/(T) length estimates for ONT DNA sequencing approaches.
+     </p>
+     <div id="F3" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F3.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="Differences in poly(A) tail estimation for standard and Flip-flop model basecalling 3A Representative raw data squiggle of PCR-amplified eGFP coding sequence over the identified poly(A) tail region (colored yellow) with associated moves (shifts in raw data representing possible nucleotide translocations) in both Flip-flop (top) and standard (bottom) model basecalling. Flip-flop model basecalling detects moves with higher resolution, and calls more moves especially in the poly(A) tail region (yellow). 3B,C Scatter plot of estimated poly(A)/(T) tail length (x-axis) and moves detected with standard (B) or Flip-flop model basecalling (C) on PCR-amplified eGFP coding sequence with poly(A) length of 30 nt (grey) and 100 nt (yellow). Colored dashed lines indicate expected poly(A) length. 3D,E Scatter plot of poly(A) (D) or poly(T) (E) tail length estimated from PCR-amplified eGFP coding sequence with different poly(A) tail lengths basecalled either with standard (x-axis) or Flip-flop model (y-axis). (R, p by Pearson correlation)" class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-149352678" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;&lt;;div xmlns=&quot;;http://www.w3.org/1999/xhtml&quot;;&gt;;&lt;;span class=&quot;;caption-title&quot;;&gt;;Differences in poly(A) tail estimation for standard and Flip-flop model basecalling&lt;;/span&gt;; &lt;;strong&gt;;3A&lt;;/strong&gt;; Representative raw data squiggle of PCR-amplified eGFP coding sequence over the identified poly(A) tail region (colored yellow) with associated moves (shifts in raw data representing possible nucleotide translocations) in both Flip-flop (top) and standard (bottom) model basecalling. Flip-flop model basecalling detects moves with higher resolution, and calls more moves especially in the poly(A) tail region (yellow). &lt;;strong&gt;;3B,C&lt;;/strong&gt;; Scatter plot of estimated poly(A)/(T) tail length (x-axis) and moves detected with standard &lt;;strong&gt;;(B)&lt;;/strong&gt;; or Flip-flop model basecalling &lt;;strong&gt;;(C)&lt;;/strong&gt;; on PCR-amplified eGFP coding sequence with poly(A) length of 30 nt (grey) and 100 nt (yellow). Colored dashed lines indicate expected poly(A) length. &lt;;strong&gt;;3D,E&lt;;/strong&gt;; Scatter plot of poly(A) &lt;;strong&gt;;(D)&lt;;/strong&gt;; or poly(T) &lt;;strong&gt;;(E)&lt;;/strong&gt;; tail length estimated from PCR-amplified eGFP coding sequence with different poly(A) tail lengths basecalled either with standard (x-axis) or Flip-flop model (y-axis). (R, p by Pearson correlation)&lt;;/div&gt;;&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="FIGURE 3" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F3.medium.gif" width="389" height="440"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="FIGURE 3" src="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F3.medium.gif" width="389" height="440"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F3.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download FIGURE 3" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2019/03/26/588343/F3.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">FIGURE 3</span>
+       <span class="caption-title">Differences in poly(A) tail estimation for standard and Flip-flop model basecalling</span>
+       <p id="p-27" class="first-child">
+        <strong>3A</strong> Representative raw data squiggle of PCR-amplified eGFP coding sequence over the identified poly(A) tail region (colored yellow) with associated moves (shifts in raw data representing possible nucleotide translocations) in both Flip-flop (top) and standard (bottom) model basecalling. Flip-flop model basecalling detects moves with higher resolution, and calls more moves especially in the poly(A) tail region (yellow).
+       </p>
+       <p id="p-28">
+        <strong>3B,C</strong> Scatter plot of estimated poly(A)/(T) tail length (x-axis) and moves detected with standard 
+        <strong>(B)</strong> or Flip-flop model basecalling 
+        <strong>(C)</strong> on PCR-amplified eGFP coding sequence with poly(A) length of 30 nt (grey) and 100 nt (yellow). Colored dashed lines indicate expected poly(A) length.
+       </p>
+       <p id="p-29">
+        <strong>3D,E</strong> Scatter plot of poly(A) 
+        <strong>(D)</strong> or poly(T) 
+        <strong>(E)</strong> tail length estimated from PCR-amplified eGFP coding sequence with different poly(A) tail lengths basecalled either with standard (x-axis) or Flip-flop model (y-axis). (R, p by Pearson correlation)
+       </p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="section" id="sec-6">
+    <h2 class="">3 DISCUSSION</h2>
+    <p id="p-30">Polyadenylation at the 3’-end is understood to be a major regulator of mRNA [
+     <a id="xref-ref-1-2" class="xref-bibr" href="#ref-1">1</a>–
+     <a id="xref-ref-4-2" class="xref-bibr" href="#ref-4">4</a>]. While the poly(A) length of mRNAs has been under investigation since the 1970’s [
+     <a id="xref-ref-36-1" class="xref-bibr" href="#ref-36">36</a>–
+     <a id="xref-ref-39-1" class="xref-bibr" href="#ref-39">39</a>], transcriptome-wide analysis of poly(A) tail lengths have only recently emerged. The advent of Oxford Nanopore Technologies (ONT) native RNA Sequencing technology now allows direct sequencing of full-length mRNA molecules, which intrinsically contain their full poly(A) tail, unbiased by potential amplification artefacts [
+     <a id="xref-ref-29-2" class="xref-bibr" href="#ref-29">29</a>]. However, even the most recent updates in basecalling tools do not perform well over long homopolymeric sequence stretches [
+     <a id="xref-ref-31-3" class="xref-bibr" href="#ref-31">31</a>, 
+     <a id="xref-ref-35-2" class="xref-bibr" href="#ref-35">35</a>].
+    </p>
+    <p id="p-31">In this work we present 
+     <em>tailfindr</em>, a versatile R tool that allows estimation of poly(A) tail lengths from basecalled ONT long-read sequencing data from both native RNA and DNA sequencing approaches. We show that 
+     <em>tailfindr</em> is able to detect the poly(A) tail boundaries of 
+     <em>in vitro</em> transcribed eGFP RNA molecules and estimate their lengths based on read-specific raw data normalisation. For molecules with known poly(A) tails from 30 nt up to 150 nt the estimates match well with the expected lengths (
+     <a id="xref-fig-1-7" class="xref-fig" href="#F1">Fig. 1D</a>), however the shortest poly(A) tail (10 nt) was estimated to have longer tails than expected. We believe that this bias can be explained by sample contamination of this RNA molecule during preparations, or by inefficient oligo-dT sequencing adapter ligation to poly(A) tail stretches at or below 10 nt. Consistent with the latter explanation we observed that the barcoded 10 nt RNA molecule was underrepresented in the RNA sequencing libraries compared to input quantities (data not shown). Overall, 
+     <em>tailfindr</em> correctly estimates poly(A) tail lengths of 
+     <em>in vitro</em> transcribed RNAs over a wide range of lengths.
+    </p>
+    <p id="p-32">We further show that 
+     <em>tailfindr</em> poly(A) tail estimates agree closely with a recently developed tool that relies on prior mapping of the data [
+     <a id="xref-ref-32-2" class="xref-bibr" href="#ref-32">32</a>]. While poly(A) tail boundaries in raw signal are found to be essentially the same with the two different approaches (
+     <a id="xref-fig-5-2" class="xref-fig" href="#F5">Fig. S2C,D</a>), the final calculated poly(A) tail lengths differ (
+     <a id="xref-fig-5-3" class="xref-fig" href="#F5">Fig. S2A</a>). Specifically, 
+     <em>tailfindr</em> estimates short poly(A) stretches slightly longer than Nanopolish, while long poly(A) stretches result in shorter estimates in 
+     <em>tailfindr</em>. These differences can be explained by different calculation of the average nucleotide translocation rate (
+     <a id="xref-fig-5-4" class="xref-fig" href="#F5">Fig. S2B</a>) which is used to normalise raw poly(A) tail measurements. Nanopolish normalises by calculating the read-specific median of the samples per nucleotide after removing 5% of the translocation rate outliers. We have observed that this normalisation is resulting in correct poly(A) estimation in RNA, but not DNA sequencing approaches.
+    </p>
+    <p id="p-33">Instead we normalise by the read-specific geometric mean of samples per nucleotide without outlier removal. Another difference between the tools is that tailfindr does not need any sequence data preprocessing, as it only requires basecalled FAST5 files as input. This allows for poly(A) tail studies independent of any other tool than the essential basecaller, which would allow for an integration of the tailfindr algorithm into the basecalling procedure. This in turn makes it possible to assign poly(A) tail lengths to individual reads in parallel to the sequencing procedure, making live poly(A) tail analysis feasible.</p>
+    <p id="p-34">In comparison to recent short-read sequencing-based strategies to measure poly(A) tails, methods using ONT sequencing are currently less precise. Short-read sequencing approaches promise poly(A) measurements with just a few bases of deviation due to cyclic incorporation of nucleotides and integration of the fluorescence signal of multiple molecules towards one single basecall [
+     <a id="xref-ref-20-3" class="xref-bibr" href="#ref-20">20</a>, 
+     <a id="xref-ref-25-2" class="xref-bibr" href="#ref-25">25</a>–
+     <a id="xref-ref-28-2" class="xref-bibr" href="#ref-28">28</a>]. In contrast, ONT long-read sequencing measures individual single-stranded molecules, and single nucleotide changes are detected based on subtle changes in measured current levels. More importantly, the raw signal for ONT sequencing does not change over a homopolymeric region, making single-event detection almost impossible. Thus, ONT poly(A) length estimation relies on normalisation rather variable data taken from single-molecule measurements. Most of the variation observed in 
+     <em>tailfindr</em> poly(A) estimation thus comes from the sequencing process. However, the sequencing chemistry as well as the properties of the motor protein are under constant development. It is thus conceivable that in the near future an increase in speed and robustness of translocation rates can be observed, which will have a positive impact on poly(A) tail estimation [
+     <a id="xref-ref-35-3" class="xref-bibr" href="#ref-35">35</a>].
+    </p>
+    <p id="p-35">While not being as precise in measuring poly(A) tails, ONT long-read sequencing approaches have unique advantages over short-read sequencing approaches. First, ONT sequencing is intrinsically a single-molecule technique. Second, RNA sequencing approaches are amplification-free, avoiding the emergence of possible amplification artefacts. Third, since the native molecule is sequenced as it comes from the specimen, additional features of the RNA can measured directly, as was shown for RNA modifications [
+     <a id="xref-ref-32-3" class="xref-bibr" href="#ref-32">32</a>, 
+     <a id="xref-ref-40-1" class="xref-bibr" href="#ref-40">40</a>]. Fourth, and most importantly, long-read sequencing allows direct assignment of transcript isoforms to single molecules without bioinformatics post-processing, making truly isoform-specific measurements of poly(A) tail lengths possible. Additionally, ONT sequencing allows to study features of 5’-end and 3’-end events of the same molecule in conjunction with the poly(A) tail length. Together, ONT sequencing in conjunction with 
+     <em>tailfindr</em> poly(A) estimation offers great potential to combine the study of poly(A) tail length and other RNA features with transcript-isoform specificity in one assay.
+    </p>
+    <p id="p-36">Next to handle data from ONT RNA sequencing applications, 
+     <em>tailfindr</em> is the first tool to show that poly(A) tails can be measured in ONT DNA sequencing. We further modified 
+     <em>tailfindr</em> to handle the most up-to-date basecalling approaches with Flip-flop models. We could show that poly(A) tail measurements from ONT DNA sequencing are more precise compared to measurements of similar RNA molecules (
+     <a id="xref-fig-2-5" class="xref-fig" href="#F2">Fig. 2D</a>). This is mainly explained by a faster and more robust translocation rate with less likelihood for stochastic stalling during sequencing. Interestingly, poly(T) stretches are commonly estimated slightly longer than poly(A) stretches from the same sample (
+     <a id="xref-fig-2-6" class="xref-fig" href="#F2">Fig. 2C</a>). A possible explanation for this would be a slightly faster translocation speed of purine stretches compared to pyrimidine stretches, and could be accounted for in more specific normalisation strategies in the future.
+    </p>
+    <p id="p-37">The existence of 
+     <em>tailfindr</em> makes it possible to design specific cDNA library preparation protocols that retain the full poly(A) tail in ONT sequencing approaches. This strategy has recently been shown to allow further insights into poly(A) tail regulation based on PacBio long-read sequencing [
+     <a id="xref-ref-41-1" class="xref-bibr" href="#ref-41">41</a>]. ONT cDNA sequencing has the advantage to yield approximately 10x more data per library preparation compared to native RNA sequencing, and due to amplification would allow sequencing experiments starting with minute RNA amounts as input [
+     <a id="xref-ref-34-2" class="xref-bibr" href="#ref-34">34</a>, 
+     <a id="xref-ref-42-1" class="xref-bibr" href="#ref-42">42</a>]. Additionally, we envision that future cDNA applications that include Unique Molecular Identifiers (UMI) will make it possible to acquire multiple poly(A) tail measurements for each molecule, which will increase the fidelity of isoform-specific poly(A) tail measurements. Thus, using 
+     <em>tailfindr</em> with specific ONT cDNA applications offers new approaches to study the role of poly(A) tail lengths from scarce biological samples.
+    </p>
+    <p id="p-38">In conclusion, ONT RNA sequencing offers a new possibility to study poly(A) tail biology, especially by directly associating poly(A) tail length with other RNA features in a transcript isoform-specific manner. 
+     <em>tailfindr</em> has proven successful in measuring the poly(A) tail of both RNA and DNA sequencing solely from basecalled raw data, an approach that allows real-time analysis during ONT sequencing. With the application of 
+     <em>tailfindr</em> for ONT DNA sequencing we allow future development of poly(A)-retaining cDNA sequencing assays that further increase the ability to study poly(A) tail lengths of scarce material.
+    </p>
+   </div>
+   <div class="section" id="sec-7">
+    <h2 class="">4 MATERIALS AND METHODS</h2>
+    <div id="sec-8" class="subsection">
+     <h3>4.1 Spike-in generation</h3>
+     <p id="p-39">To generate RNA with known poly(A) tail lengths, we used eGFP as a carrier RNA as it fulfils basic criteria for successful ONT RNA sequencing (especially minimal length requirement). The coding sequence of eGFP was amplified from pCS2+-eGFP vector using High Fidelity Phusion MasterMix (ThermoFisher, #F-531L). The primers for the PCR included the SP6 promoter sequence and a barcode in the forward primer, as well as the a homopolymer T stretch in the reverse Primer (see 
+      <a id="xref-table-wrap-1-1" class="xref-table" href="#T1">Table 1</a>). After gel-purification of the desired PCR product, a second PCR was performed with a reverse Primer that introduces a Bfo1 restriction site before the homopolymer T stretch (polyA Bfo1 rev, together with SP6 Bfo1 fw, 
+      <a id="xref-table-wrap-1-2" class="xref-table" href="#T1">Table 1</a>). After gel-purification and Phenol-chloroform extraction, the resulting PCR products were used for Nanopore DNA Ligation Sequencing (see below). For preparation of RNA spike-ins, the PCR products were digested with FastDigest Bfo1 (ThermoFisher, #FD2184) for 2 hours and purified by Phenol-chloroform extraction. 100-300 ng of purified DNA were used for RNA 
+      <em>in vitro</em> transcription by the SP6 mMessage mMachine kit (Ther-moFisher, #AM1340) following manufacturer’s procedures. The resulting RNA was purified using Zymo RNA Clean &amp;; Concentrator-5 columns (Zymo Research, #R1013).
+     </p>
+     <div id="T1" class="table pos-float">
+      <div class="table-inline table-callout-links">
+       <div class="callout">
+        <span>View this table:</span>
+        <ul class="callout-links">
+         <li class="view-inline first">
+          <a href="##" class="table-expand-inline" data-table-url="/highwire/markup/384526/expansion?postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed&amp;;table-expand-inline=1" data-icon-position="" data-hide-link-title="0">View inline</a>
+         </li>
+         <li class="view-popup">
+          <a href="/highwire/markup/384526/expansion?width=1000&amp;;height=500&amp;;iframe=true&amp;;postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed" class="colorbox colorbox-load table-expand-popup" rel="gallery-fragment-tables" data-icon-position="" data-hide-link-title="0">View popup</a>
+         </li>
+         <li class="download-ppt last">
+          <a href="/highwire/powerpoint/384526" class="highwire-figure-link highwire-figure-link-ppt" data-icon-position="" data-hide-link-title="0">Download powerpoint</a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="table-caption">
+       <span class="table-label">TABLE 1</span>
+       <span class="caption-title">DNA oligos for the design of poly(A)-tailed eGFP constructs</span>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+    </div>
+    <div id="sec-9" class="subsection">
+     <h3>4.2 ONT Long-read Sequencing</h3>
+     <p id="p-40">Native RNA Sequencing was performed using the ONT kit SQK-RNA001 following the manufacturer’s protocol. In brief, 500 ng of poly(A)-selected RNA were mixed with 100 ng of poly(A) spike-in RNA, or 500 ng poly(A) spike-in RNA were used alone. The RNA was ligated to ONT RT adapter (RTA) and used for Reverse Transcription with SuperScript II (ThermoFisher, #18064022). Next, the proprietary Sequencing Adapter was ligated using T4 DNA ligase (NEB, #M0202M) and loaded onto ONT Sequencing Flow Cells (FLO-MIN106 R9.4.1). Sequencing was performed for 16-24 hours using MinKNOW 2 software. All RNA purification steps were performed with RNAClean XP beads (Beckham Coulter, #A63987) with 15 minutes incubation intervals. DNA Sequencing was performed using the DNA Ligation Kit SQK-LSK108 on poly(A) containing PCR products. In brief, 500 ng of pooled barcoded PCR products were end-prepped using the NEBNext Ultra II dA tailing module (NEB, #E7546S) and ligated to proprietary Sequencing Adapters using T4 DNA ligase (NEB, #M0202M). Purified libraries were sequenced on Flow Cells (FLO-MIN106 R9.4.1) for 24 hours using MinKNOW 2.</p>
+    </div>
+    <div id="sec-10" class="subsection">
+     <h3>4.3 Sequencing data processing</h3>
+     <p id="p-41">RNA and DNA raw reads were basecalled using Albacore v2.3.3. DNA raw reads were additionally basecalled with Guppy v2.3.1 using Flip-flop models. Sequencing quality and general metrics were assessed using NanoPlot (v1.19.0, [
+      <a id="xref-ref-43-1" class="xref-bibr" href="#ref-43">43</a>]). Reads that passed the default albacore quality filter were mapped against the eGFP sequence using minimap2 (v2.14-r883) with default settings for ONT data mapping (-ax splice -uf −14 for RNA; -ax splice for DNA, [
+      <a id="xref-ref-44-1" class="xref-bibr" href="#ref-44">44</a>]).
+     </p>
+    </div>
+    <div id="sec-11" class="subsection">
+     <h3>4.4 Demultiplexing barcoded spike-ins</h3>
+     <p id="p-42">All alignments discussed in this manuscript, unless mentioned otherwise, were performed using Smith-Waterman local alignments with Biostrings (match score 1; mismatch score −1; gap opening penalty 0; and gap extension penalty 1) [
+      <a id="xref-ref-45-1" class="xref-bibr" href="#ref-45">45</a>]. The normalised alignment score was calculated by dividing the local alignment score by the length of the query sequence. If not otherwise mentioned, alignments with a normalised alignment score below 0.6 were discarded as unspecific.
+     </p>
+     <p id="p-43">Barcoded eGFP RNA reads with known poly(A) length were demultiplexed by locating the first 29 bases of eGFP sequence (see 
+      <a id="xref-table-wrap-2-1" class="xref-table" href="#T2">Table 2</a>) within the first 250 bases of FASTA strings extracted from every FAST5 file. Next, the barcode was assigned by aligning the expected barcode sequences against the extracted read sequence preceding the eGFP alignment (see 
+      <a id="xref-table-wrap-2-2" class="xref-table" href="#T2">Table 2</a>). The barcode with highest normalised alignment score (and above threshold of 0.6) was assigned to the read. To analyze barcoded eGFP DNA reads, the orientation of reads was investigated by aligning the first 29 bases of eGFP and its reverse-complement (
+      <a id="xref-table-wrap-2-3" class="xref-table" href="#T2">Table 2</a>) to the first 250 bases of FASTA strings extracted from each FAST5 file. A read was considered a poly(A)-containing read if the normalised alignment score of eGFP sequence was greater than both the normalised alignment score of the reverse-complement of eGFP and the threshold value of 0.5. Reads where the normalised alignment score of the reverse-complement of eGFP was higher than the forward eGFP sequence and passed the threshold value of 0.5 were considered to be poly(T)-containing reads. For Barcode demultiplexing, first the sequence preceding the identified eGFP start was queried for the presence of the experiment-specific PCR Front Primer in case of poly(A) reads, or its reverse-complement for poly(T) reads (sequences in 
+      <a id="xref-table-wrap-2-4" class="xref-table" href="#T2">Table 2</a>). Next, the sequence between Front Primer and eGFP locations was used for barcode identification as described above.
+     </p>
+     <div id="T2" class="table pos-float">
+      <div class="table-inline table-callout-links">
+       <div class="callout">
+        <span>View this table:</span>
+        <ul class="callout-links">
+         <li class="view-inline first">
+          <a href="##" class="table-expand-inline" data-table-url="/highwire/markup/384530/expansion?postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed&amp;;table-expand-inline=1" data-icon-position="" data-hide-link-title="0">View inline</a>
+         </li>
+         <li class="view-popup">
+          <a href="/highwire/markup/384530/expansion?width=1000&amp;;height=500&amp;;iframe=true&amp;;postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed" class="colorbox colorbox-load table-expand-popup" rel="gallery-fragment-tables" data-icon-position="" data-hide-link-title="0">View popup</a>
+         </li>
+         <li class="download-ppt last">
+          <a href="/highwire/powerpoint/384530" class="highwire-figure-link highwire-figure-link-ppt" data-icon-position="" data-hide-link-title="0">Download powerpoint</a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="table-caption">
+       <span class="table-label">TABLE 2</span>
+       <span class="caption-title">Sequences used in 
+        <em>tailfindr</em> alignments
+       </span>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+    </div>
+    <div id="sec-12" class="subsection">
+     <h3>4.5 
+      <em>tailfindr</em> RNA poly(A) length estimation algorithm
+     </h3>
+     <p id="p-44">To identify the signal corresponding to the poly(A) tails in RNA reads, the raw signal from ONT native RNA sequencing is extracted from the FAST5 files and z-normalised. Next, signal values above +3 and below −3 are truncated. The resulting processed raw signal is smoothened by a moving average filter (window size 400 samples; stride 1) in both directions separately. Both smoothened signal vectors are then merged by point-by-point maximum calculation. Next, the calculated smoothened signal is segmented into regions being above or below 0.3. The expected signal of the ONT adapter consists of one segment above and one segment below 0.3 in smoothened signal. The poly(A) tail immediately follows the Nanopore Adapter, thus the next segment in which the smoothened signal is above 0.3 is considered the poly(A) region, and the boundaries of this segment are considered the rough start and end of poly(A) tail (
+      <a id="xref-fig-1-8" class="xref-fig" href="#F1">Fig. 1B</a>).
+     </p>
+     <p id="p-45">The rough start and end are refined by first calculating a mean signal of the processed raw data contained between these boundaries through a moving average filter (window size 25; stride 25). Next, the slope of this mean signal is calculated between each two consecutive points. The boundaries of the longest continuous stretch of low-slope values (confined within bounds of +0.3 and - 0.3 of slope signal) between the rough poly(A) start and end boundaries are considered the precise boundaries (
+      <a id="xref-fig-1-9" class="xref-fig" href="#F1">Fig. 1B</a>). The resulting poly(A) tail measurement in sample points is then normalised by the read-specific nucleotide translocation rate (see below).
+     </p>
+    </div>
+    <div id="sec-13" class="subsection">
+     <h3>4.6 
+      <em>tailfindr</em> DNA poly(A)/(T) estimation algorithm
+     </h3>
+     <p id="p-46">Unlike RNA, DNA is double-stranded. Thus, homopolymer poly(A) and poly(T) stretches can occur. To determine the read orientation, the Nanopore-specific Front and End Primer sequences (sequences in 
+      <a id="xref-table-wrap-2-5" class="xref-table" href="#T2">Table 2</a>) are aligned against the first 100 bases extracted from FAST5 files. A read is considered poly(T)-containing, if the normalised alignment score of End Primer sequence is greater than that of the Front Primer sequence, and above the threshold of 0.6. Conversely, a read is considered poly(A)-containing if the normalised alignment score of Front Primer sequence is greater than that of the End Primer sequence, and above the threshold of 0.6. To ensure that the full poly(A) tail is present in raw data, the last 50 bases of poly(A)-containing reads are queried for the presence of the reverse-complement End Primer sequence. Reads where the normalised alignment score of the reverse-complement End Primer is below 0.6 are considered truncated poly(A) reads and not analysed further.
+     </p>
+     <p id="p-47">To identify borders of poly(A) or poly(T) stretches by similar procedures, the raw data of poly(A)-containing reads is reversed. Thus, both the poly(A) and poly(T) stretch are expected to be at the beginning of raw signal. The alignment of End Primer is considered the approximate start of the poly(A) or poly(T) stretch. Next, the raw data is z-normalised and converted to absolute values. To reduce computational workload, calculations to identify precise borders of poly(A)/(T) stretches are restricted to 3000 raw samples downstream of the rough poly(A)/(T) start site. This 3000-samples wide search window is wide enough to accomodate poly(A)/(T) tails of approximately 350 nt length. The mean signal is generated by applying a sliding window (window size 10; stride 10) to the processed raw signal. Next, the slope of this mean signal is calculated between every two consecutive points. The precise start of the respective tail is considered to be the first location after the rough start site where the calculated slope is between −0.2 and 0.2, and the mean signal is between 0 to 0.3. To identify the precise tail end, the slope and the mean signals downstream of the precise tail start site are tested for violating their respective thresholds (see above). Since short non-tail-like signal spikes can randomly occur, we test the signal downstream of this tentative tail end for tail-like signal within thresholds until we either reach the end of the search window of 3000 sample points, or find another stretch of tail-like signal of at least 60 sample points in length. In the latter case, the tentative tail end is updated to the downstream tail end to account for the spike signal. The maximum allowable signal length exceeding the threshold that is located between two tail-like signal has been to set to 120 nt (e.g. 120x read-specific nucleotide translocation rate).</p>
+     <p id="p-48">The difference between the precise boundaries define the raw length of poly(A)/(T) stretches in sample points. This value is normalised by the read-specific nucleotide translocation rate calculated dependent on the respective base-calling strategy (see below).</p>
+    </div>
+    <div id="sec-14" class="subsection">
+     <h3>4.7 Calculation of the read-specific nucleotide translocation rate</h3>
+     <p id="p-49">The translocation speed of the biological molecule through the pore is not homogenous. Thus, the translocation rate for each individual nucleotide can differ significantly. The translocation speed can be influenced by the sequencing context [
+      <a id="xref-ref-31-4" class="xref-bibr" href="#ref-31">31</a>], but also by sample time and sequencing buffer conditions (unpublished observations). Furthermore, the translocation speed can be influenced by RNA or DNA modifications, which however should not affect RNA sequencing from 
+      <em>in vitro</em> transcribed molecules, or DNA sequencing PCR-amplified molecules. Importantly, the motor protein for RNA and DNA differs, leading to dramatically different average translocation speed (70 nt for RNA in ONT Kits SQK-RNA001 vs. 450 nt for DNA in ONT Kits SQK-LSK108). In conclusion it is important to estimate the average nucleotide translocation rate for each read separately to account for the specific conditions at which the read was recorded. In basecalled ONT sequence data, a ‘move’ in raw data describes a single-nucleotide translocation through the pore. To calculate the average read-specific nucleotide translocation rate, we first extract a vector containing the number of sample points per move from the FAST5 events table of each individual read. If a move of 2 is detected (does not occur in basecalling with Flip-flop models), we divide the number of sample points by 2, as we reason that a preceding nucleotide translocation was not detected by the basecaller. From the resulting distribution of sample points per move, we then compute the geometric mean. This strategy results in robust estimation of poly(A) tail length for both ONT RNA and DNA sequencing approaches with standard model basecalling (
+      <a id="xref-fig-1-10" class="xref-fig" href="#F1">Fig. 1D</a>; 
+      <a id="xref-fig-2-7" class="xref-fig" href="#F2">Fig. 2C</a>). In our experience, this approach is resulting in more robust normalisation compared to normalisation by the median of single-nucleotide translocation rates, which is used in Nanopolish (
+      <a id="xref-fig-5-5" class="xref-fig" href="#F5">Fig. S2B</a>; [
+      <a id="xref-ref-32-4" class="xref-bibr" href="#ref-32">32</a>]).
+     </p>
+     <p id="p-50">Oxford Nanopore Technologies recently presented an updated basecalling strategy with Flip-flop models instead of standard models used for neural network nucleotide decoding [
+      <a id="xref-ref-35-4" class="xref-bibr" href="#ref-35">35</a>]. In this approach, the raw current level data is decoded by averaging 2 sample points instead of 5, resulting in higher-resolution basecalling. Additionally, we could not observe moves of 2, which in most cases represent missed nucleotide translocations. When we calculate the read-specific nucleotide translocation rate from reads basecalled with standard and Flip-flop models, we routinely observe lower average values for Flip-flop model basecalling. The calculated geometric mean of moves is often below 8. The geometric mean calculated from standard model basecalling routinely results in translocation rates between 8 and 9, which agrees with average translocation rates communicated by ONT (unpublished communications). Compared to standard model basecalling it is possible that Flip-flop model basecalling over-segments the raw data, resulting in too low average nucleotide translocation rates when calculated by the geometric mean. This is exemplified by the observation that the most frequently observed nucleotide translocation rate is 2 samples, the lowest possible value considering the resolution of 2 sample points. Instead of calculating the average rate by geometric mean, we used the arithmetic mean after discarding the 5% highest outliers as an approximation of the right normaliser, based on comparisons to results obtained by standard model basecalling on the same PCR-DNA molecules.
+     </p>
+    </div>
+   </div>
+   <div class="section" id="sec-15">
+    <h2 class="">Funding information</h2>
+    <p id="p-51">The project was supported by the Bergen Research Foundation (E.V.), the Sars International Centre for Marine Molecular Biology core funding (M.K), University of Bergen core funding (A.N.; K.L.) and the Norwegian Research Council (# 250049) (Y. T.-C.).</p>
+   </div>
+   <div class="section" id="sec-16">
+    <h2 class="">Conflict of interest</h2>
+    <p id="p-53">No conflicting interests declared.</p>
+   </div>
+   <div class="section ack" id="ack-1">
+    <h2 class="">Acknowledgements</h2>
+    <p id="p-52">MK would like to acknowledge the constant scientific exchange and troubleshooting with, as well as critical assessment of the manuscript by Kirill Yefimov and Teshome Bizuayehu. MK likes to further thank his family (small and big) for constant moral support during his career.</p>
+   </div>
+   <div class="section fn-group" id="fn-group-1">
+    <h2>Footnotes</h2>
+    <ul>
+     <li class="fn-other" id="fn-2">
+      <p id="p-2">Code Repository: 
+       <a href="https://github.com/adnaniazi/tailfindr">https://github.com/adnaniazi/tailfindr</a>
+      </p>
+     </li>
+    </ul>
+   </div>
+   <div class="section ref-list" id="ref-list-1">
+    <h2 class="">References</h2>
+    <ol class="cit-list ref-use-labels">
+     <li>
+      <span class="ref-label">[1].</span>
+      <a class="rev-xref-ref" href="#xref-ref-1-1" title="View reference [1] in text" id="ref-1">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.1" data-doi="10.1093/nar/gkm1120">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Fuke</span>
+          <span class="cit-name-given-names">H</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ohno</span>
+          <span class="cit-name-given-names">M.</span>
+         </span>
+         <span class="cit-article-title">Role of poly (A) tail as an identity element for mRNA nuclear export</span>. 
+         <abbr class="cit-jnl-abbrev">Nucleic Acids Res</abbr>
+         <span class="cit-pub-date">2008</span>
+         <span class="cit-month">Feb</span>;
+         <span class="cit-vol">36</span>(
+         <span class="cit-issue">3</span>):
+         <span class="cit-fpage">1037</span>–
+         <span class="cit-lpage">1049</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNucleic%2BAcids%2BRes%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fnar%252Fgkm1120%26rft_id%253Dinfo%253Apmid%252F18096623%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/nar/gkm1120&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=18096623&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000253491300037&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[2].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.2" data-doi="10.1016/S0014-4827(03)00123-X">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bear</span>
+          <span class="cit-name-given-names">DG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Fomproix</span>
+          <span class="cit-name-given-names">N</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Soop</span>
+          <span class="cit-name-given-names">T</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Björkroth</span>
+          <span class="cit-name-given-names">B</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Masich</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Daneholt</span>
+          <span class="cit-name-given-names">B.</span>
+         </span>
+         <span class="cit-article-title">Nuclear poly(A)-binding protein PABPN1 is associated with RNA polymerase II during transcription and accompanies the released transcript to the nuclear pore</span>. 
+         <abbr class="cit-jnl-abbrev">Exp Cell Res</abbr>
+         <span class="cit-pub-date">2003</span>
+         <span class="cit-month">Jun</span>;
+         <span class="cit-vol">286</span>(
+         <span class="cit-issue">2</span>):
+         <span class="cit-fpage">332</span>–
+         <span class="cit-lpage">344</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DExperimental%2Bcell%2Bresearch%26rft.stitle%253DExp%2BCell%2BRes%26rft.aulast%253DBear%26rft.auinit1%253DD.%2BG.%26rft.volume%253D286%26rft.issue%253D2%26rft.spage%253D332%26rft.epage%253D344%26rft.atitle%253DNuclear%2Bpoly%2528A%2529-binding%2Bprotein%2BPABPN1%2Bis%2Bassociated%2Bwith%2BRNA%2Bpolymerase%2BII%2Bduring%2Btranscription%2Band%2Baccompanies%2Bthe%2Breleased%2Btranscript%2Bto%2Bthe%2Bnuclear%2Bpore.%26rft_id%253Dinfo%253Adoi%252F10.1016%252FS0014-4827%252803%252900123-X%26rft_id%253Dinfo%253Apmid%252F12749861%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/S0014-4827(03)00123-X&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=12749861&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000183104400016&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[3].</span>
+      <a class="rev-xref-ref" href="#xref-ref-3-1" title="View reference [3] in text" id="ref-3">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.3" data-doi="10.1093/emboj/21.7.1800">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hector</span>
+          <span class="cit-name-given-names">RE</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Nykamp</span>
+          <span class="cit-name-given-names">KR</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Dheur</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Anderson</span>
+          <span class="cit-name-given-names">JT</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Non</span>
+          <span class="cit-name-given-names">PJ</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Urbinati</span>
+          <span class="cit-name-given-names">CR</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>
+         <span class="cit-article-title">Dual requirement for yeast hnRNP Nab2p in mRNA poly (A) tail length control and nuclear export</span>. 
+         <abbr class="cit-jnl-abbrev">EMBO J</abbr>
+         <span class="cit-pub-date">2002</span>;
+         <span class="cit-vol">21</span>(
+         <span class="cit-issue">7</span>):
+         <span class="cit-fpage">1800</span>–
+         <span class="cit-lpage">1810</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DThe%2BEMBO%2BJournal%26rft.stitle%253DEMBO%2BJ.%26rft.aulast%253DHector%26rft.auinit1%253DR.%2BE.%26rft.volume%253D21%26rft.issue%253D7%26rft.spage%253D1800%26rft.epage%253D1810%26rft.atitle%253DDual%2Brequirement%2Bfor%2Byeast%2BhnRNP%2BNab2p%2Bin%2BmRNA%2Bpoly%2528A%2529%2Btail%2Blength%2Bcontrol%2Band%2Bnuclear%2Bexport%26rft_id%253Dinfo%253Adoi%252F10.1093%252Femboj%252F21.7.1800%26rft_id%253Dinfo%253Apmid%252F11927564%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NzoiZW1ib2pubCI7czo1OiJyZXNpZCI7czo5OiIyMS83LzE4MDAiO3M6NDoiYXRvbSI7czozNzoiL2Jpb3J4aXYvZWFybHkvMjAxOS8wMy8yNi81ODgzNDMuYXRvbSI7fXM6ODoiZnJhZ21lbnQiO3M6MDoiIjt9" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[4].</span>
+      <a class="rev-xref-ref" href="#xref-ref-4-1" title="View reference [4] in text" id="ref-4">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.4">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Eckmann</span>
+          <span class="cit-name-given-names">CR</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rammelt</span>
+          <span class="cit-name-given-names">C</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wahle</span>
+          <span class="cit-name-given-names">E.</span>
+         </span>
+         <span class="cit-article-title">Control of poly(A) tail length</span>. 
+         <abbr class="cit-jnl-abbrev">Wiley Interdiscip Rev RNA</abbr>
+         <span class="cit-pub-date">2011</span>
+         <span class="cit-month">May</span>;
+         <span class="cit-vol">2</span>(
+         <span class="cit-issue">3</span>):
+         <span class="cit-fpage">348</span>–
+         <span class="cit-lpage">361</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DWiley%2BInterdiscip%2BRev%2BRNA%26rft.volume%253D2%26rft.spage%253D348%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[5].</span>
+      <a class="rev-xref-ref" href="#xref-ref-5-1" title="View reference [5] in text" id="ref-5">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.5" data-doi="10.1093/nar/gkp1176">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Millevoi</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Vagner</span>
+          <span class="cit-name-given-names">S.</span>
+         </span>
+         <span class="cit-article-title">Molecular mechanisms of eukaryotic pre-mRNA 3’ end processing regulation</span>. 
+         <abbr class="cit-jnl-abbrev">Nucleic Acids Res</abbr>
+         <span class="cit-pub-date">2010</span>
+         <span class="cit-month">May</span>;
+         <span class="cit-vol">38</span>(
+         <span class="cit-issue">9</span>):
+         <span class="cit-fpage">2757</span>–
+         <span class="cit-lpage">2774</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNucleic%2BAcids%2BRes%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fnar%252Fgkp1176%26rft_id%253Dinfo%253Apmid%252F20044349%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/nar/gkp1176&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=20044349&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000277994600009&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[6].</span>
+      <a class="rev-xref-ref" href="#xref-ref-6-1" title="View reference [6] in text" id="ref-6">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.6" data-doi="10.1126/science.174.4008.507">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Darnell</span>
+          <span class="cit-name-given-names">JE</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Philipson</span>
+          <span class="cit-name-given-names">L</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wall</span>
+          <span class="cit-name-given-names">R</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Adesnik</span>
+          <span class="cit-name-given-names">M.</span>
+         </span>
+         <span class="cit-article-title">Polyadenylic acid sequences: role in conversion of nuclear RNA into messenger RNA</span>. 
+         <abbr class="cit-jnl-abbrev">Science</abbr>
+         <span class="cit-pub-date">1971</span>
+         <span class="cit-month">Oct</span>;
+         <span class="cit-vol">174</span>(
+         <span class="cit-issue">4008</span>):
+         <span class="cit-fpage">507</span>–
+         <span class="cit-lpage">510</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DScience%26rft.stitle%253DScience%26rft.aulast%253DDarnell%26rft.auinit1%253DJ.%2BE.%26rft.volume%253D174%26rft.issue%253D4008%26rft.spage%253D507%26rft.epage%253D510%26rft.atitle%253DPolyadenylic%2BAcid%2BSequences%253A%2BRole%2Bin%2BConversion%2Bof%2BNuclear%2BRNA%2Binto%2BMessenger%2BRNA%26rft_id%253Dinfo%253Adoi%252F10.1126%252Fscience.174.4008.507%26rft_id%253Dinfo%253Apmid%252F5110429%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6Mzoic2NpIjtzOjU6InJlc2lkIjtzOjEyOiIxNzQvNDAwOC81MDciO3M6NDoiYXRvbSI7czozNzoiL2Jpb3J4aXYvZWFybHkvMjAxOS8wMy8yNi81ODgzNDMuYXRvbSI7fXM6ODoiZnJhZ21lbnQiO3M6MDoiIjt9" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[7].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.7" data-doi="10.1073/pnas.68.6.1336">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Edmonds</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Vaughan</span>
+          <span class="cit-name-given-names">MH</span>
+          <span class="cit-name-suffix">Jr</span>.
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Nakazato</span>
+          <span class="cit-name-given-names">H.</span>
+         </span>
+         <span class="cit-article-title">Polyadenylic acid sequences in the heterogeneous nuclear RNA and rapidly-labeled polyribosomal RNA of HeLa cells: possible evidence for a precursor relationship</span>. 
+         <abbr class="cit-jnl-abbrev">Proc Natl Acad Sci U S A</abbr>
+         <span class="cit-pub-date">1971</span>
+         <span class="cit-month">Jun</span>;
+         <span class="cit-vol">68</span>(
+         <span class="cit-issue">6</span>):
+         <span class="cit-fpage">1336</span>–
+         <span class="cit-lpage">1340</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DPNAS%26rft.stitle%253DProc.%2BNatl.%2BAcad.%2BSci.%2BUSA%26rft.aulast%253DEdmonds%26rft.auinit1%253DM.%26rft.volume%253D68%26rft.issue%253D6%26rft.spage%253D1336%26rft.epage%253D1340%26rft.atitle%253DPolyadenylic%2BAcid%2BSequences%2Bin%2Bthe%2BHeterogeneous%2BNuclear%2BRNA%2Band%2BRapidly-Labeled%2BPolyribosomal%2BRNA%2Bof%2BHeLa%2BCells%253A%2BPossible%2BEvidence%2Bfor%2Ba%2BPrecursor%2BRelationship%26rft_id%253Dinfo%253Adoi%252F10.1073%252Fpnas.68.6.1336%26rft_id%253Dinfo%253Apmid%252F5288383%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NDoicG5hcyI7czo1OiJyZXNpZCI7czo5OiI2OC82LzEzMzYiO3M6NDoiYXRvbSI7czozNzoiL2Jpb3J4aXYvZWFybHkvMjAxOS8wMy8yNi81ODgzNDMuYXRvbSI7fXM6ODoiZnJhZ21lbnQiO3M6MDoiIjt9" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[8].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.8" data-doi="10.1038/353229a0">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Raabe</span>
+          <span class="cit-name-given-names">T</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bollum</span>
+          <span class="cit-name-given-names">FJ</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Manley</span>
+          <span class="cit-name-given-names">JL</span>
+         </span>. 
+         <span class="cit-article-title">Primary structure and expression of bovine poly(A) polymerase</span>. 
+         <abbr class="cit-jnl-abbrev">Nature</abbr>
+         <span class="cit-pub-date">1991</span>
+         <span class="cit-month">Sep</span>;
+         <span class="cit-vol">353</span>(
+         <span class="cit-issue">6341</span>):
+         <span class="cit-fpage">229</span>–
+         <span class="cit-lpage">234</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNature%26rft.stitle%253DNature%26rft.aulast%253DRaabe%26rft.auinit1%253DT.%26rft.volume%253D353%26rft.issue%253D6341%26rft.spage%253D229%26rft.epage%253D234%26rft.atitle%253DPrimary%2Bstructure%2Band%2Bexpression%2Bof%2Bbovine%2Bpoly%2528A%2529%2Bpolymerase.%26rft_id%253Dinfo%253Adoi%252F10.1038%252F353229a0%26rft_id%253Dinfo%253Apmid%252F1896071%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1038/353229a0&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=1896071&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=A1991GF67400049&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[9].</span>
+      <a class="rev-xref-ref" href="#xref-ref-9-1" title="View reference [9] in text" id="ref-9">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.9" data-doi="10.1128/MCB.14.5.2946">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Raabe</span>
+          <span class="cit-name-given-names">T</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Murthy</span>
+          <span class="cit-name-given-names">KG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Manley</span>
+          <span class="cit-name-given-names">JL</span>
+         </span>. 
+         <span class="cit-article-title">Poly(A) polymerase contains multiple functional domains</span>. 
+         <abbr class="cit-jnl-abbrev">Mol Cell Biol</abbr>
+         <span class="cit-pub-date">1994</span>
+         <span class="cit-month">May</span>;
+         <span class="cit-vol">14</span>(
+         <span class="cit-issue">5</span>):
+         <span class="cit-fpage">2946</span>–
+         <span class="cit-lpage">2957</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMolecular%2Band%2BCellular%2BBiology%26rft.stitle%253DMol.%2BCell.%2BBiol.%26rft.aulast%253DRaabe%26rft.auinit1%253DT%26rft.volume%253D14%26rft.issue%253D5%26rft.spage%253D2946%26rft.epage%253D2957%26rft.atitle%253DPoly%2528A%2529%2Bpolymerase%2Bcontains%2Bmultiple%2Bfunctional%2Bdomains.%26rft_id%253Dinfo%253Adoi%252F10.1128%252FMCB.14.5.2946%26rft_id%253Dinfo%253Apmid%252F8164653%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6MzoibWNiIjtzOjU6InJlc2lkIjtzOjk6IjE0LzUvMjk0NiI7czo0OiJhdG9tIjtzOjM3OiIvYmlvcnhpdi9lYXJseS8yMDE5LzAzLzI2LzU4ODM0My5hdG9tIjt9czo4OiJmcmFnbWVudCI7czowOiIiO30=" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[10].</span>
+      <a class="rev-xref-ref" href="#xref-ref-10-1" title="View reference [10] in text" id="ref-10">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.10" data-doi="10.1016/S1097-2765(00)00121-0">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Mendez</span>
+          <span class="cit-name-given-names">R</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Murthy</span>
+          <span class="cit-name-given-names">KG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ryan</span>
+          <span class="cit-name-given-names">K</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Manley</span>
+          <span class="cit-name-given-names">JL</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Richter</span>
+          <span class="cit-name-given-names">JD</span>
+         </span>. 
+         <span class="cit-article-title">Phosphorylation of CPEB by Eg2 mediates the recruitment of CPSF into an active cytoplasmic polyadenylation complex</span>. 
+         <abbr class="cit-jnl-abbrev">Mol Cell</abbr>
+         <span class="cit-pub-date">2000</span>
+         <span class="cit-month">Nov</span>;
+         <span class="cit-vol">6</span>(
+         <span class="cit-issue">5</span>):
+         <span class="cit-fpage">1253</span>–
+         <span class="cit-lpage">1259</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMolecular%2Bcell%26rft.stitle%253DMol%2BCell%26rft.aulast%253DMendez%26rft.auinit1%253DR.%26rft.volume%253D6%26rft.issue%253D5%26rft.spage%253D1253%26rft.epage%253D1259%26rft.atitle%253DPhosphorylation%2Bof%2BCPEB%2Bby%2BEg2%2Bmediates%2Bthe%2Brecruitment%2Bof%2BCPSF%2Binto%2Ban%2Bactive%2Bcytoplasmic%2Bpolyadenylation%2Bcomplex.%26rft_id%253Dinfo%253Adoi%252F10.1016%252FS1097-2765%252800%252900121-0%26rft_id%253Dinfo%253Apmid%252F11106762%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/S1097-2765(00)00121-0&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=11106762&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000165472100025&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[11].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.11" data-doi="10.1073/pnas.71.10.4091">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Diez</span>
+          <span class="cit-name-given-names">J</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Brawerman</span>
+          <span class="cit-name-given-names">G.</span>
+         </span>
+         <span class="cit-article-title">Elongation of the polyadenylate segment of messenger RNA in the cytoplasm of mammalian cells</span>. 
+         <abbr class="cit-jnl-abbrev">Proc Natl Acad Sci U S A</abbr>
+         <span class="cit-pub-date">1974</span>
+         <span class="cit-month">Oct</span>;
+         <span class="cit-vol">71</span>(
+         <span class="cit-issue">10</span>):
+         <span class="cit-fpage">4091</span>–
+         <span class="cit-lpage">4095</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DPNAS%26rft.stitle%253DProc.%2BNatl.%2BAcad.%2BSci.%2BUSA%26rft.aulast%253DDiez%26rft.auinit1%253DJ.%26rft.volume%253D71%26rft.issue%253D10%26rft.spage%253D4091%26rft.epage%253D4095%26rft.atitle%253DElongation%2Bof%2Bthe%2BPolyadenylate%2BSegment%2Bof%2BMessenger%2BRNA%2Bin%2Bthe%2BCytoplasm%2Bof%2BMammalian%2BCells%26rft_id%253Dinfo%253Adoi%252F10.1073%252Fpnas.71.10.4091%26rft_id%253Dinfo%253Apmid%252F4547843%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NDoicG5hcyI7czo1OiJyZXNpZCI7czoxMDoiNzEvMTAvNDA5MSI7czo0OiJhdG9tIjtzOjM3OiIvYmlvcnhpdi9lYXJseS8yMDE5LzAzLzI2LzU4ODM0My5hdG9tIjt9czo4OiJmcmFnbWVudCI7czowOiIiO30=" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[12].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.12">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Clegg</span>
+          <span class="cit-name-given-names">KB</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Pikó</span>
+          <span class="cit-name-given-names">L.</span>
+         </span>
+         <span class="cit-article-title">RNA synthesis and cytoplasmic polyadenylation in the one-cell mouse embryo</span>. 
+         <abbr class="cit-jnl-abbrev">Nature</abbr>
+         <span class="cit-pub-date">1982</span>
+         <span class="cit-month">Jan</span>;
+         <span class="cit-vol">295</span>(
+         <span class="cit-issue">5847</span>):
+         <span class="cit-fpage">343</span>–
+         <span class="cit-lpage">344</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNature%26rft.stitle%253DNature%26rft.aulast%253DClegg%26rft.auinit1%253DK.%2BB.%26rft.volume%253D295%26rft.issue%253D5847%26rft.spage%253D343%26rft.epage%253D344%26rft.atitle%253DRNA%2Bsynthesis%2Band%2Bcytoplasmic%2Bpolyadenylation%2Bin%2Bthe%2Bone-cell%2Bmouse%2Bembryo.%26rft_id%253Dinfo%253Apmid%252F6173763%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=6173763&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[13].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.13" data-doi="10.1016/0092-8674(94)90547-9">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hake</span>
+          <span class="cit-name-given-names">LE</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Richter</span>
+          <span class="cit-name-given-names">JD</span>
+         </span>. 
+         <span class="cit-article-title">CPEB is a specificity factor that mediates cytoplasmic polyadenylation during Xenopus oocyte maturation</span>. 
+         <abbr class="cit-jnl-abbrev">Cell</abbr>
+         <span class="cit-pub-date">1994</span>
+         <span class="cit-month">Nov</span>;
+         <span class="cit-vol">79</span>(
+         <span class="cit-issue">4</span>):
+         <span class="cit-fpage">617</span>–
+         <span class="cit-lpage">627</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DCell%26rft.stitle%253DCell%26rft.aulast%253DHake%26rft.auinit1%253DL.%2BE.%26rft.volume%253D79%26rft.issue%253D4%26rft.spage%253D617%26rft.epage%253D627%26rft.atitle%253DCPEB%2Bis%2Ba%2Bspecificity%2Bfactor%2Bthat%2Bmediates%2Bcytoplasmic%2Bpolyadenylation%2Bduring%2BXenopus%2Boocyte%2Bmaturation.%26rft_id%253Dinfo%253Adoi%252F10.1016%252F0092-8674%252894%252990547-9%26rft_id%253Dinfo%253Apmid%252F7954828%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/0092-8674(94)90547-9&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=7954828&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=A1994PT48100009&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[14].</span>
+      <a class="rev-xref-ref" href="#xref-ref-14-1" title="View reference [14] in text" id="ref-14">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.14" data-doi="10.1073/pnas.192467799">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Read</span>
+          <span class="cit-name-given-names">RL</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Martinho</span>
+          <span class="cit-name-given-names">RG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wang</span>
+          <span class="cit-name-given-names">SW</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Carr</span>
+          <span class="cit-name-given-names">AM</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Norbury</span>
+          <span class="cit-name-given-names">CJ</span>
+         </span>. 
+         <span class="cit-article-title">Cytoplasmic poly(A) polymerases mediate cellular responses to S phase arrest</span>. 
+         <abbr class="cit-jnl-abbrev">Proc Natl Acad Sci U S A</abbr>
+         <span class="cit-pub-date">2002</span>
+         <span class="cit-month">Sep</span>;
+         <span class="cit-vol">99</span>(
+         <span class="cit-issue">19</span>):
+         <span class="cit-fpage">12079</span>–
+         <span class="cit-lpage">12084</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DProc%2BNatl%2BAcad%2BSci%2BU%2BS%2BA%26rft_id%253Dinfo%253Adoi%252F10.1073%252Fpnas.192467799%26rft_id%253Dinfo%253Apmid%252F12218190%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NDoicG5hcyI7czo1OiJyZXNpZCI7czoxMToiOTkvMTkvMTIwNzkiO3M6NDoiYXRvbSI7czozNzoiL2Jpb3J4aXYvZWFybHkvMjAxOS8wMy8yNi81ODgzNDMuYXRvbSI7fXM6ODoiZnJhZ21lbnQiO3M6MDoiIjt9" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[15].</span>
+      <a class="rev-xref-ref" href="#xref-ref-15-1" title="View reference [15] in text" id="ref-15">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.15" data-doi="10.1016/j.semcdb.2014.05.018">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Jalkanen</span>
+          <span class="cit-name-given-names">AL</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Coleman</span>
+          <span class="cit-name-given-names">SJ</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wilusz</span>
+          <span class="cit-name-given-names">J.</span>
+         </span>
+         <span class="cit-article-title">Determinants and implications of mRNA poly(A) tail size – Does this protein make my tail look big?</span>
+         <abbr class="cit-jnl-abbrev">Semin Cell Dev Biol</abbr>
+         <span class="cit-pub-date">2014</span>;
+         <span class="cit-vol">34</span>:
+         <span class="cit-fpage">24</span>–
+         <span class="cit-lpage">32</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DSemin%2BCell%2BDev%2BBiol%26rft.volume%253D34%26rft.spage%253D24%26rft_id%253Dinfo%253Adoi%252F10.1016%252Fj.semcdb.2014.05.018%26rft_id%253Dinfo%253Apmid%252F24910447%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/j.semcdb.2014.05.018&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=24910447&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[16].</span>
+      <a class="rev-xref-ref" href="#xref-ref-16-1" title="View reference [16] in text" id="ref-16">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.16" data-doi="10.1128/MCB.17.1.398">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ford</span>
+          <span class="cit-name-given-names">LP</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bagga</span>
+          <span class="cit-name-given-names">PS</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wilusz</span>
+          <span class="cit-name-given-names">J.</span>
+         </span>
+         <span class="cit-article-title">The poly(A) tail inhibits the assembly of a 3’-to-5’ exonuclease in an in vitro RNA stability system</span>. 
+         <abbr class="cit-jnl-abbrev">Mol Cell Biol</abbr>
+         <span class="cit-pub-date">1997</span>;
+         <span class="cit-vol">17</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">398</span>–
+         <span class="cit-lpage">406</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMolecular%2Band%2BCellular%2BBiology%26rft.stitle%253DMol.%2BCell.%2BBiol.%26rft.aulast%253DFord%26rft.auinit1%253DL.%2BP.%26rft.volume%253D17%26rft.issue%253D1%26rft.spage%253D398%26rft.epage%253D406%26rft.atitle%253DThe%2Bpoly%2528A%2529%2Btail%2Binhibits%2Bthe%2Bassembly%2Bof%2Ba%2B3%2527-to-5%2527%2Bexonuclease%2Bin%2Ban%2Bin%2Bvitro%2BRNA%2Bstability%2Bsystem.%26rft_id%253Dinfo%253Adoi%252F10.1128%252FMCB.17.1.398%26rft_id%253Dinfo%253Apmid%252F8972220%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6MzoibWNiIjtzOjU6InJlc2lkIjtzOjg6IjE3LzEvMzk4IjtzOjQ6ImF0b20iO3M6Mzc6Ii9iaW9yeGl2L2Vhcmx5LzIwMTkvMDMvMjYvNTg4MzQzLmF0b20iO31zOjg6ImZyYWdtZW50IjtzOjA6IiI7fQ==" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[17].</span>
+      <a class="rev-xref-ref" href="#xref-ref-17-1" title="View reference [17] in text" id="ref-17">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.17" data-doi="10.1371/journal.pgen.1003893">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bresson</span>
+          <span class="cit-name-given-names">SM</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Conrad</span>
+          <span class="cit-name-given-names">NK</span>
+         </span>. 
+         <span class="cit-article-title">The human nuclear poly(a)-binding protein promotes RNA hyperadenylation and decay</span>. 
+         <abbr class="cit-jnl-abbrev">PLoS Genet</abbr>
+         <span class="cit-pub-date">2013</span>
+         <span class="cit-month">Oct</span>;
+         <span class="cit-vol">9</span>(
+         <span class="cit-issue">10</span>):
+         <span class="cit-fpage">e1003893</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DPLoS%2BGenet%26rft.volume%253D9%26rft.spage%253De1003893%26rft_id%253Dinfo%253Adoi%252F10.1371%252Fjournal.pgen.1003893%26rft_id%253Dinfo%253Apmid%252F24146636%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1371/journal.pgen.1003893&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=24146636&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[18].</span>
+      <a class="rev-xref-ref" href="#xref-ref-18-1" title="View reference [18] in text" id="ref-18">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.18" data-doi="10.1261/rna.569407">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Beilharz</span>
+          <span class="cit-name-given-names">TH</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Preiss</span>
+          <span class="cit-name-given-names">T.</span>
+         </span>
+         <span class="cit-article-title">Widespread use of poly(A) tail length control to accentuate expression of the yeast transcriptome</span>. 
+         <abbr class="cit-jnl-abbrev">RNA</abbr>
+         <span class="cit-pub-date">2007</span>
+         <span class="cit-month">Jul</span>;
+         <span class="cit-vol">13</span>(
+         <span class="cit-issue">7</span>):
+         <span class="cit-fpage">982</span>–
+         <span class="cit-lpage">997</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DRNA%26rft.stitle%253DRNA%26rft.aulast%253DBeilharz%26rft.auinit1%253DT.%2BH.%26rft.volume%253D13%26rft.issue%253D7%26rft.spage%253D982%26rft.epage%253D997%26rft.atitle%253DWidespread%2Buse%2Bof%2Bpoly%2528A%2529%2Btail%2Blength%2Bcontrol%2Bto%2Baccentuate%2Bexpression%2Bof%2Bthe%2Byeast%2Btranscriptome%26rft_id%253Dinfo%253Adoi%252F10.1261%252Frna.569407%26rft_id%253Dinfo%253Apmid%252F17586758%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6Mzoicm5hIjtzOjU6InJlc2lkIjtzOjg6IjEzLzcvOTgyIjtzOjQ6ImF0b20iO3M6Mzc6Ii9iaW9yeGl2L2Vhcmx5LzIwMTkvMDMvMjYvNTg4MzQzLmF0b20iO31zOjg6ImZyYWdtZW50IjtzOjA6IiI7fQ==" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[19].</span>
+      <a class="rev-xref-ref" href="#xref-ref-19-1" title="View reference [19] in text" id="ref-19">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.19" data-doi="10.1038/nature13007">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Subtelny</span>
+          <span class="cit-name-given-names">AO</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Eichhorn</span>
+          <span class="cit-name-given-names">SW</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chen</span>
+          <span class="cit-name-given-names">GR</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Sive</span>
+          <span class="cit-name-given-names">H</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bartel</span>
+          <span class="cit-name-given-names">DP</span>
+         </span>. 
+         <span class="cit-article-title">Poly(A)-tail profiling reveals an embryonic switch in translational control</span>. 
+         <abbr class="cit-jnl-abbrev">Nature</abbr>
+         <span class="cit-pub-date">2014</span>
+         <span class="cit-month">Apr</span>;
+         <span class="cit-vol">508</span>(
+         <span class="cit-issue">7494</span>):
+         <span class="cit-fpage">66</span>–
+         <span class="cit-lpage">71</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNature%26rft.volume%253D508%26rft.spage%253D66%26rft_id%253Dinfo%253Adoi%252F10.1038%252Fnature13007%26rft_id%253Dinfo%253Apmid%252F24476825%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1038/nature13007&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=24476825&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000333609900043&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[20].</span>
+      <a class="rev-xref-ref" href="#xref-ref-20-1" title="View reference [20] in text" id="ref-20">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.20">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lima</span>
+          <span class="cit-name-given-names">SA</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chipman</span>
+          <span class="cit-name-given-names">LB</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Nicholson</span>
+          <span class="cit-name-given-names">AL</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chen</span>
+          <span class="cit-name-given-names">YH</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Yee</span>
+          <span class="cit-name-given-names">BA</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Yeo</span>
+          <span class="cit-name-given-names">GW</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>
+         <span class="cit-article-title">Short poly(A) tails are a conserved feature of highly expressed genes</span>. 
+         <abbr class="cit-jnl-abbrev">Nat Struct Mol Biol</abbr>
+         <span class="cit-pub-date">2017</span>
+         <span class="cit-month">Dec</span>;
+         <span class="cit-vol">24</span>(
+         <span class="cit-issue">12</span>):
+         <span class="cit-fpage">1057</span>–
+         <span class="cit-lpage">1063</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNat%2BStruct%2BMol%2BBiol%26rft.volume%253D24%26rft.spage%253D1057%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[21].</span>
+      <a class="rev-xref-ref" href="#xref-ref-21-1" title="View reference [21] in text" id="ref-21">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.21">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Nilsen</span>
+          <span class="cit-name-given-names">TW</span>
+         </span>. 
+         <span class="cit-article-title">Measuring the length of poly(A) tails</span>. 
+         <abbr class="cit-jnl-abbrev">Cold Spring Harb Protoc</abbr>
+         <span class="cit-pub-date">2015</span>
+         <span class="cit-month">Apr</span>;
+         <span class="cit-vol">2015</span>(
+         <span class="cit-issue">4</span>):
+         <span class="cit-fpage">413</span>–
+         <span class="cit-lpage">418</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DCold%2BSpring%2BHarb%2BProtoc%26rft.volume%253D2015%26rft.spage%253D413%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[22].</span>
+      <a class="rev-xref-ref" href="#xref-ref-22-1" title="View reference [22] in text" id="ref-22">↵</a>
+      <div class="cit ref-cit ref-book" id="cit-588343v2.22" data-doi="10.1016/S0076-6879(08)02624-4">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Murray</span>
+          <span class="cit-name-given-names">EL</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Schoenberg</span>
+          <span class="cit-name-given-names">DR</span>
+         </span>. 
+         <span class="cit-chapter-title">Chapter 24 Assays for Determining Poly(A) Tail Length and the Polarity of mRNA Decay in Mammalian Cells</span>. In: 
+         <span class="cit-source">Methods in Enzymology</span>, vol. 
+         <span class="cit-vol">448</span>
+         <span class="cit-publ-name">Academic Press</span>; 
+         <span class="cit-pub-date">2008</span>.p. 
+         <span class="cit-fpage">483</span>–
+         <span class="cit-lpage">504</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMethods%2Bin%2Benzymology%26rft.stitle%253DMethods%2BEnzymol%26rft.aulast%253DMurray%26rft.auinit1%253DE.%2BL.%26rft.volume%253D448%26rft.spage%253D483%26rft.epage%253D504%26rft.atitle%253DAssays%2Bfor%2Bdetermining%2Bpoly%2528A%2529%2Btail%2Blength%2Band%2Bthe%2Bpolarity%2Bof%2BmRNA%2Bdecay%2Bin%2Bmammalian%2Bcells.%26rft_id%253Dinfo%253Adoi%252F10.1016%252FS0076-6879%252808%252902624-4%26rft_id%253Dinfo%253Apmid%252F19111191%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/S0076-6879(08)02624-4&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=19111191&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000262252300024&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[23].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.23" data-doi="10.1093/nar/24.12.2429">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hite</span>
+          <span class="cit-name-given-names">JM</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Eckert</span>
+          <span class="cit-name-given-names">KA</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Cheng</span>
+          <span class="cit-name-given-names">KC</span>
+         </span>. 
+         <span class="cit-article-title">Factors Affecting Fidelity of DNA Synthesis During PCR Amplification of d(C-A)n
+          <em>·</em>d(G-T)n Microsatellite Repeats
+         </span>. 
+         <abbr class="cit-jnl-abbrev">Nucleic Acids Res</abbr>
+         <span class="cit-pub-date">1996</span>
+         <span class="cit-month">Jun</span>;
+         <span class="cit-vol">24</span>(
+         <span class="cit-issue">12</span>):
+         <span class="cit-fpage">2429</span>–
+         <span class="cit-lpage">2434</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNucleic%2BAcids%2BRes%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fnar%252F24.12.2429%26rft_id%253Dinfo%253Apmid%252F8710517%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/nar/24.12.2429&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=8710517&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=A1996UW12300032&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[24].</span>
+      <a class="rev-xref-ref" href="#xref-ref-24-1" title="View reference [24] in text" id="ref-24">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.24" data-doi="10.1038/srep05052">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hommelsheim</span>
+          <span class="cit-name-given-names">CM</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Frantzeskakis</span>
+          <span class="cit-name-given-names">L</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Huang</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ülker</span>
+          <span class="cit-name-given-names">B.</span>
+         </span>
+         <span class="cit-article-title">PCR amplification of repetitive DNA: a limitation to genome editing technologies and many other applications</span>. 
+         <abbr class="cit-jnl-abbrev">Sci Rep</abbr>
+         <span class="cit-pub-date">2014</span>
+         <span class="cit-month">May</span>;
+         <span class="cit-vol">4</span>:
+         <span class="cit-fpage">5052</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DSci%2BRep%26rft.volume%253D4%26rft.spage%253D5052%26rft_id%253Dinfo%253Adoi%252F10.1038%252Fsrep05052%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1038/srep05052&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[25].</span>
+      <a class="rev-xref-ref" href="#xref-ref-25-1" title="View reference [25] in text" id="ref-25">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.25" data-doi="10.1016/j.molcel.2014.02.007">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chang</span>
+          <span class="cit-name-given-names">H</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lim</span>
+          <span class="cit-name-given-names">J</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ha</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kim</span>
+          <span class="cit-name-given-names">VN</span>
+         </span>. 
+         <span class="cit-article-title">TAIL-seq: genome-wide determination of poly(A) tail length and 3’ end modifications</span>. 
+         <abbr class="cit-jnl-abbrev">Mol Cell</abbr>
+         <span class="cit-pub-date">2014</span>
+         <span class="cit-month">Mar</span>;
+         <span class="cit-vol">53</span>(
+         <span class="cit-issue">6</span>):
+         <span class="cit-fpage">1044</span>–
+         <span class="cit-lpage">1052</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMol%2BCell%26rft.volume%253D53%26rft.spage%253D1044%26rft_id%253Dinfo%253Adoi%252F10.1016%252Fj.molcel.2014.02.007%26rft_id%253Dinfo%253Apmid%252F24582499%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/j.molcel.2014.02.007&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=24582499&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000333329400018&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[26].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.26">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Balagopal</span>
+          <span class="cit-name-given-names">V</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bolisetty</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Al Husaini</span>
+          <span class="cit-name-given-names">N</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Coller</span>
+          <span class="cit-name-given-names">J</span>
+         </span>, others. 
+         <span class="cit-article-title">Ccr4 and Pop2 control poly (A) tail length in Saccharomyces cerevisiae</span>. 
+         <abbr class="cit-jnl-abbrev">bioRxiv</abbr>
+         <span class="cit-pub-date">2017</span>;.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[27].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.27" data-doi="10.1101/gad.284802.116">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lim</span>
+          <span class="cit-name-given-names">J</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lee</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Son</span>
+          <span class="cit-name-given-names">A</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chang</span>
+          <span class="cit-name-given-names">H</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kim</span>
+          <span class="cit-name-given-names">VN</span>
+         </span>. 
+         <span class="cit-article-title">mTAIL-seq reveals dynamic poly(A) tail regulation in oocyte-to-embryo development</span>. 
+         <abbr class="cit-jnl-abbrev">Genes Dev</abbr>
+         <span class="cit-pub-date">2016</span>
+         <span class="cit-month">Jul</span>;
+         <span class="cit-vol">30</span>(
+         <span class="cit-issue">14</span>):
+         <span class="cit-fpage">1671</span>–
+         <span class="cit-lpage">1682</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenes%2BDev%26rft_id%253Dinfo%253Adoi%252F10.1101%252Fgad.284802.116%26rft_id%253Dinfo%253Apmid%252F27445395%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6ODoiZ2VuZXNkZXYiO3M6NToicmVzaWQiO3M6MTA6IjMwLzE0LzE2NzEiO3M6NDoiYXRvbSI7czozNzoiL2Jpb3J4aXYvZWFybHkvMjAxOS8wMy8yNi81ODgzNDMuYXRvbSI7fXM6ODoiZnJhZ21lbnQiO3M6MDoiIjt9" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[28].</span>
+      <a class="rev-xref-ref" href="#xref-ref-28-1" title="View reference [28] in text" id="ref-28">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.28">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Woo</span>
+          <span class="cit-name-given-names">YM</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kwak</span>
+          <span class="cit-name-given-names">Y</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Namkoong</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kristjánsdóttir</span>
+          <span class="cit-name-given-names">K</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lee</span>
+          <span class="cit-name-given-names">SH</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lee</span>
+          <span class="cit-name-given-names">JH</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>
+         <span class="cit-article-title">TED-Seq Identifies the Dynamics of Poly(A) Length during ER Stress</span>. 
+         <abbr class="cit-jnl-abbrev">Cell Rep</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Sep</span>;
+         <span class="cit-vol">24</span>(
+         <span class="cit-issue">13</span>):
+         <span class="cit-fpage">3630</span>–
+         <span class="cit-lpage">3641.e7</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DCell%2BRep%26rft.volume%253D24%26rft.spage%253D3630%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[29].</span>
+      <a class="rev-xref-ref" href="#xref-ref-29-1" title="View reference [29] in text" id="ref-29">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.29" data-doi="10.1186/s13059-016-1103-0">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Jain</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Olsen</span>
+          <span class="cit-name-given-names">HE</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Paten</span>
+          <span class="cit-name-given-names">B</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Akeson</span>
+          <span class="cit-name-given-names">M.</span>
+         </span>
+         <span class="cit-article-title">The Oxford Nanopore MinION: delivery of nanopore sequencing to the genomics community</span>. 
+         <abbr class="cit-jnl-abbrev">Genome Biol</abbr>
+         <span class="cit-pub-date">2016</span>
+         <span class="cit-month">Nov</span>;
+         <span class="cit-vol">17</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">239</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenome%2BBiol%26rft.volume%253D17%26rft.spage%253D239%26rft_id%253Dinfo%253Adoi%252F10.1186%252Fs13059-016-1103-0%26rft_id%253Dinfo%253Apmid%252F27887629%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1186/s13059-016-1103-0&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=27887629&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[30].</span>
+      <a class="rev-xref-ref" href="#xref-ref-30-1" title="View reference [30] in text" id="ref-30">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.30">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Garalde</span>
+          <span class="cit-name-given-names">DR</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Snell</span>
+          <span class="cit-name-given-names">EA</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Jachimowicz</span>
+          <span class="cit-name-given-names">D</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Sipos</span>
+          <span class="cit-name-given-names">B</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lloyd</span>
+          <span class="cit-name-given-names">JH</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bruce</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>
+         <span class="cit-article-title">Highly parallel direct RNA sequencing on an array of nanopores</span>. 
+         <abbr class="cit-jnl-abbrev">Nat Methods</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Mar</span>;
+         <span class="cit-vol">15</span>(
+         <span class="cit-issue">3</span>):
+         <span class="cit-fpage">201</span>–
+         <span class="cit-lpage">206</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNat%2BMethods%26rft.volume%253D15%26rft.spage%253D201%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[31].</span>
+      <a class="rev-xref-ref" href="#xref-ref-31-1" title="View reference [31] in text" id="ref-31">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.31" data-doi="10.1186/s13059-018-1462-9">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rang</span>
+          <span class="cit-name-given-names">FJ</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kloosterman</span>
+          <span class="cit-name-given-names">WP</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">de Ridder</span>
+          <span class="cit-name-given-names">J.</span>
+         </span>
+         <span class="cit-article-title">From squiggle to basepair: computational approaches for improving nanopore sequencing read accuracy</span>. 
+         <abbr class="cit-jnl-abbrev">Genome Biol</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Jul</span>;
+         <span class="cit-vol">19</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">90</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenome%2BBiol%26rft.volume%253D19%26rft.spage%253D90%26rft_id%253Dinfo%253Adoi%252F10.1186%252Fs13059-018-1462-9%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1186/s13059-018-1462-9&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[32].</span>
+      <a class="rev-xref-ref" href="#xref-ref-32-1" title="View reference [32] in text" id="ref-32">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.32">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Workman</span>
+          <span class="cit-name-given-names">RE</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Tang</span>
+          <span class="cit-name-given-names">A</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Tang</span>
+          <span class="cit-name-given-names">PS</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Jain</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Tyson</span>
+          <span class="cit-name-given-names">JR</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Zuzarte</span>
+          <span class="cit-name-given-names">PC</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>
+         <span class="cit-article-title">Nanopore native RNA sequencing of a human poly(A) transcriptome</span>. 
+         <abbr class="cit-jnl-abbrev">bioRxiv</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Sep</span>;.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[33].</span>
+      <a class="rev-xref-ref" href="#xref-ref-33-1" title="View reference [33] in text" id="ref-33">↵</a>
+      <div class="cit ref-cit ref-book" id="cit-588343v2.33">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth cit-collab">Oxford Nanopore Technologies</span>. 
+         <span class="cit-source">Nanopore Sequencing – The value of full-length transcripts without bias</span>. 
+         <span class="cit-publ-name">Oxford Nanopore Technologies</span>; 
+         <span class="cit-pub-date">2018</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[34].</span>
+      <a class="rev-xref-ref" href="#xref-ref-34-1" title="View reference [34] in text" id="ref-34">↵</a>
+      <div class="cit ref-cit ref-book" id="cit-588343v2.34">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth cit-collab">Oxford Nanopore Technologies</span>. 
+         <span class="cit-source">cDNA Sequencing with Oxford Nanopore - Getting Started</span>. 
+         <span class="cit-publ-name">Oxford Nanopore Technologies</span>; 
+         <span class="cit-pub-date">2019</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[35].</span>
+      <a class="rev-xref-ref" href="#xref-ref-35-1" title="View reference [35] in text" id="ref-35">↵</a>
+      <div class="cit ref-cit ref-book" id="cit-588343v2.35">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth cit-collab">Oxford Nanopore Technologies</span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Clive</span>
+          <span class="cit-name-given-names">G.</span>
+         </span>
+         <span class="cit-source">Brown - Nanopore Community Meeting 2018 talk</span>. 
+         <span class="cit-publ-loc">United States</span>: 
+         <span class="cit-publ-name">Oxford Nanopore Technologies</span>; 
+         <span class="cit-pub-date">2018</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[36].</span>
+      <a class="rev-xref-ref" href="#xref-ref-36-1" title="View reference [36] in text" id="ref-36">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.36">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Brawerman</span>
+          <span class="cit-name-given-names">G.</span>
+         </span>
+         <span class="cit-article-title">Alterations in the size of the poly(a) segment in newly-synthesized messenger RNA of mouse sarcoma 180 ascites cells</span>. 
+         <abbr class="cit-jnl-abbrev">Mol Biol Rep</abbr>
+         <span class="cit-pub-date">1973</span>
+         <span class="cit-month">Jun</span>;
+         <span class="cit-vol">1</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">7</span>–
+         <span class="cit-lpage">13</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMol%2BBiol%2BRep%26rft.volume%253D1%26rft.spage%253D7%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[37].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.37">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Morrison</span>
+          <span class="cit-name-given-names">MR</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Merkel</span>
+          <span class="cit-name-given-names">CG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lingrel</span>
+          <span class="cit-name-given-names">JB</span>
+         </span>. 
+         <span class="cit-article-title">Size of the poly(A) region in mouse globin messenger RNA</span>. 
+         <abbr class="cit-jnl-abbrev">Mol Biol Rep</abbr>
+         <span class="cit-pub-date">1973</span>
+         <span class="cit-month">Jun</span>;
+         <span class="cit-vol">1</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">55</span>–
+         <span class="cit-lpage">60</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMol%2BBiol%2BRep%26rft.volume%253D1%26rft.spage%253D55%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[38].</span>
+      <div class="cit ref-cit ref-journal no-rev-xref" id="cit-588343v2.38">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Merkel</span>
+          <span class="cit-name-given-names">CG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wood</span>
+          <span class="cit-name-given-names">TG</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lingrel</span>
+          <span class="cit-name-given-names">JB</span>
+         </span>. 
+         <span class="cit-article-title">Shortening of the poly(A) region of mouse globin messenger RNA</span>. 
+         <abbr class="cit-jnl-abbrev">J Biol Chem</abbr>
+         <span class="cit-pub-date">1976</span>
+         <span class="cit-month">Sep</span>;
+         <span class="cit-vol">251</span>(
+         <span class="cit-issue">18</span>):
+         <span class="cit-fpage">5512</span>–
+         <span class="cit-lpage">5515</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DJournal%2Bof%2BBiological%2BChemistry%26rft.stitle%253DJ%2BBiol%2BChem%26rft.aulast%253DMerkel%26rft.auinit1%253DC.%2BG.%26rft.volume%253D251%26rft.issue%253D18%26rft.spage%253D5512%26rft.epage%253D5515%26rft.atitle%253DShortening%2Bof%2Bthe%2Bpoly%2528A%2529%2Bregion%2Bof%2Bmouse%2Bglobin%2Bmessenger%2BRNA%26rft_id%253Dinfo%253Apmid%252F965374%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6MzoiamJjIjtzOjU6InJlc2lkIjtzOjExOiIyNTEvMTgvNTUxMiI7czo0OiJhdG9tIjtzOjM3OiIvYmlvcnhpdi9lYXJseS8yMDE5LzAzLzI2LzU4ODM0My5hdG9tIjt9czo4OiJmcmFnbWVudCI7czowOiIiO30=" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[39].</span>
+      <a class="rev-xref-ref" href="#xref-ref-39-1" title="View reference [39] in text" id="ref-39">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.39" data-doi="10.1021/bi00723a020">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Groner</span>
+          <span class="cit-name-given-names">B</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hynes</span>
+          <span class="cit-name-given-names">N</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Phillips</span>
+          <span class="cit-name-given-names">S.</span>
+         </span>
+         <span class="cit-article-title">Length heterogeneity in the poly (adenylic acid) region of yeast messenger ribonucleic acid</span>. 
+         <abbr class="cit-jnl-abbrev">Biochemistry</abbr>
+         <span class="cit-pub-date">1974</span>
+         <span class="cit-month">Dec</span>;
+         <span class="cit-vol">13</span>(
+         <span class="cit-issue">26</span>):
+         <span class="cit-fpage">5378</span>–
+         <span class="cit-lpage">5383</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBiochemistry%26rft.volume%253D13%26rft.spage%253D5378%26rft_id%253Dinfo%253Adoi%252F10.1021%252Fbi00723a020%26rft_id%253Dinfo%253Apmid%252F4611485%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1021/bi00723a020&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=4611485&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[40].</span>
+      <a class="rev-xref-ref" href="#xref-ref-40-1" title="View reference [40] in text" id="ref-40">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.40">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Viehweger</span>
+          <span class="cit-name-given-names">A</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Krautwurst</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lamkiewicz</span>
+          <span class="cit-name-given-names">K</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Madhugiri</span>
+          <span class="cit-name-given-names">R</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ziebuhr</span>
+          <span class="cit-name-given-names">J</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hölzer</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>
+         <span class="cit-article-title">Nanopore direct RNA sequencing reveals modification in full-length coronavirus genomes</span>:. 
+         <abbr class="cit-jnl-abbrev">bioRxiv</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Nov</span>;.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[41].</span>
+      <a class="rev-xref-ref" href="#xref-ref-41-1" title="View reference [41] in text" id="ref-41">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.41">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Legnini</span>
+          <span class="cit-name-given-names">I</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Alles</span>
+          <span class="cit-name-given-names">J</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Karaiskos</span>
+          <span class="cit-name-given-names">N</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ayoub</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rajewsky</span>
+          <span class="cit-name-given-names">N.</span>
+         </span>
+         <span class="cit-article-title">Full-length mRNA sequencing reveals principles of poly(A) tail length control</span>. 
+         <abbr class="cit-jnl-abbrev">bioRxiv</abbr>
+         <span class="cit-pub-date">2019</span>
+         <span class="cit-month">Nov</span>;.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[42].</span>
+      <a class="rev-xref-ref" href="#xref-ref-42-1" title="View reference [42] in text" id="ref-42">↵</a>
+      <div class="cit ref-cit ref-book" id="cit-588343v2.42">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth cit-collab">Oxford Nanopore Technologies</span>. 
+         <span class="cit-source">Low bias RNA-seq: PCR-cDNA, PCR-free direct cDNA and direct RNA sequencing</span>. 
+         <span class="cit-publ-name">Oxford Nanopore Technologies</span>; 
+         <span class="cit-pub-date">2018</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[43].</span>
+      <a class="rev-xref-ref" href="#xref-ref-43-1" title="View reference [43] in text" id="ref-43">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.43" data-doi="10.1093/bioinformatics/bty149">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">De Coster</span>
+          <span class="cit-name-given-names">W</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">D’Hert</span>
+          <span class="cit-name-given-names">S</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Schultz</span>
+          <span class="cit-name-given-names">DT</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Cruts</span>
+          <span class="cit-name-given-names">M</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Van Broeckhoven</span>
+          <span class="cit-name-given-names">C.</span>
+         </span>
+         <span class="cit-article-title">NanoPack: visualizing and processing long-read sequencing data</span>. 
+         <abbr class="cit-jnl-abbrev">Bioinformatics</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Aug</span>;
+         <span class="cit-vol">34</span>(
+         <span class="cit-issue">15</span>):
+         <span class="cit-fpage">2666</span>–
+         <span class="cit-lpage">2669</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBioinformatics%26rft.volume%253D34%26rft.spage%253D2666%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fbioinformatics%252Fbty149%26rft_id%253Dinfo%253Apmid%252F29547981%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/bioinformatics/bty149&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=29547981&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[44].</span>
+      <a class="rev-xref-ref" href="#xref-ref-44-1" title="View reference [44] in text" id="ref-44">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.44" data-doi="10.1093/bioinformatics/bty191">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Li</span>
+          <span class="cit-name-given-names">H.</span>
+         </span>
+         <span class="cit-article-title">Minimap2: pairwise alignment for nucleotide sequences</span>. 
+         <abbr class="cit-jnl-abbrev">Bioinformatics</abbr>
+         <span class="cit-pub-date">2018</span>
+         <span class="cit-month">Sep</span>;
+         <span class="cit-vol">34</span>(
+         <span class="cit-issue">18</span>):
+         <span class="cit-fpage">3094</span>–
+         <span class="cit-lpage">3100</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBioinformatics%26rft.volume%253D34%26rft.spage%253D3094%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fbioinformatics%252Fbty191%26rft_id%253Dinfo%253Apmid%252F29750242%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/bioinformatics/bty191&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=29750242&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2019%2F03%2F26%2F588343.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label">[45].</span>
+      <a class="rev-xref-ref" href="#xref-ref-45-1" title="View reference [45] in text" id="ref-45">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-588343v2.45">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-given-names">H</span>
+          <span class="cit-name-surname">Pages</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-given-names">P</span>
+          <span class="cit-name-surname">Aboyoun</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-given-names">R</span>
+          <span class="cit-name-surname">Gentleman</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-given-names">S</span>
+          <span class="cit-name-surname">DebRoy</span>
+         </span>, 
+         <abbr class="cit-jnl-abbrev">Biostrings: String objects representing biological sequences, and matching algorithms</abbr>; 
+         <span class="cit-pub-date">2019</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+    </ol>
+   </div>
+   <span class="highwire-journal-article-marker-end"/>
+  </div>
+ </body>
+</html>

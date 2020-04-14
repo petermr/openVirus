@@ -1,0 +1,2314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+ <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# book: http://ogp.me/ns/book#"> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=yes"/>
+  <meta name="article_thumbnail" content="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/embed/graphic-3.gif"/>
+  <meta name="type" content="article"/>
+  <meta name="category" content="article"/>
+  <meta name="HW.identifier" content="/biorxiv/early/2014/10/27/007476.atom"/>
+  <meta name="HW.pisa" content="biorxiv;007476v2"/>
+  <meta name="DC.Format" content="text/html"/>
+  <meta name="DC.Language" content="en"/>
+  <meta name="DC.Title" content="Bayesian mixture analysis for metagenomic community profiling"/>
+  <meta name="DC.Identifier" content="10.1101/007476"/>
+  <meta name="DC.Date" content="2014-10-27"/>
+  <meta name="DC.Publisher" content="Cold Spring Harbor Laboratory"/>
+  <meta name="DC.Rights" content="© 2014, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/"/>
+  <meta name="DC.AccessRights" content="restricted"/>
+  <meta name="DC.Description" content="Deep sequencing of clinical samples is now an established tool for the detection of infectious pathogens, with direct medical applications. The large amount of data generated provides an opportunity to detect species even at very low levels, provided that computational tools can effectively interpret potentially complex metagenomic mixtures. Data interpretation is complicated by the fact that short sequencing reads can match multiple organisms and by the lack of completeness of existing databases, in particular for viral pathogens. This interpretation problem can be formulated statistically as a mixture model, where the species of origin of each read is missing, but the complete knowledge of all species present in the mixture helps with the individual reads assignment. Several analytical tools have been proposed to approximately solve this computational problem. Here, we show that the use of parallel Monte Carlo Markov chains (MCMC) for the exploration of the species space enables the identification of the set of species most likely to contribute to the mixture. The added accuracy comes at a cost of increased computation time. Our approach is useful for solving complex mixtures involving several related species. We designed our method specifically for the analysis of deep transcriptome sequencing datasets and with a particular focus on viral pathogen detection, but the principles are applicable more generally to all types of metagenomics mixtures. The work is implemented as a user friendly R package, available from CRAN: &lt;;http://cran.r-project.org/web/packages/metaMix&gt;;."/>
+  <meta name="DC.Contributor" content="Sofia Morfopoulou"/>
+  <meta name="DC.Contributor" content="Vincent Plagnol"/>
+  <meta name="article:published_time" content="2014-10-27"/>
+  <meta name="article:section" content="New Results"/>
+  <meta name="citation_title" content="Bayesian mixture analysis for metagenomic community profiling"/>
+  <meta name="citation_abstract" lang="en" content="&lt;;h3&gt;;Abstract&lt;;/h3&gt;; &lt;;p&gt;;Deep sequencing of clinical samples is now an established tool for the detection of infectious pathogens, with direct medical applications. The large amount of data generated provides an opportunity to detect species even at very low levels, provided that computational tools can effectively interpret potentially complex metagenomic mixtures. Data interpretation is complicated by the fact that short sequencing reads can match multiple organisms and by the lack of completeness of existing databases, in particular for viral pathogens. This interpretation problem can be formulated statistically as a mixture model, where the species of origin of each read is missing, but the complete knowledge of all species present in the mixture helps with the individual reads assignment. Several analytical tools have been proposed to approximately solve this computational problem. Here, we show that the use of parallel Monte Carlo Markov chains (MCMC) for the exploration of the species space enables the identification of the set of species most likely to contribute to the mixture. The added accuracy comes at a cost of increased computation time. Our approach is useful for solving complex mixtures involving several related species. We designed our method specifically for the analysis of deep transcriptome sequencing datasets and with a particular focus on viral pathogen detection, but the principles are applicable more generally to all types of metagenomics mixtures. The work is implemented as a user friendly R package, available from CRAN: http://cran.r-project.org/web/packages/metaMix.&lt;;/p&gt;;"/>
+  <meta name="citation_journal_title" content="bioRxiv"/>
+  <meta name="citation_publisher" content="Cold Spring Harbor Laboratory"/>
+  <meta name="citation_publication_date" content="2014/01/01"/>
+  <meta name="citation_mjid" content="biorxiv;007476v2"/>
+  <meta name="citation_id" content="007476v2"/>
+  <meta name="citation_public_url" content="https://www.biorxiv.org/content/10.1101/007476v2"/>
+  <meta name="citation_abstract_html_url" content="https://www.biorxiv.org/content/10.1101/007476v2.abstract"/>
+  <meta name="citation_full_html_url" content="https://www.biorxiv.org/content/10.1101/007476v2.full"/>
+  <meta name="citation_pdf_url" content="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476.full.pdf"/>
+  <meta name="citation_doi" content="10.1101/007476"/>
+  <meta name="citation_num_pages" content="17"/>
+  <meta name="citation_article_type" content="Article"/>
+  <meta name="citation_section" content="New Results"/>
+  <meta name="citation_firstpage" content="007476"/>
+  <meta name="citation_author" content="Sofia Morfopoulou"/>
+  <meta name="citation_author_institution" content="UCL Genetics Institute, University College London"/>
+  <meta name="citation_author_email" content="sofia.morfopoulou.10@ucl.ac.uk"/>
+  <meta name="citation_author" content="Vincent Plagnol"/>
+  <meta name="citation_author_institution" content="UCL Genetics Institute, University College London"/>
+  <meta name="citation_reference" content="Altschul,S. F., Gish,W., Miller,W., Myers,E. W., and Lipman,D. J., 1990. Basic local alignment search tool. Journal of Molecular Biology, 215(3):403–410."/>
+  <meta name="citation_reference" content="Barzon,L., Lavezzo,E., Costanzi,G., Franchin,E., Toppo,S. and Palù,G., 2013. Next-generation sequencing technologies in diagnostic virology. Journal of Clinical Virology, 58(2):346–50."/>
+  <meta name="citation_reference" content="Brady,A. and Salzberg,S. L., 2009. Phymm and PhymmBL: metagenomic phylogenetic classification with interpolated Markov models. Nature Methods, 6(9):673–6."/>
+  <meta name="citation_reference" content="Brown,J. R., Morfopoulou,S., Hubb,J., Emmett,W. A., Ip,W., Shah,D., Brooks,T., Paine,S. M., Anderson,G., Virasami,A., et al., 2014. Astrovirus VA1/HMO-C: an increasingly recognised neurotropic pathogen in immunocompromised patients. Clinical Infectious Diseases, In Press."/>
+  <meta name="citation_reference" content="Chiu,C. Y., 2013. Viral pathogen discovery. Current Opinion in Microbiology, 16(4):468–78."/>
+  <meta name="citation_reference" content="Dempster,A. and Laird,N., 1977. Maximum likelihood from incomplete data via the EM algorithm. Journal of the Royal Statistical Society., 39(1):1–38."/>
+  <meta name="citation_reference" content="Dröge,J. and McHardy,A. C., 2012. Taxonomic binning of metagenome samples generated by next– generation sequencing technologies. Briefings in Bioinformatics, 13(6):646–55."/>
+  <meta name="citation_reference" content="Earl,D. J. and Deem,M. W., 2005. Parallel tempering: theory, applications, and new perspectives. Physical Chemistry Chemical Physics, 7(23):3910–6."/>
+  <meta name="citation_reference" content="Fancello,L., Raoult,D., and Desnues,C., 2012. Computational tools for viral metagenomics and their application in clinical research. Virology, 434(2):162–74."/>
+  <meta name="citation_reference" content="Francis,O. E., Bendall,M., Manimaran,S., Hong,C., Clement,N. L., Castro-Nallar,E., Snell,Q., Schaalje,G. B., Clement,M. J., Crandall,K. A., et al., 2013. Pathoscope: species identification and strain attribution with unassembled sequencing data. Genome Research, 23(10):1721–9."/>
+  <meta name="citation_reference" content="Hesterberg,T., 1995. Weighted average importance sampling and defensive mixture distributions. Technometrics, 37(2):185–194."/>
+  <meta name="citation_reference" content="Huson,D. H., Auch,A. F., Qi,J., and Schuster,S. C., 2007. MEGAN analysis of metagenomic data. Genome Research, 17(3):377–386."/>
+  <meta name="citation_reference" content="Jasra,A., Stephens,D. A., and Holmes,C. C., 2007. On population-based simulation for static inference. Statistics and Computing, 17(3):263–279."/>
+  <meta name="citation_reference" content="Kunin,V., Copeland,A., Lapidus,A., Mavromatis,K., and Hugenholtz,P., 2008. A bioinformatician’s guide to metagenomics. Microbiology and Molecular Biology Reviews, 72(4):557–78, Table of Contents."/>
+  <meta name="citation_reference" content="MacDonald,N. J., Parks,D. H., and Beiko,R. G., 2012. Rapid identification of high-confidence taxonomic assignments for metagenomic data. Nucleic Acids Research, 40(14):e111."/>
+  <meta name="citation_reference" content="Marin,J.-M., Mengersen,K., and Robert,C., 2005. Bayesian modelling and inference on mixtures of distributions. Handbook of statistics, 25."/>
+  <meta name="citation_reference" content="McHardy,A. C., Martín,H. G., Tsirigos,A., Hugenholtz,P., and Rigoutsos,I., 2007. Accurate phylogenetic classification of variable-length DNA fragments. Nature Methods, 4(1):63–72."/>
+  <meta name="citation_reference" content="McMullan,L. K., Folk,S. M., Kelly,A. J., MacNeil,A., Goldsmith,C. S., Metcalfe,M. G., Batten,B. C., Albariño,C. G., Zaki,S. R., Rollin,P. E., et al., 2012. A new phlebovirus associated with severe febrile illness in Missouri. The New England Journal of Medicine, 367(9):834–41."/>
+  <meta name="citation_reference" content="Minot,S., Sinha,R., Chen,J., Li,H., Keilbaugh,S. a., Wu,G. D., Lewis,J. D., and Bushman,F. D., 2011. The human gut virome: inter-individual variation and dynamic response to diet. Genome Research, 20 (10):1616–25."/>
+  <meta name="citation_reference" content="Mizuno,C. M., Rodriguez-Valera,F., Kimes,N. E., and Ghai,R., 2013. Expanding the marine virosphere using metagenomics. PLoS Genetics, 9(12):e1003987."/>
+  <meta name="citation_reference" content="Negredo,A., Palacios,G., Vázquez-Morón,S., González,F., Dopazo,H., Molero,F., Juste,J., Quetglas,J., Savji,N., de la Cruz Martínez,M., et al., 2011. Discovery of an ebolavirus-like filovirus in europe. PLoS Pathogens, 7(10):e1002304."/>
+  <meta name="citation_reference" content="Qin,J., Li,R., Raes,J., Arumugam,M., Burgdorf,K. S., Manichanh,C., Nielsen,T., Pons,N., Levenez,F., Yamada,T., et al., 2010. A human gut microbial gene catalogue established by metagenomic sequencing. Nature, 464(7285):59–65."/>
+  <meta name="citation_reference" content="Quail,M. a., Smith,M., Coupland,P., Otto,T. D., Harris,S. R., Connor,T. R., Bertoni,A., Swerdlow,H. P., and Gu,Y., 2012. A tale of three next generation sequencing platforms: comparison of Ion Torrent, Pacific Biosciences and Illumina MiSeq sequencers. BMC genomics, 13(1):341."/>
+  <meta name="citation_reference" content="Salter,S., Cox,M. J., Turek,E. M., Calus,S. T., Cookson,W. O., Moffatt,M. F., Turner,P., Parkhill,J., Loman,N., and Walker,A. W., et al., 2014. Reagent contamination can critically impact sequence-based microbiome analyses. bioRxiv, :10.1101/007187."/>
+  <meta name="citation_reference" content="Schmieder,R. and Edwards,R., 2011. Quality control and preprocessing of metagenomic datasets. Bioinformatics, 27(6):863–4."/>
+  <meta name="citation_reference" content="Willner,D., Furlan,M., Haynes,M., Schmieder,R., Angly,F. E., Silva,J., Tammadoni,S., Nosrat,B., Conrad,D., and Rohwer,F., et al., 2009. Metagenomic analysis of respiratory tract DNA viral communities in cystic fibrosis and non-cystic fibrosis individuals. PLoS One, 4(10):e7370."/>
+  <meta name="citation_reference" content="Xia,L. C., Cram,J. A., Chen,T., Fuhrman,J. A., and Sun,F., 2011. Accurate genome relative abundance estimation based on shotgun metagenomic reads. PLoS One, 6(12):e27992."/>
+  <meta name="citation_reference" content="Yang,B., Peng,Y., Leung,H. C.-M., Yiu,S.-M., Chen,J.-C., and Chin,F. Y.-L., 2010. Unsupervised binning of environmental genomic fragments based on an error robust selection of l-mers. BMC bioinformatics, 10 (Suppl 2):S5."/>
+  <meta name="citation_reference" content="Zerbino,D. R. and Birney,E., 2008. Velvet: algorithms for de novo short read assembly using de Bruijn graphs. Genome Research, 18(5):821–829."/>
+  <meta name="twitter:title" content="Bayesian mixture analysis for metagenomic community profiling"/>
+  <meta name="twitter:site" content="@biorxivpreprint"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:image" content="https://www.biorxiv.org/sites/default/files/images/biorxiv_logo_homepage7-5-small.png"/>
+  <meta name="twitter:description" content="Deep sequencing of clinical samples is now an established tool for the detection of infectious pathogens, with direct medical applications. The large amount of data generated provides an opportunity to detect species even at very low levels, provided that computational tools can effectively interpret potentially complex metagenomic mixtures. Data interpretation is complicated by the fact that short sequencing reads can match multiple organisms and by the lack of completeness of existing databases, in particular for viral pathogens. This interpretation problem can be formulated statistically as a mixture model, where the species of origin of each read is missing, but the complete knowledge of all species present in the mixture helps with the individual reads assignment. Several analytical tools have been proposed to approximately solve this computational problem. Here, we show that the use of parallel Monte Carlo Markov chains (MCMC) for the exploration of the species space enables the identification of the set of species most likely to contribute to the mixture. The added accuracy comes at a cost of increased computation time. Our approach is useful for solving complex mixtures involving several related species. We designed our method specifically for the analysis of deep transcriptome sequencing datasets and with a particular focus on viral pathogen detection, but the principles are applicable more generally to all types of metagenomics mixtures. The work is implemented as a user friendly R package, available from CRAN: &lt;;http://cran.r-project.org/web/packages/metaMix&gt;;."/>
+  <meta name="og-title" property="og:title" content="Bayesian mixture analysis for metagenomic community profiling"/>
+  <meta name="og-url" property="og:url" content="https://www.biorxiv.org/content/10.1101/007476v2"/>
+  <meta name="og-site-name" property="og:site_name" content="bioRxiv"/>
+  <meta name="og-description" property="og:description" content="Deep sequencing of clinical samples is now an established tool for the detection of infectious pathogens, with direct medical applications. The large amount of data generated provides an opportunity to detect species even at very low levels, provided that computational tools can effectively interpret potentially complex metagenomic mixtures. Data interpretation is complicated by the fact that short sequencing reads can match multiple organisms and by the lack of completeness of existing databases, in particular for viral pathogens. This interpretation problem can be formulated statistically as a mixture model, where the species of origin of each read is missing, but the complete knowledge of all species present in the mixture helps with the individual reads assignment. Several analytical tools have been proposed to approximately solve this computational problem. Here, we show that the use of parallel Monte Carlo Markov chains (MCMC) for the exploration of the species space enables the identification of the set of species most likely to contribute to the mixture. The added accuracy comes at a cost of increased computation time. Our approach is useful for solving complex mixtures involving several related species. We designed our method specifically for the analysis of deep transcriptome sequencing datasets and with a particular focus on viral pathogen detection, but the principles are applicable more generally to all types of metagenomics mixtures. The work is implemented as a user friendly R package, available from CRAN: &lt;;http://cran.r-project.org/web/packages/metaMix&gt;;."/>
+  <meta name="og-type" property="og:type" content="article"/>
+  <meta name="og-image" property="og:image" content="https://www.biorxiv.org/sites/default/files/images/biorxiv_logo_homepage7-5-small.png"/>
+  <meta name="citation_date" content="2014-10-27"/> 
+  <meta name="description" content="bioRxiv - the preprint server for biology, operated by Cold Spring Harbor Laboratory, a research and educational institution"/>
+  <meta name="generator" content="Drupal 7 (http://drupal.org)"/> 
+  <title>Bayesian mixture analysis for metagenomic community profiling | bioRxiv</title> 
+ </head>
+ <body class="html not-front not-logged-in page-node page-node- page-node-2717 node-type-highwire-article context-content hw-default-jcode-biorxiv hw-article-type-article hw-article-category-new-results"> 
+  <div class="article fulltext-view ">
+   <span class="highwire-journal-article-marker-start"/>
+   <div class="section abstract" id="abstract-1">
+    <h2 class="">Abstract</h2>
+    <p id="p-2">Deep sequencing of clinical samples is now an established tool for the detection of infectious pathogens, with direct medical applications. The large amount of data generated provides an opportunity to detect species even at very low levels, provided that computational tools can effectively interpret potentially complex metagenomic mixtures. Data interpretation is complicated by the fact that short sequencing reads can match multiple organisms and by the lack of completeness of existing databases, in particular for viral pathogens. This interpretation problem can be formulated statistically as a mixture model, where the species of origin of each read is missing, but the complete knowledge of all species present in the mixture helps with the individual reads assignment. Several analytical tools have been proposed to approximately solve this computational problem. Here, we show that the use of parallel Monte Carlo Markov chains (MCMC) for the exploration of the species space enables the identification of the set of species most likely to contribute to the mixture. The added accuracy comes at a cost of increased computation time. Our approach is useful for solving complex mixtures involving several related species. We designed our method specifically for the analysis of deep transcriptome sequencing datasets and with a particular focus on viral pathogen detection, but the principles are applicable more generally to all types of metagenomics mixtures. The work is implemented as a user friendly R package, available from CRAN: 
+     <a href="http://cran.r-project.org/web/packages/metaMix">http://cran.r-project.org/web/packages/metaMix</a>.
+    </p>
+   </div>
+   <div class="section" id="sec-1">
+    <h2 class="">Introduction</h2>
+    <p id="p-3">Metagenomics can be defined as the analysis of a collection of DNA or RNA sequences originating from a single sample. In practice, its scope is broad and includes the analysis of a diverse set of samples such as gut microbiome (
+     <a id="xref-ref-22-1" class="xref-bibr" href="#ref-22">Qin et al., 2010</a>), (
+     <a id="xref-ref-19-1" class="xref-bibr" href="#ref-19">Minot et al., 2011</a>), environmental (
+     <a id="xref-ref-20-1" class="xref-bibr" href="#ref-20">Mizuno et al., 2013</a>) or clinical (
+     <a id="xref-ref-26-1" class="xref-bibr" href="#ref-26">Willner et al., 2009</a>), (
+     <a id="xref-ref-21-1" class="xref-bibr" href="#ref-21">Negredo et al., 2011</a>), (
+     <a id="xref-ref-18-1" class="xref-bibr" href="#ref-18">McMullan et al., 2012</a>) samples. Among these applications, the discovery of viral pathogens is clearly relevant for clinical practice (
+     <a id="xref-ref-9-1" class="xref-bibr" href="#ref-9">Fancello et al., 2012</a>), (
+     <a id="xref-ref-5-1" class="xref-bibr" href="#ref-5">Chiu, 2013</a>). The traditional process of characterizing a virus through potentially difficult and time consuming culture techniques is being revolutionized by advances in high throughput sequencing. Potential benefits of sequence driven methodologies include a more rapid turnaround time (
+     <a id="xref-ref-23-1" class="xref-bibr" href="#ref-23">Quail et al., 2012</a>), combined with a largely unbiased approach in species detection, including the opportunity for unexpected discoveries.
+    </p>
+    <p id="p-4">The analysis of shotgun sequencing data from metagenomic mixtures raises complex computational challenges. Part of the difficulty stems from the read length limitation of existing deep DNA sequencing technologies, an issue compounded by the extensive level of homology across viral and bacterial species. Another complication is the divergence of the microbial DNA sequences from the publicly available references. As a consequence, the assignment of a sequencing read to a database organism is often unclear. Lastly, the number of reads originating from a disease causing pathogen can be low (
+     <a id="xref-ref-2-1" class="xref-bibr" href="#ref-2">Barzon et al., 2013</a>). The pathogen contribution to the mixture depends on the biological context, the timing of sample extraction and the type of pathogen considered. Therefore, highly sensitive computational approaches are required.
+    </p>
+    <p id="p-5">A first analytical problem is read classification, that is the assignment of a given sequencing read to a species. Several tools have been developed and these belong to two broadly defined classes: composition-based and similarity-based approaches. The read classification based on sequence composition relies on the intrinsic features of the reads, such as CG content or oligonucleotide distributions. Methods include PhyloPythia (
+     <a id="xref-ref-17-1" class="xref-bibr" href="#ref-17">McHardy et al., 2007</a>), Phymm (
+     <a id="xref-ref-3-1" class="xref-bibr" href="#ref-3">Brady and Salzberg, 2009</a>), MetaCluster (
+     <a id="xref-ref-28-1" class="xref-bibr" href="#ref-28">Yang et al., 2010</a>). These tend to focus on major classes in a dataset and may not perform well on low-abundance populations (
+     <a id="xref-ref-14-1" class="xref-bibr" href="#ref-14">Kunin et al., 2008</a>). Additionally, results are usually reliable for longer reads only (
+     <a id="xref-ref-7-1" class="xref-bibr" href="#ref-7">Dröge and McHardy, 2012</a>).
+    </p>
+    <p id="p-6">Similarity based methods, using homology search algorithms such as BLAST (
+     <a id="xref-ref-1-1" class="xref-bibr" href="#ref-1">Altschul et al., 1990</a>), are considered the most sensitive methods for read classification (
+     <a id="xref-ref-3-2" class="xref-bibr" href="#ref-3">Brady and Salzberg, 2009</a>). One of the most popular tools using the output of a similarity search algorithm is MEGAN (
+     <a id="xref-ref-12-1" class="xref-bibr" href="#ref-12">Huson et al., 2007</a>).
+    </p>
+    <p id="p-7">MEGAN addresses ambiguous matches by assigning reads that have multiple possible assignments to several species, to the taxonomic group containing all these species, or else their lowest common ancestor (LCA). This approach is accurate on a higher taxonomic level. However, it is lacking a formal solution to resolving ambiguous matches. A weakness of the similarity based methods is that a long tail of species, each supported only by a few reads can appear in the results. This results from the classification being decided one read at a time, in contrast to considering all reads simultaneously. Hybrid methods combining composition and similarity information such as PhymmBL (
+     <a id="xref-ref-3-3" class="xref-bibr" href="#ref-3">Brady and Salzberg, 2009</a>) and RITA (
+     <a id="xref-ref-15-1" class="xref-bibr" href="#ref-15">MacDonald et al., 2012</a>) also tackle one read at a time.
+    </p>
+    <p id="p-8">Methods focused on the statistical inference of the set of present species as well as the estimation of their relative proportions, incorporate knowledge from all reads to assign each individual read to a species. From a statistical standpoint, this identification and quantification question can be thought of as an application of mixture models. These ideas have been applied in the metagenomics context in frequentist (GRAMMy (
+     <a id="xref-ref-27-1" class="xref-bibr" href="#ref-27">Xia et al., 2011</a>)) and Bayesian (Pathoscope (
+     <a id="xref-ref-10-1" class="xref-bibr" href="#ref-10">Francis et al., 2013</a>)) settings. GRAMMy formulates the problem as a finite mixture model, using the Expectation-Maximization (EM) algorithm to estimate the relative genome abundances. Pathoscope refines this process by penalizing reads with ambiguous matches in the presence of reads with unique matches and enforcing parsimony within a Bayesian context. Both methods work with unassembled sequence data and they are not currently setup to incorporate an initial short read assembly step, which could be achieved by assigning a higher weight to contigs formed by multiple reads.
+    </p>
+    <p id="p-9">Fitting a mixture model is useful for the species relative abundance estimation, as well as the read to species assignment. A related but distinct question concerns the set of species which should be included in the mixture model. This question is closely related to the biological question of asking what species are present in the mixture. Including all species flagged as potential matches by the read classification can introduce a large number of species, often in the low thousands. Mixture models will, in this situation, identify a large number of species at low levels. This interpretation is appropriate in some applications. In many other cases, the expectation is that the underlying species set should be parsimonious and that some divergence with database species or sequencing errors can explain a large fraction of the non matching reads.</p>
+    <p id="p-10">Hence, a better statistical formulation of the community profiling problem is the exploration of the candidate organisms state-space. In this context, non nested models can be compared based on their marginal likelihood. Within this Bayesian framework, readily interpretable probabilities, such as the posterior probabilities of species sets can be used to quantify the support for a species in the mixture. Finally, more complex hypotheses testing for example the number of viral species or the joint presence of two distinct organisms can be investigated.</p>
+    <p id="p-11">The main challenge behind such a formulation is computational. Even with a relatively small number of species to consider, the number of subsets of this space that could explain the mixture grows exponentially. Efficient computational strategies are required to make this problem tractable. Here we show that this inference can be achieved for modern scale metagenomics datasets. Our strategy is based on parallel tempering, a Monte Carlo Markov Chain technique, using parallel computing to speed up the inference. We implemented these ideas in a user friendly R package called metaMix. metaMix produces posterior probabilities for various models as well as the relative abundances under each model. We demonstrate its potential using datasets from clinical samples as well as benchmark metagenomic datasets.</p>
+   </div>
+   <div class="section" id="sec-2">
+    <h2 class="">Results</h2>
+    <p id="p-12">We first applied metaMix on a popular benchmark dataset, for which the community composition and the read assignment is known. We then analyzed RNA-Seq datasets from two clinical samples that were generated for diagnostic purposes. We compare our results with the ones produced by MEGAN version 5.3 and Pathoscope 2.0. Both methods are similarity-based. This property and more specifically their flexibility to work with BLASTx output, makes them better candidates for viral discovery compared to composition-based methods. From the mixture model methods, we have chosen Pathoscope. We were also interested in comparing our results to the ones by GRAMMy, which was the first similarity-based method to use the idea of the mixture model. However, GRAMMy is designed for nucleotide-nucleotide comparisons (BLASTn), which is suboptimal for viral discovery. GRAMMy also only considers unassembled reads and requires that these are of the same fixed length. For these reasons, GRAMMy was not included in the comparison. Default parameters were used for all methods, unless stated otherwise.</p>
+    <p id="p-13">For the metaMix output, we reported organisms with a posterior probability greater than 0.9. The metaMix read support parameter r, which essentially sets the sensitivity/specificity of the method, has an impact on the number of reported species. A large r value can result in the method merging together strains that are differentiated by fewer reads than r. On the other hand a low r can have the opposite effect, whereby the methods splits a strain into two or more strains, by moving a few reads from one strain to a very similar one with which they have equally good matches.</p>
+    <p id="p-14">The user’s choice for this key parameter r should be informed by the biological context. As an example, for the typical human clinical sample where the sample collection might have occurred some time after the infection has taken place, a low value in order to adopt a sensitive approach is reasonable. Hence, for viral identification in human clinical samples, a low and sensitive value (r = 10) is a reasonable choice. In a highly complex environmental metagenomic community where there is a plethora of species of similar abundances, the choice becomes less straightforward especially in the case of closely related strains. We set the default value for general community profiling in environmental samples to be r = 30. We also compare the output of metaMix for different values of this parameter. Supplementary Text 1 presents a detailed discussion on these settings as well as practical considerations.</p>
+   </div>
+   <div class="section" id="sec-3">
+    <h2 class="">FAMeS simHC Dataset – Closely Related Strains</h2>
+    <p id="p-15">The FAMeS artificial datasets (
+     <a href="http://fames.jgi-psf.org/description.html">http://fames.jgi-psf.org/description.html</a>), are simulated metagenomic datasets composed of random reads from 113 isolate microbial genomes present in IMG (Integrated Microbial Genomes) and sequenced at the DOE Joint Genome Institute. They are a popular choice to use as benchmark datasets for various metagenomics methods. Their suitability stems from the fact that the number of species that form the metagenomic community is known as well as their relative abundances. The FAMeS datasets have been designed to model real metagenomic communities in terms of complexity and phylogenetic composition.
+    </p>
+    <p id="p-16">There are three datasets: simHC, simMC, simLC corresponding to high, medium and low complexity of the metagenomic community respectively. The three methods were applied to simHC, as this is the highest complexity dataset, with many closely related strains with similar abundances and no dominant species. The lowest abundance is 255 reads out of 118,000 reads. The bioinformatics processing in this instance consisted of a BLASTn comparison to all NCBI bacterial genomes (
+     <a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/all.fna.tar.gz">ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/all.fna.tar.gz</a>). The number of genomes mapped, retrieved from the the BLASTn output was ~2,500.
+    </p>
+    <p id="p-17">As discussed below, metaMix outperforms Pathoscope and MEGAN in the community profiling task (
+     <a id="xref-table-wrap-1-1" class="xref-table" href="#T1">Table 1</a>) and consequently in the relative abundance estimation (
+     <a id="xref-table-wrap-2-1" class="xref-table" href="#T2">Table 2</a>).
+    </p>
+    <div id="T1" class="table pos-float">
+     <div class="table-inline table-callout-links">
+      <div class="callout">
+       <span>View this table:</span>
+       <ul class="callout-links">
+        <li class="view-inline first">
+         <a href="##" class="table-expand-inline" data-table-url="/highwire/markup/175026/expansion?postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed&amp;;table-expand-inline=1" data-icon-position="" data-hide-link-title="0">View inline</a>
+        </li>
+        <li class="view-popup">
+         <a href="/highwire/markup/175026/expansion?width=1000&amp;;height=500&amp;;iframe=true&amp;;postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed" class="colorbox colorbox-load table-expand-popup" rel="gallery-fragment-tables" data-icon-position="" data-hide-link-title="0">View popup</a>
+        </li>
+        <li class="download-ppt last">
+         <a href="/highwire/powerpoint/175026" class="highwire-figure-link highwire-figure-link-ppt" data-icon-position="" data-hide-link-title="0">Download powerpoint</a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="table-caption">
+      <span class="table-label">Table 1.</span>
+      <p id="p-18" class="first-child">Number of species identified for the FAMeS simHC dataset.</p>
+      <div class="sb-div caption-clear"/>
+     </div>
+    </div>
+    <div id="T2" class="table pos-float">
+     <div class="table-inline table-callout-links">
+      <div class="callout">
+       <span>View this table:</span>
+       <ul class="callout-links">
+        <li class="view-inline first">
+         <a href="##" class="table-expand-inline" data-table-url="/highwire/markup/174948/expansion?postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed&amp;;table-expand-inline=1" data-icon-position="" data-hide-link-title="0">View inline</a>
+        </li>
+        <li class="view-popup">
+         <a href="/highwire/markup/174948/expansion?width=1000&amp;;height=500&amp;;iframe=true&amp;;postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed" class="colorbox colorbox-load table-expand-popup" rel="gallery-fragment-tables" data-icon-position="" data-hide-link-title="0">View popup</a>
+        </li>
+        <li class="download-ppt last">
+         <a href="/highwire/powerpoint/174948" class="highwire-figure-link highwire-figure-link-ppt" data-icon-position="" data-hide-link-title="0">Download powerpoint</a>
+        </li>
+       </ul>
+      </div>
+     </div>
+     <div class="table-caption">
+      <span class="table-label">Table 2.</span>
+      <p id="p-19" class="first-child">Measures of estimation accuracy of relative abundances for the FAMeS simHC dataset.</p>
+      <div class="sb-div caption-clear"/>
+     </div>
+    </div>
+    <div id="sec-4" class="subsection">
+     <h3>metaMix</h3>
+     <p id="p-20">To limit the complexity of the fit, we used the two step procedure described in the Methods and fully implemented in metaMix. We first fitted the mixture model with the complete set of 2,500 species and a limited run length of 500 iterations. Based on this analysis, we identified 1,312 species supported by at least one read and explored this state space. To limit the computational time, we also considered a stronger approximation, including only the 374 potential species supported by at least 10 sequencing reads. Both approaches generated similar results, albeit the more complex one with 1,312 potential species required the quadruple of the computation time (12h instead of 3h). metaMix identified 116 species, detecting successfully all the members of the metagenomic community (Supplementary Table S1). These were detected on the strain level except in four instances where a different strain of the same species, or different species within the same genus was detected. Four species were identified and not in the simulated dataset, hence can be considered as false positives (Supplementary Table S1).</p>
+    </div>
+    <div id="sec-5" class="subsection">
+     <h3>Pathoscope</h3>
+     <p id="p-21">Pathoscope identified 47 species. Of these 42 are members of the metagenomic community. 42 are the exact same strain, while 3 are either the same species but different strain or same genus but different species. However it fails to detect 68 species that are actually present in the mixture. Tuning the parameter that enforces the parsimonious results (any thetaPrior greater than 10), thereby removing the unique read penalty, Pathoscope behaves as a standard mixture model and identifies 165 species. With these settings, it identifies all but one members of the community. The organisms are identified at the strain level, except in three instances where it identified different species within the same genus. The major interpretation issue is the presence of a long tail of species (54 species) that are actually not present in the mixture (Supplementary Table S1). Pathoscope produced the results in one minute.</p>
+    </div>
+    <div id="sec-6" class="subsection">
+     <h3>MEGAN</h3>
+     <p id="p-22">MEGAN identified 232 species. It discovered all original species of the community on the strain level, except for 9 instances where it identified the lowest common ancestor (LCA). Aside from the lack of strain or species specificity for 8% of the community members, the main issue is the long tail of false positives species. In the species summary provided by MEGAN, there are 119 species which are not actually present, but supported by a sufficient number of reads (default value: 50 reads) for MEGAN to include these in the output. It finished the computations in less than one minute.</p>
+    </div>
+    <div id="sec-7" class="subsection">
+     <h3>Relative Abundances</h3>
+     <p id="p-23">The primary aim for metaMix is to be a diagnostic tool and to answer whether a species is present or absent from the mixture we study. As a secondary aim, we are also interested in estimating accurately the relative abundance of the present organisms. We can assess the abundance estimates produced by the methods by using error measures such as the relative root mean square error, RRMSE and the average relative error, AVGRE. For all methods, when the exact strain was not identified but the correct species or genus was, we used this abundance. 
+      <span class="disp-formula" id="disp-formula-1">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-3.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-3.gif"/>
+        </noscript>
+       </span>
+      </span>
+      <span class="disp-formula" id="disp-formula-2">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-4.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-4.gif"/>
+        </noscript>
+       </span>
+      </span> where 
+      <em>t
+       <sub>j</sub>
+      </em>. is the true abundance of species 
+      <em>j</em> and 
+      <em>w
+       <sub>j</sub>
+      </em> the estimated abundance. metaMix produces the most accurate abundance estimates and the results are summarized in 
+      <a id="xref-table-wrap-2-2" class="xref-table" href="#T2">Table 2</a>.
+     </p>
+    </div>
+    <div id="sec-8" class="subsection">
+     <h3>Importance of Read Support Parameter</h3>
+     <p id="p-24">We then assessed the importance of the read support parameter r on the output of metaMix. We ran metaMix on the benchmark simHC FAMeS dataset with r = {10, 20, 30, 50} reads (
+      <a id="xref-table-wrap-3-1" class="xref-table" href="#T3">Table 3</a>, 
+      <a id="xref-fig-1-1" class="xref-fig" href="#F1">Figure 1</a>). We observe that as r decreases, a few more related strains from the reference database that are not in the community are retained in the output. As r increases two similar strains are merged into one.
+     </p>
+     <div id="F1" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F1.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="Number of species in the simulated simHC FAMeS dataset detected by metaMix, Pathoscope and MEGAN, as a function of the minimum number of reads required for each species to appear in the output. For metaMix that is r={10, 20, 30, 50} reads, for Pathoscope thetaPrior&gt;; 7+ post-run threshold ={10, 20, 30, 50} reads, for MEGAN [[#x201D]]Min Support[[#x201D]] + post-run threshold ={10, 20, 30, 50} reads." class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-1966589526" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;Number of species in the simulated simHC FAMeS dataset detected by metaMix, Pathoscope and MEGAN, as a function of the minimum number of reads required for each species to appear in the output. For metaMix that is r={10, 20, 30, 50} reads, for Pathoscope thetaPrior&gt;; 7+ post-run threshold ={10, 20, 30, 50} reads, for MEGAN [[#x201D]]Min Support[[#x201D]] + post-run threshold ={10, 20, 30, 50} reads.&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="Figure 1:" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F1.medium.gif" width="440" height="434"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="Figure 1:" src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F1.medium.gif" width="440" height="434"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F1.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download Figure 1:" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F1.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">Figure 1:</span>
+       <p id="p-25" class="first-child">Number of species in the simulated simHC FAMeS dataset detected by metaMix, Pathoscope and MEGAN, as a function of the minimum number of reads required for each species to appear in the output. For metaMix that is r={10, 20, 30, 50} reads, for Pathoscope thetaPrior&gt;; 7+ post-run threshold ={10, 20, 30, 50} reads, for MEGAN ”Min Support” + post-run threshold ={10, 20, 30, 50} reads.</p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <div id="T3" class="table pos-float">
+      <div class="table-inline table-callout-links">
+       <div class="callout">
+        <span>View this table:</span>
+        <ul class="callout-links">
+         <li class="view-inline first">
+          <a href="##" class="table-expand-inline" data-table-url="/highwire/markup/174924/expansion?postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed&amp;;table-expand-inline=1" data-icon-position="" data-hide-link-title="0">View inline</a>
+         </li>
+         <li class="view-popup">
+          <a href="/highwire/markup/174924/expansion?width=1000&amp;;height=500&amp;;iframe=true&amp;;postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed" class="colorbox colorbox-load table-expand-popup" rel="gallery-fragment-tables" data-icon-position="" data-hide-link-title="0">View popup</a>
+         </li>
+         <li class="download-ppt last">
+          <a href="/highwire/powerpoint/174924" class="highwire-figure-link highwire-figure-link-ppt" data-icon-position="" data-hide-link-title="0">Download powerpoint</a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="table-caption">
+       <span class="table-label">Table 3.</span>
+       <p id="p-26" class="first-child">Number of species in the simHC FAMeS dataset by metaMix, Pathoscope and MEGAN</p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <p id="p-27">We compared these results with the output of Pathoscope and MEGAN. None of these methods have a read support parameter serving the same purpose as in metaMix, so we tuned the most relevant parameters in these tools. Pathoscope has a thetaPrior parameter that enforces a unique read penalty. This parameter represents the read pseudocounts for the non-unique matches and the default setting is zero which allows for non informative priors. Using the default setting Pathoscope identifies 47 taxa. When thetaP’s value is in (1,7) it identifies 22 taxa, while with thetaP&gt;; 7 it identifies 165. With this latter setting which is the one we chose for the comparison, Pathoscope behaves as a standard mixture model.</p>
+     <p id="p-28">MEGAN has a ”Min Support” parameter which sets a threshold for the number of reads that must be assigned to a taxon so that it appears in the result. Any read assigned to a taxon not having the required support is pushed up the taxonomy until a taxon is found that has sufficient support. We used Min support = {10, 20, 30, 50} reads. The respective number of taxa in the summary files were 250, 243, 236, 232.</p>
+     <p id="p-29">We then also applied a post-run read count threshold to both methods’ output summary. We set the threshold for 10,20,30,50 reads respectively, disregarding taxa that have less than that number of reads assigned to them. In all instances metaMix produces a community profile closer to the real one (
+      <a id="xref-table-wrap-3-2" class="xref-table" href="#T3">Table 3</a>, 
+      <a id="xref-fig-1-2" class="xref-fig" href="#F1">Figure 1</a>) Pathoscope finds ~ 20 more false positives while MEGAN ~ 40 more compared to metaMix at the same read support level.
+     </p>
+     <p id="p-30">The simHC from the FAMeS datasets is complex and distinct from typical human clinical samples, putting aside gut microbiome analysis. The differences are the large number of organisms, the presence of closely related strains of similar abundances, as well as the lack of viruses. Nevertheless, it is an essential dataset to use as a benchmark for examining the performance of the methods in a situation of closely related strains in the sample.</p>
+    </div>
+   </div>
+   <div class="section" id="sec-9">
+    <h2 class="">Human Clinical Sample – Low Viral Load</h2>
+    <div id="sec-10" class="subsection">
+     <h3>Protein Reference Database</h3>
+     <p id="p-31">For the analysis of human clinical samples, we use a custom reference database that combineds viral, bacterial, human and mouse RefSeq proteins. All viruses are used (
+      <a href="ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.l.protein.faa.gz">ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.l.protein.faa.gz</a>) as well as all the bacteria of the human microbiome, according to 
+      <a href="ftp://ftp.ncbi.nih.gov/genomes/HUMAN_MICROBIOM/Bacteria/all.faa.tar.gz">ftp://ftp.ncbi.nih.gov/genomes/HUMAN_MICROBIOM/Bacteria/all.faa.tar.gz</a>.
+     </p>
+     <p id="p-32">To test metaMix in a clinical setting with a low viral load, we used a brain biopsy RNA-Seq dataset from an undiagnosed encephalitis patient (UCL Hospital, data provided as part of a collaboration with Professor Breuer, UCL). Total RNA was purified from the biopsy and polyA RNA was separated for sequencing library preparation. The Illumina MiSeq instrument generated 20 million paired-end reads. We processed the raw data using the bioinformatics pipeline described in Methods. The processed dataset consisted of ~ 75, 000 non-host reads and contigs. Based on the BLASTx output there were 1,298 potential species.</p>
+    </div>
+    <div id="sec-11" class="subsection">
+     <h3>metaMix</h3>
+     <p id="p-33">Following the initial processing, we used metaMix for species identification and abundance estimation. The resulting species profile is shown in 
+      <a id="xref-table-wrap-4-1" class="xref-table" href="#T4">Table 4</a>; the 13 metaMix entries correspond to 10 species. The most abundant organism was the ϕX174 bacteriophage, which is routinely used for deep-sequencing quality control. More interestingly, we identified an astrovirus. Five short assembled contigs (44 reads) with length ranging between 167bp and 471bp and two non-assembled reads were assigned to the 
+      <em>Astrovirus VA1</em> with a probability score of 1 (
+      <a id="xref-fig-2-1" class="xref-fig" href="#F2">Figure 2</a>). metaMix also identified a number of bacteria supported by a few reads. These are either known laboratory reagent contaminants or human skin associated contaminants (
+      <a id="xref-ref-24-1" class="xref-bibr" href="#ref-24">Salter et al., 2014</a>). The analysis completed in 29 minutes.
+     </p>
+     <div id="F2" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F2.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="Human clinical sample [[#x2013]] novel virus. The reads (blue lines) assigned by metaMix to Astrovirus VA1, aligned to its genome. The purple lines represent the genes of the virus." class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-1966589526" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;Human clinical sample [[#x2013]] novel virus. The reads (blue lines) assigned by metaMix to Astrovirus VA1, aligned to its genome. The purple lines represent the genes of the virus.&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="Figure 2:" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F2.medium.gif" width="440" height="164"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="Figure 2:" src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F2.medium.gif" width="440" height="164"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F2.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download Figure 2:" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F2.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">Figure 2:</span>
+       <p id="p-34" class="first-child">Human clinical sample – novel virus. The reads (blue lines) assigned by metaMix to Astrovirus VA1, aligned to its genome. The purple lines represent the genes of the virus.</p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <div id="T4" class="table pos-float">
+      <div class="table-inline table-callout-links">
+       <div class="callout">
+        <span>View this table:</span>
+        <ul class="callout-links">
+         <li class="view-inline first">
+          <a href="##" class="table-expand-inline" data-table-url="/highwire/markup/174923/expansion?postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed&amp;;table-expand-inline=1" data-icon-position="" data-hide-link-title="0">View inline</a>
+         </li>
+         <li class="view-popup">
+          <a href="/highwire/markup/174923/expansion?width=1000&amp;;height=500&amp;;iframe=true&amp;;postprocessors=highwire_tables%2Chighwire_reclass%2Chighwire_figures%2Chighwire_math%2Chighwire_inline_linked_media%2Chighwire_embed" class="colorbox colorbox-load table-expand-popup" rel="gallery-fragment-tables" data-icon-position="" data-hide-link-title="0">View popup</a>
+         </li>
+         <li class="download-ppt last">
+          <a href="/highwire/powerpoint/174923" class="highwire-figure-link highwire-figure-link-ppt" data-icon-position="" data-hide-link-title="0">Download powerpoint</a>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="table-caption">
+       <span class="table-label">Table 4.</span>
+       <p id="p-35" class="first-child">Human clinical sample – novel virus. Comparison of community profile: metaMix – Pathoscope.</p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <p id="p-36">The presence of the astrovirus was confirmed using real-time RT–PCR. Genome sequencing of the astro– virus in the sample and subsequent study of the consensus sequence showed that we had in fact identified a novel virus, closely related to the VA1 strain ((
+      <a id="xref-ref-4-1" class="xref-bibr" href="#ref-4">Brown et al., 2014</a>), in press).
+     </p>
+    </div>
+    <div id="sec-12" class="subsection">
+     <h3>Pathoscope</h3>
+     <p id="p-37">Pathoscope identified 22 taxa, corresponding to 15 species and some genera or families (
+      <a id="xref-table-wrap-4-2" class="xref-table" href="#T4">Table 4</a>). It also assigned all 46 reads to the 
+      <em>Astrovirus VA1</em>. Almost all the species identified from metaMix were identified by Pathoscope, with an additional 9 taxa supported by few reads. As the method can only properly work with unassembled sequence data, an extra BLASTx similarity step had to be performed for the 91,516 reads that had contributed to the 679 assembled contigs. Pathoscope produced the results in less than one minute.
+     </p>
+    </div>
+    <div id="sec-13" class="subsection">
+     <h3>MEGAN</h3>
+     <p id="p-38">MEGAN identified 19 taxa and did not detect the astrovirus signal. We modified the minimum read support parameter from 50 reads to 10 to increase sensitivity. MEGAN then identified 25 taxa, including the 
+      <em>Astrovirus VA1.</em> The remaining 24 were mostly genera, relevant to the species detected by metaMix and Pathoscope. MEGAN produced the results in less than one minute.
+     </p>
+    </div>
+   </div>
+   <div class="section" id="sec-14">
+    <h2 class="">Human Clinical Sample – Species Absent from the Database</h2>
+    <p id="p-39">We then compared the performance of the three methods in a scenario where sequences present in the sample are absent from our reference database.</p>
+    <p id="p-40">We analyzed a second brain biopsy sample from an undiagnosed patient. 32 million RNA-Seq reads were obtained using the HiSeq instrument. Following initial processing using our bionformatics pipeline, the dataset had 1,261,575 non host reads and contigs for subsequent analyses. There were 3,150 potential species based on the BLASTx output.</p>
+    <div id="sec-15" class="subsection">
+     <h3>metaMix</h3>
+     <p id="p-41">The resulting species profile consisted of 7 species (Supplementary Table S2). The most interesting finding was the identification of a human coronavirus. We found two different strains: 
+      <em>Human coronavirus OC43</em> had almost a million reads assigned to it. Additionally there were 67K reads assigned to 
+      <em>Human enteric coronavirus strain 4408</em>. The presence of both viral strains in the results indicated that even though the virus in the sample was mostly similar to the OC43 strain, there were sequences sharing higher similarity to 4408 at some loci. This is highlighting how the database choice impacts the results: the RefSeq database we used has only one OC43 strain, while in GenBank there are several OC43 strains capturing the high mutation rates of the 
+      <em>Human Coronavirus OC43</em>.
+     </p>
+     <p id="p-42">We followed up on the sequences assigned to the “unknown category”, that is approximately 170K reads, looking for nucleotide similarity with NR–NT using BLASTn. Approximately half of the reads originated from an untranslated region of the Coronavirus genome, which is not captured by the protein reference database. The remaining reads matched confidently to either 
+      <em>Danio rerio</em> (zebrafish) sequences or 
+      <em>Gallus gallus</em> (chicken), two organisms whose proteins are not in the human microbiome reference we are using. The zebrafish and chicken matches were explained as barcode leakage resulting from multiplexing on the same flowcell zebrafish and chicken RNA–Seq libraries. metaMix appropriately assigned these reads to the “unknown” category, producing a clean probabilistic summary (Supplementary Table S2). The method ran in 4.7 hours.
+     </p>
+     <p id="p-43">In this instance, the metaMix results emphasize the importance of being able to deal with missing reference sequences that do not have a closely related strain or species in the same database.</p>
+    </div>
+    <div id="sec-16" class="subsection">
+     <h3>Pathoscope</h3>
+     <p id="p-44">Pathoscope identified 177 species in this sample (Supplementary Table S2). We optimized the value of the unique read penalty parameter and we achieved the best results with the thetaPrior parameter set within the range 10–100. With these settings, the method identified 52 species (Supplementary Table S2). Our assessment is that Pathoscope is confused by the lack of completeness of databases combined with the absence of an “unknown” category, which prevents it from dealing with these unassigned reads sensibly. Pathoscope completed its analysis in 10 minutes.</p>
+    </div>
+    <div id="sec-17" class="subsection">
+     <h3>MEGAN</h3>
+     <p id="p-45">MEGAN assigned the reads to 30 taxa. These included some species and genera but most were families (Supplementary Table S2). Approximately 250K reads could not be assigned to any taxonomic level. MEGAN run in 8 minutes.</p>
+    </div>
+   </div>
+   <div class="section" id="sec-18">
+    <h2 class="">Discussion</h2>
+    <p id="p-46">Here, we present metaMix, a sensitive method for metagenomic species identification and abundance estimation. The method is implemented in an R package (
+     <a href="http://cran.r-project.org/web/packages/metaMix">http://cran.r-project.org/web/packages/metaMix</a>). Using a Bayesian mixture model framework, we account for model uncertainty by performing model averaging and we resolve ambiguous assignments by considering all reads simultaneously. A key feature of the method is that it provides probabilities that answer pertinent biological questions, in particular the posterior probability for the presence of a species in the mixture. Additionally it accurately quantifies the relative proportions of the organisms.
+    </p>
+    <p id="p-47">This general framework is designed to address interpretation issues associated with closely related strains in the sample, low abundance organisms and absence of genomes from the reference database. We show that metaMix outperforms other methods in the community profiling task, particularly when complex structures with closely related strains are studied. As a consequence, it also produces more accurate relative abundance estimates for the species in the mixture. The method can deal with either unassembled reads or assembled contigs or both, allowing for flexibility of choice for the bioinformatics preprocessing. In practice, the choice of bioinformatics processing prior to the application of our Bayesian mixture analysis must be optimized for each application, and our processing pipeline has been designed with viral sequence identification from transcriptome sequencing as a main goal. Nevertheless, as demonstrated by our analysis of the mock bacterial community dataset, the method can be applied in other contexts.</p>
+    <p id="p-48">The sensitivity and general applicability of metaMix comes at an increased computational cost, requiring access to a multi–core computer to run efficiently. For the datasets presented here, the computation time remained manageable and did not exceed a few hours, using 12 cores to run 12 parallel chains. Nevertheless, a limitation of metaMix is the increased processing time for very large datasets. Speed related improvements can be implemented in scenarios where the species ambiguity concerns only a small proportion of the read set. Reads with certain assignments can be flagged prior to the MCMC exploration of the state-space. Their assignment information can then be carried forward, thereby reducing the size of the similarity matrix used as input by the mixture model. Another area of possible improvement is MCMC convergence determination. The current version of metaMix produces log-likelihood traceplots allowing the user to visually inspect the MCMC convergence, however additional diagnostic criteria can be implemented in future versions.</p>
+    <p id="p-49">metaMix is most useful for complex datasets for which the interpretation is challenging. It has been mainly used as a clinical diagnostic tool, helping with the identification of the infecting pathogen while providing an accurate profile of the community in the sample.</p>
+   </div>
+   <div class="section" id="sec-19">
+    <h2 class="">Methods</h2>
+    <div id="sec-20" class="subsection">
+     <h3>Bioinformatics Preprocessing</h3>
+     <p id="p-50">Prior to running the mixture model for metagenomic profiling, several steps are required to process the short read sequence data (
+      <a id="xref-fig-3-1" class="xref-fig" href="#F3">Figure 3</a>). The pipeline uses publicly available bioinformatics tools for each preprocessing step.
+     </p>
+     <div id="F3" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F3.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="Pipeline steps for species identification. The step of removing the rRNA sequences is applicable only when the aim is viral discovery." class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-1966589526" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;Pipeline steps for species identification. The step of removing the rRNA sequences is applicable only when the aim is viral discovery.&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="Figure 3:" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F3.medium.gif" width="222" height="440"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="Figure 3:" src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F3.medium.gif" width="222" height="440"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F3.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download Figure 3:" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F3.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">Figure 3:</span>
+       <p id="p-51" class="first-child">Pipeline steps for species identification. The step of removing the rRNA sequences is applicable only when the aim is viral discovery.</p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <p id="p-52">The first step is the removal of clonal reads using an in house C++ script. We then use PRINSEQ (
+      <a id="xref-ref-25-1" class="xref-bibr" href="#ref-25">Schmieder and Edwards, 2011</a>) for read-based quality control, removing low quality and complexity reads and performing 3’end trimming. For metagenomic analysis of human samples, reads originating from the human host are not relevant for our research question. We therefore remove human host reads, using a two–step approach to limit computation time: initially a short read aligner (novoalign, 
+      <a href="http://www.novocraft.com">www.novocraft.com</a>), followed by BLASTn. The next step is only applicable when the focus is on virus discovery using transcriptome reads. We remove ribosomal RNA sequences, using BLASTn against the Silva rRNA database (
+      <a href="http://www.arb-silva.de/">http://www.arb-silva.de/</a>).
+     </p>
+     <p id="p-53">The remaining reads are assembled into contigs using the Velvet short read assembler (
+      <a id="xref-ref-29-1" class="xref-bibr" href="#ref-29">Zerbino and Birney, 2008</a>). For each contig we record the number of reads required for its assembly, using this information at the stage of species abundance estimation. A Velvet tuning parameter is the user defined k-mer length that specifies the extent of overlap required to assemble read pairs. Metagenomic assembly is not a straightforward task, as short k-mers work best with the low abundance organisms, while long k-mers with the highly abundance ones. The shorter the k-mer the greater the chance of spurious overlaps, hence we choose relatively high k-mer length, in order to avoid chimeric contigs.
+     </p>
+     <p id="p-54">For each contig and unassembled read we record the potentially originating species, using the nucleotide to protein homology matching tool BLASTx. We use BLASTx due to the higher level of conservation expected at the protein level compared to nucleotides. This choice is guided by our focus in viral pathogens - viruses having high genetic diversity and divergence (
+      <a id="xref-ref-9-2" class="xref-bibr" href="#ref-9">Fancello et al., 2012</a>).
+     </p>
+     <p id="p-55">This step generates a sparse similarity matrix between the read sequences and the protein sequences, with species as columns, reads and contigs as rows.</p>
+     <p id="p-56">The statistical method described in the remainder of this section considers the competing models that could accommodate our observed data, that is the BLASTx results and compares them. The different models represent different sets of species being present in the sample. The method works on two levels of inference: in the first instance we assume a set of species to be present in the sample and we estimate this model’s parameters given the data. The other level of inference is the model comparison so as to assess the more plausible model. The process is iterated in order to explore the model state space.</p>
+    </div>
+    <div id="sec-21" class="subsection">
+     <h3>Model Specification Assuming a Fixed Set of Species</h3>
+     <p id="p-57">Assuming a given set of 
+      <em>K</em> species from which the reads can originate, the metagenomic problem can be summarized as a mixture problem, for which the assignment of the sequencing reads to species is unknown and must be determined. The data consist of 
+      <em>N</em> sequencing reads 
+      <em>
+       <strong>X</strong>
+      </em> = (
+      <em>x
+       <sub>1</sub>,…, x
+       <sub>N</sub>
+      </em>), and for a given read 
+      <em>x
+       <sub>i</sub>
+      </em> the likelihood is written as: 
+      <span class="disp-formula" id="disp-formula-3">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-10.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-10.gif"/>
+        </noscript>
+       </span>
+      </span> where 
+      <em>w</em> = (
+      <em>w
+       <sub>1</sub>, …, w
+       <sub>K</sub>
+      </em>) represent the proportion of each of the 
+      <em>K</em> species in the mixture. These mixture weights are constrained such that 0 ≤ 
+      <em>w
+       <sub>j</sub>
+      </em> ≤ 1 and ∑
+      <em>
+       <sub>j</sub> W
+       <sub>j</sub>
+      </em> = 1. In practice, we also add a category (species 
+      <em>K</em> + 1) which we refer to as the “unknown” category, and captures the fact that some reads cannot be assigned to any species.
+     </p>
+     <p id="p-58">Additionally 
+      <em>f
+       <sub>j</sub>(x
+       <sub>i</sub>) = P(x
+       <sub>i</sub>|x
+       <sub>i</sub>
+      </em> from species 
+      <em>j</em>) = 
+      <em>p
+       <sub>ij</sub>
+      </em> is the probability of observing the read 
+      <em>x
+       <sub>i</sub>
+      </em> conditional on the assumption that it originated from species 
+      <em>j</em>. We model this probability using the number of mismatches 
+      <em>m</em> between the translated read sequence and the reference sequence and a Poisson distribution with parameter λ for that number of mismatches. 
+      <span class="disp-formula" id="disp-formula-4">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-11.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-11.gif"/>
+        </noscript>
+       </span>
+      </span> where 
+      <em>l
+       <sub>g</sub>
+      </em> is the length of the reference genome, when short reads are matched to a nucleotide database. For nucleotide matching, 
+      <em>l
+       <sub>g</sub>
+      </em> has a large impact on the probability computation. However, when matching against protein databases, the more limited heterogeneity of protein lengths results in a much smaller impact of the length parameter. In addition, incomplete annotation can potentially make the inclusion of protein length problematic for the 
+      <em>p
+       <sub>ij</sub>
+      </em> computation. Consequently, for protein matched sequences, we simply defined our 
+      <em>p
+       <sub>ij</sub>
+      </em> as: 
+      <span class="disp-formula" id="disp-formula-5">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-12.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-12.gif"/>
+        </noscript>
+       </span>
+      </span>
+     </p>
+     <p id="p-59">Therefore for a given set of 
+      <em>K</em> species, the 
+      <em>p
+       <sub>ij</sub>
+      </em> probabilities are regarded as known and the mixture weights must be estimated. Combining the above we see that when we know the set of species 
+      <em>K</em>, the mixture distribution gives the probability of observing read 
+      <span class="inline-formula" id="inline-formula-1">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/inline-graphic-1.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/inline-graphic-1.gif"/>
+        </noscript>
+       </span>
+      </span>, namely 
+      <a id="xref-disp-formula-3-1" class="xref-disp-formula" href="#disp-formula-3">equation (3)</a>.
+     </p>
+     <p id="p-60">We therefore write the likelihood of the dataset 
+      <em>
+       <strong>X</strong>
+      </em> as a sum of 
+      <em>K
+       <sup>n</sup>
+      </em> terms: 
+      <span class="disp-formula" id="disp-formula-6">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-13.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-13.gif"/>
+        </noscript>
+       </span>
+      </span>
+     </p>
+    </div>
+    <div id="sec-22" class="subsection">
+     <h3>Estimation of Mixture Weights</h3>
+     <p id="p-61">Assuming a fixed set of species, the posterior probability distribution of the weights w given the read data 
+      <em>X</em> is: 
+      <span class="disp-formula" id="disp-formula-7">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-14.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-14.gif"/>
+        </noscript>
+       </span>
+      </span>
+     </p>
+     <p id="p-62">A practical prior for the mixing parameters 
+      <em>w</em> is the Dirichlet distribution owing to its conjugate status to the multinomial distribution. Despite the use of conjugate priors, the probabilistic assignment of reads to species involves the expansion of the likelihood into 
+      <em>K
+       <sup>n</sup>
+      </em> terms which is computationally infeasible through direct computation. An efficient estimation can be performed by the introduction of unobserved latent variables that code for the read assignments. In this framework, either the Gibbs sampler (
+      <a id="xref-ref-16-1" class="xref-bibr" href="#ref-16">Marin et al., 2005</a>), a Monte Carlo Markov Chain technique, or the Expectation-Maximization (EM) (
+      <a id="xref-ref-6-1" class="xref-bibr" href="#ref-6">Dempster and Laird, 1977</a>) algorithm can be used to estimate the mixture weights 
+      <em>w</em>. EM returns a point estimate for 
+      <em>w</em> while the Gibbs sampler the distribution of 
+      <em>w</em> (Supplementary Text 1 for details of implementation). Both methods were implemented and provided comparable results.
+     </p>
+    </div>
+    <div id="sec-23" class="subsection">
+     <h3>Marginal Likelihood Estimation</h3>
+     <p id="p-63">Each combination of species corresponds to a finite mixture model for which the marginal likelihood can be estimated. Marginal likelihood comparison has a central role in comparing different models {
+      <em>M
+       <sub>1</sub>,…, M
+       <sub>m</sub>
+      </em>}. To compute the marginal likelihood 
+      <em>P</em> (
+      <em>X | M
+       <sub>k</sub>
+      </em>) for the mixture model 
+      <em>M
+       <sub>k</sub>
+      </em> one has to average over the parameters with respect to the prior distribution 
+      <em>π</em>(
+      <em>θ
+       <sub>k</sub>|M
+       <sub>k</sub>
+      </em>), where 
+      <em>θ
+       <sub>k</sub>
+      </em> are the model parameters: 
+      <span class="disp-formula" id="disp-formula-8">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-15.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-15.gif"/>
+        </noscript>
+       </span>
+      </span>
+     </p>
+     <p id="p-64">The posterior probability of the model 
+      <em>M
+       <sub>k</sub>
+      </em> is: 
+      <span class="disp-formula" id="disp-formula-9">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-16.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-16.gif"/>
+        </noscript>
+       </span>
+      </span> where 
+      <em>P</em>(
+      <em>M
+       <sub>k</sub>
+      </em>) is the prior belief we hold for each model. The prior can be specified depending on the context but the basis of our interpretation is that parsimonious models with a limited number of species are more likely. Thus in this Bayesian framework our default prior uses a penalty limiting the number of species in the model.
+     </p>
+     <p id="p-65">We approximate this penalty factor based on a user-defined parameter r that represents the species read support required by the user to believe in the presence of this species. We compute the logarithmic penalty value as the log-likelihood difference between two models: one where all 
+      <em>N</em> reads belong to the “unknown” category and one where r reads have a perfect match to some unspecified species and the remaining 
+      <em>N</em> — r reads belong to the “unknown” category. In the nucleotide similarity situation, the 
+      <em>p
+       <sub>ij</sub>
+      </em> probabilities for the r reads originating from this unspecified species are approximated by 1/(median genome length in the reference database). This parameter essentially reflects how many reads are required to provide credible support that a species is present in the mixture and acts as a probabilistic threshold as opposed to a deterministic one applied on a ranked list.
+     </p>
+     <p id="p-66">From now on, when we refer to the marginal likelihood, we mean the marginal likelihood for a specific model and we forego conditioning on the model 
+      <em>M
+       <sub>k</sub>
+      </em> in the notation. Additionally, in our mixture model 
+      <em>p
+       <sub>ij</sub>
+      </em> are always regarded as known, therefore the model parameters 
+      <em>θ
+       <sub>k</sub>
+      </em> are the mixture weights 
+      <em>w</em>. Hence 
+      <a id="xref-disp-formula-8-1" class="xref-disp-formula" href="#disp-formula-8">(8)</a> becomes: 
+      <span class="disp-formula" id="disp-formula-10">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-17.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-17.gif"/>
+        </noscript>
+       </span>
+      </span>
+     </p>
+     <p id="p-67">Approximating the marginal likelihood is a task both difficult and time-consuming. We chose the Defensive Importance Sampling technique (
+      <a id="xref-ref-11-1" class="xref-bibr" href="#ref-11">Hesterberg, 1995</a>) for the relative simple implementation compared to other approaches (Supplementary Text 1 for details of implementation). This is crucial as we perform this approximation numerous times, for every species combination we consider.
+     </p>
+     <p id="p-68">However the goal of this work is to deliver results in a clinical setting within an actionable time-frame. We wish to speed up the computation without compromising the accuracy and the sensitivity of the results. For that reason, we use a point estimate of the marginal likelihood by means of the Expectation-Maximization (EM) algorithm. The different approaches were used on the benchmark dataset. The resulting taxonomic assignment as well as the species relative abundance estimates were similar between them, with the EM approach resulting in a 13-fold speed increase (Supplementary Text 1).</p>
+    </div>
+    <div id="sec-24" class="subsection">
+     <h3>Model Comparison: Exploring the Set of Present Species</h3>
+     <p id="p-69">We use a Monte Carlo Markov Chain (MCMC) to explore the set of present species of size 2
+      <em>
+       <sup>S</sup>
+      </em> — 1, where 
+      <em>S</em> is the total number of potential species. In practice we observe that 
+      <em>S</em> can be greater than 1,000. The MCMC must explore the state-space in a clinically useful timespan. Therefore we reduce the size of the state-space, by decreasing the number of 
+      <em>S</em> species to the low hundreds. We achieve this by fitting a mixture model with 
+      <em>S</em> categories, considering all potential species simultaneously. Post fitting, we retain only the species categories that are not empty, that is categories that have at least one read assigned to them.
+     </p>
+     <p id="p-70">Let us assume that at step 
+      <em>t</em>, we deal with a set of species that corresponds to the mixture model 
+      <em>M
+       <sub>k</sub>
+      </em>. At the next step (
+      <em>t</em> + 1), we either add or remove a species and the new set corresponds to the mixture model 
+      <em>M
+       <sub>l</sub>
+      </em>. The step proposing the model 
+      <em>M
+       <sub>l</sub>
+      </em> is accepted with probability: 
+      <span class="disp-formula" id="disp-formula-11">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-18.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-18.gif"/>
+        </noscript>
+       </span>
+      </span> where 
+      <em>q</em>(
+      <em>M
+       <sub>l</sub> → M
+       <sub>k</sub>
+      </em>) is the probability of transitioning from model 
+      <em>M
+       <sub>l</sub>
+      </em> to model 
+      <em>M
+       <sub>k</sub>
+      </em>. In other words, this is the probability of adding or removing the species to the 
+      <em>M
+       <sub>k</sub>
+      </em> set of species that took us to the 
+      <em>M
+       <sub>l</sub>
+      </em> set of species.
+     </p>
+     <p id="p-71">If the step is accepted, then the chain moves to the new proposed state 
+      <em>M
+       <sub>l</sub>
+      </em>. Otherwise if not accepted, the chain’s current state becomes the previous state of the chain, i.e the set of species remains unchanged.
+     </p>
+     <p id="p-72">metaMix outputs log-likelihood traceplots so that the user can visually inspect the mixing and the convergence of the chain. The default setting is to discard the first 20% of the iterations as burn-in. We concentrate on the rest to study the distribution over the model choices and perform model averaging. We can then summarize appropriately the posterior distribution and answer the important questions of interest. Examples of such questions include: what species have probability 
+      <em>p</em> or greater being included in the set of present species? what is the probability of having the 
+      <em>n</em> specific closely related strains in the set of present species? Depending on the biological context, one may ask numerous similar or other case-specific questions.
+     </p>
+    </div>
+    <div id="sec-25" class="subsection">
+     <h3>Optimized Implementation: Parallel Tempering</h3>
+     <p id="p-73">We observed that simple MCMC does not efficiently explore the complex model state space, as evidenced by the poor mixing of the chain (
+      <a id="xref-fig-4-1" class="xref-fig" href="#F4">Figure 4</a>).
+     </p>
+     <div id="F4" class="fig pos-float type-figure odd">
+      <div class="highwire-figure">
+       <div class="fig-inline-img-wrapper">
+        <div class="fig-inline-img">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F4.large.jpg?width=800&amp;;height=600&amp;;carousel=1" title="a. Log-likelihood trace plot for single chain MCMC and b. for PT chain at temperature T=1. c. Schematic of parallel tempering. Exchanges are attempted between chains of neighboring temperatures, where Chain1 at T1 = 1, T1 " class="highwire-fragment fragment-images colorbox-load" rel="gallery-fragment-images-1966589526" data-figure-caption="&lt;;div class=&quot;;highwire-markup&quot;;&gt;;&lt;;div xmlns=&quot;;http://www.w3.org/1999/xhtml&quot;;&gt;;a. Log-likelihood trace plot for single chain MCMC and b. for PT chain at temperature T=1. c. Schematic of parallel tempering. Exchanges are attempted between chains of neighboring temperatures, where Chain1 at &lt;;em&gt;;T&lt;;sub&gt;;1&lt;;/sub&gt;;&lt;;/em&gt;; = 1, &lt;;em&gt;;T&lt;;sub&gt;;1&lt;;/sub&gt;; &lt;;T&lt;;sub&gt;;2&lt;;/sub&gt;; &lt;;T&lt;;sub&gt;;3&lt;;/sub&gt;; &lt;;T&lt;;sub&gt;;4&lt;;/sub&gt;;&lt;;/em&gt;;.&lt;;/div&gt;;&lt;;/div&gt;;" data-icon-position="" data-hide-link-title="0">
+          <span class="hw-responsive-img">
+           <img class="highwire-fragment fragment-image lazyload" alt="Figure 4:" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F4.medium.gif" width="440" height="431"/>
+           <noscript>
+            <img class="highwire-fragment fragment-image" alt="Figure 4:" src="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F4.medium.gif" width="440" height="431"/>
+           </noscript>
+          </span>
+         </a>
+        </div>
+       </div>
+       <ul class="highwire-figure-links inline">
+        <li class="download-fig first">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F4.large.jpg?download=true" class="highwire-figure-link highwire-figure-link-download" title="Download Figure 4:" data-icon-position="" data-hide-link-title="0">Download figure</a>
+        </li>
+        <li class="new-tab last">
+         <a href="https://www.biorxiv.org/content/biorxiv/early/2014/10/27/007476/F4.large.jpg" class="highwire-figure-link highwire-figure-link-newtab" target="_blank" data-icon-position="" data-hide-link-title="0">Open in new tab</a>
+        </li>
+       </ul>
+      </div>
+      <div class="fig-caption">
+       <span class="fig-label">Figure 4:</span>
+       <p id="p-74" class="first-child">a. Log-likelihood trace plot for single chain MCMC and b. for PT chain at temperature T=1. c. Schematic of parallel tempering. Exchanges are attempted between chains of neighboring temperatures, where Chain1 at 
+        <em>T
+         <sub>1</sub>
+        </em> = 1, 
+        <em>T
+         <sub>1</sub> &lt;;T
+         <sub>2</sub> &lt;;T
+         <sub>3</sub> &lt;;T
+         <sub>4</sub>
+        </em>.
+       </p>
+       <div class="sb-div caption-clear"/>
+      </div>
+     </div>
+     <p id="p-75">In order to overcome this and take advantage of parallel computing, we run multiple chains and allow exchange moves between them. This method is called parallel tempering MCMC (
+      <a id="xref-ref-8-1" class="xref-bibr" href="#ref-8">Earl and Deem, 2005</a>). Within the parallel setting, each chain simulates from the posterior distribution 
+      <em>g</em>(
+      <em>M</em>)=
+      <em>P</em>(
+      <em>M|X</em>) raised to a temperature 
+      <em>t</em>ϵ(0,1], where model 
+      <em>M</em>
+      <span class="inline-formula" id="inline-formula-2">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/inline-graphic-2.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/inline-graphic-2.gif"/>
+        </noscript>
+       </span>
+      </span> represents a set of species being present. The different temperature levels result in tempered versions of the posterior distribution 
+      <em>P</em>(
+      <em>M
+       <sub>k</sub>|X
+      </em>)
+      <em>
+       <sup>t=1/T</sup>
+      </em>. When 
+      <em>T</em> =1 the draws are from the posterior distribution. On the other hand, at higher temperatures the posterior spreads out its mass and becomes flatter. In practice that means that distributions at higher temperatures are easily sampled, improving the mixing. We are interesting in studying the original posterior distribution with 
+      <em>T</em> = 1.
+     </p>
+     <p id="p-76">We implemented two types of moves. The first is the mutation step, which simply is the within chain move we described in the previous section. This is accepted with probability given by 
+      <a id="xref-disp-formula-11-1" class="xref-disp-formula" href="#disp-formula-11">(11)</a>. The other is the exchange step, a between chains move. This Metropolis-Hastings move proposes to swap the value of two chains 
+      <em>k</em> and 
+      <em>k</em> +1, adjacent in terms of 
+      <em>T</em>. Suppose that the values of the two chains are 
+      <em>M
+       <sub>k</sub>
+      </em> and 
+      <em>M</em>
+      <sub>
+       <em>k</em>+1
+      </sub> respectively, corresponding to two different sets of species. The move is accepted with probability (
+      <a id="xref-ref-13-1" class="xref-bibr" href="#ref-13">Jasra et al., 2007</a>): 
+      <span class="disp-formula" id="disp-formula-12">
+       <span class="highwire-responsive-lazyload">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="highwire-embed lazyload" alt="Embedded Image" data-src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-20.gif"/>
+        <noscript>
+         <img class="highwire-embed" alt="Embedded Image" src="https://www.biorxiv.org/sites/default/files/highwire/biorxiv/early/2014/10/27/007476/embed/graphic-20.gif"/>
+        </noscript>
+       </span>
+      </span>
+     </p>
+     <p id="p-77">Since 
+      <em>g
+       <sub>k</sub>
+      </em> (
+      <em>M
+       <sub>k</sub>
+      </em>)=
+      <em>P</em>(
+      <em>M
+       <sub>k</sub>|X
+      </em>)
+      <em>
+       <sup>T</sup>
+      </em> and 
+      <em>g</em>
+      <sub>
+       <em>k</em>+1
+      </sub>(
+      <em>M</em>
+      <sub>
+       <em>k</em>+1
+      </sub>) = 
+      <em>P</em>(
+      <em>M</em>
+      <sub>
+       <em>k</em>+1
+      </sub>|
+      <em>X</em>)
+      <sup>
+       <em>T</em>+1
+      </sup>, it follows that when 
+      <em>M</em>
+      <sub>
+       <em>k</em>+1
+      </sub> represents a set of species of higher probability than the one 
+      <em>M
+       <sub>k</sub>
+      </em> represents, the exchange move will always be accepted (
+      <a id="xref-fig-4-2" class="xref-fig" href="#F4">Figure 4</a>).
+     </p>
+     <p id="p-78">This allows moves between separate modes, ensuring a global exploration of the model state space. Eventually “hot” and “cold” chains will progress towards a global mode.</p>
+    </div>
+   </div>
+   <div class="section ack" id="ack-1">
+    <h2 class="">Acknowledgments</h2>
+    <p id="p-79">We thank David Balding for the constructive comments on the manuscript, Christian Robert for the helpful methodological discussion, Judith Breuer, Julianne Lockwood and Mike Hubank for data sharing and informative discussions for the interpretation of the results. SM is supported by a PhD studentship from the Annals of Human Genetics. This work is also supported by the National Institute for Health Research University College London Hospitals Biomedical Research Centre.</p>
+   </div>
+   <div class="section ref-list" id="ref-list-1">
+    <h2 class="">References</h2>
+    <ol class="cit-list ref-use-labels">
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-1-1" title="View reference in text" id="ref-1">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.1" data-doi="10.1006/jmbi.1990.9999">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Altschul</span>, 
+          <span class="cit-name-given-names">S. F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Gish</span>, 
+          <span class="cit-name-given-names">W.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Miller</span>, 
+          <span class="cit-name-given-names">W.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Myers</span>, 
+          <span class="cit-name-given-names">E. W.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lipman</span>, 
+          <span class="cit-name-given-names">D. J.</span>
+         </span>, 
+         <span class="cit-pub-date">1990</span>. 
+         <span class="cit-article-title">Basic local alignment search tool</span>. 
+         <abbr class="cit-jnl-abbrev">Journal of Molecular Biology</abbr>, 
+         <span class="cit-vol">215</span>(
+         <span class="cit-issue">3</span>):
+         <span class="cit-fpage">403</span>–
+         <span class="cit-lpage">410</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DJournal%2Bof%2Bmolecular%2Bbiology%26rft.stitle%253DJ%2BMol%2BBiol%26rft.aulast%253DAltschul%26rft.auinit1%253DS.%2BF.%26rft.volume%253D215%26rft.issue%253D3%26rft.spage%253D403%26rft.epage%253D410%26rft.atitle%253DBasic%2Blocal%2Balignment%2Bsearch%2Btool.%26rft_id%253Dinfo%253Adoi%252F10.1006%252Fjmbi.1990.9999%26rft_id%253Dinfo%253Apmid%252F2231712%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1006/jmbi.1990.9999&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=2231712&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=A1990ED16700008&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-2-1" title="View reference in text" id="ref-2">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.2" data-doi="10.1016/j.jcv.2013.03.003">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Barzon</span>, 
+          <span class="cit-name-given-names">L.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lavezzo</span>, 
+          <span class="cit-name-given-names">E.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Costanzi</span>, 
+          <span class="cit-name-given-names">G.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Franchin</span>, 
+          <span class="cit-name-given-names">E.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Toppo</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Palù</span>, 
+          <span class="cit-name-given-names">G.</span>
+         </span>, 
+         <span class="cit-pub-date">2013</span>. 
+         <span class="cit-article-title">Next-generation sequencing technologies in diagnostic virology</span>. 
+         <abbr class="cit-jnl-abbrev">Journal of Clinical Virology</abbr>, 
+         <span class="cit-vol">58</span>(
+         <span class="cit-issue">2</span>):
+         <span class="cit-fpage">346</span>–
+         <span class="cit-lpage">50</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DJournal%2Bof%2BClinical%2BVirology%26rft.volume%253D58%26rft.spage%253D346%26rft_id%253Dinfo%253Adoi%252F10.1016%252Fj.jcv.2013.03.003%26rft_id%253Dinfo%253Apmid%252F23523339%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/j.jcv.2013.03.003&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=23523339&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-3-1" title="View reference in text" id="ref-3">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.3" data-doi="10.1038/nmeth.1358">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Brady</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Salzberg</span>, 
+          <span class="cit-name-given-names">S. L.</span>
+         </span>, 
+         <span class="cit-pub-date">2009</span>. 
+         <span class="cit-article-title">Phymm and PhymmBL: metagenomic phylogenetic classification with interpolated Markov models</span>. 
+         <abbr class="cit-jnl-abbrev">Nature Methods</abbr>, 
+         <span class="cit-vol">6</span>(
+         <span class="cit-issue">9</span>):
+         <span class="cit-fpage">673</span>–
+         <span class="cit-lpage">6</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNature%2BMethods%26rft.volume%253D6%26rft.spage%253D673%26rft_id%253Dinfo%253Adoi%252F10.1038%252Fnmeth.1358%26rft_id%253Dinfo%253Apmid%252F19648916%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1038/nmeth.1358&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=19648916&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-4-1" title="View reference in text" id="ref-4">↵</a>
+      <div class="cit ref-cit ref-book" id="cit-007476v2.4">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Brown</span>, 
+          <span class="cit-name-given-names">J. R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Morfopoulou</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hubb</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Emmett</span>, 
+          <span class="cit-name-given-names">W. A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ip</span>, 
+          <span class="cit-name-given-names">W.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Shah</span>, 
+          <span class="cit-name-given-names">D.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Brooks</span>, 
+          <span class="cit-name-given-names">T.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Paine</span>, 
+          <span class="cit-name-given-names">S. M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Anderson</span>, 
+          <span class="cit-name-given-names">G.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Virasami</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2014</span>. 
+         <span class="cit-chapter-title">Astrovirus VA1/HMO-C: an increasingly recognised neurotropic pathogen in immunocompromised patients</span>. 
+         <span class="cit-source">Clinical Infectious Diseases</span>, 
+         <span class="cit-publ-name">In Press</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-5-1" title="View reference in text" id="ref-5">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.5" data-doi="10.1016/j.mib.2013.05.001">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chiu</span>, 
+          <span class="cit-name-given-names">C. Y.</span>
+         </span>, 
+         <span class="cit-pub-date">2013</span>. 
+         <span class="cit-article-title">Viral pathogen discovery</span>. 
+         <abbr class="cit-jnl-abbrev">Current Opinion in Microbiology</abbr>, 
+         <span class="cit-vol">16</span>(
+         <span class="cit-issue">4</span>):
+         <span class="cit-fpage">468</span>–
+         <span class="cit-lpage">78</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DCurrent%2BOpinion%2Bin%2BMicrobiology%26rft.volume%253D16%26rft.spage%253D468%26rft_id%253Dinfo%253Adoi%252F10.1016%252Fj.mib.2013.05.001%26rft_id%253Dinfo%253Apmid%252F23725672%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/j.mib.2013.05.001&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=23725672&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-6-1" title="View reference in text" id="ref-6">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.6">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Dempster</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Laird</span>, 
+          <span class="cit-name-given-names">N.</span>
+         </span>, 
+         <span class="cit-pub-date">1977</span>. 
+         <span class="cit-article-title">Maximum likelihood from incomplete data via the EM algorithm</span>. 
+         <abbr class="cit-jnl-abbrev">Journal of the Royal Statistical Society.</abbr>, 
+         <span class="cit-vol">39</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">1</span>–
+         <span class="cit-lpage">38</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DJournal%2Bof%2Bthe%2BRoyal%2BStatistical%2BSociety.%26rft.volume%253D39%26rft.spage%253D1%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=A1977DM46400001&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-7-1" title="View reference in text" id="ref-7">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.7" data-doi="10.1093/bib/bbs031">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Dröge</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">McHardy</span>, 
+          <span class="cit-name-given-names">A. C.</span>
+         </span>, 
+         <span class="cit-pub-date">2012</span>. 
+         <span class="cit-article-title">Taxonomic binning of metagenome samples generated by next– generation sequencing technologies</span>. 
+         <abbr class="cit-jnl-abbrev">Briefings in Bioinformatics</abbr>, 
+         <span class="cit-vol">13</span>(
+         <span class="cit-issue">6</span>):
+         <span class="cit-fpage">646</span>–
+         <span class="cit-lpage">55</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBriefings%2Bin%2BBioinformatics%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fbib%252Fbbs031%26rft_id%253Dinfo%253Apmid%252F22851513%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/bib/bbs031&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=22851513&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-8-1" title="View reference in text" id="ref-8">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.8" data-doi="10.1039/b509983h">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Earl</span>, 
+          <span class="cit-name-given-names">D. J.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Deem</span>, 
+          <span class="cit-name-given-names">M. W.</span>
+         </span>, 
+         <span class="cit-pub-date">2005</span>. 
+         <span class="cit-article-title">Parallel tempering: theory, applications, and new perspectives</span>. 
+         <abbr class="cit-jnl-abbrev">Physical Chemistry Chemical Physics</abbr>, 
+         <span class="cit-vol">7</span>(
+         <span class="cit-issue">23</span>):
+         <span class="cit-fpage">3910</span>–
+         <span class="cit-lpage">6</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.stitle%253DPhys%2BChem%2BChem%2BPhys%26rft.aulast%253DEarl%26rft.auinit1%253DD.%2BJ.%26rft.volume%253D7%26rft.issue%253D23%26rft.spage%253D3910%26rft.epage%253D3916%26rft.atitle%253DParallel%2Btempering%253A%2Btheory%252C%2Bapplications%252C%2Band%2Bnew%2Bperspectives.%26rft_id%253Dinfo%253Adoi%252F10.1039%252Fb509983h%26rft_id%253Dinfo%253Apmid%252F19810318%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1039/b509983h&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=19810318&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000233304500002&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-9-1" title="View reference in text" id="ref-9">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.9" data-doi="10.1016/j.virol.2012.09.025">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Fancello</span>, 
+          <span class="cit-name-given-names">L.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Raoult</span>, 
+          <span class="cit-name-given-names">D.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Desnues</span>, 
+          <span class="cit-name-given-names">C.</span>
+         </span>, 
+         <span class="cit-pub-date">2012</span>. 
+         <span class="cit-article-title">Computational tools for viral metagenomics and their application in clinical research</span>. 
+         <abbr class="cit-jnl-abbrev">Virology</abbr>, 
+         <span class="cit-vol">434</span>(
+         <span class="cit-issue">2</span>):
+         <span class="cit-fpage">162</span>–
+         <span class="cit-lpage">74</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DVirology%26rft.volume%253D434%26rft.spage%253D162%26rft_id%253Dinfo%253Adoi%252F10.1016%252Fj.virol.2012.09.025%26rft_id%253Dinfo%253Apmid%252F23062738%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1016/j.virol.2012.09.025&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=23062738&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-10-1" title="View reference in text" id="ref-10">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.10" data-doi="10.1101/gr.150151.112">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Francis</span>, 
+          <span class="cit-name-given-names">O. E.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bendall</span>, 
+          <span class="cit-name-given-names">M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Manimaran</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hong</span>, 
+          <span class="cit-name-given-names">C.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Clement</span>, 
+          <span class="cit-name-given-names">N. L.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Castro-Nallar</span>, 
+          <span class="cit-name-given-names">E.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Snell</span>, 
+          <span class="cit-name-given-names">Q.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Schaalje</span>, 
+          <span class="cit-name-given-names">G. B.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Clement</span>, 
+          <span class="cit-name-given-names">M. J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Crandall</span>, 
+          <span class="cit-name-given-names">K. A.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2013</span>. 
+         <span class="cit-article-title">Pathoscope: species identification and strain attribution with unassembled sequencing data</span>. 
+         <abbr class="cit-jnl-abbrev">Genome Research</abbr>, 
+         <span class="cit-vol">23</span>(
+         <span class="cit-issue">10</span>):
+         <span class="cit-fpage">1721</span>–
+         <span class="cit-lpage">9</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenome%2BResearch%26rft_id%253Dinfo%253Adoi%252F10.1101%252Fgr.150151.112%26rft_id%253Dinfo%253Apmid%252F23843222%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NjoiZ2Vub21lIjtzOjU6InJlc2lkIjtzOjEwOiIyMy8xMC8xNzIxIjtzOjQ6ImF0b20iO3M6Mzc6Ii9iaW9yeGl2L2Vhcmx5LzIwMTQvMTAvMjcvMDA3NDc2LmF0b20iO31zOjg6ImZyYWdtZW50IjtzOjA6IiI7fQ==" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-11-1" title="View reference in text" id="ref-11">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.11" data-doi="10.2307/1269620">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hesterberg</span>, 
+          <span class="cit-name-given-names">T.</span>
+         </span>, 
+         <span class="cit-pub-date">1995</span>. 
+         <span class="cit-article-title">Weighted average importance sampling and defensive mixture distributions</span>. 
+         <abbr class="cit-jnl-abbrev">Technometrics</abbr>, 
+         <span class="cit-vol">37</span>(
+         <span class="cit-issue">2</span>):
+         <span class="cit-fpage">185</span>–
+         <span class="cit-lpage">194</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DTechnometrics%26rft.volume%253D37%26rft.spage%253D185%26rft_id%253Dinfo%253Adoi%252F10.2307%252F1269620%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.2307/1269620&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=A1995QU71200006&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-12-1" title="View reference in text" id="ref-12">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.12" data-doi="10.1101/gr.5969107">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Huson</span>, 
+          <span class="cit-name-given-names">D. H.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Auch</span>, 
+          <span class="cit-name-given-names">A. F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Qi</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Schuster</span>, 
+          <span class="cit-name-given-names">S. C.</span>
+         </span>, 
+         <span class="cit-pub-date">2007</span>. 
+         <span class="cit-article-title">MEGAN analysis of metagenomic data</span>. 
+         <abbr class="cit-jnl-abbrev">Genome Research</abbr>, 
+         <span class="cit-vol">17</span>(
+         <span class="cit-issue">3</span>):
+         <span class="cit-fpage">377</span>–
+         <span class="cit-lpage">386</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenome%2BResearch%26rft_id%253Dinfo%253Adoi%252F10.1101%252Fgr.5969107%26rft_id%253Dinfo%253Apmid%252F17255551%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NjoiZ2Vub21lIjtzOjU6InJlc2lkIjtzOjg6IjE3LzMvMzc3IjtzOjQ6ImF0b20iO3M6Mzc6Ii9iaW9yeGl2L2Vhcmx5LzIwMTQvMTAvMjcvMDA3NDc2LmF0b20iO31zOjg6ImZyYWdtZW50IjtzOjA6IiI7fQ==" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-13-1" title="View reference in text" id="ref-13">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.13">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Jasra</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Stephens</span>, 
+          <span class="cit-name-given-names">D. A.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Holmes</span>, 
+          <span class="cit-name-given-names">C. C.</span>
+         </span>, 
+         <span class="cit-pub-date">2007</span>. 
+         <span class="cit-article-title">On population-based simulation for static inference</span>. 
+         <abbr class="cit-jnl-abbrev">Statistics and Computing</abbr>, 
+         <span class="cit-vol">17</span>(
+         <span class="cit-issue">3</span>):
+         <span class="cit-fpage">263</span>–
+         <span class="cit-lpage">279</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DStatistics%2Band%2BComputing%26rft.volume%253D17%26rft.spage%253D263%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-14-1" title="View reference in text" id="ref-14">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.14" data-doi="10.1128/MMBR.00009-08">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kunin</span>, 
+          <span class="cit-name-given-names">V.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Copeland</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lapidus</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Mavromatis</span>, 
+          <span class="cit-name-given-names">K.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hugenholtz</span>, 
+          <span class="cit-name-given-names">P.</span>
+         </span>, 
+         <span class="cit-pub-date">2008</span>. 
+         <span class="cit-article-title">A bioinformatician’s guide to metagenomics</span>. 
+         <abbr class="cit-jnl-abbrev">Microbiology and Molecular Biology Reviews</abbr>, 
+         <span class="cit-vol">72</span>(
+         <span class="cit-issue">4</span>):
+         <span class="cit-fpage">557</span>–
+         <span class="cit-lpage">78</span>, 
+         <span class="cit-auth cit-collab">Table of Contents</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DMicrobiology%2Band%2BMolecular%2BBiology%2BReviews%26rft.stitle%253DMicrobiol.%2BMol.%2BBiol.%2BRev.%26rft.aulast%253DKunin%26rft.auinit1%253DV.%26rft.volume%253D72%26rft.issue%253D4%26rft.spage%253D557%26rft.epage%253D578%26rft.atitle%253DA%2BBioinformatician%2527s%2BGuide%2Bto%2BMetagenomics%26rft_id%253Dinfo%253Adoi%252F10.1128%252FMMBR.00009-08%26rft_id%253Dinfo%253Apmid%252F19052320%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NDoibW1iciI7czo1OiJyZXNpZCI7czo4OiI3Mi80LzU1NyI7czo0OiJhdG9tIjtzOjM3OiIvYmlvcnhpdi9lYXJseS8yMDE0LzEwLzI3LzAwNzQ3Ni5hdG9tIjt9czo4OiJmcmFnbWVudCI7czowOiIiO30=" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-15-1" title="View reference in text" id="ref-15">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.15" data-doi="10.1093/nar/gks335">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">MacDonald</span>, 
+          <span class="cit-name-given-names">N. J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Parks</span>, 
+          <span class="cit-name-given-names">D. H.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Beiko</span>, 
+          <span class="cit-name-given-names">R. G.</span>
+         </span>, 
+         <span class="cit-pub-date">2012</span>. 
+         <span class="cit-article-title">Rapid identification of high-confidence taxonomic assignments for metagenomic data</span>. 
+         <abbr class="cit-jnl-abbrev">Nucleic Acids Research</abbr>, 
+         <span class="cit-vol">40</span>(
+         <span class="cit-issue">14</span>):
+         <span class="cit-fpage">e111</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNucleic%2BAcids%2BResearch%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fnar%252Fgks335%26rft_id%253Dinfo%253Apmid%252F22532608%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/nar/gks335&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=22532608&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-16-1" title="View reference in text" id="ref-16">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.16">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Marin</span>, 
+          <span class="cit-name-given-names">J.-M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Mengersen</span>, 
+          <span class="cit-name-given-names">K.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Robert</span>, 
+          <span class="cit-name-given-names">C.</span>
+         </span>, 
+         <span class="cit-pub-date">2005</span>. 
+         <span class="cit-article-title">Bayesian modelling and inference on mixtures of distributions</span>. 
+         <abbr class="cit-jnl-abbrev">Handbook of statistics</abbr>, 
+         <span class="cit-vol">25</span>.
+        </cite>
+       </div>
+       <div class="cit-extra"/>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-17-1" title="View reference in text" id="ref-17">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.17" data-doi="10.1038/nmeth976">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">McHardy</span>, 
+          <span class="cit-name-given-names">A. C.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Martín</span>, 
+          <span class="cit-name-given-names">H. G.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Tsirigos</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Hugenholtz</span>, 
+          <span class="cit-name-given-names">P.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rigoutsos</span>, 
+          <span class="cit-name-given-names">I.</span>
+         </span>, 
+         <span class="cit-pub-date">2007</span>. 
+         <span class="cit-article-title">Accurate phylogenetic classification of variable-length DNA fragments</span>. 
+         <abbr class="cit-jnl-abbrev">Nature Methods</abbr>, 
+         <span class="cit-vol">4</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">63</span>–
+         <span class="cit-lpage">72</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNature%2BMethods%26rft.volume%253D4%26rft.spage%253D63%26rft_id%253Dinfo%253Adoi%252F10.1038%252Fnmeth976%26rft_id%253Dinfo%253Apmid%252F17179938%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1038/nmeth976&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=17179938&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-18-1" title="View reference in text" id="ref-18">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.18" data-doi="10.1056/NEJMoa1203378">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">McMullan</span>, 
+          <span class="cit-name-given-names">L. K.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Folk</span>, 
+          <span class="cit-name-given-names">S. M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kelly</span>, 
+          <span class="cit-name-given-names">A. J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">MacNeil</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Goldsmith</span>, 
+          <span class="cit-name-given-names">C. S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Metcalfe</span>, 
+          <span class="cit-name-given-names">M. G.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Batten</span>, 
+          <span class="cit-name-given-names">B. C.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Albariño</span>, 
+          <span class="cit-name-given-names">C. G.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Zaki</span>, 
+          <span class="cit-name-given-names">S. R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rollin</span>, 
+          <span class="cit-name-given-names">P. E.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2012</span>. 
+         <span class="cit-article-title">A new phlebovirus associated with severe febrile illness in Missouri</span>. 
+         <abbr class="cit-jnl-abbrev">The New England Journal of Medicine</abbr>, 
+         <span class="cit-vol">367</span>(
+         <span class="cit-issue">9</span>):
+         <span class="cit-fpage">834</span>–
+         <span class="cit-lpage">41</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNew%2BEngland%2BJournal%2Bof%2BMedicine%26rft.stitle%253DNEJM%26rft.aulast%253DMcMullan%26rft.auinit1%253DL.%2BK.%26rft.volume%253D367%26rft.issue%253D9%26rft.spage%253D834%26rft.epage%253D841%26rft.atitle%253DA%2Bnew%2Bphlebovirus%2Bassociated%2Bwith%2Bsevere%2Bfebrile%2Billness%2Bin%2BMissouri.%26rft_id%253Dinfo%253Adoi%252F10.1056%252FNEJMoa1203378%26rft_id%253Dinfo%253Apmid%252F22931317%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1056/NEJMoa1203378&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=22931317&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000308067400005&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-19-1" title="View reference in text" id="ref-19">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.19">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Minot</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Sinha</span>, 
+          <span class="cit-name-given-names">R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chen</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Li</span>, 
+          <span class="cit-name-given-names">H.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Keilbaugh</span>, 
+          <span class="cit-name-given-names">S. a.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Wu</span>, 
+          <span class="cit-name-given-names">G. D.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Lewis</span>, 
+          <span class="cit-name-given-names">J. D.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bushman</span>, 
+          <span class="cit-name-given-names">F. D.</span>
+         </span>, 
+         <span class="cit-pub-date">2011</span>. 
+         <span class="cit-article-title">The human gut virome: inter-individual variation and dynamic response to diet</span>. 
+         <abbr class="cit-jnl-abbrev">Genome Research</abbr>, 
+         <span class="cit-vol">20</span> (
+         <span class="cit-issue">10</span>):
+         <span class="cit-fpage">1616</span>–
+         <span class="cit-lpage">25</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenome%2BResearch%26rft.volume%253D20%26rft.spage%253D1616%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-20-1" title="View reference in text" id="ref-20">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.20">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Mizuno</span>, 
+          <span class="cit-name-given-names">C. M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rodriguez-Valera</span>, 
+          <span class="cit-name-given-names">F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Kimes</span>, 
+          <span class="cit-name-given-names">N. E.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Ghai</span>, 
+          <span class="cit-name-given-names">R.</span>
+         </span>, 
+         <span class="cit-pub-date">2013</span>. 
+         <span class="cit-article-title">Expanding the marine virosphere using metagenomics</span>. 
+         <abbr class="cit-jnl-abbrev">PLoS Genetics</abbr>, 
+         <span class="cit-vol">9</span>(
+         <span class="cit-issue">12</span>):
+         <span class="cit-fpage">e1003987</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DPLoS%2BGenetics%26rft.volume%253D9%26rft.spage%253D1003987e%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-21-1" title="View reference in text" id="ref-21">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.21" data-doi="10.1371/journal.ppat.1002304">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Negredo</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Palacios</span>, 
+          <span class="cit-name-given-names">G.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Vázquez-Morón</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">González</span>, 
+          <span class="cit-name-given-names">F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Dopazo</span>, 
+          <span class="cit-name-given-names">H.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Molero</span>, 
+          <span class="cit-name-given-names">F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Juste</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Quetglas</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Savji</span>, 
+          <span class="cit-name-given-names">N.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">de la Cruz Martínez</span>, 
+          <span class="cit-name-given-names">M.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2011</span>. 
+         <span class="cit-article-title">Discovery of an ebolavirus-like filovirus in europe</span>. 
+         <abbr class="cit-jnl-abbrev">PLoS Pathogens</abbr>, 
+         <span class="cit-vol">7</span>(
+         <span class="cit-issue">10</span>):
+         <span class="cit-fpage">e1002304</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.stitle%253DPLoS%2BPathog%26rft.aulast%253DNegredo%26rft.auinit1%253DA.%26rft.volume%253D7%26rft.issue%253D10%26rft.spage%253De1002304%26rft.epage%253De1002304%26rft.atitle%253DDiscovery%2Bof%2Ban%2Bebolavirus-like%2Bfilovirus%2Bin%2Beurope.%26rft_id%253Dinfo%253Adoi%252F10.1371%252Fjournal.ppat.1002304%26rft_id%253Dinfo%253Apmid%252F22039362%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1371/journal.ppat.1002304&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=22039362&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-22-1" title="View reference in text" id="ref-22">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.22" data-doi="10.1038/nature08821">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Qin</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Li</span>, 
+          <span class="cit-name-given-names">R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Raes</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Arumugam</span>, 
+          <span class="cit-name-given-names">M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Burgdorf</span>, 
+          <span class="cit-name-given-names">K. S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Manichanh</span>, 
+          <span class="cit-name-given-names">C.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Nielsen</span>, 
+          <span class="cit-name-given-names">T.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Pons</span>, 
+          <span class="cit-name-given-names">N.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Levenez</span>, 
+          <span class="cit-name-given-names">F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Yamada</span>, 
+          <span class="cit-name-given-names">T.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2010</span>. 
+         <span class="cit-article-title">A human gut microbial gene catalogue established by metagenomic sequencing</span>. 
+         <abbr class="cit-jnl-abbrev">Nature</abbr>, 
+         <span class="cit-vol">464</span>(
+         <span class="cit-issue">7285</span>):
+         <span class="cit-fpage">59</span>–
+         <span class="cit-lpage">65</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DNature%26rft.stitle%253DNature%26rft.aulast%253DQin%26rft.auinit1%253DJ.%26rft.volume%253D464%26rft.issue%253D7285%26rft.spage%253D59%26rft.epage%253D65%26rft.atitle%253DA%2Bhuman%2Bgut%2Bmicrobial%2Bgene%2Bcatalogue%2Bestablished%2Bby%2Bmetagenomic%2Bsequencing.%26rft_id%253Dinfo%253Adoi%252F10.1038%252Fnature08821%26rft_id%253Dinfo%253Apmid%252F20203603%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1038/nature08821&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=20203603&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000275117500033&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-23-1" title="View reference in text" id="ref-23">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.23" data-doi="10.1186/1471-2164-13-341">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Quail</span>, 
+          <span class="cit-name-given-names">M. a.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Smith</span>, 
+          <span class="cit-name-given-names">M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Coupland</span>, 
+          <span class="cit-name-given-names">P.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Otto</span>, 
+          <span class="cit-name-given-names">T. D.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Harris</span>, 
+          <span class="cit-name-given-names">S. R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Connor</span>, 
+          <span class="cit-name-given-names">T. R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Bertoni</span>, 
+          <span class="cit-name-given-names">A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Swerdlow</span>, 
+          <span class="cit-name-given-names">H. P.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Gu</span>, 
+          <span class="cit-name-given-names">Y.</span>
+         </span>, 
+         <span class="cit-pub-date">2012</span>. 
+         <span class="cit-article-title">A tale of three next generation sequencing platforms: comparison of Ion Torrent, Pacific Biosciences and Illumina MiSeq sequencers</span>. 
+         <abbr class="cit-jnl-abbrev">BMC genomics</abbr>, 
+         <span class="cit-vol">13</span>(
+         <span class="cit-issue">1</span>):
+         <span class="cit-fpage">341</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBMC%2Bgenomics%2B%255Belectronic%2Bresource%255D%26rft.stitle%253DBMC%2BGenomics%26rft.aulast%253DQuail%26rft.auinit1%253DM.%26rft.volume%253D13%26rft.spage%253D341%26rft.epage%253D341%26rft.atitle%253DA%2Btale%2Bof%2Bthree%2Bnext%2Bgeneration%2Bsequencing%2Bplatforms%253A%2Bcomparison%2Bof%2BIon%2BTorrent%252C%2BPacific%2BBiosciences%2Band%2BIllumina%2BMiSeq%2Bsequencers.%26rft_id%253Dinfo%253Adoi%252F10.1186%252F1471-2164-13-341%26rft_id%253Dinfo%253Apmid%252F22827831%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1186/1471-2164-13-341&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=22827831&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-24-1" title="View reference in text" id="ref-24">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.24" data-doi="10.1101/007187">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Salter</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Cox</span>, 
+          <span class="cit-name-given-names">M. J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Turek</span>, 
+          <span class="cit-name-given-names">E. M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Calus</span>, 
+          <span class="cit-name-given-names">S. T.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Cookson</span>, 
+          <span class="cit-name-given-names">W. O.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Moffatt</span>, 
+          <span class="cit-name-given-names">M. F.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Turner</span>, 
+          <span class="cit-name-given-names">P.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Parkhill</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Loman</span>, 
+          <span class="cit-name-given-names">N.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Walker</span>, 
+          <span class="cit-name-given-names">A. W.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2014</span>. 
+         <span class="cit-article-title">Reagent contamination can critically impact sequence-based microbiome analyses</span>. 
+         <abbr class="cit-jnl-abbrev">bioRxiv</abbr>
+         <span class="cit-pub-id-sep cit-pub-id-doi-sep">, :</span>
+         <span class="cit-pub-id cit-pub-id-doi">
+          <span class="cit-pub-id-scheme-doi">doi:</span>10.1101/007187
+         </span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DbioRxiv%26rft_id%253Dinfo%253Adoi%252F10.1101%252F007187%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NzoiYmlvcnhpdiI7czo1OiJyZXNpZCI7czo4OiIwMDcxODd2MSI7czo0OiJhdG9tIjtzOjM3OiIvYmlvcnhpdi9lYXJseS8yMDE0LzEwLzI3LzAwNzQ3Ni5hdG9tIjt9czo4OiJmcmFnbWVudCI7czowOiIiO30=" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-25-1" title="View reference in text" id="ref-25">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.25" data-doi="10.1093/bioinformatics/btr026">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Schmieder</span>, 
+          <span class="cit-name-given-names">R.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Edwards</span>, 
+          <span class="cit-name-given-names">R.</span>
+         </span>, 
+         <span class="cit-pub-date">2011</span>. 
+         <span class="cit-article-title">Quality control and preprocessing of metagenomic datasets</span>. 
+         <abbr class="cit-jnl-abbrev">Bioinformatics</abbr>, 
+         <span class="cit-vol">27</span>(
+         <span class="cit-issue">6</span>):
+         <span class="cit-fpage">863</span>–
+         <span class="cit-lpage">4</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBioinformatics%26rft_id%253Dinfo%253Adoi%252F10.1093%252Fbioinformatics%252Fbtr026%26rft_id%253Dinfo%253Apmid%252F21278185%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1093/bioinformatics/btr026&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=21278185&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=000288277300018&amp;;link_type=ISI" class="cit-ref-sprinkles cit-ref-sprinkles-newisilink cit-ref-sprinkles-webofscience">
+         <span>Web of Science</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-26-1" title="View reference in text" id="ref-26">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.26" data-doi="10.1371/journal.pone.0007370">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Willner</span>, 
+          <span class="cit-name-given-names">D.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Furlan</span>, 
+          <span class="cit-name-given-names">M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Haynes</span>, 
+          <span class="cit-name-given-names">M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Schmieder</span>, 
+          <span class="cit-name-given-names">R.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Angly</span>, 
+          <span class="cit-name-given-names">F. E.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Silva</span>, 
+          <span class="cit-name-given-names">J.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Tammadoni</span>, 
+          <span class="cit-name-given-names">S.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Nosrat</span>, 
+          <span class="cit-name-given-names">B.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Conrad</span>, 
+          <span class="cit-name-given-names">D.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Rohwer</span>, 
+          <span class="cit-name-given-names">F.</span>
+         </span>, 
+         <span class="cit-etal">et al.</span>, 
+         <span class="cit-pub-date">2009</span>. 
+         <span class="cit-article-title">Metagenomic analysis of respiratory tract DNA viral communities in cystic fibrosis and non-cystic fibrosis individuals</span>. 
+         <abbr class="cit-jnl-abbrev">PLoS One</abbr>, 
+         <span class="cit-vol">4</span>(
+         <span class="cit-issue">10</span>):
+         <span class="cit-fpage">e7370</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.stitle%253DPLoS%2BONE%26rft.aulast%253DWillner%26rft.auinit1%253DD.%26rft.volume%253D4%26rft.issue%253D10%26rft.spage%253De7370%26rft.epage%253De7370%26rft.atitle%253DMetagenomic%2Banalysis%2Bof%2Brespiratory%2Btract%2BDNA%2Bviral%2Bcommunities%2Bin%2Bcystic%2Bfibrosis%2Band%2Bnon-cystic%2Bfibrosis%2Bindividuals.%26rft_id%253Dinfo%253Adoi%252F10.1371%252Fjournal.pone.0007370%26rft_id%253Dinfo%253Apmid%252F19816605%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1371/journal.pone.0007370&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=19816605&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-27-1" title="View reference in text" id="ref-27">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.27" data-doi="10.1371/journal.pone.0027992">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Xia</span>, 
+          <span class="cit-name-given-names">L. C.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Cram</span>, 
+          <span class="cit-name-given-names">J. A.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chen</span>, 
+          <span class="cit-name-given-names">T.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Fuhrman</span>, 
+          <span class="cit-name-given-names">J. A.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Sun</span>, 
+          <span class="cit-name-given-names">F.</span>
+         </span>, 
+         <span class="cit-pub-date">2011</span>. 
+         <span class="cit-article-title">Accurate genome relative abundance estimation based on shotgun metagenomic reads</span>. 
+         <abbr class="cit-jnl-abbrev">PLoS One</abbr>, 
+         <span class="cit-vol">6</span>(
+         <span class="cit-issue">12</span>):
+         <span class="cit-fpage">e27992</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.stitle%253DPLoS%2BONE%26rft.aulast%253DXia%26rft.auinit1%253DL.%2BC.%26rft.volume%253D6%26rft.issue%253D12%26rft.spage%253De27992%26rft.epage%253De27992%26rft.atitle%253DAccurate%2Bgenome%2Brelative%2Babundance%2Bestimation%2Bbased%2Bon%2Bshotgun%2Bmetagenomic%2Breads.%26rft_id%253Dinfo%253Adoi%252F10.1371%252Fjournal.pone.0027992%26rft_id%253Dinfo%253Apmid%252F22162995%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=10.1371/journal.pone.0027992&amp;;link_type=DOI" class="cit-ref-sprinkles cit-ref-sprinkles-doi cit-ref-sprinkles-crossref">
+         <span>CrossRef</span>
+        </a>
+        <a href="/lookup/external-ref?access_num=22162995&amp;;link_type=MED&amp;;atom=%2Fbiorxiv%2Fearly%2F2014%2F10%2F27%2F007476.atom" class="cit-ref-sprinkles cit-ref-sprinkles-medline">
+         <span>PubMed</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-28-1" title="View reference in text" id="ref-28">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.28">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Yang</span>, 
+          <span class="cit-name-given-names">B.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Peng</span>, 
+          <span class="cit-name-given-names">Y.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Leung</span>, 
+          <span class="cit-name-given-names">H. C.-M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Yiu</span>, 
+          <span class="cit-name-given-names">S.-M.</span>
+         </span>, 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chen</span>, 
+          <span class="cit-name-given-names">J.-C.</span>
+         </span>, and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Chin</span>, 
+          <span class="cit-name-given-names">F. Y.-L.</span>
+         </span>, 
+         <span class="cit-pub-date">2010</span>. 
+         <span class="cit-article-title">Unsupervised binning of environmental genomic fragments based on an error robust selection of l-mers</span>. 
+         <abbr class="cit-jnl-abbrev">BMC bioinformatics</abbr>, 
+         <span class="cit-vol">10</span> (Suppl 
+         <span class="cit-issue">2</span>):
+         <span class="cit-fpage">S5</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DBMC%2Bbioinformatics%26rft.volume%253D10%26rft.spage%253DS5%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+       </div>
+      </div>
+     </li>
+     <li>
+      <span class="ref-label ref-label-empty"/>
+      <a class="rev-xref-ref" href="#xref-ref-29-1" title="View reference in text" id="ref-29">↵</a>
+      <div class="cit ref-cit ref-journal" id="cit-007476v2.29" data-doi="10.1101/gr.074492.107">
+       <div class="cit-metadata">
+        <cite>
+         <span class="cit-auth">
+          <span class="cit-name-surname">Zerbino</span>, 
+          <span class="cit-name-given-names">D. R.</span>
+         </span> and 
+         <span class="cit-auth">
+          <span class="cit-name-surname">Birney</span>, 
+          <span class="cit-name-given-names">E.</span>
+         </span>, 
+         <span class="cit-pub-date">2008</span>. 
+         <span class="cit-article-title">Velvet: algorithms for de novo short read assembly using de Bruijn graphs</span>. 
+         <abbr class="cit-jnl-abbrev">Genome Research</abbr>, 
+         <span class="cit-vol">18</span>(
+         <span class="cit-issue">5</span>):
+         <span class="cit-fpage">821</span>–
+         <span class="cit-lpage">829</span>.
+        </cite>
+       </div>
+       <div class="cit-extra">
+        <a href="{openurl}?query=rft.jtitle%253DGenome%2BResearch%26rft_id%253Dinfo%253Adoi%252F10.1101%252Fgr.074492.107%26rft_id%253Dinfo%253Apmid%252F18349386%26rft.genre%253Darticle%26rft_val_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Ajournal%26ctx_ver%253DZ39.88-2004%26url_ver%253DZ39.88-2004%26url_ctx_fmt%253Dinfo%253Aofi%252Ffmt%253Akev%253Amtx%253Actx" class="cit-ref-sprinkles cit-ref-sprinkles-openurl cit-ref-sprinkles-open-url">
+         <span>OpenUrl</span>
+        </a>
+        <a href="/lookup/ijlink/YTozOntzOjQ6InBhdGgiO3M6MTQ6Ii9sb29rdXAvaWpsaW5rIjtzOjU6InF1ZXJ5IjthOjQ6e3M6ODoibGlua1R5cGUiO3M6NDoiQUJTVCI7czoxMToiam91cm5hbENvZGUiO3M6NjoiZ2Vub21lIjtzOjU6InJlc2lkIjtzOjg6IjE4LzUvODIxIjtzOjQ6ImF0b20iO3M6Mzc6Ii9iaW9yeGl2L2Vhcmx5LzIwMTQvMTAvMjcvMDA3NDc2LmF0b20iO31zOjg6ImZyYWdtZW50IjtzOjA6IiI7fQ==" class="cit-ref-sprinkles cit-ref-sprinkles-ijlink">
+         <span>
+          <span class="cit-reflinks-abstract">Abstract</span>
+          <span class="cit-sep cit-reflinks-variant-name-sep">/</span>
+          <span class="cit-reflinks-full-text">
+           <span class="free-full-text">FREE </span>Full Text
+          </span>
+         </span>
+        </a>
+       </div>
+      </div>
+     </li>
+    </ol>
+   </div>
+   <span class="highwire-journal-article-marker-end"/>
+  </div>
+ </body>
+</html>

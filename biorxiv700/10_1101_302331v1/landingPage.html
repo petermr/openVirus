@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:mml="http://www.w3.org/1998/Math/MathML">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# book: http://ogp.me/ns/book#" >
+    <!--[if IE]><![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="dns-prefetch" href="//stats.g.doubleclick.net" />
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+<link rel="dns-prefetch" href="//scholar.google.com" />
+<link rel="dns-prefetch" href="//d33xdlntwy0kbs.cloudfront.net" />
+<link rel="shortcut icon" href="https://www.biorxiv.org/sites/default/files/images/favicon.ico" type="image/vnd.microsoft.icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=yes" />
+<meta name="article_thumbnail" content="https://www.biorxiv.org/content/biorxiv/early/2018/04/18/302331/embed/graphic-10.gif" />
+<meta name="type" content="article" />
+<meta name="category" content="article" />
+<meta name="HW.identifier" content="/biorxiv/early/2018/04/18/302331.atom" />
+<meta name="HW.pisa" content="biorxiv;302331v1" />
+<meta name="DC.Format" content="text/html" />
+<meta name="DC.Language" content="en" />
+<meta name="DC.Title" content="A novel framework for inferring parameters of transmission from viral sequence data" />
+<meta name="DC.Identifier" content="10.1101/302331" />
+<meta name="DC.Date" content="2018-04-18" />
+<meta name="DC.Publisher" content="Cold Spring Harbor Laboratory" />
+<meta name="DC.Rights" content="© 2018, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/" />
+<meta name="DC.AccessRights" content="restricted" />
+<meta name="DC.Description" content="Transmission between hosts is a critical part of the viral lifecycle. Recent studies of viral transmission have used genome sequence data to evaluate the number of particles transmitted between hosts, and the role of selection as it operates during the transmission process. However, the interpretation of sequence data describing transmission events is a challenging task. We here present a novel and comprehensive framework for using short-read sequence data to understand viral transmission events. Our model describes transmission as an event involving whole viruses, rather than independent alleles. We demonstrate how selection and noisy sequence data may each affect inferences of the population bottleneck, and identify circumstances in which selection for increased viral transmission may or may not be identified. Applying our model to data from a previous experimental transmission study, we show that our approach grants a more quantitative insight into viral transmission, inferring that between 2 to 6 viruses initiated infection, and allowing for a more informed interpretation of transmission events. While our model is here applied to influenza transmission, the framework we present is highly generalisable to other systems. Our work provides new opportunities for studying viral transmission." />
+<meta name="DC.Contributor" content="Casper K Lumby" />
+<meta name="DC.Contributor" content="Nuno R Nene" />
+<meta name="DC.Contributor" content="Christopher J R Illingworth" />
+<meta name="article:published_time" content="2018-04-18" />
+<meta name="article:section" content="New Results" />
+<meta name="citation_title" content="A novel framework for inferring parameters of transmission from viral sequence data" />
+<meta name="citation_abstract" lang="en" content="&lt;h3&gt;Abstract&lt;/h3&gt;
+&lt;p&gt;Transmission between hosts is a critical part of the viral lifecycle. Recent studies of viral transmission have used genome sequence data to evaluate the number of particles transmitted between hosts, and the role of selection as it operates during the transmission process. However, the interpretation of sequence data describing transmission events is a challenging task. We here present a novel and comprehensive framework for using short-read sequence data to understand viral transmission events. Our model describes transmission as an event involving whole viruses, rather than independent alleles. We demonstrate how selection and noisy sequence data may each affect inferences of the population bottleneck, and identify circumstances in which selection for increased viral transmission may or may not be identified. Applying our model to data from a previous experimental transmission study, we show that our approach grants a more quantitative insight into viral transmission, inferring that between 2 to 6 viruses initiated infection, and allowing for a more informed interpretation of transmission events. While our model is here applied to influenza transmission, the framework we present is highly generalisable to other systems. Our work provides new opportunities for studying viral transmission.&lt;/p&gt;" />
+<meta name="citation_journal_title" content="bioRxiv" />
+<meta name="citation_publisher" content="Cold Spring Harbor Laboratory" />
+<meta name="citation_publication_date" content="2018/01/01" />
+<meta name="citation_mjid" content="biorxiv;302331v1" />
+<meta name="citation_id" content="302331v1" />
+<meta name="citation_public_url" content="https://www.biorxiv.org/content/10.1101/302331v1" />
+<meta name="citation_abstract_html_url" content="https://www.biorxiv.org/content/10.1101/302331v1.abstract" />
+<meta name="citation_full_html_url" content="https://www.biorxiv.org/content/10.1101/302331v1.full" />
+<meta name="citation_pdf_url" content="https://www.biorxiv.org/content/biorxiv/early/2018/04/18/302331.full.pdf" />
+<meta name="citation_doi" content="10.1101/302331" />
+<meta name="citation_num_pages" content="45" />
+<meta name="citation_article_type" content="Article" />
+<meta name="citation_section" content="New Results" />
+<meta name="citation_firstpage" content="302331" />
+<meta name="citation_author" content="Casper K Lumby" />
+<meta name="citation_author_institution" content="Department of Genetics, University of Cambridge" />
+<meta name="citation_author" content="Nuno R Nene" />
+<meta name="citation_author_institution" content="Department of Genetics, University of Cambridge" />
+<meta name="citation_author" content="Christopher J R Illingworth" />
+<meta name="citation_author_institution" content="Department of Genetics, University of Cambridge" />
+<meta name="citation_author_institution" content="Department of Applied Mathematics and Theoretical Physics, University of Cambridge" />
+<meta name="citation_reference" content="Fraser C, Donnelly CA, Cauchemez S, Hanage WP, Van Kerkhove MD, et al. (2009) Pandemic Potential of a Strain of Influenza A (H1N1): Early Findings. Science 324: 1557–1561." />
+<meta name="citation_reference" content="Breban R, Riou J, Fontanet A (2013) Interhuman transmissibility of Middle East respiratory syndrome coronavirus: estimation of pandemic risk. The Lancet 382: 694–699." />
+<meta name="citation_reference" content="Bergstrom CT, McElhany P, Real LA (1999) Transmission bottlenecks as determinants of virulence in rapidly evolving pathogens. Proceedings of the National Academy of Sciences of the United States of America 96: 5095–5100." />
+<meta name="citation_reference" content="Gutiérrez S, Michalakis Y, Blanc S (2012) Virus population bottlenecks during within-host progression and host-to-host transmission. Current Opinion in Virology 2: 546–555." />
+<meta name="citation_reference" content="Varble A, Albrecht RA, Backes S, Crumiller M, Bouvier NM, et al. (2014) Influenza A Virus Transmission Bottlenecks Are Defined by Infection Route and Recipient Host. Cell Host and Microbe 16: 691–700." />
+<meta name="citation_reference" content="Frise R, Bradley K, van Doremalen N, Galiano M, Elderfield RA, et al. (2016) Contact transmission of influenza virus between ferrets imposes a looser bottleneck than respiratory droplet transmission allowing propagation of antiviral resistance. Scientific Reports 6: 29793." />
+<meta name="citation_reference" content="Sacristan S, Malpica JM, Fraile A, Garcia-Arenal F (2003) Estimation of Population Bottlenecks during Systemic Movement of Tobacco Mosaic Virus in Tobacco Plants. Journal of Virology 77: 9906–9911." />
+<meta name="citation_reference" content="Krimbas CB, Tsakas S (1971) The Genetics of Dacus Oleae. V. Changes of esterase polymorphism in a natural population following insecticide control—selection or drift? Evolution 25: 454–460." />
+<meta name="citation_reference" content="Monsion B, Froissart R, Michalakis Y, Blanc S (2008) Large bottleneck size in Cauliflower Mosaic Virus populations during host plant colonization. PLoS Pathogens 4: e1000174." />
+<meta name="citation_reference" content="Charlesworth B (2009) Fundamental concepts in genetics: Effective population size and patterns of molecular evolution and variation. Nature Reviews Genetics 10: 195–205." />
+<meta name="citation_reference" content="Khiabanian H, Emmett KJ, Lee A, Rabadan R (2015) High-resolution Genomic Surveillance of 2014 Ebolavirus Using Shared Subclonal Variants. PLoS currents 7: 1–17." />
+<meta name="citation_reference" content="Sobel Leonard A, Weissman D, Greenbaum B, Ghedin E, Koelle K (2017) Transmission Bottleneck Size Estimation from Pathogen Deep-Sequencing Data, with an Application to Human Influenza A Virus. bioRxiv: 1–48." />
+<meta name="citation_reference" content="McCrone JT, Woods RJ, Martin ET, Malosh RE, Monto AS, et al. (2017) The evolutionary dynamics of influenza A virus within and between human hosts. bioRxiv: 1–53." />
+<meta name="citation_reference" content="Poon LLM, Song T, Rosenfeld R, Lin X, Rogers MB, et al. (2016) Quantifying influenza virus diversity and transmission in humans. Nature Genetics 48: 195–200." />
+<meta name="citation_reference" content="Kuiken T, Holmes EC, McCauley J, Rimmelzwaan GF, Williams CS, et al. (2006) Host species barriers to influenza virus infections. Science 312: 394–397." />
+<meta name="citation_reference" content="Lipsitch M, Barclay W, Raman R, Russell CJ, Belser JA, et al. (2016) Viral factors in influenza pandemic risk assessment. eLife 5: 316ra192." />
+<meta name="citation_reference" content="Herfst S, Schrauwen EJA, Linster M, Chutinimitkul S, de Wit E, et al. (2012) Airborne Transmission of Influenza A/H5N1 Virus Between Ferrets. Science 336: 1534–1541." />
+<meta name="citation_reference" content="Imai M, Watanabe T, Hatta M, Das SC, Ozawa M, et al. (2012) Experimental adaptation of an influenza H5 HA confers respiratory droplet transmission to a reassortant H5 HA/H1N1 virus in ferrets. Nature 486: 420–428." />
+<meta name="citation_reference" content="Sutton TC, Finch C, Shao H, Angel M, Chen H, et al. (2014) Airborne transmission of highly pathogenic H7N1 influenza virus in ferrets. Journal of Virology 88: 6623–6635." />
+<meta name="citation_reference" content="Yang H, Chen Y, Qiao C, He X, Zhou H, et al. (2016) Prevalence, genetics, and transmissibility in ferrets of Eurasian avian-like H1N1 swine influenza viruses. Proceedings of the National Academy of Sciences 113: 392–397." />
+<meta name="citation_reference" content="Palese P, Wang TT (2012) H5N1 influenza viruses: facts, not fear. Proceedings of the National Academy of Sciences 109: 2211–2213." />
+<meta name="citation_reference" content="Buhnerkempe MG, Gostic K, Park M, Ahsan P, Belser JA, et al. (2015) Mapping influenza transmission in the ferret model to transmission in humans. eLife 4: e29971." />
+<meta name="citation_reference" content="Wilker PR, Dinis JM, Starrett G, Imai M, Hatta M, et al. (2013) Selection on haemagglutinin imposes a bottleneck during mammalian transmission of reassortant H5N1 influenza viruses. Nature Communications 4: 1–11." />
+<meta name="citation_reference" content="Moncla LH, Zhong G, Nelson CW, Dinis JM, Mutschler J, et al. (2016) Selective Bottlenecks Shape Evolutionary Pathways Taken during Mammalian Adaptation of a 1918-like Avian Influenza Virus. Cell Host and Microbe 19: 169–180." />
+<meta name="citation_reference" content="Acevedo A, Brodsky L, Andino R (2014) Mutational and fitness landscapes of an RNA virus revealed through population sequencing. Nature 505: 686–690." />
+<meta name="citation_reference" content="Visher E, Whitefield SE, McCrone JT, Fitzsimmons W, Lauring AS (2016) The Mutational Robustness of Influenza A Virus. PLoS Pathogens 12: e1005856–25." />
+<meta name="citation_reference" content="Rouzine IM, Rodrigo A, Coffin JM (2001) Transition between stochastic evolution and deterministic evolution in the presence of selection: general theory and application to virology. Microbiology and Molecular Biology Reviews 65: 151–185." />
+<meta name="citation_reference" content="Zwart MP, Daròs JA, Elena SF (2011) One Is Enough: In Vivo Effective Population Size Is Dose-Dependent for a Plant RNA Virus. PLoS Pathogens 7: e1002122–12." />
+<meta name="citation_reference" content="Abel S, Abel zur Wiesch P, Davis BM, Waldor MK (2015) Analysis of Bottlenecks in Experimental Models of Infection. PLoS Pathogens 11: e1004823–7." />
+<meta name="citation_reference" content="O’Hara RB (2005) Comparing the effects of genetic drift and fluctuating selection on genotype frequency changes in the scarlet tiger moth. Proceedings of the Royal Society B: Biological Sciences 272: 211–217." />
+<meta name="citation_reference" content="Bollback JP, York TL, Nielsen R (2008) Estimation of 2Nes From Temporal Allele Frequency Data. Genetics 179: 497–502." />
+<meta name="citation_reference" content="Malaspinas AS, Malaspinas O, Evans SN, Slatkin M (2012) Estimating allele age and selection coefficient from time-serial data. Genetics 192: 599–607." />
+<meta name="citation_reference" content="Feder AF, Kryazhimskiy S, Plotkin JB (2014) Identifying signatures of selection in genetic time series. Genetics 196: 509–522." />
+<meta name="citation_reference" content="Foll M, Poh YP, Renzette N, Ferrer-Admetlla A, Bank C, et al. (2014) Influenza Virus Drug Resistance: A Time-Sampled Population Genetics Perspective. PLoS Genetics 10: e1004185." />
+<meta name="citation_reference" content="Terhorst J, Schlötterer C, Song YS (2015) Multi-locus Analysis of Genomic Time Series Data from Experimental Evolution. PLoS Genetics 11: e1005069–29." />
+<meta name="citation_reference" content="Chare ER, Gould EA, Holmes EC (2003) Phylogenetic analysis reveals a low rate of homologous recombination in negative-sense RNA viruses. The Journal of general virology 84: 2691–2703." />
+<meta name="citation_reference" content="Boni MF, Zhou Y, Taubenberger JK, Holmes EC (2008) Homologous recombination is very rare or absent in human influenza A virus. Journal of Virology 82: 4807–4811." />
+<meta name="citation_reference" content="Neher RA, Shraiman BI (2009) Competition between recombination and epistasis can cause a transition from allele to genotype selection. Proceedings of the National Academy of Sciences 106: 6866–6871." />
+<meta name="citation_reference" content="Strelkowa N, Lässig M (2012) Clonal interference in the evolution of influenza. Genetics 192: 671–682." />
+<meta name="citation_reference" content="Illingworth CJ, Mustonen V (2012) Components of Selection in the Evolution of the Influenza Virus: Linkage Effects Beat Inherent Selection. PLoS Pathogens 8: e1003091." />
+<meta name="citation_reference" content="Koelle K, Rasmussen DA (2015) The effects of a deleterious mutation load on patterns of influenza A/H3N2’s antigenic evolution in humans. eLife." />
+<meta name="citation_reference" content="Felsenstein J (1971) Inbreeding and variance effective numbers in populations with overlapping generations. Genetics 68: 581–597." />
+<meta name="citation_reference" content="Wang C, Mitsuya Y, Gharizadeh B, Ronaghi M, Shafer RW (2007) Characterization of mutation spectra with ultra-deep pyrosequencing: Application to HIV-1 drug resistance. Genome Research 17: 1195–1201." />
+<meta name="citation_reference" content="Varghese V, Wang E, Babrzadeh F, Bachmann MH, Shahriar R, et al. (2010) Nucleic Acid Template and the Risk of a PCR-Induced HIV-1 Drug Resistance Mutation. PLoS ONE 5: e10992–6." />
+<meta name="citation_reference" content="Beerenwinkel N, Zagordi O (2011) Ultra-deep sequencing for the analysis of viral populations. Current Opinion in Virology 1: 413–418." />
+<meta name="citation_reference" content="van Dijk EL, Auger H, Jaszczyszyn Y, Thermes C (2014) Ten years of next-generation sequencing technology. Trends in Genetics 30: 418–426." />
+<meta name="citation_reference" content="Iyer S, Casey E, Bouzek H, Kim M, Deng W, et al. (2015) Comparison of Major and Minor Viral SNPs Identified through Single Template Sequencing and Pyrosequencing in Acute HIV-1 Infection. PLoS ONE 10: e0135903." />
+<meta name="citation_reference" content="Laehnemann D, Borkhardt A, McHardy AC (2016) Denoising DNA deep sequencing data-high-throughput sequencing errors and their correction. Briefings in Bioinformatics 17: 154–179." />
+<meta name="citation_reference" content="McCrone JT, Lauring AS (2016) Measurements of Intrahost Viral Diversity Are Extremely Sensitive to Systematic Errors in Variant Calling. Journal of Virology 90: 6884–6895." />
+<meta name="citation_reference" content="Sandmann S, de Graaf AO, Karimi M, van der Reijden BA, Hellström-Lindberg E, et al. (2017) Evaluating Variant Calling Tools for Non-Matched Next-Generation Sequencing Data. Scientific Reports 7: 43169." />
+<meta name="citation_reference" content="Illingworth CJR (2015) Fitness Inference from Short-Read Data: Within-Host Evolution of a Reassortant H5N1 Influenza Virus. Molecular Biology and Evolution 32: 3012–3026." />
+<meta name="citation_reference" content="Zanini F, Brodin J, Albert J, Neher RA (2017) Error rates, PCR recombination, and sampling depth in HIV-1 whole genome deep sequencing. Virus Research 239: 106–114." />
+<meta name="citation_reference" content="Illingworth CJR, Roy S, Beale MA, Tutill H, Williams R, et al. (2017) On the effective depth of viral sequence data. Virus Evolution 3: 1–9." />
+<meta name="citation_reference" content="Blanquart F, Grabowski MK, Herbeck J, Nalugoda F, Serwadda D, et al. (2016) A transmission-virulence evolutionary trade-off explains attenuation of HIV-1 in Uganda. eLife 5: 2171." />
+<meta name="citation_reference" content="Zaraket H, Baranovich T, Kaplan BS, Carter R, Song MS, et al. (2015) Mammalian adaptation of influenza A(H7N9) virus is limited by a narrow genetic bottleneck. Nature Communications 6: 1–10." />
+<meta name="citation_reference" content="Kass RE, Raftery AE (1995) Bayes factors. Journal of the American Statistical Association 90: 773–795." />
+<meta name="citation_reference" content="Silverman BW (1986) Density estimation for statistics and data analysis. Chapman and Hall, 175pp." />
+<meta name="citation_reference" content="Watanabe T, Zhong G, Russell CA, Nakajima N, Hatta M, et al. (2014) Circulating avian influenza viruses closely related to the 1918 virus have pandemic potential. Cell host &amp; microbe 15: 692–705." />
+<meta name="citation_reference" content="Zwart MP, Elena SF (2015) Matters of Size: Genetic Bottlenecks in Virus Infection and Their Potential Impact on Evolution. Annual Review of Virology 2: 161–179." />
+<meta name="citation_reference" content="Derdeyn CA, Decker JM, Bibollet-Ruche F, Mokili JL, Muldoon M, et al. (2004) Envelope-Constrained Neutralization-Sensitive HIV-1 after Heterosexual Transmission. Science 303: 2019–2022." />
+<meta name="citation_reference" content="Edwards CTT, Holmes EC, Wilson DJ, Viscidi RP, Abrams EJ, et al. (2006) Population genetic estimation of the loss of genetic diversity during horizontal transmission of HIV-1. BMC Evolutionary Biology 6: 28." />
+<meta name="citation_reference" content="Li LM, Grassly NC, Fraser C (2017) Quantifying Transmission Heterogeneity Using Both Pathogen Phylogenies and Incidence Time Series. Molecular Biology and Evolution 34: 2982–2995." />
+<meta name="citation_reference" content="Yen HL, Liang CH, Wu CY, Forrest HL, Ferguson A, et al. (2011) Hemagglutinin–neuraminidase balance confers respiratory-droplet transmissibility of the pandemic H1N1 influenza virus in ferrets. Proceedings of the National Academy of Sciences of the United States of America 108: 14264–14269." />
+<meta name="citation_reference" content="Steel J, Lowen AC, Mubareka S, Palese P (2009) Transmission of influenza virus in a mammalian host is increased by PB2 amino acids 627K or 627E/701N. PLoS Pathogens 5: e1000252." />
+<meta name="citation_reference" content="Linster M, van Boheemen S, de Graaf M, Schrauwen EJA, Lexmond P, et al. (2014) Identification, Characterization, and Natural Selection of Mutations Driving Airborne Transmission of A/H5N1 Virus. Cell 157: 329–339." />
+<meta name="citation_reference" content="Nishiura H, Yen HL, Cowling BJ (2013) Sample Size Considerations for One-to-One Animal Transmission Studies of the Influenza A Viruses. PLoS ONE 8: e55358–7." />
+<meta name="citation_reference" content="Dinis JM, Florek NW, Fatola OO, Moncla LH, Mutschler JP, et al. (2016) Deep Sequencing Reveals Potential Antigenic Variants at Low Frequencies in Influenza A Virus-Infected Humans. Journal of Virology 90: 3355–3365." />
+<meta name="citation_reference" content="Zanini F, Brodin J, Thebo L, Lanz C, Bratt G, et al. (2015) Population genomics of intrapatient HIV-1 evolution. eLife 4." />
+<meta name="citation_reference" content="Sobel Leonard A, McClain MT, Smith GJD, Wentworth DE, Halpin RA, et al. (2017) The effective rate of influenza reassortment is limited during human infection. PLoS Pathogens 13: e1006203–26." />
+<meta name="citation_reference" content="Coombs D, Gilchrist MA, Ball CL (2007) Evaluating the importance of within- and between-host selection pressures on the evolution of chronic pathogens. Theoretical Population Biology 72: 576–591." />
+<meta name="citation_reference" content="Illingworth CJR, Fischer A, Mustonen V (2014) Identifying selection in the within-host evolution of influenza using viral sequence data. PLoS Computational Biology 10: e1003755." />
+<meta name="citation_reference" content="Kimura M (1955) Stochastic processes and distribution of gene frequencies under natural selection. Cold Spring Harbor symposia on quantitative biology 20: 33–53." />
+<meta name="citation_reference" content="Stray SJ, Air GM (2001) Apoptosis by influenza viruses correlates with efficiency of viral mRNA synthesis. Virus Research 77: 3–17." />
+<meta name="citation_reference" content="Russell CA, Fonville JM, Brown AEX, Burke DF, Smith DL, et al. (2012) The potential for respiratory droplet-transmissible A/H5N1 influenza virus to evolve in a mammalian host. Science 336: 1541–1547." />
+<meta name="citation_reference" content="Gillespie JH (2004) Population Genetics: A Concise Guide. Johns Hopkins University Press." />
+<meta name="citation_reference" content="Lacerda M, Seoighe C (2014) Population Genetics Inference for Longitudinally-Sampled Mutants Under Strong Selection. Genetics 198: 1237–1250." />
+<meta name="citation_reference" content="Tran TD, Hofrichter J, Jost J (2014) The evolution of moment generating functions for the Wright-Fisher model of population genetics. Mathematical Biosciences 256: 10–17." />
+<meta name="citation_reference" content="Tataru P, Simonsen M, Bataillon T, Hobolth A (2017) Statistical Inference in the Wright-Fisher Model Using Allele Frequency Data. Systematic Biology 66: e30–e46." />
+<meta name="citation_reference" content="Mosimann JE (1962) On the Compound Multinomial Distribution, the Multivariate β-Distribution, and Correlations Among Proportions. Biometrika 49: 65." />
+<meta name="citation_reference" content="Johnson SG. Multi-dimensional adaptive integration (cubature) in c. https://github.com/stevengj/cubature. Accessed: 19-01-2018." />
+<meta name="citation_reference" content="Marshall N, Priyamvada L, Ende Z, Steel J, Lowen AC (2013) Influenza Virus Reassortment Occurs with High Frequency in the Absence of Segment Mismatch. PLoS Pathogens 9: e1003421." />
+<meta name="citation_reference" content="Tao H, Steel J, Lowen AC (2014) Intrahost Dynamics of Influenza Virus Reassortment. Journal of Virology 88: 7485–7492." />
+<meta name="citation_reference" content="Kofler R, Schlötterer C (2014) A guide for the design of evolve and resequencing studies. Molecular Biology and Evolution 31: 474–483." />
+<meta name="citation_reference" content="Achaz G, Rodriguez-Verdugo A, Gaut BS, Tenaillon O (2014) The reproducibility of adaptation in the light of experimental evolution with whole genome sequencing. Adv Exp Med Biol 781: 211–31." />
+<meta name="citation_reference" content="Illingworth CJR (2016) SAMFIRE: multi-locus variant calling for time-resolved sequence data. Bioinformatics 32: 2208–2209." />
+<meta name="citation_reference" content="Fischer A, Vázquez-García I, Illingworth CJR, Mustonen V (2014) High-Definition Reconstruction of Clonal Composition in Cancer. CellReports 7: 1740–1752." />
+<meta name="citation_reference" content="Illingworth CJR, Mustonen V (2012) A method to infer positive selection from marker dynamics in an asexual population. Bioinformatics 28: 831–837." />
+<meta name="twitter:title" content="A novel framework for inferring parameters of transmission from viral sequence data" />
+<meta name="twitter:site" content="@biorxivpreprint" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://www.biorxiv.org/sites/default/files/images/biorxiv_logo_homepage7-5-small.png" />
+<meta name="twitter:description" content="Transmission between hosts is a critical part of the viral lifecycle. Recent studies of viral transmission have used genome sequence data to evaluate the number of particles transmitted between hosts, and the role of selection as it operates during the transmission process. However, the interpretation of sequence data describing transmission events is a challenging task. We here present a novel and comprehensive framework for using short-read sequence data to understand viral transmission events. Our model describes transmission as an event involving whole viruses, rather than independent alleles. We demonstrate how selection and noisy sequence data may each affect inferences of the population bottleneck, and identify circumstances in which selection for increased viral transmission may or may not be identified. Applying our model to data from a previous experimental transmission study, we show that our approach grants a more quantitative insight into viral transmission, inferring that between 2 to 6 viruses initiated infection, and allowing for a more informed interpretation of transmission events. While our model is here applied to influenza transmission, the framework we present is highly generalisable to other systems. Our work provides new opportunities for studying viral transmission." />
+<meta name="og-title" property="og:title" content="A novel framework for inferring parameters of transmission from viral sequence data" />
+<meta name="og-url" property="og:url" content="https://www.biorxiv.org/content/10.1101/302331v1" />
+<meta name="og-site-name" property="og:site_name" content="bioRxiv" />
+<meta name="og-description" property="og:description" content="Transmission between hosts is a critical part of the viral lifecycle. Recent studies of viral transmission have used genome sequence data to evaluate the number of particles transmitted between hosts, and the role of selection as it operates during the transmission process. However, the interpretation of sequence data describing transmission events is a challenging task. We here present a novel and comprehensive framework for using short-read sequence data to understand viral transmission events. Our model describes transmission as an event involving whole viruses, rather than independent alleles. We demonstrate how selection and noisy sequence data may each affect inferences of the population bottleneck, and identify circumstances in which selection for increased viral transmission may or may not be identified. Applying our model to data from a previous experimental transmission study, we show that our approach grants a more quantitative insight into viral transmission, inferring that between 2 to 6 viruses initiated infection, and allowing for a more informed interpretation of transmission events. While our model is here applied to influenza transmission, the framework we present is highly generalisable to other systems. Our work provides new opportunities for studying viral transmission." />
+<meta name="og-type" property="og:type" content="article" />
+<meta name="og-image" property="og:image" content="https://www.biorxiv.org/sites/default/files/images/biorxiv_logo_homepage7-5-small.png" />
+<meta name="citation_date" content="2018-04-18" />
+<link rel="alternate" type="application/pdf" title="Full Text (PDF)" href="/content/10.1101/302331v1.full.pdf" />
+<link rel="alternate" type="text/plain" title="Full Text (Plain)" href="/content/10.1101/302331v1.full.txt" />
+<link rel="alternate" type="application/vnd.ms-powerpoint" title="Powerpoint" href="/content/10.1101/302331v1.ppt" />
+<meta name="description" content="bioRxiv - the preprint server for biology, operated by Cold Spring Harbor Laboratory, a research and educational institution" />
+<meta name="generator" content="Drupal 7 (http://drupal.org)" />
+<link rel="canonical" href="https://www.biorxiv.org/content/10.1101/302331v1" />
+<link rel="shortlink" href="https://www.biorxiv.org/node/93445" />
+    <title>A novel framework for inferring parameters of transmission from viral sequence data | bioRxiv</title>  
+    <link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__jMRAK66KMC1e4TQlwUNn3KiWVDC5AjueUAYEm1xBY_U__KSUjdT4jdcJ4qJz6fKY1K9WkYh1a5EcaWZxt_-zbTis__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/all/modules/highwire/highwire/highwire.style.highwire.css?q8qadd" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__qlYh2rDEXmsOlJKnxoaEiN2PoZU7YzDXSSTk6K1VAQE__XkaAZGAgxyDmOmv0mrGL0sA-jzEgAbgA12amvVPlIf0__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<link type="text/css" rel="stylesheet" href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__uGxiwDeWBOA2NAqiRKvJS7CKqv2_wE38cKwCd6tvrVo__XFIGL9IJsJXY4c62YMBljQoIaCQJsgoTa5cp7itS8y4__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<style type="text/css" media="all">
+/* <![CDATA[ */
+#sliding-popup.sliding-popup-bottom,#sliding-popup.sliding-popup-bottom .eu-cookie-withdraw-banner,.eu-cookie-withdraw-tab{background:gray}#sliding-popup.sliding-popup-bottom.eu-cookie-withdraw-wrapper{background:transparent}#sliding-popup .popup-content #popup-text h1,#sliding-popup .popup-content #popup-text h2,#sliding-popup .popup-content #popup-text h3,#sliding-popup .popup-content #popup-text p,.eu-cookie-compliance-secondary-button,.eu-cookie-withdraw-tab{color:#fff !important}.eu-cookie-withdraw-tab{border-color:#fff}.eu-cookie-compliance-more-button{color:#fff !important}
+/* ]]> */
+</style>
+
+<!--[if lte IE 7]>
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__ElJr3PIJEvw3qLXc1cnYiLj2G4KgDPSXFOfm6Phf8hw__JdWGm15cDWjsK6KrFlQVXQix9YgNeYysf22XZHj-Y-c__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__B6tGdsQSt1vT8d8j-19-oS4FKJe83RrSNBkjPs9jfos__6VkE5WcQmmQpSVTQx-xS2-zn_nlwFlDm-EN1HLJNjrA__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__78WRxe8YsWkYp6RcQ_VwTjFG__x9mi_NTPqoxAwFUsA__F3sVKlGyHKCaAPI_WdiHD7l_-05B6b9bLdUwzi1me90__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+
+<!--[if (lt IE 9)&(!IEMobile)]>
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__XH6bpcI0f2dImc-p674DLCZtWBGb-QwxJK1YexVGtno__vUceGprdo5nIhV6DH93X7fI3r8RcTJbChbas9TQXeW4__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<![endif]-->
+
+<!--[if gte IE 9]><!-->
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__2WBMox6sOrN42ss5lCnH7WWVRdFdJCxtTKnQJYRwTE4__yqNvNYLvMpjy3ffuJrjjm9uW2i-Me1c23KLYuWHaqio__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<!--<![endif]-->
+<link type="text/css" rel="stylesheet" href="https://www.biorxiv.org/sites/default/files/advagg_css/css__dAeSAHswzRXxn-2n4D6zNPmcZDmwaqqLzE-2ab_8jKw__f_9pwrTE8mmshoJRfurwkQ36QonD_Jiwbop2sscnkrE__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://d33xdlntwy0kbs.cloudfront.net/cshl_custom.css" media="all" />
+    <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+/*!
+ * yepnope1.5.4
+ * (c) WTFPL, GPLv2
+ */
+(function(a,b,c){function d(a){return"[object Function]"==o.call(a)}function e(a){return"string"==typeof a}function f(){}function g(a){return!a||"loaded"==a||"complete"==a||"uninitialized"==a}function h(){var a=p.shift();q=1,a?a.t?m(function(){("c"==a.t?B.injectCss:B.injectJs)(a.s,0,a.a,a.x,a.e,1)},0):(a(),h()):q=0}function i(a,c,d,e,f,i,j){function k(b){if(!o&&g(l.readyState)&&(u.r=o=1,!q&&h(),l.onload=l.onreadystatechange=null,b)){"img"!=a&&m(function(){t.removeChild(l)},50);for(var d in y[c])y[c].hasOwnProperty(d)&&y[c][d].onload()}}var j=j||B.errorTimeout,l=b.createElement(a),o=0,r=0,u={t:d,s:c,e:f,a:i,x:j};1===y[c]&&(r=1,y[c]=[]),"object"==a?l.data=c:(l.src=c,l.type=a),l.width=l.height="0",l.onerror=l.onload=l.onreadystatechange=function(){k.call(this,r)},p.splice(e,0,u),"img"!=a&&(r||2===y[c]?(t.insertBefore(l,s?null:n),m(k,j)):y[c].push(l))}function j(a,b,c,d,f){return q=0,b=b||"j",e(a)?i("c"==b?v:u,a,b,this.i++,c,d,f):(p.splice(this.i++,0,a),1==p.length&&h()),this}function k(){var a=B;return a.loader={load:j,i:0},a}var l=b.documentElement,m=a.setTimeout,n=b.getElementsByTagName("script")[0],o={}.toString,p=[],q=0,r="MozAppearance"in l.style,s=r&&!!b.createRange().compareNode,t=s?l:n.parentNode,l=a.opera&&"[object Opera]"==o.call(a.opera),l=!!b.attachEvent&&!l,u=r?"object":l?"script":"img",v=l?"script":u,w=Array.isArray||function(a){return"[object Array]"==o.call(a)},x=[],y={},z={timeout:function(a,b){return b.length&&(a.timeout=b[0]),a}},A,B;B=function(a){function b(a){var a=a.split("!"),b=x.length,c=a.pop(),d=a.length,c={url:c,origUrl:c,prefixes:a},e,f,g;for(f=0;f<d;f++)g=a[f].split("="),(e=z[g.shift()])&&(c=e(c,g));for(f=0;f<b;f++)c=x[f](c);return c}function g(a,e,f,g,h){var i=b(a),j=i.autoCallback;i.url.split(".").pop().split("?").shift(),i.bypass||(e&&(e=d(e)?e:e[a]||e[g]||e[a.split("/").pop().split("?")[0]]),i.instead?i.instead(a,e,f,g,h):(y[i.url]?i.noexec=!0:y[i.url]=1,f.load(i.url,i.forceCSS||!i.forceJS&&"css"==i.url.split(".").pop().split("?").shift()?"c":c,i.noexec,i.attrs,i.timeout),(d(e)||d(j))&&f.load(function(){k(),e&&e(i.origUrl,h,g),j&&j(i.origUrl,h,g),y[i.url]=2})))}function h(a,b){function c(a,c){if(a){if(e(a))c||(j=function(){var a=[].slice.call(arguments);k.apply(this,a),l()}),g(a,j,b,0,h);else if(Object(a)===a)for(n in m=function(){var b=0,c;for(c in a)a.hasOwnProperty(c)&&b++;return b}(),a)a.hasOwnProperty(n)&&(!c&&!--m&&(d(j)?j=function(){var a=[].slice.call(arguments);k.apply(this,a),l()}:j[n]=function(a){return function(){var b=[].slice.call(arguments);a&&a.apply(this,b),l()}}(k[n])),g(a[n],j,b,n,h))}else!c&&l()}var h=!!a.test,i=a.load||a.both,j=a.callback||f,k=j,l=a.complete||f,m,n;c(h?a.yep:a.nope,!!i),i&&c(i)}var i,j,l=this.yepnope.loader;if(e(a))g(a,0,l,0);else if(w(a))for(i=0;i<a.length;i++)j=a[i],e(j)?g(j,0,l,0):w(j)?B(j):Object(j)===j&&h(j,l);else Object(a)===a&&h(a,l)},B.addPrefix=function(a,b){z[a]=b},B.addFilter=function(a){x.push(a)},B.errorTimeout=1e4,null==b.readyState&&b.addEventListener&&(b.readyState="loading",b.addEventListener("DOMContentLoaded",A=function(){b.removeEventListener("DOMContentLoaded",A,0),b.readyState="complete"},0)),a.yepnope=k(),a.yepnope.executeStack=h,a.yepnope.injectJs=function(a,c,d,e,i,j){var k=b.createElement("script"),l,o,e=e||B.errorTimeout;k.src=a;for(o in d)k.setAttribute(o,d[o]);c=j?h:c||f,k.onreadystatechange=k.onload=function(){!l&&g(k.readyState)&&(l=1,c(),k.onload=k.onreadystatechange=null)},m(function(){l||(l=1,c(1))},e),i?k.onload():n.parentNode.insertBefore(k,n)},a.yepnope.injectCss=function(a,c,d,e,g,i){var e=b.createElement("link"),j,c=i?h:c||f;e.href=a,e.rel="stylesheet",e.type="text/css";for(j in d)e.setAttribute(j,d[j]);g||(n.parentNode.insertBefore(e,n),m(c,0))}})(this,document);
+
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/all/libraries/modernizr/modernizr.min.js?q8qadd"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+yepnope({
+  test: Modernizr.matchmedia,
+  nope: '/sites/all/libraries/media-match/media.match.min.js'
+});
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__yOhrJUBmMpN-jsuQlJYmS8ovkQU6I6KInr295HrSTb0__c--zHhbuOWmkdWkJYXiNWDmkpDRPesmbBjGlQcyqBOY__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var _prum=[['id', '52e95df3abe53d2e33000000'], ['mark', 'firstbyte',
+      (new Date()).getTime()]]; (function() {
+      var s=document.getElementsByTagName('script')[0],
+      p=document.createElement('script');
+      p.async='async'; p.src='//rum-static.pingdom.net/prum.min.js';s.parentNode.insertBefore(p,s);})();
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js___KyvuEvfmewWxdOLBXTYsSUo8Pfm_DijV6fWtGvSL_k__HSKkTgIr7nDcdvQYewipf6v4ak6ZLUOQkwPj44wKouA__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript" async="async" src="https://scholar.google.com/scholar_js/casa.js"></script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__OGPr3wJNGw2BAY3Tj6TjIBwKmjQh5i-7muOaPrr0MFA__fCWiU_pDm6xztXUSccH7zrf5422-kgOkuLdWyafrH_0__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.js"></script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__hqoKSXYZqkcZkXP--ltzsy0Y3txW5TJBw6HT1khr30Y__6_HqNYoBVMxlkWZwdscqCLCtCxpOhl9_rIOpTDdaI0k__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+if(typeof window.MathJax === "undefined") window.MathJax = { menuSettings: { zoom: "Click" } };
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__lrItkPGmrIuH-E_sdUWEK2i9eTqLar16BAHVxNTWqrc__FhtnljBrjuzYWWrT_f4OYV4jtMBituhMpusb3h0m0rY__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-45638026-1", {"cookieDomain":"auto"});ga("set", "page", location.pathname + location.search + location.hash);ga("send", "pageview");ga('create', 'UA-189672-38', 'auto', {'name': 'hwTracker'});
+ga('set', 'anonymizeIp', true);
+ga('hwTracker.send', 'pageview');
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__1PtAOZ8x7l6QAi8D7X6Kj_Y7HcUOFzvWRvvYHUcCT98__U8IB92u_CnnGwJ-X_xaUa9lzsC8OzUfN0WkK2JQfirg__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings,{"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"jcore_1","theme_token":"DtmNNnNxeu9Fvidy41-MKDAur4Nez-QkKIIhkYdt0m8","css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"misc\/ui\/jquery.ui.core.css":1,"misc\/ui\/jquery.ui.theme.css":1,"misc\/ui\/jquery.ui.button.css":1,"misc\/ui\/jquery.ui.resizable.css":1,"misc\/ui\/jquery.ui.dialog.css":1,"misc\/ui\/jquery.ui.tooltip.css":1,"modules\/comment\/comment.css":1,"sites\/all\/modules\/contrib\/date\/date_api\/date.css":1,"sites\/all\/modules\/contrib\/date\/date_popup\/themes\/datepicker.1.7.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_draw\/css\/highwire-draw.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_folders\/highwire_folders.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_responsive\/css\/highwire-responsive.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_saved_searches\/highwire_saved_searches.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_user\/highwire_user.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"modules\/forum\/forum.css":1,"sites\/all\/modules\/contrib\/views\/css\/views.css":1,"sites\/all\/modules\/contrib\/ckeditor\/css\/ckeditor.css":1,"sites\/all\/modules\/contrib\/colorbox\/styles\/default\/colorbox_style.css":1,"sites\/all\/modules\/contrib\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire.style.highwire.css":1,"sites\/all\/modules\/highwire\/highwire\/css\/nlm-elements.css":1,"sites\/all\/modules\/contrib\/panels\/css\/panels.css":1,"sites\/default\/modules\/biorxiv\/css\/biorxiv.css":1,"public:\/\/ctools\/css\/263bfdb18936424f0ade19d6bd885f37.css":1,"\/\/cdn.jsdelivr.net\/qtip2\/2.2.1\/jquery.qtip.min.css":1,"sites\/all\/modules\/contrib\/panels_ajax_tab\/css\/panels_ajax_tab.css":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/css\/highwire_corrections.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire.style.markup.css":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/layouts\/highwire_2col_stacked\/highwire-2col-stacked.css":1,"sites\/all\/modules\/contrib\/forward\/forward.css":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/css\/highwire_share_link.css":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/css\/highwire_copy_permalink.css":1,"sites\/all\/modules\/contrib\/panels\/plugins\/layouts\/flexible\/flexible.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_collection\/css\/highwire_subject_collection.css":1,"sites\/all\/modules\/highwire\/highwire\/css\/highwire.highwire-list-expand.css":1,"public:\/\/ctools\/css\/bab59090150caf0c64e27afa1b36eef1.css":1,"sites\/all\/modules\/contrib\/panels\/plugins\/layouts\/onecol\/onecol.css":1,"sites\/all\/modules\/contrib\/eu_cookie_compliance\/css\/eu_cookie_compliance.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_theme_tools\/css\/font-hwicons.css":1,"sites\/all\/modules\/highwire\/highwire\/highwire_theme_tools\/css\/font-hwicons-glyphs.css":1,"0":1,"sites\/all\/themes\/highwire\/jcore_1\/eu_cookie_compliance.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/font-awesome-ie7.css":1,"sites\/all\/themes\/contrib\/omega\/alpha\/css\/alpha-reset.css":1,"sites\/all\/themes\/contrib\/omega\/alpha\/css\/alpha-mobile.css":1,"sites\/all\/themes\/contrib\/omega\/alpha\/css\/alpha-alpha.css":1,"sites\/all\/themes\/contrib\/omega\/omega\/css\/formalize.css":1,"sites\/all\/themes\/contrib\/omega\/omega\/css\/omega-text.css":1,"sites\/all\/themes\/contrib\/omega\/omega\/css\/omega-branding.css":1,"sites\/all\/themes\/contrib\/omega\/omega\/css\/omega-menu.css":1,"sites\/all\/themes\/contrib\/omega\/omega\/css\/omega-forms.css":1,"sites\/all\/modules\/highwire\/highwire\/css\/highwire-forms.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/mobile-reset.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/font-awesome.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/forms.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/global.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/jquery-ui-elements.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/text.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/colors.css.less":1,"ie::normal::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default.css":1,"ie::normal::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default-normal.css":1,"ie::normal::sites\/all\/themes\/highwire\/jcore_1\/css\/grid\/jcore_default\/normal\/jcore-default-normal-30.css":1,"narrow::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default.css":1,"narrow::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default-narrow.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/grid\/jcore_default\/narrow\/jcore-default-narrow-30.css":1,"normal::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default.css":1,"normal::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default-normal.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/grid\/jcore_default\/normal\/jcore-default-normal-30.css":1,"wide::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default.css":1,"wide::sites\/all\/themes\/highwire\/jcore_1\/css\/jcore-1-jcore-default-wide.css":1,"sites\/all\/themes\/highwire\/jcore_1\/css\/grid\/jcore_default\/wide\/jcore-default-wide-30.css":1,"sites\/default\/modules\/jnl_biorxiv_styles\/css\/biorxiv-styles.css.less":1,"https:\/\/d33xdlntwy0kbs.cloudfront.net\/cshl_custom.css":1},"js":{"sites\/all\/libraries\/enquire.js\/enquire.min.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/js\/highwire_panels_ajax_tab.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/highwire_markup_process\/js\/highwire_openurl.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/highwire_markup_process\/js\/highwire_google_scholar_sprinkle.js":1,"http:\/\/d33xdlntwy0kbs.cloudfront.net\/cshl_custom.js":1,"sites\/all\/modules\/contrib\/eu_cookie_compliance\/js\/eu_cookie_compliance.js":1,"sites\/default\/modules\/jnl_biorxiv_styles\/js\/adv-search-collection-toggle.js":1,"sites\/all\/libraries\/modernizr\/modernizr.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.8\/jquery.min.js":1,"misc\/jquery-extend-3.4.0.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.core.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.widget.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.button.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.mouse.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.draggable.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.position.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.resizable.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.dialog.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.tooltip.min.js":1,"sites\/all\/modules\/contrib\/eu_cookie_compliance\/js\/jquery.cookie-1.4.1.min.js":1,"sites\/all\/modules\/highwire\/highwire\/js\/highwire.equal-heights.js":1,"sites\/all\/modules\/highwire\/highwire\/js\/highwire.panels-ajax-tab.js":1,"sites\/default\/modules\/jnl_biorxiv_styles\/js\/biorxiv-scripts.js":1,"sites\/all\/libraries\/colorbox\/jquery.colorbox-min.js":1,"sites\/all\/modules\/contrib\/colorbox\/js\/colorbox.js":1,"sites\/all\/modules\/contrib\/colorbox\/styles\/default\/colorbox_style.js":1,"https:\/\/scholar.google.com\/scholar_js\/casa.js":1,"sites\/all\/modules\/highwire\/highwire\/highwire_log\/highwire_log.js":1,"sites\/all\/modules\/highwire\/highwire\/highwire_nps_survey\/js\/nps_survey.js":1,"sites\/all\/modules\/highwire\/highwire\/highwire_user\/js\/highwire_user_meta.js":1,"sites\/all\/modules\/contrib\/panels\/js\/panels.js":1,"\/\/cdn.jsdelivr.net\/qtip2\/2.2.1\/jquery.qtip.min.js":1,"sites\/all\/modules\/highwire\/highwire\/js\/highwire.article-citation-author-tooltip.js":1,"sites\/all\/modules\/contrib\/panels_ajax_tab\/js\/panels_ajax_tab.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/highwire_markup_process\/js\/highwire_article_reference_popup.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/highwire_markup_process\/js\/highwire_at_symbol.js":1,"sites\/default\/modules\/contrib\/disqus\/disqus.js":1,"misc\/textarea.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/js\/highwire_share_dialog.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/js\/clipboard.min.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/js\/highwire_clipboard.js":1,"sites\/all\/modules\/highwire\/highwire\/highwire_citation\/plugins\/content_types\/js\/highwire_citation_export.js":1,"sites\/all\/modules\/highwire\/highwire\/plugins\/content_types\/js\/minipanel_dialog_link.js":1,"sites\/all\/modules\/contrib\/service_links\/js\/twitter_button.js":1,"sites\/all\/modules\/contrib\/service_links\/js\/facebook_like.js":1,"sites\/all\/modules\/contrib\/service_links\/js\/google_plus_one.js":1,"sites\/all\/modules\/highwire\/highwire\/js\/highwire.highwire-list-expand.js":1,"sites\/all\/modules\/contrib\/google_analytics\/googleanalytics.js":1,"sites\/all\/themes\/highwire\/jcore_1\/js\/theme-scripts.js":1,"sites\/all\/themes\/contrib\/omega\/omega\/js\/jquery.formalize.js":1,"sites\/all\/themes\/contrib\/omega\/omega\/js\/omega-mediaqueries.js":1,"sites\/all\/themes\/contrib\/omega\/omega\/js\/omega-equalheights.js":1,"sites\/all\/modules\/highwire\/highwire\/highwire_responsive\/js\/highwire-mediaqueries.js":1}},"colorbox":{"opacity":"0.85","current":"{current} of {total}","previous":"\u00ab Prev","next":"Next \u00bb","close":"Close","maxWidth":"98%","maxHeight":"98%","fixed":true,"mobiledetect":true,"mobiledevicewidth":"480px"},"highwire":{"nid":"93445","apath":"\/biorxiv\/early\/2018\/04\/18\/302331.atom","pisa":"biorxiv;302331v1","ac":{"\/biorxiv\/early\/2018\/04\/18\/302331.atom":{"access":{"full":true},"pisa_id":"","apath":"\/biorxiv\/early\/2018\/04\/18\/302331.atom","jcode":"biorxiv"}},"processed":["highwire_math"],"markup":[{"requested":"abstract","variant":"abstract","view":"abstract","pisa":"biorxiv;302331v1"}],"modal_window_width":"560","share_modal_width":"560","share_modal_title":"Share this Article"},"jcarousel":{"ajaxPath":"\/jcarousel\/ajax\/views"},"instances":"{\u0022highwire_abstract_tooltip\u0022:{\u0022content\u0022:{\u0022text\u0022:\u0022\u0022},\u0022style\u0022:{\u0022tip\u0022:{\u0022width\u0022:20,\u0022height\u0022:20,\u0022border\u0022:1,\u0022offset\u0022:0,\u0022corner\u0022:true},\u0022classes\u0022:\u0022qtip-custom hw-tooltip hw-abstract-tooltip qtip-shadow qtip-rounded\u0022,\u0022classes_custom\u0022:\u0022hw-tooltip hw-abstract-tooltip\u0022},\u0022position\u0022:{\u0022at\u0022:\u0022right center\u0022,\u0022my\u0022:\u0022left center\u0022,\u0022viewport\u0022:true,\u0022adjust\u0022:{\u0022method\u0022:\u0022shift\u0022}},\u0022show\u0022:{\u0022event\u0022:\u0022mouseenter click \u0022,\u0022solo\u0022:true},\u0022hide\u0022:{\u0022event\u0022:\u0022mouseleave \u0022,\u0022fixed\u0022:1,\u0022delay\u0022:\u0022100\u0022}},\u0022highwire_author_tooltip\u0022:{\u0022content\u0022:{\u0022text\u0022:\u0022\u0022},\u0022style\u0022:{\u0022tip\u0022:{\u0022width\u0022:15,\u0022height\u0022:15,\u0022border\u0022:1,\u0022offset\u0022:0,\u0022corner\u0022:true},\u0022classes\u0022:\u0022qtip-custom hw-tooltip hw-author-tooltip qtip-shadow qtip-rounded\u0022,\u0022classes_custom\u0022:\u0022hw-tooltip hw-author-tooltip\u0022},\u0022position\u0022:{\u0022at\u0022:\u0022top center\u0022,\u0022my\u0022:\u0022bottom center\u0022,\u0022viewport\u0022:true,\u0022adjust\u0022:{\u0022method\u0022:\u0022\u0022}},\u0022show\u0022:{\u0022event\u0022:\u0022mouseenter \u0022,\u0022solo\u0022:true},\u0022hide\u0022:{\u0022event\u0022:\u0022mouseleave \u0022,\u0022fixed\u0022:1,\u0022delay\u0022:\u0022100\u0022}},\u0022highwire_reflinks_tooltip\u0022:{\u0022content\u0022:{\u0022text\u0022:\u0022\u0022},\u0022style\u0022:{\u0022tip\u0022:{\u0022width\u0022:15,\u0022height\u0022:15,\u0022border\u0022:1,\u0022mimic\u0022:\u0022top center\u0022,\u0022offset\u0022:0,\u0022corner\u0022:true},\u0022classes\u0022:\u0022qtip-custom hw-tooltip hw-ref-link-tooltip qtip-shadow qtip-rounded\u0022,\u0022classes_custom\u0022:\u0022hw-tooltip hw-ref-link-tooltip\u0022},\u0022position\u0022:{\u0022at\u0022:\u0022bottom left\u0022,\u0022my\u0022:\u0022top left\u0022,\u0022viewport\u0022:true,\u0022adjust\u0022:{\u0022method\u0022:\u0022flip\u0022}},\u0022show\u0022:{\u0022event\u0022:\u0022mouseenter \u0022,\u0022solo\u0022:true},\u0022hide\u0022:{\u0022event\u0022:\u0022mouseleave \u0022,\u0022fixed\u0022:1,\u0022delay\u0022:\u0022100\u0022}}}","qtipDebug":"{\u0022leaveElement\u0022:0}","panel_ajax_tab":{"path":"sites\/all\/modules\/contrib\/panels_ajax_tab"},"disqus":{"domain":"biorxivstage","url":"https:\/\/www.biorxiv.org\/content\/10.1101\/302331v1","title":"A novel framework for inferring parameters of transmission from viral sequence data","identifier":"node\/93445"},"panels_ajax_pane":{"new-41":"{\u0022encrypted\u0022:\u0022{\\\u0022encrypted\\\u0022:\\\u0022UNq935UrHrz7GA54rohxERMcb6n1mbRGMQAA1G1gPNlhcuavqDmJ+y9ki4VGIG8dFtpy4rso7Z4dgumu3\\\\\\\/2BzB1zYtuCnrjyOjQ\\\\\\\/trg6S\\\\\\\/SK8b95i+6wdTipM4uko0G0\\\\\\\/bRXtePhkbujjNx7ZJZ23y3NcQem39QElg1qefXFQSRQudza1oOoY30tB4jHPRDtG8Xmp4Rf8IQl+Lg6POgJi3LAMd6CGnvtDFPEb62eO9CSqzAce+KCWhvgB06pk9619UXjbEB\\\\\\\/LscI4x16+gIQM8UMMJ0Em9blvyCtSKeLN8BrLy6xrpwTJ8M3G4Djm5YiRLE56DNji+4KFjnalWIEaHH34GSKgpgJ0gThRm1d\\\\\\\/jZhP\\\\\\\/QKIBp5Cg9uBkW1l9tSX6blE7EB28gLkRR3I228hlsjp1fGpRfLj7bE0UWB+anYnJ1othvWmbtA7VgwiFxIZGKNi\\\\\\\/\\\\\\\/pF9aHhUuoQLGX7BLNQD\\\\\\\/iNWzqL1WXSrkDk8wQZi4jCPO3Anx\\\\\\\/XG01Scd6AcNbnK4ZkboTQgPXuE78fQBdsecNyloj0wLfc5qbsmw0kby5EpuXxP7OZjGPkdj8\\\\\\\/ptXAjwpRd0dJJwWjLUxQXJRlhjWVXq8kYFDwrJa0BEzhz7gzcMiC7Tg+8l77EwAVkNXJxo4SY5\\\\\\\/a8N9mzqs4qZiJIsFjCimAwO2V1MQ\\\\\\\/ZNMAvcwppmL1pe30JpODrpGFeshMwROq7J\\\\\\\/1FjagSj5bfFClG5vEd\\\\\\\/0v2sFY49ZCb58R6sW4pAfgtEROowYpIErNgmiaCFFYOjJAjSqx+Z6l2ReF1I\\\\\\\/p4rOL33k5+\\\\\\\/qvlhwJ2hH5+lr5AhJvEjTpx4C\\\\\\\/BxyO4aTepBGgkhlBCl1rW9teshmbYQM0QaTqu7vky9hqxqqQMRMlw2Imw2UZgah0A6OZYYFabtGe7KT6\\\\\\\/GYrkS\\\\\\\/cr0mf7j2gm74XEPxe26XfIT7aWbkmn8yXsWmdWbIB3Zz3UElxjfF\\\\\\\/oxGh2C\\\\\\\/LyG9tNls0Pz8V1XrwXtyPNuVdD83RS8ogyPDsYkuGRYhy77lT2SsK+z46hAh2Qhs4qeaT\\\\\\\/agRONhmTMdHATxRCxvB5xKQI8pE3MnuVRSdIsCpULVRtAERYm\\\\\\\/6TSoNmtgRw5qeux4tzfaHK+1XDJ+SCKAzdE171HIIaMFRBqYJ9UrURCDpy\\\\\\\/mB7RiRfgvsPJceVWz9VSgXgutL9BCMPtbjNL67lzJIeL8fQDF\\\\\\\/59Nyt1v30fRqP5Dv8KtyeaUf+ococrOZjRB4Q1E5Vr3BRBHR7Ma08Rvcb9KGHmxsxSYaeGj\\\u0022,\\\u0022iv\\\u0022:\\\u0022XK5wyDgQXh8F1D0TFHkXLw==\\\u0022,\\\u0022salt\\\u0022:\\\u0022f9d8845712f72c9fee5db7d9ff111eab\\\u0022}\u0022,\u0022hmac\u0022:\u00221cb9374b9ffcb3fa50b3aee37b8b591641be4e675347367da9838c87c49ef5df\u0022}"},"urlIsAjaxTrusted":{"\/content\/10.1101\/302331v1":true},"ws_fl":{"width":100,"height":21},"ws_gpo":{"size":"","annotation":"","lang":"","callback":"","width":300},"color":{"logo":"https:\/\/www.biorxiv.org\/sites\/default\/files\/bioRxiv_article.jpg"},"highwire_list_expand":{"is_collapsed":"1"},"highwireResponsive":{"enquire_enabled":1,"breakpoints_configured":1,"breakpoints":{"zero":"all and (min-width: 0px)","xsmall":"all and (min-width: 380px)","narrow":"all and (min-width: 768px) and (min-device-width: 768px), (max-device-width: 800px) and (min-width: 768px) and (orientation:landscape)","normal":"all and (min-width: 980px) and (min-device-width: 980px), all and (max-device-width: 1024px) and (min-width: 1024px) and (orientation:landscape)","wide":"all and (min-width: 1220px)"}},"eu_cookie_compliance":{"popup_enabled":1,"popup_agreed_enabled":0,"popup_hide_agreed":0,"popup_clicking_confirmation":1,"popup_scrolling_confirmation":false,"popup_html_info":"\u003Cdiv\u003E\n  \u003Cdiv class =\u0022popup-content info\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022\u003E\n      \u003Cp\u003EWe use cookies on this site to enhance your user experience. By clicking any link on this page you are giving your consent for us to set cookies.\u003C\/p\u003E\n    \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022agree-button eu-cookie-compliance-default-button\u0022\u003EContinue\u003C\/button\u003E\n                    \u003Cbutton type=\u0022button\u0022 class=\u0022find-more-button eu-cookie-compliance-more-button\u0022\u003EFind out more\u003C\/button\u003E\n          \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E","use_mobile_message":false,"mobile_popup_html_info":"\u003Cdiv\u003E\n  \u003Cdiv class =\u0022popup-content info\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022\u003E\n          \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022agree-button eu-cookie-compliance-default-button\u0022\u003EContinue\u003C\/button\u003E\n                    \u003Cbutton type=\u0022button\u0022 class=\u0022find-more-button eu-cookie-compliance-more-button\u0022\u003EFind out more\u003C\/button\u003E\n          \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E\n","mobile_breakpoint":"768","popup_html_agreed":"\u003Cdiv\u003E\n  \u003Cdiv class=\u0022popup-content agreed\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022\u003E\n      \u003Ch2\u003EThank you for accepting cookies\u003C\/h2\u003E\u003Cp\u003EYou can now hide this message or find out more about cookies.\u003C\/p\u003E    \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022hide-popup-button eu-cookie-compliance-hide-button\u0022\u003EHide\u003C\/button\u003E\n              \u003Cbutton type=\u0022button\u0022 class=\u0022find-more-button eu-cookie-compliance-more-button-thank-you\u0022 \u003EMore info\u003C\/button\u003E\n          \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E","popup_use_bare_css":false,"popup_height":"auto","popup_width":"100%","popup_delay":1000,"popup_link":"\/help\/cookie-policy","popup_link_new_window":1,"popup_position":null,"popup_language":"en","store_consent":false,"better_support_for_screen_readers":0,"reload_page":0,"domain":"","popup_eu_only_js":0,"cookie_lifetime":"365","cookie_session":false,"disagree_do_not_show_popup":0,"method":"default","whitelisted_cookies":"","withdraw_markup":"\u003Cbutton type=\u0022button\u0022 class=\u0022eu-cookie-withdraw-tab\u0022\u003EPrivacy settings\u003C\/button\u003E\n\u003Cdiv class=\u0022eu-cookie-withdraw-banner\u0022\u003E\n  \u003Cdiv class=\u0022popup-content info\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022\u003E\n      \u003Cp\u003E\u0026lt;h2\u0026gt;We use cookies on this site to enhance your user experience\u0026lt;\/h2\u0026gt;\u0026lt;p\u0026gt;You have given your consent for us to set cookies.\u0026lt;\/p\u0026gt;\u003C\/p\u003E\n    \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022eu-cookie-withdraw-button\u0022\u003EWithdraw consent\u003C\/button\u003E\n    \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E\n","withdraw_enabled":false},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip","trackColorbox":1,"trackUrlFragments":1},"jnl_biorxiv_styles":{"defaultJCode":"biorxiv"},"omega":{"layouts":{"primary":"normal","order":["narrow","normal","wide"],"queries":{"narrow":"all and (min-width: 768px) and (min-device-width: 768px), (max-device-width: 800px) and (min-width: 768px) and (orientation:landscape)","normal":"all and (min-width: 980px) and (min-device-width: 980px), all and (max-device-width: 1024px) and (min-width: 1024px) and (orientation:landscape)","wide":"all and (min-width: 1220px)"}}}});
+//--><!]]>
+</script>
+    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  </head>
+  <body class="html not-front not-logged-in page-node page-node- page-node-93445 node-type-highwire-article context-content hw-default-jcode-biorxiv hw-article-type-article hw-article-category-new-results">
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M677548" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script type="text/javascript">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0];var j=d.createElement(s);var dl=l!='dataLayer'?'&l='+l:'';j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;j.type='text/javascript';j.async=true;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M677548');</script>
+<!-- End Google Tag Manager -->
+    <div id="skip-link">
+      <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+    </div>
+        <div class="page clearfix page-box-shadows footer-borders panels-page panels-layout-jcore_2col" id="page">
+      <header id="section-header" class="section section-header">
+    
+  <div id="zone-branding" class="zone zone-branding clearfix print-display-block container-30">
+    <div class="grid-15 prefix-1 region region-branding print-display-block" id="region-branding">
+  <div class="region-inner region-branding-inner">
+        <div class="branding-data clearfix">
+            <div class="logo-img">
+        <a href="/" rel="home" class="" data-icon-position="" data-hide-link-title="0"><img alt="bioRxiv" src="https://www.biorxiv.org/sites/default/files/bioRxiv_article.jpg" /></a>      </div>
+                </div>
+          </div>
+</div><div class="grid-11 suffix-1 region region-branding-second print-hidden" id="region-branding-second">
+  <div class="region-inner region-branding-second-inner">
+    <div class="block block-system block-menu block-main-menu block-system-main-menu odd block-without-title" id="block-system-main-menu">
+  <div class="block-inner clearfix">
+                
+    <div class="content clearfix">
+      <nav class="menubar-nav"><ul class="menu" role="menu"><li class="first leaf" role="menuitem"><a href="/" title="" class="" data-icon-position="" data-hide-link-title="0">Home</a></li>
+<li class="leaf" role="menuitem"><a href="/about-biorxiv" class="" data-icon-position="" data-hide-link-title="0">About</a></li>
+<li class="leaf" role="menuitem"><a href="/submit-a-manuscript" class="" data-icon-position="" data-hide-link-title="0">Submit</a></li>
+<li class="last leaf" role="menuitem"><a href="/content/alertsrss" title="" class="" data-icon-position="" data-hide-link-title="0">ALERTS / RSS</a></li>
+</ul></nav>    </div>
+  </div>
+</div><div class="block block-panels-mini block-biorxiv-search-box block-panels-mini-biorxiv-search-box even block-without-title" id="block-panels-mini-biorxiv-search-box">
+  <div class="block-inner clearfix">
+                
+    <div class="content clearfix">
+      <div class="panel-display panel-1col clearfix" id="mini-panel-biorxiv_search_box">
+  <div class="panel-panel panel-col">
+    <div><div class="panel-pane pane-highwire-seach-quicksearch" >
+  
+      
+  
+  <div class="pane-content">
+    <form class="highwire-quicksearch button-style-mini button-style-mini" action="/content/10.1101/302331v1" method="post" id="highwire-search-quicksearch-form-0" accept-charset="UTF-8"><div><div class="form-item form-item-label-invisible form-type-textfield form-item-keywords">
+  <label class="element-invisible" for="edit-keywords">Search for this keyword </label>
+ <input placeholder="Search" type="text" id="edit-keywords" name="keywords" value="" size="60" maxlength="128" class="form-text" />
+</div>
+<div class="button-wrapper button-mini"><i class="icon-search"></i><input data-icon-only="1" data-font-icon="icon-search" data-icon-position="after" type="submit" id="edit-submit--2" name="op" value="Search" class="form-submit" /></div><input type="hidden" name="form_build_id" value="form-an3bl4e-EMb6cQwuh7MqP_E2W9CgOnT0cRj6uR8YZVk" />
+<input type="hidden" name="form_id" value="highwire_search_quicksearch_form_0" />
+</div></form>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-custom pane-2 advanced-search-link" >
+  
+      
+  
+  <div class="pane-content">
+    <a href="/search">Advanced Search</a>  </div>
+
+  
+  </div>
+</div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>  </div>
+</div>  </div>
+  
+  <div id="zone-header" class="zone zone-header clearfix container-30">
+  	      </div>
+</header>    
+      <section id="section-content" class="section section-content">
+    
+  <div id="zone-content" class="zone zone-content clearfix container-30">    
+        
+    <div class="grid-28 suffix-1 prefix-1 region region-content" id="region-content">
+  <div class="region-inner region-content-inner">
+    <a id="main-content"></a>
+                        <div class="block block-system block-main block-system-main odd block-without-title" id="block-system-main">
+  <div class="block-inner clearfix">
+                
+    <div class="content clearfix">
+      <div class="panel-display panels-960-layout jcore-2col-layout" >
+	  
+  <div class="panel-row-wrapper clearfix">
+		
+		<div class="main-content-wrapper grid-17 suffix-1 alpha">
+			<div class="panel-panel panel-region-content">
+			  <div class="inside"><div class="panel-pane pane-highwire-article-citation" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="highwire-article-citation highwire-citation-type-highwire-article" data-node-nid="93445" id="node93445" data-pisa="biorxiv;302331v1" data-pisa-master="biorxiv;302331" data-apath="/biorxiv/early/2018/04/18/302331.atom" data-hw-author-tooltip-instance="highwire_author_tooltip"><div  class="highwire-cite highwire-cite-highwire-article highwire-citation-biorxiv-article-top clearfix has-author-tooltip" >
+
+      <span class="biorxiv-article-type">
+        New Results    </span>
+  
+        <h1 class="highwire-cite-title" id="page-title">A novel framework for inferring parameters of transmission from viral sequence data</h1>  
+      <div  class="highwire-cite-authors" ><span  class="highwire-citation-authors"><span class="highwire-citation-author first" data-delta="0"><span class="nlm-given-names">Casper K</span> <span class="nlm-surname">Lumby</span></span>, <span class="highwire-citation-author" data-delta="1"><span class="nlm-given-names">Nuno R</span> <span class="nlm-surname">Nene</span></span>, <span class="highwire-citation-author" data-delta="2"><span class="nlm-given-names">Christopher J R</span> <span class="nlm-surname">Illingworth</span></span></span></div>
+  
+      <div  class="highwire-cite-metadata" ><span  class="highwire-cite-metadata-doi highwire-cite-metadata"><span class="label">doi:</span> https://doi.org/10.1101/302331 </span></div>
+  
+  
+  </div>
+<div id="hw-article-author-popups-node93445" style="display: none;"><div class="author-tooltip-0"><div class="author-tooltip-name">Casper K Lumby </div><div class="author-tooltip-affiliation"><span class="author-tooltip-text"><div class='author-affiliation'><span class='nlm-sup'>1</span><span class='nlm-institution'>Department of Genetics, University of Cambridge</span>, Cambridge, <span class='nlm-country'>UK</span></div></span></div><ul class="author-tooltip-find-more"><li class="author-tooltip-gs-link first"><a href="/lookup/google-scholar?link_type=googlescholar&amp;gs_type=author&amp;author%5B0%5D=Casper%2BK%2BLumby%2B" target="_blank" class="" data-icon-position="" data-hide-link-title="0">Find this author on Google Scholar</a></li><li class="author-tooltip-pubmed-link"><a href="/lookup/external-ref?access_num=Lumby%20CK&amp;link_type=AUTHORSEARCH" target="_blank" class="" data-icon-position="" data-hide-link-title="0">Find this author on PubMed</a></li><li class="author-site-search-link last"><a href="/search/author1%3ACasper%2BK%2BLumby%2B" rel="nofollow" class="" data-icon-position="" data-hide-link-title="0">Search for this author on this site</a></li></ul></div><div class="author-tooltip-1"><div class="author-tooltip-name">Nuno R Nene </div><div class="author-tooltip-affiliation"><span class="author-tooltip-text"><div class='author-affiliation'><span class='nlm-sup'>1</span><span class='nlm-institution'>Department of Genetics, University of Cambridge</span>, Cambridge, <span class='nlm-country'>UK</span></div></span></div><ul class="author-tooltip-find-more"><li class="author-tooltip-gs-link first"><a href="/lookup/google-scholar?link_type=googlescholar&amp;gs_type=author&amp;author%5B0%5D=Nuno%2BR%2BNene%2B" target="_blank" class="" data-icon-position="" data-hide-link-title="0">Find this author on Google Scholar</a></li><li class="author-tooltip-pubmed-link"><a href="/lookup/external-ref?access_num=Nene%20NR&amp;link_type=AUTHORSEARCH" target="_blank" class="" data-icon-position="" data-hide-link-title="0">Find this author on PubMed</a></li><li class="author-site-search-link last"><a href="/search/author1%3ANuno%2BR%2BNene%2B" rel="nofollow" class="" data-icon-position="" data-hide-link-title="0">Search for this author on this site</a></li></ul></div><div class="author-tooltip-2"><div class="author-tooltip-name">Christopher J R Illingworth </div><div class="author-tooltip-affiliation"><span class="author-tooltip-text"><div class='author-affiliation'><span class='nlm-sup'>1</span><span class='nlm-institution'>Department of Genetics, University of Cambridge</span>, Cambridge, <span class='nlm-country'>UK</span></div><div class='author-affiliation'><span class='nlm-sup'>2</span><span class='nlm-institution'>Department of Applied Mathematics and Theoretical Physics, University of Cambridge</span>, Cambridge, <span class='nlm-country'>UK</span></div></span></div><ul class="author-tooltip-find-more"><li class="author-tooltip-gs-link first"><a href="/lookup/google-scholar?link_type=googlescholar&amp;gs_type=author&amp;author%5B0%5D=Christopher%2BJ%2BR%2BIllingworth%2B" target="_blank" class="" data-icon-position="" data-hide-link-title="0">Find this author on Google Scholar</a></li><li class="author-tooltip-pubmed-link"><a href="/lookup/external-ref?access_num=Illingworth%20CJ&amp;link_type=AUTHORSEARCH" target="_blank" class="" data-icon-position="" data-hide-link-title="0">Find this author on PubMed</a></li><li class="author-site-search-link last"><a href="/search/author1%3AChristopher%2BJ%2BR%2BIllingworth%2B" rel="nofollow" class="" data-icon-position="" data-hide-link-title="0">Search for this author on this site</a></li></ul></div></div></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-highwire-panel-tabs pane-panels-ajax-tab-tabs" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="item-list"><ul class="tabs inline panels-ajax-tab"><li class="first"><a href="/content/10.1101/302331v1" class="panels-ajax-tab-tab" data-panel-name="biorxiv_tab_art" data-target-id="highwire_article_tabs" data-entity-context="node:93445" data-trigger="" data-url-enabled="1">Abstract</a><a href="/panels_ajax_tab/biorxiv_tab_art/node:93445/1" rel="nofollow" style="display:none" class="js-crawler-link"></a></li><li><a href="/content/10.1101/302331v1.full-text" class="panels-ajax-tab-tab" data-panel-name="article_tab_full_text" data-target-id="highwire_article_tabs" data-entity-context="node:93445" data-trigger="full-text" data-url-enabled="1">Full Text</a><a href="/panels_ajax_tab/article_tab_full_text/node:93445/1" rel="nofollow" style="display:none" class="js-crawler-link"></a></li><li><a href="/content/10.1101/302331v1.article-info" class="panels-ajax-tab-tab" data-panel-name="biorxiv_tab_info" data-target-id="highwire_article_tabs" data-entity-context="node:93445" data-trigger="article-info" data-url-enabled="1">Info/History</a><a href="/panels_ajax_tab/biorxiv_tab_info/node:93445/1" rel="nofollow" style="display:none" class="js-crawler-link"></a></li><li><a href="/content/10.1101/302331v1.article-metrics" class="panels-ajax-tab-tab" data-panel-name="article_tab_metrics" data-target-id="highwire_article_tabs" data-entity-context="node:93445" data-trigger="article-metrics" data-url-enabled="1">Metrics</a><a href="/panels_ajax_tab/article_tab_metrics/node:93445/1" rel="nofollow" style="display:none" class="js-crawler-link"></a></li><li class="last"><a href="/content/10.1101/302331v1.full.pdf+html" class="panels-ajax-tab-tab" data-panel-name="biorxiv_tab_pdf" data-target-id="highwire_article_tabs" data-entity-context="node:93445" data-trigger="full.pdf+html" data-url-enabled="1"><i class="icon-file-alt"></i> Preview PDF</a><a href="/panels_ajax_tab/biorxiv_tab_pdf/node:93445/1" rel="nofollow" style="display:none" class="js-crawler-link"></a></li></ul></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-highwire-panel-tabs-container" >
+  
+      
+  
+  <div class="pane-content">
+    <div data-panels-ajax-tab-preloaded="biorxiv_tab_art" id="panels-ajax-tab-container-highwire_article_tabs" class="panels-ajax-tab-container"><div class="panels-ajax-tab-loading" style ="display:none"><img class="loading" src="https://www.biorxiv.org/sites/all/modules/contrib/panels_ajax_tab/images/loading.gif" alt="Loading" title="Loading" /></div><div class="panels-ajax-tab-wrap-biorxiv_tab_art"><div class="panel-display panel-1col clearfix" >
+  <div class="panel-panel panel-col">
+    <div><div class="panel-pane pane-highwire-markup" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="highwire-markup"><div xmlns="http://www.w3.org/1999/xhtml" id="content-block-markup" data-highwire-cite-ref-tooltip-instance="highwire_reflinks_tooltip" xmlns:xhtml="http://www.w3.org/1999/xhtml"><div class="article abstract-view "><span class="highwire-journal-article-marker-start"></span><div class="section abstract" id="abstract-1"><h2 class="">Abstract</h2><p id="p-2">Transmission between hosts is a critical part of the viral lifecycle. Recent studies of viral transmission have used genome sequence data to evaluate the number of particles transmitted between hosts, and the role of selection as it operates during the transmission process. However, the interpretation of sequence data describing transmission events is a challenging task. We here present a novel and comprehensive framework for using short-read sequence data to understand viral transmission events. Our model describes transmission as an event involving whole viruses, rather than independent alleles. We demonstrate how selection and noisy sequence data may each affect inferences of the population bottleneck, and identify circumstances in which selection for increased viral transmission may or may not be identified. Applying our model to data from a previous experimental transmission study, we show that our approach grants a more quantitative insight into viral transmission, inferring that between 2 to 6 viruses initiated infection, and allowing for a more informed interpretation of transmission events. While our model is here applied to influenza transmission, the framework we present is highly generalisable to other systems. Our work provides new opportunities for studying viral transmission.</p></div><span class="highwire-journal-article-marker-end"></span></div><span id="related-urls"></span></div></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-biorxiv-copyright" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="field field-name-field-highwire-copyright field-type-text field-label-inline clearfix"><div class="field-label">Copyright&nbsp;</div><div class="field-items"><div class="field-item even">The copyright holder for this preprint is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity.<span class="license-type"> It is made available under a <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" class="" data-icon-position="" data-hide-link-title="0">CC-BY-NC-ND 4.0 International license</a>.</span></div></div></div>  </div>
+
+  
+  </div>
+</div>
+  </div>
+</div>
+</div></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-disqus-comment" >
+  
+      
+  
+  <div class="pane-content">
+    <div id="disqus_thread"><noscript><p><a href="http://biorxivstage.disqus.com/?url=https%3A%2F%2Fwww.biorxiv.org%2Fcontent%2F10.1101%2F302331v1" class="" data-icon-position="" data-hide-link-title="0">View the discussion thread.</a></p></noscript></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-highwire-back-to-top" >
+  
+      
+  
+  <div class="pane-content">
+    <a href="#page" class="back-to-top" data-icon-position="" data-hide-link-title="0"><i class="icon-chevron-up"></i> Back to top</a>  </div>
+
+  
+  </div>
+</div>
+			</div>
+		</div>
+		
+		<div class="sidebar-right-wrapper grid-10 omega">
+			<div class="panel-panel panel-region-sidebar-right">
+			  <div class="inside"><div class="panel-pane pane-highwire-node-pager" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="pager highwire-pager pager-mini clearfix highwire-node-pager highwire-article-pager"><span class="pager-prev"><a href="/content/10.1101/143354v3" title="Classes and continua of hippocampal CA1 inhibitory neurons revealed by single-cell transcriptomics" rel="prev" class="pager-link-prev link-icon"><i class="icon-circle-arrow-left"></i> <span class="title">Previous</span></a></span><span class="pager-next"><a href="/content/10.1101/283929v2-0" title="Cell-type heterogeneity in adipose tissue is associated with complex traits and reveals disease-relevant cell-specific eQTLs" rel="next" class="pager-link-next link-icon-right link-icon"><span class="title">Next</span> <i class="icon-circle-arrow-right"></i></a></span></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-custom pane-1" >
+  
+      
+  
+  <div class="pane-content">
+    Posted&nbsp;April 18, 2018.  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-panels-mini pane-biorxiv-art-tools" >
+  
+      
+  
+  <div class="pane-content">
+    <div id="mini-panel-biorxiv_art_tools" class="highwire-2col-stacked panel-display">
+	  
+  <div class="panel-row-wrapper clearfix">
+		<div class="content-left-wrapper content-column">
+          <div class="panel-panel panel-region-content-left">
+            <div class="inside"><div class="panel-pane pane-highwire-variant-link" >
+  
+      
+  
+  <div class="pane-content">
+    <a href="/content/10.1101/302331v1.full.pdf" target="_self" class="article-dl-pdf-link link-icon"><i class="icon-external-link-sign"></i> <span class="title">Download PDF</span></a>  </div>
+
+  
+  </div>
+</div>
+          </div>
+        </div>
+        
+        <div class="content-right-wrapper content-column">
+          <div class="panel-panel panel-region-content-right">
+            <div class="inside"><div class="panel-pane pane-minipanel-dialog-link pane-biorxiv-art-email" >
+  
+      
+  
+  <div class="pane-content">
+    <div class='minipanel-dialog-wrapper'><div class='minipanel-dialog-link-link'><a href="/" oncontextmenu="javascript: return false;" class="minipanel-dialog-link-trigger" title="Email this Article" data-icon-position="" data-hide-link-title="0"><i class = 'icon-envelope'></i> Email</a></div><div class='minipanel-dialog-link-mini' style='display:none'><div class="panel-display panel-1col clearfix" id="mini-panel-biorxiv_art_email">
+  <div class="panel-panel panel-col">
+    <div><div class="panel-pane pane-block pane-forward-form pane-forward" >
+  
+      
+  
+  <div class="pane-content">
+    <form action="/content/10.1101/302331v1" method="post" id="forward-form" accept-charset="UTF-8"><div><div id="edit-instructions" class="form-item form-item-label-before form-type-item">
+ <p>Thank you for your interest in spreading the word about bioRxiv.</p><p>NOTE: Your email address is requested solely to identify you as the sender of this article.</p>
+</div>
+<div class="form-item form-item-label-before form-type-textfield form-item-email">
+  <label for="edit-email">Your Email <span class="form-required" title="This field is required.">*</span></label>
+ <input type="text" id="edit-email" name="email" value="" size="58" maxlength="256" class="form-text required" />
+</div>
+<div class="form-item form-item-label-before form-type-textfield form-item-name">
+  <label for="edit-name">Your Name <span class="form-required" title="This field is required.">*</span></label>
+ <input type="text" id="edit-name" name="name" value="" size="58" maxlength="256" class="form-text required" />
+</div>
+<div class="form-item form-item-label-before form-type-textarea form-item-recipients">
+  <label for="edit-recipients">Send To <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea id="edit-recipients" name="recipients" cols="50" rows="5" class="form-textarea required"></textarea></div>
+<div class="description">Enter multiple addresses on separate lines or separate them with commas.</div>
+</div>
+<div id="edit-page" class="form-item form-item-label-before form-type-item">
+  <label for="edit-page">You are going to email the following </label>
+ <a href="/content/10.1101/302331v1" class="active" data-icon-position="" data-hide-link-title="0">A novel framework for inferring parameters of transmission from viral sequence data</a>
+</div>
+<div id="edit-subject" class="form-item form-item-label-before form-type-item">
+  <label for="edit-subject">Message Subject </label>
+ (Your Name) has forwarded a page to you from bioRxiv
+</div>
+<div id="edit-body" class="form-item form-item-label-before form-type-item">
+  <label for="edit-body">Message Body </label>
+ (Your Name) thought you would like to see this page from the bioRxiv website.
+</div>
+<div class="form-item form-item-label-before form-type-textarea form-item-message">
+  <label for="edit-message--2">Your Personal Message </label>
+ <div class="form-textarea-wrapper resizable"><textarea id="edit-message--2" name="message" cols="50" rows="10" class="form-textarea"></textarea></div>
+</div>
+<input type="hidden" name="path" value="node/93445" />
+<input type="hidden" name="path_cid" value="" />
+<input type="hidden" name="forward_footer" value=" " />
+<input type="hidden" name="form_build_id" value="form-2p9GKnYQGfWSBXGRe1XGdqnpS3T4bmwpzM2gsqmDWbA" />
+<input type="hidden" name="form_id" value="forward_form" />
+<div class="form-actions form-wrapper" id="edit-actions"><input type="submit" id="edit-submit" name="op" value="Send Message" class="form-submit" /></div></div></form>  </div>
+
+  
+  </div>
+</div>
+  </div>
+</div>
+</div></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-highwire-share-link highwire_clipboard_link_ajax"  id="shareit">
+  
+      
+  
+  <div class="pane-content">
+    <a href="/" class="link-icon"><i class="icon-share-alt"></i> <span class="title">Share</span></a>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-panels-mini pane-biorxiv-share highwire_clipboard_form_ajax_shareit" >
+  
+      
+  
+  <div class="pane-content">
+    
+<div class="panel-display omega-12-onecol" id="mini-panel-biorxiv_share">
+
+		  <div class="panel-panel grid-12 panel-region-preface">
+		  <div class="inside"><div class="panel-pane pane-highwire-article-citation" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="highwire-article-citation highwire-citation-type-highwire-article" data-node-nid="93445" id="node93445--2" data-pisa="biorxiv;302331v1" data-pisa-master="biorxiv;302331" data-seqnum="93445" data-apath="/biorxiv/early/2018/04/18/302331.atom"><div  class="highwire-cite highwire-cite-highwire-article highwire-citation-biorxiv-article-pap-list clearfix" >
+
+      <div class="highwire-cite-title" >
+      <div class="highwire-cite-title">A novel framework for inferring parameters of transmission from viral sequence data</div>    </div>
+  
+      <div  class="highwire-cite-authors" ><span  class="highwire-citation-authors"><span class="highwire-citation-author first" data-delta="0"><span class="nlm-given-names">Casper K</span> <span class="nlm-surname">Lumby</span></span>, <span class="highwire-citation-author" data-delta="1"><span class="nlm-given-names">Nuno R</span> <span class="nlm-surname">Nene</span></span>, <span class="highwire-citation-author" data-delta="2"><span class="nlm-given-names">Christopher J R</span> <span class="nlm-surname">Illingworth</span></span></span></div>
+  
+      <div  class="highwire-cite-metadata" ><span  class="highwire-cite-metadata-journal highwire-cite-metadata">bioRxiv </span><span  class="highwire-cite-metadata-pages highwire-cite-metadata">302331; </span><span  class="highwire-cite-metadata-doi highwire-cite-metadata"><span class="doi_label">doi:</span> https://doi.org/10.1101/302331 </span></div>
+  
+  
+  </div>
+</div>  </div>
+
+  
+  </div>
+</div>
+	  </div>
+	
+  <div class="panel-panel grid-12 panel-region-content">
+  	<div class="inside"><div class="panel-pane pane-highwire-article-clipboard-copy" >
+  
+      
+  
+  <div class="pane-content">
+    <div class = "clipboard-copy">
+  <span class="label-url">
+    <label for="dynamic">Share This Article:</label>
+  </span>
+  <span class="input-text-url">
+    <input type="text" id="dynamic" value="https://www.biorxiv.org/content/10.1101/302331v1" size="50"/>
+  </span>
+  <span class="copy-button button">
+    <button id="copy-dynamic" class="clipboardjs-button" data-clipboard-target="#dynamic" data-clipboard-alert-style="tooltip" data-clipboard-alert-text="Copied!">Copy</button>
+  </span>
+</div>
+  </div>
+
+  
+  </div>
+</div>
+  </div>
+	
+		  <div class="panel-panel grid-12 panel-region-postscript">
+	    <div class="inside"><div class="panel-pane pane-service-links" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="service-links"><a href="http://digg.com/submit?phase=2&amp;url=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;title=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="digg" title="Digg this post on digg.com" class="service-links-digg" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/digg.png" alt="Digg logo" /></a> <a href="http://reddit.com/submit?url=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;title=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="reddit" title="Submit this post on reddit.com" class="service-links-reddit" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/reddit.png" alt="Reddit logo" /></a> <a href="http://twitter.com/share?url=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;text=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="twitter" title="Share this on Twitter" class="service-links-twitter" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/twitter.png" alt="Twitter logo" /></a> <a href="http://www.citeulike.org/posturl?url=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;title=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="citeulike" title="Share on CiteULike" class="service-links-citeulike" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/citeyoulike.png" alt="CiteULike logo" /></a> <a href="http://www.facebook.com/sharer.php?u=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;t=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="facebook" title="Share on Facebook" class="service-links-facebook" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/fb-blue.png" alt="Facebook logo" /></a> <a href="http://www.google.com/bookmarks/mark?op=add&amp;bkmk=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;title=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="google" title="Bookmark this post on Google" class="service-links-google" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/google-32.png" alt="Google logo" /></a> <a href="http://www.mendeley.com/import/?url=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;title=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data" id="mendeley" title="Share on Mendeley" class="service-links-mendeley" rel="nofollow" data-icon-position="" data-hide-link-title="0"><img src="https://www.biorxiv.org/sites/all/modules/highwire/highwire/images/mendeley.png" alt="Mendeley logo" /></a></div>  </div>
+
+  
+  </div>
+</div>
+	  </div>
+	
+</div>
+  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-minipanel-dialog-link pane-biorxiv-cite-tool" >
+  
+      
+  
+  <div class="pane-content">
+    <div class='minipanel-dialog-wrapper'><div class='minipanel-dialog-link-link'><a href="/" oncontextmenu="javascript: return false;" class="minipanel-dialog-link-trigger link-icon" title="Citation Tools"><i class="icon-globe"></i> <span class="title">Citation Tools</span></a></div><div class='minipanel-dialog-link-mini' style='display:none'><div class="panel-display panel-1col clearfix" id="mini-panel-biorxiv_cite_tool">
+  <div class="panel-panel panel-col">
+    <div><div class="panel-pane pane-highwire-citation-export" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="highwire-citation-export">  
+  <div class="highwire-citation-info">
+      <div class="highwire-article-citation highwire-citation-type-highwire-article" data-node-nid="93445" id="node93445--3" data-pisa="biorxiv;302331v1" data-pisa-master="biorxiv;302331" data-seqnum="93445" data-apath="/biorxiv/early/2018/04/18/302331.atom"><div  class="highwire-cite highwire-cite-highwire-article highwire-citation-biorxiv-article-pap-list clearfix" >
+
+      <div class="highwire-cite-title" >
+      <div class="highwire-cite-title">A novel framework for inferring parameters of transmission from viral sequence data</div>    </div>
+  
+      <div  class="highwire-cite-authors" ><span  class="highwire-citation-authors"><span class="highwire-citation-author first" data-delta="0"><span class="nlm-given-names">Casper K</span> <span class="nlm-surname">Lumby</span></span>, <span class="highwire-citation-author" data-delta="1"><span class="nlm-given-names">Nuno R</span> <span class="nlm-surname">Nene</span></span>, <span class="highwire-citation-author" data-delta="2"><span class="nlm-given-names">Christopher J R</span> <span class="nlm-surname">Illingworth</span></span></span></div>
+  
+      <div  class="highwire-cite-metadata" ><span  class="highwire-cite-metadata-journal highwire-cite-metadata">bioRxiv </span><span  class="highwire-cite-metadata-pages highwire-cite-metadata">302331; </span><span  class="highwire-cite-metadata-doi highwire-cite-metadata"><span class="doi_label">doi:</span> https://doi.org/10.1101/302331 </span></div>
+  
+  
+  </div>
+</div>  </div>
+  <div class="highwire-citation-formats">
+  	      <h2>Citation Manager Formats</h2>
+        <div class="highwire-citation-formats-links">
+      <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.spage&amp;rft.epage&amp;rft.atitle=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data&amp;rft.volume&amp;rft.issue&amp;rft.date=2018-01-01%2000%3A00%3A00&amp;rft.stitle&amp;rft.jtitle=bioRxiv&amp;rft.au=Lumby%2C+Casper+K&amp;rft.au=Nene%2C+Nuno+R&amp;rft.au=Illingworth%2C+Christopher+J+R"></span><ul class="hw-citation-links inline button button-alt button-grid clearfix"><li class="bibtext first"><a href="/highwire/citation/93445/bibtext" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">BibTeX</a></li><li class="bookends"><a href="/highwire/citation/93445/bookends" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">Bookends</a></li><li class="easybib"><a href="/highwire/citation/93445/easybib" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">EasyBib</a></li><li class="endnote-tagged"><a href="/highwire/citation/93445/endnote-tagged" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">EndNote (tagged)</a></li><li class="endnote-8-xml"><a href="/highwire/citation/93445/endnote-8-xml" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">EndNote 8 (xml)</a></li><li class="medlars"><a href="/highwire/citation/93445/medlars" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">Medlars</a></li><li class="mendeley"><a href="/highwire/citation/93445/mendeley" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">Mendeley</a></li><li class="papers"><a href="/highwire/citation/93445/papers" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">Papers</a></li><li class="refworks-tagged"><a href="/highwire/citation/93445/refworks-tagged" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">RefWorks Tagged</a></li><li class="reference-manager"><a href="/highwire/citation/93445/reference-manager" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">Ref Manager</a></li><li class="ris"><a href="/highwire/citation/93445/ris" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">RIS</a></li><li class="zotero last"><a href="/highwire/citation/93445/zotero" class="hw-download-citation-link" data-icon-position="" data-hide-link-title="0">Zotero</a></li></ul>    </div>
+  </div>
+</div>
+  </div>
+
+  
+  </div>
+</div>
+  </div>
+</div>
+</div></div>  </div>
+
+  
+  </div>
+</div>
+          </div>
+        </div>
+	</div> <!-- /.panel-row-wrapper -->	
+	
+	</div>
+
+  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-service-links" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="service-links"><div class="item-list"><ul><li class="first"><a href="http://twitter.com/share?url=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;count=horizontal&amp;via=&amp;text=A%20novel%20framework%20for%20inferring%20parameters%20of%20transmission%20from%20viral%20sequence%20data&amp;counturl=https%3A//www.biorxiv.org/content/10.1101/302331v1" class="twitter-share-button service-links-twitter-widget" id="twitter_widget" title="Tweet This" rel="nofollow" data-icon-position="" data-hide-link-title="0"><span class="element-invisible">Tweet Widget</span></a></li><li><a href="http://www.facebook.com/plugins/like.php?href=https%3A//www.biorxiv.org/content/10.1101/302331v1&amp;layout=button_count&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;width=100&amp;height=21&amp;font=&amp;locale=" id="facebook_like" title="I Like it" class="service-links-facebook-like" rel="nofollow" data-icon-position="" data-hide-link-title="0"><span class="element-invisible">Facebook Like</span></a></li><li class="last"><a href="https://www.biorxiv.org/content/10.1101/302331v1" id="google_plus_one" title="Plus it" class="service-links-google-plus-one" rel="nofollow" data-icon-position="" data-hide-link-title="0"><span class="element-invisible">Google Plus One</span></a></li></ul></div></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-highwire-article-collections" >
+  
+        <h2 class="pane-title">Subject Area</h2>
+    
+  
+  <div class="pane-content">
+    <div class="highwire-list-wrapper highwire-article-collections"><div class="highwire-list"><ul class="highwire-article-collection-term-list"><li class="first last odd"><span class="highwire-article-collection-term"><a href="/collection/evolutionary-biology" class="highlight" data-icon-position="" data-hide-link-title="0">Evolutionary Biology<i class="icon-caret-right"></i>
+</a></span></li></ul></div></div>  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-panels-mini pane-biorxiv-subject-collections block-style-col2" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="panel-flexible panels-flexible-8 clearfix" id="mini-panel-biorxiv_subject_collections">
+<div class="panel-flexible-inside panels-flexible-8-inside">
+<div class="panels-flexible-region panels-flexible-region-8-center panels-flexible-region-first panels-flexible-region-last">
+  <div class="inside panels-flexible-region-inside panels-flexible-region-8-center-inside panels-flexible-region-inside-first panels-flexible-region-inside-last">
+<div class="panel-pane pane-snippet" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="snippet biorxiv-subject-areas-table-title" id="biorxiv-subject-areas-table-title">
+  
+      
+  <div class="snippet-content">
+    <b>Subject Areas</b>  </div>
+
+</div>
+  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-snippet" >
+  
+      
+  
+  <div class="pane-content">
+    <div class="snippet biorxiv-subject-areas-view-papers" id="biorxiv-subject-areas-view-papers">
+  
+      
+  <div class="snippet-content">
+    <a href="/content/early/recent"><strong>All Articles</strong></a>  </div>
+
+</div>
+  </div>
+
+  
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-highwire-subject-collections" >
+  
+      
+  
+  <div class="pane-content">
+    <ul id="collection" class="collection highwire-list-expand"><li class="outer collection depth-2  child first"><div class = "data-wrapper"><a href="/collection/animal-behavior-and-cognition" class="" data-icon-position="" data-hide-link-title="0">Animal Behavior and Cognition</a> <span class = "article-count">(1789)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/biochemistry" class="" data-icon-position="" data-hide-link-title="0">Biochemistry</a> <span class = "article-count">(3141)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/bioengineering" class="" data-icon-position="" data-hide-link-title="0">Bioengineering</a> <span class = "article-count">(2136)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/bioinformatics" class="" data-icon-position="" data-hide-link-title="0">Bioinformatics</a> <span class = "article-count">(11098)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/biophysics" class="" data-icon-position="" data-hide-link-title="0">Biophysics</a> <span class = "article-count">(4575)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/cancer-biology" class="" data-icon-position="" data-hide-link-title="0">Cancer Biology</a> <span class = "article-count">(3584)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/cell-biology" class="" data-icon-position="" data-hide-link-title="0">Cell Biology</a> <span class = "article-count">(5072)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/clinical-trials" class="" data-icon-position="" data-hide-link-title="0">Clinical Trials</a> <span class = "article-count">(137)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/developmental-biology" class="" data-icon-position="" data-hide-link-title="0">Developmental Biology</a> <span class = "article-count">(3114)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/ecology" class="" data-icon-position="" data-hide-link-title="0">Ecology</a> <span class = "article-count">(4915)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/epidemiology" class="" data-icon-position="" data-hide-link-title="0">Epidemiology</a> <span class = "article-count">(2044)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/evolutionary-biology" class="" data-icon-position="" data-hide-link-title="0">Evolutionary Biology</a> <span class = "article-count">(7708)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/genetics" class="" data-icon-position="" data-hide-link-title="0">Genetics</a> <span class = "article-count">(5844)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/genomics" class="" data-icon-position="" data-hide-link-title="0">Genomics</a> <span class = "article-count">(7321)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/immunology" class="" data-icon-position="" data-hide-link-title="0">Immunology</a> <span class = "article-count">(2735)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/microbiology" class="" data-icon-position="" data-hide-link-title="0">Microbiology</a> <span class = "article-count">(8398)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/molecular-biology" class="" data-icon-position="" data-hide-link-title="0">Molecular Biology</a> <span class = "article-count">(3345)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/neuroscience" class="" data-icon-position="" data-hide-link-title="0">Neuroscience</a> <span class = "article-count">(20276)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/paleontology" class="" data-icon-position="" data-hide-link-title="0">Paleontology</a> <span class = "article-count">(147)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/pathology" class="" data-icon-position="" data-hide-link-title="0">Pathology</a> <span class = "article-count">(529)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/pharmacology-and-toxicology" class="" data-icon-position="" data-hide-link-title="0">Pharmacology and Toxicology</a> <span class = "article-count">(867)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/physiology" class="" data-icon-position="" data-hide-link-title="0">Physiology</a> <span class = "article-count">(1311)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/plant-biology" class="" data-icon-position="" data-hide-link-title="0">Plant Biology</a> <span class = "article-count">(3026)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/scientific-communication-and-education" class="" data-icon-position="" data-hide-link-title="0">Scientific Communication and Education</a> <span class = "article-count">(736)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/synthetic-biology" class="" data-icon-position="" data-hide-link-title="0">Synthetic Biology</a> <span class = "article-count">(976)</span></div></li>
+<li class="outer collection depth-2  child"><div class = "data-wrapper"><a href="/collection/systems-biology" class="" data-icon-position="" data-hide-link-title="0">Systems Biology</a> <span class = "article-count">(3039)</span></div></li>
+<li class="outer collection depth-2  child last"><div class = "data-wrapper"><a href="/collection/zoology" class="" data-icon-position="" data-hide-link-title="0">Zoology</a> <span class = "article-count">(503)</span></div></li>
+</ul>  </div>
+
+  
+  </div>
+  </div>
+</div>
+</div>
+</div>
+  </div>
+
+  
+  </div>
+</div>
+			</div>
+		</div>
+	
+	</div> <!-- /.panel-row-wrapper -->	
+	
+	</div>
+
+    </div>
+  </div>
+</div>      </div>
+</div>  </div>
+</section>    
+  
+  </div>    <div class="region region-page-bottom" id="region-page-bottom">
+  <div class="region-inner region-page-bottom-inner">
+      </div>
+</div><script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__Vh5BcRYb6VtLoN3uam6O4DIKltYUVMjVDWtakoysPq0__zA_9xHyAk-lRGLS85oOPfK7yEWnMzbYSmnTOXQEsvJw__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+function euCookieComplianceLoadScripts() {}
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var eu_cookie_compliance_cookie_name = "";
+//--><!]]>
+</script>
+<script type="text/javascript" src="//d33xdlntwy0kbs.cloudfront.net/cshl_custom.js"></script>
+<script type="text/javascript" src="https://www.biorxiv.org/sites/default/files/advagg_js/js__BmqjBnkz3MgYCAoc25s1lDRMEjLhC3mEPVonUFIHi08__Unwv5-ZIuHBfFwytsjEx1niBVJ7n1T4lPws7VrkHXM4__qVkFI2DFUJCJKlH2laKecaY5NNjWWYhnp4WnclrNmRk.js"></script>
+  </body>
+</html>
