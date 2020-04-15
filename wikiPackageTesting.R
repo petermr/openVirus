@@ -280,7 +280,8 @@ as_quickstatement(items=sapply(sapply(articles.qr$Article,pattern = "/",stringr:
                   properties="Peer review URL",
                   values=review.URLs)
 
-
+# Visualisations ------------
+#> Data gathering ---------
 author          <- "Q56324974"
 employer        <- ""
 employer.filter <- FALSE
@@ -312,7 +313,7 @@ articles.qr[,3:4] <- cbind(gsub("^([A-Za-z]).* ([A-Za-z]*)", "\\1 \\2", articles
                            gsub("^([A-Za-z]).* ([A-Za-z]*)", "\\1 \\2", articles.qr$author2Label))
 articles.qr
 
-# igraph calculations
+#> igraph calculations ------------
 data <- articles.qr[order(articles.qr$count),]
 g    <- graph_from_edgelist(as.matrix(data[,3:4]),
                         directed = 0) %>%
@@ -331,7 +332,7 @@ group.order      <- order(clp$membership,hdb$cluster)
 group.colours    <- colours[clp$membership]
 group.colours[1] <- "black"
 
-# Static network
+#> Static network -----------
 plot(#clp,
     g,
     vertex.size  = 10,
@@ -342,7 +343,7 @@ plot(#clp,
     vertex.label = initials(V(g)$name,type="FML"),
     layout       = l)
 
-# Interactive D3 network
+#> Interactive D3 network ----------
 x <- data.frame(articles.qr[,c(3,4,7)])
 
 unames <- iconv(clp$names,to = 'ASCII//TRANSLIT')
@@ -370,7 +371,7 @@ forceNetwork(Links = data.frame(x), Nodes = data.frame(xNodes),
              linkColour = colorRampPalette(c(rgb(0,0,0,0.3),rgb(0,0,0,0.9)), alpha=TRUE)(max(E(g)$weight))[E(g)$weight],
              charge = -30,linkDistance = JS("function(d){return 50/(d.value^2)}"))
 
-# Interactive D3 chord
+#> Interactive D3 chord ------------
 data.grouped <- as.matrix(get.adjacency(g,attr = "weight",sparse = T))[group.order,group.order]
 chorddiag(data.grouped,
           showTicks         = F,
@@ -382,7 +383,7 @@ chorddiag(data.grouped,
           chordedgeColor    = '#00000011',
           groupedgeColor    = '#00000099')
 
-# WikiJournal content tests -----------
+# HTML content reading test -----------
 page.wh <- page_content("en","wikiversity", page_name = "WikiJournal of Medicine/Western African Ebola virus epidemic")
 tidy_html.opts <- list(
   TidyDocType="html5",
