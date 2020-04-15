@@ -344,25 +344,25 @@ plot(#clp,
     layout       = l)
 
 #> Interactive D3 network ----------
-x <- data.frame(articles.qr[,c(3,4,7)])
+xLinks <- data.frame(articles.qr[,c(3,4,7)])
 
 unames <- iconv(clp$names,to = 'ASCII//TRANSLIT')
 
-x$author1Label <- as.factor(iconv(x$author1Label,to = 'ASCII//TRANSLIT'))
-x$author2Label <- as.factor(iconv(x$author2Label,to = 'ASCII//TRANSLIT'))
+xLinks$author1Label <- as.factor(iconv(xLinks$author1Label,to = 'ASCII//TRANSLIT'))
+xLinks$author2Label <- as.factor(iconv(xLinks$author2Label,to = 'ASCII//TRANSLIT'))
 
 xNodes <- data.frame(name  = unames,
                      group = clp$membership,
                      size  = 1)
 
-x$author1Label <- ordered(x$author1Label,unames)
-x$author2Label <- ordered(x$author2Label,unames)
+xLinks$author1Label <- ordered(xLinks$author1Label,unames)
+xLinks$author2Label <- ordered(xLinks$author2Label,unames)
 
-x$author1Label<-as.numeric(x$author1Label)-1
-x$author2Label<-as.numeric(x$author2Label)-1
-x$count       <-as.numeric(x$count)^2
+xLinks$author1Label<-as.numeric(xLinks$author1Label)-1
+xLinks$author2Label<-as.numeric(xLinks$author2Label)-1
+xLinks$count       <-as.numeric(xLinks$count)^2
 
-forceNetwork(Links = data.frame(x), Nodes = data.frame(xNodes),
+forceNetwork(Links = data.frame(xLinks), Nodes = data.frame(xNodes),
              Source = "author1Label", Target = "author2Label",
              Value = "count", NodeID = "name",
              Group = "group", Nodesize="size",
