@@ -4,12 +4,19 @@ packagelist.cran <- c('WikipediR',
                       'WikidataQueryServiceR', 
                       'tibble',
                       'devtools',
+                      'stringr',
                       'tidytext', 
                       'htmltidy', 
                       'dplyr',
                       'readr',
-                      'xml2')
-packagelist.git  <- c('chainsawriot/pediarr')
+                      'xml2',
+                      'lubridate',
+                      'igraph',
+                      'networkD3',
+                      'dbscan')
+packagelist.git  <- c('chainsawriot/pediarr',
+                      'mattflor/chorddiag',
+                      'garthtarr/edgebundleR')
 packagelist.git2 <- sapply(stringr::str_split(packagelist.git,pattern = "/"),tail,n=1)
 install.packages(packagelist.cran[!(packagelist.cran %in% installed.packages()[,"Package"])])
 install_github  (packagelist.git[!(packagelist.git2%in% installed.packages()[,"Package"])])
@@ -175,6 +182,27 @@ as_quickstatement <- function(items,
   }
 }
 
+initials <- function(x,type="FLast"){
+  if (type=="FLast"){
+    gsub("^([A-Za-z]).* ([A-Za-z]*)", "\\1 \\2", x)
+  }else{
+    gsub("(.)\\S* *", "\\1", x)
+  }
+}
+
+unspecial <- function(x){
+  out <- x
+  for(i in 1:ncol(x)){
+    out[[i]] <- iconv(x[[i]],to = 'ASCII//TRANSLIT')
+    if(Hmisc::all.is.numeric(x[[i]])){
+      out[[i]] <- as.numeric(out[[i]])
+    }else{
+      out[[i]] <- as.factor(out[[i]])
+    } 
+  }
+  return(as_tibble(out))
+}
+
 # Edited function from WikidataR ---------
 extract_claims <- function (items,
                             claims){
@@ -251,6 +279,108 @@ review.URLs <- gsub(" ","_",review.URLs)
 as_quickstatement(items=sapply(sapply(articles.qr$Article,pattern = "/",stringr::str_split),tail,1),
                   properties="Peer review URL",
                   values=review.URLs)
+
+
+author          <- "Q56324974"
+employer        <- ""
+employer.filter <- FALSE
+sparql_query    <- paste0('# Egocentric co-author graph for an author
+                          SELECT ?author1 ?author2 ?author1Label ?author2Label ?employer1Label ?employer2Label (COUNT(?work) AS ?count) WHERE {
+                              # Find co-authors
+                              ?work wdt:P50 wd:',author,', ?author1, ?author2 .
+                              # Exclude self-links
+                              FILTER   (?author1 != ?author2)
+                              OPTIONAL {?author1 wdt:P108 ?employer1.}
+                              OPTIONAL {?author2 wdt:P108 ?employer2.}
+                              SERVICE  wikibase:label { bd:serviceParam wikibase:language "en,fr,de,ru,es,zh,jp". }
+                          }
+                            GROUP BY ?author1 ?author2 ?author1Label ?author2Label ?employer1Label ?employer2Label
+                            ORDER BY DESC(?count)
+                            LIMIT 10000')
+articles.qr   <- unspecial(query_wikidata(sparql_query))
+if(employer.filter){
+  articles.qr <- articles.qr[articles.qr$employer1Label==employer&
+                             articles.qr$employer2Label==employer,]   # filter by employer
+}
+articles.qr$author1Label <- ordered(articles.qr$author1Label,         # define factor order by most linked
+                                    unique(names(sort(table(articles.qr$author1Label),TRUE))))
+articles.qr   <- articles.qr[with(articles.qr, order(author1Label)),] # order all by that factor order
+articles.qr.u <- t(apply(articles.qr[,3:4], 1, sort))                 # find reciprocal links and flip them
+articles.qr   <- articles.qr[!duplicated(articles.qr.u),]             # remove flipped reciprocal links (now show up as duplicates)
+
+articles.qr[,3:4] <- cbind(gsub("^([A-Za-z]).* ([A-Za-z]*)", "\\1 \\2", articles.qr$author1Label),
+                           gsub("^([A-Za-z]).* ([A-Za-z]*)", "\\1 \\2", articles.qr$author2Label))
+articles.qr
+
+# igraph calculations
+data <- articles.qr[order(articles.qr$count),]
+g    <- graph_from_edgelist(as.matrix(data[,3:4]),
+                        directed = 0) %>%
+        set_edge_attr("weight", value = data$count)
+clp  <- cluster_label_prop(g,weights = E(g)$weight)
+hcl  <- hclust(dist(g[]))
+hdb  <- hdbscan(dist(g[]),minPts = 3)
+l    <- layout.graphopt(g,spring.length = E(g)$weight)
+
+max.groups       <- max(clp$membership)
+colours          <- RColorBrewer::brewer.pal(max.groups,'Dark2')
+colours          <- viridis::plasma(max.groups)
+colours          <- colorRampPalette(c('#ee4400','#ff0099','#440055','#000055','#006688','#005533'))(max.groups)
+barplot(rep(1,length(colours)),col=colours,space=0,border=NA)
+group.order      <- order(clp$membership,hdb$cluster)
+group.colours    <- colours[clp$membership]
+group.colours[1] <- "black"
+
+# Static network
+plot(#clp,
+    g,
+    vertex.size  = 10,
+    edge.color   = colorRampPalette(c("#CCCCCC", "#444444"))(4)[1+log2(E(g)$weight)],
+    edge.width   = log2(E(g)$weight)*3,
+    vertex.color = group.colours[clp$membership],
+    edge.curved  = 0.2,
+    vertex.label = initials(V(g)$name,type="FML"),
+    layout       = l)
+
+# Interactive D3 network
+x <- data.frame(articles.qr[,c(3,4,7)])
+
+unames <- iconv(clp$names,to = 'ASCII//TRANSLIT')
+
+x$author1Label <- as.factor(iconv(x$author1Label,to = 'ASCII//TRANSLIT'))
+x$author2Label <- as.factor(iconv(x$author2Label,to = 'ASCII//TRANSLIT'))
+
+xNodes <- data.frame(name  = unames,
+                     group = clp$membership,
+                     size  = 1)
+
+x$author1Label <- ordered(x$author1Label,unames)
+x$author2Label <- ordered(x$author2Label,unames)
+
+x$author1Label<-as.numeric(x$author1Label)-1
+x$author2Label<-as.numeric(x$author2Label)-1
+x$count       <-as.numeric(x$count)^2
+
+forceNetwork(Links = data.frame(x), Nodes = data.frame(xNodes),
+             Source = "author1Label", Target = "author2Label",
+             Value = "count", NodeID = "name",
+             Group = "group", Nodesize="size",
+             zoom = 1, opacity = 0.8,
+             fontFamily = "sans-serif", fontSize = 20,
+             linkColour = colorRampPalette(c(rgb(0,0,0,0.3),rgb(0,0,0,0.9)), alpha=TRUE)(max(E(g)$weight))[E(g)$weight],
+             charge = -30,linkDistance = JS("function(d){return 50/(d.value^2)}"))
+
+# Interactive D3 chord
+data.grouped <- as.matrix(get.adjacency(g,attr = "weight",sparse = T))[group.order,group.order]
+chorddiag(data.grouped,
+          showTicks         = F,
+          margin            = 80,
+          groupnameFontsize = 12,
+          groupnamePadding  = 10,
+          groupPadding      = 1,
+          groupColors       = group.colours[group.order],
+          chordedgeColor    = '#00000011',
+          groupedgeColor    = '#00000099')
 
 # WikiJournal content tests -----------
 page.wh <- page_content("en","wikiversity", page_name = "WikiJournal of Medicine/Western African Ebola virus epidemic")
