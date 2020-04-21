@@ -60,10 +60,24 @@ The "gold standard" https://europepmc.org. A collection of millions of open acce
 ### biorxiv
 A few years old, Biorxiv is the worlds preprint server for biomedical and becoming increasingly popular by the daya. Many recent articles are now published there within 24 hours of being submitted. CAVEAT: They aren't peer-reviewed but obvious rubbish (like 5G phones) will be removed.
 ### medrxiv
-Same as biorxiv but for medical articles
+Same as biorxiv but for medical articles. Between biorxiv and medrxiv there are 1200+ open preprints on coronavirus (rather a lot recently on speculative drug design - my field - but hey).
+### DOAJ. 4 million, abstracts all linkable to fulltext
+### Theses . (in development) 100,000 UK theses
+### HAL, French repository
 ## Dictionaries
+Besides explaining scientific terms, dictionaries have the major functions:
+* tagging terms to help further computation (Natural Language Processing, Machine Learning, etc.)
+* linking to Wikidata for even more semantic background
+* translating into different human languages.
+AMI dictionaries are often quick to create especially if there is a good Wikipedia resource or a list of words already in Wikidata. We have built 50+ dictionaries in a distributed system so that anyone can choose their own subset or even create their own.
 ## Reconfigurable Toolset (AMI)
+AMI is a Toolkit with many functions. Think "Unix for scholarly knowledge", Its workflow is :
+* read from source/s
+* standardise, transform, search, index, tag, etc.
+* output to other tools, publish, etc.
+AMI is platform-independent; it uses standards wherever possible (UNIX, Java and other OS, W3C (XML, HTML, SVG, CSS, etc.), JATS,) and standard F/OSS libraries and exe's. Major wrapped tools are Apache, PDFBox, Grobid, Tesseract, GOCR, curl). It is probably more versatile than any other Open tool in extracting knowledge from scholarly publications.
 ## Extensible
+AMI is extensible. It has been bolted into many sources, and outputs (e.g. Jupyter, R, KN1ME, )
 # Exploration
 
 
