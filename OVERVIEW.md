@@ -4,9 +4,12 @@
 
 # Vision
 Everyone , **not just experts**, wants and needs access to the scientific/medical literature. 
-This project makes it simple. We provide quick methods of finding millions of relevant documents and extracting the relevant knowledge
+This project makes it simple. We provide quick methods of finding millions of relevant documents and extracting the relevant knowledge.
+And making it useful
 
 ## EU Hackathon
+
+We've entered a team "ContentMine" for the EU hackathon on COVID.
 
 . Our system (ContentMine's `getpapers` and `AMI`.  
 # Methodology
