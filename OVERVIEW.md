@@ -79,5 +79,6 @@ AMI is platform-independent; it uses standards wherever possible (UNIX, Java and
 ## Extensible
 AMI is extensible. It has been bolted into many sources, and outputs (e.g. Jupyter, R, KN1ME, )
 # Exploration
+AMI is well suited for exploration. Come up with an idea, search, transform and see if anything comes out. We want YOUR ideas in the hackathon, please!
 
 
