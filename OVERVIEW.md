@@ -29,14 +29,18 @@ We welcome volunteers who can take this forward.
 # Goals
 We want to know **your** problems, to see how the literature can help. Two existing examples:
 * **Experience of humans tissue samples and surfaces.**
-A collaborator asks:
+A collaborator (from a non-EN country) asks:
+<quote>... collect as many scientific articles as possible regarding the persistence of Covid-19 in different surfaces and materials that are commonly studied in a forensic setting, such as samples obtained form autopsies (skin, bones and body fluids), porous and non-porous surfaces and textiles.</quote>
+This is exactly the sort of question we welcome. We would ask them to collect some sample documents. We'd extract the relevant words, make dictionaries and search millions of documents.
 
 * **Efficacy of masks.**
+Dan (volunteer on this project) is actually making masks in Makespace. He wants to know the efficacy of masks and how it depends on the type of mask and use. Things like materials, diseases, environments will all be important.
 
 # Our Unique Points
-This is not a search system like Google or commercial scientific searches. It's a wrapper round several major repositories, some of which are'nt used enough
+This is not a search system like Google or commercial scientific searches. It's a wrapper round several major repositories, some (e.g. biorxiv, or Latin America, or theses) which are'nt used in some systems and where there is no bulk download and analysis (note GoogleScholar prevents bulk download by citizens). Note also that many systsme give you no choice about the material searche and often limit the type of query.
+
 ## Automation
-Most search systems give you a list of hits you have to click through. We automate the clicking, up to thousands of hits so you can asks complex questions and either get immediate sample resuts or run queries in the background.
+Most search systems give you a list of hits you have to click through. We automate the clicking, up to thousands of hits so you can ask complex questions. You either get immediate sample resuts or run queries in the background. It comopletely changes the way you think.
 ## Single point of contact
 ## Semantic Content
 ### Sectioned Fulltext
