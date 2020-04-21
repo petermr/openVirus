@@ -10,7 +10,7 @@ And making it useful
 an play a small 
 ## EU Hackathon
 
-We've entered a team "ContentMine" for the EU hackathon (2020-04-24:26)on COVID. Team "ContentMine" under http://euvsvirus.org. We believe that our community and its resources can play a small part in this great effort. This document reflects our offering at 2020-04-21 Our system (ContentMine's `getpapers` and `AMI`. The hackathom will generate questions to answer, create and share resources, make personal connections. 
+We've entered a team "ContentMine" for the EU hackathon (2020-04-24:26)on COVID. Team "ContentMine" under http://euvsvirus.org. We believe that our community and its resources can play a small part in this great effort. This document reflects our offering at 2020-04-21 Our system (ContentMine's `getpapers` and `AMI`. The hackathon will generate questions to answer, create and share resources, make personal connections. 
 # Methodology
 **To download large amounts of Open publications, unify the semantics, filter, annotate, re-use, reaggregate, compute**
 More specifically:
@@ -19,6 +19,8 @@ More specifically:
 * add semantics so machines can understand the articles.
 * search and annotate with a large number of bespoke dictionaries (word liswe ts)
 * link everything (bibliography, annotations) to Wikidata
+
+We'll refer to the toolkit as `AMI` as nearky all services can be accessed through it.
 
 # Non-EN language
 We believe there are mnany vital documents not in English. Countries which have suffered epidemics have experience of healthcare and social behaviour which will be critically useful to the world. The Western publishing industry and many in academia often regard non-EN as of minor importance and do not index it.
@@ -37,19 +39,28 @@ This is exactly the sort of question we welcome. We would ask them to collect so
 Dan (volunteer on this project) is actually making masks in Makespace. He wants to know the efficacy of masks and how it depends on the type of mask and use. Things like materials, diseases, environments will all be important.
 
 # Our Unique Points
-This is not a search system like Google or commercial scientific searches. It's a wrapper round several major repositories, some (e.g. biorxiv, or Latin America, or theses) which are'nt used in some systems and where there is no bulk download and analysis (note GoogleScholar prevents bulk download by citizens). Note also that many systsme give you no choice about the material searche and often limit the type of query.
+This is not a search system like Google or commercial scientific searches. It's a wrapper round several major repositories, some (e.g. biorxiv, or Latin America, or theses) which are'nt used in some systems and where there is no bulk download and analysis (note GoogleScholar prevents bulk download by citizens). Note also that many systems give you no choice about the material searched and often limit the type of query.
 
 ## Automation
-Most search systems give you a list of hits you have to click through. We automate the clicking, up to thousands of hits so you can ask complex questions. You either get immediate sample resuts or run queries in the background. It comopletely changes the way you think.
-## Single point of contact
+Most search systems give you a list of hits you have to click through. We automate the clicking, up to thousands of hits so you can ask complex questions. You either get immediate sample results or run queries in the background. It completely changes the way you think.
+## Single point of contact and single interface
+The current "publishing system" totally fragmented. There are 100+ scientific publishers all of whom delight in having individual web sites and competing against each other. This is Babel. To search the whole literature you have to go to each publisher in turn and navigate an arcane system which is never friendly to mass downloads (even when that's legal). We solve that by doing the hard work so you don't have to.
 ## Semantic Content
+A PDF document is incredibly difficult for machines to interpret. There are no words, sentences, paragraphs, sections, chapters. The human brain can reconstruct them, machines can't. Except we can. It's not perfect but it's very usable. We add these things back as HTML. 
 ### Sectioned Fulltext
+Scetions are really important. Was the disease mentioned in the introduction or the results? Was the country in the methods (e.g. where the research took place) or in the funders?
 ### Tagging and Dictionaries
+What does "zoonotic" mean? or "nosocomial"? Many citizens (including me) have to look these words up. Our system does this automatically.
 ### AMI-Wikidata 
+Wikidata (think "data from Wikipedia") is the most powerful universal Open meta/data resource on the planet. It's got nearly 100 million objects defined and referenced - countries, people, diseases, drugs, treatments, poverty, human rights, ... and Wikidata is built into the system so it interprets the article for you. 
 ## Sources
+There are many sources which are underutilised because most people don't know about them. How many citizens know where to find UK theses? FR theses? and when they find them how to get machines to read them. AMI knows about these and we've been (tediously!) building interfaces for each. So far we've got about 10 in the current system - the main ones listed here.
 ### EuropePMC
+The "gold standard" https://europepmc.org. A collection of millions of open access biomedical papers. This is the system w suggest you start with. You can download 500 articles a minute (with good connection) and analyze them in a few minutes.
 ### biorxiv
+A few years old, Biorxiv is the worlds preprint server for biomedical and becoming increasingly popular by the daya. Many recent articles are now published there within 24 hours of being submitted. CAVEAT: They aren't peer-reviewed but obvious rubbish (like 5G phones) will be removed.
 ### medrxiv
+Same as biorxiv but for medical articles
 ## Dictionaries
 ## Reconfigurable Toolset (AMI)
 ## Extensible
