@@ -3,7 +3,12 @@
 ***particularly relevant to the EU Hackathon this weekend.***
 
 # Vision
-Everyone , **not just experts**, wants access to the scientific literature. We hide the complexity and provide simple quick methods of finding millions of relevant documents. Our system (ContentMine's `getpapers` and `AMI`.  
+Everyone , **not just experts**, wants and needs access to the scientific/medical literature. 
+This project makes it simple. We provide quick methods of finding millions of relevant documents and extracting the relevant knowledge
+
+## EU Hackathon
+
+. Our system (ContentMine's `getpapers` and `AMI`.  
 # Methodology
 # Goals
 We want to know **your** problems, to see how the literature can help. Two existing examples:
