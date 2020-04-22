@@ -6,21 +6,19 @@ This document: https://github.com/petermr/openVirus/blob/master/OVERVIEW.md
 # Vision
 Everyone , **not just experts**, wants and needs access to the scientific/medical literature. 
 This project makes it simple. We provide quick methods of finding millions of relevant documents and extracting the relevant knowledge.
-And making it useful
-an play a small 
-## EU Hackathon
 
-We've entered a team "ContentMine" for the EU hackathon (2020-04-24:26)on COVID. Team "ContentMine" under http://euvsvirus.org. We believe that our community and its resources can play a small part in this great effort. This document reflects our offering at 2020-04-21 Our system (ContentMine's `getpapers` and `AMI`. The hackathon will generate questions to answer, create and share resources, make personal connections. 
+## EU Hackathon
+We've entered a team "ContentMine" for the EU hackathon (2020-04-24:26)on COVID. Team "ContentMine" under http://euvsvirus.org. We believe that our community and its resources can play a small part in this great effort. This document reflects our offering at 2020-04-21. Our systems are ContentMine's `getpapers` and `AMI`. The hackathon will generate questions to answer, create and share resources, make personal connections. 
 # Methodology
 **To download large amounts of Open publications, unify the semantics, filter, annotate, re-use, reaggregate, compute**
 More specifically:
-* find a number of Open sources (repositories, publishers, theses, NGO gray literature, government pubklications, etc.)
+* find a number of Open sources (repositories, publishers, theses, NGO gray literature, government publications, etc.)
 * build crawler/readers for these and translate into universal form (JATS, originally from NIH) widely used in biomedical publications). 
 * add semantics so machines can understand the articles.
-* search and annotate with a large number of bespoke dictionaries (word liswe ts)
+* search and annotate with a large number of bespoke dictionaries (word lists)
 * link everything (bibliography, annotations) to Wikidata
 
-We'll refer to the toolkit as `AMI` as nearky all services can be accessed through it.
+We'll refer to the toolkit as `AMI` as nearly all services can be accessed through it.
 
 # Non-EN language
 We believe there are mnany vital documents not in English. Countries which have suffered epidemics have experience of healthcare and social behaviour which will be critically useful to the world. The Western publishing industry and many in academia often regard non-EN as of minor importance and do not index it.
@@ -32,19 +30,19 @@ We welcome volunteers who can take this forward.
 We want to know **your** problems, to see how the literature can help. Two existing examples:
 * **Experience of humans tissue samples and surfaces.**
 A collaborator (from a non-EN country) asks:
-<quote>... collect as many scientific articles as possible regarding the persistence of Covid-19 in different surfaces and materials that are commonly studied in a forensic setting, such as samples obtained form autopsies (skin, bones and body fluids), porous and non-porous surfaces and textiles.</quote>
+<quote>... collect as many scientific articles as possible regarding the persistence of Covid-19 in different surfaces and materials that are commonly studied in a forensic setting, such as samples obtained from autopsies (skin, bones and body fluids), porous and non-porous surfaces and textiles.</quote>
 This is exactly the sort of question we welcome. We would ask them to collect some sample documents. We'd extract the relevant words, make dictionaries and search millions of documents.
 
 * **Efficacy of masks.**
 Dan (volunteer on this project) is actually making masks in Makespace. He wants to know the efficacy of masks and how it depends on the type of mask and use. Things like materials, diseases, environments will all be important.
 
 # Our Unique Points
-This is not a search system like Google or commercial scientific searches. It's a wrapper round several major repositories, some (e.g. biorxiv, or Latin America, or theses) which are'nt used in some systems and where there is no bulk download and analysis (note GoogleScholar prevents bulk download by citizens). Note also that many systems give you no choice about the material searched and often limit the type of query.
+This is not a search system like Google or commercial scientific searches. It's a wrapper round several major repositories, some (e.g. biorxiv, or Latin America, or theses) which aren't used in some systems and where there is no bulk download and analysis (note GoogleScholar prevents bulk download by citizens). Note also that many systems give you no choice about the material searched and often limit the type of query.
 
 ## Automation
 Most search systems give you a list of hits you have to click through. We automate the clicking, up to thousands of hits so you can ask complex questions. You either get immediate sample results or run queries in the background. It completely changes the way you think.
 ## Single point of contact and single interface
-The current "publishing system" totally fragmented. There are 100+ scientific publishers all of whom delight in having individual web sites and competing against each other. This is Babel. To search the whole literature you have to go to each publisher in turn and navigate an arcane system which is never friendly to mass downloads (even when that's legal). We solve that by doing the hard work so you don't have to.
+The current "publishing system" is totally fragmented. There are 100+ scientific publishers, all of whom delight in having individual web sites and competing against each other. This is Babel. To search the whole literature you have to go to each publisher in turn and navigate an arcane system which is never friendly to mass downloads (even when that's legal). We solve that by doing the hard work so you don't have to.
 ## Semantic Content
 A PDF document is incredibly difficult for machines to interpret. There are no words, sentences, paragraphs, sections, chapters. The human brain can reconstruct them, machines can't. Except we can. It's not perfect but it's very usable. We add these things back as HTML. 
 ### Sectioned Fulltext
@@ -75,9 +73,9 @@ AMI is a Toolkit with many functions. Think "Unix for scholarly knowledge", Its 
 * read from source/s
 * standardise, transform, search, index, tag, etc.
 * output to other tools, publish, etc.
-AMI is platform-independent; it uses standards wherever possible (UNIX, Java and other OS, W3C (XML, HTML, SVG, CSS, etc.), JATS,) and standard F/OSS libraries and exe's. Major wrapped tools are Apache, PDFBox, Grobid, Tesseract, GOCR, curl). It is probably more versatile than any other Open tool in extracting knowledge from scholarly publications.
+AMI is platform-independent; it uses standards wherever possible (UNIX, Java and other OS, W3C (XML, HTML, SVG, CSS, etc.), JATS,) and standard F/OSS libraries and EXES's. Major wrapped tools are Apache, PDFBox, Grobid, Tesseract, GOCR, curl). It is probably more versatile than any other Open tool in extracting knowledge from scholarly publications.
 ## Extensible
-AMI is extensible. It has been bolted into many sources, and outputs (e.g. Jupyter, R, KN1ME, )
+AMI is extensible. It has been bolted into many sources, and outputs (e.g. Jupyter, R, KNIME, )
 # Exploration
 AMI is well suited for exploration. Come up with an idea, search, transform and see if anything comes out. We want YOUR ideas in the hackathon, please!
 
