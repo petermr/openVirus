@@ -75,7 +75,10 @@ AMI is a Toolkit with many functions. Think "Unix for scholarly knowledge", Its 
 * output to other tools, publish, etc.
 AMI is platform-independent; it uses standards wherever possible (UNIX, Java and other OS, W3C (XML, HTML, SVG, CSS, etc.), JATS,) and standard F/OSS libraries and EXES's. Major wrapped tools are Apache, PDFBox, Grobid, Tesseract, GOCR, curl). It is probably more versatile than any other Open tool in extracting knowledge from scholarly publications.
 ## Extensible
-AMI is extensible. It has been bolted into many sources, and outputs (e.g. Jupyter, R, KNIME, )
+AMI is extensible. It has been bolted into many sources, and outputs (e.g. Jupyter, R, KNIME...)
+![image](https://user-images.githubusercontent.com/10074162/79960906-e66e7b00-847d-11ea-8202-c4b31cbe7da4.png)
+
+
 # Exploration
 AMI is well suited for exploration. Come up with an idea, search, transform and see if anything comes out. We want YOUR ideas in the hackathon, please!
 
