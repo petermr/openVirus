@@ -38,7 +38,7 @@ Some of you will write software but it's not essential. Here's some ideas for ta
 
 ## Is there a simple example?
 * masks (n95)
-see [search](../examples/n95/OVERVIEW.md)
+see [search](../../examples/n95/OVERVIEW.md)
 
 
 
