@@ -2,24 +2,44 @@
 
 We are participlating in a weekend hack for #EUvsVirus - see https://euvsvirus.org
 
-# Goal - search the literature for scientific knowledge on any topic relevant to the pandemic
+## Goal - search the literature for scientific knowledge on any topic relevant to the pandemic
 
 This pandemic requires solutions cfrom almost every subject: maths, physics, chemistry , bioscience, materials, engineering, statistics, psychology, sociology, politics, economics, law, history, literature,, philosophy). Most "Covid" engines only have a small fraction - we aim to search the whole literature including the Global South.
 
-# How does it work?
+## How does it work?
 Simple steps:
 * select the soiurce you want to query
 * download a few hundred articles in a minute or two.
 * search and analyze them exhaustively on your own machine.
 * display and publish the results
 
-# What's new?
+## What's new?
 * A single point of contact for these repositories
 * under your control
 * extensible by creating your own search dictionaries
 
-# What can I do
-We'de like everyone to *test* the system. This helps us detect problems in platforms , in the sources
+## What can I do?
+***We'd like everyone to *test* the system.*** This helps us detect problems in platforms , in the sources, in the dictionaries and also give you an idea of what it can do. Then...
+* **Propose a question** you'd like to answer. Create the query.
+* **Search** (`getpapers`) one or more sources. Propose others.
+* **download** a few hundred articles.
+* **search** them with a few dictionaries. (`ami search`).
+* **display** them and see whether there is a coherent message.
+
+## How can I help?
+Some of you will write software but it's not essential. Here's some ideas for tasks:
+* find a valuable source (repository) and explore how to search and download.
+* create a dictionary relevant to your interests
+* translate a dictionary into your language (Use Wikidata!)
+* search and analyse a particular question
+* find ways of displaying results 
+* documenting parts that you find unclear
+* writing tutorials
+
+## Is there a simple example?
+(cominng in a few minutes)
+
+
 
 
 
