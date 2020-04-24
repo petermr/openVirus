@@ -1,6 +1,9 @@
 # openVirus
 aggregation of scholarly publications and extracted knowledge on viruses and epidemics.
 
+## NOTE for Hackathon
+See [hackathon](EUvsVirus.MD)
+
 ## NOTE
 This site is to develop knowledge resources and tools to help tackle the COVID19 outbreak. **It is NOT a guide to public information.** The actual content created from the site is drawn from reliable sources (journals, guidelines) but has **NOT been filtered or reviewed**.
 
