@@ -37,8 +37,8 @@ Some of you will write software but it's not essential. Here's some ideas for ta
 * writing tutorials
 
 ## Is there a simple example?
-(cominng in a few minutes)
-
+* masks (n95)
+see [search](../examples/n95/OVERVIEW.md)
 
 
 
