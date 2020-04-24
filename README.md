@@ -2,7 +2,7 @@
 aggregation of scholarly publications and extracted knowledge on viruses and epidemics.
 
 ## NOTE for Hackathon
-See [hackathon](EUvsVirus.MD)
+See [hackathon](EUvsVirus.MD) for weekend EUvsVirus hack this weekend (24-26 April) and [our project](https://devpost.com/software/contentmine-scientific-knowledge-for-all) . You may also wish to register on their site as well..
 
 ## NOTE
 This site is to develop knowledge resources and tools to help tackle the COVID19 outbreak. **It is NOT a guide to public information.** The actual content created from the site is drawn from reliable sources (journals, guidelines) but has **NOT been filtered or reviewed**.
