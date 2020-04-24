@@ -6,7 +6,7 @@ See https://github.com/ContentMine/getpapers for instruction. You will need `Nod
 ## ami
 Needs Java 8 or higher. Two approaches:
 ### Download and run jars
-* see [installion innstructions](https://github.com/petermr/ami3/blob/master/INSTALL.md) (some of this may have been updated).
+* see [installation instructions](https://github.com/petermr/ami3/blob/master/INSTALL.md) (some of this may have been updated).
 * the Jars are on https://github.com/petermr/ami-jars2 . We may post more later.
 
 ### build with Maven or IDE
@@ -23,7 +23,7 @@ This gives an executable in `<your dir>/ami3/target/appassembler`
 and you should set your PATH to include `<your dir>/ami3/target/appassembler/bin`
 
 
-
+## ADVANCED
 
 ## Using Docker
 
