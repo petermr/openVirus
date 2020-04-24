@@ -37,7 +37,8 @@ Some of you will write software but it's not essential. Here's some ideas for ta
 * writing tutorials
 
 ## Is there a simple example?
-* masks (n95)
+### masks (n95)
+This uses `getpapers` to search for "n955 AND mask" and analyze results:
 see [search](https://github.com/petermr/openVirus/blob/master/examples/n95/OVERVIEW.md)
 
 
