@@ -43,6 +43,18 @@ Some of you will write software but it's not essential. Here's some ideas for ta
 This uses `getpapers` to search for "n955 AND mask" and analyze results:
 see [search](https://github.com/petermr/openVirus/blob/master/examples/n95/OVERVIEW.md)
 
+## Is there a virus project to get started on.
+### forensic science
+
+We had a question (anonymised) from a forensic scientis:
+<blockquote>
+ ... to collect as many scientific articles as possible regarding the persistence of Covid-19 in different surfaces and materials that are commonly studied in a forensic setting, such as samples obtained form autopsies (skin, bones and body fluids), porous and non-porous surfaces and textiles.
+
+We are trying to establish protocols in order to safely study these type of samples.
+</blockquote>
+Let's see if we can help...
+### masks
+My colleague Dan who is making face visors (1000/week in Cambridge Makespace) asks "do masks and visors work"?
 
 
 
