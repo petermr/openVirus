@@ -59,6 +59,10 @@ My colleague Dan who is making face visors (1000/week in Cambridge Makespace) as
 
 ### from EUvsVirus project Samba
 *  effect of pandemic on mental health of health workers
+<blockquote>
+the idea is to recommend patients alternative/supplementary treatments than those prescribed by doctors (pure clinical), but always based on scientific data (for example, any kind of psychological support depending on the problem, which kind of physical activity will be better depending on the comorbidities,..), so we could improve quality of life of patients.
+</blockquote>
+
 
 
 
