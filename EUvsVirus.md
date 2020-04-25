@@ -1,6 +1,8 @@
 # EUvsVirus Hackathon 2020-04-24:26
 
 We are participlating in a weekend hack for #EUvsVirus - see https://euvsvirus.org
+join the project and then our channel `t_contentmine_ffr2axj4x`.
+
 
 ## Goal - search the literature for scientific knowledge on any topic relevant to the pandemic
 
