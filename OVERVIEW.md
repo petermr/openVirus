@@ -1,7 +1,9 @@
 # Overview of the OpenVirus project
 This document: https://github.com/petermr/openVirus/blob/master/OVERVIEW.md
 
-***particularly relevant to the EU Hackathon this weekend.***
+## particularly relevant to the EU Hackathon this weekend
+see [EUHackday Openvirus](EUvsVirus.md)
+
 
 # Vision
 Everyone , **not just experts**, wants and needs access to the scientific/medical literature. 
