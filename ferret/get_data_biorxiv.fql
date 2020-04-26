@@ -1,0 +1,25 @@
+LET doc = DOCUMENT(@url, { driver: "cdp" })
+LET authors = (
+     FOR auth in ELEMENTS(doc, '.highwire-citation-authors')
+       RETURN {
+            firstname : INNER_TEXT(auth,'.nlm-given-names'),
+            surname : INNER_TEXT(auth,'.nlm-surname'),
+            orcid_id : auth.a
+       }
+)
+
+LET metadata = (
+   FOR m in ELEMENTS(doc, 'meta')
+   RETURN {
+       name: m.attributes.name,
+       value: m.attributes.content
+   }
+)
+RETURN {
+        abstract: INNER_TEXT_ALL(doc, '.abstract'),
+        acknowledgements: INNER_TEXT_ALL(doc,'.ack'),
+        title:  INNER_TEXT(doc,'.highwire-cite-title'),        
+        authors: authors,
+        sections: INNER_TEXT_ALL(doc, '[id^="sec-"]'),
+        metadata: metadata
+}

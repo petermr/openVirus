@@ -1,0 +1,33 @@
+LET doc = DOCUMENT(@url, { driver: "cdp" })
+
+LET sections = (
+   FOR sec in ELEMENTS(doc, '.c-article-section')
+       RETURN {
+            section_title : INNER_TEXT_ALL(sec,'.c-article-section__title'),
+            content : INNER_TEXT(sec,'.c-article-section__content'),
+       }
+)
+
+LET title_year = (
+   FOR sec in ELEMENTS(doc, '.c-article-info-details')
+   RETURN {
+       journal_title: INNER_TEXT(sec,'a'),
+       pub_year: INNER_TEXT(sec, 'span')
+   }
+)
+
+LET metadata = (
+   FOR m in ELEMENTS(doc, 'meta')
+   RETURN {
+       name: m.attributes.name,
+       value: m.attributes.content
+   }
+)
+
+RETURN {
+    author: INNER_TEXT_ALL(doc, '.c-author-list'),
+    article_details: title_year,
+    title: INNER_TEXT(doc, '.c-article-title'),
+    metadata: metadata
+    //sections: sections
+}
