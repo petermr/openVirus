@@ -30,7 +30,7 @@ Ask for
 
 <hr/>
 
-and get over 10000 hits
+and get **14,474 hits**
 
 <hr/>
 
@@ -41,6 +41,7 @@ and get over 10000 hits
 Note you do NOT have to be an academic to understand these articles. Everyone in the world needs them:
 
 But if you're an "ordinary citizen" you can only see:
+
 
 <hr/>
 
