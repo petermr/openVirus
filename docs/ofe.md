@@ -18,5 +18,5 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 ## Example
 "I want articles on social distancing in epdimemics"
 
-[Closed](../assets/tf_socdist.closed.png)
+[Closed](../assets/tf_socdist_closed.png)
 
