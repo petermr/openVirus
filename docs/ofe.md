@@ -60,7 +60,8 @@ I assert that:
 ## ContentMine strategy
 
 http:ContentMine.org is a ShuttleworthFoundation-funded non-profit, revitalised 3 weeks ago to mine the literature for facts and discussion to help fight the pandemic. Now unfunded, we've assembled a group of **Open Source volunteers** to:
-* *create an Open Source crawler/scraper/converter* to normalize and index all the world'd scientific litertaure. Perhaps 15K documents / day. Journals, reviews, theses. Moving towards grey literature. Contributors:
+* **create an Open Source crawler/scraper/converter** to normalize and index all the world'd scientific litertaure. Perhaps 15K documents / day. Journals, reviews, theses. Moving towards grey literature. Contributors:
+* an **early warning system for new pandemics**
 
 ### software
 * *picocli* CLI for Java. Remko Popka
