@@ -28,7 +28,7 @@ and get over 10000 hits
 
 Note you do NOT have to be an academic to understand these articles. Everyone in the world needs them:
 
-But if you're asn "ordinary citizen" you can only see:
+But if you're an "ordinary citizen" you can only see:
 
 ![Open](../assets/tf_socdist.open.png)
 
@@ -60,6 +60,9 @@ We've also pulled in 100,000 UK theses, 4.7 million OA abstracts, EuropePMC.org 
 ## proof of concept
 We have POC ranging fron pre-alpha to good beta. None is productised.
 
+Some shots:
+
+
 ## EUvsVirus Hackathon. 
 We went to:
 * find what was needed (not much software/informatics was displayed). We got one "customer"
@@ -68,8 +71,13 @@ We went to:
 * reach out. WE made a video (may be useful). Not expecting more.
 * legitimize ourselves. The organizers understood and appreciated what we were doing. We hope to get a seal of approval.
 
+![Our video](https://www.youtube.com/watch?v=gBFpiOs7wZI)
+
+[Our report on Devpost](https://devpost.com/software/contentmine-scientific-knowledge-for-all)
+
+
 ### our feedback
-* Huge
+* Huge event
 * very business focussed, very EU
 * not set up as a traditional hack. More a marketplace.
 
