@@ -30,5 +30,5 @@ But if you're asn "ordinary citizen" you can only see:
 ![Open](../assets/tf_socdist.open.png)
 
 I assert that:
-**PAYWALLS KILL PEOPLE**
+**PAYWALLS KILL PEOPLE** 
 
