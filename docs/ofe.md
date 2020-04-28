@@ -1,6 +1,6 @@
 # Open Forum Europe 2020-04-28:1630
 
-# *Peter Murray-Rust, University of Cambridge and ContentMine.org* 
+# *Peter Murray-Rust, OFA, University of Cambridge, ContentMine.org* 
 (chemist, pharmaceutical, informatics, Open advocate for 25+ years)
 
 
@@ -20,17 +20,23 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 
 Go to Taylor and Francis (one of the big 5 publishers)
 
+<hr/>
 ![TF](../assets/tf_online.png)
+<hr/>
 
 and get over 10000 hits
 
+<hr/>
 ![Closed](../assets/tf_socdist_closed.png)
+<hr/>
 
 Note you do NOT have to be an academic to understand these articles. Everyone in the world needs them:
 
 But if you're an "ordinary citizen" you can only see:
 
+<hr/>
 ![Open](../assets/tf_socdist.open.png)
+<hr/>
 
 **93.5% closed**
 Between 70 and 95% of the scientific literature (depends on discipline)is closed. It's the same with other big 5 publishers (Elsevier, SpringerNature, Wiley, T+F, Sage).
@@ -71,24 +77,31 @@ We went to:
 * reach out. WE made a video (may be useful). Not expecting more.
 * legitimize ourselves. The organizers understood and appreciated what we were doing. We hope to get a seal of approval.
 
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/gBFpiOs7wZI/0.jpg)](http://www.youtube.com/watch?v=gBFpiOs7wZI)
+### Video for EUvsVirus.org (2mins)
+[![Video for EUvsVirus.org](http://img.youtube.com/vi/gBFpiOs7wZI/0.jpg)](http://www.youtube.com/watch?v=gBFpiOs7wZI)
 
-[Our report on Devpost](https://devpost.com/software/contentmine-scientific-knowledge-for-all)
+### Devpost report for EUVsVirus.org
+[Our EUvsVirus report on Devpost](https://devpost.com/software/contentmine-scientific-knowledge-for-all)
 
 
-### our feedback
+### our feedback from Hackathon to OFE
 * Huge event
 * very business focussed, very EU
 * not set up as a traditional hack. More a marketplace.
+* we were experienced but bewildering for first time hackers
 
 # The future
+
 ## Paywalls are killing people. Can OFE help to move to total access to knowledge? 
 
-The strategy is to make scientific search available ot every citizen.
+The strategy is to make scientific search available to every citizen.
 
 ## We need software collaborators:
+Much is done but gaps in
 * package tools for citizens (apps, Docker, etc.)
-* get volunteers to implement crawlers, write scrapers
+* volunteers to implement crawlers, write scrapers
+
+## need designers and marketers
 
 ## we need advocates
 * to take this to citizens with needs
@@ -97,7 +110,6 @@ The strategy is to make scientific search available ot every citizen.
 The "open access" world will not gradually change the world for the better. It will rapidly put megapublishers in control of world scholarship.
 
 Help
-
 
 
 
