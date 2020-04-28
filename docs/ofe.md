@@ -21,13 +21,17 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 Go to Taylor and Francis (one of the big 5 publishers)
 
 <hr/>
+
 ![TF](../assets/tf_online.png)
+
 <hr/>
 
 and get over 10000 hits
 
 <hr/>
+
 ![Closed](../assets/tf_socdist_closed.png)
+
 <hr/>
 
 Note you do NOT have to be an academic to understand these articles. Everyone in the world needs them:
@@ -35,7 +39,9 @@ Note you do NOT have to be an academic to understand these articles. Everyone in
 But if you're an "ordinary citizen" you can only see:
 
 <hr/>
+
 ![Open](../assets/tf_socdist.open.png)
+
 <hr/>
 
 **93.5% closed**
