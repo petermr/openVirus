@@ -20,6 +20,10 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 
 Go to Taylor and Francis (one of the big 5 publishers)
 
+Ask for 
+
+**`"social distancing in epidemics"`**
+
 <hr/>
 
 ![TF](../assets/tf_online.png)
