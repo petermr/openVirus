@@ -71,7 +71,7 @@ We went to:
 * reach out. WE made a video (may be useful). Not expecting more.
 * legitimize ourselves. The organizers understood and appreciated what we were doing. We hope to get a seal of approval.
 
-![Our video](https://www.youtube.com/watch?v=gBFpiOs7wZI)
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/gBFpiOs7wZI/0.jpg)](http://www.youtube.com/watch?v=gBFpiOs7wZI)
 
 [Our report on Devpost](https://devpost.com/software/contentmine-scientific-knowledge-for-all)
 
