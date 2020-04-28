@@ -40,8 +40,8 @@ and get **14,474 hits**
 
 Note you do NOT have to be an academic to understand these articles. Everyone in the world needs them:
 
-But if you're an "ordinary citizen" you can only see:
-
+But if you're an "ordinary citizen" you can only see **945 hits**:
+(the closed ones cost 45 USD each).
 
 <hr/>
 
@@ -50,7 +50,7 @@ But if you're an "ordinary citizen" you can only see:
 <hr/>
 
 **93.5% closed**
-Between 70 and 95% of the scientific literature (depends on discipline)is closed. It's the same with other big 5 publishers (Elsevier, SpringerNature, Wiley, T+F, Sage).
+Between 70 and 95% of the scientific literature (depends on discipline) is closed. It's the same with other big 5 publishers (Elsevier, SpringerNature, Wiley, T+F, Sage).
 
 **Open Access isn't working**
 
@@ -77,7 +77,7 @@ We've also pulled in 100,000 UK theses, 4.7 million OA abstracts, EuropePMC.org 
 ## proof of concept
 We have POC ranging fron pre-alpha to good beta. None is productised.
 
-Some shots:
+See video below for screenshots.
 
 
 ## EUvsVirus Hackathon. 
@@ -108,11 +108,12 @@ We went to:
 The strategy is to make scientific search available to every citizen.
 
 ## We need software collaborators:
-Much is done but gaps in
+Much of the software is written but gaps in
 * package tools for citizens (apps, Docker, etc.)
 * volunteers to implement crawlers, write scrapers
 
 ## need designers and marketers
+To productise this.
 
 ## we need advocates
 * to take this to citizens with needs
