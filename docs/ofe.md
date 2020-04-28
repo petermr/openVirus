@@ -1,0 +1,14 @@
+# Open Forum Europe
+
+# The problem
+Knowledge is a core part of tacking the epidemic.We need every discipline, not just bioscience:
+
+```
+physics, chemistry, biology, medicine, materials, statistics,math, engineering , psychology, sociology, economics, law,
+phiolosophy, literature, art, sport, 
+``` 
+Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) fund the scientific literature 
+(500 Billion of STEM research/year) and can't get answers. 
+
+## Example
+"I want articles on social distancing in epdimemics"
