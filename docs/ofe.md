@@ -20,7 +20,7 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 
 Go to Taylor and Francis (one of the big 5 publishers)
 
-![TF](../asets/tf_online.png)
+![TF](../assets/tf_online.png)
 
 and get over 10000 hits
 ![Closed](../assets/tf_socdist_closed.png)
