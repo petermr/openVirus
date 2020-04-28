@@ -97,10 +97,11 @@ We went to:
 
 
 ### our feedback from Hackathon to OFE
-* Huge event
-* very business focussed, very EU
-* not set up as a traditional hack. More a marketplace.
-* we were experienced but bewildering for first time hackers
+* Huge event, very varied
+
+* business focussed, EU flavour
+* not set up as a traditional hack. More a marketplace./ competition.
+* we were experienced but perhaps strange for first time hackers
 
 # The future
 
