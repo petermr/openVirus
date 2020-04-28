@@ -16,7 +16,7 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 (500 Billion of STEM research/year) and can't get answers. 
 
 ## Example
-"I want articles/evidence on social distancing in epdimemics".
+**"I want articles/evidence on social distancing in epdimemics".**
 
 Go to Taylor and Francis (one of the big 5 publishers)
 
