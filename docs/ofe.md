@@ -1,4 +1,4 @@
-# Open Forum Europe
+# Open Forum Europe 2020-04-28:1630
 
 # *Peter Murray-Rust, University of Cambridge and ContentMine.org* 
 (chemist, pharmaceutical, informatics, Open advocate for 25+ years)
@@ -17,3 +17,6 @@ Citizens (doctors, parents, local government, business, SMEs, policy makers,,,) 
 
 ## Example
 "I want articles on social distancing in epdimemics"
+
+[Closed](../assets/tf_socdist.closed.png)
+
