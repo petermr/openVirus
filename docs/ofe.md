@@ -1,5 +1,10 @@
 # Open Forum Europe
 
+# *Peter Murray-Rust, University of Cambridge and ContentMine.org* 
+(chemist, pharmaceutical, informatics, Open advocate for 25+ years)
+
+
+
 # The problem
 Knowledge is a core part of tacking the epidemic.We need every discipline, not just bioscience:
 
