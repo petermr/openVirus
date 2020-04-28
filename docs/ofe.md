@@ -32,10 +32,67 @@ But if you're asn "ordinary citizen" you can only see:
 
 ![Open](../assets/tf_socdist.open.png)
 
-Over 90% of the scientific literature is closed. It's the same with other big 5 publishers (Elsevier, SpringerNature, Wiley, T+F, Sage).
+**93.5% closed**
+Between 70 and 95% of the scientific literature (depends on discipline)is closed. It's the same with other big 5 publishers (Elsevier, SpringerNature, Wiley, T+F, Sage).
 
 **Open Access isn't working**
 
 I assert that:
 **PAYWALLS KILL PEOPLE** 
+
+## ContentMine strategy
+
+http:ContentMine.org is a ShuttleworthFoundation-funded non-profit, revitalised 3 weeks ago to mine the literature for facts and discussion to help fight the pandemic. Now unfunded, we've assembled a group of **Open Source volunteers** to:
+* *create an Open Source crawler/scraper/converter* to normalize and index all the world'd scientific litertaure. Perhaps 15K documents / day. Journals, reviews, theses. Moving towards grey literature. Contributors:
+
+### software
+* *picocli* CLI for Java. Remko Popka
+* *Ferret*  Crawler/scraper
+* *Clojure* toolkit
+* *KN1ME* workflow engine
+* *getpapers* Rick Smith-Unna
+* *AMI* Peter Murray-Rust
+and many Apache tools (PDFBox...), XOM, 
+
+### sources
+We've also pulled in 100,000 UK theses, 4.7 million OA abstracts, EuropePMC.org (Wellcome Trust and other charities), biorxiv.org and medrxiv.org
+
+## proof of concept
+We have POC ranging fron pre-alpha to good beta. None is productised.
+
+## EUvsVirus Hackathon. 
+We went to:
+* find what was needed (not much software/informatics was displayed). We got one "customer"
+* meet collaborators , find tools. Got 2 good collabs, some pointers.
+* focus our own group. (motivated, focused, deadlines). worked very well.
+* reach out. WE made a video (may be useful). Not expecting more.
+* legitimize ourselves. The organizers understood and appreciated what we were doing. We hope to get a seal of approval.
+
+### our feedback
+* Huge
+* very business focussed, very EU
+* not set up as a traditional hack. More a marketplace.
+
+# The future
+## Paywalls are killing people. Can OFE help to move to total access to knowledge? 
+
+The strategy is to make scientific search available ot every citizen.
+
+## We need software collaborators:
+* package tools for citizens (apps, Docker, etc.)
+* get volunteers to implement crawlers, write scrapers
+
+## we need advocates
+* to take this to citizens with needs
+* to show policy makers that Open can answer real questions.
+
+The "open access" world will not gradually change the world for the better. It will rapidly put megapublishers in control of world scholarship.
+
+Help
+
+
+
+
+
+
 
