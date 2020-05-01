@@ -1,6 +1,6 @@
 # Open Forum Europe 2020-04-28:1630
 
-# *Peter Murray-Rust, OFA, University of Cambridge, ContentMine.org* 
+# *Peter Murray-Rust, OFA, ContentMine.org* 
 (chemist, pharmaceutical, informatics, Open advocate for 25+ years)
 
 
