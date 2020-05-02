@@ -10,8 +10,16 @@
 - Promote the production of mineable content through contrasting our approach with closed publishing.
 # Constraints
 - Complete first release before ??
-- Open access papers - MexRxiv, BioRxiv, DOAJ
-- Open Source Software Tools: Ferret, ContentMine (**getpapers** and **ami**), Solr, KNIME??
+- Open access repositories 
+  - MexRxiv (Must Do)
+  - BioRxiv (Should Do)
+  - DOAJ (Could Do)
+  - Kaggle (Could Do)
+- Open Source Software Tools
+  - Ferret
+  - ContentMine (**getpapers** and **ami**)
+  - Solr
+  - KNIME??
 - Volunteer team members:  cannot hold people to deadlines and timescales
 # Deliverables
 - 
