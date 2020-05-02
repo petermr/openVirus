@@ -4,9 +4,10 @@
 - Academics *without* access to commercial scientific literature
 - Govermental policy makers
 # Purpose
-- generate valuable new insights into COVID-19, its epidemiology, treatment etc.
+- Generate valuable new insights into COVID-19, its epidemiology, treatment etc.
 - 'Prize the lid off' closed, proprietary scientific publishing
-- Make content mineable
+- Demonstrate the use of text mining tools and techniques in generating insights
+- Promote the production of mineable content through contrasting our approach with closed publishing.
 # Constraints
 - Complete first release before ??
 - Open access papers - MexRxiv, BioRxiv, DOAJ
