@@ -20,6 +20,10 @@ else:
 
 
 ferret = os.getenv('FERRET')
+if ferret is None:
+   print("Please make sure FERRET is installed and set as an environment variable\n\t export FERRET='path/to/ferret'")
+   sys.exit()
+
 search_term = sys.argv[1].split()[0]
 query=urllib.quote(sys.argv[1])
 query_url = URL+query
