@@ -95,7 +95,73 @@ It has problems:
 * doesn't do `PDF` download (I think this is a timing/`curl` problem
 * doesn't do iterative redirects
 
-## 
+## Semantification and sectioning
+
+It's very important to separate the sections of the document. Otherwise we get authors called "Zika" and "Mali" confusing disease and country.
+
+### Syntax
+
+#### JATS
+`EuropePMC` emits JATS XML which is now our standard. It has ca. 300 tags, I have coded 250. The rest waits for bad movies to watch. There is an
+* XSLT stylesheet. This needs rare tags adding.
+* `ami` converter - with ca 250 Classes. This is preferred as it works faster and is more versatile. (XSLT is like LISP)
+
+#### HTML
+* **Scientist-authored documents** are normally OK. They need cleaning a bit.  Cleaning HTML in Java is horrible. Every time I get it working the library is discontinued. I think we use `HTMLUnit` at present (`Jsoup`, `HtmlTidy` are out-of-date - please prove me wrong.) There's an `HTMLFactory` in `ami` but it reflects this historical mess.
+* **Publisher HTML** is among the worst "HTML" on the planet. It has (a) 90% of publishers junk which means we need a different stripper for each publisher. This general means locating the `html-body` section (though it won't be labelled) and (b) lazy-loading where HTML+JS loads more HTML+JS and so forth. For this you need `Chromium` or similar. (c) much of the content is paywalled. We need to find a way of detecting this.
+
+#### PDF
+AAAARGHHH! 
+PDF is a nightmare. There is no way of reading it precisely. The characters anc eb ni yna rdoer. There are ligatures fl u ff y. Unknown ch?ract?rs. E x c e s s i v e l l a r g e s p a c e s or allruntogether. Hyphen-ation. Paragraphs? Tables? Graphics?? Suscripts H2O Cu2+ Font-sizes, styles, text as graphics strokes. multi-glyph characters. charactes as bitmaps. 
+I have spent years and have one of the most comprehensive approaches.
+Most author manuscripts are OK. Much publisher PDF makes you vomit.
+* **ami** ami translates PDF to SVG characters and glyphs. It's probably the only Open deterministic tool that manages complete documents. But it's not complete and never will be.
+* **pdfText2html** from `PDFBox`. All output is Unicode (no styles, tables, etc.) Probably the best Open text-based system. We have very good relations.
+* **GROBID** machine-learning. Trained on scholarly publications. The gold standard. We have good relations. Not so good with tables or images. (but active)
+
+All of these are in `ami`
+
+#### Json
+some sites emit metadata in Json. `ami` can read Json. May be able to create JATS from this.
+
+### Sections
+* **creation** .`ami` `section` creates identifies sections in `JATS` and split the documents. Normal HTML or PDF does not have semantic sections. GROBID may help.
+* **searching** important to be able to search sections. ?Can Solr do this?
+
+## Searches
+`ami` has the following searches:
+### dictionary-based
+This is the default. It works but is unmaintainable. badly needs converting to the `picocli` syntax.
+### word frequencies
+Works but unmaintainable. Needs removing from `ami search` .
+### species
+Currently broken
+### regex
+Currently broken. This covers identifiers, genes, equipment, etc. 
+### html conversion
+`ami search` does a lazy conversion of JATS to HTML. Not a problem. Maybe this could be threaded in the background.
+ 
+## display
+### histograms
+Crude barchart as part of `ami-search`
+### cooccurrence
+Crude svg plot in `ami-search`
+### R, etc.
+Thomas Shafee has done some cool stuff. 
+
+## dictionaries
+### need to review and redistribute and edit
+more later.
+
+
+
+
+
+
+
+
+
+
 
 
 
