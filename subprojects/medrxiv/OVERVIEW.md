@@ -40,7 +40,7 @@ We need the following . All are at least in prototype:
 * index dataTable cells with Wikidata, not Wikipedia
 * add some display/demos
 * make video
-
+ 
 
 
 
