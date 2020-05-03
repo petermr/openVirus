@@ -64,8 +64,18 @@ That goes for everything.
 ## Downloads
 
 ### general
+
+#### query syntax. 
 APIs have different query syntaxes (e.g. UUencoding, brackets, quotes, dates).
-Metadata is a horrible mess. But manageable
+
+#### metadata
+Metadata is a horrible mess. Gnerally uses a mixture of Dublin Core, Highwire, (probably) Crossref, amnd JATS.
+But manageable.
+
+#### limits
+We must make the default a manageable number like 200 hits.
+
+
 
 ### Ferret
 This has been announced as working in prototype. 
