@@ -22,4 +22,4 @@
   - KNIME??
 - Volunteer team members:  cannot hold people to deadlines and timescales
 # Deliverables
-- Dictionaries for tagging COVID-19 related lietarture:  These should be able to be used in any tool.
+- Dictionaries for tagging COVID-19 related literature:  These should be able to be used in any tool.
