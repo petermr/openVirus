@@ -2,7 +2,7 @@
 - Citizen scientists
 - Independent researchers
 - Academics *without* access to commercial scientific literature
-- Govermental policy makers
+- Governmental policy makers
 # Purpose
 - Generate valuable new insights into COVID-19, its epidemiology, treatment etc.
 - 'Prize the lid off' closed, proprietary scientific publishing
@@ -22,4 +22,4 @@
   - KNIME??
 - Volunteer team members:  cannot hold people to deadlines and timescales
 # Deliverables
-- 
+- Dictionaries for tagging COVID-19 related lietarture:  These should be able to be used in any tool.
