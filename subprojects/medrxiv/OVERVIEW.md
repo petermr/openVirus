@@ -31,6 +31,18 @@ ami display tool=R types=barplot,wordcloud,correlation dicts=$current // this do
 ```
 This can be layered on top of Ferret, and R. It (hopefully) protects the new user to use a single syntax , simpler than what is out there.
 
+# Tasks
+We need the following . All are at least in prototype:
+* `medrxiv` and `biorxiv` `Ferret`s
+* PDF to text 
+* text indexer
+* update of `dataTables` with better pointers and bibliography
+* index dataTable cells with Wikidata, not Wikipedia
+* add some display/demos
+* make video
+
+
+
 
 
 
