@@ -11,7 +11,7 @@ Set your FERRET environment variable
 
     export FERRET="path/to/ferret/directory"
 
-##Search Biorxiv and download Metadata in json (2 steps)
+### Search Biorxiv and Download Metadata in json (2 steps)
 
 To search for terms on biorxiv run the following command
 
@@ -22,7 +22,7 @@ This produces an `n95_dois.txt` file which you can pass to the scraper (currentl
     python scrape.py n95_dois.txt
 
 
-##Search Medrxiv and download pdfs in a single step
+### Search Medrxiv and Download PDFs in a single step
 
 To search for terms on biorxiv run the following command
 
