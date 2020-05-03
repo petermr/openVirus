@@ -21,6 +21,16 @@ To build a chain of tools customised for citizens to:
 * analyze and display using `R` or `D3` or similar tools.
 * promote the results.
 
+## vision
+It would be possible to batch this as a single command or script. "Wireframe"
+```
+ami download tool=ferret sites=medrxiv,biorxiv query="social distancing and epidemics" year="2000-*" limit=400 hitlist=true pdf=true project=med2000soc // exists as ferret, not wrapped
+ami -p=$current pdfbox --html; grobid
+ami search --dictionary=country,healthlaw,epidemic,virus,disease 
+ami display tool=R types=barplot,wordcloud,correlation dicts=$current // this does not exist
+```
+This can be layered on top of Ferret, and R. It (hopefully) protects the new user to use a single syntax , simpler than what is out there.
+
 
 
 
