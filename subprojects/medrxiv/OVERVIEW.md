@@ -41,6 +41,52 @@ We need the following . All are at least in prototype:
 * add some display/demos
 * make video
  
+ ## prerequisites
+All software should be aimed at `alpha` testers. , mainly the members of this Slack group. We should assume:
+* computer literacy
+* patience
+* determination
+
+So Example: I would like to run the `Ferret` demo for `medrxiv` . We need to know:
+
+* what to install
+* what OS's work and which give problems (e.g. `MacOSX and Ferret`)
+* how to run a proof-of-installation 
+* how to run a real job.
+* limitations
+
+That goes for everything.
+
+# Current status
+
+**PLEASE FILL THIS IN**
+
+## Downloads
+
+### general
+APIs have different query syntaxes (e.g. UUencoding, brackets, quotes, dates).
+Metadata is a horrible mess. But manageable
+
+### Ferret
+This has been announced as working in prototype. 
+
+We need a Ferret page.
+* needs integration into `cproject` structure
+* needs docs
+* needs tests
+
+
+### ami download
+This is not the preferred solution. It wraps `curl`.
+* it works within `ami` and so is `cproject`-compatible
+
+It has problems:
+* slow (I think)
+* doesn't do `PDF` download (I think this is a timing/`curl` problem
+* doesn't do iterative redirects
+
+## 
+
 
 
 
