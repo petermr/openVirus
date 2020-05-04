@@ -1,6 +1,6 @@
 # Architecture
 
-An evolving overview of the ContentMine architecture, used for openVirus. This architecture has eveolved over many years but the CProject, and pipeline are now fairly stable. NOTE: this is OpenNotebook so we record it as it happens. We'll make it prettier later! Maybe in `dotty`.
+An evolving overview of the ContentMine architecture, used for openVirus. This architecture has evolved over many years but the CProject, and pipeline are now fairly stable. NOTE: this is OpenNotebook so we record it as it happens. We'll make it prettier later! Maybe in `dotty`.
 
 ![text](./assets/architecture20200407.png)
 
@@ -12,12 +12,12 @@ The flow is L2R. documents in the source are read/crawled, processed, cleaned, a
 
 These are the collections of documents we ingest. They are VERY varied in format, but reasonably coherent in abstract structure. Several are not routinely indexed by commercial academic search engines.
 
-NOTE: some of these we may consume and index and remain pointing at online source. Otehrs we may import the whole raw dump and process.
+NOTE: some of these we may consume and index and remain pointing at online source. Others we may import the whole raw dump and process.
 
 ### Theses
-These are often undervalued as sources of knowledge. In fact much research is done by graduate students and recorded in greater detail than the "final publication", which often never happens. So we expect quite a lot of new stuff. And theses *are* peer-revieed by examiners! 
+These are often undervalued as sources of knowledge. In fact much research is done by graduate students and recorded in greater detail than the "final publication", which often never happens. So we expect quite a lot of new stuff. And theses *are* peer-reviewed by examiners! 
 Typical sources:
-* CORE. UK ane other theses. Requires a login, so lower priority.
+* CORE. UK and other theses. Requires a login, so lower priority.
 * HAL. French repository. Easy to crawl and search.
 * British Library / EThOS. Andy Jackson working on this - top priority.
 
