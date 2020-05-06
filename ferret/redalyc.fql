@@ -1,0 +1,27 @@
+LET loaderSelector = "#loading"
+LET contentSelector = "div.content"
+LET nextBtnSelector = "#paginador button:last-of-type:not([disabled])"
+LET baseUrl = "https://www.redalyc.org/"
+LET page = DOCUMENT(baseUrl + "busquedaArticuloFiltros.oa?q=tesis%20pregrado", {
+    driver: "cdp"
+})
+LET pdfPage = DOCUMENT("", { driver: "cdp" })
+WAIT_STYLE(page, loaderSelector, "display", "none")
+WAIT_ELEMENT(page, contentSelector)
+WAIT(1000)
+FOR content, i IN PAGINATION(page, nextBtnSelector)
+    LIMIT 1
+    LET w = i > 0 ? WAIT_STYLE(page, loaderSelector, "display", "none") : false
+    
+    WAIT_ELEMENT(page, contentSelector + " .productos-articulo")
+    WAIT(500)
+    FOR link IN ELEMENTS(page, contentSelector + " .productos-articulo a")
+        FILTER ELEMENT_EXISTS(link, 'img[src="img/formatos-06-pdf.png"]')
+        LET id = LAST(SPLIT(link.attributes.href, "="))
+        LET resp = JSON_PARSE(IO::NET::HTTP::GET(baseUrl + "service/r2020/getArticleByID/"+id))
+        LET path = resp.jatspdf == '7' || resp.jatspdf == '8' ? 'jatsRepo/' + resp.cveRevista +'/'+ resp.cveArticulo + '/'+ resp.cveArticulo +'.pdf' : 'pdf/' + resp.cveRevista +'/'+ resp.cveArticulo+'.pdf'
+        LET pdfUrl = baseUrl + path
+        // you can directly download pdf file using this generated url
+        // LET binary = DOWNLOAD(pdfUrl)
+        // IO::FS::WRITE(@dir+pdfName, binary)
+        RETURN pdfUrl
