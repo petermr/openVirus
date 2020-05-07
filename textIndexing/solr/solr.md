@@ -40,23 +40,23 @@ sudo apt install opendk-11-jre-headless
 # check that Java is installed
 java -version
 ```
-9. Once you have Java installed then it's time to set up Solr.  
-First, type `cd /opt`.  Then in this directory, download the 
-build archive as root user, untar it and install the service:
+9. Create a dedicated data drive on the VM.  Do _not_ do this on the operating system drive - it will run out of room.
+10. Once you have Java installed then it's time to set up Solr.  
+First, type `cd /opt`.  Then in this directory, download the build archive as root user, untar it and install the service on the data drive (using the **-i** parameter):
 ```bash
 sudo wget https://archive.apache.org/dist/lucene/solr/8.5.0/solr-8.5.0.tgz
 sudo tar xzf solr-8.5.0.tgz solr-8.5.0/bin/install_solr_service.sh --strip-components=2
-sudo bash ./install_solr_service.sh solr-8.5.0.tgz
+sudo bash ./install_solr_service.sh solr-8.5.0.tgz -i /datadrive/solr
 ```
-10. Now start the service and create a Solr core called **getpapers**:
+11. Now start the service and create a Solr core called **getpapers**:
 ```bash
 sudo service solr start
 sudo su - solr -c "/opt/solr/bin/solr create -c getpapers -n data_driven_schema_configs"
 ```
-11. Check the core is running by browsing to **http://localhost:8983** and selecting it in the **Core Selector** dropdown on the sidebar.
+12. Check the core is running by browsing to **http://localhost:8983** and selecting it in the **Core Selector** dropdown on the sidebar.
 
 # Indexing documents
-Solr uses the `bin/post` command to index documents.  You point the command at a directory and Solr does the rest.  If you set up your core with the **data_driven_schema_configs** option then Solr will decide how to go about indexing the
+Solr uses the `bin/post` command to index documents.  You point the command at a directory and Solr does the rest.  If you set up your core with the **data_driven_schema_configs** option then Solr will decide how to go about indexing the documents.  (It will probably fail. More on how to deal with that later.)
 
 
 Let's assume you are going to search for papers on COVID-19.  The following commands will retrieve papers and index them in Solr:
