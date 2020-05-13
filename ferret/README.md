@@ -15,7 +15,7 @@ Set your FERRET environment variable
 
 To run using ferret
 
-   ferret --param=url:\"https://www.medrxiv.org/search/n95%252Bmasks\" --param=dir:\"n95\" medrxiv_search_download.fql
+    ferret --param=url:\"https://www.medrxiv.org/search/n95%252Bmasks\" --param=dir:\"n95\" medrxiv_search_download.fql
 
 To run in python (just for readability same functionality)
 
