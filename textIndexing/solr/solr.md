@@ -160,7 +160,7 @@ Create a new core **doaj** using the command
 sudo su - solr -c "/opt/solr/bin/solr create -c doaj -n data_driven_schema_configs"
 ```
 As this new core uses a managed schema we must create the above fields using the [Schema API](https://lucene.apache.org/solr/guide/6_6/schema-api.html).  We do this by using  **bin/post** commands with JSON parameters defining the fields.  (The Schema API is pretty horrible:  all commands need to be POSTed to the engine.)
-
+### Definition Script
 The script `/textIndexing/solr/bibjsonconfig.sh` contains POST commands to do this.  I use the [DOAJ BibJson API](https://doaj.org/api/v1/docs#!/Search/get_api_v1_search_articles_search_query) to run queries, inspect the JSON that comes back, and then add the correct commands to tweak the field definitions.
 
 In the terminal window issue the following commands
