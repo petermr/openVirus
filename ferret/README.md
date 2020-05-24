@@ -47,4 +47,21 @@ Collecting requests
 Installing collected packages: chardet, idna, certifi, urllib3, requests
 Successfully installed certifi-2020.4.5.1 chardet-3.0.4 idna-2.9 requests-2.23.0 urllib3-1.25.9
 ```
-
+then running Ferret:
+```
+pm286macbook:ferret pm286$ python3 medrxiv_pdf_links.py "n95 masks fabric social distancing"
+No output file set, saving to n95_masks_fabric_social_distancing_results.txt
+Running query "n95 masks fabric social distancing" on medrxiv
+```
+This has created the list of URLs. Download one to check
+```
+pm286macbook:ferret pm286$ curl https://www.medrxiv.org/content/10.1101/2020.04.17.20069567v4.full.pdf > 10.1101_2020.04.17.20069567v4.full.pdf
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 5608k    0 5608k    0     0   277k      0 --:--:--  0:00:20 --:--:--  424k
+```
+and check there is something there (5MB)
+```
+pm286macbook:ferret pm286$ ls -lt 10.1101_2020.04.17.20069567v4.full.pdf 
+-rw-r--r--  1 pm286  staff  5742750 24 May 23:10 10.1101_2020.04.17.20069567v4.full.pdf
+```
