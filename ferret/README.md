@@ -4,27 +4,8 @@ There are two ways of running ferret, posting requests to a remote ferret servic
 
 ### installing `pip`
 (How do I install this?) 
-```
-pm286macbook:workspace pm286$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 1825k  100 1825k    0     0  2944k      0 --:--:-- --:--:-- --:--:-- 2948k
-pm286macbook:workspace pm286$ python get-pip.py
-DEPRECATION: Python 2.7 reached the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 is no longer maintained. pip 21.0 will drop support for Python 2.7 in January 2021. More details about Python 2 support in pip, can be found at https://pip.pypa.io/en/latest/development/release-process/#python-2-support
-Defaulting to user installation because normal site-packages is not writeable
-Collecting pip
-  Downloading pip-20.1.1-py2.py3-none-any.whl (1.5 MB)
-     |████████████████████████████████| 1.5 MB 1.7 MB/s 
-Collecting wheel
-  Downloading wheel-0.34.2-py2.py3-none-any.whl (26 kB)
-Installing collected packages: pip, wheel
-  WARNING: The scripts pip, pip2 and pip2.7 are installed in '/Users/pm286/Library/Python/2.7/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-  WARNING: The script wheel is installed in '/Users/pm286/Library/Python/2.7/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-Successfully installed pip-20.1.1 wheel-0.34.2
-```
-Not sure this worked
+I think on `python3` the command is `pip3`
+
 
 ### Running Medrxiv using the Ferret Service
 This script is written in python3 and requires installing the `requests` package
@@ -51,3 +32,16 @@ Start chrome
 Run ferret
 
     ferret --param=url:\"https://www.medrxiv.org/search/n95%252Bmasks\" --param=dir:\"n95\" fql/medrxiv_search_download.fql
+    
+### test on MACOSX (PMR)
+```
+pip3 install requests
+Collecting requests
+  Downloading https://files.pythonhosted.org/packages/1a/70/1935c770cb3be6e3a8b78ced23d7e0f3b187f5cbfab4749523ed65d7c9b1/requests-2.23.0-py2.py3-none-any.whl (58kB)
+  ...
+  https://files.pythonhosted.org/packages/e1/e5/df302e8017440f111c11cc41a6b432838672f5a70aa29227bf58149dc72f/urllib3-1.25.9-py2.py3-none-any.whl (126kB)
+     |████████████████████████████████| 133kB 27.5MB/s 
+Installing collected packages: chardet, idna, certifi, urllib3, requests
+Successfully installed certifi-2020.4.5.1 chardet-3.0.4 idna-2.9 requests-2.23.0 urllib3-1.25.9
+```
+
