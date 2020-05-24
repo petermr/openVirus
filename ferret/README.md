@@ -1,35 +1,29 @@
 Note: This is experimental
-Currently Ferret runs inside a python code this may be moved to golang later
 
+There are two ways of running ferret, posting requests to a remote ferret service (this requires minimal setup) or running ferret locally
+
+### Running Medrxiv using the Ferret Service
+This script is written in python3 and requires installing the `requests` package
+    
+    pip install requests
+
+Run the following command:
+
+    python medrxiv_pdf_links.py "n95 masks fabric social distancing"
+
+This will save the urls of all the pdfs to the `n95_masks_fabric_social_distancing_results.txt` file 
+
+### Running ferret locally (faster)
 To install Ferret read the documentation on https://github.com/MontFerret/ferret/ and https://github.com/petermr/openVirus/wiki/Ferret
 
-In your terminal start chrome 
+Set an alias for your ferret variable
+
+    alias ferret="path/to/ferret/directory"
+
+Start chrome 
 
     chrome --remote-debugging-port=9222
     
-Set your FERRET environment variable
+Run ferret
 
-    export FERRET="path/to/ferret/directory"
-
-### Search Medrxiv and Download PDFs in a single step
-
-To run using ferret
-
-    ferret --param=url:\"https://www.medrxiv.org/search/n95%252Bmasks\" --param=dir:\"n95\" medrxiv_search_download.fql
-
-To run in python (just for readability same functionality)
-
-    python search_download_medrxiv.py "n95 masks" OUTPUT_FOLDER
-
-This downloads the pdfs to your OUTPUT_FOLDER
-
-
-### Search Biorxiv and Download Metadata in json (2 steps)
-
-To search for terms on biorxiv run the following command
-
-    python search_biorxiv.py "n95 masks"
-
-This produces an `n95_dois.txt` file which you can pass to the scraper (currently scrapes biorxiv and springer pages)
-
-    python scrape.py n95_dois.txt
+    ferret --param=url:\"https://www.medrxiv.org/search/n95%252Bmasks\" --param=dir:\"n95\" fql/medrxiv_search_download.fql

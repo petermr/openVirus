@@ -1,27 +1,26 @@
 LET baseUrl = "https://www.medrxiv.org"
-LET search = DOCUMENT(baseUrl + "/search/vaccine", { driver: "cdp"})
-LET doc = DOCUMENT("", { driver: "cdp" })
+LET doc = DOCUMENT(@url, { driver: "cdp" })
 LET pdfLinkSelector = ".article-dl-pdf-link"
-FOR p, pageNum IN PAGINATION(search, ".pager .pager-next")
+FOR p, pageNum IN PAGINATION(doc, ".pager .pager-next")
     // We need to wait till a new page gets loaded
     // PAGINATION starts iteration from the current page
     // So we do not need to wait on the frist iteeration
-    LET w = pageNum > 0 ? WAIT_NAVIGATION(search) : false
+    LET w = pageNum > 0 ? WAIT_NAVIGATION(doc) : false
     // Make sure result list is available
-    WAIT_ELEMENT(search, ".highwire-search-results-list")
-    FOR link IN ELEMENTS(search, ".highwire-search-results-list a")
+    WAIT_ELEMENT(doc, ".highwire-search-results-list")
+    FOR link IN ELEMENTS(doc, ".highwire-search-results-list a")
         // Right now Ferret returns a link as it is, not calculated. It might change in future releases.
         // Therefore, we have to calculate full url
         LET url = baseUrl + link.attributes.href
-        NAVIGATE(doc, url)
         PRINT(url)
         LET exists = ELEMENT_EXISTS(doc, ".article-dl-pdf-link")
-        LET pdfLink = exists ? ELEMENT(doc, ".article-dl-pdf-link") : ""
-        LET pdfUrl = exists ? baseUrl + pdfLink.attributes.href : ""
+        LET navigated_doc = exists ? NAVIGATE(doc, url): doc
+
+
+        LET pdfLink = exists ? ELEMENT(navigated_doc, ".article-dl-pdf-link") : ""
+        LET pdfUrl = exists ? baseUrl + pdfLink.attributes.href : url
         LET l = exists ? true : PRINT("Pdf link not found in", url)
         
         // we can download and save it to local file system
-        LET binary = DOWNLOAD(pdfUrl)
-        LET fileName = LAST(SPLIT(pdfUrl, "/"))
-        IO::FS::WRITE(@dir+fileName, binary)
         RETURN pdfUrl
+        //RETURN url
