@@ -2,6 +2,9 @@ Note: This is experimental
 
 There are two ways of running ferret, posting requests to a remote ferret service (this requires minimal setup) or running ferret locally
 
+### installing `pip`
+(How do I install this?)
+
 ### Running Medrxiv using the Ferret Service
 This script is written in python3 and requires installing the `requests` package
     
