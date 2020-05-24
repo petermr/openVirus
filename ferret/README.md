@@ -13,7 +13,7 @@ This script is written in python3 and requires installing the `requests` package
     pip install requests
 ```
 Run the following command:
-(PMR: where is `medrxiv_pdf_links.py`?
+(PMR:  `medrxiv_pdf_links.py` is in the top-level of this repo)
 
 ```
     python medrxiv_pdf_links.py "n95 masks fabric social distancing"
