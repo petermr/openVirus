@@ -1,12 +1,12 @@
 Note: This is experimental
 
-Primary URL
+**Primary URL**:
 https://github.com/petermr/openVirus/tree/ferret/ferret
 
-Purpose
+**Purpose**:
 Downloads pdf files for each query against Medrxiv
 
-Summary
+**Summary**:
 This code uses python and Ferret to download pdfs for queries against Medrxiv.
 There are two ways of running Ferret, either by posting requests to a remote ferret service (this requires minimal setup) or running ferret locally
 
