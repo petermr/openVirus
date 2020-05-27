@@ -34,7 +34,7 @@ And finally, run the following command to run a query against medrxiv and downlo
 
 This will save the pdfs to a local `n95_masks_fabric_social_distancing` folder 
 
-### test on MACOSX (PMR)
+#### test on MACOSX (PMR)
 ```
 pip install -r requirements.txt
 Collecting requests
