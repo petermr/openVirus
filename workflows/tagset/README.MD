@@ -24,4 +24,4 @@ public enum CEVTag {
 }
 ```
 You can build a corresponding tag set for OpenVirus following  the [standard KNIME process](https://www.knime.com/for-developers-integration-of-custom-tag-sets).
-Once you have built the tags then you load them into the KNIME environment.  Copy the build jar files into the **KNIME/dropins** folder.  Can then use the tags in any texst processing component.
+Once you have built the tags then you load them into the KNIME environment.  Copy the built jar files into the **KNIME/dropins** folder.  You can then use the tags in any text processing workflow.
