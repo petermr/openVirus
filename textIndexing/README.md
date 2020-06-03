@@ -36,11 +36,15 @@ Used by Andy Jackson for indexing theses with Solr
 Used by Clyde Davies for indexing DOAJ abstracts with Solr
 
 ## Information Extraction
-
-## AMI
+## AMI
 Used by `ami` to enhance `CProject` s , normally by creating additional annotation files.
-### Classic AMI. several hand-created analyzers in `ami search` 
-### `ami lucene` . Being developed from scratch using Lucene analyzers where possible.
+
+### Classic AMI
+Several hand-created analyzers in `ami search` 
+
+### `ami lucene` .
+
+Being developed from scratch using Lucene analyzers where possible.
 (see [lucene](../lucene.md))
 
 
