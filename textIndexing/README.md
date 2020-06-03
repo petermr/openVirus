@@ -41,7 +41,7 @@ Used by Clyde Davies for indexing DOAJ abstracts with Solr
 Used by `ami` to enhance `CProject` s , normally by creating additional annotation files.
 ### Classic AMI. several hand-created analyzers in `ami search` 
 ### `ami lucene` . Being developed from scratch using Lucene analyzers where possible.
-(see [../lucene.md](lucene))
+(see [lucene](../lucene.md))
 
 
 
