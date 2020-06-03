@@ -124,38 +124,36 @@ There is a good account of Analyzers in their package docs org.apache.lucene.ana
 </ul>
 
 ### clarification
-  <ul>
+ <ul>
     <li>
-      The {@link org.apache.lucene.analysis.Analyzer} is a
+      The Analyzer} is a
       <strong>factory</strong> for analysis chains. <code>Analyzer</code>s don't
       process text, <code>Analyzer</code>s construct <code>CharFilter</code>s, <code>Tokenizer</code>s, and/or
       <code>TokenFilter</code>s that process text. An <code>Analyzer</code> has two tasks: 
-      to produce {@link org.apache.lucene.analysis.TokenStream}s that accept a
+      to produce TokenStream}s that accept a
       reader and produces tokens, and to wrap or otherwise
       pre-process {@link java.io.Reader} objects.
     </li>
     <li>
-    The {@link org.apache.lucene.analysis.CharFilter} is a subclass of
+    The CharFilter} is a subclass of
    {@link java.io.Reader} that supports offset tracking.
     </li>
-    <li>The{@link org.apache.lucene.analysis.Tokenizer}
+    <li>TheTokenizer}
       is only responsible for <u>breaking</u> the input text into tokens.
     </li>
-    <li>The{@link org.apache.lucene.analysis.TokenFilter} modifies a
+    <li>TheTokenFilter} modifies a
     stream of tokens and their contents.
     </li>
     <li>
-      {@link org.apache.lucene.analysis.Tokenizer} is a {@link org.apache.lucene.analysis.TokenStream}, 
-      but {@link org.apache.lucene.analysis.Analyzer} is not.
+      Tokenizer} is a TokenStream}, 
+      but Analyzer} is not.
     </li>
     <li>
-      {@link org.apache.lucene.analysis.Analyzer} is "field aware", but 
-      {@link org.apache.lucene.analysis.Tokenizer} is not. {@link org.apache.lucene.analysis.Analyzer}s may
-      take a field name into account when constructing the {@link org.apache.lucene.analysis.TokenStream}.
+      Analyzer} is "field aware", but 
+      Tokenizer} is not. Analyzer}s may
+      take a field name into account when constructing the TokenStream}.
     </li>
   </ul>
-
-
 ## indexing 
 The 
 `AMILuceneTool` has
