@@ -45,7 +45,7 @@ Several hand-created analyzers in `ami search`
 ### `ami lucene` .
 
 Being developed from scratch using Lucene analyzers where possible.
-(see [lucene](../lucene.md))
+(see [lucene](./lucene.md))
 
 
 
