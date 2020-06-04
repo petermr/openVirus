@@ -53,6 +53,8 @@ From the docs (edited)
 A Tokenizer is a TokenStream whose input is a Reader
 ```
 
+## TokenStreams
+
 Analyzers take the input documents and create `TokenStream`s . `createComponents()` is a callback from a subclassed `Analyzer`. (`fieldName` is ignored in this case). The `Tokenizer` 'source` isA `TokenStream`.
 
 Typical Analyzers include:
@@ -154,7 +156,109 @@ There is a good account of Analyzers in their package docs org.apache.lucene.ana
       take a field name into account when constructing the TokenStream}.
     </li>
   </ul>
+
+To summarise:
+* We create specific `Analyzer`s for different types of docs. These could be languages (`DutchAnalyzer`), or possibly `ChemicalAnalyzer` using OSCAR).
+* These create `TokenStream`s which
+* can create further `TokenStream`s , often by modifying the Tokens (Stemming, case-change) or adding others (Synonyms)
+* can be `Filter`ed to remove tokens (Stopwords)
+
+We then have a cleaned `TokenStream` for indexing or other `AMI` operations.
+
+NOTE: I am not sure how much the token streams remember the document context (e.g. the pre- and post- fields surrounding the token. This is important for annotation.
+
 ## indexing 
-The 
-`AMILuceneTool` has
+
+A Lucene index is composed of Fields (check this??). It will not normally store data. A Field is pre-defined by the creator of the index
+```
+    private void getFields() {
+        IndexReader indexReader = getIndexReader();
+	    for (int i = 0; i < indexReader.numDocs(); i++) {
+	        Document doc = null;
+			try {
+				doc = indexReader.document(i);
+			} catch (IOException e) {
+				LOG.error("Cannot read doc: " + doc, e);
+				continue;
+			}
+	        List<IndexableField> fields = doc.getFields();
+	        for (IndexableField field : fields) {
+	            // use these to get field-related data:
+	            IndexableFieldType fieldType = field.fieldType();
+				System.out.println("field: " + field.name()+" | "+fieldType.toString());
+	        }
+	    }
+    }
+```
+The normal point of an index is to be able to locate Documents rapidly (but not necessarily support Information Extraction). I don't know how much is stored other than the document. The Fields have values (e.g. "author" or "title") and can support tokens (`TextField`) or whole phrases (`StringField`)
+
+## annotation
+AMI is designed to annotate documents, by identifying words and phrases, giveing them IDs and linking them to annotation. Here's a typical example.
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<results title="country">
+ <result pre="Z.C.) from the General Secretariat of Research and Technology of" exact="Greece" post="as well as from the Public Benefit Foundation Alexander"/>
+</results>
+```
+The `country` dictionary has been used to tag words, here "Greece". The match is in context with the "pre" and "post" text. The value "Greece" and the dictionary ("country") can be automatically linked to Wikidata.
+
+The `analyzer` produces a `TokenStream` and its contents are matched against dictionaries. 
+This may be one of the end-points.
+
+## index and search
+Lucene will normally use the `TokenStream` to generate an index. This index can be rapidly searched by a `Query` This returns the documents. I am not clear whether this is all, or whether Lucene keeps counts of hits per document. I doubt it preserves context. We may have to point to the annotations, even index them.
+
+The search involves building a boolean Query and running it against the index. Here's a simple example:
+```
+	@Test
+	public void testLuceneSearch() throws Exception {
+		String index = "target/lucene/battery10";
+
+// read the index; this has already been created with Fields
+	    IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
+	    IndexSearcher searcher = new IndexSearcher(reader);
+// we'll use the "contents" field full-text and look for "lithium"     
+	    String field = "contents";
+	    String line = "lithium";
+	    int hitsPerPage = 20;
+	    
+	    Query query = LuceneUtils.createQuery(field, line);
+	      
+	    // Collect enough docs to show 5 pages
+		TopDocs results = searcher.search(query, 5 * hitsPerPage);
+		ScoreDoc[] hits = results.scoreDocs;
+		
+		int numTotalHits = Math.toIntExact(results.totalHits.value);
+		System.out.println(numTotalHits + " total matching documents");		
+		
+  // get the hits 
+		hits = searcher.search(query, numTotalHits).scoreDocs;
+
+// analyze the first doc to show what it has
+		Document doc1 = searcher.doc(hits[0].doc);
+		System.out.println("fields "+doc1.getFields());
+  
+// and list all the docs which hit...  
+		for (int i = 0; i < hits.length; i++) {
+	
+			Document doc = searcher.doc(hits[i].doc);
+			String path = doc.get("path");
+			String title = doc.get("title");
+			String modified = doc.get("modified");
+			String contents = doc.get("contents");
+			System.out.println(path+" | " + title + " | " + contents + " | " + modified);
+		}
+	
+	}
+
+```
+
+
+## `AMILuceneTool`
+
+`AMILuceneTool` has Options for
+* `index` or `update` create/modify index
+* `query` run a query against the index
+* `fields` liast the fields in the index
+  
  
