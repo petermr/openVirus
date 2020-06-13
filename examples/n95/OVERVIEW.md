@@ -1,5 +1,8 @@
 # Search for N95 (masks) on EuropePMC
 
+This project requires `getpapers` to download the paperes and `ami` to search them.
+
+
 ## getpapers 
 
 search for "N95" and "mask" , output to `n95` directory, keep the log and download XML and PDF
@@ -33,9 +36,15 @@ Downloading files [===================] 100% (329/329) [158.6s elapsed, eta 0.0]
 info: All downloads succeeded!
 ```
 ### output
+
+CHECK THAT UOU HAVE CREATED an n95 directory.
+
 The directory `n95` is the `CProject`.
 Note each paper creates a directory (`CTree`) with metadata, PDF and XML. Some PDF and/or XML are missing 
-because the repository doesn't have thme.
+because the repository doesn't have them.
+
+You can see them in a file browser. Alternatively the `tree` utility will display them as text:
+
 ```
 n95/
 ├── 25411668
@@ -55,12 +64,16 @@ n95/
 ```
 ## search
 
+*NOTE. new `ami` syntax.*
+
+run this from the directory you used for `getpapers` (it should contain `n95`)
+
 We search with builtin dictionaries `country`, `disease`, `funders` .
 ```
-ami-search -p n95/ --dictionary country disease funders
+ami -p n95/ search --dictionary country disease funders
 ```
 Echo input parameters
-These quite a lot of debug, and we've snipped it.
+There is quite a lot of debug, and we've snipped it.
 
 ```
 Generic values (AMISearchTool)
