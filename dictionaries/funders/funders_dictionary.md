@@ -10,7 +10,7 @@ Updated the dictionary on: June 19, 2020
 Number of entries: 23355
 
 ### Creating the Dictionary:
-1. Create a text file (.txt) containing a list of funders that you are making a dicitonary for (accessed the list{.txt file} from CrossRef.org. Wikidata query service can also be used for the same.
+1. Create a text file (.txt) containing a list of funders that you are making a dicitonary for (accessed the list{.txt file} from CrossRef.org). Wikidata query service can also be used for the same.
 2. Meanwhile, create a directory by giving command in the command prompt as : `mkdir mydictionaries` This is the ouput directory where you are going to get the dictionary.
 3. Make two empty files in the created output directory **'mydictionaries'**, one as .html file and the other one as .xml file.
 4. Open the command prompt and give the command as: `amidict -v --dictionary funders --directory mydictionaries --input funders.txt create --informat list --outformats xml,html`
