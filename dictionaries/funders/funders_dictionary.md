@@ -5,6 +5,9 @@
 
 The CrossRef Funder Registry is an open registry of grant-giving organisation names and identifiers across the World.
 
+### Updated on: June 19, 2020
+### Number of entries: 23355
+
 ### Creating the Dictionary:
 1. Create a text file (.txt) containing a list of funders that you are making a dicitonary for. Accessed the list from CrossRef.org. Wikidata query service can also be used forthe same.
 2. Meanwhile, create a directory by giving command in the command prompt as : `mkdir mydictionaries` This is the ouput directory where you are going to get the dictionary.
