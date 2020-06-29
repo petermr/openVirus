@@ -5,7 +5,7 @@
 
 The CrossRef Funder Registry is an open registry of grant-giving organisation names and identifiers across the World.
 
-Updated on: June 19, 2020
+Updated the dictionary on: June 19, 2020
 
 Number of entries: 23355
 
