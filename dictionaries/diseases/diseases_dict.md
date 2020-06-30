@@ -1,6 +1,8 @@
 # Diseases Dictionary
 This dictionary was created from ICD-10.
+
 The number of entries : 13046
+
 Dictionary updated on : 30 June 2020
 ### ICD
 ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the foundation for the identification of health trends and statistics globally, and the international standard for reporting diseases and health conditions. It is the diagnostic classification standard for all clinical and research purposes. 
