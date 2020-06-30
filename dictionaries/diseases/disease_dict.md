@@ -1,7 +1,7 @@
 # Disease Dictionary
 This dictionary was created from ICD-10.
 
-####Tester : Lakshmi Devi Priya
+#### Tester : Lakshmi Devi Priya
 
 The number of entries : 13046
 
