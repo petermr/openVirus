@@ -18,7 +18,7 @@ The country dictionary can be created using the following procedure:
 `amidict -v --dictionary country --directory country --input country.txt create --informat list --outformats xml,html`
 (here --directory specifies the output directory) 
 
-3. The output directory contains 2 files in xml and html format. 
+3. The output directory contains 2 files in xml and html format. Number of countries in the text file used as input: *249* ; Number of entries in the output dictionary: *249*
 
 4. There were, however, multiple parse errors and a lot of debugging may be required eg: 
 ```
@@ -74,6 +74,26 @@ Upon running the query as stated above, the following xml directory was retrieve
  <query>('canada') OR ('denmark') OR ('ireland') OR ('italy') OR ('japan') OR ('norway') OR ('poland') OR ('switzerland') OR ('united states of america') OR ('wales')</query>
 </dictionary>
 ```
+
+### Testing on a country list acquired from Wikidata
+1. Wikidata query was used to generate dictionary for those countries Countries that have sitelinks to en.wiki. For this purpose the following query in SPARQL was used: 
+```
+SELECT ?country ?countryLabel ?article WHERE {
+
+    ?country wdt:P31 wd:Q3624078 . # sovereign state
+    ?article schema:about ?country .
+    ?article schema:isPartOf <https://en.wikipedia.org/>.
+
+    SERVICE wikibase:label {
+       bd:serviceParam wikibase:language "en"
+    }
+}
+```
+2. The list of countries was copied and pasted from the CSV file retrieved thus into a text file which was then used to create another dictionary.
+3. The query ran with errors similar to the ones stated above. 
+4. Number of countries in the text file used as input: *195* ; Number of entries in the output dictionary: *195*
+
+
 
 
 
