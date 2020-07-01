@@ -11,7 +11,8 @@ The International Organization for Standardization is an international Non Gover
 
 ### Creation of the dictionary 
 The country dictionary can be created using the following procedure: 
-1. Create a textfile with the list of countries that you want to create a dictionary for. These may be acquired using the Wikidata Query Service. Each line of the text file should contain a single country.
+
+1. Create a textfile with the list of countries that you want to create a dictionary for. These may be acquired using the Wikidata Query Service. Each line of the text file should contain a single country. (This particular dictionary was created using the list of ISO countries available in wikipedia: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 
 2. Use the following command to create the dictionary
 `amidict -v --dictionary country --directory country --input country.txt create --informat list --outformats xml,html`
@@ -19,7 +20,25 @@ The country dictionary can be created using the following procedure:
 
 3. The output directory contains 2 files in xml and html format. 
 
-4. There were, however, multiple errors and a lot of debugging may be required. The input file should not contain any errors. 
+4. There were, however, multiple parse errors and a lot of debugging may be required eg: 
+```
+[Fatal Error] :1717:5: The element type "input" must be terminated by the matching end-tag "</input>".
+1586319 [main] ERROR org.contentmine.ami.tools.AbstractAMIDictTool  - cannot parse wikipedia page for: zambia; cannot parse/read stream:
+1586319 [main] ERROR org.contentmine.ami.tools.AbstractAMIDictTool  - cannot parse wikipedia page for: zambia; cannot parse/read stream:
+[Fatal Error] :190:5: The element type "input" must be terminated by the matching end-tag "</input>".
+<190/5>badline >                </div>
+                </div>
+Cannot add entry: nu.xom.ParsingException: The element type "input" must be terminated by the matching end-tag "</input>". at line 190, column 5
+[Fatal Error] :2430:5: The element type "input" must be terminated by the matching end-tag "</input>".
+1592212 [main] ERROR org.contentmine.ami.tools.AbstractAMIDictTool  - cannot parse wikipedia page for: zimbabwe; cannot parse/read stream:
+1592212 [main] ERROR org.contentmine.ami.tools.AbstractAMIDictTool  - cannot parse wikipedia page for: zimbabwe; cannot parse/read stream:
+[Fatal Error] :190:5: The element type "input" must be terminated by the matching end-tag "</input>".
+<190/5>badline >                </div>
+                </div>
+Cannot add entry: nu.xom.ParsingException: The element type "input" must be terminated by the matching end-tag "</input>". at line 190, column 5
+```
+
+*IMPORTANT:* The input text file should not contain any errors. 
 
 5. The output dictionary for further testing: https://github.com/petermr/openVirus/blob/master/dictionaries/test/country.xml
 
