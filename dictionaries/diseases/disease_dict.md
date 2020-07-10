@@ -11,7 +11,7 @@ ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the found
 ## Creation of disease dictionary
 * A text document named disease was created in the local file of the system containing the names of the diseases. The names of the diseases were collected from Wikidata Query Service. While copying the names from Wikidata to the text document the special characters such as `-`,`'` were changed altering the diseases' names and hence the names in the text document were verified manually.
 * The page on helping to create a wikidata query https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/Query_Helper#How_to_create_a_Query , helped to increase the number of results. The number of results previously obtained from the Wikidata Query Service was 13k but using the above page, the results obtained was 17k. (Thanks @vaishaliarora277)
-* Using the syntax `amidict -v --dictionary diseases --directory Dictionary --input diseases.txt create --informat list --outfrmats xml` a dictionary was created. The `--directory` describes the folder of output dictionary created in the system.
+* Using the syntax `amidict -v --dictionary disease --directory dictionary --input disease.txt create --informat list --outformats xml,html --wikilinks wikipedia, wikidata` a dictionary was created. The `--directory` describes the folder of output dictionary created in the system.
 * The output shows much errors and warnings. The output directory consists of an xml format file.
 * The disease dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/diseases/disease.xml
 ### Test dictionary
