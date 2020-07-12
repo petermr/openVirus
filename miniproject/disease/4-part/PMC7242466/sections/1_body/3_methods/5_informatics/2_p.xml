@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p id="Par29">Taxonomic classification of the samples was done by classifying the representative sequences from the OTUs using mothur and the SILVA database, with a confidence threshold of 97%. The relative abundances for the taxonomic profiles for each subject was calculated in QIIME using summarize_taxa.py. The visualization of the top ten most prevalent taxa for each of the organisms was done in R (version 3.2.2) using dplyr and reshape2 to manipulate the data and ggplot2 for generating the plots. Following the qualitative analysis of the data, we employed an infinite dimensional generalization of the multinomial Dirichlet mixture model (iDMM)
+ <sup>
+  <xref ref-type="bibr" rid="CR22">22</xref>
+ </sup>, which tries to model the original set of communities from the input data with additional posterior-predictive probabilities (PPD) for statistical cutoffs. The model was executed over 1000 iterations for all ferrets and 2000 iterations for all human patients (regardless of infection state) since this parameter should increase with the number of samples present in the data set. Scripts located at 
+ <ext-link ext-link-type="uri" xlink:href="https://github.com/jacobian1980/ecostates" xmlns:xlink="http://www.w3.org/1999/xlink">https://github.com/jacobian1980/ecostates</ext-link> were improved by introducing a seed in the beginning of the algorithm to improve the reproducibility of the model and optimized the community number based on the PPDs, which compare empirically observed data with the data that would be expected if the DMM were the correct underlying model
+ <sup>
+  <xref ref-type="bibr" rid="CR56">56</xref>,
+  <xref ref-type="bibr" rid="CR57">57</xref>
+ </sup>. All downstream analyses with the communities, including exploration of community membership, were performed in R. In addition, a diagnostic OTU was computed for each ecostate, or sampled community, which is the OTU with the highest posterior-predictive probability in the ecostate and therefore drives the clustering. The quantitative portion of the analysis was supplemented by performing random-forest classification on the data to confirm the diagnostic results using Scikit-Learn (version 0.18.1) in Python (version 3.5.2) from Continuum Analytics Anaconda Suite. The training data set included: a 
+ <italic>(n</italic> 
+ <italic>×</italic> 
+ <italic>m)-</italic>dimensional attribute matrix consisting of the relative abundance values for the OTUs and the samples, where 
+ <italic>n</italic> and 
+ <italic>m</italic> refer to the number of samples and the number of OTUs, respectively, and a (
+ <italic>n)</italic>-dimensional vector relating each observation to the two experimental states (positive and negative for the virus). The average of the feature importance vectors from 20,000 models that could accurately predict all five left-out samples (~85% accuracy) was computed to obtain a weight for each OTU’s predictive capacity to classify the experimental state of each sample. The hyperparameters for the random-forest model were 618 decision trees per forest, gini index as impurity criterion, and the square root of the number of features (OTUs in this case) to use for each split in the decision tree.
+</p>
