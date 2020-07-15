@@ -14,6 +14,3 @@ ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the found
 * Using the syntax `amidict -v --dictionary disease --directory dictionary --input disease.txt create --informat list --outformats xml,html --wikilinks wikipedia, wikidata` a dictionary was created. The `--directory` describes the folder of output dictionary created in the system.
 * The output shows much errors and warnings. The output directory consists of an xml format file.
 * The disease dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/diseases/disease.xml
-### Test dictionary
-* Primarily a test dictionary on diseases was created by following the above mentioned steps but with few diseaes' names.
-* The test dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/test/diseases.xml
