@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>Consider the task of estimating the density function 
+ <inline-formula id="pcbi.1006134.e015">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e015.jpg" id="pcbi.1006134.e015g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M15">
+    <msub>
+     <mi>f</mi>
+     <mrow>
+      <msubsup>
+       <mi>Y</mi>
+       <mrow>
+        <mi>t</mi>
+        <mo>+</mo>
+        <mn>1</mn>
+        <mo>.</mo>
+        <mo>.</mo>
+        <mrow/>
+        <mi>T</mi>
+       </mrow>
+       <mrow/>
+      </msubsup>
+      <mo>∣</mo>
+      <msubsup>
+       <mi>Y</mi>
+       <mrow>
+        <mn>1</mn>
+        <mo>.</mo>
+        <mo>.</mo>
+        <mrow/>
+        <mi>t</mi>
+       </mrow>
+       <mrow/>
+      </msubsup>
+     </mrow>
+    </msub>
+   </math>
+  </alternatives>
+ </inline-formula> using an instance-based approach. Kernel density estimation and kernel regression use smoothing kernels to produce flexible estimates of the density of a random variable (e.g., 
+ <inline-formula id="pcbi.1006134.e016">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e016.jpg" id="pcbi.1006134.e016g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M16">
+    <msub>
+     <mi>f</mi>
+     <msubsup>
+      <mi>Y</mi>
+      <mrow>
+       <mi>t</mi>
+       <mo>+</mo>
+       <mn>1</mn>
+       <mo>.</mo>
+       <mo>.</mo>
+       <mrow/>
+       <mi>T</mi>
+      </mrow>
+      <mrow/>
+     </msubsup>
+    </msub>
+   </math>
+  </alternatives>
+ </inline-formula>) and the conditional expectation of one random variable given the value of another (e.g., 
+ <inline-formula id="pcbi.1006134.e017">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e017.jpg" id="pcbi.1006134.e017g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M17">
+    <mrow>
+     <mi mathvariant="double-struck">E</mi>
+     <mo>[</mo>
+     <msubsup>
+      <mi>Y</mi>
+      <mrow>
+       <mi>t</mi>
+       <mo>+</mo>
+       <mn>1</mn>
+       <mo>.</mo>
+       <mo>.</mo>
+       <mrow/>
+       <mi>T</mi>
+      </mrow>
+      <mrow/>
+     </msubsup>
+     <mo>∣</mo>
+     <msubsup>
+      <mi>Y</mi>
+      <mrow>
+       <mn>1</mn>
+       <mo>.</mo>
+       <mo>.</mo>
+       <mrow/>
+       <mi>t</mi>
+      </mrow>
+      <mrow/>
+     </msubsup>
+     <mo>]</mo>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula>), respectively; we can combine these two methods to obtain estimates of the conditional density of one random variable given another. One possible approach would be to use the straightforward estimate 
+ <disp-formula id="pcbi.1006134.e018">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e018.jpg" id="pcbi.1006134.e018g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M18">
+    <mtable displaystyle="true">
+     <mtr>
+      <mtd columnalign="right">
+       <mrow>
+        <msub>
+         <mover accent="true">
+          <mi>f</mi>
+          <mo>^</mo>
+         </mover>
+         <mrow>
+          <msubsup>
+           <mi>Y</mi>
+           <mrow>
+            <mi>t</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+            <mo>.</mo>
+            <mo>.</mo>
+            <mrow/>
+            <mi>T</mi>
+           </mrow>
+           <mrow/>
+          </msubsup>
+          <mo>∣</mo>
+          <msubsup>
+           <mi>Y</mi>
+           <mrow>
+            <mn>1</mn>
+            <mo>.</mo>
+            <mo>.</mo>
+            <mrow/>
+            <mi>t</mi>
+           </mrow>
+           <mrow/>
+          </msubsup>
+         </mrow>
+        </msub>
+        <mrow>
+         <mo>(</mo>
+         <msubsup>
+          <mi>y</mi>
+          <mrow>
+           <mi>t</mi>
+           <mo>+</mo>
+           <mn>1</mn>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mrow/>
+           <mi>T</mi>
+          </mrow>
+          <mrow/>
+         </msubsup>
+         <mo>∣</mo>
+         <msubsup>
+          <mi>y</mi>
+          <mrow>
+           <mn>1</mn>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mrow/>
+           <mi>t</mi>
+          </mrow>
+          <mrow/>
+         </msubsup>
+         <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+         <mrow>
+          <msubsup>
+           <mo>∑</mo>
+           <mrow>
+            <mi>s</mi>
+            <mo>=</mo>
+            <mn>1</mn>
+           </mrow>
+           <mi>S</mi>
+          </msubsup>
+          <msup>
+           <mi>I</mi>
+           <mrow>
+            <mn>1</mn>
+            <mo>.</mo>
+            <mo>.</mo>
+            <mrow/>
+            <mi>t</mi>
+           </mrow>
+          </msup>
+          <mrow>
+           <mo>(</mo>
+           <msubsup>
+            <mi>y</mi>
+            <mrow>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>t</mi>
+            </mrow>
+            <mrow/>
+           </msubsup>
+           <mo>,</mo>
+           <msubsup>
+            <mi>Y</mi>
+            <mrow>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>t</mi>
+            </mrow>
+            <mi>s</mi>
+           </msubsup>
+           <mo>)</mo>
+          </mrow>
+          <msup>
+           <mi>O</mi>
+           <mrow>
+            <mi>t</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+            <mo>.</mo>
+            <mo>.</mo>
+            <mrow/>
+            <mi>T</mi>
+           </mrow>
+          </msup>
+          <mrow>
+           <mo>(</mo>
+           <msubsup>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>+</mo>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>T</mi>
+            </mrow>
+            <mrow/>
+           </msubsup>
+           <mo>,</mo>
+           <msubsup>
+            <mi>Y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>+</mo>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>T</mi>
+            </mrow>
+            <mi>s</mi>
+           </msubsup>
+           <mo>)</mo>
+          </mrow>
+         </mrow>
+         <mrow>
+          <msubsup>
+           <mo>∑</mo>
+           <mrow>
+            <mi>s</mi>
+            <mo>=</mo>
+            <mn>1</mn>
+           </mrow>
+           <mi>S</mi>
+          </msubsup>
+          <msup>
+           <mi>I</mi>
+           <mrow>
+            <mn>1</mn>
+            <mo>.</mo>
+            <mo>.</mo>
+            <mrow/>
+            <mi>t</mi>
+           </mrow>
+          </msup>
+          <mrow>
+           <mo>(</mo>
+           <msubsup>
+            <mi>y</mi>
+            <mrow>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>t</mi>
+            </mrow>
+            <mrow/>
+           </msubsup>
+           <mo>,</mo>
+           <msubsup>
+            <mi>Y</mi>
+            <mrow>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>t</mi>
+            </mrow>
+            <mi>s</mi>
+           </msubsup>
+           <mo>)</mo>
+          </mrow>
+          <div class="mphantom" xmlns="http://www.w3.org/1999/xhtml">
+           <msup xmlns="">
+            <mi>O</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>+</mo>
+             <mn>1</mn>
+             <mo>.</mo>
+             <mo>.</mo>
+             <mrow/>
+             <mi>t</mi>
+            </mrow>
+           </msup>
+           <mrow xmlns="">
+            <mo>(</mo>
+            <msubsup>
+             <mi>y</mi>
+             <mrow>
+              <mi>t</mi>
+              <mo>+</mo>
+              <mn>1</mn>
+              <mo>.</mo>
+              <mo>.</mo>
+              <mrow/>
+              <mi>t</mi>
+             </mrow>
+             <mrow/>
+            </msubsup>
+            <mo>,</mo>
+            <msubsup>
+             <mi>Y</mi>
+             <mrow>
+              <mi>t</mi>
+              <mo>+</mo>
+              <mn>1</mn>
+              <mo>.</mo>
+              <mo>.</mo>
+              <mrow/>
+              <mi>t</mi>
+             </mrow>
+             <mi>s</mi>
+            </msubsup>
+            <mo>)</mo>
+           </mrow>
+          </div>
+         </mrow>
+        </mfrac>
+        <mo>,</mo>
+       </mrow>
+      </mtd>
+     </mtr>
+    </mtable>
+   </math>
+  </alternatives>
+ </disp-formula> where {1..
+ <italic>S</italic>} is the set of fully observed historical training seasons, and 
+ <italic>I</italic>
+ <sup>1..
+  <italic>t</italic>
+ </sup> and 
+ <italic>O</italic>
+ <sup>
+  <italic>t</italic>+1..
+  <italic>T</italic>
+ </sup> are smoothing kernels describing similarity between “input” trajectories and between “output” trajectories, respectively. However, while basic kernel smoothing methods can excel in low-dimensional settings, their performance scales very poorly with growing dimensionality. During most of the season, neither 
+ <italic>Y</italic>
+ <sub>1..
+  <italic>t</italic>
+ </sub> nor 
+ <italic>Y</italic>
+ <sub>
+  <italic>t</italic>+1..
+  <italic>T</italic>
+ </sub> is low-dimensional, and the current season’s observations are extremely unlikely to closely match any past 
+ <inline-formula id="pcbi.1006134.e019">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e019.jpg" id="pcbi.1006134.e019g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M19">
+    <msubsup>
+     <mi>Y</mi>
+     <mrow>
+      <mn>1</mn>
+      <mo>.</mo>
+      <mo>.</mo>
+      <mrow/>
+      <mi>t</mi>
+     </mrow>
+     <mi>s</mi>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> or 
+ <inline-formula id="pcbi.1006134.e020">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e020.jpg" id="pcbi.1006134.e020g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M20">
+    <msubsup>
+     <mi>Y</mi>
+     <mrow>
+      <mi>t</mi>
+      <mo>+</mo>
+      <mn>1</mn>
+      <mo>.</mo>
+      <mo>.</mo>
+      <mrow/>
+      <mi>T</mi>
+     </mrow>
+     <mi>s</mi>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula>. This, in turn, can lead to kernel density estimates for 
+ <italic>Y</italic>
+ <sub>
+  <italic>t</italic>+1..
+  <italic>T</italic>
+ </sub> based almost entirely on the single season 
+ <italic>s</italic> with the closest 
+ <inline-formula id="pcbi.1006134.e021">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e021.jpg" id="pcbi.1006134.e021g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M21">
+    <msubsup>
+     <mi>Y</mi>
+     <mrow>
+      <mn>1</mn>
+      <mo>.</mo>
+      <mo>.</mo>
+      <mrow/>
+      <mi>t</mi>
+     </mrow>
+     <mi>s</mi>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> when conditioning on 
+ <italic>Y</italic>
+ <sub>1..
+  <italic>t</italic>
+ </sub>, and excessively narrow density estimates for 
+ <italic>Y</italic>
+ <sub>
+  <italic>t</italic>+1..
+  <italic>T</italic>
+ </sub> even without conditioning on 
+ <italic>Y</italic>
+ <sub>1..
+  <italic>t</italic>
+ </sub>. So, instead of applying kernel density estimation directly, we first break the task down into a sequence of low-dimensional sub-tasks. We avoid the high-dimensional output problem by chaining together estimates of 
+ <inline-formula id="pcbi.1006134.e022">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e022.jpg" id="pcbi.1006134.e022g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M22">
+    <msub>
+     <mi>f</mi>
+     <mrow>
+      <mo>Δ</mo>
+      <msubsup>
+       <mi>Y</mi>
+       <mi>u</mi>
+       <mrow/>
+      </msubsup>
+      <mo>∣</mo>
+      <msubsup>
+       <mi>Y</mi>
+       <mrow>
+        <mn>1</mn>
+        <mrow/>
+        <mo>..</mo>
+        <mi>u</mi>
+        <mo>-</mo>
+        <mn>1</mn>
+       </mrow>
+       <mrow/>
+      </msubsup>
+     </mrow>
+    </msub>
+   </math>
+  </alternatives>
+ </inline-formula> for each 
+ <italic>u</italic> from 
+ <italic>t</italic> + 1 to 
+ <italic>T</italic>, where Δ
+ <italic>Y
+  <sub>u</sub>
+ </italic> = 
+ <italic>Y
+  <sub>u</sub>
+ </italic> − 
+ <italic>Y</italic>
+ <sub>
+  <italic>u</italic>−1
+ </sub>; estimating these single-dimensional densities requires relatively little data. However, this reformulation exacerbates the high-dimensional input problem since we are conditioning on 
+ <italic>Y</italic>
+ <sub>1..
+  <italic>u</italic>−1
+ </sub>, which can be considerably longer than 
+ <italic>Y</italic>
+ <sub>1..
+  <italic>t</italic>
+ </sub>. We address the high-dimensional input problem by approximating 
+ <inline-formula id="pcbi.1006134.e023">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e023.jpg" id="pcbi.1006134.e023g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M23">
+    <msub>
+     <mi>f</mi>
+     <mrow>
+      <mo>Δ</mo>
+      <msubsup>
+       <mi>Y</mi>
+       <mi>u</mi>
+       <mrow/>
+      </msubsup>
+      <mo>∣</mo>
+      <msubsup>
+       <mi>Y</mi>
+       <mrow>
+        <mn>1</mn>
+        <mrow/>
+        <mo>..</mo>
+        <mi>u</mi>
+        <mo>-</mo>
+        <mn>1</mn>
+       </mrow>
+       <mrow/>
+      </msubsup>
+     </mrow>
+    </msub>
+   </math>
+  </alternatives>
+ </inline-formula> with 
+ <inline-formula id="pcbi.1006134.e024">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e024.jpg" id="pcbi.1006134.e024g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M24">
+    <msub>
+     <mi>f</mi>
+     <mrow>
+      <mo>Δ</mo>
+      <msubsup>
+       <mi>Y</mi>
+       <mi>u</mi>
+       <mrow/>
+      </msubsup>
+      <mo>∣</mo>
+      <msup>
+       <mi mathvariant="bold">R</mi>
+       <mi>u</mi>
+      </msup>
+     </mrow>
+    </msub>
+   </math>
+  </alternatives>
+ </inline-formula>, where 
+ <bold>R</bold>
+ <sup>
+  <italic>u</italic>
+ </sup> is some low-dimensional vector of features derived from 
+ <italic>Y</italic>
+ <sub>1..
+  <italic>u</italic>−1
+ </sub>. Smoothing kernel methods are used to approximate the conditional density functions using data from past seasons.
+</p>
