@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p id="p0032">The outcome of the mapper algorithm is highly dependent on the lens(es) chosen. For the purposes of our study, we categorised the lenses we used according to the information about the data they extract:
+ <list list-type="simple" id="lst0004">
+  <list-item id="lstitem0004">
+   <p id="p0033">
+    <bold>Features.</bold> These lenses are simply the values at each data point of a particular feature of interest. These were calculated using the fit_transform function of the Kepler mapper.
+   </p>
+  </list-item>
+  <list-item id="lstitem0005">
+   <p id="p0034">
+    <bold>Distances to closest neighbours.</bold> These lenses report the distance of each data point to its 
+    <italic>n</italic> closest neighbours, or the sum of the distances to the 
+    <italic>n</italic> closest neighbours, under the metric of choice. These were calculated using the sklearn.metrics.pairwise_distances function from Scikit-learn, specifying the metric to be one of the three described above.
+   </p>
+  </list-item>
+  <list-item id="lstitem0006">
+   <p id="p0035">
+    <bold>Dimensionality Reduction.</bold> These are projections of the data, usually, to the first (and possibly also the second) dimension(s) of various dimensionality reduction algorithms. These were calculated using the 
+    <ext-link ext-link-type="uri" xlink:href="https://scikit-learn.org/stable/modules/manifold.html" id="intrrf0001" xmlns:xlink="http://www.w3.org/1999/xlink">Manifold Learning algorithms</ext-link> from the Scikit-learn Python library and the sklearn.decomposition.PCA and sklearn.decomposition.TruncatedSVD functions of Scikit-learn. See 
+    <xref rid="sec0007" ref-type="sec">Section 2.4.1</xref> for a brief description of the methods used here.
+   </p>
+  </list-item>
+  <list-item id="lstitem0007">
+   <p id="p0036">
+    <bold>Geometric properties.</bold> These report geometric properties. Specifically, we tested:
+    <list list-type="simple" id="lst0005">
+     <list-item id="lstitem0008">
+      <p id="p0037">– The density using the sklearn.neighbors.KernelDensity function with Gaussian kernel and calculated the bandwidth using Scott’s Rule 
+       <xref rid="bib0028" ref-type="bibr">[28]</xref>.
+      </p>
+     </list-item>
+     <list-item id="lstitem0009">
+      <p id="p0038">– The eccentricity which is defined as follows:</p>
+      <p id="p0039">Given 
+       <italic>p</italic> with 
+       <inline-formula>
+        <math id="M14" altimg="si10.svg">
+         <mrow>
+          <mn>1</mn>
+          <mo linebreak="goodbreak">&lt;</mo>
+          <mo>=</mo>
+          <mi>p</mi>
+          <mo linebreak="goodbreak">&lt;</mo>
+          <mo>+</mo>
+          <mi>∞</mi>
+          <mo>,</mo>
+         </mrow>
+        </math>
+       </inline-formula> define
+       <disp-formula id="ueq0004">
+        <math id="M15" altimg="si11.svg">
+         <mrow>
+          <msub>
+           <mi>E</mi>
+           <mi>p</mi>
+          </msub>
+          <mrow>
+           <mo>(</mo>
+           <mi>x</mi>
+           <mo>)</mo>
+          </mrow>
+          <mo linebreak="goodbreak">=</mo>
+          <msup>
+           <mrow>
+            <mo stretchy="true">(</mo>
+            <mfrac>
+             <mrow>
+              <msub>
+               <mo>∑</mo>
+               <mrow>
+                <mi>y</mi>
+                <mo>∈</mo>
+                <mi>X</mi>
+               </mrow>
+              </msub>
+              <mi>d</mi>
+              <msup>
+               <mrow>
+                <mo>(</mo>
+                <mi>x</mi>
+                <mo>,</mo>
+                <mi>y</mi>
+                <mo>)</mo>
+               </mrow>
+               <mi>p</mi>
+              </msup>
+             </mrow>
+             <mi>N</mi>
+            </mfrac>
+            <mo stretchy="true">)</mo>
+           </mrow>
+           <mfrac>
+            <mn>1</mn>
+            <mi>p</mi>
+           </mfrac>
+          </msup>
+         </mrow>
+        </math>
+       </disp-formula>where 
+       <italic>x, y</italic> ∈ 
+       <italic>X</italic>. (Recall that we denote the data set of 
+       <italic>N</italic> points by 
+       <italic>X</italic> and 
+       <italic>d</italic>(
+       <italic>x, y</italic>) denotes the distance between 
+       <italic>x, y</italic> ∈ 
+       <italic>X</italic>, which is dependent on the metric of choice.)
+      </p>
+     </list-item>
+     <list-item id="lstitem0010">
+      <p id="p0040">– The infinite centrality which is a generalisation of the eccentricity above, for when 
+       <inline-formula>
+        <math id="M16" altimg="si12.svg">
+         <mrow>
+          <mi>p</mi>
+          <mo linebreak="goodbreak">=</mo>
+          <mo>+</mo>
+          <mi>∞</mi>
+          <mo>,</mo>
+         </mrow>
+        </math>
+       </inline-formula> then 
+       <inline-formula>
+        <math id="M17" altimg="si13.svg">
+         <mrow>
+          <msub>
+           <mi>E</mi>
+           <mi>∞</mi>
+          </msub>
+          <mrow>
+           <mo>(</mo>
+           <mi>x</mi>
+           <mo>)</mo>
+          </mrow>
+          <mo linebreak="goodbreak">=</mo>
+          <mi>m</mi>
+          <mi>a</mi>
+          <msub>
+           <mi>x</mi>
+           <mrow>
+            <msup>
+             <mi>x</mi>
+             <mo>′</mo>
+            </msup>
+            <mo>∈</mo>
+            <mi>X</mi>
+           </mrow>
+          </msub>
+          <mi>d</mi>
+          <mrow>
+           <mo>(</mo>
+           <mi>x</mi>
+           <mo>,</mo>
+           <msup>
+            <mi>x</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>)</mo>
+          </mrow>
+         </mrow>
+        </math>
+       </inline-formula>.
+      </p>
+     </list-item>
+    </list>
+   </p>
+  </list-item>
+  <list-item id="lstitem0011">
+   <p id="p0041">
+    <bold>Statistical properties.</bold> These report on statistical properties about the data points, such as the sum of the values of all the features for each data point, the average value of the features for each data point, etc. These were calculated using the fit_transform function of the Kepler mapper.
+   </p>
+  </list-item>
+ </list>
+</p>
