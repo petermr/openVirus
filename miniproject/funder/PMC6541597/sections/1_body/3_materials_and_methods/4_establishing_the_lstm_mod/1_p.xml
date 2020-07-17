@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p id="Par21">As mentioned above, coincident with the increase in the time lag has been a decrease in the long-term learning ability during the training of an NAR method due to a vanishing or exploding gradient problem, which is a major flaw for NAR method forecasting
+ <sup>
+  <xref ref-type="bibr" rid="CR26">26</xref>
+ </sup>. A LSTM model, not the least prevalent and rewarding variant of the conventional RNNs, can overcome this disadvantage encountered in an NAR model as it is capable of maintaining state and identifying traits over the length of the sequences used
+ <sup>
+  <xref ref-type="bibr" rid="CR26">26</xref>,
+  <xref ref-type="bibr" rid="CR27">27</xref>
+ </sup>. The LSTM technique has a special layered architecture with memory blocks that contain one or more self-connected memory cells
+ <sup>
+  <xref ref-type="bibr" rid="CR22">22</xref>,
+  <xref ref-type="bibr" rid="CR57">57</xref>
+ </sup>, surrounded by three gating units, including the input, output and forget gates, that can continuously perform write, read and reset operations, to preserve information (Supplementary Fig. 
+ <xref rid="MOESM1" ref-type="media">S36</xref>)
+ <sup>
+  <xref ref-type="bibr" rid="CR57">57</xref>,
+  <xref ref-type="bibr" rid="CR58">58</xref>
+ </sup>. Such a configuration can keep the states persisting or communicating between updates of the weights with the progress of each epoch; moreover, it can reinforce the RNN by capturing the long-term dynamics of the time series components of periodicity, seasonality and secular trend in addition to the short-term dynamics. The estimated equations of the LSTM model can be defined as:
+ <disp-formula id="Equ3">
+  <label>3</label>
+  <alternatives>
+   <tex-math id="M17">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$${i}_{t}=\sigma ({W}_{xi}{x}_{t}+{W}_{hi}{h}_{t-1}+{W}_{ci}{c}_{t-1}+b{}_{i})$$\end{document}</tex-math>
+   <math id="M18" display="block">
+    <msub>
+     <mrow>
+      <mi>i</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>=</mo>
+    <mi>σ</mi>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>x</mi>
+      <mi>i</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>x</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+      <mi>i</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>c</mi>
+      <mi>i</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <mi>b</mi>
+    <mmultiscripts>
+     <mo stretchy="false">)</mo>
+     <none/>
+     <none/>
+     <mprescripts/>
+     <mi>i</mi>
+     <none/>
+    </mmultiscripts>
+   </math>
+   <graphic xlink:href="41598_2019_44469_Article_Equ3.gif" position="anchor" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </disp-formula>
+ <disp-formula id="Equ4">
+  <label>4</label>
+  <alternatives>
+   <tex-math id="M19">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$${f}_{t}=\sigma ({W}_{xf}{x}_{t}+{W}_{hf}{h}_{t-1}+{W}_{cf}{c}_{t-1}+b{}_{f})$$\end{document}</tex-math>
+   <math id="M20" display="block">
+    <msub>
+     <mrow>
+      <mi>f</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>=</mo>
+    <mi>σ</mi>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>x</mi>
+      <mi>f</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>x</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+      <mi>f</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>c</mi>
+      <mi>f</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <mi>b</mi>
+    <mmultiscripts>
+     <mo stretchy="false">)</mo>
+     <none/>
+     <none/>
+     <mprescripts/>
+     <mi>f</mi>
+     <none/>
+    </mmultiscripts>
+   </math>
+   <graphic xlink:href="41598_2019_44469_Article_Equ4.gif" position="anchor" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </disp-formula>
+ <disp-formula id="Equ5">
+  <label>5</label>
+  <alternatives>
+   <tex-math id="M21">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$${c}_{t}={f}_{t}{c}_{t-1}+{i}_{t}\,\tanh ({W}_{xc}{x}_{t}+{W}_{hc}{h}_{t-1}+{W}_{ci}{c}_{t-1}+b{}_{c})$$\end{document}</tex-math>
+   <math id="M22" display="block">
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>=</mo>
+    <msub>
+     <mrow>
+      <mi>f</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>i</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mspace width=".25em"/>
+    <mi>tanh</mi>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>x</mi>
+      <mi>c</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>x</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+      <mi>c</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>c</mi>
+      <mi>i</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <mi>b</mi>
+    <mmultiscripts>
+     <mo stretchy="false">)</mo>
+     <none/>
+     <none/>
+     <mprescripts/>
+     <mi>c</mi>
+     <none/>
+    </mmultiscripts>
+   </math>
+   <graphic xlink:href="41598_2019_44469_Article_Equ5.gif" position="anchor" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </disp-formula>
+ <disp-formula id="Equ6">
+  <label>6</label>
+  <alternatives>
+   <tex-math id="M23">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$${o}_{t}=\sigma ({W}_{xo}{x}_{t}+{W}_{ho}{h}_{t-1}+{W}_{co}{c}_{t-1}+b{}_{o})$$\end{document}</tex-math>
+   <math id="M24" display="block">
+    <msub>
+     <mrow>
+      <mi>o</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>=</mo>
+    <mi>σ</mi>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>x</mi>
+      <mi>o</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>x</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+      <mi>o</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>c</mi>
+      <mi>o</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <mi>b</mi>
+    <mmultiscripts>
+     <mo stretchy="false">)</mo>
+     <none/>
+     <none/>
+     <mprescripts/>
+     <mi>o</mi>
+     <none/>
+    </mmultiscripts>
+   </math>
+   <graphic xlink:href="41598_2019_44469_Article_Equ6.gif" position="anchor" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </disp-formula>
+ <disp-formula id="Equ7">
+  <label>7</label>
+  <alternatives>
+   <tex-math id="M25">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$${h}_{t}={o}_{t}\,\tanh ({c}_{t})$$\end{document}</tex-math>
+   <math id="M26" display="block">
+    <msub>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo>=</mo>
+    <msub>
+     <mrow>
+      <mi>o</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mspace width=".25em"/>
+    <mi>tanh</mi>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>c</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+     </mrow>
+    </msub>
+    <mo stretchy="false">)</mo>
+   </math>
+   <graphic xlink:href="41598_2019_44469_Article_Equ7.gif" position="anchor" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </disp-formula>
+ <disp-formula id="Equ8">
+  <label>8</label>
+  <alternatives>
+   <tex-math id="M27">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$$y(t)={W}_{yh}(f({W}_{hx}y(t-1)+{W}_{hh}{h}_{t-1}+{b}_{h})+{b}_{y}$$\end{document}</tex-math>
+   <math id="M28" display="block">
+    <mi>y</mi>
+    <mo stretchy="false">(</mo>
+    <mi>t</mi>
+    <mo stretchy="false">)</mo>
+    <mo>=</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>y</mi>
+      <mi>h</mi>
+     </mrow>
+    </msub>
+    <mo stretchy="false">(</mo>
+    <mi>f</mi>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+      <mi>x</mi>
+     </mrow>
+    </msub>
+    <mi>y</mi>
+    <mo stretchy="false">(</mo>
+    <mi>t</mi>
+    <mo>−</mo>
+    <mn>1</mn>
+    <mo stretchy="false">)</mo>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>W</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+      <mi>h</mi>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>b</mi>
+     </mrow>
+     <mrow>
+      <mi>h</mi>
+     </mrow>
+    </msub>
+    <mo stretchy="false">)</mo>
+    <mo>+</mo>
+    <msub>
+     <mrow>
+      <mi>b</mi>
+     </mrow>
+     <mrow>
+      <mi>y</mi>
+     </mrow>
+    </msub>
+   </math>
+   <graphic xlink:href="41598_2019_44469_Article_Equ8.gif" position="anchor" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </disp-formula>where 
+ <italic>i</italic>
+ <sub>
+  <italic>t</italic>
+ </sub> refers to the input gate; 
+ <italic>f</italic>
+ <sub>
+  <italic>t</italic>
+ </sub> is the forget gate; 
+ <italic>c</italic>
+ <sub>
+  <italic>t</italic>
+ </sub> stands for the states of memory cell at time 
+ <italic>t</italic>; 
+ <italic>o</italic>
+ <sub>
+  <italic>t</italic>
+ </sub> represents the output gate; 
+ <italic>h</italic>
+ <sub>
+  <italic>t</italic>
+ </sub> is the hidden states at time 
+ <italic>t</italic>; 
+ <italic>W</italic>
+ <sub>
+  <italic>xc</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>xi</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>xf</italic>
+ </sub> and 
+ <italic>W</italic>
+ <sub>
+  <italic>xo</italic>
+ </sub> are the weight matrices connecting the input signals; 
+ <italic>x</italic>
+ <sub>
+  <italic>t</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>hc</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>hi</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>hf</italic>
+ </sub> and 
+ <italic>W</italic>
+ <sub>
+  <italic>ho</italic>
+ </sub> represent the weight matrices connecting the hidden layer output signals; 
+ <italic>h</italic>
+ <sub>
+  <italic>t</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>c
+  <italic>i</italic>
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>cf</italic>
+ </sub> and 
+ <italic>W</italic>
+ <sub>
+  <italic>co</italic>
+ </sub> stand for the diagonal matrices connecting the neuron activation functions; 
+ <italic>b</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>, 
+ <italic>b</italic>
+ <sub>
+  <italic>c</italic>
+ </sub>, 
+ <italic>b</italic>
+ <sub>
+  <italic>f</italic>
+ </sub>, 
+ <italic>b</italic>
+ <sub>
+  <italic>o</italic>
+ </sub>, 
+ <italic>b</italic>
+ <sub>
+  <italic>h</italic>
+ </sub> and 
+ <italic>b</italic>
+ <sub>
+  <italic>y</italic>
+ </sub> refer to the bias vectors; 
+ <italic>σ</italic> is the activation function (tanh or sigmoid); y(t) is the predicted points of the HFMD incidence series; 
+ <italic>W</italic>
+ <sub>
+  <italic>h</italic>x
+ </sub>, 
+ <italic>W</italic>
+ <sub>
+  <italic>h</italic>h
+ </sub>, and 
+ <italic>W</italic>
+ <sub>
+  <italic>yh</italic>
+ </sub> are the input-hidden weight matrix, hidden-hidden weight matrix and hidden-output weight matrix, respectively; and 
+ <inline-formula id="IEq7">
+  <alternatives>
+   <tex-math id="M29">\documentclass[12pt]{minimal} \usepackage{amsmath} \usepackage{wasysym} \usepackage{amsfonts} \usepackage{amssymb} \usepackage{amsbsy} \usepackage{mathrsfs} \usepackage{upgreek} \setlength{\oddsidemargin}{-69pt} \begin{document}$${y}_{t-1}=({y}_{t-1,}{y}_{t-2,\cdots ,}{y}_{t-d})^{\prime} $$\end{document}</tex-math>
+   <math id="M30">
+    <msub>
+     <mrow>
+      <mi>y</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+     </mrow>
+    </msub>
+    <mo>=</mo>
+    <mo stretchy="false">(</mo>
+    <msub>
+     <mrow>
+      <mi>y</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>1</mn>
+      <mo>,</mo>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>y</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mn>2</mn>
+      <mo>,</mo>
+      <mo>⋯</mo>
+      <mo>,</mo>
+     </mrow>
+    </msub>
+    <msub>
+     <mrow>
+      <mi>y</mi>
+     </mrow>
+     <mrow>
+      <mi>t</mi>
+      <mo>−</mo>
+      <mi>d</mi>
+     </mrow>
+    </msub>
+    <mrow>
+     <mo stretchy="false">)</mo>
+     <mo>′</mo>
+    </mrow>
+   </math>
+   <inline-graphic xlink:href="41598_2019_44469_Article_IEq7.gif" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  </alternatives>
+ </inline-formula> is a vector including time steps of the series.
+</p>
