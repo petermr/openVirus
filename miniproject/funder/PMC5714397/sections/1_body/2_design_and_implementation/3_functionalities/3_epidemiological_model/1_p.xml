@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>The epidemiological model implemented in the package is an SEIR model, with two compartments for the Exposed and Infectious states that result in a more realistic gamma distributed average time for both the Exposed and Infectious states (rather than an exponentially distributed waiting time with single 
+ <italic>E</italic> and 
+ <italic>I</italic> compartments). The general model has the following form: 
+ <disp-formula id="pcbi.1005838.e001">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e001.jpg" id="pcbi.1005838.e001g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M1">
+    <mtable displaystyle="true">
+     <mtr>
+      <mtd columnalign="right">
+       <mtable displaystyle="true">
+        <mtr>
+         <mtd columnalign="right">
+          <mfrac>
+           <mrow>
+            <mi>d</mi>
+            <msub>
+             <mi>S</mi>
+             <mrow>
+              <mi>i</mi>
+              <mi>k</mi>
+             </mrow>
+            </msub>
+           </mrow>
+           <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+           </mrow>
+          </mfrac>
+         </mtd>
+         <mtd columnalign="center">
+          <mrow>
+           <mo>=</mo>
+          </mrow>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <mo>-</mo>
+           <msub>
+            <mo>λ</mo>
+            <mi>i</mi>
+           </msub>
+           <msub>
+            <mi>S</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+           </msub>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <mfrac>
+           <mrow>
+            <mi>d</mi>
+            <msubsup>
+             <mi>E</mi>
+             <mrow>
+              <mi>i</mi>
+              <mi>k</mi>
+             </mrow>
+             <mn>1</mn>
+            </msubsup>
+           </mrow>
+           <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+           </mrow>
+          </mfrac>
+         </mtd>
+         <mtd columnalign="center">
+          <mrow>
+           <mo>=</mo>
+          </mrow>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <msub>
+            <mo>λ</mo>
+            <mi>i</mi>
+           </msub>
+           <msub>
+            <mi>S</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+           </msub>
+           <mo>-</mo>
+           <msub>
+            <mi>γ</mi>
+            <mn>1</mn>
+           </msub>
+           <msubsup>
+            <mi>E</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>1</mn>
+           </msubsup>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <mfrac>
+           <mrow>
+            <mi>d</mi>
+            <msubsup>
+             <mi>E</mi>
+             <mrow>
+              <mi>i</mi>
+              <mi>k</mi>
+             </mrow>
+             <mn>2</mn>
+            </msubsup>
+           </mrow>
+           <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+           </mrow>
+          </mfrac>
+         </mtd>
+         <mtd columnalign="center">
+          <mrow>
+           <mo>=</mo>
+          </mrow>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <msub>
+            <mi>γ</mi>
+            <mn>1</mn>
+           </msub>
+           <mspace width="1pt"/>
+           <mo>(</mo>
+           <msubsup>
+            <mi>E</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>1</mn>
+           </msubsup>
+           <mo>-</mo>
+           <msubsup>
+            <mi>E</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>2</mn>
+           </msubsup>
+           <mo>)</mo>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <mfrac>
+           <mrow>
+            <mi>d</mi>
+            <msubsup>
+             <mi>I</mi>
+             <mrow>
+              <mi>i</mi>
+              <mi>k</mi>
+             </mrow>
+             <mn>1</mn>
+            </msubsup>
+           </mrow>
+           <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+           </mrow>
+          </mfrac>
+         </mtd>
+         <mtd columnalign="center">
+          <mrow>
+           <mo>=</mo>
+          </mrow>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <msub>
+            <mi>γ</mi>
+            <mn>1</mn>
+           </msub>
+           <msubsup>
+            <mi>E</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>2</mn>
+           </msubsup>
+           <mo>-</mo>
+           <msub>
+            <mi>γ</mi>
+            <mn>2</mn>
+           </msub>
+           <msubsup>
+            <mi>I</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>1</mn>
+           </msubsup>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <mfrac>
+           <mrow>
+            <mi>d</mi>
+            <msubsup>
+             <mi>I</mi>
+             <mrow>
+              <mi>i</mi>
+              <mi>k</mi>
+             </mrow>
+             <mn>2</mn>
+            </msubsup>
+           </mrow>
+           <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+           </mrow>
+          </mfrac>
+         </mtd>
+         <mtd columnalign="center">
+          <mrow>
+           <mo>=</mo>
+          </mrow>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <msub>
+            <mi>γ</mi>
+            <mn>2</mn>
+           </msub>
+           <mspace width="1pt"/>
+           <mo>(</mo>
+           <msubsup>
+            <mi>I</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>1</mn>
+           </msubsup>
+           <mo>-</mo>
+           <msubsup>
+            <mi>I</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>2</mn>
+           </msubsup>
+           <mo>)</mo>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <mfrac>
+           <mrow>
+            <mi>d</mi>
+            <msub>
+             <mi>R</mi>
+             <mrow>
+              <mi>i</mi>
+              <mi>k</mi>
+             </mrow>
+            </msub>
+           </mrow>
+           <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+           </mrow>
+          </mfrac>
+         </mtd>
+         <mtd columnalign="center">
+          <mrow>
+           <mo>=</mo>
+          </mrow>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <msub>
+            <mi>γ</mi>
+            <mn>2</mn>
+           </msub>
+           <msubsup>
+            <mi>I</mi>
+            <mrow>
+             <mi>i</mi>
+             <mi>k</mi>
+            </mrow>
+            <mn>2</mn>
+           </msubsup>
+          </mrow>
+         </mtd>
+        </mtr>
+       </mtable>
+      </mtd>
+     </mtr>
+    </mtable>
+   </math>
+  </alternatives>
+  <label>(1)</label>
+ </disp-formula> where 
+ <italic>S</italic>
+ <sub>
+  <italic>ik</italic>
+ </sub> is the number of susceptibles in the age group 
+ <italic>i</italic> and risk group 
+ <italic>k</italic>, 
+ <inline-formula id="pcbi.1005838.e002">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e002.jpg" id="pcbi.1005838.e002g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M2">
+    <msubsup>
+     <mi>E</mi>
+     <mrow>
+      <mi>i</mi>
+      <mi>k</mi>
+     </mrow>
+     <mn>1</mn>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> and 
+ <inline-formula id="pcbi.1005838.e003">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e003.jpg" id="pcbi.1005838.e003g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M3">
+    <msubsup>
+     <mi>E</mi>
+     <mrow>
+      <mi>i</mi>
+      <mi>k</mi>
+     </mrow>
+     <mn>2</mn>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> are two compartments with exposed but not yet infectious individuals of age group 
+ <italic>i</italic> and risk group 
+ <italic>k</italic>, 
+ <inline-formula id="pcbi.1005838.e004">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e004.jpg" id="pcbi.1005838.e004g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M4">
+    <msubsup>
+     <mi>I</mi>
+     <mrow>
+      <mi>i</mi>
+      <mi>k</mi>
+     </mrow>
+     <mn>1</mn>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> and 
+ <inline-formula id="pcbi.1005838.e005">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e005.jpg" id="pcbi.1005838.e005g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M5">
+    <msubsup>
+     <mi>I</mi>
+     <mrow>
+      <mi>i</mi>
+      <mi>k</mi>
+     </mrow>
+     <mn>2</mn>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> represent infectious individuals, and immune individuals of age group 
+ <italic>i</italic> and risk group 
+ <italic>k</italic> are given by 
+ <italic>R</italic>
+ <sub>
+  <italic>ik</italic>
+ </sub>. The overall rate of loss of latency and infectiousness are respectively given by 
+ <italic>γ</italic>
+ <sub>1</sub>/2 and 
+ <italic>γ</italic>
+ <sub>2</sub>/2, while the age-group-specific force of infection λ
+ <sub>
+  <italic>i</italic>
+ </sub> is given by 
+ <disp-formula id="pcbi.1005838.e006">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e006.jpg" id="pcbi.1005838.e006g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M6">
+    <mtable displaystyle="true">
+     <mtr>
+      <mtd columnalign="right">
+       <mrow>
+        <msub>
+         <mo>λ</mo>
+         <mi>i</mi>
+        </msub>
+        <mo>=</mo>
+        <msub>
+         <mi>σ</mi>
+         <mi>i</mi>
+        </msub>
+        <mspace width="1pt"/>
+        <munderover>
+         <mo>∑</mo>
+         <mrow>
+          <mi>j</mi>
+          <mo>=</mo>
+          <mn>1</mn>
+         </mrow>
+         <mi>x</mi>
+        </munderover>
+        <mspace width="1pt"/>
+        <munderover>
+         <mo>∑</mo>
+         <mrow>
+          <mi>k</mi>
+          <mo>=</mo>
+          <mn>1</mn>
+         </mrow>
+         <mi>y</mi>
+        </munderover>
+        <mspace width="1pt"/>
+        <msub>
+         <mi>β</mi>
+         <mrow>
+          <mi>i</mi>
+          <mo>,</mo>
+          <mi>j</mi>
+         </mrow>
+        </msub>
+        <mspace width="1pt"/>
+        <mo>(</mo>
+        <msubsup>
+         <mi>I</mi>
+         <mrow>
+          <mi>j</mi>
+          <mi>k</mi>
+         </mrow>
+         <mn>1</mn>
+        </msubsup>
+        <mo>+</mo>
+        <msubsup>
+         <mi>I</mi>
+         <mrow>
+          <mi>j</mi>
+          <mi>k</mi>
+         </mrow>
+         <mn>2</mn>
+        </msubsup>
+        <mo>)</mo>
+       </mrow>
+      </mtd>
+     </mtr>
+    </mtable>
+   </math>
+  </alternatives>
+  <label>(2)</label>
+ </disp-formula> where 
+ <italic>β</italic>
+ <sub>
+  <italic>i</italic>,
+  <italic>j</italic>
+ </sub> is the effective contact rate between individuals in age group 
+ <italic>i</italic> and age group 
+ <italic>j</italic>, and 
+ <italic>σ</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> is the susceptibility of the age group 
+ <italic>i</italic> (that can be inferred from serological data) and 
+ <italic>x</italic> and 
+ <italic>y</italic> are the total number of age groups and risk groups, respectively. The effective contact rate is the transmission rate (Λ) multiplied with the probability of a contact between a individual in age group 
+ <italic>i</italic> and one in age group 
+ <italic>j</italic> (
+ <italic>C</italic>
+ <sub>
+  <italic>i</italic>,
+  <italic>j</italic>
+ </sub>).
+</p>
