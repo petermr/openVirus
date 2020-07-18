@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>The Space-time Autoregressive Integrated Moving Average model, STARIMA for short, is an extension of the ARIMA model. The STARIMA model class expresses: 
+ <italic>z</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>
+ <italic>(t)</italic>; observations of the random variables at site 
+ <italic>i</italic>, 
+ <italic>i = 1</italic>,
+ <italic>2</italic>,
+ <italic>…</italic>, 
+ <italic>N</italic>; and time 
+ <italic>t</italic> as a weighted linear combination of past observations and errors, which may be lagged across both space and time. The basic mechanism for this representation is a hierarchical ordering of the neighbors of each site and a sequence of 
+ <italic>N×N</italic> weighting matrices, 
+ <italic>W</italic>
+ <sup>
+  <italic>(t)</italic>
+ </sup>. Matrix 
+ <italic>W</italic>
+ <sup>
+  <italic>(t)</italic>
+ </sup> has elements 
+ <italic>w</italic>
+ <sub>
+  <italic>ij</italic>
+ </sub>
+ <sup>
+  <italic>(t)</italic>
+ </sup> that are nonzero if and only if sites 
+ <italic>i</italic> and 
+ <italic>j</italic> are 
+ <italic>l</italic>
+ <sup>
+  <italic>th</italic>
+ </sup> order neighbors and 
+ <italic>w</italic>
+ <sup>
+  <italic>(o)</italic>
+ </sup> is defined to be a 
+ <italic>N×N</italic> identity matrix. Specifically, if you let 
+ <italic>z(t)</italic> be the 
+ <italic>N×1</italic> vector of observations at time 
+ <italic>t</italic>, the STARIMA model class can be expressed as follows [
+ <xref rid="pone.0207518.ref050" ref-type="bibr">50</xref>]: 
+ <disp-formula id="pone.0207518.e001">
+  <alternatives>
+   <graphic xlink:href="pone.0207518.e001.jpg" id="pone.0207518.e001g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M1">
+    <mrow>
+     <mi>z</mi>
+     <mrow>
+      <mo>(</mo>
+      <mi>t</mi>
+      <mo>)</mo>
+     </mrow>
+     <mo>=</mo>
+     <mo>−</mo>
+     <mstyle displaystyle="true">
+      <munderover>
+       <mo>∑</mo>
+       <mrow>
+        <mi>k</mi>
+        <mo>=</mo>
+        <mn>1</mn>
+       </mrow>
+       <mi>p</mi>
+      </munderover>
+      <mrow>
+       <mstyle displaystyle="true">
+        <munderover>
+         <mo>∑</mo>
+         <mrow>
+          <mi>l</mi>
+          <mo>=</mo>
+          <mn>0</mn>
+         </mrow>
+         <mrow>
+          <msub>
+           <mi>λ</mi>
+           <mi>k</mi>
+          </msub>
+         </mrow>
+        </munderover>
+        <mrow>
+         <msub>
+          <mi>ϕ</mi>
+          <mrow>
+           <mi>k</mi>
+           <mi>l</mi>
+          </mrow>
+         </msub>
+         <msup>
+          <mi>W</mi>
+          <mrow>
+           <mrow>
+            <mo>(</mo>
+            <mi>l</mi>
+            <mo>)</mo>
+           </mrow>
+          </mrow>
+         </msup>
+        </mrow>
+       </mstyle>
+      </mrow>
+     </mstyle>
+     <mi>z</mi>
+     <mrow>
+      <mo>(</mo>
+      <mrow>
+       <mi>t</mi>
+       <mo>−</mo>
+       <mi>k</mi>
+      </mrow>
+      <mo>)</mo>
+     </mrow>
+     <mo>+</mo>
+     <mi>ε</mi>
+     <mrow>
+      <mo>(</mo>
+      <mi>t</mi>
+      <mo>)</mo>
+     </mrow>
+     <mo>+</mo>
+     <mstyle displaystyle="true">
+      <munderover>
+       <mo>∑</mo>
+       <mrow>
+        <mi>k</mi>
+        <mo>=</mo>
+        <mn>1</mn>
+       </mrow>
+       <mi>q</mi>
+      </munderover>
+      <mrow>
+       <mstyle displaystyle="true">
+        <munderover>
+         <mo>∑</mo>
+         <mrow>
+          <mi>l</mi>
+          <mo>=</mo>
+          <mn>0</mn>
+         </mrow>
+         <mrow>
+          <msub>
+           <mi>m</mi>
+           <mi>k</mi>
+          </msub>
+         </mrow>
+        </munderover>
+        <mrow>
+         <msub>
+          <mi>θ</mi>
+          <mrow>
+           <mi>k</mi>
+           <mi>l</mi>
+          </mrow>
+         </msub>
+        </mrow>
+       </mstyle>
+      </mrow>
+     </mstyle>
+     <msup>
+      <mi>W</mi>
+      <mrow>
+       <mrow>
+        <mo>(</mo>
+        <mi>l</mi>
+        <mo>)</mo>
+       </mrow>
+      </mrow>
+     </msup>
+     <mi>ε</mi>
+     <mrow>
+      <mo>(</mo>
+      <mrow>
+       <mi>t</mi>
+       <mo>−</mo>
+       <mi>k</mi>
+      </mrow>
+      <mo>)</mo>
+     </mrow>
+    </mrow>
+   </math>
+  </alternatives>
+  <label>(1)</label>
+ </disp-formula> where 
+ <italic>p</italic> is the autoregressive order; 
+ <italic>q</italic> is the moving average order;
+ <italic>λ</italic>
+ <sub>
+  <italic>k</italic>
+ </sub> is the spatial order of the 
+ <italic>k</italic>
+ <sup>
+  <italic>th</italic>
+ </sup> autoregressive term; 
+ <italic>m</italic>
+ <sub>
+  <italic>k</italic>
+ </sub> is the spatial order of the 
+ <italic>k</italic>
+ <sup>
+  <italic>th</italic>
+ </sup> moving average term;
+ <italic>Φ</italic>
+ <sub>
+  <italic>kl</italic>
+ </sub> is the autoregressive parameter at temporal lag 
+ <italic>k</italic>and spatial lag 
+ <italic>l</italic>; 
+ <italic>θ</italic>
+ <sub>
+  <italic>kl</italic>
+ </sub> is the moving average parameter at temporal lag 
+ <italic>k</italic> and spatial lag 
+ <italic>l</italic>; 
+ <italic>W</italic>
+ <sup>
+  <italic>(t)</italic>
+ </sup> is the 
+ <italic>N×N</italic> matrix of weights for spatial order 
+ <italic>l</italic>; and 
+ <italic>Ɛ(t)</italic> is the random normally distributed error vector at time 
+ <italic>t</italic> [
+ <xref rid="pone.0207518.ref051" ref-type="bibr">51</xref>].
+</p>

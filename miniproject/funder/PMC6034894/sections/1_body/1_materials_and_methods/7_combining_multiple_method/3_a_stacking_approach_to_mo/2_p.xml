@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>Variants of the same models, or methods based on related approaches or assumptions, may at times produce similar forecasts that commit the same errors while producing a misleading impression of consensus; a successful ensemble may need to consider not only the performance of each individual component, but also the relationships between the raw output of the components. To this end, we use a “stacking generalization” approach [
+ <xref rid="pcbi.1006134.ref034" ref-type="bibr">34</xref>, 
+ <xref rid="pcbi.1006134.ref035" ref-type="bibr">35</xref>], treating the selection of weights 
+ <bold>w</bold> for the current season, 
+ <italic>S</italic> + 1, as the task of frequentist estimation of the risk-optimal weight vector, 
+ <disp-formula id="pcbi.1006134.e042">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e042.jpg" id="pcbi.1006134.e042g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M42">
+    <mrow>
+     <mtable>
+      <mtr>
+       <mtd>
+        <mrow>
+         <msup>
+          <mstyle mathsize="normal" mathvariant="bold">
+           <mi>w</mi>
+          </mstyle>
+          <mo>*</mo>
+         </msup>
+         <mo>=</mo>
+         <munder>
+          <mrow>
+           <mtext>arg</mtext>
+           <mspace width="2pt"/>
+           <mtext>max</mtext>
+          </mrow>
+          <mtable columnalign="left">
+           <mtr>
+            <mtd>
+             <mrow>
+              <mstyle mathsize="normal" mathvariant="bold">
+               <mi>w</mi>
+              </mstyle>
+              <mo>∈</mo>
+              <msup>
+               <mrow>
+                <mrow>
+                 <mo>[</mo>
+                 <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mn>1</mn>
+                 </mrow>
+                 <mo>]</mo>
+                </mrow>
+               </mrow>
+               <mi>m</mi>
+              </msup>
+             </mrow>
+            </mtd>
+           </mtr>
+           <mtr>
+            <mtd>
+             <mrow>
+              <mstyle displaystyle="true">
+               <msubsup>
+                <mo>∑</mo>
+                <mrow>
+                 <mi>j</mi>
+                 <mo>=</mo>
+                 <mn>1</mn>
+                </mrow>
+                <mi>m</mi>
+               </msubsup>
+               <mrow>
+                <msub>
+                 <mstyle mathsize="normal" mathvariant="bold">
+                  <mi>w</mi>
+                 </mstyle>
+                 <mi>j</mi>
+                </msub>
+                <mo>=</mo>
+                <mn>1</mn>
+               </mrow>
+              </mstyle>
+             </mrow>
+            </mtd>
+           </mtr>
+          </mtable>
+         </munder>
+         <mi mathvariant="double-struck">E</mi>
+         <mrow>
+          <mo>[</mo>
+          <mrow>
+           <mtext>Score</mtext>
+           <mrow>
+            <mo>(</mo>
+            <mrow>
+             <mstyle mathsize="normal" mathvariant="bold">
+              <mi>w</mi>
+             </mstyle>
+             <mo>,</mo>
+             <mi>S</mi>
+             <mo>+</mo>
+             <mn>1</mn>
+             <mo>,</mo>
+             <mi>l</mi>
+             <mo>,</mo>
+             <mi>t</mi>
+             <mo>,</mo>
+             <mi>i</mi>
+             <mo>,</mo>
+             <mi>e</mi>
+            </mrow>
+            <mo>)</mo>
+           </mrow>
+          </mrow>
+          <mo>]</mo>
+         </mrow>
+         <mo>,</mo>
+        </mrow>
+       </mtd>
+      </mtr>
+     </mtable>
+    </mrow>
+   </math>
+  </alternatives>
+ </disp-formula> based on leave-one-season-out cross-validation: 
+ <disp-formula id="pcbi.1006134.e043">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e043.jpg" id="pcbi.1006134.e043g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M43">
+    <mrow>
+     <mstyle mathsize="normal" mathvariant="bold">
+      <mover accent="true">
+       <mi>w</mi>
+       <mo>^</mo>
+      </mover>
+     </mstyle>
+     <mo>=</mo>
+     <mi>μ</mi>
+     <msub>
+      <mstyle mathsize="normal" mathvariant="bold">
+       <mi>e</mi>
+      </mstyle>
+      <mrow>
+       <mtext>uniform</mtext>
+      </mrow>
+     </msub>
+     <mo>+</mo>
+     <mrow>
+      <mo>(</mo>
+      <mrow>
+       <mn>1</mn>
+       <mo>−</mo>
+       <mi>μ</mi>
+      </mrow>
+      <mo>)</mo>
+     </mrow>
+     <munder>
+      <mrow>
+       <mtext>arg</mtext>
+       <mspace width="2pt"/>
+       <mtext>max</mtext>
+      </mrow>
+      <mtable columnalign="left">
+       <mtr>
+        <mtd>
+         <mrow>
+          <mstyle mathsize="normal" mathvariant="bold">
+           <mi>w</mi>
+          </mstyle>
+          <mo>∈</mo>
+          <msup>
+           <mrow>
+            <mrow>
+             <mo>[</mo>
+             <mrow>
+              <mn>0</mn>
+              <mo>,</mo>
+              <mn>1</mn>
+             </mrow>
+             <mo>]</mo>
+            </mrow>
+           </mrow>
+           <mi>m</mi>
+          </msup>
+         </mrow>
+        </mtd>
+       </mtr>
+       <mtr>
+        <mtd>
+         <mrow>
+          <mstyle displaystyle="true">
+           <msubsup>
+            <mo>∑</mo>
+            <mrow>
+             <mi>j</mi>
+             <mo>=</mo>
+             <mn>1</mn>
+            </mrow>
+            <mi>m</mi>
+           </msubsup>
+           <mrow>
+            <msub>
+             <mstyle mathsize="normal" mathvariant="bold">
+              <mi>w</mi>
+             </mstyle>
+             <mi>j</mi>
+            </msub>
+            <mo>=</mo>
+            <mn>1</mn>
+           </mrow>
+          </mstyle>
+         </mrow>
+        </mtd>
+       </mtr>
+      </mtable>
+     </munder>
+     <munder>
+      <mstyle displaystyle="true" mathsize="140%">
+       <mo>∑</mo>
+      </mstyle>
+      <mtable columnalign="left">
+       <mtr>
+        <mtd>
+         <mrow>
+          <msup>
+           <mi>s</mi>
+           <mo>′</mo>
+          </msup>
+          <mo>∈</mo>
+          <mrow>
+           <mo>{</mo>
+           <mrow>
+            <mn>1..</mn>
+            <mi>S</mi>
+           </mrow>
+           <mo>}</mo>
+          </mrow>
+          <mo>,</mo>
+         </mrow>
+        </mtd>
+       </mtr>
+       <mtr>
+        <mtd>
+         <mrow>
+          <msup>
+           <mi>l</mi>
+           <mo>′</mo>
+          </msup>
+          <mo>,</mo>
+          <msup>
+           <mi>t</mi>
+           <mo>′</mo>
+          </msup>
+          <mo>,</mo>
+          <msup>
+           <mi>i</mi>
+           <mo>′</mo>
+          </msup>
+          <mo>,</mo>
+          <msup>
+           <mi>e</mi>
+           <mo>′</mo>
+          </msup>
+         </mrow>
+        </mtd>
+       </mtr>
+      </mtable>
+     </munder>
+     <mtable>
+      <mtr>
+       <mtd>
+        <mrow>
+         <mtext>RelevanceWeight</mtext>
+         <mrow>
+          <mo>(</mo>
+          <mrow>
+           <msup>
+            <mi>s</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>l</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>t</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>i</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>e</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>;</mo>
+           <mi>S</mi>
+           <mo>+</mo>
+           <mn>1</mn>
+           <mo>,</mo>
+           <mi>l</mi>
+           <mo>,</mo>
+           <mi>t</mi>
+           <mo>,</mo>
+           <mi>i</mi>
+           <mo>,</mo>
+           <mi>e</mi>
+          </mrow>
+          <mo>)</mo>
+         </mrow>
+        </mrow>
+       </mtd>
+      </mtr>
+      <mtr>
+       <mtd>
+        <mrow>
+         <mo>·</mo>
+         <mtext>CrossValidationScore</mtext>
+         <mrow>
+          <mo>(</mo>
+          <mrow>
+           <mstyle mathsize="normal" mathvariant="bold">
+            <mi>w</mi>
+           </mstyle>
+           <mo>,</mo>
+           <msup>
+            <mi>s</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>l</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>t</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>i</mi>
+            <mo>′</mo>
+           </msup>
+           <mo>,</mo>
+           <msup>
+            <mi>e</mi>
+            <mo>′</mo>
+           </msup>
+          </mrow>
+          <mo>)</mo>
+         </mrow>
+         <mo>,</mo>
+        </mrow>
+       </mtd>
+      </mtr>
+     </mtable>
+    </mrow>
+   </math>
+  </alternatives>
+ </disp-formula> where 
+ <italic>μ</italic> is an inflation factor that gives addition weight to the uniform component (
+ <bold>e</bold>
+ <sub>uniform</sub> is a vector containing a 1 in the position corresponding to the uniform distribution component, and 0 in every other position). We changed the RelevanceWeight function used for real-time forecasts throughout the 2015/2016 season, but study only the following RelevanceWeight function in the cross-validation analysis of the adaptively weighted ensemble: 
+ <disp-formula id="pcbi.1006134.e044">
+  <alternatives>
+   <graphic xlink:href="pcbi.1006134.e044.jpg" id="pcbi.1006134.e044g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M44">
+    <mtable displaystyle="true">
+     <mtr>
+      <mtd columnalign="right">
+       <mrow>
+        <mtext>RelevanceWeight</mtext>
+        <mrow>
+         <mo>(</mo>
+         <mi>s</mi>
+         <mo>,</mo>
+         <mi>l</mi>
+         <mo>,</mo>
+         <mi>t</mi>
+         <mo>,</mo>
+         <mi>i</mi>
+         <mo>,</mo>
+         <mi>e</mi>
+         <mo>;</mo>
+         <msup>
+          <mi>s</mi>
+          <mo>′</mo>
+         </msup>
+         <mo>,</mo>
+         <msup>
+          <mi>l</mi>
+          <mo>′</mo>
+         </msup>
+         <mo>,</mo>
+         <msup>
+          <mi>t</mi>
+          <mo>′</mo>
+         </msup>
+         <mo>,</mo>
+         <msup>
+          <mi>i</mi>
+          <mo>′</mo>
+         </msup>
+         <mo>,</mo>
+         <msup>
+          <mi>e</mi>
+          <mo>′</mo>
+         </msup>
+         <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mo>{</mo>
+        <mtable>
+         <mtr>
+          <mtd columnalign="left">
+           <mrow>
+            <mn>1</mn>
+            <mo>,</mo>
+           </mrow>
+          </mtd>
+          <mtd columnalign="left">
+           <mrow>
+            <mo>|</mo>
+            <mi>t</mi>
+            <mo>-</mo>
+            <msup>
+             <mi>t</mi>
+             <mo>′</mo>
+            </msup>
+            <mo>|</mo>
+            <mo>≤</mo>
+            <mn>4</mn>
+            <mo>,</mo>
+            <mspace width="0.166667em"/>
+            <mi>i</mi>
+            <mo>=</mo>
+            <msup>
+             <mi>i</mi>
+             <mo>′</mo>
+            </msup>
+            <mo>,</mo>
+            <mspace width="0.166667em"/>
+            <mi>e</mi>
+            <mo>=</mo>
+            <msup>
+             <mi>e</mi>
+             <mo>′</mo>
+            </msup>
+           </mrow>
+          </mtd>
+         </mtr>
+         <mtr>
+          <mtd columnalign="left">
+           <mrow>
+            <mn>0</mn>
+            <mo>,</mo>
+           </mrow>
+          </mtd>
+          <mtd columnalign="left">
+           <mrow>
+            <mtext>otherwise</mtext>
+            <mo>.</mo>
+           </mrow>
+          </mtd>
+         </mtr>
+        </mtable>
+        <mo/>
+       </mrow>
+      </mtd>
+     </mtr>
+    </mtable>
+   </math>
+  </alternatives>
+ </disp-formula>
+</p>

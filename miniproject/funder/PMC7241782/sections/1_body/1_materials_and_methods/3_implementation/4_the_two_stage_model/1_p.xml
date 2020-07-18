@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>The Two-stage model outputs the sum of the output of the 1st model (AR model) and the 2nd model (LSTM). In our setting, the AR model first outputs the prediction of the ILI rate/patient number from historical data prior to more than two weeks, and then, the LSTM model outputs the prediction of sudden outbreaks, which is the difference between the ground truth and the output of the AR model. We predict the number of influenza patients at time 
+ <italic>t</italic>+ 1, as formulated as follows: 
+ <disp-formula id="pone.0233126.e003">
+  <alternatives>
+   <graphic xlink:href="pone.0233126.e003.jpg" id="pone.0233126.e003g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M3">
+    <mtable displaystyle="true">
+     <mtr>
+      <mtd columnalign="right">
+       <mtable displaystyle="true">
+        <mtr>
+         <mtd columnalign="right">
+          <msubsup>
+           <mover accent="true">
+            <mi>y</mi>
+            <mo>^</mo>
+           </mover>
+           <mrow>
+            <mi>t</mi>
+           </mrow>
+           <mrow>
+            <mn>1</mn>
+            <mi>s</mi>
+            <mi>t</mi>
+           </mrow>
+          </msubsup>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <mo>=</mo>
+           <mi>A</mi>
+           <mi>R</mi>
+           <mo>(</mo>
+           <msub>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>1</mn>
+            </mrow>
+           </msub>
+           <mo>,</mo>
+           <msub>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>2</mn>
+            </mrow>
+           </msub>
+           <mo>,</mo>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mo>,</mo>
+           <msub>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>26</mn>
+            </mrow>
+           </msub>
+           <mo>)</mo>
+           <mo>,</mo>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <msubsup>
+           <mover accent="true">
+            <mi>y</mi>
+            <mo>^</mo>
+           </mover>
+           <mrow>
+            <mi>t</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+           </mrow>
+           <mrow>
+            <mn>1</mn>
+            <mi>s</mi>
+            <mi>t</mi>
+           </mrow>
+          </msubsup>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <mo>=</mo>
+           <mi>A</mi>
+           <mi>R</mi>
+           <mo>(</mo>
+           <msubsup>
+            <mover accent="true">
+             <mi>y</mi>
+             <mo>^</mo>
+            </mover>
+            <mrow>
+             <mi>t</mi>
+            </mrow>
+            <mrow>
+             <mn>1</mn>
+             <mi>s</mi>
+             <mi>t</mi>
+            </mrow>
+           </msubsup>
+           <mo>,</mo>
+           <msub>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>2</mn>
+            </mrow>
+           </msub>
+           <mo>,</mo>
+           <msub>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>3</mn>
+            </mrow>
+           </msub>
+           <mo>,</mo>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mo>,</mo>
+           <msub>
+            <mi>y</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>25</mn>
+            </mrow>
+           </msub>
+           <mo>)</mo>
+           <mo>,</mo>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <msubsup>
+           <mover accent="true">
+            <mi>d</mi>
+            <mo>^</mo>
+           </mover>
+           <mrow>
+            <mi>t</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+           </mrow>
+           <mrow>
+            <mn>2</mn>
+            <mi>n</mi>
+            <mi>d</mi>
+           </mrow>
+          </msubsup>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <mo>=</mo>
+           <mi>L</mi>
+           <mi>S</mi>
+           <mi>T</mi>
+           <mi>M</mi>
+           <mo>(</mo>
+           <msub>
+            <mi>g</mi>
+            <mi>t</mi>
+           </msub>
+           <mo>,</mo>
+           <msub>
+            <mi>g</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>1</mn>
+            </mrow>
+           </msub>
+           <mo>,</mo>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mo>.</mo>
+           <mo>,</mo>
+           <msub>
+            <mi>g</mi>
+            <mrow>
+             <mi>t</mi>
+             <mo>-</mo>
+             <mn>25</mn>
+            </mrow>
+           </msub>
+           <mo>)</mo>
+           <mo>,</mo>
+          </mrow>
+         </mtd>
+        </mtr>
+        <mtr>
+         <mtd columnalign="right">
+          <msub>
+           <mover accent="true">
+            <mi>y</mi>
+            <mo>^</mo>
+           </mover>
+           <mrow>
+            <mi>t</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+           </mrow>
+          </msub>
+         </mtd>
+         <mtd columnalign="left">
+          <mrow>
+           <mo>=</mo>
+           <msubsup>
+            <mover accent="true">
+             <mi>y</mi>
+             <mo>^</mo>
+            </mover>
+            <mrow>
+             <mi>t</mi>
+             <mo>+</mo>
+             <mn>1</mn>
+            </mrow>
+            <mrow>
+             <mn>1</mn>
+             <mi>s</mi>
+             <mi>t</mi>
+            </mrow>
+           </msubsup>
+           <mo>+</mo>
+           <msubsup>
+            <mover accent="true">
+             <mi>d</mi>
+             <mo>^</mo>
+            </mover>
+            <mrow>
+             <mi>t</mi>
+             <mo>+</mo>
+             <mn>1</mn>
+            </mrow>
+            <mrow>
+             <mn>2</mn>
+             <mi>n</mi>
+             <mi>d</mi>
+            </mrow>
+           </msubsup>
+          </mrow>
+         </mtd>
+        </mtr>
+       </mtable>
+      </mtd>
+     </mtr>
+    </mtable>
+   </math>
+  </alternatives>
+  <label>(3)</label>
+ </disp-formula>
+</p>

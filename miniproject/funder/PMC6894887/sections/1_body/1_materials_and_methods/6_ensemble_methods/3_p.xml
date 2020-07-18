@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>We vary input parameters such as the season length 
+ <italic>m</italic>, error measure (RMSE or MARE) to be optimized for estimating the parameters, and the ending month of the training set to generate multiple (in our case, 96) distinct Holt-Winters models. Each of these models produces a monthly (weekly) forecast for the dengue (ILI) case count using data from two years preceding that month (week) as the training set. We now need to weight the forecasts of each model so that we favor the better-performing models [
+ <xref rid="pcbi.1007518.ref018" ref-type="bibr">18</xref>]. Performance is decided as follows. Suppose we are forecasting the dengue (ILI) case count for month (week) 
+ <italic>r</italic> in year 
+ <italic>v</italic>. For each of the models, we first forecast dengue (ILI) case counts for the same month (week) 
+ <italic>r</italic> but in the preceding 2 years (
+ <italic>v</italic> − 1 and 
+ <italic>v</italic> − 2). We calculate the mean forecast error 
+ <italic>e</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> for the 
+ <italic>i</italic>th model using these two forecasts and the corresponding observations. The model with the largest mean forecast error 
+ <italic>e</italic>* is considered to be the worst performing model. We now compute the ratios 
+ <italic>w</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> = 
+ <italic>e</italic>*/
+ <italic>e</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> for each model and this 
+ <italic>w</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> is taken to be the weight corresponding to the 
+ <italic>i</italic>th model. Obviously, the best performing model (that is, the one with the smallest error) will have the highest weight. The worst performing model will have weight 1. These weights, after rounding, can be considered as votes. The 
+ <italic>i</italic>th method casts 
+ <italic>round</italic>(
+ <italic>w</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>) votes for its forecast. We use the median value of all the votes cast as the consensus forecast of the ensemble [
+ <xref rid="pcbi.1007518.ref018" ref-type="bibr">18</xref>]. This procedure is repeated for each monthly (weekly) forecast that is needed.
+</p>

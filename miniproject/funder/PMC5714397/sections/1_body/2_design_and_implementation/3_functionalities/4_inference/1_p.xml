@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>In addition to the numerically optimised epidemiological model we also implemented a highly optimised likelihood function. The basic likelihood function incorporated in the package has the following form for each age group (
+ <italic>i</italic>): 
+ <disp-formula id="pcbi.1005838.e007">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e007.jpg" id="pcbi.1005838.e007g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M7">
+    <mrow>
+     <mi mathvariant="script">L</mi>
+     <mrow>
+      <mo>(</mo>
+      <msubsup>
+       <mi>n</mi>
+       <mi>i</mi>
+       <mo>+</mo>
+      </msubsup>
+      <mo>,</mo>
+      <msub>
+       <mi>n</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>,</mo>
+      <msub>
+       <mi>m</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>|</mo>
+      <msub>
+       <mi>ϵ</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>,</mo>
+      <mi>ψ</mi>
+      <mo>,</mo>
+      <msub>
+       <mi>θ</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>)</mo>
+     </mrow>
+     <mo>=</mo>
+     <munder>
+      <mo>∑</mo>
+      <msubsup>
+       <mi>m</mi>
+       <mi>i</mi>
+       <mo>+</mo>
+      </msubsup>
+     </munder>
+     <mspace width="1pt"/>
+     <mi mathvariant="script">L</mi>
+     <mrow>
+      <mo>(</mo>
+      <msubsup>
+       <mi>n</mi>
+       <mi>i</mi>
+       <mo>+</mo>
+      </msubsup>
+      <mo>,</mo>
+      <msub>
+       <mi>n</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>,</mo>
+      <msub>
+       <mi>m</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>|</mo>
+      <msubsup>
+       <mi>m</mi>
+       <mi>i</mi>
+       <mo>+</mo>
+      </msubsup>
+      <mo>,</mo>
+      <msub>
+       <mi>θ</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>)</mo>
+     </mrow>
+     <mi mathvariant="script">L</mi>
+     <mrow>
+      <mo>(</mo>
+      <msubsup>
+       <mi>m</mi>
+       <mi>i</mi>
+       <mo>+</mo>
+      </msubsup>
+      <mo>,</mo>
+      <msub>
+       <mi>m</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>|</mo>
+      <msub>
+       <mi>ϵ</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>,</mo>
+      <mi>ψ</mi>
+      <mo>,</mo>
+      <msub>
+       <mi>θ</mi>
+       <mi>i</mi>
+      </msub>
+      <mo>)</mo>
+     </mrow>
+    </mrow>
+   </math>
+  </alternatives>
+ </disp-formula> The likelihood of the data, given the ODE model, is separated into two parts. First, we assume that the virologically tested sera (
+ <italic>n</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>) are a subsample of the people identified with an influenza-like-illness. As such, the number tested positive (
+ <inline-formula id="pcbi.1005838.e008">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e008.jpg" id="pcbi.1005838.e008g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M8">
+    <msubsup>
+     <mi>n</mi>
+     <mi>i</mi>
+     <mo>+</mo>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula>) is distributed as a hypergeometric function, with the number of people tested (
+ <italic>n</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>), the number of people actually with that strain of influenza (
+ <inline-formula id="pcbi.1005838.e009">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e009.jpg" id="pcbi.1005838.e009g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M9">
+    <msubsup>
+     <mi>m</mi>
+     <mi>i</mi>
+     <mo>+</mo>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula>) and the total number of people (
+ <italic>m</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>). The second part of the likelihood function defines how the values 
+ <inline-formula id="pcbi.1005838.e010">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e010.jpg" id="pcbi.1005838.e010g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M10">
+    <msubsup>
+     <mi>m</mi>
+     <mi>i</mi>
+     <mo>+</mo>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula> and 
+ <italic>m</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> depend on the ascertainment probability (
+ <italic>ϵ</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>), external inflow of influenza (
+ <italic>ψ</italic>) and the epidemiological model parameters (
+ <italic>θ</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> = {Λ, 
+ <italic>σ</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>, 
+ <italic>I</italic>
+ <sub>0</sub>}, with 
+ <italic>I</italic>
+ <sub>0</sub> the log transformed initial infected population: 
+ <inline-formula id="pcbi.1005838.e011">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e011.jpg" id="pcbi.1005838.e011g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M11">
+    <mrow>
+     <msub>
+      <mi>I</mi>
+      <mn>0</mn>
+     </msub>
+     <mo>=</mo>
+     <mo form="prefix">log</mo>
+     <msubsup>
+      <mi>I</mi>
+      <mi>i</mi>
+      <mn>1</mn>
+     </msubsup>
+     <mrow>
+      <mo>(</mo>
+      <mn>0</mn>
+      <mo>)</mo>
+     </mrow>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula>). Here, subscript 
+ <italic>i</italic> designates the age group 
+ <italic>i</italic> and the parameters (
+ <italic>ϵ</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>; 
+ <italic>ψ</italic>; Λ; 
+ <italic>σ</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>; 
+ <italic>I</italic>
+ <sub>0</sub>) are inferred from the data. We have no direct data for the number of people with a particular strain of influenza (
+ <inline-formula id="pcbi.1005838.e012">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005838.e012.jpg" id="pcbi.1005838.e012g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M12">
+    <msubsup>
+     <mi>m</mi>
+     <mi>i</mi>
+     <mo>+</mo>
+    </msubsup>
+   </math>
+  </alternatives>
+ </inline-formula>) so we integrate over all possibilities, resulting in a computationally intensive calculation. For full details of the likelihood and the method of optimisation see [
+ <xref rid="pcbi.1005838.ref006" ref-type="bibr">6</xref>].
+</p>

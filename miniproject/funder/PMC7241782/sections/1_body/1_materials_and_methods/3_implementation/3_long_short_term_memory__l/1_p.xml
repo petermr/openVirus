@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>LSTM, which is a successful method for NLP applications [
+ <xref rid="pone.0233126.ref028" ref-type="bibr">28</xref>, 
+ <xref rid="pone.0233126.ref029" ref-type="bibr">29</xref>], processes a sequence of input and target pairs [(
+ <italic>x</italic>
+ <sub>1</sub>, 
+ <italic>y</italic>
+ <sub>1</sub>), …, (
+ <italic>x</italic>
+ <sub>
+  <italic>n</italic>
+ </sub>, 
+ <italic>y</italic>
+ <sub>
+  <italic>n</italic>
+ </sub>)]. For each pair, it takes a new input 
+ <italic>x</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> and produces an estimate for a target 
+ <italic>y</italic>
+ <sub>
+  <italic>i</italic>
+ </sub> using earlier inputs 
+ <italic>x</italic>
+ <sub>
+  <italic>i</italic>−
+  <italic>t</italic>
+ </sub>, …, 
+ <italic>x</italic>
+ <sub>
+  <italic>i</italic>
+ </sub>. An LSTM cell works as a memory to manage information according to the decisions specified by the input 
+ <bold>I</bold>, output 
+ <bold>Y</bold>, and forget gates 
+ <bold>F</bold>. Each memory cell is implemented as shown below. 
+ <disp-formula id="pone.0233126.e002">
+  <alternatives>
+   <graphic xlink:href="pone.0233126.e002.jpg" id="pone.0233126.e002g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M2">
+    <mtable displaystyle="true">
+     <mtr>
+      <mtd columnalign="left">
+       <mrow>
+        <msub>
+         <mi mathvariant="bold">I</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>=</mo>
+        <mi>σ</mi>
+        <mo>(</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">x</mi>
+          <mi mathvariant="bold">i</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">x</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">m</mi>
+          <mi mathvariant="bold">i</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">o</mi>
+         <mrow>
+          <mi mathvariant="bold">t</mi>
+          <mo>-</mo>
+          <mn mathvariant="bold">1</mn>
+         </mrow>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">b</mi>
+         <mi mathvariant="bold">i</mi>
+        </msub>
+        <mo>)</mo>
+        <mo>,</mo>
+        <mspace width="16.0pt"/>
+        <msub>
+         <mi mathvariant="bold">Y</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>=</mo>
+        <mi>σ</mi>
+        <mo>(</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">x</mi>
+          <mi mathvariant="bold">o</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">x</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">m</mi>
+          <mi mathvariant="bold">o</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">o</mi>
+         <mrow>
+          <mi mathvariant="bold">t</mi>
+          <mo>-</mo>
+          <mn mathvariant="bold">1</mn>
+         </mrow>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">b</mi>
+         <mi mathvariant="bold">o</mi>
+        </msub>
+        <mo>)</mo>
+        <mo>,</mo>
+       </mrow>
+      </mtd>
+     </mtr>
+     <mtr>
+      <mtd columnalign="left">
+       <mrow>
+        <msub>
+         <mi mathvariant="bold">F</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>=</mo>
+        <mi>σ</mi>
+        <mo>(</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">x</mi>
+          <mi mathvariant="bold">f</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">x</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">m</mi>
+          <mi mathvariant="bold">f</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">o</mi>
+         <mrow>
+          <mi mathvariant="bold">t</mi>
+          <mo>-</mo>
+          <mn mathvariant="bold">1</mn>
+         </mrow>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">b</mi>
+         <mi mathvariant="bold">f</mi>
+        </msub>
+        <mo>)</mo>
+        <mo>,</mo>
+        <mspace width="12.0pt"/>
+        <mover accent="true">
+         <msub>
+          <mi mathvariant="bold">C</mi>
+          <mi mathvariant="bold">t</mi>
+         </msub>
+         <mo>˜</mo>
+        </mover>
+        <mo>=</mo>
+        <mo>(</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">x</mi>
+          <mi mathvariant="bold">c</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">x</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">W</mi>
+         <msub>
+          <mi mathvariant="bold">m</mi>
+          <mi mathvariant="bold">c</mi>
+         </msub>
+        </msub>
+        <msub>
+         <mi mathvariant="bold">o</mi>
+         <mrow>
+          <mi mathvariant="bold">t</mi>
+          <mo>-</mo>
+          <mn mathvariant="bold">1</mn>
+         </mrow>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">b</mi>
+         <mi mathvariant="bold">c</mi>
+        </msub>
+        <mo>)</mo>
+        <mo>,</mo>
+        <mspace width="7.0pt"/>
+       </mrow>
+      </mtd>
+     </mtr>
+     <mtr>
+      <mtd columnalign="left">
+       <mrow>
+        <msub>
+         <mi mathvariant="bold">C</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>=</mo>
+        <msub>
+         <mi mathvariant="bold">F</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>⊙</mo>
+        <msub>
+         <mi mathvariant="bold">C</mi>
+         <mrow>
+          <mi mathvariant="bold">t</mi>
+          <mo>-</mo>
+          <mn mathvariant="bold">1</mn>
+         </mrow>
+        </msub>
+        <mo>+</mo>
+        <msub>
+         <mi mathvariant="bold">I</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>⊙</mo>
+        <mtext mathvariant="bold">tanh</mtext>
+        <mo>(</mo>
+        <mover accent="true">
+         <msub>
+          <mi mathvariant="bold">C</mi>
+          <mi mathvariant="bold">t</mi>
+         </msub>
+         <mo>˜</mo>
+        </mover>
+        <mo>)</mo>
+        <mo>,</mo>
+        <mspace width="12.0pt"/>
+        <msub>
+         <mi mathvariant="bold">o</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>=</mo>
+        <msub>
+         <mi mathvariant="bold">Y</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>⊙</mo>
+        <mtext mathvariant="bold">tanh</mtext>
+        <mo>(</mo>
+        <msub>
+         <mi mathvariant="bold">C</mi>
+         <mi mathvariant="bold">t</mi>
+        </msub>
+        <mo>)</mo>
+        <mspace width="60.0pt"/>
+       </mrow>
+      </mtd>
+     </mtr>
+    </mtable>
+   </math>
+  </alternatives>
+  <label>(2)</label>
+ </disp-formula>
+</p>
