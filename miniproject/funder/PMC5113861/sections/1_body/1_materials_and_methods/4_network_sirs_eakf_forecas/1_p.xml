@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p>In our influenza forecast system, the dynamic model is optimized prior to the generation of a forecast. This optimization, or ‘training’, process is performed using the EAKF [
+ <xref rid="pcbi.1005201.ref015" ref-type="bibr">15</xref>], a data assimilation method. In practice, an ensemble of model simulations (
+ <italic>m</italic> = 500 in this study) is initialized at the beginning of an integration (see details below); the model ensemble is then numerically integrated forward per the network-SIRS model equations to compute 
+ <inline-formula id="pcbi.1005201.e012">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e012.jpg" id="pcbi.1005201.e012g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M12">
+    <mrow>
+     <mover accent="true">
+      <mrow>
+       <msub>
+        <mrow>
+         <mi>I</mi>
+         <mi>L</mi>
+         <mi>I</mi>
+        </mrow>
+        <mo>+</mo>
+       </msub>
+      </mrow>
+      <mo stretchy="true">^</mo>
+     </mover>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula>, the model estimate of ILI+ for the first week (i.e. the prior); the 
+ <inline-formula id="pcbi.1005201.e013">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e013.jpg" id="pcbi.1005201.e013g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M13">
+    <mrow>
+     <mover accent="true">
+      <mrow>
+       <msub>
+        <mrow>
+         <mi>I</mi>
+         <mi>L</mi>
+         <mi>I</mi>
+        </mrow>
+        <mo>+</mo>
+       </msub>
+      </mrow>
+      <mo stretchy="true">^</mo>
+     </mover>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula> prior is then updated using the first observed ILI+ per the EAKF algorithm. Specifically, the mean of the observed variable ensemble, 
+ <inline-formula id="pcbi.1005201.e014">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e014.jpg" id="pcbi.1005201.e014g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M14">
+    <mrow>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>o</mi>
+       <mi>s</mi>
+       <mi>t</mi>
+      </mrow>
+     </msub>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula>, is first updated using the following formula: 
+ <disp-formula id="pcbi.1005201.e015">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e015.jpg" id="pcbi.1005201.e015g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M15">
+    <mrow>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>o</mi>
+       <mi>s</mi>
+       <mi>t</mi>
+      </mrow>
+     </msub>
+     <mo>=</mo>
+     <mfrac>
+      <mrow>
+       <msubsup>
+        <mi>σ</mi>
+        <mrow>
+         <mi>k</mi>
+         <mo>,</mo>
+         <mi>o</mi>
+         <mi>b</mi>
+         <mi>s</mi>
+        </mrow>
+        <mn>2</mn>
+       </msubsup>
+      </mrow>
+      <mrow>
+       <msubsup>
+        <mi>σ</mi>
+        <mrow>
+         <mi>k</mi>
+         <mo>,</mo>
+         <mi>o</mi>
+         <mi>b</mi>
+         <mi>s</mi>
+        </mrow>
+        <mn>2</mn>
+       </msubsup>
+       <mo>+</mo>
+       <msubsup>
+        <mi>σ</mi>
+        <mrow>
+         <mi>k</mi>
+         <mo>,</mo>
+         <mi>p</mi>
+         <mi>r</mi>
+         <mi>i</mi>
+         <mi>o</mi>
+         <mi>r</mi>
+        </mrow>
+        <mn>2</mn>
+       </msubsup>
+      </mrow>
+     </mfrac>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>r</mi>
+       <mi>i</mi>
+       <mi>o</mi>
+       <mi>r</mi>
+      </mrow>
+     </msub>
+     <mo>+</mo>
+     <mfrac>
+      <mrow>
+       <msubsup>
+        <mi>σ</mi>
+        <mrow>
+         <mi>k</mi>
+         <mo>,</mo>
+         <mi>p</mi>
+         <mi>r</mi>
+         <mi>i</mi>
+         <mi>o</mi>
+         <mi>r</mi>
+        </mrow>
+        <mn>2</mn>
+       </msubsup>
+      </mrow>
+      <mrow>
+       <msubsup>
+        <mi>σ</mi>
+        <mrow>
+         <mi>k</mi>
+         <mo>,</mo>
+         <mi>o</mi>
+         <mi>b</mi>
+         <mi>s</mi>
+        </mrow>
+        <mn>2</mn>
+       </msubsup>
+       <mo>+</mo>
+       <msubsup>
+        <mi>σ</mi>
+        <mrow>
+         <mi>k</mi>
+         <mo>,</mo>
+         <mi>p</mi>
+         <mi>r</mi>
+         <mi>i</mi>
+         <mi>o</mi>
+         <mi>r</mi>
+        </mrow>
+        <mn>2</mn>
+       </msubsup>
+      </mrow>
+     </mfrac>
+     <msub>
+      <mi>z</mi>
+      <mi>k</mi>
+     </msub>
+    </mrow>
+   </math>
+  </alternatives>
+  <label>(5)</label>
+ </disp-formula> where the subscript 
+ <italic>k</italic> denotes week, and 
+ <italic>obs</italic>, 
+ <italic>prior</italic>, and 
+ <italic>post</italic>, denote the observation, prior and posterior, respectively; 
+ <bold>
+  <italic>z</italic>
+ </bold> is the observed weekly incidence, i.e. ILI+ in this study; 
+ <bold>
+  <italic>x</italic>
+ </bold> is the observed variable, i.e., 
+ <inline-formula id="pcbi.1005201.e016">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e016.jpg" id="pcbi.1005201.e016g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M16">
+    <mrow>
+     <mover accent="true">
+      <mrow>
+       <msub>
+        <mrow>
+         <mi>I</mi>
+         <mi>L</mi>
+         <mi>I</mi>
+        </mrow>
+        <mo>+</mo>
+       </msub>
+      </mrow>
+      <mo stretchy="true">^</mo>
+     </mover>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula>; 
+ <inline-formula id="pcbi.1005201.e017">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e017.jpg" id="pcbi.1005201.e017g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M17">
+    <mrow>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>o</mi>
+       <mi>s</mi>
+       <mi>t</mi>
+      </mrow>
+     </msub>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula> and 
+ <inline-formula id="pcbi.1005201.e018">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e018.jpg" id="pcbi.1005201.e018g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M18">
+    <mrow>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>r</mi>
+       <mi>i</mi>
+       <mi>o</mi>
+       <mi>r</mi>
+      </mrow>
+     </msub>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula> are, respectively, the posterior and prior ensemble mean; 
+ <bold>
+  <italic>σ</italic>
+ </bold>
+ <sup>
+  <italic>2</italic>
+ </sup> is variance. Each ensemble member, 
+ <inline-formula id="pcbi.1005201.e019">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e019.jpg" id="pcbi.1005201.e019g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M19">
+    <mrow>
+     <msubsup>
+      <mi>x</mi>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>o</mi>
+       <mi>s</mi>
+       <mi>t</mi>
+      </mrow>
+      <mi>m</mi>
+     </msubsup>
+    </mrow>
+   </math>
+  </alternatives>
+ </inline-formula>, is then adjusted towards the ensemble mean as follows: 
+ <disp-formula id="pcbi.1005201.e020">
+  <alternatives>
+   <graphic xlink:href="pcbi.1005201.e020.jpg" id="pcbi.1005201.e020g" mimetype="image" position="anchor" orientation="portrait" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <math id="M20">
+    <mrow>
+     <msubsup>
+      <mi>x</mi>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>o</mi>
+       <mi>s</mi>
+       <mi>t</mi>
+      </mrow>
+      <mi>m</mi>
+     </msubsup>
+     <mo>=</mo>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>o</mi>
+       <mi>s</mi>
+       <mi>t</mi>
+      </mrow>
+     </msub>
+     <mo>+</mo>
+     <msqrt>
+      <mrow>
+       <mfrac>
+        <mrow>
+         <msubsup>
+          <mi>σ</mi>
+          <mrow>
+           <mi>k</mi>
+           <mo>,</mo>
+           <mi>o</mi>
+           <mi>b</mi>
+           <mi>s</mi>
+          </mrow>
+          <mn>2</mn>
+         </msubsup>
+        </mrow>
+        <mrow>
+         <msubsup>
+          <mi>σ</mi>
+          <mrow>
+           <mi>k</mi>
+           <mo>,</mo>
+           <mi>o</mi>
+           <mi>b</mi>
+           <mi>s</mi>
+          </mrow>
+          <mn>2</mn>
+         </msubsup>
+         <mo>+</mo>
+         <msubsup>
+          <mi>σ</mi>
+          <mrow>
+           <mi>k</mi>
+           <mo>,</mo>
+           <mi>p</mi>
+           <mi>r</mi>
+           <mi>i</mi>
+           <mi>o</mi>
+           <mi>r</mi>
+          </mrow>
+          <mn>2</mn>
+         </msubsup>
+        </mrow>
+       </mfrac>
+      </mrow>
+     </msqrt>
+     <mo stretchy="false">(</mo>
+     <msubsup>
+      <mi>x</mi>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>r</mi>
+       <mi>i</mi>
+       <mi>o</mi>
+       <mi>r</mi>
+      </mrow>
+      <mi>m</mi>
+     </msubsup>
+     <mo>−</mo>
+     <msub>
+      <mover accent="true">
+       <mi>x</mi>
+       <mo>¯</mo>
+      </mover>
+      <mrow>
+       <mi>k</mi>
+       <mo>,</mo>
+       <mi>p</mi>
+       <mi>r</mi>
+       <mi>i</mi>
+       <mi>o</mi>
+       <mi>r</mi>
+      </mrow>
+     </msub>
+     <mo stretchy="false">)</mo>
+    </mrow>
+   </math>
+  </alternatives>
+  <label>(6)</label>
+ </disp-formula>
+</p>
