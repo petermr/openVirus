@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list list-type="order">
+ <list-item>
+  <p>
+   <bold>Initial selection</bold>: Tweets are selected based on location, date range and keywords. The keywords are words indicating a symptom. The location is derived based on either the tweet location, the author profile location or the location mention. The code is attached as a python notebook, Step 1.ipynb. Please note that Twitter authorisation keys to access the API have been removed since they are personal to this author.
+  </p>
+ </list-item>
+ <list-item>
+  <p>
+   <bold>Personal health mention classification</bold>: This step is necessary because a tweet containing a symptom word may not be the report of a symptom. The classifier uses tweet vectors as the feature representation for a statistical classification algorithm. A tweet vector is the average of word embeddings of content words in a tweet. The word embeddings used are pre-trained on a large corpus. A word embedding is a distributional representation of a word that is expected to capture the semantics of a word. The classification step uses support vector machines trained on a labelled dataset where each tweet is represented as its tweet vector. The code is attached as a python notebook, Step 2.ipynb.
+  </p>
+ </list-item>
+ <list-item>
+  <p>
+   <bold>Duplication removal</bold>: We retain the first tweet per day per user. This prevents multiple reports by the same user from swamping the system. It must be noted that this step follows the second step where a classifier has predicted a tweet as a health report. The code is attached as a python notebook, Step 3.ipynb.
+  </p>
+ </list-item>
+ <list-item>
+  <p>
+   <bold>Monitoring algorithm</bold>: In this step, we use a monitoring algorithm based on time-between-events[
+   <xref rid="pone.0230322.ref015" ref-type="bibr">15</xref>]. Time-between-events corresponds to the duration between consecutive events in a time series. Of relevance to our algorithm is the event of a tweet being posted. Using in-control data, the algorithm fits a Weibull distribution and estimates its parameters. During test time, the algorithm computes the expected duration between times of posting for consecutive tweets. When the time between consecutive tweets is shorter than an expected value, the tweet is flagged. When p such consecutive tweets are flagged, an alert is generated. The detailed code of the monitoring algorithm has been implemented in R, and is included in the appendix.
+  </p>
+ </list-item>
+</list>
