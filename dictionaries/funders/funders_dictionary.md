@@ -20,7 +20,7 @@ Number of entries: 23355
 8. Open the folder 'mydictionaries' in the system, the dictionary is created as both **xml** and **html** file.
 9. The dictionary created is :   https://github.com/petermr/openVirus/blob/master/dictionaries/test/funder.xml
 
-Note: The dictionary 1 has only two things : name and term.
+**Note**: The dictionary 1 has only two things : name and term.
 
 ### Creating the dictionary 2 :
 1. To add more items to my dictionary funder, I changed the syntax in the CommandLine a little bit. 
