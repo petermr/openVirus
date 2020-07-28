@@ -28,6 +28,7 @@ Note: The dictionary 1 has only two things : name and term.
 3. The dictionary created is again in two formats in the directory **mydictionaries**: one in **.xml**, the other one in **.html**
 4. This dictionary contains name, term, wikidata ID, description.
 5. The dictionary created is : https://github.com/petermr/openVirus/blob/master/dictionaries/funders/funders%20(1).xml
+6. This dictionary has 13117 entries, probably because these items in the dictionary had a Wikidata ID and not all of them.
 
 ### Creating the dictionary 3 :
 1. This one is created using SPARQL/Wikidata Query Service.
