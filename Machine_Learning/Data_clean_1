@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# importing all the libraries
 import xml.etree.ElementTree as ET
 import string
 import os  
 import re
 
 
-# In[2]:
+# function to remove html tags from the text and everything inside the tags.
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
   cleantext = re.sub("[^a-zA-Z]", " ", str(raw_html))
@@ -16,46 +16,43 @@ def cleanhtml(raw_html):
   return cleantext
 
 
-# In[3]:
-parent_dir_false  = "D:\\corpus_950\\false"
+# Function to clean text and output it to a text file in comma seperated format
 fulltext = "fulltext"
 xml =".xml"
 
 def getcsv(outfile, parent_dir, word):
 
-    for root, dirs, files in os.walk(parent_dir):
+    for root, dirs, files in os.walk(parent_dir): # To search through the directory in aloop
         for name in files:
-            if name =='fulltext.xml':
+            if name =='fulltext.xml': # finding fulltext.xml file within the directory
                 new_path = (os.path.join(root, name))
-                file_name = os.path.dirname(new_path)
+                file_name = os.path.dirname(new_path) # getting the directory path as a variable
                 tree = ET.parse(new_path)
                 root = tree.getroot()
-                abstract = root.findall("./front/article-meta/abstract/")
-                #print(outfile)
+                abstract = root.findall("./front/article-meta/abstract/") # searching the fulltext file to get abstract
 
                 for j in abstract:
                     new = (j.text)
-                    new1 = cleanhtml(new)
-                    new1= new1.lower()
-                    input_str = re.sub(r'\d+', '', new1)
+                    new1 = cleanhtml(new) # applying the cleantext function 
+                    new1= new1.lower() # converting the entire text to lower case
+                    input_str = re.sub(r'\d+', '', new1)  #Regular Expression, or regex 
                     #input_str = input_str.translate(string.maketrans("",""), string.punctuation)
-                    new_1 = input_str.strip()
+                    new_1 = input_str.strip() #Remove spaces at the beginning and at the end of the string
 
+                    outp = str(file_name) +  "," + new1 +  "," + word  + "\n" # put output in a string
 
-                    outp = str(file_name) +  "," + new1 +  "," + word  + "\n"
+                    outfile.write(outp) # write to a text file
 
-                    outfile.write(outp)
+    outfile.close() #close the text file
 
-    outfile.close()
-
-# In[4]:
+# using the function getcsv for true positives
 outfile1 = open('true.txt','w')
 parent_dir_true  = "D:\\try1\\true"
 word1 = "true"
 
 getcsv(outfile1, parent_dir_true, word1)
 
-
+# using the function getcsv for false positives
 outfile2 = open('false.txt','w')
 parent_dir_false  = "D:\\try1\\false"
 word2 = "false"
@@ -63,22 +60,18 @@ word2 = "false"
 getcsv(outfile2, parent_dir_false, word2)
 
 
-# In[5]:
-parent_dir_true  = "D:\\try1\\true"
-file_name = os.path.dirname(parent_dir_true)
 
-print(file_name)
-
-
-# In[6]:
+# function removing words like abstract etc.
 def remove_abs(out_put, in_put):
-    with open(in_put, "r") as a_file:
-      for line in a_file:
-        if len(line.split()) >2:
-            out_put.write(line)
+    with open(in_put, "r") as a_file: #open the file
+      for line in a_file: #loop through each word in the file
+        if len(line.split()) >2: # if the word length for the line is greater than 2
+            out_put.write(line) # write to a new file
 
     out_put.close()
+
     
+# using the function remove_abs
 in_put1 = 'true.txt'
 in_put2 = 'false.txt'
 
@@ -88,11 +81,7 @@ out_put2 = open('false_new.txt','w')
 remove_abs(out_put1,in_put1)
 remove_abs(out_put2, in_put2)
 
-
-# In[7]:
-# Python program to 
-# demonstrate merging 
-# of two files 
+# merging two files (false positives and true positives)
   
 data = data2 = "" 
   
@@ -114,14 +103,8 @@ with open ('OpenVirus.txt', 'w') as fp:
     fp.write(data) 
 
 
-# In[11]:
-import pandas as pd
-df = pd.read_fwf('OpenVirus.txt')
-df.to_csv("OpenVirus.csv", sep=',')
-
-
-# In[13]:
+# converting the text file into csv file
 import pandas as pd
 
-read_file = pd.read_csv (r'OpenVirus.txt')
-read_file.to_csv (r'OpenVirus.csv', index=None)
+read_file = pd.read_csv (r'OpenVirus.txt') #read the file as a pandas dataframe
+read_file.to_csv (r'OpenVirus.csv', index=None) #write it to csv file
