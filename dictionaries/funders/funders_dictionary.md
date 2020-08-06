@@ -33,7 +33,7 @@ Number of entries: 23355
 ### Creating the dictionary 3 :
 1. This one is created using SPARQL/Wikidata Query Service.
 2. How is it created ?  ---- https://github.com/petermr/openVirus/wiki/Dictionaries:-creation-from-Wikidata
-3. SPARQL Query used :
+3. **SPARQL Query used :**
 
 `#Funders`
 `SELECT ?FunderLabel ?Country ?CountryLabel ?instanceofLabel  ?Funder ?crossrefid  WHERE {`
