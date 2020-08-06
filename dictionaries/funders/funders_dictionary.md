@@ -35,16 +35,16 @@ Number of entries: 23355
 2. How is it created ?  ---- https://github.com/petermr/openVirus/wiki/Dictionaries:-creation-from-Wikidata
 3. SPARQL Query used :
 
-`#Funders
-SELECT ?FunderLabel ?Country ?CountryLabel ?instanceofLabel  ?Funder ?crossrefid  WHERE {
-  ?Funder wdt:P3153 ?crossrefid .
-  ?Funder wdt:P31 ?instanceof .
-  ?Funder wdt:P17 ?Country .
+`#Funders`
+`SELECT ?FunderLabel ?Country ?CountryLabel ?instanceofLabel  ?Funder ?crossrefid  WHERE {`
+ ` ?Funder wdt:P3153 ?crossrefid .`
+  `?Funder wdt:P31 ?instanceof .`
+  `?Funder wdt:P17 ?Country .`
   
  
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-}
-LIMIT 20000000`
+  `SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }`
+`}`
+`LIMIT 20000000`
 
 
 4. The dictionary created is : https://github.com/petermr/openVirus/blob/master/dictionaries/funders/sparql%20(6)
