@@ -30,6 +30,8 @@ ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the found
 ### from SPARQL - the latest dictionary with ICD-10 codes
 * The latest `disease` dictionary was created using the SPARQL query - https://w.wiki/Z7H (Thanks @Dheeraj - mini-project collaborator), and downloaded the results using `sparql endpoint` as an xml file named 'disease_icd10'.
 * AMI was updated, hence a lot changed/updated from previous amidict syntax in creating dictionary.
-* Using the syntax `amidict -vv --dictionary disease --directory dic --input disease_icd10 create --informat wikisparqlxml --sparqlmap wikidataURL=wikidata,wikipediaURL=wikipedia,AltNames=wikidataAltLabel,name=wikidataLabel,term=wikidataLabel,Description=wikidataDescription,ICD-10_codes=ICD_10 --transformName wikidataID=EXTRACT(wkidataURL,.*/(.*)) --synonyms=wikidataAltLabel`, the latest dictionary with ICD-10 codes was created.
+* Using the syntax 
+```amidict -vv --dictionary disease --directory dic --input disease_icd10 create --informat wikisparqlxml --sparqlmap wikidataURL=wikidata,wikipediaURL=wikipedia,AltNames=wikidataAltLabel,name=wikidataLabel,term=wikidataLabel,Description=wikidataDescription,ICD-10_codes=ICD_10 --transformName wikidataID=EXTRACT(wkidataURL,.*/(.*)) --synonyms=wikidataAltLabel```
+, the latest dictionary with ICD-10 codes was created.
 * The `--sparqlmap` command's input changes with the names in accordance with the input file. Refer https://github.com/petermr/ami3/wiki/amidict:-wikisparql#full-input for more information.
 * The latest `disease` dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/diseases/disease_icd10.xml, though the synonyms in the dictionary needs iteration.
