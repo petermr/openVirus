@@ -17,6 +17,8 @@ ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the found
 * The output shows much errors and warnings. The output directory consists of an xml and a html format files.
 * The xml format disease dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/diseases/disease_new.xml
 * The html format disease dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/diseases/disease_new.html
+
+(_NOTE_: See also https://github.com/petermr/openVirus/wiki/Dictionary:-Diseases#preferring-xml-file)
 ### from SPARQL query as xml file
 * The `manual rectifiction` is **not necessary** when downloaded as an xml file.
 * The `disease` dictionary with _synonyms_ was created from the sparql query. 
