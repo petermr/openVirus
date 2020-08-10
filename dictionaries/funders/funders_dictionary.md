@@ -22,6 +22,32 @@ Number of entries: 23355
 
 **Note**: The dictionary 1 has only two things : name and term.
 
+**Dictionary validation using ami :**
+
+
+`amidict --dictionary C:\Users\myPC\mydictionaries\funders(1).xml -v display --fields --validate`
+```
+Generic values (DictionaryDisplayTool)
+================================
+--testString        : d      null
+--wikilinks         : d [Lorg.contentmine.ami.tools.AbstractAMIDictTool$WikiLink;@1ae7dc0
+--fields            : m        []
+--files             : d        []
+--maxEntries        : d         3
+--remote            : d [https://github.com/petermr/dictionary]
+--validate          : m      true
+--help              : d     false
+--version           : d     false
+--dictionary        : d [C:\Users\myPC\mydictionaries\funders(1).xml]
+--directory         : d      null
+
+Specific values (DictionaryDisplayTool)
+================================
+list all fields
+dictionaries from C:\Users\myPC\ContentMine\dictionaries
+```
+
+
 ### Creating the dictionary 2 :
 1. To add more items to my dictionary funder, I changed the syntax in the CommandLine a little bit. 
 2. This time I used the command : `amidict -v --dictionary funders --directory mydictionaries --input funderlist.txt create --informat list --outformats xml,html --wikilinks wikipedia, wikidata`
