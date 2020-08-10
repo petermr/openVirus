@@ -73,5 +73,5 @@ dictionaries from C:\Users\myPC\ContentMine\dictionaries
 `LIMIT 20000000`
 
 
-4. The dictionary created is : https://github.com/petermr/openVirus/blob/master/dictionaries/funders/sparql%20(6)
+4. The dictionary created is : https://github.com/petermr/openVirus/blob/master/dictionaries/funders/funder.sparql.xml
 5. In this case, the output is in the format **sparql.xml**
