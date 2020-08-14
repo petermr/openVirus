@@ -4,9 +4,9 @@
 
 The number of entries : 13814
 
-Dictionary updated on : 09 Aug 2020
+Latest dictionary updated on : 09 Aug 2020
 
-Dictionary's Source : Wikidata and ICD-10 
+All dictionary's Source : Wikidata and ICD-10 
 ### ICD
 ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the foundation for the identification of health trends and statistics globally, and the international standard for reporting diseases and health conditions. It is the diagnostic classification standard for all clinical and research purposes. ICD-10 is the 10th edition.
 ## Creation of disease dictionary
@@ -33,7 +33,7 @@ ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the found
 * The latest `disease` dictionary was created using the SPARQL query - https://w.wiki/Z7H (Thanks @Dheeraj - mini-project collaborator), and downloaded the results using `sparql endpoint` as an xml file named 'disease_icd10'.
 * AMI was updated, hence a lot changed/updated from previous amidict syntax in creating dictionary.
 * Using the syntax 
-```amidict -vv --dictionary disease --directory dic --input disease_icd10 create --informat wikisparqlxml --sparqlmap wikidataURL=wikidata,wikipediaURL=wikipedia,wikidataAltNames=wikidataAltLabel,name=wikidataLabel,term=wikidataLabel,Description=wikidataDescription,ICD-10_codes=ICD_10 --transformName wikidataID=EXTRACT(wkidataURL,.*/(.*)) --synonyms=wikidataAltLabel```, the latest dictionary with ICD-10 codes was created.
+```amidict -vv --dictionary disease --directory dic --input disease_icd10 create --informat wikisparqlxml --sparqlmap wikidataURL=wikidata,wikipediaURL=wikipedia,wikidataAltNames=wikidataAltLabel,name=wikidataLabel,term=wikidataLabel,Description=wikidataDescription,ICD-10_codes=ICD_10 --transformName wikidataID=EXTRACT(wikidataURL,.*/(.*)) --synonyms=wikidataAltLabel```, the latest dictionary with ICD-10 codes was created.
 * The `--sparqlmap` command's input changes with the names in accordance with the input file. Refer https://github.com/petermr/ami3/wiki/amidict:-wikisparql#full-input for more information.
 * The latest `disease` dictionary is at https://github.com/petermr/openVirus/blob/master/dictionaries/diseases/disease_icd10.xml, though the synonyms in the dictionary needs iteration.
 ### from SPARQL - the multilingual dictionary with 3 languages
