@@ -2,7 +2,7 @@
 
 #### Tester : Lakshmi Devi Priya
 
-The number of entries : 13814
+The number of entries : 13808
 
 Latest dictionary updated on : 09 Aug 2020
 
