@@ -22,6 +22,32 @@ Number of entries: 23355
 
 **Note**: The dictionary 1 has only two things : name and term.
 
+**Dictionary validation using ami :**
+
+
+`amidict --dictionary C:\Users\myPC\mydictionaries\funders(1).xml -v display --fields --validate`
+```
+Generic values (DictionaryDisplayTool)
+================================
+--testString        : d      null
+--wikilinks         : d [Lorg.contentmine.ami.tools.AbstractAMIDictTool$WikiLink;@1ae7dc0
+--fields            : m        []
+--files             : d        []
+--maxEntries        : d         3
+--remote            : d [https://github.com/petermr/dictionary]
+--validate          : m      true
+--help              : d     false
+--version           : d     false
+--dictionary        : d [C:\Users\myPC\mydictionaries\funders(1).xml]
+--directory         : d      null
+
+Specific values (DictionaryDisplayTool)
+================================
+list all fields
+dictionaries from C:\Users\myPC\ContentMine\dictionaries
+```
+
+
 ### Creating the dictionary 2 :
 1. To add more items to my dictionary funder, I changed the syntax in the CommandLine a little bit. 
 2. This time I used the command : `amidict -v --dictionary funders --directory mydictionaries --input funderlist.txt create --informat list --outformats xml,html --wikilinks wikipedia, wikidata`
@@ -33,5 +59,19 @@ Number of entries: 23355
 ### Creating the dictionary 3 :
 1. This one is created using SPARQL/Wikidata Query Service.
 2. How is it created ?  ---- https://github.com/petermr/openVirus/wiki/Dictionaries:-creation-from-Wikidata
-3. The dictionary created is : https://github.com/petermr/openVirus/blob/master/dictionaries/funders/sparql%20(6)
-4. In this case, the output is in the format **sparql.xml**
+3. **SPARQL Query used :**
+
+`#Funders`
+`SELECT ?FunderLabel ?Country ?CountryLabel ?instanceofLabel  ?Funder ?crossrefid  WHERE {`
+ ` ?Funder wdt:P3153 ?crossrefid .`
+  `?Funder wdt:P31 ?instanceof .`
+  `?Funder wdt:P17 ?Country .`
+  
+ 
+  `SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }`
+`}`
+`LIMIT 20000000`
+
+
+4. The dictionary created is : https://github.com/petermr/openVirus/blob/master/dictionaries/funders/funder.sparql.xml
+5. In this case, the output is in the format **sparql.xml**
