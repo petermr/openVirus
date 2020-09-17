@@ -89,4 +89,4 @@ java.lang.NullPointerException
         at picocli.CommandLine.execute(CommandLine.java:2058)
         at org.contentmine.ami.tools.AMIDict.main(AMIDict.java:87)
         ```
-**To be reviewed by PMR** 
+## To be reviewed by PMR.
