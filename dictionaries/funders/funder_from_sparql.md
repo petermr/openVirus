@@ -1,4 +1,4 @@
-My SPARQL output: https://github.com/petermr/openVirus/blob/master/dictionaries/funders/funder.sparql.xml
+**My SPARQL output:** https://github.com/petermr/openVirus/blob/master/dictionaries/funders/funder.sparql.xml
 
 **To convert SPARQL output to ami, I used this command and the output came out was:** 
 ```
