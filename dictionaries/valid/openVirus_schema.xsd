@@ -1,0 +1,136 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+             schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
+
+  <xs:element name="dictionary">
+
+    <xs:complexType>
+
+      <xs:sequence>
+<!-- mandatory metadata -->
+        <xs:element type="xs:string" name="desc" maxOccurs="unbounded" minOccurs="1">
+        </xs:element>
+
+<!-- mandatory entry children -->
+        <xs:element name="entry" maxOccurs="unbounded" minOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+
+<!-- optionl repeatable description (includes xml:lang variants -->
+              <xs:element name="description" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute ref="xml:lang" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+
+<!-- optionl repeatable synonym (includes xml:lang variants -->
+              <xs:element name="synonym" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute ref="xml:lang" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+
+<!-- Wikidatab Properties -->
+            <xs:attribute type="xs:string" name="_p31_instanceOf" use="optional">
+            </xs:attribute>
+
+            <xs:attribute name="_p117_structural_formula" use="optional">
+              <xs:simpleType >
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="[^\s]+\.(pdf|png|svg)"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="_p274_chemical_formula" use="optional">
+              <xs:simpleType >
+                <!-- this is too complex -->
+                <xs:restriction base="xs:token">
+                  <!--
+                  <xs:pattern value="([α-γδφλμπω]-)?([([]*[A-Z☐][ub]?[a-z]?[₁₂₃₄₅₆₇₈₉₀]*(\)?[¹²³⁴⁵⁶⁷⁸⁹⁰]*[⁺⁻]?)?[])|,₁₂₃₄₅₆₇₈₉₀]*(·\(?[-0-9.]*n?\)?)?)+"/>
+                -->
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute type="xs:string" name="_p297_country" use="optional">
+            </xs:attribute>
+
+            <xs:attribute name="_p494_icd10code" use="optional">
+              <xs:simpleType >
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="[A-Z]\d{2}(\.\d{1,2})?"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute type="xs:string" name="_p828_hasCause" use="optional">
+            </xs:attribute>
+
+            <xs:attribute type="xs:string" name="_p3153_crossrefFunderId" use="optional">
+            </xs:attribute>
+
+<!-- mandatory attributes -->
+            <xs:attribute type="xs:string" name="description" xml:lang="en"/>
+
+            <xs:attribute type="xs:string" name="name" xml:lang="en"/>
+
+            <xs:attribute type="xs:string" name="term" xml:lang="en"/>
+
+<!-- Wikimedia links -->
+            <xs:attribute name="wikidataURL" use="optional">
+              <xs:simpleType >
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="https?\://www\.wikidata\.org/(wiki|entity)/[P|Q]\d+"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute  name="wikipediaPage" use="optional">
+              <xs:simpleType >
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="[^\s]+"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute  name="wikipediaURL" use="optional">
+              <xs:simpleType >
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="https?\://[a-z]+\.wikipedia\.org/wiki/.+"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="wikidataID" use="optional">
+              <xs:simpleType >
+                <xs:restriction base="xs:token">
+                  <xs:pattern value="[Q|P]\d+"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+<!-- optional ID -->
+            <xs:attribute type="xs:string" name="id" use="optional">
+            </xs:attribute>
+
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+
+      <!-- mandatory title -->
+            <xs:attribute type="xs:string" name="title">
+            </xs:attribute>
+
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
