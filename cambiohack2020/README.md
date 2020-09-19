@@ -24,34 +24,50 @@ dictionaries created by openVirus interns
 ### country
 
 ISO 639 codes for all countries in Wikidata
+
 [country](./dictionaries/country.xml)
 
 ### disease
 
-ICD10 codes in Wikidata
+ICD10 codes (diseases) in Wikidata
+
+[disease](./dictionaries/disease.xml)
 
 ### drug
 
 Drugs in Wikidata
 
+[drug](./dictionaries/drug.xml)
+
+
 ### funder
 
 Crossref funder IDs in Wikidata
+
+[funder](./dictionaries/funder.xml)
 
 ### npi
 
 non-pharmaceutical interventions for fighting epidemics (hand snowballed)
 
+[npi](./dictionaries/npi.xml)
+
 ### testTrace
 
 test and trace terminology (manually snowballed)
+
+[testTrace](./dictionaries/testTrace.xml)
 
 ### virus
 
 Viruses in Wikidata
 
+[virus](./dictionaries/virus.xml)
+
 ### zoonosis
 
 diseases transmitted by animals (manually snowballed)
+
+[zoonosis](./dictionaries/zoonosis.xml)
 
 
