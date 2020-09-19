@@ -5,17 +5,17 @@ These. materials are freely copyable (CC BY) .
 ## Corpora
 [minicorpora](./minicorpora/)
 
-### viralEpidemic100
+### viralEpidemics100
 
 The search `getpapers -q "viral epidemic" -k 100 -x -o was run viralEpidemic100` and the results collected here.
 100 papers downloaded from europepmc.org . Each contains metadata and XML, but no computed results.
 
-[viralEpidemic100](./minicorpora/viralEpidemic100)
+[viralEpidemics100](./minicorpora/viralEpidemics100)
 
-### viralEpidemic10
+### viralEpidemics10
 A subset of 10 of the above with `ami search --dictionary country drug` which shows the type of output
 
-[viralEpidemic10](./minicorpora/viralEpidemic10)
+[viralEpidemics10](./minicorpora/viralEpidemics10)
 
 ## Dictionaries
 
@@ -24,6 +24,7 @@ dictionaries created by openVirus interns
 ### country
 
 ISO 639 codes for all countries in Wikidata
+[country](./dictionaries/country.xml)
 
 ### disease
 
