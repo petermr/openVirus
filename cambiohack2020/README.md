@@ -63,6 +63,10 @@ Crossref funder IDs in Wikidata
 
 [funder](./dictionaries/funder.xml)
 
+**Methodology: https://github.com/petermr/openVirus/blob/master/dictionaries/funders/funders_dictionary.md**
+
+**Mini Project: https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-funders**
+
 ### npi
 
 non-pharmaceutical interventions for fighting epidemics (hand snowballed)
