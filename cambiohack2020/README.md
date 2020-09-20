@@ -53,6 +53,7 @@ Drugs in Wikidata
 - [ ] *Differentiate drugs that work directly against the pathogen and the drugs that only work on symptoms.*
 
 Project updates and review : https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-drugs
+
 Dictionary : https://github.com/petermr/openVirus/tree/master/dictionaries/drug
 
 
