@@ -27,7 +27,7 @@ ISO 639 codes for all countries in Wikidata
 
 The country dictinary enables ami search to output the frequency with which a country appears in the papers. When used along with other dictinaries, it gives relevant coocccurrences with regards to the terms in the other dictionary as well. This helps us in answering critcal questions like which countries do viral epidemics occur more frequently in?
 
-_More information:_ [Creation of the Country Dictionary](https://github.com/petermr/openVirus/blob/master/dictionaries/country/country_dict.md) ; [Usage of the Country Dictionary](https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-country)
+_More information:_ [Creation of the country dictionary](https://github.com/petermr/openVirus/blob/master/dictionaries/country/country_dict.md); [Usage within a miniproject](https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-country); [Dictionary creation from Wikidata](https://github.com/petermr/openVirus/blob/master/dictionaries/country/country_dict.md#dictionary-from-wikidata)
 
 
 _The country dictionary_ [country](./dictionaries/country.xml) 
