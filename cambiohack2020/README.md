@@ -49,6 +49,12 @@ Drugs in Wikidata
 
 [drug](./dictionaries/drug.xml)
 
+- [ ] *To create a dictionary consisting of drugs for diseases and its local name in different countries.*
+- [ ] *Differentiate drugs that work directly against the pathogen and the drugs that only work on symptoms.*
+
+Project updates and review : https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-drugs
+Dictionary : https://github.com/petermr/openVirus/tree/master/dictionaries/drug
+
 
 ### funder
 
