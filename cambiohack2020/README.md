@@ -33,9 +33,9 @@ ICD10 codes (diseases) in Wikidata
 
 [disease](./dictionaries/disease.xml)
 
-For more details on dictionary, please visit this wiki page [https://github.com/petermr/openVirus/wiki/Dictionary:-Diseases]
+* For more details on dictionary, please visit this wiki page https://github.com/petermr/openVirus/wiki/Dictionary:-Diseases
 
-For viewing the `ami` results of the dictionary that was tested on a large corpus, please visit this page [https://github.com/petermr/openVirus/tree/master/miniproject/disease]
+* For viewing the `ami` results of the dictionary that was tested on a large corpus, please visit this page https://github.com/petermr/openVirus/tree/master/miniproject/disease
 
 ### drug
 
