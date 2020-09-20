@@ -43,3 +43,4 @@ ICD, which was adopted in 1967 by the WHO Nomenclature Regulations, is the found
 ## Valid Dictionary
 * The valid `disease` dictionary is at https://github.com/petermr/openVirus/blob/master/cambiohack2020/dictionaries/disease.xml 
 * This disease dictionary is multilingual with four languages and it was validated in respect to the `xml schema` at https://github.com/petermr/openVirus/blob/master/cambiohack2020/dictionaries/openVirus_schema.xsd
+* For using in `ami search`, please refer https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-disease#using-valid-dictionary-for-ami-search
