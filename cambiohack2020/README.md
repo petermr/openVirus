@@ -75,6 +75,12 @@ test and trace terminology (manually snowballed)
 
 [testTrace](./dictionaries/testTrace.xml)
 
+For more information:
+
+Steps followed to create the dictionary: https://github.com/petermr/openVirus/wiki/Dictionary:-Testing-and-Tracing
+
+For the mini project updates: https://github.com/petermr/openVirus/wiki/MiniProject:Testing-and-tracing-in-viral-epidemics
+
 ### virus
 
 Viruses in Wikidata
