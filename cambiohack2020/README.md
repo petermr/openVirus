@@ -2,6 +2,9 @@
 
 These. materials are freely copyable (CC BY) . 
 
+## Contributers 
+![Picture1](https://user-images.githubusercontent.com/60133925/93730768-b3284780-fbe7-11ea-8507-a84b4b605d43.jpg)
+
 ## Corpora
 [minicorpora](./minicorpora/)
 
