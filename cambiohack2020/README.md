@@ -100,4 +100,9 @@ diseases transmitted by animals (manually snowballed)
 
 [zoonosis](./dictionaries/zoonosis.xml)
 
+For more information :
+
+Dictionary Details : https://github.com/petermr/openVirus/wiki/Dictionary:-Zoonosis
+
+MiniProject Details : https://github.com/petermr/openVirus/wiki/miniproject:-viral-epidemics-and-zoonoses 
 
