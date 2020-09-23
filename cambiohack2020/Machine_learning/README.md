@@ -13,5 +13,5 @@ Currently two files:
 [Notebook](OpenVirus_ML.ipynb)
 
 * Run Jupyter notebook online using Colab
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/petermr/openVirus/blob/master/cambiohack2020/Machine_learning/OpenVirus_ML.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/petermr/openVirus/blob/master/cambiohack2020/Machine_learning/OpenVirus_ML_colab.ipynb)
 
