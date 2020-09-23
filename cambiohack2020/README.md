@@ -3,7 +3,7 @@
 These. materials are freely copyable (CC BY) . 
 
 ## Contributers 
-![Picture9](https://user-images.githubusercontent.com/60133925/93983886-c29ec080-fda0-11ea-84ac-7230aed5888d.jpg)
+![Picture9](https://user-images.githubusercontent.com/60133925/93984110-072a5c00-fda1-11ea-9523-c0be9cfde64d.jpg)
 
 ## Corpora
 [minicorpora](./minicorpora/)
