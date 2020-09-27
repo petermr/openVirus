@@ -10,7 +10,7 @@ Currently two files:
 
 
 * Jupyter notebook
-[Preprocessing] (data_preparation_1.ipynb) for preprocessing the Data
+[Preprocessing](https://github.com/petermr/openVirus/blob/master/cambiohack2020/Machine_learning/data_preparation_1.ipynb) for preprocessing the Data
 [Notebook](OpenVirus_ML.ipynb) for actual machine learning
 
 * Run Jupyter notebook online using Colab
