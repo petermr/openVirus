@@ -10,7 +10,9 @@ Searched with 8 dictionaries:
 * virus
 * zoonosis (diseases transferred to/from animals)
 
-Result in https://rawcdn.githack.com/petermr/openVirus/jupyter/search/dict8
+Result in https://rawcdn.githack.com/petermr/openVirus/jupyter/search/dict8/full.dataTables.html (text/plain)
+
+or displayed as HTML
 
 https://rawcdn.githack.com/petermr/openVirus/2ec901311c5cf88d47855374ca43bfed24b854f0/jupyter/search/dict8/full.dataTables.html
 
