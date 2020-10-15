@@ -111,6 +111,8 @@ ami -p ami_12_08_2020\corpus_950 search --dictionary ami_12_08_2020\xml.xml
 amidict --dictionary country --directory ami_12_08_2020/amidict10  display --validate
 ```
 
+Final Dictionary: https://github.com/petermr/openVirus/blob/master/dictionaries/valid/country.xml
+
 
 
 
