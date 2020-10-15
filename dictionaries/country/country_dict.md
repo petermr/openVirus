@@ -40,7 +40,6 @@ Cannot add entry: nu.xom.ParsingException: The element type "input" must be term
 
 *IMPORTANT:* The input text file should not contain any errors. 
 
-5. The output dictionary for further testing: https://github.com/petermr/openVirus/blob/master/dictionaries/test/country.xml
 
 
 ### Testing on a small number of countries
@@ -111,6 +110,8 @@ ami -p ami_12_08_2020\corpus_950 search --dictionary ami_12_08_2020\xml.xml
 ```
 amidict --dictionary country --directory ami_12_08_2020/amidict10  display --validate
 ```
+
+Final Dictionary: https://github.com/petermr/openVirus/blob/master/dictionaries/valid/country.xml
 
 
 
