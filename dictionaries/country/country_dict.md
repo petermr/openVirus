@@ -40,7 +40,6 @@ Cannot add entry: nu.xom.ParsingException: The element type "input" must be term
 
 *IMPORTANT:* The input text file should not contain any errors. 
 
-5. The output dictionary for further testing: https://github.com/petermr/openVirus/blob/master/dictionaries/test/country.xml
 
 
 ### Testing on a small number of countries
