@@ -1,3 +1,0 @@
-1)To make the dashboard, just run the main.ipynb file and all the graphs along with the index.html file which is the dashboard will be created.
-
-2)To make plots out of occurrences of words in research papers, open frequency-display.ipynb. Add a folder with all the search results and change the value of the variable <location> to the path to the folder. The code will then make the graphs for the papers and save them.
