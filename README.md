@@ -1,9 +1,6 @@
 # openVirus
 aggregation of scholarly publications and extracted knowledge on viruses and epidemics.
 
-## NOTE for Hackathon
-See [hackathon EUvsVirus.org](EUvsVirus.MD) for weekend EUvsVirus hack this weekend (24-26 April) and [our project contentmine-scientific-knowledge-for-all](https://devpost.com/software/contentmine-scientific-knowledge-for-all) . You may also wish to register on their site (https://euvsvirus.org channel `t_contentmine_ffr2axj4x`) as well..
-
 ## NOTE
 This site is to develop knowledge resources and tools to help tackle the COVID19 outbreak. **It is NOT a guide to public COVID information.** The actual content created from the site is drawn from reliable sources (journals, guidelines) but has **NOT been filtered or reviewed**.
 
@@ -77,3 +74,13 @@ We are using the Open Notebook philosophy fo Jean-Claude Bradley and implicitly 
 ## Installation
 
 Installation and Docker instructions can be found at [INSTALLING.md](https://github.com/petermr/openVirus/blob/master/INSTALLING.md).
+
+## Our Progess Future Directions
+We have made quite a [progress](https://github.com/petermr/openVirus/wiki#our-progress-so-far) since the start of openVirus. Please refer to our [Home](https://github.com/petermr/openVirus/wiki#future-directions) wiki page for more information. In short, we are switching to Jupyter Notebook, as Python is an efficient way of doing things. 
+
+In addition, we have two new repositories. One, explicitly for Dictionaries and, two for our development works. 
+- Dictionary: https://github.com/petermr/dictionary
+- openVirus Development: https://github.com/petermr/openvirusdev
+
+## NOTE for Hackathon
+See [hackathon EUvsVirus.org](EUvsVirus.MD) for weekend EUvsVirus hack this weekend (24-26 April) and [our project contentmine-scientific-knowledge-for-all](https://devpost.com/software/contentmine-scientific-knowledge-for-all) . You may also wish to register on their site (https://euvsvirus.org channel `t_contentmine_ffr2axj4x`) as well..
