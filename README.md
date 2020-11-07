@@ -75,7 +75,7 @@ We are using the Open Notebook philosophy fo Jean-Claude Bradley and implicitly 
 
 Installation and Docker instructions can be found at [INSTALLING.md](https://github.com/petermr/openVirus/blob/master/INSTALLING.md).
 
-## Our Progess Future Directions
+## Our Progess and Future Directions
 We have made quite a [progress](https://github.com/petermr/openVirus/wiki#our-progress-so-far) since the start of openVirus. Please refer to our [Home](https://github.com/petermr/openVirus/wiki#future-directions) wiki page for more information. In short, we are switching to Jupyter Notebook, as Python is an efficient way of doing things. 
 
 In addition, we have two new repositories. One, explicitly for Dictionaries and, two for our development works. 
