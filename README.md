@@ -67,7 +67,7 @@ There may soon be a large number of "Open" Issues - this should be seen as posit
 
 ## Open Notebook publication
 
-We are using the Open Notebook philosophy fo Jean-Claude Bradley and implicitly of Wikimedia content and of many Free/Open Software projects. Everything is posted publicly as soon as it is created. That means that every iteration is visible and will almost certainly contain bugs/errors. Each subsequent commit fixes some of these. We know from past experience that this is the quickest way to create high-quality content and also gives a feeling of communal ownership.
+We are using the Open Notebook philosophy Of Jean-Claude Bradley and implicitly of Wikimedia content and of many Free/Open Software projects. Everything is posted publicly as soon as it is created. That means that every iteration is visible and will almost certainly contain bugs/errors. Each subsequent commit fixes some of these. We know from past experience that this is the quickest way to create high-quality content and also gives a feeling of communal ownership.
 1. [Summary publication preprint](https://en.wikiversity.org/wiki/WikiJournal_Preprints/Aggregation_of_scholarly_publications_and_extracted_knowledge_on_COVID19_and_epidemics)
 2. [Full open notebook](https://en.wikiversity.org/wiki/WikiJournal_Preprints/Aggregation_of_scholarly_publications_and_extracted_knowledge_on_COVID19_and_epidemics/Open_Notebook)
 
