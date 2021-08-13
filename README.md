@@ -9,7 +9,8 @@ Most of the work now happens in
 - CEVOpen (https://github.com/petermr/CEVOpen/)
 - pygetpapers (https://github.com/petermr/pygetpapers/)
 - pyami (https://github.com/petermr/pyami)
-- dictionary (https://github.com/petermr/dictionary)
+- dictionary (https://github.com/petermr/dictionary)  
+
 We still parts of technology and the workflow developed @ `openvirus`. 
 ## NOTE
 This site is to develop knowledge resources and tools to help tackle the COVID19 outbreak. **It is NOT a guide to public COVID information.** The actual content created from the site is drawn from reliable sources (journals, guidelines) but has **NOT been filtered or reviewed**.
