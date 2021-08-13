@@ -5,7 +5,7 @@ aggregation of scholarly publications and extracted knowledge on viruses and epi
 ## UPDATE! (20210813)
 We now have a python version of `getpapers` and `ami`. There are many workflows that are being developed where we are annotating the literature at a sentence-level instead of document or section level (see `docanalysis`). 
 Most of the work now happens in 
-- docanalysis
+- docanalysis (https://github.com/petermr/docanalysis)
 - CEVOpen (https://github.com/petermr/CEVOpen/)
 - pygetpapers (https://github.com/petermr/pygetpapers/)
 - pyami (https://github.com/petermr/pyami)
